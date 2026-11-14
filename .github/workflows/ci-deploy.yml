@@ -48,6 +48,14 @@ jobs:
         run: |
           python -m pytest
           python smoke.py
+      - name: Verify final evaluation guards and selected v3 release
+        working-directory: .
+        run: |
+          # The original hash-bound review tests retain their external DEV-cache
+          # prerequisites. Portable guard equivalents use the archived snapshot.
+          python -m pytest -q ml/pvusatov/verification/final ml/pvusatov/releases/v3/test_smoke.py --ignore=ml/pvusatov/verification/final/test_summarize_results.py
+          python ml/pvusatov/verification/final/audit_snapshot.py
+          python ml/pvusatov/releases/v3/smoke.py
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin
@@ -69,6 +77,9 @@ jobs:
           docker run --rm --read-only --tmpfs /tmp \
             --entrypoint /opt/inference-venv/bin/python \
             "spaceapps-api:$GITHUB_SHA" /app/inference/smoke.py
+          docker run --rm --read-only --tmpfs /tmp \
+            --entrypoint /opt/inference-venv/bin/python \
+            "spaceapps-api:$GITHUB_SHA" /app/inference/release-smoke.py --model-dir /app/inference/models
       - name: Test container deployment and rollback
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}

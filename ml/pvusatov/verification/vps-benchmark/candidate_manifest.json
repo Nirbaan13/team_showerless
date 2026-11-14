@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "designation": "Single bounded frozen-c13 pure ONNX VPS compatibility probe; no pipeline or final-science claim",
+  "files": [
+    {
+      "path": "candidate_container_probe.py",
+      "sha256": "175e67ae6c733b056d6aa635f17c5d332dd3bb4920b163cd13fa6fd0d0943baa",
+      "bytes": 5701
+    },
+    {
+      "path": "candidate_remote_runner.py",
+      "sha256": "2b97babd0b7d05326084def490017e5cf8b2c485b8eed79f1f890c379efc9eec",
+      "bytes": 4812
+    },
+    {
+      "path": "candidate_run_ssh.py",
+      "sha256": "c34e8d0f57a2f2c40ab999230bfa81cb3e9aa68e4b67db746f2ccca32bcfe051",
+      "bytes": 2895
+    },
+    {
+      "path": "candidate_vps_benchmark.json",
+      "sha256": "767bc7179d2d0a371e68c399159ecdbe88daaa8f4c2a54e774014a0e9bdbe9ce",
+      "bytes": 7130
+    },
+    {
+      "path": "candidate_benchmark.AI.md",
+      "sha256": "1dfa605bb97d59fb70d6807dab822649f956ac224419afb4fbde627df3f9406b",
+      "bytes": 4514
+    }
+  ],
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+  "pinned_image_id": "sha256:6df625fa2845fdd7004c98d7149489776585680859237aa409aca193a670331a",
+  "image_revision": "5d9f117e19a7a010503db655259466cf36c22dfa",
+  "production_unchanged_at_checks": true,
+  "leftover_containers": 0,
+  "remote_staging_deleted": true,
+  "credentials_included": false,
+  "final_data_uploaded": false,
+  "loader_has_profile_binding": false,
+  "inference_pipeline_executed": false
+}

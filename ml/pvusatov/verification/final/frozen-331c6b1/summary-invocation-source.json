@@ -1,0 +1,27 @@
+{
+  "recorded_before_first_outcome_analysis_utc": "2026-11-14T22:56:12.280728+00:00",
+  "root_freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "independent_review": "GO;26tests+DEV E2E; scientificmetrics/cohorts/gates unchanged",
+  "both_execution_exit_codes": [
+    0,
+    0
+  ],
+  "sources": {
+    "summary_main": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/summarize_results.py",
+      "sha256": "bd17f13bef0d846bed629fad4c46343549f83a38c8f00933e14ea7cec2f5a697"
+    },
+    "summary_geometry": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/summary_geometry.py",
+      "sha256": "17939ab1cc5bcf1bf63df5018455436f4ad7a622f08c14c351d26339c9640cb7"
+    },
+    "summary_tests": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/test_summarize_results.py",
+      "sha256": "4cc0a0c29664a2555962b25b561aea9e872c73ef94f274bda9f110ffa9155f17"
+    },
+    "geometry_tests": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/test_summary_geometry.py",
+      "sha256": "88a136232b80e85c7a64bbc65b9c3057652025112bf6e1f512876b4799a1ce65"
+    }
+  }
+}

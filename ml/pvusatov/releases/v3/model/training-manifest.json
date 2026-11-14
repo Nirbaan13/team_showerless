@@ -1,0 +1,820 @@
+{
+  "schema_version": 1,
+  "release_state": "development-frozen candidate, FINAL UNOPENED",
+  "final_fields_opened": false,
+  "model_fitted_during_export": false,
+  "base_commit_at_export": "2326faa8abe7b4a9b80c70a57f478b95a7a96910",
+  "selected_configuration": {
+    "id": "4650f3f2a39c496d",
+    "profile": "sigma0.8",
+    "cache": "/tmp/spaceapps-v3-ranker/forest-cache-sigma08",
+    "config": {
+      "family": "extra",
+      "native_positive_mass": 2,
+      "native_artifact_mass": 2,
+      "parameters": {
+        "n_estimators": 160,
+        "min_samples_leaf": 12,
+        "max_depth": 16,
+        "max_features": "sqrt",
+        "max_leaf_nodes": 512,
+        "n_jobs": 1,
+        "random_state": 20261114
+      }
+    },
+    "training": {
+      "rows": 160444,
+      "positives": 2852,
+      "native_positive_rows": 848,
+      "native_artifact_negative_rows": 92
+    },
+    "validation": {
+      "native": {
+        "planned_injections": 2360,
+        "eligible_injections": 2360,
+        "detected": 529,
+        "top1": 410,
+        "top3": 438,
+        "macro_parent_recall1": 0.20462201717894626,
+        "macro_parent_recall3": 0.21813182793013633,
+        "independent_groups": 11,
+        "all_planned": {
+          "detected": 529,
+          "top1": 410,
+          "top3": 438,
+          "candidate_rows": 161569,
+          "micro_recall1": 0.17372881355932204,
+          "macro_recall1": 0.20462201717894626,
+          "micro_recall3": 0.18559322033898304,
+          "macro_recall3": 0.21813182793013633
+        },
+        "common_attributable": {
+          "detected": 529,
+          "top1": 410,
+          "top3": 438,
+          "candidate_rows": 161569,
+          "micro_recall1": 0.17372881355932204,
+          "macro_recall1": 0.20462201717894626,
+          "micro_recall3": 0.18559322033898304,
+          "macro_recall3": 0.21813182793013633
+        },
+        "finite_center_ge3": {
+          "detected": 516,
+          "top1": 402,
+          "top3": 430,
+          "candidate_rows": 153960,
+          "micro_recall1": 0.18356164383561643,
+          "macro_recall1": 0.2143530185325891,
+          "micro_recall3": 0.1963470319634703,
+          "macro_recall3": 0.22797479802782342
+        },
+        "attribution_excluded_trials": 0,
+        "native_unknowns_unlabeled": true,
+        "selection_cohort": "One shared sigma1.2 intersection sigma0.8 eligibility set across all132 candidates",
+        "full_planned_injections": 2370,
+        "full_all_planned_spatial": {
+          "detected": 535,
+          "top1": 412,
+          "top3": 440,
+          "candidate_rows": 161892,
+          "micro_recall1": 0.17383966244725738,
+          "macro_recall1": 0.20471380471380474,
+          "micro_recall3": 0.18565400843881857,
+          "macro_recall3": 0.21818181818181823
+        }
+      },
+      "synthetic": {
+        "1": {
+          "fields": 800,
+          "candidates": 38717,
+          "injected_tracks": 1614,
+          "recovered_before_ranking": 551,
+          "recovered_in_top_k": 209,
+          "top_k_recall": 0.1294919454770756,
+          "detector_recall": 0.34138785625774476,
+          "false_tracks_in_top_k": 475,
+          "false_tracks_per_field_in_top_k": 0.59375,
+          "track_average_precision": 0.2735324840105539
+        },
+        "3": {
+          "fields": 800,
+          "candidates": 38717,
+          "injected_tracks": 1614,
+          "recovered_before_ranking": 551,
+          "recovered_in_top_k": 334,
+          "top_k_recall": 0.20693928128872366,
+          "detector_recall": 0.34138785625774476,
+          "false_tracks_in_top_k": 1599,
+          "false_tracks_per_field_in_top_k": 1.99875,
+          "track_average_precision": 0.2735324840105539
+        },
+        "macro_cadence_recall1": 0.12609280771373557,
+        "macro_cadence_recall3": 0.20172134472344128
+      }
+    },
+    "selection_key": [
+      0.20462201717894626,
+      0.21813182793013633,
+      0.12609280771373557,
+      0.20172134472344128,
+      0.2735324840105539
+    ],
+    "eligible": true,
+    "paired_system": {
+      "native": {
+        "schema_version": 1,
+        "all_planned": {
+          "trials": 2370,
+          "truth_count": 2370,
+          "independent_groups": 11,
+          "groups_with_truth": 11,
+          "baseline": {
+            "detected": 400,
+            "top1": 258,
+            "top3": 320,
+            "candidate_rows": 56540,
+            "micro_recall1": 0.10886075949367088,
+            "macro_recall1": 0.12430976430976431,
+            "micro_recall3": 0.1350210970464135,
+            "macro_recall3": 0.14976430976430974
+          },
+          "candidate": {
+            "detected": 535,
+            "top1": 412,
+            "top3": 440,
+            "candidate_rows": 161892,
+            "micro_recall1": 0.17383966244725738,
+            "macro_recall1": 0.20471380471380474,
+            "micro_recall3": 0.18565400843881857,
+            "macro_recall3": 0.21818181818181823
+          },
+          "macro_delta_top1": 0.0804040404040404,
+          "paired_parent_ci95_top1": [
+            0.0430959595959596,
+            0.12040404040404037
+          ],
+          "macro_delta_top3": 0.0684175084175084,
+          "paired_parent_ci95_top3": [
+            0.02592592592592593,
+            0.11589225589225588
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "common_attributable": {
+          "trials": 2360,
+          "truth_count": 2360,
+          "independent_groups": 11,
+          "groups_with_truth": 11,
+          "baseline": {
+            "detected": 394,
+            "top1": 257,
+            "top3": 317,
+            "candidate_rows": 56374,
+            "micro_recall1": 0.10889830508474577,
+            "macro_recall1": 0.12431611714630582,
+            "micro_recall3": 0.13432203389830508,
+            "macro_recall3": 0.14903504794200953
+          },
+          "candidate": {
+            "detected": 529,
+            "top1": 410,
+            "top3": 438,
+            "candidate_rows": 161569,
+            "micro_recall1": 0.17372881355932204,
+            "macro_recall1": 0.20462201717894626,
+            "micro_recall3": 0.18559322033898304,
+            "macro_recall3": 0.21813182793013633
+          },
+          "macro_delta_top1": 0.08030590003264045,
+          "paired_parent_ci95_top1": [
+            0.04306608812041473,
+            0.12009936931667571
+          ],
+          "macro_delta_top3": 0.06909677998812676,
+          "paired_parent_ci95_top3": [
+            0.02660519749654427,
+            0.11670509694647618
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "common_finite_center_ge3": {
+          "trials": 2190,
+          "truth_count": 2190,
+          "independent_groups": 11,
+          "groups_with_truth": 11,
+          "baseline": {
+            "detected": 388,
+            "top1": 254,
+            "top3": 314,
+            "candidate_rows": 53822,
+            "micro_recall1": 0.11598173515981736,
+            "macro_recall1": 0.13019997752073226,
+            "micro_recall3": 0.14337899543378996,
+            "macro_recall3": 0.15651150335242725
+          },
+          "candidate": {
+            "detected": 516,
+            "top1": 402,
+            "top3": 430,
+            "candidate_rows": 153960,
+            "micro_recall1": 0.18356164383561643,
+            "macro_recall1": 0.2143530185325891,
+            "micro_recall3": 0.1963470319634703,
+            "macro_recall3": 0.22797479802782342
+          },
+          "macro_delta_top1": 0.08415304101185689,
+          "paired_parent_ci95_top1": [
+            0.045950978092487535,
+            0.12428487825218466
+          ],
+          "macro_delta_top3": 0.07146329467539617,
+          "paired_parent_ci95_top3": [
+            0.02819146960656395,
+            0.11925137763451034
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "attribution_excluded_trials": 10,
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20261114
+      },
+      "synthetic": {
+        "schema_version": 1,
+        "all_planned": {
+          "trials": 800,
+          "truth_count": 1614,
+          "independent_groups": 800,
+          "groups_with_truth": 640,
+          "baseline": {
+            "detected": 465,
+            "top1": 177,
+            "top3": 299,
+            "candidate_rows": 24955,
+            "micro_recall1": 0.10966542750929369,
+            "macro_recall1": 0.123046875,
+            "micro_recall3": 0.1852540272614622,
+            "macro_recall3": 0.18932291666666665
+          },
+          "candidate": {
+            "detected": 551,
+            "top1": 209,
+            "top3": 334,
+            "candidate_rows": 38717,
+            "micro_recall1": 0.1294919454770756,
+            "macro_recall1": 0.139453125,
+            "micro_recall3": 0.20693928128872366,
+            "macro_recall3": 0.2110677083333333
+          },
+          "macro_delta_top1": 0.01640625,
+          "paired_parent_ci95_top1": [
+            -3.2552083333323777e-06,
+            0.03320638020833329
+          ],
+          "macro_delta_top3": 0.021744791666666666,
+          "paired_parent_ci95_top3": [
+            0.004036458333333333,
+            0.039453125
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "common_attributable": {
+          "trials": 800,
+          "truth_count": 1614,
+          "independent_groups": 800,
+          "groups_with_truth": 640,
+          "baseline": {
+            "detected": 465,
+            "top1": 177,
+            "top3": 299,
+            "candidate_rows": 24955,
+            "micro_recall1": 0.10966542750929369,
+            "macro_recall1": 0.123046875,
+            "micro_recall3": 0.1852540272614622,
+            "macro_recall3": 0.18932291666666665
+          },
+          "candidate": {
+            "detected": 551,
+            "top1": 209,
+            "top3": 334,
+            "candidate_rows": 38717,
+            "micro_recall1": 0.1294919454770756,
+            "macro_recall1": 0.139453125,
+            "micro_recall3": 0.20693928128872366,
+            "macro_recall3": 0.2110677083333333
+          },
+          "macro_delta_top1": 0.01640625,
+          "paired_parent_ci95_top1": [
+            -3.2552083333323777e-06,
+            0.03320638020833329
+          ],
+          "macro_delta_top3": 0.021744791666666666,
+          "paired_parent_ci95_top3": [
+            0.004036458333333333,
+            0.039453125
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "common_finite_center_ge3": {
+          "trials": 800,
+          "truth_count": 1614,
+          "independent_groups": 800,
+          "groups_with_truth": 640,
+          "baseline": {
+            "detected": 465,
+            "top1": 177,
+            "top3": 299,
+            "candidate_rows": 24955,
+            "micro_recall1": 0.10966542750929369,
+            "macro_recall1": 0.123046875,
+            "micro_recall3": 0.1852540272614622,
+            "macro_recall3": 0.18932291666666665
+          },
+          "candidate": {
+            "detected": 551,
+            "top1": 209,
+            "top3": 334,
+            "candidate_rows": 38717,
+            "micro_recall1": 0.1294919454770756,
+            "macro_recall1": 0.139453125,
+            "micro_recall3": 0.20693928128872366,
+            "macro_recall3": 0.2110677083333333
+          },
+          "macro_delta_top1": 0.01640625,
+          "paired_parent_ci95_top1": [
+            -3.2552083333323777e-06,
+            0.03320638020833329
+          ],
+          "macro_delta_top3": 0.021744791666666666,
+          "paired_parent_ci95_top3": [
+            0.004036458333333333,
+            0.039453125
+          ],
+          "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+        },
+        "attribution_excluded_trials": 0,
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20261114
+      }
+    },
+    "selection_shared_native_pair": {
+      "schema_version": 1,
+      "all_planned": {
+        "trials": 2360,
+        "truth_count": 2360,
+        "independent_groups": 11,
+        "groups_with_truth": 11,
+        "baseline": {
+          "detected": 394,
+          "top1": 257,
+          "top3": 317,
+          "candidate_rows": 56374,
+          "micro_recall1": 0.10889830508474577,
+          "macro_recall1": 0.12431611714630582,
+          "micro_recall3": 0.13432203389830508,
+          "macro_recall3": 0.14903504794200953
+        },
+        "candidate": {
+          "detected": 529,
+          "top1": 410,
+          "top3": 438,
+          "candidate_rows": 161569,
+          "micro_recall1": 0.17372881355932204,
+          "macro_recall1": 0.20462201717894626,
+          "micro_recall3": 0.18559322033898304,
+          "macro_recall3": 0.21813182793013633
+        },
+        "macro_delta_top1": 0.08030590003264045,
+        "paired_parent_ci95_top1": [
+          0.04306608812041473,
+          0.12009936931667571
+        ],
+        "macro_delta_top3": 0.06909677998812676,
+        "paired_parent_ci95_top3": [
+          0.02660519749654427,
+          0.11670509694647618
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_attributable": {
+        "trials": 2360,
+        "truth_count": 2360,
+        "independent_groups": 11,
+        "groups_with_truth": 11,
+        "baseline": {
+          "detected": 394,
+          "top1": 257,
+          "top3": 317,
+          "candidate_rows": 56374,
+          "micro_recall1": 0.10889830508474577,
+          "macro_recall1": 0.12431611714630582,
+          "micro_recall3": 0.13432203389830508,
+          "macro_recall3": 0.14903504794200953
+        },
+        "candidate": {
+          "detected": 529,
+          "top1": 410,
+          "top3": 438,
+          "candidate_rows": 161569,
+          "micro_recall1": 0.17372881355932204,
+          "macro_recall1": 0.20462201717894626,
+          "micro_recall3": 0.18559322033898304,
+          "macro_recall3": 0.21813182793013633
+        },
+        "macro_delta_top1": 0.08030590003264045,
+        "paired_parent_ci95_top1": [
+          0.04306608812041473,
+          0.12009936931667571
+        ],
+        "macro_delta_top3": 0.06909677998812676,
+        "paired_parent_ci95_top3": [
+          0.02660519749654427,
+          0.11670509694647618
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_finite_center_ge3": {
+        "trials": 2190,
+        "truth_count": 2190,
+        "independent_groups": 11,
+        "groups_with_truth": 11,
+        "baseline": {
+          "detected": 388,
+          "top1": 254,
+          "top3": 314,
+          "candidate_rows": 53822,
+          "micro_recall1": 0.11598173515981736,
+          "macro_recall1": 0.13019997752073226,
+          "micro_recall3": 0.14337899543378996,
+          "macro_recall3": 0.15651150335242725
+        },
+        "candidate": {
+          "detected": 516,
+          "top1": 402,
+          "top3": 430,
+          "candidate_rows": 153960,
+          "micro_recall1": 0.18356164383561643,
+          "macro_recall1": 0.2143530185325891,
+          "micro_recall3": 0.1963470319634703,
+          "macro_recall3": 0.22797479802782342
+        },
+        "macro_delta_top1": 0.08415304101185689,
+        "paired_parent_ci95_top1": [
+          0.045950978092487535,
+          0.12428487825218466
+        ],
+        "macro_delta_top3": 0.07146329467539617,
+        "paired_parent_ci95_top3": [
+          0.02819146960656395,
+          0.11925137763451034
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "attribution_excluded_trials": 0,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261114
+    },
+    "estimator_cache_path": "/tmp/spaceapps-v3-ranker/forest-cache-sigma08/4650f3f2a39c496d.joblib",
+    "estimator_cache_sha256": "6ddc4df0a176b243f5131c213acc64abc520228640d81decdb2ff5f6713e58f8"
+  },
+  "training_manifest": {
+    "planned_configurations": 84,
+    "detector_settings": {
+      "min_snr": 4.0,
+      "max_peaks": 100,
+      "psf_sigma": 0.8,
+      "min_speed": 0.5,
+      "max_speed": 60.0,
+      "match_radius": 1.4,
+      "min_epochs": 3,
+      "min_support": 0.8,
+      "leave_one_out": true
+    },
+    "inputs": {
+      "synthetic_train": "/tmp/spaceapps-v3-detection/synthetic-sigma08-train.json.gz",
+      "synthetic_validation": "/tmp/spaceapps-v3-detection/synthetic-sigma08-validation.json.gz",
+      "native_train": [
+        "/tmp/spaceapps-v3-detection/native-train01-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train02-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train03-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train04-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train05-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train06-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train07-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-train08-short-v2-sigma08.json.gz"
+      ],
+      "native_validation": [
+        "/tmp/spaceapps-v3-detection/native-validation01-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-validation02-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-validation03-short-v2-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-validation-stress01-short-v1-sigma08.json.gz",
+        "/tmp/spaceapps-v3-detection/native-validation-stress02-short-v1-sigma08.json.gz"
+      ],
+      "native_artifacts": [
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train01-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train02-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train03-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train04-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train05-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train06-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train07-stationary-sigma0.8.json.gz",
+        "/tmp/spaceapps-v3-ranker/native-artifacts/train08-stationary-sigma0.8.json.gz"
+      ]
+    },
+    "input_sha256": {
+      "/tmp/spaceapps-v3-detection/synthetic-sigma08-train.json.gz": "c20ff7400f6f5bc6a2b84cc2a779fd261183157fdba1e617c368eb1e9e4e3a47",
+      "/tmp/spaceapps-v3-detection/synthetic-sigma08-validation.json.gz": "b816144baa5789032fd0fe1e32ac82fbb2e90e7695cebcdf52225e93b7fd6f3b",
+      "/tmp/spaceapps-v3-detection/native-train01-short-v2-sigma08.json.gz": "4fb88291422831c6381d9345278e11114b16da7d7de2e750deaff73320ff3ff7",
+      "/tmp/spaceapps-v3-detection/native-train02-short-v2-sigma08.json.gz": "b68e51ff648b709103f43858c2c4e1687e24d23d794d59b72f665b43b7c73f3c",
+      "/tmp/spaceapps-v3-detection/native-train03-short-v2-sigma08.json.gz": "b888e8d8e7b1d19da6167c9165513becd82c91fc412c6692e4cc6a09dc30923c",
+      "/tmp/spaceapps-v3-detection/native-train04-short-v2-sigma08.json.gz": "0eed872e5a21fe62f70a941dd4d070cb8667c5dbd320f4608900f6aaeb8e60c4",
+      "/tmp/spaceapps-v3-detection/native-train05-short-v2-sigma08.json.gz": "bf7ece1ec7b0b39083c93cab04aa8db1c829d15469c7bc379116208b591bdce8",
+      "/tmp/spaceapps-v3-detection/native-train06-short-v2-sigma08.json.gz": "cb7478308368b9962710e4da868815ff4b6662d0df604511b37368e2df4c4642",
+      "/tmp/spaceapps-v3-detection/native-train07-short-v2-sigma08.json.gz": "bc52be467247a016528ca006aa0a349279f74d508d0b68963ef4446a45ccc077",
+      "/tmp/spaceapps-v3-detection/native-train08-short-v2-sigma08.json.gz": "8e1e8ed150aa5b2669c1ccde87ea355dba8a985baf98b3b2f46be8e3fe5a24bc",
+      "/tmp/spaceapps-v3-detection/native-validation01-short-v2-sigma08.json.gz": "b02acf97919a715ce8030e3f3f2b38863c24b3b4baf0bbb2b550cb034e33bacd",
+      "/tmp/spaceapps-v3-detection/native-validation02-short-v2-sigma08.json.gz": "69218f2bffaa42693d0818543cc3f40f1a4bf76c003421a3a1f56f2bb5043246",
+      "/tmp/spaceapps-v3-detection/native-validation03-short-v2-sigma08.json.gz": "8ed365776c6df415a1eaf3a2713c7cb94d5d05a5f683802cc7cc6a9d3d2d4828",
+      "/tmp/spaceapps-v3-detection/native-validation-stress01-short-v1-sigma08.json.gz": "a18e069bec68ae1bce6d0543b6d94675abc8195c00f874cdeca1d81b0694b0dc",
+      "/tmp/spaceapps-v3-detection/native-validation-stress02-short-v1-sigma08.json.gz": "ef2aff35c9dd3686da8a3e791898e7d61d59c51aa2c7cf891c37e9a7d3a85cc5",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train01-stationary-sigma0.8.json.gz": "13014d0120452e16f07a0399bf6e6ac9c06bd8a44b66f3829be0adfe4d50622f",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train02-stationary-sigma0.8.json.gz": "a12dfee3ba119221851c98fcd85639b35e19a86b1496b568e7d3222e605058eb",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train03-stationary-sigma0.8.json.gz": "a7325b6cd0b6b3990571eb6986cea5fcdc49569560c9ce901512bce1d9b3a409",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train04-stationary-sigma0.8.json.gz": "a15843fd06f26f18a8e2b913d7c7ff457d2733939307319a451037da5c00a2ac",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train05-stationary-sigma0.8.json.gz": "204624e50669b9915796eb2b796e5ebf28a3b3aa27b128550b358bc4ccee19d3",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train06-stationary-sigma0.8.json.gz": "9fb4e669353bdfdb2252dcde2eaa75889ca9a14688e62ab63a4c0fd4824df4eb",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train07-stationary-sigma0.8.json.gz": "7cc1aacb9d4322bc5bcd943f90efefbb4c9160475e2f63f017b76d76adcc0f26",
+      "/tmp/spaceapps-v3-ranker/native-artifacts/train08-stationary-sigma0.8.json.gz": "60c21b55b643146e58b2a858ac203287bbc3a27df3048c6b37f3909e6db88eb3"
+    },
+    "source_sha256": {
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_ranker/train_grid.py": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+      "backend/inference/experiments/v3_ranker/protocol.py": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+      "backend/inference/experiments/v3_ranker/protocol_artifacts.py": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213"
+    },
+    "score_semantics": "Mean class-1 weighted leaf fraction; uncalibrated ranking",
+    "runtime_pickle_forbidden": true,
+    "artifact_truth": "Fixed sky source, constant flux law shared with moving positives, actual native WCS/ePSF; no imposed velocity/jitter; strict attribution and preexisting-control exclusion"
+  },
+  "fitting_rows": 160444,
+  "fitting_positive_rows": 2852,
+  "class_weight_totals": {
+    "0": 80221.99999999997,
+    "1": 80221.99999999997
+  },
+  "resolved_fitting_sources": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_ranker/train_grid.py": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_ranker/train_grid.py",
+    "backend/inference/experiments/v3_ranker/protocol.py": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_ranker/protocol.py",
+    "backend/inference/experiments/v3_ranker/protocol_artifacts.py": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_ranker/protocol_artifacts.py"
+  },
+  "detector_profile": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "model_family": "ExtraTreesClassifier",
+  "artifact_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "source_sha256": {
+    "backend/inference/experiments/v3_ranker/cache_forest_grid.py": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c",
+    "backend/inference/experiments/v3_ranker/test_artifact_protocol.py": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47",
+    "backend/inference/experiments/v3_ranker/test_protocol.py": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6",
+    "backend/inference/experiments/v3_ranker/batch_native.py": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba",
+    "backend/inference/experiments/v3_ranker/test_export_selected.py": "00d95111ede67f84626caee9558a0bc9637417836c90560cdccb5873fb0a668e",
+    "backend/inference/experiments/v3_ranker/cache_expanded_validation.py": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9",
+    "backend/inference/experiments/v3_ranker/test_selection_integrity.py": "49d3186e51d45ca7d1be8c493d1a54fe8d39af52d12e2300946527b227bbd7b0",
+    "backend/inference/experiments/v3_ranker/selection_integrity.py": "a585e75d30c708d801b37be384049729f8825b9f2fd0acc82d6f9c713b1767b2",
+    "backend/inference/experiments/v3_ranker/select_cached.py": "41261a0168c42f9f8b92c88cbc78ba75bdf8b142ecb64e0fd37527bfc7e90424",
+    "backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+    "backend/inference/experiments/v3_ranker/cache_synthetic.py": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b",
+    "backend/inference/experiments/v3_ranker/protocol.py": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+    "backend/inference/experiments/v3_ranker/cache_native_artifacts.py": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9",
+    "backend/inference/experiments/v3_ranker/protocol_artifacts.py": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213",
+    "backend/inference/experiments/v3_ranker/audit_domain.py": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf",
+    "backend/inference/experiments/v3_ranker/test_selection_policy.py": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115",
+    "backend/inference/experiments/v3_ranker/train_grid.py": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+    "backend/inference/experiments/v3_ranker/export_selected.py": "c6d2059e635bd5d97ace41bda39b2a9e031e3bf53ed3facd72a4f204bbae629b",
+    "backend/inference/experiments/v3_ranker/select_system.py": "4dc59f6381c6c5267eafa3afbb5e735d78496be0989610b3cb5b7fc8eabf32c9",
+    "backend/inference/experiments/v3_ranker/cache_native.py": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66",
+    "backend/inference/experiments/v3_evaluation/test_evaluate_presets.py": "cea715c3e47e6dd2334963823a862568489ad4710b3d5283d193dfc3d00051bf",
+    "backend/inference/experiments/v3_evaluation/paired.py": "3537abceba2b8a654ec65c2cbd0ef619363ce04524a33fd8a8ce5fa7072438df",
+    "backend/inference/experiments/v3_evaluation/test_paired.py": "6dbbec17f66a5040371b4bdcd0383c9fb41dbecda59774967fa7ba1f7dab474e",
+    "backend/inference/experiments/v3_evaluation/run_native.py": "e65bf7ded29bf9f267c68a18412f339881a40273b2a9908fc05158d51655d7cf",
+    "backend/inference/experiments/v3_evaluation/run_synthetic.py": "a489d0d9ec8d5a8e891674b5893a515c5dfe34f26075c66efd9c23b2a85f0501",
+    "backend/inference/experiments/v3_evaluation/evaluate_presets.py": "af40c7f77f721506508796125efd0d45fb61497616954c737a268231a9278a69",
+    "backend/inference/experiments/v3_evaluation/test_runners.py": "5f7416184889ad465b40e54c331fa3765343aab8e23aa54e6663e57f251244f8",
+    "backend/inference/experiments/v3_detection/confirm_scan.py": "b97403c083c16f0e1007c364a06b0ac763f8e6bc2d31072d08784e696b3429f4",
+    "backend/inference/experiments/v3_detection/digital_tracking.py": "1eb626f2c06ac1c41e7723a02d4bf91ac5d8b4f37a2ec616e4e80f641feddbb0",
+    "backend/inference/experiments/v3_detection/threshold_scan.py": "f0504fb7cb1f8c82a25cc2b271de160b5f0944e5031bff617e593a6e1c67b43a",
+    "backend/inference/experiments/v3_detection/joint_scan.py": "dbe2353b85a0a10fe516b76411173cb9822bb3f069dc16cdc6cfe7bae291172a",
+    "backend/inference/experiments/v3_detection/test_expanded_recache.py": "9a48a817096612ed3f9a627142996ff843ff8e892b382c0327878c606d12677e",
+    "backend/inference/experiments/v3_detection/summarize_slow.py": "c1007c48247ae6f13b5c6dddb77698903697221a55b5b50671158c3e21312e8e",
+    "backend/inference/experiments/v3_detection/summarize_native.py": "c3f014a12ac6a70e285a45208f74f29c84f8285056a75853bc8ff46d8298bc3d",
+    "backend/inference/experiments/v3_detection/slow_profile.py": "8bf8c02c8805e11da8d4664ee22ded6f952660da03f980405a06eaacf1b055de",
+    "backend/inference/experiments/v3_detection/test_digital_tracking.py": "ab85711b135b3bc3455c81d5c2e7e98630df21497f69af14b776be4e4fd0401f",
+    "backend/inference/experiments/v3_detection/audit_slow_matches.py": "2bff1b492f53c08d06eaf446f2cad49a1893cca4b9c87087b2da7ddec444af91",
+    "backend/inference/experiments/v3_detection/cache_synthetic.py": "40ddc16d46cd9db129e6fd746182d327bef07c7ee6d4062cac173c3462443ac2",
+    "backend/inference/experiments/v3_detection/psf_scan.py": "1a0d69bddddea20ac18e2deaa4106d63b99fccb4420d1c65dcf921e9b49df870",
+    "backend/inference/experiments/v3_detection/native_scan.py": "bb33b4b959eb48f7ff25758f63fbd7913d07928e616c6b3cd98126ad58fe9f3b",
+    "backend/inference/experiments/v3_detection/recache_expanded.py": "02e92d4a8415ed300a4efbcfe6ffb3c7f2601e1965483bc62e4bd621e3e2da98",
+    "backend/inference/experiments/v3_detection/validate_expanded_cache.py": "8740ffb19f9e1b994695a81efcb88e384ffc393205934591f5fb41ccf846a076",
+    "backend/inference/experiments/v3_detection/cache_native_narrow.py": "68ffe5e77988eeebb22fc2dfc399481adf7feb2084b21f9a3fee3fb3688115ea",
+    "backend/inference/ml_inference/model.py": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083",
+    "backend/inference/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "backend/inference/training/simulate_v2.py": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28",
+    "backend/inference/training/train_v2.py": "04f0ab04bd9cb56d65f929d19043433052944cb1b6fbf1ea3e17bdb5de98257f",
+    "backend/inference/training/evaluate_background.py": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+    "backend/inference/training/train.py": "01ff2708feade429705ea29f766837bb9d53ca04f9bfeb334eb6ab16e6a9cb3c",
+    "backend/inference/training/weights.py": "50121e69f253d992e3048688af15e57ae8736e76e13d5b01a9beb858ae32b6dd"
+  },
+  "complete132_outcome_report_sha256": "95b63b76ff8135cfcbce5baad360931c93b813aeb4325c81e3661446ba61999a",
+  "selection_source_binding": {
+    "mode": "immutable historical selection source snapshot",
+    "source_root": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source",
+    "invocation_sha256": "b4043a3275fbfdc0e71bec5ef4a3de4e9ba9d79dd7d6a6f9dd98ba7adb512456",
+    "snapshot_manifest_sha256": "a3d94ba63b4dbff8b389245ac2267132c8cc452cac4ddb7e6d0769c172392f7e",
+    "original_source_sha256": {
+      "backend/inference/experiments/v3_ranker/cache_forest_grid.py": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c",
+      "backend/inference/experiments/v3_ranker/test_artifact_protocol.py": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47",
+      "backend/inference/experiments/v3_ranker/test_protocol.py": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6",
+      "backend/inference/experiments/v3_ranker/batch_native.py": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba",
+      "backend/inference/experiments/v3_ranker/cache_expanded_validation.py": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9",
+      "backend/inference/experiments/v3_ranker/test_selection_integrity.py": "49d3186e51d45ca7d1be8c493d1a54fe8d39af52d12e2300946527b227bbd7b0",
+      "backend/inference/experiments/v3_ranker/selection_integrity.py": "a585e75d30c708d801b37be384049729f8825b9f2fd0acc82d6f9c713b1767b2",
+      "backend/inference/experiments/v3_ranker/select_cached.py": "41261a0168c42f9f8b92c88cbc78ba75bdf8b142ecb64e0fd37527bfc7e90424",
+      "backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+      "backend/inference/experiments/v3_ranker/cache_synthetic.py": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b",
+      "backend/inference/experiments/v3_ranker/protocol.py": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+      "backend/inference/experiments/v3_ranker/cache_native_artifacts.py": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9",
+      "backend/inference/experiments/v3_ranker/protocol_artifacts.py": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213",
+      "backend/inference/experiments/v3_ranker/audit_domain.py": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf",
+      "backend/inference/experiments/v3_ranker/test_selection_policy.py": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115",
+      "backend/inference/experiments/v3_ranker/train_grid.py": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+      "backend/inference/experiments/v3_ranker/select_system.py": "4dc59f6381c6c5267eafa3afbb5e735d78496be0989610b3cb5b7fc8eabf32c9",
+      "backend/inference/experiments/v3_ranker/cache_native.py": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66",
+      "backend/inference/experiments/v3_evaluation/paired.py": "ebe526aefa5212b8a40481528f0a890934d4ae360e53cd839ddb1e55766ebdce"
+    },
+    "resolved_snapshot_sha256": {
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_forest_grid.py": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/test_artifact_protocol.py": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/test_protocol.py": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/batch_native.py": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_expanded_validation.py": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/test_selection_integrity.py": "49d3186e51d45ca7d1be8c493d1a54fe8d39af52d12e2300946527b227bbd7b0",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/selection_integrity.py": "a585e75d30c708d801b37be384049729f8825b9f2fd0acc82d6f9c713b1767b2",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/select_cached.py": "41261a0168c42f9f8b92c88cbc78ba75bdf8b142ecb64e0fd37527bfc7e90424",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_synthetic.py": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/protocol.py": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_native_artifacts.py": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/protocol_artifacts.py": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/audit_domain.py": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/test_selection_policy.py": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/train_grid.py": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/select_system.py": "4dc59f6381c6c5267eafa3afbb5e735d78496be0989610b3cb5b7fc8eabf32c9",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_ranker/cache_native.py": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/artifacts/v3-selection-source/backend/inference/experiments/v3_evaluation/paired.py": "ebe526aefa5212b8a40481528f0a890934d4ae360e53cd839ddb1e55766ebdce"
+    },
+    "current_export_sources_recorded_separately": true
+  },
+  "selection_invocation_sha256": "b4043a3275fbfdc0e71bec5ef4a3de4e9ba9d79dd7d6a6f9dd98ba7adb512456",
+  "shared_selection_cohort": {
+    "planned": 2370,
+    "sigma12_eligible": 2370,
+    "sigma08_eligible": 2360,
+    "shared_eligible": 2360,
+    "by_parent": {
+      "validation-stress01": {
+        "planned": 150,
+        "sigma12_eligible": 150,
+        "sigma08_eligible": 150,
+        "shared_eligible": 150
+      },
+      "validation-stress02": {
+        "planned": 150,
+        "sigma12_eligible": 150,
+        "sigma08_eligible": 150,
+        "shared_eligible": 150
+      },
+      "validation01": {
+        "planned": 150,
+        "sigma12_eligible": 150,
+        "sigma08_eligible": 150,
+        "shared_eligible": 150
+      },
+      "validation02": {
+        "planned": 150,
+        "sigma12_eligible": 150,
+        "sigma08_eligible": 150,
+        "shared_eligible": 150
+      },
+      "validation03": {
+        "planned": 150,
+        "sigma12_eligible": 150,
+        "sigma08_eligible": 145,
+        "shared_eligible": 145
+      },
+      "validation06": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 265,
+        "shared_eligible": 265
+      },
+      "validation07": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 270,
+        "shared_eligible": 270
+      },
+      "validation08": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 270,
+        "shared_eligible": 270
+      },
+      "validation09": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 270,
+        "shared_eligible": 270
+      },
+      "validation10": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 270,
+        "shared_eligible": 270
+      },
+      "validation11": {
+        "planned": 270,
+        "sigma12_eligible": 270,
+        "sigma08_eligible": 270,
+        "shared_eligible": 270
+      }
+    },
+    "features_labels_and_attribution_bits_changed": false
+  },
+  "input_sha256": {
+    "/tmp/spaceapps-v3-detection/synthetic-sigma08-train.json.gz": "c20ff7400f6f5bc6a2b84cc2a779fd261183157fdba1e617c368eb1e9e4e3a47",
+    "/tmp/spaceapps-v3-detection/synthetic-sigma08-validation.json.gz": "b816144baa5789032fd0fe1e32ac82fbb2e90e7695cebcdf52225e93b7fd6f3b",
+    "/tmp/spaceapps-v3-detection/native-train01-short-v2-sigma08.json.gz": "4fb88291422831c6381d9345278e11114b16da7d7de2e750deaff73320ff3ff7",
+    "/tmp/spaceapps-v3-detection/native-train02-short-v2-sigma08.json.gz": "b68e51ff648b709103f43858c2c4e1687e24d23d794d59b72f665b43b7c73f3c",
+    "/tmp/spaceapps-v3-detection/native-train03-short-v2-sigma08.json.gz": "b888e8d8e7b1d19da6167c9165513becd82c91fc412c6692e4cc6a09dc30923c",
+    "/tmp/spaceapps-v3-detection/native-train04-short-v2-sigma08.json.gz": "0eed872e5a21fe62f70a941dd4d070cb8667c5dbd320f4608900f6aaeb8e60c4",
+    "/tmp/spaceapps-v3-detection/native-train05-short-v2-sigma08.json.gz": "bf7ece1ec7b0b39083c93cab04aa8db1c829d15469c7bc379116208b591bdce8",
+    "/tmp/spaceapps-v3-detection/native-train06-short-v2-sigma08.json.gz": "cb7478308368b9962710e4da868815ff4b6662d0df604511b37368e2df4c4642",
+    "/tmp/spaceapps-v3-detection/native-train07-short-v2-sigma08.json.gz": "bc52be467247a016528ca006aa0a349279f74d508d0b68963ef4446a45ccc077",
+    "/tmp/spaceapps-v3-detection/native-train08-short-v2-sigma08.json.gz": "8e1e8ed150aa5b2669c1ccde87ea355dba8a985baf98b3b2f46be8e3fe5a24bc",
+    "/tmp/spaceapps-v3-detection/native-validation01-short-v2-sigma08.json.gz": "b02acf97919a715ce8030e3f3f2b38863c24b3b4baf0bbb2b550cb034e33bacd",
+    "/tmp/spaceapps-v3-detection/native-validation02-short-v2-sigma08.json.gz": "69218f2bffaa42693d0818543cc3f40f1a4bf76c003421a3a1f56f2bb5043246",
+    "/tmp/spaceapps-v3-detection/native-validation03-short-v2-sigma08.json.gz": "8ed365776c6df415a1eaf3a2713c7cb94d5d05a5f683802cc7cc6a9d3d2d4828",
+    "/tmp/spaceapps-v3-detection/native-validation-stress01-short-v1-sigma08.json.gz": "a18e069bec68ae1bce6d0543b6d94675abc8195c00f874cdeca1d81b0694b0dc",
+    "/tmp/spaceapps-v3-detection/native-validation-stress02-short-v1-sigma08.json.gz": "ef2aff35c9dd3686da8a3e791898e7d61d59c51aa2c7cf891c37e9a7d3a85cc5",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train01-stationary-sigma0.8.json.gz": "13014d0120452e16f07a0399bf6e6ac9c06bd8a44b66f3829be0adfe4d50622f",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train02-stationary-sigma0.8.json.gz": "a12dfee3ba119221851c98fcd85639b35e19a86b1496b568e7d3222e605058eb",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train03-stationary-sigma0.8.json.gz": "a7325b6cd0b6b3990571eb6986cea5fcdc49569560c9ce901512bce1d9b3a409",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train04-stationary-sigma0.8.json.gz": "a15843fd06f26f18a8e2b913d7c7ff457d2733939307319a451037da5c00a2ac",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train05-stationary-sigma0.8.json.gz": "204624e50669b9915796eb2b796e5ebf28a3b3aa27b128550b358bc4ccee19d3",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train06-stationary-sigma0.8.json.gz": "9fb4e669353bdfdb2252dcde2eaa75889ca9a14688e62ab63a4c0fd4824df4eb",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train07-stationary-sigma0.8.json.gz": "7cc1aacb9d4322bc5bcd943f90efefbb4c9160475e2f63f017b76d76adcc0f26",
+    "/tmp/spaceapps-v3-ranker/native-artifacts/train08-stationary-sigma0.8.json.gz": "60c21b55b643146e58b2a858ac203287bbc3a27df3048c6b37f3909e6db88eb3",
+    "/tmp/spaceapps-v3-ranker/synthetic-validation.json.gz": "a5f86ef81970f97d8433d597d1f32b0684490bf9773d5efd009a43e81f6e13dd",
+    "/tmp/spaceapps-v3-ranker/native-validation01-short-v2.json.gz": "f9928371e8bd47dbced6caf286c70520a011f9441dab5227b06b4971b71c1ccc",
+    "/tmp/spaceapps-v3-ranker/native-validation02-short-v2.json.gz": "31b67d62c1dcea615da4c4e0e2243b5cf5de0ec606860f375ad529f39cab9bd3",
+    "/tmp/spaceapps-v3-ranker/native-validation03-short-v2.json.gz": "d17c071f469e4c2631fef350673b41bc1eba9912c75a54830485662dbf2d71cf",
+    "/tmp/spaceapps-v3-ranker/native-validation-stress01-short-v1.json.gz": "4aec2f3df8f96ceb4b6fd7e49b704289cd225335b96d34d837d0e05577c22e66",
+    "/tmp/spaceapps-v3-ranker/native-validation-stress02-short-v1.json.gz": "e5957d1c1d0b07da441ab113c7a2bb5bc32603e5d0f33435aff67b45915e51b1",
+    "/tmp/spaceapps-v3-ranker/native-validation06-expanded-v1-sigma12-default.json.gz": "3c0642006c5c654e8b245a2b41b0ae086d7dff0f07840a47d7dba8d80966ed1c",
+    "/tmp/spaceapps-v3-detection/native-validation06-expanded-v1-sigma12-default-sigma08.json.gz": "c77dd57788ee43ad40cf69ab3cf161363370849d91185524ee11ba7210e80dd1",
+    "/tmp/spaceapps-v3-ranker/native-validation07-expanded-v1-sigma12-default.json.gz": "c624fd69eff920ea2e7cabed2107fa65830b6447e5e69e772bc6776e07fab3b1",
+    "/tmp/spaceapps-v3-detection/native-validation07-expanded-v1-sigma12-default-sigma08.json.gz": "dd4a1dc3226bd4b57ef702813a7f6df9c186a569804422e3a0ab7d0f6782d83b",
+    "/tmp/spaceapps-v3-ranker/native-validation08-expanded-v1-sigma12-default.json.gz": "fd2b2bb056a78a962eb6a6137bf4db0364ec1b1cccf0b5161ec0dcc616b4bcd2",
+    "/tmp/spaceapps-v3-detection/native-validation08-expanded-v1-sigma12-default-sigma08.json.gz": "51e60ed287275d2ce0f1423ebd572a9bbaf4235eb2f346475dec9b2cfa8e97f0",
+    "/tmp/spaceapps-v3-ranker/native-validation09-expanded-v1-sigma12-default.json.gz": "aea95a30bb013c3de74b3f9dd2e168da1067076be101c414c82b34271f132608",
+    "/tmp/spaceapps-v3-detection/native-validation09-expanded-v1-sigma12-default-sigma08.json.gz": "dc93f5155bbf0a9eb078b6a498c7e56f871876454e5ea0964f865cdc278883c4",
+    "/tmp/spaceapps-v3-ranker/native-validation10-expanded-v1-sigma12-default.json.gz": "c6376a38ef4b071b0c214fa614062e6d4ade4542fde25a1937de9ecd9a87f082",
+    "/tmp/spaceapps-v3-detection/native-validation10-expanded-v1-sigma12-default-sigma08.json.gz": "a194e4846ebc6890bd801cd9c6e5e931366f1fba01c83b22fd126a65d22fbed8",
+    "/tmp/spaceapps-v3-ranker/native-validation11-expanded-v1-sigma12-default.json.gz": "338c7691ceb84b0c8b43ef74ed3e0fee37ae3f059d660e5820ad078660989145",
+    "/tmp/spaceapps-v3-detection/native-validation11-expanded-v1-sigma12-default-sigma08.json.gz": "ef3f3789476b00708a94ac6e6a0939a986e0e16b47c9aabb9037e9855cd3e342"
+  },
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "sklearn": "1.9.1",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.30.0",
+    "skl2onnx": "1.20.0"
+  },
+  "export_guard_amendment": {
+    "recorded_before_final": true,
+    "prior_failure_sha256": "a32262a15884ad09e7df7fc566b9454d36f7576bbb38f13aeba91777aa74477b",
+    "reason": "One float32 accumulation swap at ranks99/100 changed no protected review/output membership; original failure and artifact retained. No model refit or second candidate.",
+    "policy": "Root-approved BEFORE FINAL amendment:np.allclose rtol=2e-6 and atol=2e-6; identical ordered top1/top3 and known retention in every field; identical top100 membership; other full-order changes reported, never claimed exact"
+  },
+  "validation_export_policy": "Root-approved BEFORE FINAL amendment:np.allclose rtol=2e-6 and atol=2e-6; identical ordered top1/top3 and known retention in every field; identical top100 membership; other full-order changes reported, never claimed exact"
+}

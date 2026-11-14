@@ -21,9 +21,10 @@ RUN python3 -m venv /opt/inference-venv \
 COPY --from=build --chown=app:app /build/backend/target/stage ./
 COPY --chown=app:app backend/docs/openai/openapi.yaml ./docs/openai/openapi.yaml
 COPY --chown=app:app ml/pvusatov/backend/inference/ml_inference ./inference/ml_inference
-COPY --chown=app:app ml/pvusatov/backend/inference/models/ranker.onnx ml/pvusatov/backend/inference/models/metadata.json ./inference/models/
+COPY --chown=app:app ml/pvusatov/releases/v3/model/ranker.onnx ml/pvusatov/releases/v3/model/metadata.json ./inference/models/
 COPY --chown=app:app ml/pvusatov/backend/inference/fixtures ./inference/fixtures
 COPY --chown=app:app ml/pvusatov/backend/inference/smoke.py ./inference/smoke.py
+COPY --chown=app:app ml/pvusatov/releases/v3/smoke.py ./inference/release-smoke.py
 ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \

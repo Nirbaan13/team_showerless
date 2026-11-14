@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "passes": true,
+  "audit_source_sha256": "a1fa4b4f9ffbdb5cba4bef9da83303184ec7e55716e1aefec5d46fabca3f7e14",
+  "freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "summary_sha256": "3c0be474cc46488b159e72ebf56fd7a0862fea614a5d1de77c45925143386b9b",
+  "snapshot_manifest_sha256": "008eb0a4d5930037d05e3e58423c0f80e0a2892e4003f360233ac7e83b4fa45a",
+  "snapshot_files_verified": 46,
+  "snapshot_bytes_verified": 62727329,
+  "scientific_sources_verified": 15,
+  "translated_freeze_references_verified": 59,
+  "external_freeze_references_not_verified": [
+    {
+      "reference": "$.native.parents[0].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final01-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[1].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final02-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[2].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final03-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[3].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final04-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[4].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[5].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[6].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[7].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[8].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/downloads.json"
+    },
+    {
+      "reference": "$.native.parents[9].original_downloads_manifest",
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/downloads.json"
+    }
+  ],
+  "model_artifacts_and_original_metadata_verified": true,
+  "summary_invocation_sources_verified": 4,
+  "paired_model_reports_recomputed": 4,
+  "all_model_report_metrics_match": true,
+  "primary_gate_matches_published": {
+    "passes_recovery_gate": true,
+    "reasons": [],
+    "runtime_and_integration_gates_required_separately": true
+  },
+  "key_counts": {
+    "native_primary": {
+      "trials": 2700,
+      "independent_groups": 10,
+      "truth_count": 2700,
+      "common_attributable_trials": 2695
+    },
+    "native_secondary": {
+      "trials": 2700,
+      "independent_groups": 10,
+      "truth_count": 2700,
+      "common_attributable_trials": 2690
+    },
+    "synthetic_primary": {
+      "trials": 2000,
+      "independent_groups": 2000,
+      "truth_count": 3998,
+      "common_attributable_trials": 2000
+    },
+    "synthetic_secondary": {
+      "trials": 2000,
+      "independent_groups": 2000,
+      "truth_count": 3998,
+      "common_attributable_trials": 2000
+    }
+  },
+  "replay_python": "3.14.4",
+  "floating_comparison": {
+    "absolute_tolerance": 1e-12,
+    "relative_tolerance": 1e-12,
+    "integer_counts_exact": true
+  },
+  "scope": "Portable source/model/snapshot/cache/paired-aggregate audit only; no original FITS, execution-environment recreation, rendering or inference.",
+  "original_absolute_paths_opened": false,
+  "predictions_changed": false,
+  "promotion_authorized": false
+}

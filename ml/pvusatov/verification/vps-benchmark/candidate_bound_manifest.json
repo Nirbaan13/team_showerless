@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "designation": "One profile-bound c13 VPS numeric and four packaged-DEVELOPMENT CLI follow-up; no final-science claim",
+  "files": [
+    {
+      "path": "candidate_bound_container_probe.py",
+      "sha256": "48aab5b3414457fc8771bb91e505bd4851848f47e11ce1c1f58bce44ef7b796a",
+      "bytes": 13207
+    },
+    {
+      "path": "candidate_remote_runner.py",
+      "sha256": "2b97babd0b7d05326084def490017e5cf8b2c485b8eed79f1f890c379efc9eec",
+      "bytes": 4812
+    },
+    {
+      "path": "candidate_bound_run_ssh.py",
+      "sha256": "4674881b88f9bab89b358d617f010d14270fce3d525d1be4fe21f7d73e66baba",
+      "bytes": 2909
+    },
+    {
+      "path": "candidate_bound_vps_benchmark.json",
+      "sha256": "dbc09b49a7796d83c0e160c6ac96a8e3f16571ec6e4f8ae8919d6ad12b51ca52",
+      "bytes": 90287
+    },
+    {
+      "path": "candidate_bound_benchmark.AI.md",
+      "sha256": "b9d12ccdcefe4bcd9d483ab63b062586b34886bd617a64cd9094c7463a5efcfb",
+      "bytes": 5674
+    }
+  ],
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+  "pinned_image_id": "sha256:a7a09a3f08074570110dfe1dbb714d378047ea1bb3ca19f278ba2a08c4aa64c7",
+  "image_revision": "5867ff8ac88087acb36cbfdb168b6d2299fef97a",
+  "production_unchanged_at_checks": true,
+  "loader_has_profile_binding": true,
+  "cli_cases": 4,
+  "all_cli_checks": {
+    "all_four_cli_success": true,
+    "comet_d2_known_model_rank1": true,
+    "comet_d6_known_model_rank4": true,
+    "vesta_d3_known_unscored_bloom_rank100": true,
+    "vesta_bloom_targets_always_unscored": true
+  },
+  "leftover_containers": 0,
+  "remote_staging_deleted": true,
+  "credentials_included": false,
+  "final_data_uploaded_or_opened": false
+}

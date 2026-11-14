@@ -26,6 +26,12 @@
 !ml/pvusatov/backend/inference/fixtures/
 !ml/pvusatov/backend/inference/fixtures/**
 !ml/pvusatov/backend/inference/smoke.py
+!ml/pvusatov/releases/
+!ml/pvusatov/releases/v3/
+!ml/pvusatov/releases/v3/model/
+!ml/pvusatov/releases/v3/model/ranker.onnx
+!ml/pvusatov/releases/v3/model/metadata.json
+!ml/pvusatov/releases/v3/smoke.py
 backend/project/target
 backend/project/project
 backend/src/test
