@@ -1,0 +1,23 @@
+services:
+  frontend:
+    image: ${FRONTEND_IMAGE:?FRONTEND_IMAGE must name the commit-tagged frontend image}
+    pull_policy: never
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_BIND_ADDRESS:-0.0.0.0}:${FRONTEND_PORT:-8080}:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cpus: 0.5
+    mem_limit: 128m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,4 +1,7 @@
-package spaceapps
+package spaceapps.controller
+
+import spaceapps.domain.*
+import spaceapps.service.{Jobs,Resource}
 
 import zio.{Chunk as _, *}
 import zio.http.*

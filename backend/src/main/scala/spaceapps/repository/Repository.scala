@@ -1,4 +1,6 @@
-package spaceapps
+package spaceapps.repository
+
+import spaceapps.domain.*
 
 import zio.{Chunk as _, *}
 import zio.json.*

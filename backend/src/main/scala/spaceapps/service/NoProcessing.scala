@@ -1,4 +1,6 @@
-package spaceapps
+package spaceapps.service
+
+import spaceapps.domain.{ApiError,Query}
 
 import zio.*
 import java.nio.file.Path

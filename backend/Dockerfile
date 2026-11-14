@@ -23,7 +23,7 @@ LABEL org.opencontainers.image.revision=${APP_REVISION} \
       org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless"
 VOLUME ["/app/data"]
 USER app
-EXPOSE 8000
+EXPOSE 8000 50051
 HEALTHCHECK --interval=3s --timeout=3s --start-period=20s --retries=3 \
     CMD curl --fail --silent --max-time 2 http://127.0.0.1:8000/health | grep -Fq "\"revision\":\"$APP_REVISION\""
-CMD ["java", "-cp", "classes:lib/*", "spaceapps.Main"]
+CMD ["java", "-cp", "classes:lib/*", "spaceapps.bootstrap.Main"]

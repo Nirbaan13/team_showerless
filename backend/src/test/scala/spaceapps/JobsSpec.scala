@@ -1,6 +1,13 @@
 package spaceapps
 
+import spaceapps.domain.*
+import spaceapps.service.*
+import spaceapps.repository.Repository
+import spaceapps.integrations.irsa.LiveArchive
+import spaceapps.controller.Api
+
 import zio.*
+import zio.json.*
 import zio.test.*
 import java.nio.file.{Files, Path}
 
@@ -57,6 +64,31 @@ object JobsSpec extends ZIOSpecDefault:
           preview <- jobs.resource(done.chunks.head.id, true)
         yield assertTrue(done.status == "completed", done.chunks.head.preview_status == "unavailable", fits.isInstanceOf[Resource.Ready],
           preview match { case Resource.Failed(error) => error.code == "unavailable"; case _ => false })
+      }
+    },
+    test("every job.updated carries a full manifest when preview processing is disabled") {
+      ZIO.scoped {
+        for
+          dir <- temp
+          repo <- Repository.open(dir.resolve("jobs.db"))
+          gate <- Promise.make[Nothing, Unit]
+          subscribed <- Promise.make[Nothing, Unit]
+          jobs <- Jobs.make(repo, archive(gate.await), NoProcessing, dir)
+          accepted <- jobs.submit(query, "default", None)
+          streamed <- jobs.events(accepted.id).tap(_ => subscribed.succeed(())).runCollect.fork
+          _ <- subscribed.await
+          discovered <- awaitChunks(jobs, accepted.id)
+          _ <- gate.succeed(())
+          done <- awaitDone(jobs, accepted.id)
+          stream <- streamed.join
+          persisted <- repo.eventsAfter(done.id, 0)
+          storedUpdates = persisted.filter(_.name == "job.updated")
+          streamedUpdates = stream.filter(_.name == "job.updated")
+          compact = persisted.find(_.name == "chunk.ready").get
+        yield assertTrue(done.status == "completed", discovered.chunks.head.preview_status == "unavailable",
+          storedUpdates.size == 3, storedUpdates.forall(_.data.fromJson[Download].isRight),
+          streamedUpdates.nonEmpty, streamedUpdates.forall(_.data.fromJson[Download].isRight),
+          compact.data.fromJson[Download].isLeft, compact.data.contains("chunk_id"))
       }
     },
     test("a channel filter selects native products without preparing science output") {

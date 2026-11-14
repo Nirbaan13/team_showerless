@@ -17,7 +17,7 @@ Test / fork := true
 Test / javaOptions += "--enable-native-access=ALL-UNNAMED"
 Compile / run / fork := true
 Compile / run / javaOptions += "--enable-native-access=ALL-UNNAMED"
-Compile / mainClass := Some("spaceapps.Main")
+Compile / mainClass := Some("spaceapps.bootstrap.Main")
 // Export a dependency-complete classpath directory without a fat-JAR plugin.
 lazy val stage = taskKey[File]("Stage the application and dependency jars")
 stage := {
@@ -30,3 +30,22 @@ stage := {
   }
   output
 }
+
+val grpcVersion = "1.84.2"
+val scalaPbVersion = "0.11.21"
+libraryDependencies ++= Seq(
+  "com.thesamet.scalapb.zio-grpc" %% "zio-grpc-core" % "0.6.4",
+  "com.thesamet.scalapb" %% "scalapb-runtime" % scalaPbVersion % "protobuf",
+  "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalaPbVersion,
+  "io.grpc" % "grpc-netty-shaded" % grpcVersion
+)
+// Keep gRPC's modules on the runtime's release and avoid unshaded Netty alongside ZIO HTTP.
+dependencyOverrides ++= Seq("grpc-api", "grpc-core", "grpc-context", "grpc-util", "grpc-stub", "grpc-protobuf", "grpc-protobuf-lite", "grpc-services")
+  .map("io.grpc" % _ % grpcVersion)
+dependencyOverrides ++= Seq("zio", "zio-streams", "zio-internal-macros", "zio-stacktracer")
+  .map("dev.zio" %% _ % zioVersion)
+Compile / PB.protocVersion := "3.25.8"
+Compile / PB.targets := Seq(
+  scalapb.gen(grpc = true) -> (Compile / sourceManaged).value / "scalapb",
+  scalapb.zio_grpc.ZioCodeGenerator -> (Compile / sourceManaged).value / "scalapb"
+)

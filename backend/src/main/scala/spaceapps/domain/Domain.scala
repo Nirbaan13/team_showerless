@@ -1,9 +1,8 @@
-package spaceapps
+package spaceapps.domain
 
 import zio.*
 import zio.json.*
 import zio.json.ast.Json
-import java.nio.file.Path
 import java.security.MessageDigest
 import java.time.Instant
 import scala.util.Try
@@ -142,11 +141,3 @@ object Query:
       Query(Json.Obj(zio.Chunk.fromIterable(geometry++common)),position,detector,channel,dates(0),dates(1))
     .toEither.left.map(ApiError.from)
 
-trait Archive:
-  def search(query: Query): Task[List[ArchiveImage]]
-  def fetch(image: ArchiveImage, destination: Path): Task[Unit]
-
-trait Processor:
-  def supportsPreview: Boolean = true
-  def prepare(image: Path, output: Path, mode: String, reference: Option[Path], query: Query): Task[Unit]
-  def preview(image: Path, output: Path): Task[Unit]

@@ -1,6 +1,6 @@
 # Running the IRSA retrieval service
 
-Use JDK25. Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
+Use JDK25. Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
 
 The application implements metadata search, default/range/polygon native-image retrieval, durable status, snapshot-first SSE and FITS file delivery. The public polygon parameter is spelled `verices_degrees` to match the current contract. It does not invent tiles or reproject pixels. A chunk contains an entire native IRSA image, which can extend beyond the requested discovery region.
 

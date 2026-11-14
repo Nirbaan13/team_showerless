@@ -1,0 +1,56 @@
+syntax = "proto3";
+package spaceapps.retrieval.v1;
+import "scalapb/scalapb.proto";
+import "google/protobuf/struct.proto";
+option (scalapb.options) = { package_name: "spaceapps.integrations.grpc.v1" flat_package: true };
+
+// Native IRSA products only: one archive image is one chunk.
+service RetrievalService {
+  rpc SearchObservations(SearchRequest) returns (SearchResponse);
+  rpc PrepareObservations(PrepareRequest) returns (Download);
+  rpc GetDownload(DownloadRequest) returns (Download);
+  rpc WatchDownload(DownloadRequest) returns (stream DownloadEvent);
+  rpc GetChunk(ChunkRequest) returns (stream ChunkBytes);
+  rpc GetVersion(VersionRequest) returns (VersionResponse);
+}
+message Center { double right_ascension_deg = 1; double declination_deg = 2; optional double width_arcmin = 3; optional double height_arcmin = 4; }
+message Range { double right_ascension_min_deg = 1; double right_ascension_max_deg = 2; double declination_min_deg = 3; double declination_max_deg = 4; }
+message Vertex { double right_ascension_deg = 1; double declination_deg = 2; }
+message Polygon { repeated Vertex vertices_degrees = 1; }
+message Query {
+  oneof region { Center center = 1; Range range = 2; Polygon polygon = 3; }
+  optional int32 detector_array = 4;
+  optional int32 channel_index = 5;
+  optional string observed_after = 6;
+  optional string observed_before = 7;
+}
+message SearchRequest { Query query = 1; }
+message SearchResponse { repeated Observation observations = 1; }
+message PrepareRequest { Query query = 1; }
+message DownloadRequest { string download_id = 1; }
+message ChunkRequest { string chunk_id = 1; }
+// Each data field is at most 64 KiB. Ordering is the original file byte order.
+message ChunkBytes { bytes data = 1; }
+message VersionRequest {}
+message VersionResponse { string revision = 1; string api_version = 2; }
+message ApiError { string code = 1; string message = 2; bool retryable = 3; }
+message Observation {
+  string frame_id = 1; string observation_date = 2; int32 detector_array = 3; string release = 4;
+  bool is_available = 5; optional double wavelength_min_um = 6; optional double wavelength_max_um = 7;
+  optional int32 channel_index = 8; optional string skip_reason = 9; google.protobuf.Struct header_metadata = 10;
+}
+message Chunk {
+  string id = 1; string frame_id = 2; string status = 3; string preview_status = 4;
+  string image_url = 5; string fits_cutout_url = 6; ApiError error = 7;
+}
+message Progress { bool discovery_complete = 1; int32 total_chunks = 2; int32 ready_chunks = 3; int32 failed_chunks = 4; int32 unavailable_chunks = 5; }
+message Download {
+  string id = 1; string status = 2; string mode = 3; Query query = 4;
+  repeated Observation observations = 5; repeated Chunk chunks = 6; Progress progress = 7;
+  string status_url = 8; string events_url = 9; optional string reference_frame_id = 10; repeated ApiError errors = 11;
+}
+message ChunkUpdate { string download_id = 1; Chunk chunk = 2; Progress progress = 3; }
+message DownloadEvent {
+  int64 sequence = 1; string name = 2;
+  oneof payload { Download download = 3; ChunkUpdate chunk_update = 4; }
+}

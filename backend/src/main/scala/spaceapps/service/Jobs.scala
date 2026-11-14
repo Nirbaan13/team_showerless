@@ -1,4 +1,7 @@
-package spaceapps
+package spaceapps.service
+
+import spaceapps.domain.*
+import spaceapps.repository.Repository
 
 import zio.{Chunk as _, *}
 import zio.stream.*
@@ -49,7 +52,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
     })
   private def progress(chunks: List[Chunk]): Progress = Progress(true, chunks.size, chunks.count(_.status == "ready"), chunks.count(_.status == "failed"), chunks.count(_.status == "unavailable"))
   private def changeChunk(id: String, chunk: String, name: String)(f: Chunk => Chunk): Task[Unit] =
-    repository.update(id, name, Some(chunk)) { record =>
+    repository.update(id, name, if name == "job.updated" then None else Some(chunk)) { record =>
       val chunks = record.download.chunks.map(c => if c.id == chunk then f(c) else c)
       record.copy(download = record.download.copy(chunks = chunks, progress = progress(chunks)))
     }.unit
@@ -72,7 +75,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
       yield path
       prepare.foldZIO(
         error => changeChunk(id, chunk.id, "chunk.failed")(_.copy(status = "failed", preview_status = "failed", error = Some(ApiError.from(error)))),
-        path => if !processor.supportsPreview then changeChunk(id, chunk.id, "job.updated")(_.copy(preview_status = "unavailable"))
+        path => if !processor.supportsPreview then ZIO.unit
         else publish(previewPath(id, chunk.id))(processor.preview(path, _)).foldZIO(
           error => changeChunk(id, chunk.id, "preview.failed")(_.copy(preview_status = "failed", error = Some(ApiError.from(error)))),
           _ => changeChunk(id, chunk.id, "preview.ready")(_.copy(preview_status = "ready"))
@@ -87,7 +90,8 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         val chunks = images.map { image =>
           val cid = Hash.sha256(s"$id|${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}").take(40)
           val status = if image.observation.is_available then "pending" else "unavailable"
-          Chunk(cid, image.observation.frame_id, status, status, s"/api/chunks/$cid/preview", s"/api/chunks/$cid")
+          val previewStatus = if processor.supportsPreview then status else "unavailable"
+          Chunk(cid, image.observation.frame_id, status, previewStatus, s"/api/chunks/$cid/preview", s"/api/chunks/$cid")
         }
         current.copy(images = images, download = current.download.copy(status = "preparing", observations = images.map(_.observation), chunks = chunks, progress = progress(chunks)))
       }

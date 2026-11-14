@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT:-80}:8000"
+      - "127.0.0.1:${GRPC_PORT:-50051}:50051"
     volumes:
       - api-data:/app/data
     read_only: true

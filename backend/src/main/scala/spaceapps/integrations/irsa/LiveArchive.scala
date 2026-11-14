@@ -1,4 +1,7 @@
-package spaceapps
+package spaceapps.integrations.irsa
+
+import spaceapps.domain.*
+import spaceapps.service.Archive
 
 import zio.*
 import zio.http.{Client, Request, Response}
