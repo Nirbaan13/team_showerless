@@ -56,5 +56,19 @@ from a 66,386,880-byte parent (HEAD only), and a 3 x 5 arcmin cutout of 3,965,76
 bytes. Both retained PRIMARY/IMAGE/FLAGS/VARIANCE/ZODI/EPSF/WCS-WAVE. EPSF alone
 occupied 3,859,632 data bytes, so tiny angular regions do not imply kilobyte files.
 These direct research sizes differ from the deliberately enclosing square used
-by the backend. Full regression and production verification are recorded after
-the final checks.
+by the backend.
+
+Final local regression after merging the latest ML and migration changes:
+`./sbtw test stage` passed 129 tests with zero failures and one optional live
+test ignored. Running `IRSA_CUTOUT_LIVE=1 ./sbtw 'testOnly
+spaceapps.IrsaCutoutsLiveSpec'` separately passed against the documented QR3
+product: the actual Scala adapter returned a 4,034,880-byte valid MEF containing
+seven HDUs. Its covering-square request used a 0.1212677761-degree side. The
+primary HDU has no EXTNAME; all six named mission extensions were verified.
+
+The live test uses a known product URL to isolate retrieval from discovery. A
+separate full SIA-to-job attempt was accepted with HTTP 202 but failed explicitly
+with `archive_timeout` while querying IRSA metadata. It did not transfer a full
+image or fabricate a result. This external discovery availability issue remains
+independent of the verified cutout transport. Whitespace, shell syntax and YAML
+checks passed; independent code review found no blocking issues.
