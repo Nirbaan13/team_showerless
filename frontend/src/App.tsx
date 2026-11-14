@@ -8,12 +8,17 @@ import type {
   CandidateClassification,
   ConfidenceLevel,
   CandidateObject,
+  SpherexEpochFrame,
 } from './types/spherex';
 import {
   getMockEpochFrames,
   getMockCandidates,
   getMock102BandSpectrum,
 } from './services/mockSpherexApi';
+import {
+  searchArchiveObservations,
+  convertObservationsToEpochFrames,
+} from './services/spherexBackendApi';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { TopNav } from './components/TopNav';
@@ -87,10 +92,26 @@ export function App() {
     }
   }, [activeTab]);
 
+  const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
+  const [searchStatus, setSearchStatus] = useState<{
+    source: 'live' | 'fallback' | 'preset';
+    message: string;
+  }>({
+    source: 'preset',
+    message: "NASA Benchmark: Barnard's Star",
+  });
+
   const frames = useMemo(() => {
+    if (currentPresetId) {
+      const arrayId = selectedArray === 'all' ? 3 : selectedArray;
+      return getMockEpochFrames(currentPresetId, arrayId);
+    }
+    if (customFrames && customFrames.length > 0) {
+      return customFrames;
+    }
     const arrayId = selectedArray === 'all' ? 3 : selectedArray;
-    return getMockEpochFrames(currentPresetId || 'custom', arrayId);
-  }, [currentPresetId, selectedArray]);
+    return getMockEpochFrames('custom', arrayId);
+  }, [currentPresetId, customFrames, selectedArray]);
 
   const [candidatesList, setCandidatesList] = useState(() =>
     getMockCandidates('barnards-star')
@@ -131,13 +152,54 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
-  // Handler when user searches custom coordinates on Home page
-  const handleSearchCoordinates = (newRa: number, newDec: number) => {
+  // Handler when user searches custom coordinates on Home page or LeftControlPanel
+  const handleSearchCoordinates = async (newRa: number, newDec: number) => {
     setRa(newRa);
     setDec(newDec);
     setCurrentPresetId(null);
     setActiveTab('viewer');
     setIsLoading(true);
+
+    const fovArcmin = parseFloat(fov) || 3;
+    const arrayId = selectedArray === 'all' ? undefined : selectedArray;
+
+    try {
+      const searchResult = await searchArchiveObservations({
+        right_ascension_deg: newRa,
+        declination_deg: newDec,
+        width_arcmin: fovArcmin,
+        height_arcmin: fovArcmin,
+        detector_array: arrayId,
+      });
+
+      const converted = convertObservationsToEpochFrames(
+        searchResult.observations,
+        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId
+      );
+      setCustomFrames(converted);
+      setActiveFrameIndex(0);
+
+      if (searchResult.isFallback) {
+        setSearchStatus({
+          source: 'fallback',
+          message: `Procedural mock fallback (NASA IRSA SIA has no coverage at RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°)`,
+        });
+      } else {
+        setSearchStatus({
+          source: 'live',
+          message: `Live NASA IRSA SIA Stream: ${searchResult.totalFound} observation frames retrieved`,
+        });
+      }
+    } catch (err) {
+      console.warn('Search query error; falling back to procedural mock frames:', err);
+      const fallback = getMockEpochFrames('custom', selectedArray === 'all' ? 2 : selectedArray);
+      setCustomFrames(fallback);
+      setActiveFrameIndex(0);
+      setSearchStatus({
+        source: 'fallback',
+        message: 'Offline catalog fallback active',
+      });
+    }
 
     // Dynamically instantiate candidate object for the entered coordinates
     const customCandidate: CandidateObject = {
@@ -155,19 +217,24 @@ export function App() {
       ],
       classification: 'unreviewed',
       confidence: 'medium',
-      volunteerNotes: `User entered coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Detected proper motion candidate awaiting triage.`,
+      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Searched NASA IRSA SIA archive for SPHEREx coverage.`,
       isKnownCatalogMatch: false,
       properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
     };
 
     setCandidatesList([customCandidate]);
     setSelectedCandidateId(customCandidate.id);
-    setTimeout(() => setIsLoading(false), 500);
+    setIsLoading(false);
   };
 
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
     setCurrentPresetId(preset.id);
+    setCustomFrames(null);
+    setSearchStatus({
+      source: 'preset',
+      message: `NASA Benchmark Preset: ${preset.name}`,
+    });
     setRa(preset.raDeg);
     setDec(preset.decDeg);
     setSelectedArray(preset.recommendedArray);
@@ -179,12 +246,16 @@ export function App() {
     }
     setActiveTab('viewer');
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 500);
+    setTimeout(() => setIsLoading(false), 400);
   };
 
   const handleRefreshCutout = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 500);
+    if (currentPresetId) {
+      setIsLoading(true);
+      setTimeout(() => setIsLoading(false), 400);
+    } else {
+      void handleSearchCoordinates(ra, dec);
+    }
   };
 
   const handleToggleOverlay = (key: keyof CatalogOverlayState) => {
@@ -339,6 +410,7 @@ export function App() {
             onToggleOverlay={handleToggleOverlay}
             onRefreshCutout={handleRefreshCutout}
             viewMode={viewMode}
+            searchStatus={searchStatus}
           />
 
           <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">

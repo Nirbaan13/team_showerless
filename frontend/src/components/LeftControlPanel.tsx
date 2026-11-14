@@ -19,6 +19,10 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
+  searchStatus?: {
+    source: 'live' | 'fallback' | 'preset';
+    message: string;
+  };
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -36,6 +40,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   overlays,
   onToggleOverlay,
   viewMode = 'volunteer',
+  searchStatus,
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
@@ -92,6 +97,27 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             Update Field
           </button>
         </form>
+
+        {searchStatus && (
+          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
+            <span
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                searchStatus.source === 'live'
+                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+                  : searchStatus.source === 'preset'
+                  ? 'bg-sky-400'
+                  : 'bg-amber-400'
+              }`}
+            />
+            <span className="truncate text-paper-300" title={searchStatus.message}>
+              {searchStatus.source === 'live'
+                ? 'NASA IRSA Live Stream'
+                : searchStatus.source === 'preset'
+                ? 'Benchmark Preset'
+                : 'Offline Mock Fallback'}
+            </span>
+          </div>
+        )}
 
         {/* FOV Area Size */}
         <div className="mt-2.5 pt-2 border-t border-paper-800">

@@ -69,14 +69,102 @@ export interface SSEEventHandlers {
 
 const BACKEND_BASE_URL = (import.meta.env.VITE_BACKEND_URL as string) || 'http://35.159.162.202';
 
+import type { SpherexEpochFrame, DetectorArrayId } from '../types/spherex';
+
+export interface ObservationSearchResult {
+  observations: ObservationMetadata[];
+  isFallback: boolean;
+  totalFound: number;
+}
+
 /**
- * Searches the archive for matching observation metadata without downloading image data.
- * Auto-falls back to simulated observations if backend VPS is offline.
+ * Procedural fallback generator when coordinates have no NASA IRSA archive coverage or backend is offline.
  */
-export async function searchObservations(query: SkyQueryRequest): Promise<ObservationMetadata[]> {
+export function generateFallbackObservations(query: SkyQueryRequest): ObservationMetadata[] {
+  const dates = [
+    '2025-06-15T04:12:00Z',
+    '2025-09-22T11:45:00Z',
+    '2025-12-08T19:30:00Z',
+    '2026-03-01T08:15:00Z',
+    '2026-06-14T23:50:00Z',
+  ];
+  const targetArray = typeof query.detector_array === 'number' ? query.detector_array : 2;
+
+  const arrayRanges: Record<number, [number, number]> = {
+    1: [0.75, 1.11],
+    2: [1.11, 1.64],
+    3: [1.64, 2.42],
+    4: [2.42, 3.82],
+    5: [3.82, 4.42],
+    6: [4.42, 5.00],
+  };
+  const [wMin, wMax] = arrayRanges[targetArray] || [1.11, 1.64];
+
+  return dates.map((date, idx) => ({
+    frame_id: `SPX-L3-RA${query.right_ascension_deg.toFixed(2)}-DEC${query.declination_deg.toFixed(2)}-E${idx + 1}-A${targetArray}`,
+    observation_date: date,
+    detector_array: targetArray,
+    release: 'DR1' as const,
+    wavelength_min_um: wMin,
+    wavelength_max_um: wMax,
+    channel_index: Math.floor(((wMin + wMax) / 2 - 0.75) / (5.0 - 0.75) * 102) + 1,
+    is_available: true,
+    header_metadata: {
+      exposure_time_sec: 142.5,
+      airmass: 1.0,
+      zodi_brightness: Number((12.4 + idx * 0.8).toFixed(2)),
+      snr_estimated: Number((24.5 - idx * 0.7).toFixed(1)),
+      flagged_pixel_percentage: Number((0.4 + idx * 0.2).toFixed(2)),
+      cosmic_ray_hits: 12 + idx * 3,
+    },
+  }));
+}
+
+/**
+ * Converts ObservationMetadata from NASA IRSA archive into SpherexEpochFrame objects for the canvas viewport.
+ */
+export function convertObservationsToEpochFrames(
+  observations: ObservationMetadata[],
+  fallbackArrayId: DetectorArrayId = 2
+): SpherexEpochFrame[] {
+  return observations.map((obs, idx) => ({
+    frameId: obs.frame_id,
+    epochIndex: idx,
+    observationDate: obs.observation_date,
+    detectorArray: (obs.detector_array >= 1 && obs.detector_array <= 6
+      ? obs.detector_array
+      : fallbackArrayId) as DetectorArrayId,
+    wavelengthMinUm: obs.wavelength_min_um ?? (0.75 + ((obs.detector_array || 2) - 1) * 0.7),
+    wavelengthMaxUm: obs.wavelength_max_um ?? (1.11 + ((obs.detector_array || 2) - 1) * 0.7),
+    channelIndex: obs.channel_index ?? ((obs.detector_array || 2) * 16),
+    flaggedPixelPercentage: Number(
+      obs.header_metadata?.flagged_pixel_percentage ?? (obs.is_available ? 0.2 : 100)
+    ),
+    cosmicRayHits: Number(
+      obs.header_metadata?.cosmic_ray_hits ?? (obs.is_available ? 10 : 0)
+    ),
+    isAvailable: obs.is_available,
+    skipReason: obs.skip_reason,
+    headerMetadata: {
+      exposureTimeSec: Number(obs.header_metadata?.exposure_time_sec ?? 142.5),
+      airmass: Number(obs.header_metadata?.airmass ?? 1.0),
+      zodiBrightnessMjySr: Number(obs.header_metadata?.zodi_brightness ?? 12.4),
+      snrEstimated: Number(
+        obs.header_metadata?.snr_estimated ?? (obs.is_available ? 22.0 : 0)
+      ),
+    },
+  }));
+}
+
+/**
+ * Searches the live NASA IRSA SIA archive via POST /api/observations/search.
+ * Gracefully falls back to simulated observations if the archive has no coverage
+ * at the requested coordinates or if the backend VPS is offline.
+ */
+export async function searchArchiveObservations(query: SkyQueryRequest): Promise<ObservationSearchResult> {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3500);
+    const timeout = setTimeout(() => controller.abort(), 4000);
 
     const response = await fetch(`${BACKEND_BASE_URL}/api/observations/search`, {
       method: 'POST',
@@ -91,20 +179,39 @@ export async function searchObservations(query: SkyQueryRequest): Promise<Observ
     }
 
     const data = await response.json();
-    return data.observations || [];
+    if (Array.isArray(data.observations) && data.observations.length > 0) {
+      return {
+        observations: data.observations,
+        isFallback: false,
+        totalFound: data.observations.length,
+      };
+    }
+
+    // NASA IRSA SIA archive returned 0 observations (no coverage for this sky patch)
+    console.info('[SPHEREx API] NASA IRSA archive returned 0 observations at coordinates. Using graceful mock fallback.');
+    const fallbackObs = generateFallbackObservations(query);
+    return {
+      observations: fallbackObs,
+      isFallback: true,
+      totalFound: 0,
+    };
   } catch (err) {
-    console.warn('[SPHEREx API] Live backend offline or unreachable. Using offline catalog fallback.', err);
-    return [1, 2, 3, 4, 5, 6].map((arr) => ({
-      frame_id: `SPX-L3-RA${query.right_ascension_deg.toFixed(1)}-DEC${query.declination_deg.toFixed(1)}-A${arr}`,
-      observation_date: '2025-06-15T04:12:00Z',
-      detector_array: arr,
-      release: 'DR1',
-      wavelength_min_um: 0.75 + (arr - 1) * 0.7,
-      wavelength_max_um: 1.11 + (arr - 1) * 0.7,
-      channel_index: arr * 16,
-      is_available: true,
-    }));
+    console.warn('[SPHEREx API] Live backend unreachable or search failed. Using graceful offline fallback.', err);
+    const fallbackObs = generateFallbackObservations(query);
+    return {
+      observations: fallbackObs,
+      isFallback: true,
+      totalFound: 0,
+    };
   }
+}
+
+/**
+ * Legacy search function returning plain array of ObservationMetadata.
+ */
+export async function searchObservations(query: SkyQueryRequest): Promise<ObservationMetadata[]> {
+  const result = await searchArchiveObservations(query);
+  return result.observations;
 }
 
 /**

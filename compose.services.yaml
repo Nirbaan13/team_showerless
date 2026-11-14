@@ -1,0 +1,98 @@
+services:
+  # 1. Scala 3 / ZIO Backend API
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${APP_IMAGE:-spaceapps-api:latest}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:8000"
+      - "127.0.0.1:${GRPC_PORT:-50051}:50051"
+    volumes:
+      - api-data:/app/data
+    environment:
+      - DATA_DIR=/app/data
+      - ML_SERVICE_URL=http://ml-inference:8001
+      - CUTOUT_SERVICE_URL=http://cutout-worker:8002
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:8000/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 2. React 18 / Vite / Nginx Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: ops/frontend/Dockerfile
+      args:
+        APP_REVISION: ${APP_REVISION:-latest}
+    image: ${FRONTEND_IMAGE:-spaceapps-frontend:latest}
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:8080"
+    depends_on:
+      - api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/ | grep -q 'id=\"root\"' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 3. ML Inference Service (Moving Object Detection & Random Forest Track Ranker)
+  ml-inference:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    image: ${ML_IMAGE:-spaceapps-ml:latest}
+    restart: unless-stopped
+    ports:
+      - "${ML_PORT:-8001}:8001"
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')\" || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 4. Python IRSA Cutout Worker (Astroquery / NASA IRSA SIA)
+  cutout-worker:
+    build:
+      context: ./backend/app/spherex
+      dockerfile: Dockerfile
+    image: ${CUTOUT_IMAGE:-spaceapps-cutout:latest}
+    restart: unless-stopped
+    ports:
+      - "${CUTOUT_PORT:-8002}:8002"
+    volumes:
+      - api-data:/tmp/spherex_cutouts
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health')\" || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  api-data:
