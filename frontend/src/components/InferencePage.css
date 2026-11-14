@@ -1,7 +1,8 @@
 .inference-page {
   height:100dvh;
   overflow:auto;
-  min-height:100vh;
+  min-height:0;
+  flex:1;
   background:#101314;
   color:#e9ece9;
   font-family:Inter,system-ui,sans-serif;
