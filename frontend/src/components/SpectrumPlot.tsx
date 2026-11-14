@@ -3,7 +3,7 @@ import type { SpectralDataPoint } from '../types/spherex';
 import { REFERENCE_MOLECULAR_LINES } from '../services/mockSpherexApi';
 import { fetchTargetSpectrum } from '../services/spherexBackendApi';
 import type { TargetSpectrumResult, MolecularDetection } from '../services/spherexBackendApi';
-import { Download, Sparkles, ShieldCheck, Activity } from 'lucide-react';
+import { Download, ShieldCheck, Activity } from 'lucide-react';
 
 interface SpectrumPlotProps {
   data?: SpectralDataPoint[];
@@ -156,17 +156,14 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
 
   return (
     <div className="space-y-3.5 select-none text-xs">
-      {/* Header Info Banner: Shasta's Pipeline Attribution & Physical Target */}
-      <div className="p-2.5 rounded-lg bg-paper-950 border border-emerald-500/30 flex items-center justify-between gap-2">
+      {/* Header Info Banner: Physical Target & Export */}
+      <div className="p-2 rounded-lg bg-paper-950 border border-paper-800 flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-              Shasta’s WCS-WAVE Spectrophotometer
-            </span>
-          </div>
-          <div className="text-xs font-mono font-bold text-white truncate mt-0.5">
+          <div className="text-xs font-mono font-bold text-white truncate">
             {spectrumResult?.target || objectLabel}
+          </div>
+          <div className="text-[10px] font-mono text-emerald-400">
+            RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · 102 Bands
           </div>
         </div>
 
@@ -244,7 +241,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
                   ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
                   : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
               }`}
-              title="Shasta's clean = img - zodi (Zodiacal light subtracted)"
+              title="clean = img - zodi (Zodiacal light subtracted)"
             >
               clean = img - zodi
             </button>

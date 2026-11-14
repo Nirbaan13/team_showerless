@@ -8,6 +8,7 @@ import type {
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
 import { MLDetectionsPanel } from './MLDetectionsPanel';
+import { CommunityVerificationStream } from './CommunityVerificationStream';
 import {
   CheckCircle,
   Radio,
@@ -15,6 +16,7 @@ import {
   Maximize2,
   Minimize2,
   FileText,
+  MessageSquare,
   Cpu,
   Sparkles,
   ShieldAlert,
@@ -102,7 +104,7 @@ interface RightDrawerProps {
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
   frames: _frames,
-  activeFrameIndex: _activeFrameIndex = 0,
+  activeFrameIndex = 0,
   onSelectFrame: _onSelectFrame,
   candidates,
   selectedCandidateId,
@@ -114,13 +116,13 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   isScientistMode = false,
   ra,
   dec,
-  fov: _fov,
-  selectedArray: _selectedArray,
-  subtractionMode: _subtractionMode,
+  fov,
+  selectedArray,
+  subtractionMode,
   controlledTab,
   onTabChange,
   mlAnalysisStatus,
-  currentPresetId: _currentPresetId = null,
+  currentPresetId = null,
   className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
@@ -245,18 +247,27 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </button>
 
           <button
+            onClick={() => setActiveTab('chat')}
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+              activeTab === 'chat'
+                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                : 'border-transparent text-paper-400 hover:text-paper-200'
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Chat</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('spectrum')}
-            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === 'spectrum' || activeTab === 'chat'
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+              activeTab === 'spectrum'
                 ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
                 : 'border-transparent text-paper-400 hover:text-paper-200'
             }`}
           >
             <Radio className="w-3.5 h-3.5 text-emerald-400" />
-            <span>102 Bands</span>
-            <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 font-bold text-[9px] border border-emerald-500/40">
-              Shasta
-            </span>
+            <span>Spectral Analysis</span>
           </button>
 
         </div>
@@ -470,8 +481,24 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 3: SHASTA'S 102-BAND SPECTROPHOTOMETRY (Replaces fake Chat) */}
-        {(activeTab === 'spectrum' || activeTab === 'chat') && (
+        {/* TAB 2: CANDIDATE VERIFICATION DISCUSSION & NOTES THREAD */}
+        {activeTab === 'chat' && (
+          <CommunityVerificationStream
+            key={candidate?.id || selectedCandidateId || 'none'}
+            candidate={candidate}
+            activeCandidateId={candidate?.id || selectedCandidateId || null}
+            currentPresetId={currentPresetId}
+            ra={ra}
+            dec={dec}
+            fov={fov}
+            selectedArray={selectedArray}
+            activeFrameIndex={activeFrameIndex}
+            subtractionMode={subtractionMode}
+          />
+        )}
+
+        {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}
+        {activeTab === 'spectrum' && (
           <div className="p-3.5 space-y-3">
             <SpectrumPlot
               data={spectrumData}
