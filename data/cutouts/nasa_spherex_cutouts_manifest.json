@@ -1,0 +1,175 @@
+[
+  {
+    "id": "december-d6",
+    "target": "3I/ATLAS",
+    "detector": "D6",
+    "pixel_scale_arcsec": 6.15,
+    "width": 256,
+    "height": 144,
+    "total_frames": 4,
+    "tracks_count": 10,
+    "bloom_tracks_count": 0,
+    "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html",
+    "frames": [
+      {
+        "frame_id": "2025W50_2A_0741_2D6",
+        "time": "2025-12-14T11:01:45.688Z",
+        "coverage": 0.9691,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_00_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D6/frame_00_residual.png"
+      },
+      {
+        "frame_id": "2025W50_2A_0755_2D6",
+        "time": "2025-12-14T12:39:42.784Z",
+        "coverage": 0.9724,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_01_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D6/frame_01_residual.png"
+      },
+      {
+        "frame_id": "2025W50_2A_0797_4D6",
+        "time": "2025-12-14T17:33:31.003Z",
+        "coverage": 0.9735,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_02_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D6/frame_02_residual.png"
+      },
+      {
+        "frame_id": "2025W50_2A_0813_1D6",
+        "time": "2025-12-14T19:06:21.122Z",
+        "coverage": 0.9723,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_03_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D6/frame_03_residual.png"
+      }
+    ]
+  },
+  {
+    "id": "december-d2",
+    "target": "3I/ATLAS",
+    "detector": "D2",
+    "pixel_scale_arcsec": 6.15,
+    "width": 104,
+    "height": 76,
+    "total_frames": 3,
+    "tracks_count": 2,
+    "bloom_tracks_count": 0,
+    "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html",
+    "frames": [
+      {
+        "frame_id": "2025W50_2A_0685_2D2",
+        "time": "2025-12-14T04:29:52.701Z",
+        "coverage": 0.978,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_00_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D2/frame_00_residual.png"
+      },
+      {
+        "frame_id": "2025W50_2A_0698_1D2",
+        "time": "2025-12-14T06:02:09.050Z",
+        "coverage": 0.947,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_01_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D2/frame_01_residual.png"
+      },
+      {
+        "frame_id": "2025W50_2A_0712_2D2",
+        "time": "2025-12-14T07:43:04.194Z",
+        "coverage": 0.9498,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_02_aligned.png",
+        "residual_png": "data/cutouts/3I_ATLAS_D2/frame_02_residual.png"
+      }
+    ]
+  },
+  {
+    "id": "vesta-d6",
+    "target": "(4) Vesta",
+    "detector": "D6",
+    "pixel_scale_arcsec": 6.15,
+    "width": 222,
+    "height": 174,
+    "total_frames": 3,
+    "tracks_count": 7,
+    "bloom_tracks_count": 1,
+    "source": "https://caltech-ipac.github.io/irsa-tutorials/most-queries/",
+    "frames": [
+      {
+        "frame_id": "2025W32_1A_0105_1D6",
+        "time": "2025-08-04T11:05:01.099Z",
+        "coverage": 0.9267,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D6/frame_00_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D6/frame_00_residual.png"
+      },
+      {
+        "frame_id": "2025W32_1A_0225_1D6",
+        "time": "2025-08-05T00:07:59.490Z",
+        "coverage": 0.9486,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D6/frame_01_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D6/frame_01_residual.png"
+      },
+      {
+        "frame_id": "2025W32_1A_0347_1D6",
+        "time": "2025-08-05T13:08:52.021Z",
+        "coverage": 0.9473,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D6/frame_02_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D6/frame_02_residual.png"
+      }
+    ]
+  },
+  {
+    "id": "vesta-d3",
+    "target": "(4) Vesta",
+    "detector": "D3",
+    "pixel_scale_arcsec": 6.15,
+    "width": 222,
+    "height": 174,
+    "total_frames": 3,
+    "tracks_count": 25,
+    "bloom_tracks_count": 1,
+    "source": "https://caltech-ipac.github.io/irsa-tutorials/most-queries/",
+    "frames": [
+      {
+        "frame_id": "2025W32_1A_0105_1D3",
+        "time": "2025-08-04T11:05:01.099Z",
+        "coverage": 0.9437,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D3/frame_00_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D3/frame_00_residual.png"
+      },
+      {
+        "frame_id": "2025W32_1A_0225_1D3",
+        "time": "2025-08-05T00:07:59.490Z",
+        "coverage": 0.9509,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D3/frame_01_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D3/frame_01_residual.png"
+      },
+      {
+        "frame_id": "2025W32_1A_0347_1D3",
+        "time": "2025-08-05T13:08:52.021Z",
+        "coverage": 0.9512,
+        "release": "DR1",
+        "archive_url": null,
+        "aligned_png": "data/cutouts/4_Vesta_D3/frame_02_aligned.png",
+        "residual_png": "data/cutouts/4_Vesta_D3/frame_02_residual.png"
+      }
+    ]
+  }
+]

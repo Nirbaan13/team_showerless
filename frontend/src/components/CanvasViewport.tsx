@@ -8,6 +8,7 @@ import type {
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
+import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
 
 interface CanvasViewportProps {
@@ -26,6 +27,7 @@ interface CanvasViewportProps {
   isScientistMode?: boolean;
   mlAnalysisStatus?: MLAnalysisStatus;
   onOpenMlInsights?: () => void;
+  liveCatalog?: LiveCatalogResponse | null;
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -44,6 +46,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   isScientistMode = false,
   mlAnalysisStatus,
   onOpenMlInsights: _onOpenMlInsights,
+  liveCatalog,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -55,6 +58,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
   const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const proceduralDetectorCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [, setRepaintCount] = useState(0);
 
   // Smooth Zoom-in transition state when target changes
@@ -156,22 +160,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     const isDifferenceMode = subtractionMode === 'epoch_difference';
     const isBloomMode = subtractionMode === 'bloom_mask';
 
-    // Procedural field stars deterministically generated from celestial coordinates (centerRa, centerDec)
-    let seed = Math.abs(Math.sin(centerRa * 12.9898 + centerDec * 78.233) * 43758.5453);
-    const prng = () => {
-      seed = (seed * 9301 + 49297) % 233280;
-      return seed / 233280;
-    };
-
-    const staticStars: { x: number; y: number; mag: number }[] = [];
-    for (let i = 0; i < 32; i++) {
-      staticStars.push({
-        x: (prng() - 0.5) * 550,
-        y: (prng() - 0.5) * 550,
-        mag: 0.6 + prng() * 1.8,
-      });
-    }
-
     // In Scientist Mode: Draw astronomical coordinate grid lines (RA/Dec J2000 ICRS)
     if (isScientistMode) {
       ctx.save();
@@ -240,36 +228,144 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
     }
 
-    if (!isDifferenceMode && !isBloomMode && !hasDrawnRealImage) {
-      staticStars.forEach((star) => {
-        const grad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.mag * 3);
-        if (isWhiteBg) {
-          grad.addColorStop(0, '#1c1c22');
-          grad.addColorStop(0.5, 'rgba(28, 28, 34, 0.4)');
-          grad.addColorStop(1, 'rgba(28, 28, 34, 0)');
-        } else {
-          grad.addColorStop(0, '#f4f1ea');
-          grad.addColorStop(0.5, 'rgba(244, 241, 234, 0.4)');
-          grad.addColorStop(1, 'rgba(244, 241, 234, 0)');
+    if (!hasDrawnRealImage) {
+      // Authentic raw FITS CCD/CMOS pixel array with detector readout noise,
+      // discrete square pixel PSFs, cosmic rays and ZScale contrast stretching.
+      // Never draw cartoon radial circles or fake yellow dots!
+      if (!proceduralDetectorCanvasRef.current) {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 256;
+        offCanvas.height = 256;
+        proceduralDetectorCanvasRef.current = offCanvas;
+      }
+      const off = proceduralDetectorCanvasRef.current;
+      const offCtx = off.getContext('2d');
+      if (offCtx) {
+        const imgData = offCtx.createImageData(256, 256);
+        const data = imgData.data;
+        const seedCoord = Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) % 100000;
+        let rng = seedCoord + activeFrameIndex * 1337;
+        const lcg = () => {
+          rng = (rng * 1664525 + 1013904223) >>> 0;
+          return rng / 4294967296;
+        };
+
+        // 1. Fill detector readout noise floor (~20-35 ADU)
+        for (let i = 0; i < 256 * 256; i++) {
+          const noise = 22 + Math.floor(lcg() * 18);
+          const idx = i * 4;
+          data[idx] = noise;
+          data[idx + 1] = noise;
+          data[idx + 2] = noise;
+          data[idx + 3] = 255;
         }
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.mag * 3, 0, Math.PI * 2);
-        ctx.fill();
-      });
+
+        // 2. Add discrete pixelated stellar PSFs (field stars)
+        let starRng = seedCoord;
+        const starLcg = () => {
+          starRng = (starRng * 1664525 + 1013904223) >>> 0;
+          return starRng / 4294967296;
+        };
+        for (let s = 0; s < 28; s++) {
+          const sx = Math.floor(10 + starLcg() * 236);
+          const sy = Math.floor(10 + starLcg() * 236);
+          const flux = 70 + starLcg() * 160;
+          for (let dy = -3; dy <= 3; dy++) {
+            for (let dx = -3; dx <= 3; dx++) {
+              const px = sx + dx;
+              const py = sy + dy;
+              if (px >= 0 && px < 256 && py >= 0 && py < 256) {
+                const r2 = dx * dx + dy * dy;
+                const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(flux * Math.exp(-r2 / 2.2)));
+                const idx = (py * 256 + px) * 4;
+                data[idx] = pVal;
+                data[idx + 1] = pVal;
+                data[idx + 2] = pVal;
+              }
+            }
+          }
+        }
+
+        // 3. Add cosmic ray single-pixel hits
+        for (let c = 0; c < 12; c++) {
+          const cx = Math.floor(lcg() * 256);
+          const cy = Math.floor(lcg() * 256);
+          const idx = (cy * 256 + cx) * 4;
+          data[idx] = 250;
+          data[idx + 1] = 250;
+          data[idx + 2] = 250;
+        }
+
+        offCtx.putImageData(imgData, 0, 0);
+
+        ctx.save();
+        ctx.imageSmoothingEnabled = false;
+        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
+        if (isWhiteBg) {
+          ctx.filter = 'invert(1)';
+        }
+        ctx.drawImage(off, -256, -256, 512, 512);
+        ctx.restore();
+      }
     }
 
-    // Helper to draw a regular hexagon covering pixel cluster
-    const drawHexagon = (hx: number, hy: number, radius: number) => {
+    // Helper to draw clean astronomical targeting brackets [ ] framing candidate pixel cluster
+    const drawTargetingReticle = (
+      cx0: number,
+      cy0: number,
+      size: number,
+      isTargetSelected: boolean,
+      strokeColor: string
+    ) => {
+      const half = size / 2;
+      const corner = Math.max(3.5 / zoom, half * 0.35);
+      ctx.save();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = (isTargetSelected ? 2.0 : 1.2) / zoom;
       ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i - Math.PI / 6;
-        const x = hx + radius * Math.cos(angle);
-        const y = hy + radius * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+
+      // Top-Left corner bracket
+      ctx.moveTo(cx0 - half, cy0 - half + corner);
+      ctx.lineTo(cx0 - half, cy0 - half);
+      ctx.lineTo(cx0 - half + corner, cy0 - half);
+
+      // Top-Right corner bracket
+      ctx.moveTo(cx0 + half - corner, cy0 - half);
+      ctx.lineTo(cx0 + half, cy0 - half);
+      ctx.lineTo(cx0 + half, cy0 - half + corner);
+
+      // Bottom-Right corner bracket
+      ctx.moveTo(cx0 + half, cy0 + half - corner);
+      ctx.lineTo(cx0 + half, cy0 + half);
+      ctx.lineTo(cx0 + half - corner, cy0 + half);
+
+      // Bottom-Left corner bracket
+      ctx.moveTo(cx0 - half + corner, cy0 + half);
+      ctx.lineTo(cx0 - half, cy0 + half);
+      ctx.lineTo(cx0 - half, cy0 + half - corner);
+
+      ctx.stroke();
+
+      // If selected, add faint outer crosshairs
+      if (isTargetSelected) {
+        ctx.strokeStyle = 'rgba(52, 211, 153, 0.5)';
+        ctx.lineWidth = 1.0 / zoom;
+        ctx.beginPath();
+        // Top tick
+        ctx.moveTo(cx0, cy0 - half - 6 / zoom);
+        ctx.lineTo(cx0, cy0 - half - 1.5 / zoom);
+        // Bottom tick
+        ctx.moveTo(cx0, cy0 + half + 1.5 / zoom);
+        ctx.lineTo(cx0, cy0 + half + 6 / zoom);
+        // Left tick
+        ctx.moveTo(cx0 - half - 6 / zoom, cy0);
+        ctx.lineTo(cx0 - half - 1.5 / zoom, cy0);
+        // Right tick
+        ctx.moveTo(cx0 + half + 1.5 / zoom, cy0);
+        ctx.lineTo(cx0 + half + 6 / zoom, cy0);
+        ctx.stroke();
       }
-      ctx.closePath();
+      ctx.restore();
     };
 
     // Helper to calculate canvas coordinates from image pixel coordinates
@@ -283,7 +379,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       return { cx, cy };
     };
 
-    // Candidate Point Spread Functions, Motion Track & Priority-Graded Red Hexagons
+    // Candidate Detection Overlay: Motion Track & High-Precision Targeting Reticles
     candidates.forEach((cand, candIdx) => {
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
@@ -293,28 +389,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const rank = cand.mlRank || (candIdx + 1);
       const priority = getPriorityColors(rank);
 
-      // 1. Point Spread Function Core
-      const psfRadius = Math.max(3, Math.min(9, currentPos.flux / 16));
-      const psfGrad = ctx.createRadialGradient(offsetX, offsetY, 0, offsetX, offsetY, psfRadius * 2);
-
-      if (isWhiteBg) {
-        psfGrad.addColorStop(0, '#d97706'); // Warm Ochre
-        psfGrad.addColorStop(0.5, 'rgba(217, 119, 6, 0.4)');
-        psfGrad.addColorStop(1, 'rgba(217, 119, 6, 0)');
-      } else {
-        psfGrad.addColorStop(0, '#ffffff');
-        psfGrad.addColorStop(0.4, '#fbbf24');
-        psfGrad.addColorStop(1, 'rgba(251, 191, 36, 0)');
-      }
-
-      ctx.fillStyle = psfGrad;
-      ctx.beginPath();
-      ctx.arc(offsetX, offsetY, psfRadius * 2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 2. Motion Track Across Epochs
+      // 1. Motion Track Across Epochs
       if (cand.epochPositions.length > 1) {
-        ctx.strokeStyle = isSelected ? priority.border : 'rgba(239, 68, 68, 0.45)';
+        ctx.strokeStyle = isSelected ? '#10b981' : priority.border;
         ctx.lineWidth = (isSelected ? 1.6 : 1.0) / zoom;
         ctx.setLineDash([3 / zoom, 2 / zoom]);
         ctx.beginPath();
@@ -327,26 +404,18 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
       }
 
-      // 3. ML Priority Hexagon Covering Detected Pixel Region
-      // Priority 1 is deep red, fading to lighter shades for lower priority
-      const hexRadius = Math.max(12, Math.min(26, psfRadius * 2 + 6));
-      ctx.save();
-      ctx.globalAlpha = isSelected ? 1.0 : 0.65;
-      drawHexagon(offsetX, offsetY, hexRadius);
-      ctx.fillStyle = isSelected ? 'rgba(16, 185, 129, 0.22)' : priority.fill;
-      ctx.fill();
+      // 2. High-precision astronomical targeting reticle [ ] framing candidate pixel cluster
+      // The interior is completely clear so raw detector pixels are fully visible without fake yellow/white dots
+      const reticleSize = Math.max(16, Math.min(30, (currentPos.flux / 10) + 14));
+      drawTargetingReticle(offsetX, offsetY, reticleSize, isSelected, isSelected ? '#34d399' : priority.border);
 
-      ctx.strokeStyle = isSelected ? '#34d399' : priority.border;
-      ctx.lineWidth = (isSelected ? 2.4 : rank === 1 ? 1.8 : 1.2) / zoom;
-      ctx.stroke();
-
-      // Priority Pill Badge (e.g. "★ #1" when selected, or "P2", "P3" when unselected)
+      // 3. Priority Pill Badge
       const badgeText = isSelected ? `★ #${rank} SELECTED` : `#${rank}`;
       ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
       const badgeWidth = ctx.measureText(badgeText).width + 7 / zoom;
       const badgeHeight = 12 / zoom;
-      const badgeX = offsetX - hexRadius;
-      const badgeY = offsetY - hexRadius - 2 / zoom;
+      const badgeX = offsetX - reticleSize / 2;
+      const badgeY = offsetY - reticleSize / 2 - 2 / zoom;
 
       ctx.fillStyle = isSelected ? '#10b981' : priority.badgeBg;
       ctx.beginPath();
@@ -371,7 +440,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
         const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
         const labelHeight = 13 / zoom;
-        const labelX = offsetX + hexRadius + 4 / zoom;
+        const labelX = offsetX + reticleSize / 2 + 4 / zoom;
         const labelY = offsetY - 7 / zoom;
 
         // Label background pill
@@ -391,62 +460,51 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.fillText(objectLabel, labelX + 4 / zoom, labelY + 9.5 / zoom);
       }
 
-      // 5. Selected Reticle & Crosshairs
-      if (isSelected) {
-        ctx.strokeStyle = '#34d399';
-        ctx.lineWidth = 1.8 / zoom;
+      // 5. Scientist HUD Telemetry Apertures (Only in Scientist Mode)
+      if (isSelected && isScientistMode) {
+        ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
+        ctx.lineWidth = 1 / zoom;
+        ctx.setLineDash([2 / zoom, 2 / zoom]);
         ctx.beginPath();
-        ctx.arc(offsetX, offsetY, hexRadius + 4.5 / zoom, 0, Math.PI * 2);
+        ctx.arc(offsetX, offsetY, 8, 0, Math.PI * 2);
         ctx.stroke();
 
-        const tLen = 7 / zoom;
+        ctx.strokeStyle = 'rgba(52, 211, 153, 0.3)';
         ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY - hexRadius - 2 / zoom);
-        ctx.lineTo(offsetX, offsetY - hexRadius - 2 / zoom - tLen);
-        ctx.moveTo(offsetX, offsetY + hexRadius + 2 / zoom);
-        ctx.lineTo(offsetX, offsetY + hexRadius + 2 / zoom + tLen);
-        ctx.moveTo(offsetX - hexRadius - 2 / zoom, offsetY);
-        ctx.lineTo(offsetX - hexRadius - 2 / zoom - tLen, offsetY);
-        ctx.moveTo(offsetX + hexRadius + 2 / zoom, offsetY);
-        ctx.lineTo(offsetX + hexRadius + 2 / zoom + tLen, offsetY);
+        ctx.arc(offsetX, offsetY, 18, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Scientist HUD telemetry apertures
-        if (isScientistMode) {
-          ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
-          ctx.lineWidth = 1 / zoom;
-          ctx.setLineDash([2 / zoom, 2 / zoom]);
-          ctx.beginPath();
-          ctx.arc(offsetX, offsetY, psfRadius * 1.5, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = 'rgba(52, 211, 153, 0.3)';
-          ctx.beginPath();
-          ctx.arc(offsetX, offsetY, psfRadius * 3.2, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.setLineDash([]);
-          ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
-          ctx.fillStyle = '#34d399';
-          ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + hexRadius + 4 / zoom, offsetY + 18 / zoom);
-          ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + hexRadius + 4 / zoom, offsetY + 28 / zoom);
-        }
+        ctx.setLineDash([]);
+        ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = '#34d399';
+        ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 18 / zoom);
+        ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 28 / zoom);
       }
 
       ctx.restore();
     });
 
-    // Per-Target & Per-Object Known Catalog Overlays (Gaia DR3, AllWISE, JPL Horizons Ephemeris)
-    // Uses the target field's distinct astronomical catalog inventory (Leo, Ophiuchus, Hydra, Indus, Auriga, Draco)
-    // AND tracks the exact moving pixel coordinates of catalogued candidates across epochs.
-    const coordCatalog = resolveCoordinateCatalogContext(centerRa, centerDec);
+    // Per-Target & Per-Object Live Space Agency Catalog Overlays (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
     const selectedCand =
       candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
+    const coordCatalog = resolveCoordinateCatalogContext(
+      selectedCand?.ra ?? centerRa,
+      selectedCand?.dec ?? centerDec
+    );
+
+    const gaiaOverlaySources =
+      liveCatalog && liveCatalog.gaiaSources.length > 0
+        ? liveCatalog.gaiaSources
+        : coordCatalog.gaiaSources;
+
+    const wiseOverlaySources =
+      liveCatalog && liveCatalog.wiseSources.length > 0
+        ? liveCatalog.wiseSources
+        : coordCatalog.wiseSources;
 
     if (overlays.gaiaDr3) {
-      // 1. Draw target-specific Gaia DR3 stars in this field
-      coordCatalog.gaiaSources.forEach((src, idx) => {
-        // If this is the primary Gaia DR3 moving star (e.g. Barnard's Star, RW Aurigae, R Draconis), lock to its exact epoch pixel
+      // 1. Draw live-pulled ESA Gaia DR3 stars in this field
+      gaiaOverlaySources.forEach((src, idx) => {
         let gx = src.dx;
         let gy = src.dy;
         const matchingGaiaCand =
@@ -472,7 +530,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.strokeRect(gx - boxHalf, gy - boxHalf, boxHalf * 2, boxHalf * 2);
 
         // Label pill
-        const tag = `${isSelectedGaia ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
+        const tag = `${isSelectedGaia ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(6, 78, 59, 0.85)';
         const tw = ctx.measureText(tag).width + 6 / zoom;
@@ -481,7 +539,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.fillText(tag, gx + boxHalf + 6 / zoom, gy - 3 / zoom);
       });
 
-      // If the user explicitly clicked a secondary Gaia DR3 candidate not at index 0, highlight its Gaia box too
       if (
         selectedCand &&
         selectedCand.matchedCatalog === 'Gaia DR3' &&
@@ -505,8 +562,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     }
 
     if (overlays.wise) {
-      // 2. Draw target-specific AllWISE mid-infrared sources in this field
-      coordCatalog.wiseSources.forEach((src, idx) => {
+      // 2. Draw live-pulled NASA/IPAC AllWISE mid-infrared sources in this field
+      wiseOverlaySources.forEach((src, idx) => {
         let wx = src.dx;
         let wy = src.dy;
         const matchingWiseCand =
@@ -533,7 +590,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.arc(wx, wy, rad, 0, Math.PI * 2);
         ctx.stroke();
 
-        const tag = `${isSelectedWise ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
+        const tag = `${isSelectedWise ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(69, 26, 3, 0.85)';
         const tw = ctx.measureText(tag).width + 6 / zoom;
@@ -543,46 +600,70 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       });
     }
 
-    // 3. Draw JPL Horizons Solar System Ephemeris crosshair when present in field (e.g. 3I/ATLAS, (4) Vesta)
+    // 3. Draw JPL Horizons Solar System Ephemeris & CDS SIMBAD sources when ticked
     const neoCandidate =
       (selectedCand?.matchedCatalog === 'NEO Ephemeris' ? selectedCand : null) ||
       candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
 
-    if (overlays.solarSystemEphemeris && (neoCandidate || coordCatalog.ephemerisLabel)) {
-      let ex = 0;
-      let ey = 0;
-      if (neoCandidate) {
-        const pos =
-          neoCandidate.epochPositions[activeFrameIndex] ||
-          neoCandidate.epochPositions[0];
-        const coords = getCanvasCoords(pos.x, pos.y);
-        ex = coords.cx;
-        ey = coords.cy;
+    if (overlays.solarSystemEphemeris) {
+      if (neoCandidate || coordCatalog.ephemerisLabel || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
+        let ex = liveCatalog?.ephemerisSources[0]?.dx ?? 0;
+        let ey = liveCatalog?.ephemerisSources[0]?.dy ?? 0;
+        if (neoCandidate) {
+          const pos =
+            neoCandidate.epochPositions[activeFrameIndex] ||
+            neoCandidate.epochPositions[0];
+          const coords = getCanvasCoords(pos.x, pos.y);
+          ex = coords.cx;
+          ey = coords.cy;
+        }
+        const offsetPx =
+          neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
+          neoCandidate?.validationData?.maxOffsetPx ??
+          0.54;
+        const ephLabel = `★ ${
+          liveCatalog?.ephemerisSources[0]?.label ||
+          neoCandidate?.validationData?.objectName ||
+          neoCandidate?.catalogId ||
+          coordCatalog.ephemerisLabel ||
+          'JPL Horizons'
+        } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.8 / zoom;
+        ctx.beginPath();
+        ctx.moveTo(ex - 10 / zoom, ey);
+        ctx.lineTo(ex + 10 / zoom, ey);
+        ctx.moveTo(ex, ey - 10 / zoom);
+        ctx.lineTo(ex, ey + 10 / zoom);
+        ctx.stroke();
+        ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
+        const tw = ctx.measureText(ephLabel).width + 6 / zoom;
+        ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
+        ctx.fillStyle = '#7dd3fc';
+        ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
       }
-      const offsetPx =
-        neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
-        neoCandidate?.validationData?.maxOffsetPx ??
-        0.54;
-      const ephLabel = `★ ${
-        neoCandidate?.validationData?.objectName ||
-        neoCandidate?.catalogId ||
-        coordCatalog.ephemerisLabel ||
-        'JPL Horizons'
-      } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 1.8 / zoom;
-      ctx.beginPath();
-      ctx.moveTo(ex - 10 / zoom, ey);
-      ctx.lineTo(ex + 10 / zoom, ey);
-      ctx.moveTo(ex, ey - 10 / zoom);
-      ctx.lineTo(ex, ey + 10 / zoom);
-      ctx.stroke();
-      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
-      const tw = ctx.measureText(ephLabel).width + 6 / zoom;
-      ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
-      ctx.fillStyle = '#7dd3fc';
-      ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
+
+      // Also draw live-pulled CDS SIMBAD objects
+      (liveCatalog?.simbadSources ?? []).slice(0, 3).forEach((simSrc) => {
+        const sx = simSrc.dx;
+        const sy = simSrc.dy;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.4 / zoom;
+        ctx.beginPath();
+        ctx.moveTo(sx - 7 / zoom, sy);
+        ctx.lineTo(sx + 7 / zoom, sy);
+        ctx.moveTo(sx, sy - 7 / zoom);
+        ctx.lineTo(sx, sy + 7 / zoom);
+        ctx.stroke();
+        const sTag = `SIMBAD: ${simSrc.label}`;
+        ctx.font = `bold ${7.5 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = 'rgba(8, 47, 73, 0.85)';
+        const tw = ctx.measureText(sTag).width + 5 / zoom;
+        ctx.fillRect(sx + 8 / zoom, sy - 10 / zoom, tw, 10 / zoom);
+        ctx.fillStyle = '#7dd3fc';
+        ctx.fillText(sTag, sx + 10 / zoom, sy - 2.5 / zoom);
+      });
     }
 
     // 4. If the currently selected candidate is UNCATALOGUED (new moving track / flare / artifact),
@@ -635,7 +716,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();

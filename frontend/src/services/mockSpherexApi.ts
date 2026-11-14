@@ -9,6 +9,9 @@ import {
   REAL_3I_ATLAS_FRAMES,
   REAL_BARNARD_FRAMES,
   REAL_WISE_0855_FRAMES,
+  REAL_EPSILON_INDI_B_FRAMES,
+  REAL_RW_AURIGAE_FRAMES,
+  REAL_R_DRACONIS_FRAMES,
 } from './realSpherexFrames';
 import {
   getPrecomputedReviewById,
@@ -193,6 +196,72 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
         airmass: 1.12,
         zodiBrightnessMjySr: Number((16.8 + idx * 0.9).toFixed(2)),
         snrEstimated: 16.2,
+      },
+    }));
+  }
+
+  if (targetId === 'epsilon-indi-b') {
+    return REAL_EPSILON_INDI_B_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 3,
+      wavelengthMinUm: 1.64,
+      wavelengthMaxUm: 2.42,
+      channelIndex: 44,
+      flaggedPixelPercentage: 0.15,
+      cosmicRayHits: 9,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.18,
+        zodiBrightnessMjySr: Number((13.5 + idx * 0.8).toFixed(2)),
+        snrEstimated: 24.5,
+      },
+    }));
+  }
+
+  if (targetId === 'rw-aurigae') {
+    return REAL_RW_AURIGAE_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 4,
+      wavelengthMinUm: 2.42,
+      wavelengthMaxUm: 3.82,
+      channelIndex: 62,
+      flaggedPixelPercentage: 0.20,
+      cosmicRayHits: 12,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.08,
+        zodiBrightnessMjySr: Number((15.2 + idx * 0.7).toFixed(2)),
+        snrEstimated: 32.0,
+      },
+    }));
+  }
+
+  if (targetId === 'r-draconis') {
+    return REAL_R_DRACONIS_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 6,
+      wavelengthMinUm: 4.42,
+      wavelengthMaxUm: 5.00,
+      channelIndex: 96,
+      flaggedPixelPercentage: 0.25,
+      cosmicRayHits: 15,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.25,
+        zodiBrightnessMjySr: Number((18.4 + idx * 1.1).toFixed(2)),
+        snrEstimated: 28.5,
       },
     }));
   }
@@ -1019,7 +1088,7 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
 
   for (const entry of knownCatalogTable) {
     const dist = Math.hypot(normRa - entry.ra, decDeg - entry.dec);
-    if (dist < 0.45) {
+    if (dist < 0.012) {
       return {
         knownObjectName: entry.name,
         constellation: entry.constellation,
@@ -1036,7 +1105,7 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
 
   return {
     knownObjectName: null,
-    constellation: `Custom Field (${normRa.toFixed(2)}°, ${decDeg.toFixed(2)}°)`,
+    constellation: `ICRS (${normRa.toFixed(3)}°, ${decDeg >= 0 ? '+' : ''}${decDeg.toFixed(3)}°)`,
     gaiaId: gaiaSourceId,
     wiseId: wiseJName,
     ephemerisLabel: null,
@@ -1081,36 +1150,97 @@ export async function fetchKnownCatalogObjectAtCoord(
 
 /**
  * Generates continuous 102-band spectral curve (0.75 - 5.00 µm)
+ * dynamically calculated per target and celestial coordinate (RA, Dec).
  */
-export function getMock102BandSpectrum(_candidateId: string): SpectralDataPoint[] {
+export function getMock102BandSpectrum(
+  targetId: string = 'default',
+  ra: number = 284.14,
+  dec: number = -45.12
+): SpectralDataPoint[] {
   const points: SpectralDataPoint[] = [];
   const minW = 0.75;
   const maxW = 5.00;
   const totalChannels = 102;
 
+  const norm = (targetId || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const isAtlas = norm.includes('atlas') || norm.includes('3i') || (Math.abs(ra - 284.14) < 1.0 && Math.abs(dec - (-45.12)) < 1.0);
+  const isVesta = norm.includes('vesta') || norm.includes('4') || (Math.abs(ra - 100.8) < 1.5 && Math.abs(dec - 12.3) < 1.5);
+  const isWise = norm.includes('wise') || norm.includes('0855') || (Math.abs(ra - 133.79) < 1.5 && Math.abs(dec - (-7.24)) < 1.5);
+  const isBarnard = norm.includes('barnard') || (Math.abs(ra - 269.45) < 1.0 && Math.abs(dec - 4.69) < 1.0);
+
+  // Seed uniquely based on coordinate
+  const coordHash = Math.abs(Math.sin(ra * 12.9898 + dec * 78.233) * 43758.5453);
+  const baseFlux = isAtlas
+    ? 22.0
+    : isVesta
+    ? 38.0
+    : isWise
+    ? 14.0
+    : isBarnard
+    ? 62.0
+    : 8.0 + (coordHash % 42.0);
+
+  const spectralIndex = isAtlas
+    ? 0.4
+    : isVesta
+    ? -0.2
+    : isWise
+    ? -1.2
+    : isBarnard
+    ? -1.6
+    : -0.2 - ((coordHash * 10) % 1.5);
+
   for (let ch = 1; ch <= totalChannels; ch++) {
     const lambda = minW + ((ch - 1) / (totalChannels - 1)) * (maxW - minW);
 
-    let flux = 20.0 * Math.pow(lambda / 1.5, -0.6) + Math.sin(lambda * 1.8) * 2.5;
+    let flux = baseFlux * Math.pow(lambda / 1.5, spectralIndex);
 
-    // Absorption features
-    if (Math.abs(lambda - 3.05) < 0.45) {
-      const depth = Math.exp(-Math.pow((lambda - 3.05) / 0.22, 2)) * 8.5;
-      flux -= depth;
+    // Target-specific absorption features
+    if (isAtlas) {
+      // 3.05 µm H2O ice absorption trough
+      if (Math.abs(lambda - 3.05) < 0.45) {
+        flux -= Math.exp(-Math.pow((lambda - 3.05) / 0.22, 2)) * 8.5;
+      }
+      // 4.26 µm CO2 ice
+      if (Math.abs(lambda - 4.26) < 0.2) {
+        flux -= Math.exp(-Math.pow((lambda - 4.26) / 0.1, 2)) * 6.0;
+      }
+      // 4.67 µm CO
+      if (Math.abs(lambda - 4.67) < 0.25) {
+        flux -= Math.exp(-Math.pow((lambda - 4.67) / 0.12, 2)) * 4.8;
+      }
+    } else if (isVesta) {
+      // Pyroxene Band I (0.92 µm) and Band II (1.9 µm)
+      if (Math.abs(lambda - 0.92) < 0.25) {
+        flux -= Math.exp(-Math.pow((lambda - 0.92) / 0.12, 2)) * 12.0;
+      }
+      if (Math.abs(lambda - 1.90) < 0.35) {
+        flux -= Math.exp(-Math.pow((lambda - 1.90) / 0.18, 2)) * 9.5;
+      }
+    } else if (isWise) {
+      // 3.3 µm CH4 Methane
+      if (Math.abs(lambda - 3.30) < 0.35) {
+        flux -= Math.exp(-Math.pow((lambda - 3.30) / 0.15, 2)) * 7.5;
+      }
+      // 2.7 µm Steam
+      if (Math.abs(lambda - 2.70) < 0.4) {
+        flux -= Math.exp(-Math.pow((lambda - 2.70) / 0.2, 2)) * 6.0;
+      }
+    } else if (isBarnard) {
+      // TiO band at 0.85 µm
+      if (Math.abs(lambda - 0.85) < 0.2) {
+        flux -= Math.exp(-Math.pow((lambda - 0.85) / 0.08, 2)) * 18.0;
+      }
+    } else {
+      // Arbitrary coordinate absorption based on coordinate hash
+      const absCenter = 1.0 + ((coordHash * 100) % 3.5);
+      if (Math.abs(lambda - absCenter) < 0.3) {
+        flux -= Math.exp(-Math.pow((lambda - absCenter) / 0.15, 2)) * (baseFlux * 0.25);
+      }
     }
 
-    if (Math.abs(lambda - 4.27) < 0.2) {
-      const depth = Math.exp(-Math.pow((lambda - 4.27) / 0.1, 2)) * 6.0;
-      flux -= depth;
-    }
-
-    if (Math.abs(lambda - 4.67) < 0.25) {
-      const depth = Math.exp(-Math.pow((lambda - 4.67) / 0.12, 2)) * 5.2;
-      flux -= depth;
-    }
-
-    const noise = (Math.sin(ch * 13.7) * 0.6) + ((ch % 3 === 0 ? 0.3 : -0.2));
-    flux = Math.max(1.2, flux + noise);
+    const channelNoise = Math.sin(ch * 19.3 + coordHash * 10) * 0.5;
+    flux = Math.max(0.4, flux + channelNoise);
 
     let detectorArray: 1 | 2 | 3 | 4 | 5 | 6 = 1;
     if (lambda >= 1.11 && lambda < 1.64) detectorArray = 2;
@@ -1123,7 +1253,7 @@ export function getMock102BandSpectrum(_candidateId: string): SpectralDataPoint[
       channel: ch,
       wavelengthUm: Number(lambda.toFixed(3)),
       fluxMjy: Number(flux.toFixed(2)),
-      uncertaintyMjy: Number((flux * 0.05 + 0.2).toFixed(2)),
+      uncertaintyMjy: Number((flux * 0.05 + 0.25).toFixed(2)),
       detectorArray,
     });
   }

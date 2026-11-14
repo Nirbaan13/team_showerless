@@ -7,8 +7,8 @@ import type {
   SpectralDataPoint,
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
-import { CommunityVerificationStream } from './CommunityVerificationStream';
 import { MLDetectionsPanel } from './MLDetectionsPanel';
+import { CommunityVerificationStream } from './CommunityVerificationStream';
 import {
   CheckCircle,
   Radio,
@@ -260,17 +260,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
           <button
             onClick={() => setActiveTab('spectrum')}
-            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
               activeTab === 'spectrum'
                 ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
                 : 'border-transparent text-paper-400 hover:text-paper-200'
             }`}
           >
-            <Radio className={`w-3.5 h-3.5 ${isScientistMode ? 'text-emerald-400' : ''}`} />
-            <span>102 Bands</span>
-            {isScientistMode && (
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            )}
+            <Radio className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Spectral Analysis</span>
           </button>
 
         </div>
@@ -484,7 +481,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 2: VERIFICATION NOTES & SINGLE-OBJECT COMMUNITY CHAT */}
+        {/* TAB 2: CANDIDATE VERIFICATION DISCUSSION & NOTES THREAD */}
         {activeTab === 'chat' && (
           <CommunityVerificationStream
             key={candidate?.id || selectedCandidateId || 'none'}
@@ -500,39 +497,23 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           />
         )}
 
-        {/* TAB 3: 102-BAND SPECTROPHOTOMETRY */}
+        {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}
         {activeTab === 'spectrum' && (
-          <div className="p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-paper-100 uppercase tracking-wider text-xs block">
-                102-Band Spectrophotometry
-              </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
-                0.75 – 5.00 µm
-              </span>
-            </div>
-
+          <div className="p-3.5 space-y-3">
             <SpectrumPlot
               data={spectrumData}
-              objectLabel={candidate?.matchedCatalog || candidate?.id || "Target"}
+              objectLabel={
+                candidate?.validationData?.objectName ||
+                candidate?.matchedCatalog ||
+                candidate?.catalogId ||
+                candidate?.id ||
+                "Target"
+              }
+              ra={ra}
+              dec={dec}
+              candidateId={candidate?.id || selectedCandidateId}
+              isScientistMode={isScientistMode}
             />
-
-            {/* 102 bands = 6 detectors x 17 channels (matches IRSA cutouts grouped per detector D1–D6) */}
-            <div className="grid grid-cols-6 gap-1 text-[10px] font-mono text-center">
-              {[
-                ['D1', '0.75–1.1'],
-                ['D2', '1.1–1.6'],
-                ['D3', '1.6–2.4'],
-                ['D4', '2.4–3.8'],
-                ['D5', '3.8–4.4'],
-                ['D6', '4.4–5.0'],
-              ].map(([d, r]) => (
-                <div key={d} className="p-1 rounded bg-paper-950 border border-paper-800">
-                  <div className="text-emerald-400 font-bold">{d}</div>
-                  {isScientistMode && <div className="text-paper-500">{r}µm</div>}
-                </div>
-              ))}
-            </div>
 
             {isScientistMode && (
               <details className="p-3 bg-paper-950 border border-emerald-500/40 rounded-lg font-mono text-[10px] text-emerald-300">
@@ -544,6 +525,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                   <div>RADESYS = 'ICRS' / EQUINOX = 2000.0</div>
                   <div>CD1_1   = -1.722222E-03 / deg/px</div>
                   <div>CD2_2   =  1.722222E-03 / deg/px</div>
+                  <div>WCS-WAVE= 'Secondary HDU key W' / 102 bands</div>
                 </div>
               </details>
             )}

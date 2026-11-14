@@ -1,0 +1,41 @@
+{
+  "id": "vesta-d6",
+  "target": "(4) Vesta",
+  "detector": "D6",
+  "pixel_scale_arcsec": 6.15,
+  "width": 222,
+  "height": 174,
+  "total_frames": 3,
+  "tracks_count": 7,
+  "bloom_tracks_count": 1,
+  "source": "https://caltech-ipac.github.io/irsa-tutorials/most-queries/",
+  "frames": [
+    {
+      "frame_id": "2025W32_1A_0105_1D6",
+      "time": "2025-08-04T11:05:01.099Z",
+      "coverage": 0.9267,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/4_Vesta_D6/frame_00_aligned.png",
+      "residual_png": "data/cutouts/4_Vesta_D6/frame_00_residual.png"
+    },
+    {
+      "frame_id": "2025W32_1A_0225_1D6",
+      "time": "2025-08-05T00:07:59.490Z",
+      "coverage": 0.9486,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/4_Vesta_D6/frame_01_aligned.png",
+      "residual_png": "data/cutouts/4_Vesta_D6/frame_01_residual.png"
+    },
+    {
+      "frame_id": "2025W32_1A_0347_1D6",
+      "time": "2025-08-05T13:08:52.021Z",
+      "coverage": 0.9473,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/4_Vesta_D6/frame_02_aligned.png",
+      "residual_png": "data/cutouts/4_Vesta_D6/frame_02_residual.png"
+    }
+  ]
+}

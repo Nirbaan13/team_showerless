@@ -22,6 +22,8 @@ import {
 import {
   searchArchiveObservations,
   convertObservationsToEpochFrames,
+  buildRealSkyCutoutPhotoUrl,
+  fetchLiveBackendCutoutAnalysis,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
@@ -33,6 +35,10 @@ import {
   type MotionReviewDataset,
   type MotionTrackCandidate,
 } from './services/motionReviewService';
+import {
+  fetchLiveCatalogForCoordinate,
+  type LiveCatalogResponse,
+} from './services/catalogService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { TopNav } from './components/TopNav';
@@ -231,9 +237,47 @@ export function App() {
     );
   }, [candidatesList, selectedCandidateId]);
 
+  const [liveCatalog, setLiveCatalog] = useState<LiveCatalogResponse | null>(null);
+  const [isCatalogLoading, setIsCatalogLoading] = useState<boolean>(false);
+  const [catalogRefreshCounter, setCatalogRefreshCounter] = useState<number>(0);
+
+  // Automatically query space-agency catalogs (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
+  // whenever the field coordinate (ra, dec), FOV, or selected candidate object changes
+  useEffect(() => {
+    let cancelled = false;
+    const queryRa = activeCandidate?.ra ?? ra;
+    const queryDec = activeCandidate?.dec ?? dec;
+    const fovArcmin = parseFloat(fov) || 5;
+
+    setIsCatalogLoading(true);
+    fetchLiveCatalogForCoordinate({
+      queryRa,
+      queryDec,
+      centerRa: ra,
+      centerDec: dec,
+      fovArcmin,
+      candidateId: activeCandidate ? `${activeCandidate.id}-${catalogRefreshCounter}` : `${catalogRefreshCounter}`,
+    })
+      .then((res) => {
+        if (!cancelled) {
+          setLiveCatalog(res);
+          setIsCatalogLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsCatalogLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ra, dec, fov, activeCandidate?.id, activeCandidate?.ra, activeCandidate?.dec, catalogRefreshCounter]);
+
   const spectrumData = useMemo(() => {
-    return getMock102BandSpectrum(activeCandidate?.id || 'default');
-  }, [activeCandidate]);
+    return getMock102BandSpectrum(activeCandidate?.id || 'default', activeCandidate?.ra ?? ra, activeCandidate?.dec ?? dec);
+  }, [activeCandidate, ra, dec]);
 
   useUrlSync(
     {
@@ -374,12 +418,15 @@ export function App() {
         message: `SPHEREx Cutout Stream: ${matchingReview.target} (${matchingReview.detector}) — Running ML Analysis...`,
       });
     } else {
-      const initialFrames = getMockEpochFrames('custom', detNum);
+      const initialFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       setCustomFrames(initialFrames);
       setActiveFrameIndex(0);
       setSearchStatus({
         source: 'live',
-        message: `Loaded RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
+        message: `Loaded Real Cutout @ RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
       });
     }
 
@@ -472,6 +519,27 @@ export function App() {
       return;
     }
 
+    // 2b. Try the deployed Scala + Python backend cutout pipeline (/backend/api/observations/default + /backend/api/analyses/motion)
+    try {
+      const backendCutout = await fetchLiveBackendCutoutAnalysis({
+        ra: newRa,
+        dec: newDec,
+        fovArcmin,
+        detector: detNum,
+      });
+      if (backendCutout && backendCutout.frames.length > 0) {
+        resolvedFrames = backendCutout.frames;
+        resolvedCands = backendCutout.candidates;
+        resolvedSource = 'live';
+        resolvedMessage = `Live Backend SPHEREx Cutouts: ${resolvedFrames.length} frames & ${resolvedCands.length} tracks`;
+        jobFinished = true;
+        finalizeMlInsights();
+        return;
+      }
+    } catch {
+      // Proceed to archive observation search + real sky cutout photo
+    }
+
     // 3. Query archive observations + /detect ML microservice in parallel
     try {
       const searchResult = await searchArchiveObservations({
@@ -484,16 +552,22 @@ export function App() {
 
       resolvedFrames = convertObservationsToEpochFrames(
         searchResult.observations,
-        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId
+        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId,
+        newRa,
+        newDec,
+        fovArcmin
       );
       resolvedSource = searchResult.isFallback ? 'fallback' : 'live';
       resolvedMessage = searchResult.isFallback
-        ? `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
-        : `Live NASA IRSA + ML Detector: ${searchResult.totalFound} exposures analyzed`;
+        ? `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
+        : `Live NASA IRSA + Real Cutout: ${searchResult.totalFound} exposures analyzed`;
     } catch {
-      resolvedFrames = getMockEpochFrames('custom', detNum);
+      resolvedFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       resolvedSource = 'fallback';
-      resolvedMessage = `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
+      resolvedMessage = `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
     }
 
     const syntheticStack = Array.from({ length: 4 }, (_, eIdx) => {
@@ -1171,6 +1245,9 @@ export function App() {
               viewMode={viewMode}
               searchStatus={searchStatus}
               activeCandidate={activeCandidate}
+              liveCatalog={liveCatalog}
+              isCatalogLoading={isCatalogLoading}
+              onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
               className="h-full w-full"
             />
           </div>
@@ -1220,6 +1297,7 @@ export function App() {
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
               mlAnalysisStatus={mlAnalysisStatus}
+              liveCatalog={liveCatalog}
               onOpenMlInsights={() => {
                 setDrawerControlledTab('ai');
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) {

@@ -13,7 +13,6 @@ from fastapi.responses import JSONResponse, Response
 from PIL import Image
 from pydantic import BaseModel
 
-from spherex.align_files import align_ref, sub_med_ref
 from spherex.cleaning import load_clean_cutout
 from spherex.query import DEFAULT, cutout, image_search
 from scripts.spectra import extract_spectrum, measure_cutout_point
