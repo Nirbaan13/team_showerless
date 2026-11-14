@@ -24,7 +24,7 @@ final class TapMetadata(client: Client, endpoint: String):
     for
       did <- field("obs_publisher_did")
       collection <- field("obs_collection")
-      access <- field("access_url").orElse(Option(image.accessUrl).filter(_.nonEmpty))
+      access <- field("access_url").orElse(image.sourceUrl).orElse(Option(image.accessUrl).filter(_.nonEmpty))
       uri <- scala.util.Try(URI.create(access)).toOption
       path <- Option(uri.getPath).filter(_.nonEmpty)
     yield
