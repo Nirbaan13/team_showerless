@@ -5,6 +5,7 @@ interface UseSpherexPlayerProps {
   frames: SpherexEpochFrame[];
   fps: number;
   isPlaying: boolean;
+  blinkMode?: boolean;
   onFrameChange: (index: number) => void;
   currentIndex: number;
 }
@@ -13,11 +14,13 @@ export function useSpherexPlayer({
   frames,
   fps,
   isPlaying,
+  blinkMode = false,
   onFrameChange,
   currentIndex,
 }: UseSpherexPlayerProps) {
   const [skippedNotice, setSkippedNotice] = useState<string | null>(null);
   const timeoutRef = useRef<number | null>(null);
+  const blinkPairRef = useRef<[number, number]>([0, 1]);
 
   // Clear notice after 3.5s
   useEffect(() => {
@@ -48,26 +51,58 @@ export function useSpherexPlayer({
     [frames]
   );
 
+  // Compute valid A/B blink pair whenever frames change or blinkMode activates
+  useEffect(() => {
+    if (!blinkMode || frames.length <= 1) return;
+    const availIndices = frames
+      .map((f, idx) => (f.isAvailable ? idx : -1))
+      .filter((idx) => idx >= 0);
+    if (availIndices.length >= 2) {
+      const frameA = availIndices[0];
+      // Use the last available epoch as Frame B so motion displacement is maximal and obvious
+      const frameB = availIndices[availIndices.length - 1];
+      blinkPairRef.current = [frameA, frameB];
+    }
+  }, [blinkMode, frames]);
+
   const stepForward = useCallback(() => {
+    if (blinkMode && frames.length > 1) {
+      const [a, b] = blinkPairRef.current;
+      onFrameChange(currentIndex === a ? b : a);
+      return;
+    }
     const next = getNextAvailableIndex(currentIndex, 1);
     onFrameChange(next);
-  }, [currentIndex, getNextAvailableIndex, onFrameChange]);
+  }, [blinkMode, frames.length, currentIndex, getNextAvailableIndex, onFrameChange]);
 
   const stepBackward = useCallback(() => {
+    if (blinkMode && frames.length > 1) {
+      const [a, b] = blinkPairRef.current;
+      onFrameChange(currentIndex === a ? b : a);
+      return;
+    }
     const prev = getNextAvailableIndex(currentIndex, -1);
     onFrameChange(prev);
-  }, [currentIndex, getNextAvailableIndex, onFrameChange]);
+  }, [blinkMode, frames.length, currentIndex, getNextAvailableIndex, onFrameChange]);
 
-  // Main playback loop
+  // Main playback / Blink A/B loop (runs when either Play Movie OR Blink A/B is active)
   useEffect(() => {
-    if (!isPlaying || frames.length <= 1) return;
+    if ((!isPlaying && !blinkMode) || frames.length <= 1) return;
 
-    const intervalMs = Math.max(100, Math.floor(1000 / fps));
+    const intervalMs = blinkMode
+      ? Math.max(180, Math.floor(700 / Math.max(1, fps / 2)))
+      : Math.max(100, Math.floor(1000 / fps));
 
     const loop = () => {
       timeoutRef.current = window.setTimeout(() => {
-        const next = getNextAvailableIndex(currentIndex, 1);
-        onFrameChange(next);
+        if (blinkMode) {
+          const [a, b] = blinkPairRef.current;
+          const nextBlink = currentIndex === a ? b : a;
+          onFrameChange(nextBlink);
+        } else {
+          const next = getNextAvailableIndex(currentIndex, 1);
+          onFrameChange(next);
+        }
       }, intervalMs);
     };
 
@@ -76,12 +111,13 @@ export function useSpherexPlayer({
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [isPlaying, fps, currentIndex, frames, getNextAvailableIndex, onFrameChange]);
+  }, [isPlaying, blinkMode, fps, currentIndex, frames, getNextAvailableIndex, onFrameChange]);
 
   return {
     skippedNotice,
     clearSkippedNotice: () => setSkippedNotice(null),
     stepForward,
     stepBackward,
+    blinkPair: blinkPairRef.current,
   };
 }

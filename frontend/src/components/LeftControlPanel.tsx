@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState } from '../types/spherex';
-import { DETECTOR_ARRAY_SPECS } from '../services/mockSpherexApi';
+import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import { Search, Layers, Filter, Database } from 'lucide-react';
 
 interface LeftControlPanelProps {
@@ -262,47 +262,79 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* 4. Known Astronomical Catalogs */}
-      <div className="p-3">
-        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
-          <Database className="w-3.5 h-3.5 text-emerald-400" />
-          Known Catalog Overlays
-        </span>
-
-        <div className="space-y-1.5">
-          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
-            <div>
-              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                Gaia DR3
+      {/* 4. Known Astronomical Catalogs (Dynamic per Image / Coordinate) */}
+      {(() => {
+        const coordCat = resolveCoordinateCatalogContext(ra, dec);
+        return (
+          <div className="p-3">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-emerald-400" />
+                Known Catalog Overlays
               </span>
-              <span className="text-[10px] text-paper-500 font-sans block">Known stars & coordinates</span>
-            </div>
-            <input
-              type="checkbox"
-              checked={overlays.gaiaDr3}
-              onChange={() => onToggleOverlay('gaiaDr3')}
-              className="accent-emerald-400 rounded cursor-pointer"
-            />
-          </label>
-
-          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
-            <div>
-              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                AllWISE
+              <span className="text-[9px] font-mono text-emerald-400">
+                Auto-matched
               </span>
-              <span className="text-[10px] text-paper-500 font-sans block">Known infrared sources</span>
             </div>
-            <input
-              type="checkbox"
-              checked={overlays.wise}
-              onChange={() => onToggleOverlay('wise')}
-              className="accent-emerald-400 rounded cursor-pointer"
-            />
-          </label>
-        </div>
-      </div>
+
+            <div className="space-y-1.5">
+              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+                <div className="min-w-0 pr-2">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                    <span>Gaia DR3</span>
+                  </span>
+                  <span className="text-[9px] text-emerald-300/90 font-mono block truncate" title={coordCat.gaiaId}>
+                    {coordCat.gaiaId}
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={overlays.gaiaDr3}
+                  onChange={() => onToggleOverlay('gaiaDr3')}
+                  className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                />
+              </label>
+
+              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+                <div className="min-w-0 pr-2">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                    <span>AllWISE</span>
+                  </span>
+                  <span className="text-[9px] text-amber-300/90 font-mono block truncate" title={coordCat.wiseId}>
+                    {coordCat.wiseId}
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={overlays.wise}
+                  onChange={() => onToggleOverlay('wise')}
+                  className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                />
+              </label>
+
+              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+                <div className="min-w-0 pr-2">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
+                    <span>JPL Horizons Ephemeris</span>
+                  </span>
+                  <span className="text-[9px] text-sky-300/90 font-mono block truncate">
+                    {coordCat.ephemerisLabel || coordCat.knownObjectName || `Field (${ra.toFixed(2)}°, ${dec.toFixed(2)}°)`}
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={overlays.solarSystemEphemeris}
+                  onChange={() => onToggleOverlay('solarSystemEphemeris')}
+                  className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                />
+              </label>
+            </div>
+          </div>
+        );
+      })()}
     </aside>
   );
 };

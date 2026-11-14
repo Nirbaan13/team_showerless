@@ -210,6 +210,7 @@ export function App() {
 
   const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
     setSelectedArray(newArray);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     if (currentPresetId) {
       const arrayId = newArray === 'all' ? 6 : newArray;
       const updated = getMockCandidates(currentPresetId, arrayId);
@@ -257,6 +258,7 @@ export function App() {
     frames,
     fps,
     isPlaying,
+    blinkMode,
     currentIndex: activeFrameIndex,
     onFrameChange: setActiveFrameIndex,
   });
@@ -355,6 +357,7 @@ export function App() {
     setRa(newRa);
     setDec(newDec);
     setCurrentPresetId(null);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setActiveTab('viewer');
 
     const fovArcmin = parseFloat(fov) || 5;
@@ -616,6 +619,7 @@ export function App() {
 
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setSearchStatus({
       source: 'preset',
       message: `NASA Benchmark Preset: ${preset.name}`,
@@ -681,6 +685,7 @@ export function App() {
       const cands = getMockCandidates(setting.targetPresetId, detId);
       setCandidatesList(cands);
     }
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setRa(setting.ra);
     setDec(setting.dec);
     setFov(setting.fov);
