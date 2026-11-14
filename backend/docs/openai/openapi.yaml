@@ -45,6 +45,7 @@ paths:
           $ref: '#/components/responses/InvalidRequest'
         '503':
           $ref: '#/components/responses/ArchiveUnavailable'
+  # overenginering: keep the legacy center/width/height endpoint for compatibility.
   /api/observations/default:
     get:
       tags: [Observations]
@@ -59,6 +60,92 @@ paths:
         - $ref: '#/components/parameters/Declination'
         - $ref: '#/components/parameters/Width'
         - $ref: '#/components/parameters/Height'
+        - $ref: '#/components/parameters/Detector'
+        - $ref: '#/components/parameters/Channel'
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadyJob'
+        '202':
+          $ref: '#/components/responses/PendingJob'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  /api/observations/range:
+    get:
+      tags: [Observations]
+      operationId: prepareRangeObservations
+      summary: Prepare observations intersecting a rectangular sky region
+      description: |
+        Uses the same default preparation, download job, chunk statuses, cache,
+        and resource URLs as observations/default, without a center or dimensions.
+        Discovery and preparation run in the background. Repeated identical
+        requests reuse the existing active job or cached result.
+        The backend constructs the IRSA query as
+        POS=RANGE ra_min ra_max dec_min dec_max.
+        All coordinates are ICRS degrees. Native IRSA image boundaries are retained;
+        the service does not introduce its own tile grid.
+      parameters:
+        - name: right_ascension_min_deg
+          in: query
+          required: true
+          description: Lower right ascension boundary, in ICRS degrees
+          schema: {type: number, minimum: 0, maximum: 360}
+          example: 210.80
+        - name: right_ascension_max_deg
+          in: query
+          required: true
+          description: Upper right ascension boundary, in ICRS degrees
+          schema: {type: number, minimum: 0, maximum: 360}
+          example: 210.81
+        - name: declination_min_deg
+          in: query
+          required: true
+          description: Lower declination boundary, in ICRS degrees
+          schema: {type: number, minimum: -90, maximum: 90}
+          example: 54.34
+        - name: declination_max_deg
+          in: query
+          required: true
+          description: Upper declination boundary, in ICRS degrees
+          schema: {type: number, minimum: -90, maximum: 90}
+          example: 54.35
+        - $ref: '#/components/parameters/Detector'
+        - $ref: '#/components/parameters/Channel'
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadyJob'
+        '202':
+          $ref: '#/components/responses/PendingJob'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  /api/observations/polygon:
+    get:
+      tags: [Observations]
+      operationId: preparePolygonObservations
+      summary: Prepare observations intersecting a sky polygon
+      description: |
+        Uses the same default preparation, download job, chunk statuses, cache,
+        and resource URLs as observations/default, without a center or dimensions.
+        Discovery and preparation run in the background. Repeated identical
+        requests reuse the existing active job or cached result.
+        The backend constructs POS=POLYGON from the supplied coordinate pairs.
+        All coordinates are ICRS degrees. Native IRSA image boundaries are retained;
+        the service does not introduce its own tile grid.
+      parameters:
+        - name: verices_degrees
+          in: query
+          required: true
+          description: |
+            Comma-separated coordinates in the order ra1,dec1,ra2,dec2,ra3,dec3,...
+            Supply at least three vertices in boundary order for a convex spherical
+            polygon. The number of coordinates must be even. Each right ascension
+            must be between 0 and 360 degrees; each declination must be between
+            -90 and 90 degrees. Coordinate pairing and polygon validity are checked
+            by the backend in addition to schema validation.
+          style: form
+          explode: false
+          schema:
+            $ref: '#/components/schemas/PolygonCoordinates'
+          example: [210.80, 54.34, 210.81, 54.34, 210.81, 54.35, 210.80, 54.35]
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
       responses:
@@ -329,6 +416,38 @@ components:
         channel_index: {type: integer, minimum: 1, maximum: 102}
         observed_after: {type: string, format: date-time}
         observed_before: {type: string, format: date-time}
+    RangeQuery:
+      type: object
+      required:
+        - right_ascension_min_deg
+        - right_ascension_max_deg
+        - declination_min_deg
+        - declination_max_deg
+      properties:
+        right_ascension_min_deg: {type: number, minimum: 0, maximum: 360}
+        right_ascension_max_deg: {type: number, minimum: 0, maximum: 360}
+        declination_min_deg: {type: number, minimum: -90, maximum: 90}
+        declination_max_deg: {type: number, minimum: -90, maximum: 90}
+        detector_array:
+          $ref: '#/components/schemas/DetectorSelection'
+        channel_index: {type: integer, minimum: 1, maximum: 102}
+    PolygonCoordinates:
+      type: array
+      minItems: 6
+      items: {type: number}
+      description: |
+        Flat ICRS coordinate pairs in degrees: ra1,dec1,ra2,dec2,ra3,dec3,...
+        Requires an even number of coordinates and a valid convex spherical polygon.
+        RA/Dec ranges and geometry require backend validation.
+    PolygonQuery:
+      type: object
+      required: [verices_degrees]
+      properties:
+        verices_degrees:
+          $ref: '#/components/schemas/PolygonCoordinates'
+        detector_array:
+          $ref: '#/components/schemas/DetectorSelection'
+        channel_index: {type: integer, minimum: 1, maximum: 102}
     Observation:
       type: object
       required: [frame_id, observation_date, detector_array, release, is_available]
@@ -372,7 +491,11 @@ components:
           type: string
           enum: [default, zodi_reference_subtracted, epoch_difference]
         query:
-          $ref: '#/components/schemas/SkyQuery'
+          description: Original request geometry and filters for this download job
+          oneOf:
+            - $ref: '#/components/schemas/SkyQuery'
+            - $ref: '#/components/schemas/RangeQuery'
+            - $ref: '#/components/schemas/PolygonQuery'
         reference_frame_id: {type: string}
         observations:
           type: array
