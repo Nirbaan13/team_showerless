@@ -10,6 +10,10 @@ info:
     and preview endpoints are retained.
     URLs may be returned before their resources are ready. Clients must use
     resource status or readiness events before fetching image or FITS data.
+    Optional observed_after and observed_before timestamps constrain observation
+    time for every query geometry. The backend converts them to Modified Julian
+    Dates (MJD) and sends IRSA TIME=<start_mjd> <end_mjd>. An omitted bound becomes
+    -Inf or +Inf; when both bounds are omitted, no TIME filter is sent.
 servers:
   - url: http://35.159.162.202
 tags:
@@ -62,6 +66,8 @@ paths:
         - $ref: '#/components/parameters/Height'
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
       responses:
         '200':
           $ref: '#/components/responses/ReadyJob'
@@ -110,6 +116,8 @@ paths:
           example: 54.35
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
       responses:
         '200':
           $ref: '#/components/responses/ReadyJob'
@@ -148,6 +156,8 @@ paths:
           example: [210.80, 54.34, 210.81, 54.34, 210.81, 54.35, 210.80, 54.35]
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
       responses:
         '200':
           $ref: '#/components/responses/ReadyJob'
@@ -170,6 +180,8 @@ paths:
         - $ref: '#/components/parameters/Height'
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
       responses:
         '200':
           $ref: '#/components/responses/ReadyJob'
@@ -190,6 +202,8 @@ paths:
         - $ref: '#/components/parameters/Height'
         - $ref: '#/components/parameters/Detector'
         - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
         - name: reference_frame_id
           in: query
           required: true
@@ -342,6 +356,24 @@ components:
       in: query
       description: Optional spectral channel filter
       schema: {type: integer, minimum: 1, maximum: 102}
+    ObservedAfter:
+      name: observed_after
+      in: query
+      description: |
+        Lower bound of the observation-time interval, as an ISO 8601 timestamp
+        with a timezone. Converted to the lower MJD bound of IRSA TIME.
+        Omit for an unbounded start. Must precede observed_before when both are set.
+      schema:
+        $ref: '#/components/schemas/ObservedAfter'
+    ObservedBefore:
+      name: observed_before
+      in: query
+      description: |
+        Upper bound of the observation-time interval, as an ISO 8601 timestamp
+        with a timezone. Converted to the upper MJD bound of IRSA TIME.
+        Omit for an unbounded end. Must follow observed_after when both are set.
+      schema:
+        $ref: '#/components/schemas/ObservedBefore'
   responses:
     ReadyJob:
       description: Current job manifest; preparation may still be in progress
@@ -398,6 +430,16 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ObservedAfter:
+      type: string
+      format: date-time
+      description: Observation-time lower bound; converted to MJD for IRSA TIME. Omit for an unbounded start.
+      example: '2025-04-29T00:00:00Z'
+    ObservedBefore:
+      type: string
+      format: date-time
+      description: Observation-time upper bound; converted to MJD for IRSA TIME. Must follow observed_after. Omit for an unbounded end.
+      example: '2025-04-30T00:00:00Z'
     DetectorSelection:
       default: all
       oneOf:
@@ -414,8 +456,10 @@ components:
         detector_array:
           $ref: '#/components/schemas/DetectorSelection'
         channel_index: {type: integer, minimum: 1, maximum: 102}
-        observed_after: {type: string, format: date-time}
-        observed_before: {type: string, format: date-time}
+        observed_after:
+          $ref: '#/components/schemas/ObservedAfter'
+        observed_before:
+          $ref: '#/components/schemas/ObservedBefore'
     RangeQuery:
       type: object
       required:
@@ -431,6 +475,10 @@ components:
         detector_array:
           $ref: '#/components/schemas/DetectorSelection'
         channel_index: {type: integer, minimum: 1, maximum: 102}
+        observed_after:
+          $ref: '#/components/schemas/ObservedAfter'
+        observed_before:
+          $ref: '#/components/schemas/ObservedBefore'
     PolygonCoordinates:
       type: array
       minItems: 6
@@ -448,6 +496,10 @@ components:
         detector_array:
           $ref: '#/components/schemas/DetectorSelection'
         channel_index: {type: integer, minimum: 1, maximum: 102}
+        observed_after:
+          $ref: '#/components/schemas/ObservedAfter'
+        observed_before:
+          $ref: '#/components/schemas/ObservedBefore'
     Observation:
       type: object
       required: [frame_id, observation_date, detector_array, release, is_available]
