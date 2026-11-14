@@ -40,6 +40,36 @@ object PythonJobsSpec extends ZIOSpecDefault:
     if job.terminal then ZIO.succeed(job) else ZIO.sleep(25.millis) *> completed(jobs,id)
   }
   def spec=suite("Verified Python job flow")(
+    test("enabling previews refreshes an old native-only job while reusing its cached FITS") {
+      ZIO.scoped {
+        for
+          dir <- ZIO.attempt(Files.createTempDirectory("python-upgrade-"))
+          repo <- Repository.open(dir.resolve("jobs.sqlite"))
+          fetched <- Ref.make(0)
+          source=new Archive:
+            def search(q:Query)=ZIO.succeed(List(ArchiveImage(Observation("upgrade-fixture","2025-04-29T00:00:00Z",1,"DR1"),"https://example.test/upgrade.fits")))
+            def fetch(image:ArchiveImage,path:Path)=fetched.update(_+1) *> ZIO.attemptBlocking {
+              val input=getClass.getResourceAsStream("/processing/native_fixture.fits")
+              try { Files.copy(input,path,java.nio.file.StandardCopyOption.REPLACE_EXISTING);() } finally input.close()
+            }
+          archive <- CapacityArchive.make(source,dir,2*1024*1024,256*1024,0)
+          q=Query.fromParameters("default",Map("right_ascension_deg"->"1","declination_deg"->"2")).toOption.get
+          old <- ZIO.scoped {
+            for
+              jobs <- Jobs.make(repo,archive,NoProcessing,dir)
+              submitted <- jobs.submit(q,"default",None)
+              done <- completed(jobs,submitted.id)
+            yield done
+          }
+          processor <- PythonProcessor.make(python,Paths.get("processing/worker.py"),Paths.get("../pipeline"))
+          jobs <- Jobs.make(repo,archive,processor,dir)
+          next <- jobs.submit(q,"default",None)
+          done <- completed(jobs,next.id)
+          transfers <- fetched.get
+        yield assertTrue(old.chunks.head.preview_status=="unavailable",old.id!=done.id,
+          done.status=="completed",done.chunks.head.preview_status=="ready",transfers==1)
+      }
+    },
     test("gRPC selects verified ZODI processing and streams the resulting FITS") {
       ZIO.scoped(fixture { (_,jobs,grpc)=>
         for
