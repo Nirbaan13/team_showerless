@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run against a real Docker daemon; no production resources are used.
 set -euo pipefail
-repo_root=$(cd "$(dirname "$0")/.." && pwd)
+repo_root=$(cd "$(dirname "$0")/../.." && pwd)
 export APP_DIR
 APP_DIR=$(mktemp -d)
 export APP_PORT=18080 COMPOSE_PROJECT_NAME="spaceapps-ci-$$" DEPLOY_HEALTH_TIMEOUT=15
