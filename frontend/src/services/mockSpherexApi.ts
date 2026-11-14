@@ -77,12 +77,12 @@ export const REFERENCE_MOLECULAR_LINES: MolecularLine[] = [
 ];
 
 export const DETECTOR_ARRAY_SPECS = [
-  { id: 1, name: 'Band 1', label: 'Deep Red Light', range: '0.75 – 1.11 µm', desc: 'Captures bright nearby stars' },
-  { id: 2, name: 'Band 2', label: 'Warm Infrared', range: '1.11 – 1.64 µm', desc: 'Highlights red dwarf stars' },
-  { id: 3, name: 'Band 3', label: 'Mid-Infrared', range: '1.64 – 2.42 µm', desc: 'Cuts through space dust' },
-  { id: 4, name: 'Band 4', label: 'Heat Signature', range: '2.42 – 3.82 µm', desc: 'Spots cooler glowing gas' },
-  { id: 5, name: 'Band 5', label: 'Cold Gas & Ice', range: '3.82 – 4.42 µm', desc: 'Detects ice clouds (H₂O, CO₂)' },
-  { id: 6, name: 'Band 6', label: 'Deep Cold (Brown Dwarfs)', range: '4.42 – 5.00 µm', desc: 'Coldest sub-stellar objects' },
+  { id: 1, name: 'Band 1', label: 'Deep Red Light', range: '0.75 – 1.11 µm', res: 'R ~ 41', desc: 'Captures bright nearby stars' },
+  { id: 2, name: 'Band 2', label: 'Warm Infrared', range: '1.11 – 1.64 µm', res: 'R ~ 41', desc: 'Highlights red dwarf stars' },
+  { id: 3, name: 'Band 3', label: 'Mid-Infrared', range: '1.64 – 2.42 µm', res: 'R ~ 41', desc: 'Cuts through space dust' },
+  { id: 4, name: 'Band 4', label: 'Heat Signature', range: '2.42 – 3.82 µm', res: 'R ~ 35', desc: 'Spots cooler glowing gas' },
+  { id: 5, name: 'Band 5', label: 'Cold Gas & Ice', range: '3.82 – 4.42 µm', res: 'R ~ 110', desc: 'Detects ice clouds (H₂O, CO₂)' },
+  { id: 6, name: 'Band 6', label: 'Deep Cold Stars', range: '4.42 – 5.00 µm', res: 'R ~ 130', desc: 'Coldest sub-stellar brown dwarfs' },
 ];
 
 /**
