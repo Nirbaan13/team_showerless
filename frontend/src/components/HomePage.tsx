@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { TargetPreset } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
-import { SpherexBlinkLogo } from './common/SpherexBlinkLogo';
 import { ArrowRight, Compass } from 'lucide-react';
 
 interface HomePageProps {
@@ -50,15 +49,12 @@ export const HomePage: React.FC<HomePageProps> = ({
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#0a0a0e]/90" />
 
       <div className="relative w-full max-w-4xl flex flex-col items-center text-center space-y-8 my-auto">
-        {/* Brand Logo & Big Prominent Name */}
-        <div className="anim-fall flex flex-col items-center gap-4">
-          <SpherexBlinkLogo size={64} className="drop-shadow-[0_4px_24px_rgba(16,185,129,0.35)]" />
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
-            SPHEREx
-            <br />
-            <span className="text-emerald-400">Blink</span>
-          </h1>
-        </div>
+        {/* Big Prominent Name with cinematic reveal & pulse glow */}
+        <h1 className="anim-hero-title text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] select-none">
+          SPHEREx
+          <br />
+          <span className="text-emerald-400 anim-blink-glow inline-block">Blink</span>
+        </h1>
 
         {/* Coordinate Search */}
         <div className="anim-fall w-full max-w-2xl space-y-3" style={{ animationDelay: '120ms' }}>
