@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T21:13:55.407513+00:00",
+  "run_id": "a3cb283c7920",
+  "backend_before": {
+    "container_id": "573da98a64062d527e8d151a86d0570120f0697a704953636c2dde28c1980c30",
+    "image_id": "sha256:23f2802cc22e0eb8f60f7c8ef6465cb0ac1a45918c577fd74803b433b37fc608",
+    "revision": "f2b786457760fe5321de6346232523dda8b906d5",
+    "health": "healthy"
+  },
+  "backend_after": {
+    "container_id": "573da98a64062d527e8d151a86d0570120f0697a704953636c2dde28c1980c30",
+    "image_id": "sha256:23f2802cc22e0eb8f60f7c8ef6465cb0ac1a45918c577fd74803b433b37fc608",
+    "revision": "f2b786457760fe5321de6346232523dda8b906d5",
+    "health": "healthy"
+  },
+  "pinned_image_id": "sha256:23f2802cc22e0eb8f60f7c8ef6465cb0ac1a45918c577fd74803b433b37fc608",
+  "image_created": "2026-11-14T21:07:52.67248675Z",
+  "image_revision": "f2b786457760fe5321de6346232523dda8b906d5",
+  "requested_limits": {
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "pids": 128,
+    "tmpfs_tmp_bytes": 268435456,
+    "network": "none",
+    "read_only_root": true,
+    "remove_after_exit": true
+  },
+  "probe_source_sha256": "3641116f13df607cec8531059d5acb15e4a2f22a327f3f49be20d21892a5e821",
+  "planned_presets": [
+    "comet-d6",
+    "comet-d2",
+    "vesta-d3"
+  ],
+  "executed_probes": 3,
+  "probes": [
+    {
+      "index": 1,
+      "preset": "comet-d6",
+      "container_name": "spaceapps-v2-benchmark-a3cb283c7920-1",
+      "docker_wall_seconds": 1.8994428430005428,
+      "docker_returncode": 0,
+      "docker_timed_out": false,
+      "forced_cleanup": false,
+      "container_probe": {
+        "schema_version": 1,
+        "measured_at_utc": "2026-11-14T21:13:51.619515+00:00",
+        "preset": "comet-d6",
+        "preset_fixture_sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+        "model_id": "spherex-track-rf-v2",
+        "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+        "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "versions": {
+          "numpy": "2.5.3",
+          "scipy": "1.18.1",
+          "astropy": "8.0.2",
+          "onnxruntime": "1.30.0",
+          "pillow": "12.3.0"
+        },
+        "success": true,
+        "returncode": 0,
+        "timed_out": false,
+        "child_wall_seconds": 1.33415579099983,
+        "child_resource": {
+          "max_rss_kib": 175512,
+          "max_rss_bytes": 179724288,
+          "user_cpu_seconds": 1.158011,
+          "system_cpu_seconds": 0.166828,
+          "minor_faults": 34328,
+          "major_faults": 8,
+          "input_blocks": 2256,
+          "output_blocks": 0,
+          "voluntary_context_switches": 23,
+          "involuntary_context_switches": 14
+        },
+        "measurement_scope": "Linux RUSAGE_CHILDREN for the sole inference Python subprocess; not SSH or Docker CLI RSS",
+        "cgroup_limits": {
+          "cpu.max": "100000 100000",
+          "memory.max": "1073741824",
+          "pids.max": "128"
+        },
+        "cgroup_memory_peak_bytes": "138883072",
+        "tmp_mount": [
+          "565 507 0:96 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=262144k,inode64"
+        ],
+        "frames": 4,
+        "candidates": 10,
+        "registered_shapes": [
+          [
+            256,
+            144
+          ],
+          [
+            256,
+            144
+          ],
+          [
+            256,
+            144
+          ],
+          [
+            256,
+            144
+          ]
+        ],
+        "output_resource_count": 28,
+        "output_resource_bytes": 89233,
+        "settings": {
+          "min_snr": 4.0,
+          "min_speed_arcsec_per_hour": 3.075,
+          "max_speed_arcsec_per_hour": 369.0,
+          "mask_policy": "motion",
+          "max_candidates": 100,
+          "max_peaks": 100,
+          "pixel_scale_arcsec": 6.15,
+          "min_epochs": 3,
+          "leave_one_out": true,
+          "min_support": 0.8,
+          "psf_sigma_px": 1.2,
+          "match_radius_px": 1.4
+        },
+        "warnings": [
+          "selected_development_case",
+          "legacy_decreasing_declination_grid",
+          "outlier_measurements_retained",
+          "experimental_synthetic_trained_ranking",
+          "short_linear_arc_model",
+          "uncalibrated_residual_snr",
+          "passband_variation_not_corrected",
+          "psf_matching_not_applied"
+        ],
+        "error": null,
+        "stdout": "",
+        "stderr": "\u001b[0;93m2026-11-14 21:13:51.122368516 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+        "fitting_performed": false,
+        "inputs": "Packaged known-object development presets only; no production data or final fields"
+      },
+      "docker_stderr": "",
+      "unparsed_stdout": null
+    },
+    {
+      "index": 2,
+      "preset": "comet-d2",
+      "container_name": "spaceapps-v2-benchmark-a3cb283c7920-2",
+      "docker_wall_seconds": 1.5724996019998798,
+      "docker_returncode": 0,
+      "docker_timed_out": false,
+      "forced_cleanup": false,
+      "container_probe": {
+        "schema_version": 1,
+        "measured_at_utc": "2026-11-14T21:13:53.199363+00:00",
+        "preset": "comet-d2",
+        "preset_fixture_sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+        "model_id": "spherex-track-rf-v2",
+        "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+        "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "versions": {
+          "numpy": "2.5.3",
+          "scipy": "1.18.1",
+          "astropy": "8.0.2",
+          "onnxruntime": "1.30.0",
+          "pillow": "12.3.0"
+        },
+        "success": true,
+        "returncode": 0,
+        "timed_out": false,
+        "child_wall_seconds": 1.124266155999976,
+        "child_resource": {
+          "max_rss_kib": 173960,
+          "max_rss_bytes": 178135040,
+          "user_cpu_seconds": 0.977258,
+          "system_cpu_seconds": 0.14674399999999999,
+          "minor_faults": 33686,
+          "major_faults": 0,
+          "input_blocks": 0,
+          "output_blocks": 0,
+          "voluntary_context_switches": 15,
+          "involuntary_context_switches": 15
+        },
+        "measurement_scope": "Linux RUSAGE_CHILDREN for the sole inference Python subprocess; not SSH or Docker CLI RSS",
+        "cgroup_limits": {
+          "cpu.max": "100000 100000",
+          "memory.max": "1073741824",
+          "pids.max": "128"
+        },
+        "cgroup_memory_peak_bytes": "135491584",
+        "tmp_mount": [
+          "565 507 0:96 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=262144k,inode64"
+        ],
+        "frames": 3,
+        "candidates": 2,
+        "registered_shapes": [
+          [
+            104,
+            76
+          ],
+          [
+            104,
+            76
+          ],
+          [
+            104,
+            76
+          ]
+        ],
+        "output_resource_count": 10,
+        "output_resource_bytes": 8837,
+        "settings": {
+          "min_snr": 4.0,
+          "min_speed_arcsec_per_hour": 3.075,
+          "max_speed_arcsec_per_hour": 369.0,
+          "mask_policy": "motion",
+          "max_candidates": 100,
+          "max_peaks": 100,
+          "pixel_scale_arcsec": 6.15,
+          "min_epochs": 3,
+          "leave_one_out": true,
+          "min_support": 0.8,
+          "psf_sigma_px": 1.2,
+          "match_radius_px": 1.4
+        },
+        "warnings": [
+          "selected_development_case",
+          "legacy_decreasing_declination_grid",
+          "outlier_measurements_retained",
+          "experimental_synthetic_trained_ranking",
+          "short_linear_arc_model",
+          "uncalibrated_residual_snr",
+          "passband_variation_not_corrected",
+          "psf_matching_not_applied"
+        ],
+        "error": null,
+        "stdout": "",
+        "stderr": "\u001b[0;93m2026-11-14 21:13:52.887457890 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+        "fitting_performed": false,
+        "inputs": "Packaged known-object development presets only; no production data or final fields"
+      },
+      "docker_stderr": "",
+      "unparsed_stdout": null
+    },
+    {
+      "index": 3,
+      "preset": "vesta-d3",
+      "container_name": "spaceapps-v2-benchmark-a3cb283c7920-3",
+      "docker_wall_seconds": 2.0206364229998144,
+      "docker_returncode": 0,
+      "docker_timed_out": false,
+      "forced_cleanup": false,
+      "container_probe": {
+        "schema_version": 1,
+        "measured_at_utc": "2026-11-14T21:13:55.209003+00:00",
+        "preset": "vesta-d3",
+        "preset_fixture_sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+        "model_id": "spherex-track-rf-v2",
+        "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+        "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "versions": {
+          "numpy": "2.5.3",
+          "scipy": "1.18.1",
+          "astropy": "8.0.2",
+          "onnxruntime": "1.30.0",
+          "pillow": "12.3.0"
+        },
+        "success": true,
+        "returncode": 0,
+        "timed_out": false,
+        "child_wall_seconds": 1.3854685520000203,
+        "child_resource": {
+          "max_rss_kib": 175508,
+          "max_rss_bytes": 179720192,
+          "user_cpu_seconds": 1.218029,
+          "system_cpu_seconds": 0.16641399999999998,
+          "minor_faults": 34002,
+          "major_faults": 0,
+          "input_blocks": 0,
+          "output_blocks": 0,
+          "voluntary_context_switches": 15,
+          "involuntary_context_switches": 15
+        },
+        "measurement_scope": "Linux RUSAGE_CHILDREN for the sole inference Python subprocess; not SSH or Docker CLI RSS",
+        "cgroup_limits": {
+          "cpu.max": "100000 100000",
+          "memory.max": "1073741824",
+          "pids.max": "128"
+        },
+        "cgroup_memory_peak_bytes": "137285632",
+        "tmp_mount": [
+          "565 507 0:96 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=262144k,inode64"
+        ],
+        "frames": 3,
+        "candidates": 26,
+        "registered_shapes": [
+          [
+            222,
+            174
+          ],
+          [
+            222,
+            174
+          ],
+          [
+            222,
+            174
+          ]
+        ],
+        "output_resource_count": 61,
+        "output_resource_bytes": 52540,
+        "settings": {
+          "min_snr": 4.0,
+          "min_speed_arcsec_per_hour": 3.075,
+          "max_speed_arcsec_per_hour": 369.0,
+          "mask_policy": "motion",
+          "max_candidates": 100,
+          "max_peaks": 100,
+          "pixel_scale_arcsec": 6.15,
+          "min_epochs": 3,
+          "leave_one_out": true,
+          "min_support": 0.8,
+          "psf_sigma_px": 1.2,
+          "match_radius_px": 1.4
+        },
+        "warnings": [
+          "selected_development_case",
+          "legacy_decreasing_declination_grid",
+          "outlier_measurements_retained",
+          "experimental_synthetic_trained_ranking",
+          "short_linear_arc_model",
+          "uncalibrated_residual_snr",
+          "passband_variation_not_corrected",
+          "psf_matching_not_applied"
+        ],
+        "error": null,
+        "stdout": "",
+        "stderr": "\u001b[0;93m2026-11-14 21:13:54.671732902 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+        "fitting_performed": false,
+        "inputs": "Packaged known-object development presets only; no production data or final fields"
+      },
+      "docker_stderr": "",
+      "unparsed_stdout": null
+    }
+  ],
+  "leftover_containers_for_run": 0,
+  "production_exec_or_service_changes_performed": false,
+  "host_data_bind_mounts_requested": false,
+  "candidate_uploaded_or_fitted": false,
+  "driver_source_sha256": {
+    "container_probe.py": "3641116f13df607cec8531059d5acb15e4a2f22a327f3f49be20d21892a5e821",
+    "remote_runner.py": "b904f3b76e574767e37c200d09ab17f0ff1a86e649a2af2bedd3a7d40caf1893",
+    "run_ssh.py": "9c60194f5c0b5c8d442103d4ec2dba16c87aa8d09b91fed03ca1d50ade39633f"
+  }
+}

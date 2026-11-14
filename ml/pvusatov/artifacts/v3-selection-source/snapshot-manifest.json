@@ -1,0 +1,83 @@
+{
+  "created_utc": "2026-11-14T21:37:19.924066+00:00",
+  "designation": "Immutable source actually used for132-model development selection; no final data",
+  "invocation_sha256": "b4043a3275fbfdc0e71bec5ef4a3de4e9ba9d79dd7d6a6f9dd98ba7adb512456",
+  "files": [
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_forest_grid.py",
+      "sha256": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/test_artifact_protocol.py",
+      "sha256": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/test_protocol.py",
+      "sha256": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/batch_native.py",
+      "sha256": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_expanded_validation.py",
+      "sha256": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/test_selection_integrity.py",
+      "sha256": "49d3186e51d45ca7d1be8c493d1a54fe8d39af52d12e2300946527b227bbd7b0"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/selection_integrity.py",
+      "sha256": "a585e75d30c708d801b37be384049729f8825b9f2fd0acc82d6f9c713b1767b2"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/select_cached.py",
+      "sha256": "41261a0168c42f9f8b92c88cbc78ba75bdf8b142ecb64e0fd37527bfc7e90424"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py",
+      "sha256": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_synthetic.py",
+      "sha256": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/protocol.py",
+      "sha256": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_native_artifacts.py",
+      "sha256": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/protocol_artifacts.py",
+      "sha256": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/audit_domain.py",
+      "sha256": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/test_selection_policy.py",
+      "sha256": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/train_grid.py",
+      "sha256": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/select_system.py",
+      "sha256": "4dc59f6381c6c5267eafa3afbb5e735d78496be0989610b3cb5b7fc8eabf32c9"
+    },
+    {
+      "path": "backend/inference/experiments/v3_ranker/cache_native.py",
+      "sha256": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66"
+    },
+    {
+      "path": "backend/inference/experiments/v3_evaluation/paired.py",
+      "sha256": "ebe526aefa5212b8a40481528f0a890934d4ae360e53cd839ddb1e55766ebdce"
+    }
+  ]
+}

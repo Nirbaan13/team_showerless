@@ -1,0 +1,9 @@
+{
+  "frontend_base": "http://144.124.238.101:8080",
+  "checked_at_utc": "2026-11-14T21:59:00.032Z",
+  "frontend_proxy_spec_loaded": true,
+  "openapi_paths": 20,
+  "swagger_try_it_out": true,
+  "model": "spherex-track-rf-v2",
+  "javascript_errors": []
+}

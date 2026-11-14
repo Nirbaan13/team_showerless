@@ -43,6 +43,11 @@ jobs:
           python -m pytest
           python -m pytest experiments
           python smoke.py
+      - name: Verify immutable v2 release and source archive
+        working-directory: ml/pvusatov/releases/v2/backend/inference
+        run: |
+          python -m pytest
+          python smoke.py
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin

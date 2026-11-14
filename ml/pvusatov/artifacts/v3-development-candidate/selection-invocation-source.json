@@ -1,0 +1,26 @@
+{
+  "started_utc": "2026-11-14T21:05:08.255253+00:00",
+  "working_directory": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov",
+  "source_sha256": {
+    "backend/inference/experiments/v3_ranker/cache_forest_grid.py": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c",
+    "backend/inference/experiments/v3_ranker/test_artifact_protocol.py": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47",
+    "backend/inference/experiments/v3_ranker/test_protocol.py": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6",
+    "backend/inference/experiments/v3_ranker/batch_native.py": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba",
+    "backend/inference/experiments/v3_ranker/cache_expanded_validation.py": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9",
+    "backend/inference/experiments/v3_ranker/test_selection_integrity.py": "49d3186e51d45ca7d1be8c493d1a54fe8d39af52d12e2300946527b227bbd7b0",
+    "backend/inference/experiments/v3_ranker/selection_integrity.py": "a585e75d30c708d801b37be384049729f8825b9f2fd0acc82d6f9c713b1767b2",
+    "backend/inference/experiments/v3_ranker/select_cached.py": "41261a0168c42f9f8b92c88cbc78ba75bdf8b142ecb64e0fd37527bfc7e90424",
+    "backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+    "backend/inference/experiments/v3_ranker/cache_synthetic.py": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b",
+    "backend/inference/experiments/v3_ranker/protocol.py": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+    "backend/inference/experiments/v3_ranker/cache_native_artifacts.py": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9",
+    "backend/inference/experiments/v3_ranker/protocol_artifacts.py": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213",
+    "backend/inference/experiments/v3_ranker/audit_domain.py": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf",
+    "backend/inference/experiments/v3_ranker/test_selection_policy.py": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115",
+    "backend/inference/experiments/v3_ranker/train_grid.py": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+    "backend/inference/experiments/v3_ranker/select_system.py": "4dc59f6381c6c5267eafa3afbb5e735d78496be0989610b3cb5b7fc8eabf32c9",
+    "backend/inference/experiments/v3_ranker/cache_native.py": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66",
+    "backend/inference/experiments/v3_evaluation/paired.py": "ebe526aefa5212b8a40481528f0a890934d4ae360e53cd839ddb1e55766ebdce"
+  },
+  "final_fields_opened": false
+}

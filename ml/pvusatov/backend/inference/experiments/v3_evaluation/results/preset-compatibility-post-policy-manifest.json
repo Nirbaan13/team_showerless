@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "designation": "Prospective pre-final generic output-policy amendment; same candidate; historical reports preserved",
+  "baseline_model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "candidate_model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "executed_source_sha256": {
+    "experiments/v3_evaluation/evaluate_presets.py": "8a259d8ad1e6edaab734bcf4f089180c68814fa5634fadfdfe01e93d0ea339f6",
+    "training/evaluate_real.py": "68f99a37e6ad7fe48ff64eaf11ae7ef60d647aeeef46ae1aa13220ccdc31a63a",
+    "ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "ml_inference/pipeline.py": "15763e01808f1680926ae39974c9179b94ccd8f9a5e157872585817c81b44a6c",
+    "ml_inference/model.py": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083"
+  },
+  "files": [
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility-post-policy.json",
+      "sha256": "06ffe5003f627e2842c55d43ee59e701551593cfc063265ee21763b68eb6bd88",
+      "bytes": 579934
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility-post-policy-summary.json",
+      "sha256": "4bce372f896381ca3535dce6314d698aecd7fd1411b5b6926e7e2087d89badeb",
+      "bytes": 10991
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/evaluate_presets.py",
+      "sha256": "8a259d8ad1e6edaab734bcf4f089180c68814fa5634fadfdfe01e93d0ea339f6",
+      "bytes": 18094
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/test_evaluate_presets.py",
+      "sha256": "2b229cbfc626dff9bc3aa63c4dd987774d90b55a64ad42da4ed6aed3aa4ecb7e",
+      "bytes": 3815
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/ml_inference/pipeline.py",
+      "sha256": "15763e01808f1680926ae39974c9179b94ccd8f9a5e157872585817c81b44a6c",
+      "bytes": 9949
+    },
+    {
+      "path": "ml/pvusatov/backend/docs/implementation/ML-V3-PRESET-COMPATIBILITY.AI.md",
+      "sha256": "4c20c5577fb01de77327b13106c1681e28c9b03083e801b70ff87b453743825c",
+      "bytes": 10436
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility.json",
+      "sha256": "6f98ce350160be88aa783aabf334a08f60020d1836d7e44c0dc25ffb0b9d48dd",
+      "bytes": 461363
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility-summary.json",
+      "sha256": "2816bc71d713694ee11192a675ba6a07052434161f2200796f4a13653e08385f",
+      "bytes": 9361
+    },
+    {
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility-manifest.json",
+      "sha256": "efec6eb8db70e72175c171b7b0b76d9ac331efd84e3f77c810b39d2ac22044d6",
+      "bytes": 1358
+    }
+  ]
+}

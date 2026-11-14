@@ -1,0 +1,479 @@
+{
+  "schema_version": 1,
+  "release_id": "spherex-track-rf-v2",
+  "status": "immutable historical runtime/source/evidence snapshot before optional v3 runtime integration",
+  "created_utc": "2026-11-14T21:26:56.803149+00:00",
+  "source_revision": "2326faa8abe7b4a9b80c70a57f478b95a7a96910",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "original_manifests_unchanged": true,
+  "files": [
+    {
+      "namespace_relative_path": "backend/inference/fixtures/PROVENANCE.AI.md",
+      "archive_relative_path": "backend/inference/fixtures/PROVENANCE.AI.md",
+      "sha256": "6e9b5b658a5b3d1aac2884f1b4f78621ed3b9fd6214190e62040ee0656dcba97",
+      "size_bytes": 5887
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/comet-d2.npz",
+      "archive_relative_path": "backend/inference/fixtures/comet-d2.npz",
+      "sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+      "size_bytes": 89823
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/comet-d6.npz",
+      "archive_relative_path": "backend/inference/fixtures/comet-d6.npz",
+      "sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+      "size_bytes": 550371
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/observations.csv",
+      "archive_relative_path": "backend/inference/fixtures/observations.csv",
+      "sha256": "b2f01f993bdc09516de43ee8fd90771a4f3dbe07cac13a34b9094a4f4e1c9af6",
+      "size_bytes": 3104
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/presets.json",
+      "archive_relative_path": "backend/inference/fixtures/presets.json",
+      "sha256": "cedef7219e8d807e69eb3738a1f2266bca0c0d4346e59e0153064abb16cc1a1f",
+      "size_bytes": 1473
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/vesta-d3.npz",
+      "archive_relative_path": "backend/inference/fixtures/vesta-d3.npz",
+      "sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+      "size_bytes": 425944
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/vesta-d6.npz",
+      "archive_relative_path": "backend/inference/fixtures/vesta-d6.npz",
+      "sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114",
+      "size_bytes": 420851
+    },
+    {
+      "namespace_relative_path": "backend/inference/fixtures/vesta-horizons.csv",
+      "archive_relative_path": "backend/inference/fixtures/vesta-horizons.csv",
+      "sha256": "c1df6a763daa8ba51a98581e934b3e0fd056a782b1145dbcd78c564798303d99",
+      "size_bytes": 222
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/__init__.py",
+      "archive_relative_path": "backend/inference/ml_inference/__init__.py",
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+      "size_bytes": 74
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/__main__.py",
+      "archive_relative_path": "backend/inference/ml_inference/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "size_bytes": 48
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/cli.py",
+      "archive_relative_path": "backend/inference/ml_inference/cli.py",
+      "sha256": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+      "size_bytes": 2564
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/contracts.py",
+      "archive_relative_path": "backend/inference/ml_inference/contracts.py",
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+      "size_bytes": 2460
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/detector.py",
+      "archive_relative_path": "backend/inference/ml_inference/detector.py",
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+      "size_bytes": 9710
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/model.py",
+      "archive_relative_path": "backend/inference/ml_inference/model.py",
+      "sha256": "3e9cabef0b68c60c154ee91cc51a54aeccbab3339b52a2b2aa21f06c7d8881c5",
+      "size_bytes": 5270
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/pipeline.py",
+      "archive_relative_path": "backend/inference/ml_inference/pipeline.py",
+      "sha256": "7f53685b822b7c94945c6bda383e8fcb2213c231d8a68973638eced1cf0e4dc0",
+      "size_bytes": 8458
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/prepare.py",
+      "archive_relative_path": "backend/inference/ml_inference/prepare.py",
+      "sha256": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+      "size_bytes": 16967
+    },
+    {
+      "namespace_relative_path": "backend/inference/ml_inference/render.py",
+      "archive_relative_path": "backend/inference/ml_inference/render.py",
+      "sha256": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+      "size_bytes": 2564
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/.gitignore",
+      "archive_relative_path": "backend/inference/models/.gitignore",
+      "sha256": "8d701b318b30430c72c6f40b79f060dd81fcf4575ca0820049fd46d7874e9a97",
+      "size_bytes": 238
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/evaluation-statistics.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/evaluation-statistics.json",
+      "sha256": "aa5cc26b600a413ee7e4219a289283554e5dddadae81a394045f788ffd0609ab",
+      "size_bytes": 390
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/evaluation.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/evaluation.json",
+      "sha256": "6dbb118bfaa944cb215c40f6ce225d573b7c69a744e67c8a166b6ef7629fade9",
+      "size_bytes": 7325
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/metadata.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/metadata.json",
+      "sha256": "a5121175eae37bad25702f4872e576cc28bd52dedbf5f0ad60ad1e9287ba23ac",
+      "size_bytes": 643
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/parity-reference.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/parity-reference.json",
+      "sha256": "a68637a62d83a433c7c8ce725e2f9964ee26a17bab3c57a83703fa896b8e3884",
+      "size_bytes": 229235
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/ranker.onnx",
+      "archive_relative_path": "backend/inference/models/archive/v1/ranker.onnx",
+      "sha256": "030c1edf972b76b3cb8fadcb4adadcc386a36eab9f2cdbcb65527c277c581ab9",
+      "size_bytes": 2168053
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/real-background-evaluation.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/real-background-evaluation.json",
+      "sha256": "ef5e661f3bdf074d11bea5454bd74da359169935724db19930695e91d76709b7",
+      "size_bytes": 557390
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/real-evaluation.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/real-evaluation.json",
+      "sha256": "472d8e167cc3ccd90cfbf967e49935f7f0d09e11443f22cdc5abf2a26cc3b351",
+      "size_bytes": 4883
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/training-manifest.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/training-manifest.json",
+      "sha256": "d0810c183507af13f12ff91d60aaabca66be0955c3a625dcfb9bb9dbeb9e83b0",
+      "size_bytes": 11384
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/archive/v1/v1-domain-ablation.json",
+      "archive_relative_path": "backend/inference/models/archive/v1/v1-domain-ablation.json",
+      "sha256": "f06a5c3cb1b3047e35dca4f315cb5b97a85fb21bebb5f93781849a1c9f516b41",
+      "size_bytes": 3385
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/evaluation-statistics.json",
+      "archive_relative_path": "backend/inference/models/evaluation-statistics.json",
+      "sha256": "e9be199c1b72dadf272ae971113ee6b24aeb8e19f4d2afef0975a2a8d07d4d13",
+      "size_bytes": 871
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/evaluation-subsets.json",
+      "archive_relative_path": "backend/inference/models/evaluation-subsets.json",
+      "sha256": "d23745201e5d5ac08d8cf8cf0542aaba331efbbd97c05631d490260fc3c0036c",
+      "size_bytes": 37400
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/evaluation.fields.json.gz",
+      "archive_relative_path": "backend/inference/models/evaluation.fields.json.gz",
+      "sha256": "000041e7d113726c0221130ce03eb5aa233e540594213a7ad9955ef16a729345",
+      "size_bytes": 945996
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/evaluation.json",
+      "archive_relative_path": "backend/inference/models/evaluation.json",
+      "sha256": "aa8cf9f9455253d855986dd43da8c0f66afb57c9e7a72cebceee17981c1349c2",
+      "size_bytes": 10182
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/feature-ablation-development.json",
+      "archive_relative_path": "backend/inference/models/feature-ablation-development.json",
+      "sha256": "50d27477f27f44a7864874c2a3ef0b0138458c96d1c9291d73c2cd7066ded5ae",
+      "size_bytes": 2979
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/freeze.json",
+      "archive_relative_path": "backend/inference/models/freeze.json",
+      "sha256": "3188dc9ad5387f77bd3568c84f05c628e70f8da00595bb63ae43220f7a34cbcc",
+      "size_bytes": 7281
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/m101-development-evaluation.json",
+      "archive_relative_path": "backend/inference/models/m101-development-evaluation.json",
+      "sha256": "1132a505c2254a93fab21862539c886cb6605f1d78fb7fde9024af497aedc2d8",
+      "size_bytes": 12047
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/m101-development-evaluation.trials.json.gz",
+      "archive_relative_path": "backend/inference/models/m101-development-evaluation.trials.json.gz",
+      "sha256": "6f496d7e9927d373c26b9d17c3a544b6abfc9f4716e02e3e61583074605b37ba",
+      "size_bytes": 41601
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/metadata.json",
+      "archive_relative_path": "backend/inference/models/metadata.json",
+      "sha256": "56d97071307044ee45740cdc8c36e2f5872cccb5b8db4977edb2ea44b0fe5cab",
+      "size_bytes": 643
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/parity-reference.json",
+      "archive_relative_path": "backend/inference/models/parity-reference.json",
+      "sha256": "ea843eab27f1a983134f96a3e6a03a4f6b11d280f67624d65e94ad5463f76e8a",
+      "size_bytes": 239840
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/pretest-accounting-amendment.json",
+      "archive_relative_path": "backend/inference/models/pretest-accounting-amendment.json",
+      "sha256": "739ed43579d7fc37a1589060ea7075d11e07d2b754a20deb176f89f3b8c2fed1",
+      "size_bytes": 3818
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/ranker.onnx",
+      "archive_relative_path": "backend/inference/models/ranker.onnx",
+      "sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+      "size_bytes": 3679990
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/real-background-evaluation.json",
+      "archive_relative_path": "backend/inference/models/real-background-evaluation.json",
+      "sha256": "090c4e944d5c41e97648e62836c025bfe8948eaf41178438d520e0efeba06f96",
+      "size_bytes": 26540
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/real-background-evaluation.trials.json.gz",
+      "archive_relative_path": "backend/inference/models/real-background-evaluation.trials.json.gz",
+      "sha256": "33ad3952fe1cbf042388cffdfcdb1701461ef4a157d36e3dc1da302c6f003353",
+      "size_bytes": 49437
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/real-evaluation.json",
+      "archive_relative_path": "backend/inference/models/real-evaluation.json",
+      "sha256": "0f414d4070138808a26efd744eb60eaca4c7adb61e986efa3463e549d8a4c2cb",
+      "size_bytes": 4883
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/release-manifest.json",
+      "archive_relative_path": "backend/inference/models/release-manifest.json",
+      "sha256": "ffa4f70448d5c998a4f39efecc1801c0df1477fe2d707d0dd598213c7e59f8ce",
+      "size_bytes": 4227
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/synthetic-development-evaluation.json",
+      "archive_relative_path": "backend/inference/models/synthetic-development-evaluation.json",
+      "sha256": "cce2605354ba3637be75148fbef3bf861b1daed525e46c4f052759e21f378ed4",
+      "size_bytes": 78736
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/training-manifest.json",
+      "archive_relative_path": "backend/inference/models/training-manifest.json",
+      "sha256": "577c492d424ed21974a8db35d2d5fb0fff2697d605ad921ace2d6057eb796b04",
+      "size_bytes": 77233
+    },
+    {
+      "namespace_relative_path": "backend/inference/models/v2-development-ablation.json",
+      "archive_relative_path": "backend/inference/models/v2-development-ablation.json",
+      "sha256": "e6ad4951a6375d5e870832317b8724b24b9ffe5caddb290e73fc7dd55b1abb34",
+      "size_bytes": 7171
+    },
+    {
+      "namespace_relative_path": "backend/inference/pyproject.toml",
+      "archive_relative_path": "backend/inference/pyproject.toml",
+      "sha256": "2507b90dcebe6681681b360c2c158ad9670199060364b4c50267e48d26c3fbd5",
+      "size_bytes": 83
+    },
+    {
+      "namespace_relative_path": "backend/inference/requirements-inference.in",
+      "archive_relative_path": "backend/inference/requirements-inference.in",
+      "sha256": "ef534a104900c18105fbdea8184c93cc9fad0df71d3ad5f79c3c809530dc9fd5",
+      "size_bytes": 144
+    },
+    {
+      "namespace_relative_path": "backend/inference/requirements-inference.txt",
+      "archive_relative_path": "backend/inference/requirements-inference.txt",
+      "sha256": "09eb300ec078c87e9e86b0ea06610f4151e7df46a714e5276eda1c34b99061ea",
+      "size_bytes": 30168
+    },
+    {
+      "namespace_relative_path": "backend/inference/requirements-training.in",
+      "archive_relative_path": "backend/inference/requirements-training.in",
+      "sha256": "92e919a6ad9889ef8ac495a32f448e905bf0946550738b7d7d8cab7ab85caad6",
+      "size_bytes": 93
+    },
+    {
+      "namespace_relative_path": "backend/inference/requirements-training.txt",
+      "archive_relative_path": "backend/inference/requirements-training.txt",
+      "sha256": "4c790bf7a7f777d4f094b7715fdc28359cb20a361bb80e263645fbe9a83db1b8",
+      "size_bytes": 41745
+    },
+    {
+      "namespace_relative_path": "backend/inference/smoke.py",
+      "archive_relative_path": "backend/inference/smoke.py",
+      "sha256": "c40b0bd446bba48330af88804f11797d68866368d3aa74e67826f8dcc3b425ac",
+      "size_bytes": 1826
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_detector.py",
+      "archive_relative_path": "backend/inference/tests/test_detector.py",
+      "sha256": "28e70433ffeffabbf4b915be1ff582175c7c454d058b7152ba83be1a453df392",
+      "size_bytes": 1151
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model.py",
+      "archive_relative_path": "backend/inference/tests/test_model.py",
+      "sha256": "bf22f73c535ce1d8ef31886f8d650b1c83a15429e8e4ac70254f1fcd86c57cc3",
+      "size_bytes": 5654
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model_background.py",
+      "archive_relative_path": "backend/inference/tests/test_model_background.py",
+      "sha256": "fd4acc08c363f02f6507579f036a22b579dc14572b9ff80774ff5d91b212a399",
+      "size_bytes": 6407
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model_evaluation.py",
+      "archive_relative_path": "backend/inference/tests/test_model_evaluation.py",
+      "sha256": "7c58a827f0c6a6dd39955fce57703c6e1a366a2cacadefade0195b4eeab0a4fe",
+      "size_bytes": 893
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model_release.py",
+      "archive_relative_path": "backend/inference/tests/test_model_release.py",
+      "sha256": "acb7265af8d038e08cff9f84c0031f646850a769f2447df782b5e8e78089102e",
+      "size_bytes": 5051
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model_training.py",
+      "archive_relative_path": "backend/inference/tests/test_model_training.py",
+      "sha256": "18e5b65bf72d5b0fd28d22600e446b0b9f043a0e7de97fc2d43c4237fb42cc9c",
+      "size_bytes": 2130
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_model_v2.py",
+      "archive_relative_path": "backend/inference/tests/test_model_v2.py",
+      "sha256": "c234b4a05d69351b0ff996de2288c785b1fb8a33ae81b5cb373cafadf16d0e2e",
+      "size_bytes": 5033
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_pipeline.py",
+      "archive_relative_path": "backend/inference/tests/test_pipeline.py",
+      "sha256": "876ff2e5be9b028058f8e1c73021c81c02da67bd23a36cf5bb72aed05c9608fc",
+      "size_bytes": 5886
+    },
+    {
+      "namespace_relative_path": "backend/inference/tests/test_prepare.py",
+      "archive_relative_path": "backend/inference/tests/test_prepare.py",
+      "sha256": "67fafaa148e8fd3f7f4d689849f81abcf7a0236fcb9b3d5129b7f528e15097fe",
+      "size_bytes": 11766
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/__init__.py",
+      "archive_relative_path": "backend/inference/training/__init__.py",
+      "sha256": "340d665d109e8752797b3d5958c533c7a7218cd866a2ede585281a28bf3ec1ad",
+      "size_bytes": 78
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/ablate_generation.py",
+      "archive_relative_path": "backend/inference/training/ablate_generation.py",
+      "sha256": "6046931cc9c17733a895bc37a33801360607bdf7d708e702773a66d671df98d6",
+      "size_bytes": 3640
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/ablate_v2.py",
+      "archive_relative_path": "backend/inference/training/ablate_v2.py",
+      "sha256": "a9cd4ceb50938ec95bcfc3943326c173757436685ba40997d8f17df4152d2be6",
+      "size_bytes": 2707
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/archive_v1/evaluate_background.py",
+      "archive_relative_path": "backend/inference/training/archive_v1/evaluate_background.py",
+      "sha256": "9c50abab4576e96aacf9dab7351e9c47ffcc76e3249d51b1865710620c429f43",
+      "size_bytes": 13817
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/archive_v2/evaluate_background.py",
+      "archive_relative_path": "backend/inference/training/archive_v2/evaluate_background.py",
+      "sha256": "8739e63b9770ba06b0345cb4b81137c1d18715597072c4769344fc70ea586304",
+      "size_bytes": 14774
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "archive_relative_path": "backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "sha256": "793e05135438c95b8eaeace21948b34fe2eb49cd581be9e81dfff2b493e08d6d",
+      "size_bytes": 1548991
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/diagnose_domain.py",
+      "archive_relative_path": "backend/inference/training/diagnose_domain.py",
+      "sha256": "1f03b584309812df9de38d03e66cc0db7964d9062fc0a92ff99747c5e58259a2",
+      "size_bytes": 4615
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/evaluate_background.py",
+      "archive_relative_path": "backend/inference/training/evaluate_background.py",
+      "sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+      "size_bytes": 15469
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/evaluate_real.py",
+      "archive_relative_path": "backend/inference/training/evaluate_real.py",
+      "sha256": "68f99a37e6ad7fe48ff64eaf11ae7ef60d647aeeef46ae1aa13220ccdc31a63a",
+      "size_bytes": 4509
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/evaluate_synthetic.py",
+      "archive_relative_path": "backend/inference/training/evaluate_synthetic.py",
+      "sha256": "2bdb67ec6ee345de97595681d6ed8157fdc15745c8d3e6a53c8e538c393410cb",
+      "size_bytes": 2977
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/prepare_calibration.py",
+      "archive_relative_path": "backend/inference/training/prepare_calibration.py",
+      "sha256": "77b121df742099b374c273cfdd6e815285ea6dc47cfd6cf28a9cea61fa28a53f",
+      "size_bytes": 2596
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/simulate.py",
+      "archive_relative_path": "backend/inference/training/simulate.py",
+      "sha256": "cb5abf1a185243fc3219270a731a2166ad134b5075b9f406b1ceb23d4b138426",
+      "size_bytes": 3020
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/simulate_v2.py",
+      "archive_relative_path": "backend/inference/training/simulate_v2.py",
+      "sha256": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28",
+      "size_bytes": 8872
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/statistics.py",
+      "archive_relative_path": "backend/inference/training/statistics.py",
+      "sha256": "7c324716911a0585e15dc773ce30e1e68fcb43f3b3581654de58ab133fa1159c",
+      "size_bytes": 2106
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/train.py",
+      "archive_relative_path": "backend/inference/training/train.py",
+      "sha256": "01ff2708feade429705ea29f766837bb9d53ca04f9bfeb334eb6ab16e6a9cb3c",
+      "size_bytes": 10466
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/train_v2.py",
+      "archive_relative_path": "backend/inference/training/train_v2.py",
+      "sha256": "04f0ab04bd9cb56d65f929d19043433052944cb1b6fbf1ea3e17bdb5de98257f",
+      "size_bytes": 12140
+    },
+    {
+      "namespace_relative_path": "backend/inference/training/weights.py",
+      "archive_relative_path": "backend/inference/training/weights.py",
+      "sha256": "50121e69f253d992e3048688af15e57ae8736e76e13d5b01a9beb858ae32b6dd",
+      "size_bytes": 2024
+    }
+  ]
+}

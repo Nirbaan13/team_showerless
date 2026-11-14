@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 import time
 import urllib.error
@@ -41,7 +42,10 @@ models = request('/api/analyses/models')['models']
 assert models[0]['sha256'] == SHA and models[0]['model_id'] == 'spherex-track-rf-v2'
 assert len(request('/api/analyses/presets')['presets']) == 4
 started = time.monotonic()
-accepted = request('/api/analyses/motion', {'preset': 'comet-d6'}, 202)
+positive_request = {'preset': 'comet-d6'}
+if os.environ.get('PROBE_MIN_SNR'):
+    positive_request['options'] = {'min_snr': float(os.environ['PROBE_MIN_SNR'])}
+accepted = request('/api/analyses/motion', positive_request, 202)
 with urllib.request.urlopen(BASE + accepted['events_url'], timeout=120) as response:
     events = response.read().decode()
 assert 'event:' in events and 'completed' in events, events[-1000:]
@@ -61,7 +65,7 @@ for url in urls:
         assert response.status == 200 and response.headers.get_content_type() == 'image/png'
         assert image.startswith(b'\x89PNG\r\n\x1a\n')
         resource_bytes += len(image)
-assert request('/api/analyses/motion', {'preset': 'comet-d6'}, 202)['id'] == job['id']
+assert request('/api/analyses/motion', positive_request, 202)['id'] == job['id']
 empty = wait(request('/api/analyses/motion', {'preset': 'comet-d6', 'options': {'min_snr': 100}}, 202))
 assert empty['status'] == 'completed' and not empty['result']['candidates'], empty
 missing = request('/api/analyses/motion', {'download_id': 'missing-native-download'}, 404)
@@ -71,10 +75,10 @@ assert invalid['code'] == 'invalid_request'
 from jsonschema import Draft202012Validator, FormatChecker
 schema = {'$ref': '#/components/schemas/AnalysisResult', 'components': spec['components']}
 Draft202012Validator(schema, format_checker=FormatChecker()).validate(result)
-proof = dict(revision=version, model_sha256=SHA, positive_job=job['id'], empty_job=empty['id'],
+proof = dict(server_base=BASE, checked_at_utc=datetime.now(timezone.utc).isoformat(), positive_request=positive_request, revision=version, model_sha256=SHA, positive_job=job['id'], empty_job=empty['id'],
              frames=len(result['frames']), candidates=len(result['candidates']),
              verified_png_resources=len(urls), resource_bytes=resource_bytes,
              elapsed_seconds=time.monotonic()-started, sse_completed=True,
              deduplication_verified=True, schema_validated=True, result=result)
-Path(__file__).with_name('http-proof.json').write_text(json.dumps(proof, indent=2))
+Path(os.environ.get('PROBE_OUTPUT',str(Path(__file__).with_name('http-proof.json')))).write_text(json.dumps(proof, indent=2))
 print(json.dumps({k:v for k,v in proof.items() if k != 'result'}, indent=2))

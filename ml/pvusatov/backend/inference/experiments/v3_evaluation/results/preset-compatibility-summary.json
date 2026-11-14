@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "designation": "DEVELOPMENT compatibility summary, no refit/reselection/final access",
+  "derived_from": {
+    "path": "preset-compatibility.json",
+    "sha256": "6f98ce350160be88aa783aabf334a08f60020d1836d7e44c0dc25ffb0b9d48dd"
+  },
+  "candidate": {
+    "directory": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/models/experiments/v3-selected-candidate-profile-bound",
+    "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+    "model_id": "spherex-track-extra-v3",
+    "model_family": "ExtraTreesClassifier",
+    "detector_profile": {
+      "min_snr": 4.0,
+      "max_peaks": 100,
+      "psf_sigma": 0.8,
+      "min_speed": 0.5,
+      "max_speed": 60.0,
+      "match_radius": 1.4,
+      "min_epochs": 3,
+      "min_support": 0.8,
+      "leave_one_out": true
+    },
+    "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+    "development_freeze_sha256": "9f94d2ca715184b4dbc7e72147bfa9b505233b42277706154df65bba59156bff"
+  },
+  "baseline": {
+    "directory": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/models",
+    "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+    "model_id": "spherex-track-rf-v2"
+  },
+  "published_target_presence_definition": "A matching residual model rank or appended unscored BLOOM rank is within the production published list length; this does not give BLOOM a model score.",
+  "cases": [
+    {
+      "case": "comet-d2",
+      "object_group": "3I/ATLAS",
+      "detector": 2,
+      "exposures": 3,
+      "span_hours": 3.2198591666528955,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 2,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 2,
+          "target_residual_model_ranks": [
+            1
+          ],
+          "target_residual_heuristic_ranks": [
+            1
+          ],
+          "target_model_scores": [
+            0.5622791647911072
+          ],
+          "target_bloom_published_order_ranks": [],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": true,
+          "residual_model_at_3": true,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.010593457000140916,
+            "scoring": 0.00043853799979842734,
+            "bloom": 1.224001607624814e-06,
+            "peak_diagnostic": 0.009138756000538706
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 1,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 1,
+          "target_residual_model_ranks": [
+            1
+          ],
+          "target_residual_heuristic_ranks": [
+            1
+          ],
+          "target_model_scores": [
+            0.7204204797744751
+          ],
+          "target_bloom_published_order_ranks": [],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": true,
+          "residual_model_at_3": true,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.009794333000172628,
+            "scoring": 0.0004864750007982366,
+            "bloom": 2.044998836936429e-06,
+            "peak_diagnostic": 0.008831807999740704
+          }
+        }
+      },
+      "regression_flags": []
+    },
+    {
+      "case": "comet-d6",
+      "object_group": "3I/ATLAS",
+      "detector": 6,
+      "exposures": 4,
+      "span_hours": 8.076509444508702,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 10,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 10,
+          "target_residual_model_ranks": [
+            3
+          ],
+          "target_residual_heuristic_ranks": [
+            1
+          ],
+          "target_model_scores": [
+            0.6414848566055298
+          ],
+          "target_bloom_published_order_ranks": [],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": false,
+          "residual_model_at_3": true,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.08160405500166235,
+            "scoring": 0.000671924000926083,
+            "bloom": 7.640010153409094e-07,
+            "peak_diagnostic": 0.07419688499976473
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 36,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 36,
+          "target_residual_model_ranks": [
+            4
+          ],
+          "target_residual_heuristic_ranks": [
+            1
+          ],
+          "target_model_scores": [
+            0.8180041313171387
+          ],
+          "target_bloom_published_order_ranks": [],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": false,
+          "residual_model_at_3": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.08974745100022119,
+            "scoring": 0.0018921280006907182,
+            "bloom": 8.41000655782409e-07,
+            "peak_diagnostic": 0.07318821099943307
+          }
+        }
+      },
+      "regression_flags": [
+        "residual_model_at_3",
+        "published_model_at_3"
+      ]
+    },
+    {
+      "case": "vesta-d3",
+      "object_group": "Vesta",
+      "detector": 3,
+      "exposures": 3,
+      "span_hours": 26.064145000011194,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 25,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 26,
+          "target_residual_model_ranks": [],
+          "target_residual_heuristic_ranks": [],
+          "target_model_scores": [],
+          "target_bloom_published_order_ranks": [
+            26
+          ],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": false,
+          "residual_model_at_3": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.04755612600092718,
+            "scoring": 0.0008382119995076209,
+            "bloom": 0.006411157999536954,
+            "peak_diagnostic": 0.03565047200027038
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 112,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 100,
+          "target_residual_model_ranks": [],
+          "target_residual_heuristic_ranks": [],
+          "target_model_scores": [],
+          "target_bloom_published_order_ranks": [
+            113
+          ],
+          "target_present_in_published_review": false,
+          "residual_model_at_1": false,
+          "residual_model_at_3": false,
+          "peak_cap_reached": true,
+          "candidate_cap_reached": true,
+          "stage_wall_seconds": {
+            "detection": 0.07071061500028009,
+            "scoring": 0.0029463609989761608,
+            "bloom": 0.00619988799917337,
+            "peak_diagnostic": 0.0401884679995419
+          }
+        }
+      },
+      "regression_flags": [
+        "known_target_evidence_removed_by_published_candidate_cap"
+      ]
+    },
+    {
+      "case": "vesta-d6",
+      "object_group": "Vesta",
+      "detector": 6,
+      "exposures": 3,
+      "span_hours": 26.064145000011194,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 7,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 8,
+          "target_residual_model_ranks": [],
+          "target_residual_heuristic_ranks": [],
+          "target_model_scores": [],
+          "target_bloom_published_order_ranks": [
+            8
+          ],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": false,
+          "residual_model_at_3": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.03895832000125665,
+            "scoring": 0.0007972559997142525,
+            "bloom": 0.00581098000111524,
+            "peak_diagnostic": 0.03525347799950396
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 17,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 18,
+          "target_residual_model_ranks": [],
+          "target_residual_heuristic_ranks": [],
+          "target_model_scores": [],
+          "target_bloom_published_order_ranks": [
+            18
+          ],
+          "target_present_in_published_review": true,
+          "residual_model_at_1": false,
+          "residual_model_at_3": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.04168190400014282,
+            "scoring": 0.000797005001004436,
+            "bloom": 0.006814000000304077,
+            "peak_diagnostic": 0.037086603999341605
+          }
+        }
+      },
+      "regression_flags": []
+    }
+  ],
+  "regressions_reported_without_changing_final_gate": true,
+  "independent_known_objects": 2
+}

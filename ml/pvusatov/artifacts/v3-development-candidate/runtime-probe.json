@@ -1,0 +1,19 @@
+{
+  "rows": 1000,
+  "repetitions": 20,
+  "median_seconds": 0.017811759499636537,
+  "p95_seconds": 0.018795765699724142,
+  "max_seconds": 0.018802618998961407,
+  "peak_rss_mib": 128.49609375,
+  "inherited_rusage_maxrss_mib": 821.28125,
+  "memory_measurement": "Linux VmHWM of the fresh runtime process; fork-inherited rusage retained separately",
+  "threads": {
+    "intra_op": 1,
+    "inter_op": 1
+  },
+  "budgets": {
+    "model_only_peak_rss_mib": 1024,
+    "p95_1000row_seconds": 1.0,
+    "artifact_bytes": 33554432
+  }
+}

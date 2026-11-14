@@ -132,3 +132,19 @@ def test_native_cache_comparison_requires_provenance_instead_of_two_missing_valu
     del left['input_sources'], right['input_sources']
     with pytest.raises(ValueError, match='input_sources'):
         validate_cache_pair(left, right)
+
+
+@pytest.mark.parametrize('column,a,b', [
+    ('freeze_sha256', 'a'*64, 'b'*64),
+    ('preparation_options', {'mask_policy':'motion'}, {'mask_policy':'science'}),
+])
+def test_final_caches_cannot_mix_freezes_or_preparation(column, a, b):
+    left,right = cache(),cache(.8)
+    left[column],right[column] = a,b
+    with pytest.raises(ValueError, match=column):
+        validate_cache_pair(left,right)
+    del right[column]
+    with pytest.raises(ValueError, match=column):
+        validate_cache_pair(left,right)
+    right[column] = a
+    validate_cache_pair(left,right)
