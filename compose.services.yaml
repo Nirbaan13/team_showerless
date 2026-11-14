@@ -55,8 +55,8 @@ services:
   # 3. ML Inference Service (Moving Object Detection & Random Forest Track Ranker)
   ml-inference:
     build:
-      context: ./ml
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ml/Dockerfile
     image: ${ML_IMAGE:-spaceapps-ml:latest}
     restart: unless-stopped
     ports:

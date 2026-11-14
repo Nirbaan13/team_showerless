@@ -8,7 +8,8 @@ export type DetectorArrayId = 1 | 2 | 3 | 4 | 5 | 6;
 export type SubtractionMode = 
   | 'raw_calibrated' 
   | 'zodi_reference_subtracted' 
-  | 'epoch_difference';
+  | 'epoch_difference'
+  | 'bloom_mask';
 
 export type CandidateClassification = 
   | 'moving_object' 
@@ -32,6 +33,7 @@ export interface TargetPreset {
   description: string;
   recommendedArray: DetectorArrayId;
   expectedClass: CandidateClassification;
+  motionReviewId?: string;
 }
 
 export interface SpherexEpochFrame {
@@ -46,7 +48,14 @@ export interface SpherexEpochFrame {
   cosmicRayHits: number;
   isAvailable: boolean;
   skipReason?: string; // Reason if isAvailable is false
-  imageDataUrl?: string; // Rendered cutout bitmap or SVG simulation
+  imageDataUrl?: string; // Rendered aligned cutout bitmap or SVG simulation
+  residualDataUrl?: string; // Per-frame leave-one-out difference image PNG
+  bloomDataUrl?: string; // Detector BLOOM core bitmask PNG
+  imageWidth?: number; // Native pixel width of cutout
+  imageHeight?: number; // Native pixel height of cutout
+  archiveUrl?: string; // Direct NASA/IPAC IRSA FITS URL
+  release?: string; // DR1 or QR2/QR3
+  coverage?: number; // Fraction of valid finite pixels (0-1)
   headerMetadata: {
     exposureTimeSec: number;
     airmass: number;
@@ -91,6 +100,32 @@ export interface CandidateObject {
   mlRank?: number; // 1 = highest priority
   mlPriorityScore?: number; // 0.0 - 1.0
   priorityHexColor?: string;
+  /** Precomputed or live 29x29 coadd at fixed median sky position (PNG data URL) */
+  fixedStackDataUrl?: string;
+  /** Precomputed or live 29x29 coadd following the fitted linear track (PNG data URL) */
+  motionStackDataUrl?: string;
+  /** Number of exposures contributing at the stack center */
+  stackContributingExposures?: number;
+  /** Ranking method that produced this track */
+  detectionMethod?: 'heuristic_leave_one_out' | 'bloom_centroids' | 'baseline';
+  /** Heuristic rank from leave-one-out / bloom pipeline */
+  heuristicRank?: number;
+  /** Random Forest rank from simulated-field classifier */
+  randomForestRank?: number | null;
+  /** Linear fit RMS residual in pixels */
+  fitRmsPx?: number;
+  /** Apparent speed in pixels per hour */
+  speedPxPerHour?: number;
+  /** Apparent sky speed in arcsec per hour */
+  speedArcsecPerHour?: number;
+  /** Per-epoch BLOOM flagged pixel area when detected via BLOOM centroids */
+  bloomAreaPx?: number[];
+  /** Per-epoch matched-filter support fraction (0-1) */
+  filterSupport?: number[] | null;
+  /** Whether an OUTLIER bitmask flag is near each epoch detection */
+  outlierAtPosition?: boolean[];
+  /** Per-epoch ephemeris offsets in pixels */
+  ephemerisOffsetsPx?: number[] | null;
 }
 
 export interface VerificationSetting {

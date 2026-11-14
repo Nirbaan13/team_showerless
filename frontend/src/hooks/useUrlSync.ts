@@ -61,7 +61,8 @@ export function useUrlSync(
 
   // Sync to URL when state changes
   const updateUrl = useCallback((s: UrlParamsState) => {
-    const params = new URLSearchParams();
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
     params.set('ra', s.ra.toFixed(6));
     params.set('dec', s.dec.toFixed(6));
     params.set('fov', s.fov);
@@ -69,8 +70,7 @@ export function useUrlSync(
     params.set('subtraction', s.subtractionMode);
     params.set('frame', String(s.activeFrameIndex));
 
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState({}, '', newUrl);
+    window.history.replaceState(window.history.state, '', url);
   }, []);
 
   useEffect(() => {
