@@ -434,8 +434,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-barnard-primary',
         ra: 269.452075,
         dec: 4.693365,
-        pixelX: 128,
-        pixelY: 128,
+        pixelX: 90,
+        pixelY: 140,
         mlRank: 1,
         mlPriorityScore: 0.96,
         heuristicRank: 1,
@@ -443,11 +443,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.14,
         speedArcsecPerHour: 10.3,
         epochPositions: [
-          { epochIndex: 0, x: 122, y: 140, flux: 185.0, snr: 38.2 },
-          { epochIndex: 1, x: 125, y: 134, flux: 184.5, snr: 37.9 },
-          { epochIndex: 2, x: 128, y: 128, flux: 185.1, snr: 38.0 },
-          { epochIndex: 3, x: 131, y: 122, flux: 183.8, snr: 37.4 },
-          { epochIndex: 4, x: 134, y: 116, flux: 186.2, snr: 38.5 },
+          { epochIndex: 0, x: 84, y: 152, flux: 185.0, snr: 38.2 },
+          { epochIndex: 1, x: 87, y: 146, flux: 184.5, snr: 37.9 },
+          { epochIndex: 2, x: 90, y: 140, flux: 185.1, snr: 38.0 },
+          { epochIndex: 3, x: 93, y: 134, flux: 183.8, snr: 37.4 },
+          { epochIndex: 4, x: 96, y: 128, flux: 186.2, snr: 38.5 },
         ],
         classification: 'moving_object',
         confidence: 'high',
@@ -509,8 +509,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-barnard-wise-match',
         ra: 269.475000,
         dec: 4.671000,
-        pixelX: 220,
-        pixelY: 195,
+        pixelX: 198,
+        pixelY: 176,
         mlRank: 4,
         mlPriorityScore: 0.48,
         heuristicRank: 4,
@@ -518,11 +518,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.11,
         speedArcsecPerHour: 0.0,
         epochPositions: [
-          { epochIndex: 0, x: 220, y: 195, flux: 65.0, snr: 18.2 },
-          { epochIndex: 1, x: 220, y: 195, flux: 64.7, snr: 18.0 },
-          { epochIndex: 2, x: 220, y: 195, flux: 65.3, snr: 18.4 },
-          { epochIndex: 3, x: 220, y: 195, flux: 65.1, snr: 18.1 },
-          { epochIndex: 4, x: 220, y: 195, flux: 64.9, snr: 18.3 },
+          { epochIndex: 0, x: 198, y: 176, flux: 65.0, snr: 18.2 },
+          { epochIndex: 1, x: 198, y: 176, flux: 64.7, snr: 18.0 },
+          { epochIndex: 2, x: 198, y: 176, flux: 65.3, snr: 18.4 },
+          { epochIndex: 3, x: 198, y: 176, flux: 65.1, snr: 18.1 },
+          { epochIndex: 4, x: 198, y: 176, flux: 64.9, snr: 18.3 },
         ],
         classification: 'already_known',
         confidence: 'high',
@@ -535,8 +535,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-barnard-cosmic-ray',
         ra: 269.431000,
         dec: 4.654000,
-        pixelX: 110,
-        pixelY: 130,
+        pixelX: 145,
+        pixelY: 205,
         mlRank: 5,
         mlPriorityScore: 0.28,
         heuristicRank: 5,
@@ -544,11 +544,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 1.85,
         speedArcsecPerHour: 0.0,
         epochPositions: [
-          { epochIndex: 0, x: 110, y: 130, flux: 1.2, snr: 1.4 },
-          { epochIndex: 1, x: 110, y: 130, flux: 1.0, snr: 1.2 },
-          { epochIndex: 2, x: 110, y: 130, flux: 24.5, snr: 18.2 },
-          { epochIndex: 3, x: 110, y: 130, flux: 1.1, snr: 1.3 },
-          { epochIndex: 4, x: 110, y: 130, flux: 1.3, snr: 1.5 },
+          { epochIndex: 0, x: 145, y: 205, flux: 1.2, snr: 1.4 },
+          { epochIndex: 1, x: 145, y: 205, flux: 1.0, snr: 1.2 },
+          { epochIndex: 2, x: 145, y: 205, flux: 24.5, snr: 18.2 },
+          { epochIndex: 3, x: 145, y: 205, flux: 1.1, snr: 1.3 },
+          { epochIndex: 4, x: 145, y: 205, flux: 1.3, snr: 1.5 },
         ],
         classification: 'artifact',
         confidence: 'low',
@@ -564,42 +564,50 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-wise-0855-01',
         ra: 133.795129,
         dec: -7.245147,
-        pixelX: 128,
-        pixelY: 128,
+        pixelX: 162,
+        pixelY: 146,
         mlRank: 1,
         mlPriorityScore: 0.95,
+        heuristicRank: 1,
+        randomForestRank: 1,
+        fitRmsPx: 0.18,
+        speedArcsecPerHour: 8.1,
         epochPositions: [
-          { epochIndex: 0, x: 128, y: 128, flux: 95.0, snr: 16.2 },
-          { epochIndex: 1, x: 132, y: 126, flux: 94.5, snr: 15.9 },
-          { epochIndex: 2, x: 136, y: 124, flux: 96.0, snr: 16.5 },
+          { epochIndex: 0, x: 170, y: 150, flux: 95.0, snr: 16.2 },
+          { epochIndex: 1, x: 162, y: 146, flux: 94.5, snr: 15.9 },
+          { epochIndex: 2, x: 154, y: 142, flux: 96.0, snr: 16.5 },
         ],
         classification: 'moving_object',
         confidence: 'high',
         volunteerNotes: 'Ultra-cold Y-type sub-brown dwarf detected in Band 5/6 (4.42–5.00 µm). Atmospheric water ice absorption verified.',
         isKnownCatalogMatch: true,
         matchedCatalog: 'WISE',
-        catalogId: 'WISE 0855-0714 (Coldest Sub-Brown Dwarf)',
+        catalogId: 'WISE J085510.83-071442.5 (Y4 Sub-Brown Dwarf)',
         properMotionMasYr: { pmRa: -8120.0, pmDec: 680.0 }
       },
       {
         id: 'cand-wise-field-star',
         ra: 133.812000,
         dec: -7.234000,
-        pixelX: 60,
-        pixelY: 180,
+        pixelX: 66,
+        pixelY: 172,
         mlRank: 2,
         mlPriorityScore: 0.62,
+        heuristicRank: 2,
+        randomForestRank: 2,
+        fitRmsPx: 0.11,
+        speedArcsecPerHour: 0.1,
         epochPositions: [
-          { epochIndex: 0, x: 60, y: 180, flux: 42.0, snr: 11.4 },
-          { epochIndex: 1, x: 60, y: 180, flux: 42.1, snr: 11.5 },
-          { epochIndex: 2, x: 60, y: 180, flux: 41.9, snr: 11.3 },
+          { epochIndex: 0, x: 66, y: 172, flux: 42.0, snr: 11.4 },
+          { epochIndex: 1, x: 66, y: 172, flux: 42.1, snr: 11.5 },
+          { epochIndex: 2, x: 66, y: 172, flux: 41.9, snr: 11.3 },
         ],
         classification: 'already_known',
         confidence: 'high',
-        volunteerNotes: 'Stationary reference field star. Clean astrometric anchor.',
+        volunteerNotes: 'Stationary Hydra reference field star. Clean astrometric anchor.',
         isKnownCatalogMatch: true,
         matchedCatalog: 'Gaia DR3',
-        catalogId: 'Gaia DR3 5671948291038291024',
+        catalogId: 'Gaia DR3 5756948291038291024',
       }
     ];
   }
@@ -610,8 +618,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-eps-indi-b-primary',
         ra: 331.044146,
         dec: -56.782844,
-        pixelX: 128,
-        pixelY: 128,
+        pixelX: 102,
+        pixelY: 86,
         mlRank: 1,
         mlPriorityScore: 0.96,
         heuristicRank: 1,
@@ -619,11 +627,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.16,
         speedArcsecPerHour: 4.8,
         epochPositions: [
-          { epochIndex: 0, x: 120, y: 134, flux: 142.0, snr: 31.4 },
-          { epochIndex: 1, x: 124, y: 131, flux: 141.5, snr: 31.1 },
-          { epochIndex: 2, x: 128, y: 128, flux: 142.8, snr: 31.7 },
-          { epochIndex: 3, x: 132, y: 125, flux: 142.1, snr: 31.3 },
-          { epochIndex: 4, x: 136, y: 122, flux: 143.0, snr: 31.8 },
+          { epochIndex: 0, x: 94, y: 80, flux: 142.0, snr: 31.4 },
+          { epochIndex: 1, x: 98, y: 83, flux: 141.5, snr: 31.1 },
+          { epochIndex: 2, x: 102, y: 86, flux: 142.8, snr: 31.7 },
+          { epochIndex: 3, x: 106, y: 89, flux: 142.1, snr: 31.3 },
+          { epochIndex: 4, x: 110, y: 92, flux: 143.0, snr: 31.8 },
         ],
         classification: 'moving_object',
         confidence: 'high',
@@ -637,8 +645,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-eps-indi-gaia-star',
         ra: 331.061200,
         dec: -56.771400,
-        pixelX: 196,
-        pixelY: 88,
+        pixelX: 184,
+        pixelY: 92,
         mlRank: 2,
         mlPriorityScore: 0.52,
         heuristicRank: 2,
@@ -646,11 +654,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.12,
         speedArcsecPerHour: 0.1,
         epochPositions: [
-          { epochIndex: 0, x: 196, y: 88, flux: 54.0, snr: 15.8 },
-          { epochIndex: 1, x: 196, y: 88, flux: 53.8, snr: 15.6 },
-          { epochIndex: 2, x: 196, y: 88, flux: 54.2, snr: 15.9 },
-          { epochIndex: 3, x: 196, y: 88, flux: 54.1, snr: 15.7 },
-          { epochIndex: 4, x: 196, y: 88, flux: 53.9, snr: 15.8 },
+          { epochIndex: 0, x: 184, y: 92, flux: 54.0, snr: 15.8 },
+          { epochIndex: 1, x: 184, y: 92, flux: 53.8, snr: 15.6 },
+          { epochIndex: 2, x: 184, y: 92, flux: 54.2, snr: 15.9 },
+          { epochIndex: 3, x: 184, y: 92, flux: 54.1, snr: 15.7 },
+          { epochIndex: 4, x: 184, y: 92, flux: 53.9, snr: 15.8 },
         ],
         classification: 'already_known',
         confidence: 'high',
@@ -668,8 +676,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-rw-aur-primary',
         ra: 76.956417,
         dec: 30.401444,
-        pixelX: 128,
-        pixelY: 128,
+        pixelX: 162,
+        pixelY: 84,
         mlRank: 1,
         mlPriorityScore: 0.93,
         heuristicRank: 1,
@@ -677,11 +685,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.15,
         speedArcsecPerHour: 0.2,
         epochPositions: [
-          { epochIndex: 0, x: 128, y: 128, flux: 168.0, snr: 34.2 },
-          { epochIndex: 1, x: 128, y: 128, flux: 94.0, snr: 21.5 },
-          { epochIndex: 2, x: 128, y: 128, flux: 175.0, snr: 35.8 },
-          { epochIndex: 3, x: 128, y: 128, flux: 112.0, snr: 24.9 },
-          { epochIndex: 4, x: 128, y: 128, flux: 171.0, snr: 34.8 },
+          { epochIndex: 0, x: 162, y: 84, flux: 168.0, snr: 34.2 },
+          { epochIndex: 1, x: 162, y: 84, flux: 94.0, snr: 21.5 },
+          { epochIndex: 2, x: 162, y: 84, flux: 175.0, snr: 35.8 },
+          { epochIndex: 3, x: 162, y: 84, flux: 112.0, snr: 24.9 },
+          { epochIndex: 4, x: 162, y: 84, flux: 171.0, snr: 34.8 },
         ],
         classification: 'transient',
         confidence: 'high',
@@ -714,7 +722,7 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         volunteerNotes: 'Young stellar object in Taurus-Auriga complex matched in AllWISE.',
         isKnownCatalogMatch: true,
         matchedCatalog: 'WISE',
-        catalogId: 'AllWISE J050749.56+302405.1',
+        catalogId: 'AllWISE J050754.12+302311.8 (Tauri YSO)',
       },
     ];
   }
@@ -725,8 +733,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-r-dra-primary',
         ra: 248.167625,
         dec: 66.754972,
-        pixelX: 128,
-        pixelY: 128,
+        pixelX: 94,
+        pixelY: 168,
         mlRank: 1,
         mlPriorityScore: 0.94,
         heuristicRank: 1,
@@ -734,11 +742,11 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.14,
         speedArcsecPerHour: 0.3,
         epochPositions: [
-          { epochIndex: 0, x: 128, y: 128, flux: 210.0, snr: 41.2 },
-          { epochIndex: 1, x: 128, y: 128, flux: 145.0, snr: 29.8 },
-          { epochIndex: 2, x: 128, y: 128, flux: 98.0, snr: 21.4 },
-          { epochIndex: 3, x: 128, y: 128, flux: 164.0, snr: 33.1 },
-          { epochIndex: 4, x: 128, y: 128, flux: 224.0, snr: 43.5 },
+          { epochIndex: 0, x: 94, y: 168, flux: 210.0, snr: 41.2 },
+          { epochIndex: 1, x: 94, y: 168, flux: 145.0, snr: 29.8 },
+          { epochIndex: 2, x: 94, y: 168, flux: 98.0, snr: 21.4 },
+          { epochIndex: 3, x: 94, y: 168, flux: 164.0, snr: 33.1 },
+          { epochIndex: 4, x: 94, y: 168, flux: 224.0, snr: 43.5 },
         ],
         classification: 'transient',
         confidence: 'high',
@@ -751,8 +759,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         id: 'cand-r-dra-wise',
         ra: 248.184100,
         dec: 66.742300,
-        pixelX: 74,
-        pixelY: 192,
+        pixelX: 192,
+        pixelY: 96,
         mlRank: 2,
         mlPriorityScore: 0.51,
         heuristicRank: 2,
@@ -760,18 +768,18 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         fitRmsPx: 0.13,
         speedArcsecPerHour: 0.0,
         epochPositions: [
-          { epochIndex: 0, x: 74, y: 192, flux: 52.0, snr: 15.2 },
-          { epochIndex: 1, x: 74, y: 192, flux: 52.2, snr: 15.3 },
-          { epochIndex: 2, x: 74, y: 192, flux: 51.9, snr: 15.1 },
-          { epochIndex: 3, x: 74, y: 192, flux: 52.1, snr: 15.2 },
-          { epochIndex: 4, x: 74, y: 192, flux: 52.0, snr: 15.2 },
+          { epochIndex: 0, x: 192, y: 96, flux: 52.0, snr: 15.2 },
+          { epochIndex: 1, x: 192, y: 96, flux: 52.2, snr: 15.3 },
+          { epochIndex: 2, x: 192, y: 96, flux: 51.9, snr: 15.1 },
+          { epochIndex: 3, x: 192, y: 96, flux: 52.1, snr: 15.2 },
+          { epochIndex: 4, x: 192, y: 96, flux: 52.0, snr: 15.2 },
         ],
         classification: 'already_known',
         confidence: 'high',
         volunteerNotes: 'Stationary Draco field source matched in AllWISE catalog.',
         isKnownCatalogMatch: true,
         matchedCatalog: 'WISE',
-        catalogId: 'AllWISE J163240.22+664517.9',
+        catalogId: 'AllWISE J163251.40+664412.5 (Draco IR)',
       },
     ];
   }
@@ -802,18 +810,28 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   ];
 }
 
+export interface CatalogOverlaySource {
+  dx: number;
+  dy: number;
+  label: string;
+  sublabel?: string;
+}
+
 /**
  * Formats exact IAU J2000 sexagesimal designation (AllWISE JHHMMSS.ss±DDMMSS.s)
  * and deterministic HEALPix-like Gaia DR3 source ID for ANY sky coordinate (RA, Dec),
- * or returns the exact known NASA benchmark catalog entry if within 0.35° of a known target.
+ * or returns the exact known NASA benchmark catalog inventory if near one of the 6 targets.
  */
 export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): {
   knownObjectName: string | null;
+  constellation: string;
   gaiaId: string;
   wiseId: string;
   ephemerisLabel: string | null;
   gaiaOffsetPx: { dx: number; dy: number };
   wiseOffsetPx: { dx: number; dy: number };
+  gaiaSources: CatalogOverlaySource[];
+  wiseSources: CatalogOverlaySource[];
 } {
   const normRa = ((raDeg % 360) + 360) % 360;
   const raHours = normRa / 15;
@@ -847,78 +865,155 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
     dy: Math.round(Math.sin(angle2) * 95 + 30),
   };
 
-  // Check proximity to known astronomical objects
+  // Distinct per-target astronomical catalog inventories for the 6 NASA targets
   const knownCatalogTable: Array<{
     ra: number;
     dec: number;
     name: string;
+    constellation: string;
     gaiaId: string;
     wiseId: string;
     ephemerisLabel: string | null;
+    gaiaSources: CatalogOverlaySource[];
+    wiseSources: CatalogOverlaySource[];
   }> = [
     {
       ra: 166.79,
       dec: 5.29,
       name: '3I/ATLAS (C/2024 S1)',
-      gaiaId: 'Gaia DR3 3816492018472910464',
-      wiseId: 'AllWISE J110709.60+051724.0',
-      ephemerisLabel: 'JPL Horizons: 3I/ATLAS (0.54px)',
+      constellation: 'Leo Ecliptic Field',
+      gaiaId: 'TYC 265-814-1 · Gaia DR3 (2 Leo Stars)',
+      wiseId: 'AllWISE J110709.6+051724 (1 Bg Source)',
+      ephemerisLabel: 'JPL Horizons: Comet 3I/ATLAS (0.54px)',
+      gaiaSources: [
+        { dx: -142, dy: -64, label: 'TYC 265-814-1 (Gaia DR3 3816492018472910464 · G=11.8)' },
+        { dx: 84, dy: 78, label: 'Gaia DR3 3816491846674219136 (Leo Anchor · G=14.2)' },
+      ],
+      wiseSources: [
+        { dx: -56, dy: 92, label: 'AllWISE J110704.12+051618.4 (Bg IR Galaxy · W1=15.1)' },
+      ],
     },
     {
       ra: 167.206653,
       dec: 5.146825,
       name: '3I/ATLAS (D2 Field)',
+      constellation: 'Leo Ecliptic Field',
       gaiaId: 'Gaia DR3 3816519402849102720',
       wiseId: 'AllWISE J110849.60+050848.6',
-      ephemerisLabel: 'JPL Horizons: 3I/ATLAS (0.60px)',
+      ephemerisLabel: 'JPL Horizons: Comet 3I/ATLAS (0.60px)',
+      gaiaSources: [
+        { dx: -118, dy: -52, label: 'Gaia DR3 3816519402849102720 (G=12.4)' },
+        { dx: 102, dy: 64, label: 'Gaia DR3 3816519196690672128 (G=13.9)' },
+      ],
+      wiseSources: [
+        { dx: -44, dy: 88, label: 'AllWISE J110849.60+050848.6 (W1=14.7)' },
+      ],
     },
     {
       ra: 269.452075,
       dec: 4.693365,
       name: "Barnard's Star (HIP 87937)",
-      gaiaId: "Gaia DR3 4472832130942575872 (Barnard's Star)",
-      wiseId: 'AllWISE J175748.49+044136.1',
+      constellation: 'Ophiuchus Field',
+      gaiaId: "Barnard's Star + 3 Ophiuchus Gaia Stars",
+      wiseId: "AllWISE J175748.4+044136 + BD+04 3562 IR",
       ephemerisLabel: null,
+      gaiaSources: [
+        { dx: -75, dy: 25, label: "Barnard's Star (Gaia DR3 4472832130942575872 · PM 10.3″/yr)" },
+        { dx: 118, dy: -82, label: 'BD+04 3562 (Gaia DR3 4472832298446294528 · G=9.7)' },
+        { dx: -148, dy: -92, label: 'Gaia DR3 4472831920489178752 (Oph M-Dwarf · G=13.6)' },
+        { dx: 58, dy: 114, label: 'Gaia DR3 4472832062223098880 (Oph Ref · G=14.9)' },
+      ],
+      wiseSources: [
+        { dx: 141, dy: 97, label: 'AllWISE J175754.00+044015.6 (Ophiuchus IR Star · W1=7.9)' },
+        { dx: -75, dy: 25, label: "AllWISE J175748.49+044136.1 (Barnard's Star Photosphere · W2=4.5)" },
+      ],
     },
     {
       ra: 133.795129,
       dec: -7.245147,
       name: 'WISE 0855-0714 (Y4 Sub-Brown Dwarf)',
-      gaiaId: 'Gaia DR3 5756948291038291024',
-      wiseId: 'WISE J085510.83-071442.5 (WISE 0855)',
+      constellation: 'Hydra Sector',
+      gaiaId: 'TYC 5442-1092-1 + 1 Hydra Gaia Star',
+      wiseId: 'WISE J085510.83-071442.5 (250K Y4 Dwarf) + 2 IR',
       ephemerisLabel: null,
+      gaiaSources: [
+        { dx: -123, dy: 89, label: 'Gaia DR3 5756948291038291024 (Hydra Astrometric Anchor · G=13.1)' },
+        { dx: 104, dy: -96, label: 'TYC 5442-1092-1 (Gaia DR3 5756948531556459904 · G=11.4)' },
+      ],
+      wiseSources: [
+        { dx: 69, dy: 37, label: 'WISE J085510.83-071442.5 (Y4 Sub-Brown Dwarf · 250 K Water Ice)' },
+        { dx: -46, dy: -114, label: 'AllWISE J085506.21-071318.4 (Hydra Mid-IR Source · W1=14.4)' },
+        { dx: 136, dy: 104, label: 'AllWISE J085515.40-071529.0 (Hydra Bg IR · W2=15.0)' },
+      ],
     },
     {
       ra: 331.044146,
       dec: -56.782844,
       name: 'Epsilon Indi Ba/Bb (T1+T6 Binary)',
-      gaiaId: 'Gaia DR3 6412595290592307840',
-      wiseId: 'AllWISE J220410.52-564657.7 (ε Indi B)',
+      constellation: 'Indus Southern Field',
+      gaiaId: 'CPD-57 10015 + 2 Indus Gaia Stars',
+      wiseId: 'AllWISE J220410.52-564657.7 (ε Indi Ba/Bb)',
       ephemerisLabel: null,
+      gaiaSources: [
+        { dx: 113, dy: -71, label: 'Gaia DR3 6412595290592307840 (Indus Field Star · G=12.4)' },
+        { dx: -136, dy: 94, label: 'CPD-57 10015 (Gaia DR3 6412594981354662144 · G=10.2)' },
+        { dx: 34, dy: 126, label: 'Gaia DR3 6412595118793615488 (Indus Southern Ref · G=14.7)' },
+      ],
+      wiseSources: [
+        { dx: -51, dy: -83, label: 'AllWISE J220410.52-564657.7 (ε Indi Ba/Bb T1+T6 Binary · CH₄/H₂O)' },
+        { dx: 124, dy: 58, label: 'AllWISE J220418.11-564742.0 (Indus IR Source · W1=13.2)' },
+      ],
     },
     {
       ra: 76.956417,
       dec: 30.401444,
       name: 'RW Aurigae (T Tauri Variable)',
-      gaiaId: 'Gaia DR3 156430822114424576 (RW Aur)',
-      wiseId: 'AllWISE J050749.56+302405.1 (RW Aur)',
+      constellation: 'Taurus-Auriga Complex',
+      gaiaId: 'RW Aurigae A/B + HD 282630 (3 Gaia Stars)',
+      wiseId: 'AllWISE RW Aur Circumstellar Disk + 2 YSOs',
       ephemerisLabel: null,
+      gaiaSources: [
+        { dx: 69, dy: -87, label: 'RW Aurigae A/B (Gaia DR3 156430822114424576 · T Tauri Variable)' },
+        { dx: -116, dy: -44, label: 'HD 282630 (Gaia DR3 156430959553378048 · K2 Star · G=10.8)' },
+        { dx: 22, dy: 116, label: 'Gaia DR3 156430615955994240 (Taurus-Auriga YSO · G=13.9)' },
+      ],
+      wiseSources: [
+        { dx: 69, dy: -87, label: 'AllWISE J050749.56+302405.1 (RW Aur Circumstellar Dust Disk · W1=5.6)' },
+        { dx: 113, dy: 89, label: 'AllWISE J050754.12+302311.8 (Class II T Tauri YSO · W2=8.4)' },
+        { dx: -96, dy: 104, label: 'AllWISE J050742.19+302519.4 (Auriga Protostellar Envelope · W3=6.9)' },
+      ],
     },
     {
       ra: 248.167625,
       dec: 66.754972,
       name: 'R Draconis (Mira Variable)',
-      gaiaId: 'Gaia DR3 1645265502983951104 (R Dra)',
-      wiseId: 'AllWISE J163240.22+664517.9 (R Dra)',
+      constellation: 'Draco Circumpolar Field',
+      gaiaId: 'R Draconis (Mira P=245.6d) + TYC 4196-1842-1',
+      wiseId: 'AllWISE R Dra AGB CO Shell + Draco IR Giant',
       ephemerisLabel: null,
+      gaiaSources: [
+        { dx: -67, dy: 81, label: 'R Draconis (Gaia DR3 1645265502983951104 · Mira Red Giant P=245.6d)' },
+        { dx: 125, dy: -66, label: 'TYC 4196-1842-1 (Gaia DR3 1645265709142381568 · Draco Ref · G=11.1)' },
+      ],
+      wiseSources: [
+        { dx: -67, dy: 81, label: 'AllWISE J163240.22+664517.9 (R Dra AGB Circumstellar CO Shell · W1=1.2)' },
+        { dx: 129, dy: -63, label: 'AllWISE J163251.40+664412.5 (Draco Red Giant IR · W2=7.8)' },
+      ],
     },
     {
       ra: 223.024527,
       dec: -11.992267,
       name: '(4) Vesta (Main-Belt Asteroid)',
+      constellation: 'Libra Ecliptic Sector',
       gaiaId: 'Gaia DR3 6314829104928174080',
       wiseId: 'AllWISE J145205.89-115932.2',
       ephemerisLabel: 'JPL Horizons: (4) Vesta (0.28px)',
+      gaiaSources: [
+        { dx: -95, dy: -68, label: 'Gaia DR3 6314829104928174080 (Libra Ecliptic Star · G=12.1)' },
+      ],
+      wiseSources: [
+        { dx: 82, dy: 74, label: 'AllWISE J145205.89-115932.2 (Libra IR Source · W1=13.8)' },
+      ],
     },
   ];
 
@@ -927,22 +1022,33 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
     if (dist < 0.45) {
       return {
         knownObjectName: entry.name,
+        constellation: entry.constellation,
         gaiaId: entry.gaiaId,
         wiseId: entry.wiseId,
         ephemerisLabel: entry.ephemerisLabel,
         gaiaOffsetPx,
         wiseOffsetPx,
+        gaiaSources: entry.gaiaSources,
+        wiseSources: entry.wiseSources,
       };
     }
   }
 
   return {
     knownObjectName: null,
+    constellation: `Custom Field (${normRa.toFixed(2)}°, ${decDeg.toFixed(2)}°)`,
     gaiaId: gaiaSourceId,
     wiseId: wiseJName,
     ephemerisLabel: null,
     gaiaOffsetPx,
     wiseOffsetPx,
+    gaiaSources: [
+      { dx: gaiaOffsetPx.dx, dy: gaiaOffsetPx.dy, label: `${gaiaSourceId} (G=13.4)` },
+      { dx: -gaiaOffsetPx.dy, dy: gaiaOffsetPx.dx, label: `Gaia DR3 ${(4000000000000000000n + BigInt(healpixSeed + 7919) * 131071n).toString()} (G=14.8)` },
+    ],
+    wiseSources: [
+      { dx: wiseOffsetPx.dx, dy: wiseOffsetPx.dy, label: `${wiseJName} (W1=12.9)` },
+    ],
   };
 }
 

@@ -1168,6 +1168,7 @@ export function App() {
               onRefreshCutout={handleRefreshCutout}
               viewMode={viewMode}
               searchStatus={searchStatus}
+              activeCandidate={activeCandidate}
               className="h-full w-full"
             />
           </div>

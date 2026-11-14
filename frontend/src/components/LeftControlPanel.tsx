@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState } from '../types/spherex';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import { Search, Layers, Filter, Database } from 'lucide-react';
 
@@ -23,6 +23,7 @@ interface LeftControlPanelProps {
     source: 'live' | 'fallback' | 'preset';
     message: string;
   };
+  activeCandidate?: CandidateObject | null;
   className?: string;
 }
 
@@ -42,6 +43,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onToggleOverlay,
   viewMode = 'volunteer',
   searchStatus,
+  activeCandidate,
   className = '',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
@@ -262,30 +264,71 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* 4. Known Astronomical Catalogs (Dynamic per Image / Coordinate) */}
+      {/* 4. Known Astronomical Catalogs (Dynamic per Target & Selected Object) */}
       {(() => {
         const coordCat = resolveCoordinateCatalogContext(ra, dec);
+        const selCat = activeCandidate?.matchedCatalog || null;
+        const selId =
+          activeCandidate?.catalogId ||
+          activeCandidate?.validationData?.objectName ||
+          null;
         return (
           <div className="p-3">
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center justify-between mb-1">
               <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-emerald-400" />
                 Known Catalog Overlays
               </span>
               <span className="text-[9px] font-mono text-emerald-400">
-                Auto-matched
+                {coordCat.constellation}
               </span>
             </div>
 
+            {activeCandidate && (
+              <div className="mb-2 px-2 py-1 rounded bg-paper-950 border border-paper-800 text-[9px] font-mono flex items-center justify-between gap-1">
+                <span className="text-paper-400 truncate">
+                  ★ Selected:{' '}
+                  <strong className="text-white">
+                    {activeCandidate.validationData?.objectName ||
+                      activeCandidate.catalogId ||
+                      activeCandidate.id}
+                  </strong>
+                </span>
+                <span
+                  className={`px-1.5 py-0.5 rounded shrink-0 font-bold ${
+                    selCat
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                      : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                  }`}
+                >
+                  {selCat || 'Uncatalogued'}
+                </span>
+              </div>
+            )}
+
             <div className="space-y-1.5">
-              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+              <label
+                className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 cursor-pointer transition-all btn-tactile-sm ${
+                  selCat === 'Gaia DR3'
+                    ? 'border-emerald-400/80 ring-1 ring-emerald-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
                 <div className="min-w-0 pr-2">
                   <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                    <span>Gaia DR3</span>
+                    <span>Gaia DR3 ({coordCat.gaiaSources.length})</span>
+                    {selCat === 'Gaia DR3' && (
+                      <span className="text-[8px] bg-emerald-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
                   </span>
-                  <span className="text-[9px] text-emerald-300/90 font-mono block truncate" title={coordCat.gaiaId}>
-                    {coordCat.gaiaId}
+                  <span
+                    className="text-[9px] text-emerald-300/90 font-mono block truncate"
+                    title={selCat === 'Gaia DR3' && selId ? selId : coordCat.gaiaId}
+                  >
+                    {selCat === 'Gaia DR3' && selId ? `★ ${selId}` : coordCat.gaiaId}
                   </span>
                 </div>
                 <input
@@ -296,14 +339,28 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 />
               </label>
 
-              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+              <label
+                className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 cursor-pointer transition-all btn-tactile-sm ${
+                  selCat === 'WISE'
+                    ? 'border-amber-400/80 ring-1 ring-amber-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
                 <div className="min-w-0 pr-2">
                   <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-                    <span>AllWISE</span>
+                    <span>AllWISE ({coordCat.wiseSources.length})</span>
+                    {selCat === 'WISE' && (
+                      <span className="text-[8px] bg-amber-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
                   </span>
-                  <span className="text-[9px] text-amber-300/90 font-mono block truncate" title={coordCat.wiseId}>
-                    {coordCat.wiseId}
+                  <span
+                    className="text-[9px] text-amber-300/90 font-mono block truncate"
+                    title={selCat === 'WISE' && selId ? selId : coordCat.wiseId}
+                  >
+                    {selCat === 'WISE' && selId ? `★ ${selId}` : coordCat.wiseId}
                   </span>
                 </div>
                 <input
@@ -314,14 +371,29 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 />
               </label>
 
-              <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+              <label
+                className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 cursor-pointer transition-all btn-tactile-sm ${
+                  selCat === 'NEO Ephemeris'
+                    ? 'border-sky-400/80 ring-1 ring-sky-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
                 <div className="min-w-0 pr-2">
                   <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
-                    <span>JPL Horizons Ephemeris</span>
+                    <span>
+                      JPL Ephemeris ({coordCat.ephemerisLabel || selCat === 'NEO Ephemeris' ? '1' : '0'})
+                    </span>
+                    {selCat === 'NEO Ephemeris' && (
+                      <span className="text-[8px] bg-sky-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
                   </span>
                   <span className="text-[9px] text-sky-300/90 font-mono block truncate">
-                    {coordCat.ephemerisLabel || coordCat.knownObjectName || `Field (${ra.toFixed(2)}°, ${dec.toFixed(2)}°)`}
+                    {selCat === 'NEO Ephemeris' && selId
+                      ? `★ ${selId}`
+                      : coordCat.ephemerisLabel || 'No Solar System body in field'}
                   </span>
                 </div>
                 <input

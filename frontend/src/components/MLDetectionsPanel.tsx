@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import type { CandidateObject, MLAnalysisStatus } from '../types/spherex';
 import { rankCandidates } from '../services/mlRanking';
-import { getOrCreateEvidenceStacks, type RankingMethod } from '../services/motionReviewService';
-import { Cpu, Award, Layers, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Cpu, Award, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface MLDetectionsPanelProps {
   candidates: CandidateObject[];
@@ -31,27 +30,13 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
   ra,
   dec,
 }) => {
-  const hasBloomCandidates = useMemo(
-    () => candidates.some((c) => c.detectionMethod === 'bloom_centroids'),
-    [candidates]
-  );
-
-  const [rankingMode, setRankingMode] = useState<RankingMethod>(() =>
-    hasBloomCandidates ? 'bloom' : 'heuristic'
-  );
+  const [rankingMode, setRankingMode] = useState<'heuristic' | 'forest'>('heuristic');
 
   const baseRanked = useMemo(() => rankCandidates(candidates), [candidates]);
 
   const ranked = useMemo(() => {
     const items = [...baseRanked];
-    if (rankingMode === 'bloom' && hasBloomCandidates) {
-      items.sort((a, b) => {
-        const aBloom = a.candidate.detectionMethod === 'bloom_centroids' ? 0 : 1;
-        const bBloom = b.candidate.detectionMethod === 'bloom_centroids' ? 0 : 1;
-        if (aBloom !== bBloom) return aBloom - bBloom;
-        return (a.candidate.heuristicRank ?? a.rank) - (b.candidate.heuristicRank ?? b.rank);
-      });
-    } else if (rankingMode === 'forest') {
+    if (rankingMode === 'forest') {
       items.sort((a, b) => {
         const rfA =
           a.candidate.randomForestRank ??
@@ -95,7 +80,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         displayRank,
       };
     });
-  }, [baseRanked, rankingMode, hasBloomCandidates]);
+  }, [baseRanked, rankingMode]);
 
   const validated = useMemo(
     () => baseRanked.find((r) => r.candidate.validationData)?.candidate.validationData,
@@ -110,54 +95,49 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
     );
   }, [candidates, selectedCandidateId, ranked]);
 
-  const evidenceStacks = useMemo(
-    () => (activeCandidate ? getOrCreateEvidenceStacks(activeCandidate) : null),
-    [activeCandidate]
-  );
-
   return (
-    <div className="p-3.5 space-y-3.5">
+    <div className="p-3.5 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between anim-fall">
         <span className="font-semibold text-paper-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
           <Cpu className="w-4 h-4 text-emerald-400" />
-          AI Track Ranker & Insights
+          AI Track Ranker &amp; Insights
         </span>
-        <span className="text-[10px] font-mono text-paper-400 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
-          {validated ? `${validated.totalCandidates} tracks scanned` : `${ranked.length} found`}
+        <span className="text-[10px] font-mono text-paper-300 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
+          {validated ? `${validated.totalCandidates} tracks` : `${ranked.length} tracks`}
         </span>
       </div>
 
-      {/* Simultaneous Coordinate ML Analysis Status & Insights Card */}
+      {/* Simultaneous Coordinate ML Analysis Status */}
       {mlAnalysisStatus && mlAnalysisStatus.state !== 'idle' && (
         <div
-          className={`p-3 rounded-xl border-2 transition-all space-y-2 anim-fall ${
+          className={`p-2.5 rounded-xl border transition-all anim-fall ${
             mlAnalysisStatus.state === 'running'
-              ? 'bg-emerald-950/30 border-emerald-400/70'
-              : 'bg-paper-950 border-emerald-500/50'
+              ? 'bg-emerald-950/30 border-emerald-400/70 space-y-2'
+              : 'bg-paper-950 border-emerald-500/40'
           }`}
         >
           <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 min-w-0">
               {mlAnalysisStatus.state === 'running' ? (
                 <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
               ) : (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               )}
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300 truncate">
                 {mlAnalysisStatus.state === 'running'
                   ? 'Running Coordinate ML Analysis...'
-                  : 'Coordinate ML Insights Ready'}
+                  : 'Coordinate ML Ready'}
               </span>
             </div>
             {ra !== undefined && dec !== undefined && (
-              <span className="text-[9px] font-mono text-paper-400">
-                {ra.toFixed(3)}°, {dec >= 0 ? `+${dec.toFixed(3)}` : dec.toFixed(3)}°
+              <span className="text-[9px] font-mono text-paper-400 shrink-0">
+                {ra.toFixed(2)}°, {dec >= 0 ? `+${dec.toFixed(2)}` : dec.toFixed(2)}°
               </span>
             )}
           </div>
 
-          {mlAnalysisStatus.state === 'running' ? (
+          {mlAnalysisStatus.state === 'running' && (
             <div className="space-y-1.5">
               <p className="text-[10px] font-mono text-paper-200">{mlAnalysisStatus.stage}</p>
               <div className="w-full h-1.5 bg-paper-900 rounded-full overflow-hidden border border-paper-800">
@@ -174,28 +154,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
                   2. Track Link
                 </span>
                 <span className={mlAnalysisStatus.stepIndex >= 3 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
-                  3. RF + Coadd
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono">
-              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
-                <span className="text-[8px] uppercase text-paper-500 block">Tracks</span>
-                <span className="text-emerald-300 font-bold">
-                  {mlAnalysisStatus.tracksDetected ?? ranked.length} linked
-                </span>
-              </div>
-              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
-                <span className="text-[8px] uppercase text-paper-500 block">Velocity</span>
-                <span className="text-paper-100 font-bold">
-                  {mlAnalysisStatus.topSpeedArcsecHr ?? activeCandidate?.speedArcsecPerHour ?? 28.4}″/hr
-                </span>
-              </div>
-              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
-                <span className="text-[8px] uppercase text-paper-500 block">Fit RMS</span>
-                <span className="text-sky-300 font-bold">
-                  {mlAnalysisStatus.topFitRmsPx ?? activeCandidate?.fitRmsPx ?? 0.22} px
+                  3. RF Rank
                 </span>
               </div>
             </div>
@@ -206,41 +165,33 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
       {/* Heuristic vs Random Forest Toggle */}
       <div className="p-2.5 rounded-xl bg-paper-950 border-2 border-black space-y-2 anim-fall">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-paper-400 font-bold">
-            Ranking Method
+          <span className="text-[10px] font-mono uppercase tracking-wider text-paper-300 font-bold">
+            Ranking Algorithm
           </span>
           <span className="text-[9px] font-mono text-emerald-400">
-            {rankingMode === 'forest'
-              ? '400 Sim Fields RF'
-              : rankingMode === 'bloom'
-              ? 'BLOOM Core Centroids'
-              : 'Leave-One-Out LOO'}
+            {rankingMode === 'forest' ? '400 Sim Fields RF' : 'Leave-One-Out (Default)'}
           </span>
         </div>
 
-        <div
-          className={`grid ${hasBloomCandidates ? 'grid-cols-3' : 'grid-cols-2'} gap-1.5`}
-          role="group"
-          aria-label="Ranking method"
-        >
+        <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Ranking method">
           <button
             type="button"
             aria-pressed={rankingMode === 'heuristic'}
             onClick={() => setRankingMode('heuristic')}
-            className={`btn-tactile-sm py-1.5 px-2 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
+            className={`btn-tactile-sm py-1.5 px-2.5 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
               rankingMode === 'heuristic'
                 ? 'bg-emerald-400 text-gray-950'
                 : 'bg-paper-900 text-paper-300 hover:text-white'
             }`}
           >
-            Heuristic
+            Heuristic (Default)
           </button>
 
           <button
             type="button"
             aria-pressed={rankingMode === 'forest'}
             onClick={() => setRankingMode('forest')}
-            className={`btn-tactile-sm py-1.5 px-2 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
+            className={`btn-tactile-sm py-1.5 px-2.5 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
               rankingMode === 'forest'
                 ? 'bg-sky-400 text-gray-950'
                 : 'bg-paper-900 text-paper-300 hover:text-white'
@@ -248,238 +199,72 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           >
             Random Forest
           </button>
-
-          {hasBloomCandidates && (
-            <button
-              type="button"
-              aria-pressed={rankingMode === 'bloom'}
-              onClick={() => setRankingMode('bloom')}
-              className={`btn-tactile-sm py-1.5 px-2 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
-                rankingMode === 'bloom'
-                  ? 'bg-amber-400 text-gray-950'
-                  : 'bg-paper-900 text-amber-300 hover:text-white'
-              }`}
-            >
-              BLOOM Core
-            </button>
-          )}
         </div>
 
-        <p className="text-[10px] text-paper-400 leading-relaxed">
-          {rankingMode === 'bloom'
-            ? 'Bright asteroids can saturate and leave a BLOOM-flagged core. Links the centers of those flagged regions.'
-            : rankingMode === 'forest'
-            ? 'Reranks the same residual tracks using a Random Forest trained on 400 simulated SPHEREx fields.'
-            : 'Per-frame leave-one-out reference ranker favoring more epochs, higher residual S/N, and tight linear fit.'}
+        <p className="text-[10px] text-paper-400 leading-snug">
+          {rankingMode === 'forest'
+            ? 'Reranks detected tracks using a Random Forest trained on 400 simulated SPHEREx fields.'
+            : 'Per-frame leave-one-out difference ranker prioritizing multi-epoch linear tracks and high S/N.'}
         </p>
       </div>
 
-      {/* Ephemeris Benchmark Recovery Banner */}
-      {validated && (
-        <div
-          className="p-3 rounded-xl bg-emerald-950/40 border-2 border-emerald-500/60 anim-fall"
-          style={{ animationDelay: '60ms' }}
-        >
-          <div className="flex items-center gap-1.5 font-mono font-bold text-[11px] text-emerald-300">
-            <Award className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
-              Recovered {validated.objectName} in {validated.exposuresCount} real exposures
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-1.5 mt-2 text-[10px] font-mono">
-            <div className="bg-paper-950/80 p-1.5 rounded-lg border border-emerald-900/60">
-              <span className="text-paper-400 block">Heuristic LOO</span>
-              <span className="text-emerald-400 font-bold">
-                #{validated.baselineRank} of {validated.totalCandidates}
-              </span>
-            </div>
-            <div className="bg-paper-950/80 p-1.5 rounded-lg border border-emerald-900/60">
-              <span className="text-paper-400 block">Random Forest</span>
-              <span className="text-sky-400 font-bold">
-                #{validated.randomForestRank} of {validated.totalCandidates}
-              </span>
-            </div>
-          </div>
-          <div className="mt-2 text-[10px] font-mono text-paper-400 flex items-center justify-between">
-            <span>Max ephemeris offset: {validated.maxOffsetPx} px</span>
-            <a
-              href={validated.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-emerald-400 underline hover:text-emerald-300"
-            >
-              IRSA Source
-            </a>
-          </div>
-        </div>
-      )}
-
-      {/* Intuitive "Shift & Stack Motion Proof" (Comparing Fixed Sky vs Following Fitted Track) */}
-      {activeCandidate && evidenceStacks && (
-        <section
-          className="p-3 rounded-xl bg-paper-950 border-2 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.12)] space-y-2.5 anim-fall"
-          aria-labelledby="drawer-stack-evidence-label"
-        >
-          {/* Active Selected Candidate Differentiator Header */}
-          <div className="flex items-center justify-between gap-2 pb-2 border-b border-paper-800">
+      {/* Selected Object Compact Summary Card */}
+      {activeCandidate && (
+        <div className="p-2.5 rounded-xl bg-emerald-950/30 border-2 border-emerald-500/50 space-y-2 anim-fall">
+          <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
               <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
-                ★ Currently Inspecting Object
+                ★ Selected Object Telemetry
               </span>
               <span className="font-mono text-xs font-bold text-white truncate block">
-                #{activeCandidate.mlRank} ·{' '}
                 {activeCandidate.validationData?.objectName ||
                   activeCandidate.catalogId ||
                   activeCandidate.id}
               </span>
             </div>
-            <span
-              className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border shrink-0 ${
-                evidenceStacks.winnerMode === 'motion'
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/60'
-                  : evidenceStacks.winnerMode === 'fixed'
-                  ? 'bg-sky-500/20 text-sky-300 border-sky-400/60'
-                  : 'bg-rose-500/20 text-rose-300 border-rose-400/60'
-              }`}
-            >
-              {evidenceStacks.verdictBadge}
-            </span>
+            {validated && (
+              <a
+                href={validated.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40 hover:text-white shrink-0 flex items-center gap-1"
+              >
+                <Award className="w-3 h-3 text-emerald-400" />
+                <span>IRSA Verified</span>
+              </a>
+            )}
           </div>
 
-          <div className="flex items-center justify-between gap-2">
-            <h3
-              id="drawer-stack-evidence-label"
-              className="font-mono text-[11px] font-bold text-paper-100 uppercase tracking-wider flex items-center gap-1.5"
-            >
-              <Layers className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Shift &amp; Stack Motion Proof</span>
-            </h3>
-            <span className="text-[10px] font-mono text-paper-300 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
-              {evidenceStacks.contributingExposures} epochs co-added
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2.5">
-            {/* Box 1: Fixed Sky Position */}
-            <figure
-              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
-                evidenceStacks.winnerMode === 'fixed'
-                  ? 'bg-sky-950/25 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
-                  : 'bg-paper-900/90 border-paper-800 opacity-90'
-              }`}
-            >
-              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
-                <span className="text-paper-300 font-bold">1. Fixed Sky Spot</span>
-                <span className="text-paper-400">{evidenceStacks.fixedSnr}σ</span>
-              </div>
-              <div className="relative w-full max-w-[6.5rem] aspect-square">
-                {evidenceStacks.fixedStack ? (
-                  <img
-                    src={evidenceStacks.fixedStack}
-                    width={29}
-                    height={29}
-                    alt="Fixed sky position stack"
-                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
-                  />
-                ) : (
-                  <div className="w-full h-full rounded border-2 border-black bg-black" />
-                )}
-                {/* Center target ring to make smearing vs pinpoint dot obvious */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="w-5 h-5 rounded-full border border-dashed border-white/45" />
-                </div>
-              </div>
-              <figcaption className="text-[10px] font-mono text-paper-200 mt-1.5 text-center font-bold">
-                {evidenceStacks.fixedStatus}
-              </figcaption>
-              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
-                Camera stays still on RA/Dec
+          <div className="grid grid-cols-3 gap-1.5 text-[10px] font-mono">
+            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Velocity</span>
+              <span className="text-emerald-300 font-bold">
+                {(activeCandidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/hr
               </span>
-            </figure>
-
-            {/* Box 2: Following Fitted Track */}
-            <figure
-              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
-                evidenceStacks.winnerMode === 'motion'
-                  ? 'bg-emerald-950/30 border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]'
-                  : 'bg-paper-900/90 border-paper-800 opacity-90'
-              }`}
-            >
-              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
-                <span className="text-emerald-300 font-bold">2. Follow Track</span>
-                <span className="text-emerald-300 font-bold">{evidenceStacks.motionSnr}σ</span>
-              </div>
-              <div className="relative w-full max-w-[6.5rem] aspect-square">
-                {evidenceStacks.motionStack ? (
-                  <img
-                    src={evidenceStacks.motionStack}
-                    width={29}
-                    height={29}
-                    alt="Following the fitted track stack"
-                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
-                  />
-                ) : (
-                  <div className="w-full h-full rounded border-2 border-black bg-black" />
-                )}
-                {/* Center target ring to highlight concentrated central peak */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div
-                    className={`w-5 h-5 rounded-full border ${
-                      evidenceStacks.winnerMode === 'motion'
-                        ? 'border-emerald-400/90'
-                        : 'border-dashed border-white/45'
-                    }`}
-                  />
-                </div>
-              </div>
-              <figcaption className="text-[10px] font-mono text-emerald-300 mt-1.5 text-center font-bold">
-                {evidenceStacks.motionStatus}
-              </figcaption>
-              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
-                Shifts frames along path
-              </span>
-            </figure>
-          </div>
-
-          {/* Plain-English Takeaway Callout */}
-          <div className="p-2 rounded-lg bg-paper-900/90 border border-paper-800 text-[10px] text-paper-200 leading-relaxed">
-            <span className="font-mono font-bold text-emerald-400 uppercase mr-1">
-              How to read this:
-            </span>
-            {evidenceStacks.plainExplanation}
-          </div>
-
-          {/* Track Kinematics & Fit Telemetry */}
-          <div className="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px] font-mono">
-            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
-              <span className="text-paper-500 block text-[9px]">Fit RMS</span>
+            </div>
+            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Fit RMS</span>
               <span className="text-paper-100 font-bold">
                 {(activeCandidate.fitRmsPx ?? 0.22).toFixed(2)} px
               </span>
             </div>
-            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
-              <span className="text-paper-500 block text-[9px]">Sky Speed</span>
-              <span className="text-emerald-300 font-bold">
-                {(activeCandidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/h
-              </span>
-            </div>
-            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
-              <span className="text-paper-500 block text-[9px]">Method</span>
-              <span className="text-sky-300 font-bold">
-                {activeCandidate.detectionMethod === 'bloom_centroids' ? 'BLOOM' : 'LOO Diff'}
+            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Catalog</span>
+              <span className="text-sky-300 font-bold truncate block">
+                {activeCandidate.matchedCatalog || 'Uncatalogued'}
               </span>
             </div>
           </div>
-        </section>
+        </div>
       )}
 
       {/* Ranked Candidates List Header */}
-      <div className="flex items-center justify-between pt-1 px-0.5">
+      <div className="flex items-center justify-between pt-0.5 px-0.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-paper-400 font-bold">
-          Select Object to Compare ({ranked.length})
+          Ranked Objects ({ranked.length})
         </span>
         <span className="text-[9px] font-mono text-emerald-400">
-          Click any row to switch
+          Click to inspect on sky
         </span>
       </div>
 

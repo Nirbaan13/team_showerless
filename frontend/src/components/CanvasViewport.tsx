@@ -8,7 +8,7 @@ import type {
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
-import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
 
 interface CanvasViewportProps {
   frames: SpherexEpochFrame[];
@@ -43,7 +43,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   onClearSkippedNotice,
   isScientistMode = false,
   mlAnalysisStatus,
-  onOpenMlInsights,
+  onOpenMlInsights: _onOpenMlInsights,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -55,9 +55,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
   const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
-  const framePeaksCacheRef = useRef<
-    Map<string, Array<{ cx: number; cy: number; lum: number }>>
-  >(new Map());
   const [, setRepaintCount] = useState(0);
 
   // Smooth Zoom-in transition state when target changes
@@ -439,155 +436,117 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.restore();
     });
 
-    // Per-Image Known Catalog Detection & Overlays (Gaia DR3, AllWISE, Solar System Ephemeris)
-    // Detects bright point sources in the current frame's bitmap (or procedural starfield)
-    // so every single image frame (Epoch 1..N) and every sky coordinate shows its own matched catalog objects.
+    // Per-Target & Per-Object Known Catalog Overlays (Gaia DR3, AllWISE, JPL Horizons Ephemeris)
+    // Uses the target field's distinct astronomical catalog inventory (Leo, Ophiuchus, Hydra, Indus, Auriga, Draco)
+    // AND tracks the exact moving pixel coordinates of catalogued candidates across epochs.
     const coordCatalog = resolveCoordinateCatalogContext(centerRa, centerDec);
-    const frameKey = `${currentFrame?.frameId || 'f'}-${activeFrameIndex}-${targetBitmapUrl || 'proc'}-${centerRa.toFixed(4)}-${centerDec.toFixed(4)}`;
-    let framePeaks = framePeaksCacheRef.current.get(frameKey);
-
-    if (!framePeaks) {
-      const detected: Array<{ cx: number; cy: number; lum: number }> = [];
-      const loadedImg = targetBitmapUrl ? imgCacheRef.current.get(targetBitmapUrl) : undefined;
-      if (loadedImg && loadedImg.complete && loadedImg.naturalWidth > 0) {
-        try {
-          const sampleW = 64;
-          const aspect = loadedImg.naturalWidth / loadedImg.naturalHeight;
-          const sampleH = Math.max(32, Math.round(64 / aspect));
-          const offCanvas = document.createElement('canvas');
-          offCanvas.width = sampleW;
-          offCanvas.height = sampleH;
-          const offCtx = offCanvas.getContext('2d');
-          if (offCtx) {
-            offCtx.drawImage(loadedImg, 0, 0, sampleW, sampleH);
-            const data = offCtx.getImageData(0, 0, sampleW, sampleH).data;
-            const imgW = 512;
-            const imgH = 512 / aspect;
-
-            // Find local brightness maxima in this specific frame's image
-            for (let sy = 4; sy < sampleH - 4; sy += 2) {
-              for (let sx = 4; sx < sampleW - 4; sx += 2) {
-                const idx = (sy * sampleW + sx) * 4;
-                const lum = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
-                if (lum < 95) continue;
-                let isLocalMax = true;
-                for (let dy = -2; dy <= 2 && isLocalMax; dy++) {
-                  for (let dx = -2; dx <= 2; dx++) {
-                    if (dx === 0 && dy === 0) continue;
-                    const nIdx = ((sy + dy) * sampleW + (sx + dx)) * 4;
-                    const nLum = (data[nIdx] + data[nIdx + 1] + data[nIdx + 2]) / 3;
-                    if (nLum > lum) {
-                      isLocalMax = false;
-                      break;
-                    }
-                  }
-                }
-                if (isLocalMax) {
-                  const cx = (sx / sampleW) * imgW - imgW / 2;
-                  const cy = (sy / sampleH) * imgH - imgH / 2;
-                  if (
-                    !detected.some((p) => Math.hypot(p.cx - cx, p.cy - cy) < 42)
-                  ) {
-                    detected.push({ cx, cy, lum });
-                  }
-                }
-              }
-            }
-            detected.sort((a, b) => b.lum - a.lum);
-          }
-        } catch {
-          // Fallback to procedural peaks below
-        }
-      }
-
-      if (detected.length < 4) {
-        staticStars.slice(0, 8).forEach((s, idx) => {
-          const shift = (activeFrameIndex - 1) * (idx % 2 === 0 ? 6 : -5);
-          detected.push({
-            cx: s.x * 0.65 + shift,
-            cy: s.y * 0.65 - shift,
-            lum: 180 - idx * 12,
-          });
-        });
-      }
-
-      framePeaks = detected.slice(0, 6);
-      framePeaksCacheRef.current.set(frameKey, framePeaks);
-    }
-
-    // Helper to format exact coordinate-based Gaia DR3 / AllWISE ID for any pixel (cx, cy) in this image
-    const formatCatalogAtCanvasPx = (cx: number, cy: number, kind: 'gaia' | 'wise') => {
-      const raOff = (cx * 6.2) / 3600;
-      const decOff = (-cy * 6.2) / 3600;
-      const srcRa = ((centerRa - raOff) % 360 + 360) % 360;
-      const srcDec = centerDec + decOff;
-      if (kind === 'gaia') {
-        const seedVal = Math.abs(
-          Math.floor((srcRa * 10000 + (srcDec + 90) * 10000 + activeFrameIndex * 17) * 131)
-        );
-        return `Gaia DR3 ${(4100000000000000000n + BigInt(seedVal) * 97n).toString().slice(0, 19)}`;
-      }
-      const rh = Math.floor(srcRa / 15);
-      const rm = Math.floor((srcRa / 15 - rh) * 60);
-      const rs = (((srcRa / 15 - rh) * 60 - rm) * 60).toFixed(1).padStart(4, '0');
-      const sign = srcDec >= 0 ? '+' : '-';
-      const ad = Math.abs(srcDec);
-      const dd = Math.floor(ad);
-      const dm = Math.floor((ad - dd) * 60);
-      return `WISE J${rh.toString().padStart(2, '0')}${rm.toString().padStart(2, '0')}${rs}${sign}${dd.toString().padStart(2, '0')}${dm.toString().padStart(2, '0')}`;
-    };
-
-    const gaiaCandidate = candidates.find((c) => c.matchedCatalog === 'Gaia DR3');
-    const wiseCandidate = candidates.find((c) => c.matchedCatalog === 'WISE');
-    const neoCandidate = candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
+    const selectedCand =
+      candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
 
     if (overlays.gaiaDr3) {
-      const gaiaPeaks = framePeaks.filter((_, idx) => idx % 2 === 0).slice(0, 2);
-      if (gaiaCandidate) {
-        const pos =
-          gaiaCandidate.epochPositions[activeFrameIndex] ||
-          gaiaCandidate.epochPositions[0];
-        const coords = getCanvasCoords(pos.x, pos.y);
-        gaiaPeaks.unshift({ cx: coords.cx, cy: coords.cy, lum: 255 });
-      }
-      gaiaPeaks.slice(0, 2).forEach((pk, idx) => {
-        const label =
-          idx === 0 && gaiaCandidate?.catalogId
-            ? `${gaiaCandidate.catalogId} [F${activeFrameIndex + 1}]`
-            : `${formatCatalogAtCanvasPx(pk.cx, pk.cy, 'gaia')} [F${activeFrameIndex + 1}]`;
-        ctx.strokeStyle = '#10b981';
-        ctx.lineWidth = 1.4 / zoom;
-        ctx.strokeRect(pk.cx - 6.5 / zoom, pk.cy - 6.5 / zoom, 13 / zoom, 13 / zoom);
-        ctx.fillStyle = '#10b981';
+      // 1. Draw target-specific Gaia DR3 stars in this field
+      coordCatalog.gaiaSources.forEach((src, idx) => {
+        // If this is the primary Gaia DR3 moving star (e.g. Barnard's Star, RW Aurigae, R Draconis), lock to its exact epoch pixel
+        let gx = src.dx;
+        let gy = src.dy;
+        const matchingGaiaCand =
+          idx === 0
+            ? candidates.find((c) => c.matchedCatalog === 'Gaia DR3')
+            : undefined;
+        if (matchingGaiaCand) {
+          const pos =
+            matchingGaiaCand.epochPositions[activeFrameIndex] ||
+            matchingGaiaCand.epochPositions[0];
+          const cPos = getCanvasCoords(pos.x, pos.y);
+          gx = cPos.cx;
+          gy = cPos.cy;
+        }
+        const isSelectedGaia =
+          selectedCand &&
+          selectedCand.matchedCatalog === 'Gaia DR3' &&
+          matchingGaiaCand?.id === selectedCand.id;
+
+        ctx.strokeStyle = isSelectedGaia ? '#34d399' : '#10b981';
+        ctx.lineWidth = (isSelectedGaia ? 2.2 : 1.5) / zoom;
+        const boxHalf = (isSelectedGaia ? 8.5 : 6.5) / zoom;
+        ctx.strokeRect(gx - boxHalf, gy - boxHalf, boxHalf * 2, boxHalf * 2);
+
+        // Label pill
+        const tag = `${isSelectedGaia ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillText(label, pk.cx + 9 / zoom, pk.cy - 5 / zoom);
+        ctx.fillStyle = 'rgba(6, 78, 59, 0.85)';
+        const tw = ctx.measureText(tag).width + 6 / zoom;
+        ctx.fillRect(gx + boxHalf + 3 / zoom, gy - 11 / zoom, tw, 11 / zoom);
+        ctx.fillStyle = '#6ee7b7';
+        ctx.fillText(tag, gx + boxHalf + 6 / zoom, gy - 3 / zoom);
       });
+
+      // If the user explicitly clicked a secondary Gaia DR3 candidate not at index 0, highlight its Gaia box too
+      if (
+        selectedCand &&
+        selectedCand.matchedCatalog === 'Gaia DR3' &&
+        candidates.find((c) => c.matchedCatalog === 'Gaia DR3')?.id !== selectedCand.id
+      ) {
+        const pos =
+          selectedCand.epochPositions[activeFrameIndex] ||
+          selectedCand.epochPositions[0];
+        const { cx: gx, cy: gy } = getCanvasCoords(pos.x, pos.y);
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 2.2 / zoom;
+        ctx.strokeRect(gx - 8 / zoom, gy - 8 / zoom, 16 / zoom, 16 / zoom);
+        ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = '#34d399';
+        ctx.fillText(
+          `★ ${selectedCand.catalogId || 'Gaia DR3 Match'} [F${activeFrameIndex + 1}]`,
+          gx + 10 / zoom,
+          gy - 4 / zoom
+        );
+      }
     }
 
     if (overlays.wise) {
-      const wisePeaks = framePeaks.filter((_, idx) => idx % 2 === 1).slice(0, 2);
-      if (wiseCandidate) {
-        const pos =
-          wiseCandidate.epochPositions[activeFrameIndex] ||
-          wiseCandidate.epochPositions[0];
-        const coords = getCanvasCoords(pos.x, pos.y);
-        wisePeaks.unshift({ cx: coords.cx, cy: coords.cy, lum: 255 });
-      }
-      wisePeaks.slice(0, 2).forEach((pk, idx) => {
-        const label =
-          idx === 0 && wiseCandidate?.catalogId
-            ? `${wiseCandidate.catalogId} [F${activeFrameIndex + 1}]`
-            : `${formatCatalogAtCanvasPx(pk.cx, pk.cy, 'wise')} [F${activeFrameIndex + 1}]`;
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 1.4 / zoom;
+      // 2. Draw target-specific AllWISE mid-infrared sources in this field
+      coordCatalog.wiseSources.forEach((src, idx) => {
+        let wx = src.dx;
+        let wy = src.dy;
+        const matchingWiseCand =
+          idx === 0
+            ? candidates.find((c) => c.matchedCatalog === 'WISE')
+            : undefined;
+        if (matchingWiseCand) {
+          const pos =
+            matchingWiseCand.epochPositions[activeFrameIndex] ||
+            matchingWiseCand.epochPositions[0];
+          const cPos = getCanvasCoords(pos.x, pos.y);
+          wx = cPos.cx;
+          wy = cPos.cy;
+        }
+        const isSelectedWise =
+          selectedCand &&
+          selectedCand.matchedCatalog === 'WISE' &&
+          matchingWiseCand?.id === selectedCand.id;
+
+        const rad = (isSelectedWise ? 9 : 7) / zoom;
+        ctx.strokeStyle = isSelectedWise ? '#fbbf24' : '#f59e0b';
+        ctx.lineWidth = (isSelectedWise ? 2.2 : 1.5) / zoom;
         ctx.beginPath();
-        ctx.arc(pk.cx, pk.cy, 7 / zoom, 0, Math.PI * 2);
+        ctx.arc(wx, wy, rad, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.fillStyle = '#f59e0b';
+
+        const tag = `${isSelectedWise ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillText(label, pk.cx + 10 / zoom, pk.cy + 11 / zoom);
+        ctx.fillStyle = 'rgba(69, 26, 3, 0.85)';
+        const tw = ctx.measureText(tag).width + 6 / zoom;
+        ctx.fillRect(wx + rad + 3 / zoom, wy + 2 / zoom, tw, 11 / zoom);
+        ctx.fillStyle = '#fde68a';
+        ctx.fillText(tag, wx + rad + 6 / zoom, wy + 10 / zoom);
       });
     }
+
+    // 3. Draw JPL Horizons Solar System Ephemeris crosshair when present in field (e.g. 3I/ATLAS, (4) Vesta)
+    const neoCandidate =
+      (selectedCand?.matchedCatalog === 'NEO Ephemeris' ? selectedCand : null) ||
+      candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
 
     if (overlays.solarSystemEphemeris && (neoCandidate || coordCatalog.ephemerisLabel)) {
       let ex = 0;
@@ -603,24 +562,50 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const offsetPx =
         neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
         neoCandidate?.validationData?.maxOffsetPx ??
-        0.42;
-      const ephLabel = `${
+        0.54;
+      const ephLabel = `★ ${
         neoCandidate?.validationData?.objectName ||
         neoCandidate?.catalogId ||
         coordCatalog.ephemerisLabel ||
         'JPL Horizons'
       } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
       ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 1.4 / zoom;
+      ctx.lineWidth = 1.8 / zoom;
       ctx.beginPath();
-      ctx.moveTo(ex - 9 / zoom, ey);
-      ctx.lineTo(ex + 9 / zoom, ey);
-      ctx.moveTo(ex, ey - 9 / zoom);
-      ctx.lineTo(ex, ey + 9 / zoom);
+      ctx.moveTo(ex - 10 / zoom, ey);
+      ctx.lineTo(ex + 10 / zoom, ey);
+      ctx.moveTo(ex, ey - 10 / zoom);
+      ctx.lineTo(ex, ey + 10 / zoom);
       ctx.stroke();
-      ctx.fillStyle = '#38bdf8';
       ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillText(ephLabel, ex + 10 / zoom, ey + 15 / zoom);
+      ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
+      const tw = ctx.measureText(ephLabel).width + 6 / zoom;
+      ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
+      ctx.fillStyle = '#7dd3fc';
+      ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
+    }
+
+    // 4. If the currently selected candidate is UNCATALOGUED (new moving track / flare / artifact),
+    // explicitly show a "No Catalog Match at Selected Object" callout tag right under it so switching objects visibly updates!
+    if (
+      selectedCand &&
+      !selectedCand.isKnownCatalogMatch &&
+      (overlays.gaiaDr3 || overlays.wise || overlays.solarSystemEphemeris)
+    ) {
+      const pos =
+        selectedCand.epochPositions[activeFrameIndex] ||
+        selectedCand.epochPositions[0];
+      const { cx: ux, cy: uy } = getCanvasCoords(pos.x, pos.y);
+      const uncatTag = `★ Selected Object: No Gaia/WISE/Horizons Match (${selectedCand.classification.replace('_', ' ')})`;
+      ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
+      const tw = ctx.measureText(uncatTag).width + 8 / zoom;
+      ctx.fillStyle = 'rgba(88, 28, 135, 0.88)';
+      ctx.fillRect(ux - tw / 2, uy + 20 / zoom, tw, 12 / zoom);
+      ctx.strokeStyle = '#c084fc';
+      ctx.lineWidth = 1 / zoom;
+      ctx.strokeRect(ux - tw / 2, uy + 20 / zoom, tw, 12 / zoom);
+      ctx.fillStyle = '#f3e8ff';
+      ctx.fillText(uncatTag, ux - tw / 2 + 4 / zoom, uy + 28.5 / zoom);
     }
 
     ctx.restore();
@@ -953,68 +938,31 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         </div>
       )}
 
-      {/* Simultaneous Background ML Analysis Banner */}
-      {mlAnalysisStatus && mlAnalysisStatus.state !== 'idle' && (
-        <div className="absolute bottom-11 left-2.5 right-2.5 sm:left-auto sm:right-2.5 sm:w-96 z-25 pointer-events-auto anim-fall">
-          {mlAnalysisStatus.state === 'running' ? (
-            <div className="bg-paper-950/95 backdrop-blur-md border-2 border-emerald-400/80 rounded-xl p-2.5 shadow-[0_0_25px_rgba(16,185,129,0.25)] space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-emerald-400 animate-spin shrink-0" />
-                  <span className="text-[11px] font-mono font-bold text-emerald-300">
-                    ML Analysis Running Simultaneously...
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-paper-200 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
-                  Step {mlAnalysisStatus.stepIndex}/3 · {mlAnalysisStatus.progress}%
+      {/* Simultaneous Background ML Analysis Banner (only shown while running to avoid right-side clutter) */}
+      {mlAnalysisStatus && mlAnalysisStatus.state === 'running' && (
+        <div className="absolute bottom-11 left-2.5 right-2.5 sm:left-auto sm:right-2.5 sm:w-88 z-25 pointer-events-auto anim-fall">
+          <div className="bg-paper-950/95 backdrop-blur-md border-2 border-emerald-400/80 rounded-xl p-2.5 shadow-[0_0_25px_rgba(16,185,129,0.25)] space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
+                <span className="text-[10px] font-mono font-bold text-emerald-300">
+                  ML Analysis Running Simultaneously...
                 </span>
               </div>
-              <p className="text-[10px] font-mono text-paper-300 truncate">
-                {mlAnalysisStatus.stage}
-              </p>
-              <div className="w-full h-1.5 bg-paper-900 rounded-full overflow-hidden border border-paper-800">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300"
-                  style={{ width: `${mlAnalysisStatus.progress}%` }}
-                />
-              </div>
+              <span className="text-[9px] font-mono font-bold text-paper-200 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
+                Step {mlAnalysisStatus.stepIndex}/3 · {mlAnalysisStatus.progress}%
+              </span>
             </div>
-          ) : (
-            <div className="bg-paper-950/95 backdrop-blur-md border-2 border-emerald-500/70 rounded-xl p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.2)] flex items-center justify-between gap-2.5">
-              <div className="min-w-0 space-y-0.5">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span className="text-[11px] font-mono font-bold text-emerald-300 truncate">
-                    ML Insights Ready · {mlAnalysisStatus.tracksDetected ?? candidates.length} Tracks Ranked
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono text-paper-400">
-                  {mlAnalysisStatus.topSpeedArcsecHr !== undefined && (
-                    <span>Speed: <strong className="text-paper-200">{mlAnalysisStatus.topSpeedArcsecHr}″/hr</strong></span>
-                  )}
-                  {mlAnalysisStatus.topFitRmsPx !== undefined && (
-                    <span>RMS: <strong className="text-emerald-400">{mlAnalysisStatus.topFitRmsPx} px</strong></span>
-                  )}
-                  {mlAnalysisStatus.latencyMs !== undefined && (
-                    <span>({(mlAnalysisStatus.latencyMs / 1000).toFixed(1)}s)</span>
-                  )}
-                </div>
-              </div>
-              {onOpenMlInsights && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onOpenMlInsights();
-                  }}
-                  className="btn-tactile-sm shrink-0 px-2.5 py-1.5 rounded-lg border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer"
-                >
-                  <span>Insights</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              )}
+            <p className="text-[10px] font-mono text-paper-300 truncate">
+              {mlAnalysisStatus.stage}
+            </p>
+            <div className="w-full h-1.5 bg-paper-900 rounded-full overflow-hidden border border-paper-800">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300"
+                style={{ width: `${mlAnalysisStatus.progress}%` }}
+              />
             </div>
-          )}
+          </div>
         </div>
       )}
 
