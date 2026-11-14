@@ -6,3 +6,6 @@ numpy
 matplotlib
 reproject
 photutils
+fastapi
+uvicorn
+Pillow

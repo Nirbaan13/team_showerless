@@ -41,6 +41,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
+  const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const [, setRepaintCount] = useState(0);
 
   // Smooth Zoom-in transition state when target changes
   const prevRaRef = useRef(centerRa);
@@ -188,7 +190,37 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.restore();
     }
 
-    if (!isDifferenceMode) {
+    const currentFrame = frames[activeFrameIndex];
+    let hasDrawnRealImage = false;
+
+    if (currentFrame?.imageDataUrl && !isDifferenceMode) {
+      let cachedImg = imgCacheRef.current.get(currentFrame.imageDataUrl);
+      if (!cachedImg) {
+        cachedImg = new Image();
+        cachedImg.src = currentFrame.imageDataUrl;
+        cachedImg.onload = () => {
+          setRepaintCount((c) => c + 1);
+        };
+        imgCacheRef.current.set(currentFrame.imageDataUrl, cachedImg);
+      }
+
+      if (cachedImg.complete && cachedImg.naturalWidth > 0) {
+        ctx.save();
+        ctx.imageSmoothingEnabled = false;
+        const aspect = cachedImg.naturalWidth / cachedImg.naturalHeight;
+        const imgW = 512;
+        const imgH = 512 / aspect;
+        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.88;
+        if (isWhiteBg) {
+          ctx.filter = 'invert(1)';
+        }
+        ctx.drawImage(cachedImg, -imgW / 2, -imgH / 2, imgW, imgH);
+        ctx.restore();
+        hasDrawnRealImage = true;
+      }
+    }
+
+    if (!isDifferenceMode && !hasDrawnRealImage) {
       staticStars.forEach((star) => {
         const grad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.mag * 3);
         if (isWhiteBg) {
@@ -426,7 +458,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();

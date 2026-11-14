@@ -5,6 +5,7 @@ import type {
   SpectralDataPoint,
   MolecularLine,
 } from '../types/spherex';
+import { REAL_3I_ATLAS_FRAMES } from './realSpherexFrames';
 
 export const NASA_TEST_PRESETS: TargetPreset[] = [
   {
@@ -120,6 +121,7 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
       flaggedPixelPercentage: 0.12,
       cosmicRayHits: 8,
       isAvailable: true,
+      imageDataUrl: REAL_3I_ATLAS_FRAMES[idx]?.pngDataUrl,
       headerMetadata: {
         exposureTimeSec: 142.5,
         airmass: 1.0,

@@ -116,6 +116,7 @@ export function generateFallbackObservations(query: SkyQueryRequest): Observatio
       snr_estimated: Number((24.5 - idx * 0.7).toFixed(1)),
       flagged_pixel_percentage: Number((0.4 + idx * 0.2).toFixed(2)),
       cosmic_ray_hits: 12 + idx * 3,
+      image_data_url: `${BACKEND_BASE_URL.replace(/:\d+$/, '')}:8002/api/cutout/render?ra=${query.right_ascension_deg}&dec=${query.declination_deg}&size_arcmin=${query.width_arcmin || 3}`,
     },
   }));
 }
@@ -145,6 +146,7 @@ export function convertObservationsToEpochFrames(
     ),
     isAvailable: obs.is_available,
     skipReason: obs.skip_reason,
+    imageDataUrl: obs.header_metadata?.image_data_url,
     headerMetadata: {
       exposureTimeSec: Number(obs.header_metadata?.exposure_time_sec ?? 142.5),
       airmass: Number(obs.header_metadata?.airmass ?? 1.0),
