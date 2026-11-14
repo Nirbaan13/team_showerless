@@ -18,7 +18,7 @@ interface LeftControlPanelProps {
   overlays: CatalogOverlayState;
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
-  viewMode?: 'explorer' | 'scientist';
+  viewMode?: 'volunteer' | 'scientist';
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -35,7 +35,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
-  viewMode = 'explorer',
+  viewMode = 'volunteer',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));

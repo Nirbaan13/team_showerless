@@ -108,6 +108,35 @@ export const HomePage: React.FC<HomePageProps> = ({
           )}
         </div>
 
+        {/* Real SPHEREx Interim Results Feature Card */}
+        <div
+          onClick={() => onSelectPreset(NASA_TEST_PRESETS[0])}
+          className="w-full p-4 rounded-2xl bg-paper-900 border-2 border-emerald-500/80 card-tactile cursor-pointer hover:border-emerald-400 text-left transition-all group"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-mono font-bold text-xs text-emerald-400 uppercase tracking-wider">
+                Real Interim Result: 3I/ATLAS Comet
+              </span>
+            </div>
+            <span className="text-[10px] font-mono text-paper-300 bg-paper-950 px-2 py-0.5 rounded border border-paper-700">
+              NASA/IPAC IRSA QR2
+            </span>
+          </div>
+
+          <p className="text-xs text-paper-300 font-sans leading-relaxed">
+            Detector found interstellar comet <strong className="text-white">3I/ATLAS</strong> in all 4 real SPHEREx exposures within <strong className="text-emerald-300">0.54 pixels</strong> of predicted ephemeris. Track ranked <strong>#1 of 25</strong> (Baseline) and <strong>#2 of 25</strong> (Random Forest ML).
+          </p>
+
+          <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-emerald-400 pt-2 border-t border-paper-800/80">
+            <span>RA 166.790° • Dec +05.290° (Band 6: 4.47–4.85 µm)</span>
+            <span className="group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold">
+              Load Real Exposures →
+            </span>
+          </div>
+        </div>
+
         {/* Benchmark Presets: Styled like GitIngest's example repo pills */}
         <div className="w-full space-y-3 pt-6 border-t border-paper-800/80">
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-mono text-paper-400">

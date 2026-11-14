@@ -76,6 +76,16 @@ export interface CandidateObject {
   matchedCatalog?: 'Gaia DR3' | 'WISE' | 'NEO Ephemeris' | null;
   catalogId?: string;
   properMotionMasYr?: { pmRa: number; pmDec: number };
+  validationData?: {
+    objectName: string;
+    maxOffsetPx: number;
+    baselineRank: number;
+    totalCandidates: number;
+    randomForestRank: number;
+    datasetDoi: string;
+    sourceUrl: string;
+    exposuresCount: number;
+  };
 }
 
 export interface SpectralDataPoint {

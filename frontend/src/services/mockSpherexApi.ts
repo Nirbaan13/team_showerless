@@ -8,6 +8,18 @@ import type {
 
 export const NASA_TEST_PRESETS: TargetPreset[] = [
   {
+    id: '3i-atlas',
+    name: '3I/ATLAS',
+    subtitle: 'Interstellar Comet (Real SPHEREx Detection)',
+    raHms: '11h 07m 09.6s',
+    decDms: '+05° 17\' 24.0"',
+    raDeg: 166.790000,
+    decDeg: 5.290000,
+    description: 'Real NASA/IPAC IRSA QR2 detection across 4 exposures. Offset within 0.54 px of ephemeris. Ranked #1/25 baseline & #2/25 Random Forest.',
+    recommendedArray: 6,
+    expectedClass: 'moving_object',
+  },
+  {
     id: 'barnards-star',
     name: "Barnard's Star",
     subtitle: 'High Proper Motion Red Dwarf',
@@ -89,6 +101,34 @@ export const DETECTOR_ARRAY_SPECS = [
  * Generates simulated multi-epoch frames for the celestial viewport.
  */
 export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
+  // Real SPHEREx Interim Results: 3I/ATLAS (NASA/IPAC IRSA Quick Release 2)
+  if (targetId === '3i-atlas') {
+    const realObservations = [
+      { id: '2025W50_2A_0741_2D6', date: '2025-12-14T11:01:45.688Z', wave: 4.475, snr: 12.1, offset: 0.421 },
+      { id: '2025W50_2A_0755_2D6', date: '2025-12-14T12:39:42.784Z', wave: 4.608, snr: 13.4, offset: 0.263 },
+      { id: '2025W50_2A_0797_4D6', date: '2025-12-14T17:33:31.003Z', wave: 4.813, snr: 14.8, offset: 0.246 },
+      { id: '2025W50_2A_0813_1D6', date: '2025-12-14T19:06:21.122Z', wave: 4.847, snr: 14.2, offset: 0.539 },
+    ];
+    return realObservations.map((obs, idx) => ({
+      frameId: obs.id,
+      epochIndex: idx,
+      observationDate: obs.date,
+      detectorArray: 6 as any,
+      wavelengthMinUm: 4.42,
+      wavelengthMaxUm: 5.00,
+      channelIndex: 94 + idx * 2,
+      flaggedPixelPercentage: 0.12,
+      cosmicRayHits: 8,
+      isAvailable: true,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.0,
+        zodiBrightnessMjySr: 12.43,
+        snrEstimated: obs.snr,
+      }
+    }));
+  }
+
   const dates = [
     '2025-06-15T04:12:00Z',
     '2025-09-22T11:45:00Z',
@@ -140,6 +180,40 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
  * Generates mock candidate objects in the field of view.
  */
 export function getMockCandidates(targetId: string): CandidateObject[] {
+  if (targetId === '3i-atlas') {
+    return [
+      {
+        id: '3I/ATLAS',
+        ra: 166.790000,
+        dec: 5.290000,
+        pixelX: 195,
+        pixelY: 47,
+        epochPositions: [
+          { epochIndex: 0, x: 19, y: 108, flux: 18.4, snr: 12.1 },
+          { epochIndex: 1, x: 63, y: 93, flux: 19.2, snr: 13.4 },
+          { epochIndex: 2, x: 195, y: 47, flux: 21.0, snr: 14.8 },
+          { epochIndex: 3, x: 237, y: 32, flux: 20.5, snr: 14.2 },
+        ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: 'Interstellar comet track matched across all 4 real SPHEREx exposures. Max offset 0.539 px from ephemeris. Ranked #1/25 baseline & #2/25 Random Forest.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'NEO Ephemeris',
+        catalogId: '3I/ATLAS (C/2024 S1)',
+        validationData: {
+          objectName: '3I/ATLAS',
+          maxOffsetPx: 0.539,
+          baselineRank: 1,
+          totalCandidates: 25,
+          randomForestRank: 2,
+          datasetDoi: '10.26131/IRSA652',
+          sourceUrl: 'https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html',
+          exposuresCount: 4,
+        }
+      }
+    ];
+  }
+
   if (targetId === 'barnards-star') {
     return [
       {

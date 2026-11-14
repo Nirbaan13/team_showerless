@@ -24,13 +24,40 @@ import { RightDrawer } from './components/RightDrawer';
 import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
+import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { Compass, Home } from 'lucide-react';
 
 export function App() {
   // Opens on the clean Home page by default as requested
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('home');
-  const [telemetryMode, setTelemetryMode] = useState<'explorer' | 'scientist'>('explorer');
+
+  const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
+    try {
+      const saved = localStorage.getItem('spherex_view_mode');
+      if (saved === 'volunteer' || saved === 'scientist') return saved;
+    } catch {
+      // sandboxed
+    }
+    return 'volunteer';
+  });
+
+  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('spherex_view_mode') === null;
+    } catch {
+      return false;
+    }
+  });
+
+  const handleSetViewMode = (mode: 'volunteer' | 'scientist') => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem('spherex_view_mode', mode);
+    } catch {
+      // sandboxed
+    }
+  };
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
   const [ra, setRa] = useState<number>(269.452075);
@@ -230,28 +257,28 @@ export function App() {
           </nav>
         </div>
 
-        {/* Global Explorer vs Scientist Mode Switch (Always Visible) */}
+        {/* Global Volunteer vs Scientist View Switch */}
         <div className="flex items-center gap-2">
           <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
-              onClick={() => setTelemetryMode('explorer')}
-              className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
-                telemetryMode === 'explorer'
+              onClick={() => handleSetViewMode('volunteer')}
+              className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                viewMode === 'volunteer'
                   ? 'bg-emerald-400 text-gray-950'
                   : 'text-paper-400 hover:text-paper-100'
               }`}
-              title="Explorer View: Clean, intuitive labels for public & citizen science volunteers"
+              title="Volunteer View: Intuitive starfield for citizen science & candidate triage"
             >
-              Explorer
+              Volunteer
             </button>
             <button
-              onClick={() => setTelemetryMode('scientist')}
-              className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
-                telemetryMode === 'scientist'
+              onClick={() => handleSetViewMode('scientist')}
+              className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                viewMode === 'scientist'
                   ? 'bg-emerald-400 text-gray-950'
                   : 'text-paper-400 hover:text-paper-100'
               }`}
-              title="Scientist View: Full astrophysics metadata (wavelengths, resolving power, and FITS levels)"
+              title="Scientist View: Astrophysics research HUD, celestial coordinates, and FITS telemetry"
             >
               Scientist
             </button>
@@ -306,7 +333,7 @@ export function App() {
             overlays={overlays}
             onToggleOverlay={handleToggleOverlay}
             onRefreshCutout={handleRefreshCutout}
-            viewMode={telemetryMode}
+            viewMode={viewMode}
           />
 
           <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
@@ -322,7 +349,7 @@ export function App() {
               centerDec={dec}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
-              isScientistMode={telemetryMode === 'scientist'}
+              isScientistMode={viewMode === 'scientist'}
             />
 
             <MoviePlayerControls
@@ -340,7 +367,7 @@ export function App() {
             />
           </main>
 
-          {/* Right Drawer: Resizable & Expandable Chat / Triage */}
+          {/* Right Drawer: Resizable & Expandable Triage & Telemetry */}
           <RightDrawer
             frames={frames}
             activeFrameIndex={activeFrameIndex}
@@ -349,7 +376,7 @@ export function App() {
             spectrumData={spectrumData}
             onUpdateCandidateClassification={handleUpdateCandidateClassification}
             onOpenDiscoveryReport={() => setActiveTab('report')}
-            isScientistMode={telemetryMode === 'scientist'}
+            isScientistMode={viewMode === 'scientist'}
           />
         </div>
       )}
@@ -364,6 +391,14 @@ export function App() {
         selectedArray={selectedArray}
         subtractionMode={subtractionMode}
         activeFrameIndex={activeFrameIndex}
+      />
+
+      {/* Choose Your View Assessment Pop-up Modal */}
+      <ChooseYourViewModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        currentMode={viewMode}
+        onSelectMode={handleSetViewMode}
       />
     </div>
   );

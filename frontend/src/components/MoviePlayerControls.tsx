@@ -32,7 +32,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
   return (
     <div className="h-16 bg-paper-900 border-t border-paper-800 px-4 flex items-center justify-between text-xs select-none z-20">
       {/* 1. Playback Engine Controls */}
-      <div className="flex items-center space-x-1.5">
+      <div className="flex items-center space-x-1.5 shrink-0">
         <button
           onClick={onStepBackward}
           className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
@@ -82,7 +82,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
       </div>
 
       {/* 2. Epoch Timeline Scrubber */}
-      <div className="flex-1 max-w-xl mx-6 flex flex-col space-y-1">
+      <div className="flex-1 min-w-0 max-w-xl mx-2 sm:mx-4 md:mx-6 flex flex-col space-y-1">
         <div className="flex items-center justify-between text-[11px] font-mono">
           <div className="flex items-center gap-1 text-paper-400">
             <Clock className="w-3 h-3 text-emerald-400" />
@@ -94,7 +94,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         </div>
 
         {/* Multi-Epoch Frame Buttons */}
-        <div className="flex items-center space-x-1.5">
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5">
           {frames.map((frame, idx) => {
             const isActive = idx === activeFrameIndex;
             const isMissing = !frame.isAvailable;
@@ -104,7 +104,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
                 key={frame.frameId}
                 disabled={isMissing}
                 onClick={() => onSelectFrame(idx)}
-                className={`btn-tactile-sm flex-1 py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
+                className={`btn-tactile-sm flex-1 min-w-[70px] py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
                   isMissing
                     ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
                     : isActive
@@ -125,11 +125,11 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
       </div>
 
       {/* 3. FPS Speed Control */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 shrink-0">
         <div className="flex items-center gap-1.5 bg-paper-950 border border-paper-800 px-2.5 py-1 rounded">
           <FastForward className="w-3 h-3 text-paper-400" />
           <span className="text-[10px] font-mono text-paper-400">Speed:</span>
-          <span className="font-mono text-ochre-300 font-semibold text-[11px] w-9 text-right">
+          <span className="font-mono text-emerald-300 font-semibold text-[11px] w-9 text-right">
             {fps} fps
           </span>
           <input
@@ -138,7 +138,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
             max="10"
             value={fps}
             onChange={(e) => onChangeFps(parseInt(e.target.value, 10))}
-            className="w-16 accent-amber-500 h-1 bg-paper-800 rounded cursor-pointer"
+            className="w-14 sm:w-16 accent-emerald-400 h-1 bg-paper-800 rounded cursor-pointer"
           />
         </div>
       </div>
