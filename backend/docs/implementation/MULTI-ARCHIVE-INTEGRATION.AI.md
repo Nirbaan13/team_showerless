@@ -160,7 +160,7 @@ Final offline verification on 2026-11-14 after merging frontend-only main
   live tests ignored.
 - `./sbtw test stage`: 153 passed, zero failed, two optional live tests ignored;
   staged runtime built successfully. The 104 existing SPHEREx tests remain green.
-- `git diff --check` and deployment/bootstrap/test shell syntax checks passed.
+- The branch diff passed `git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol diff --check origin/main..HEAD`; original HTTP fixture CRLF bytes are retained. Deployment/bootstrap/test shell syntax checks passed.
 - OpenAPI validation retained all 14 legacy paths and 17 legacy schemas
   structurally, and added exactly seven archive paths.
 - The staged `spaceapps.bootstrap.Main` started with a fresh isolated `DATA_DIR`,
