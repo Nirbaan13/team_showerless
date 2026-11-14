@@ -1,0 +1,11 @@
+**
+!ml/
+!ml/*.py
+!ml/*.txt
+!ml/*.json
+!ml/*.npz
+!ml/*.png
+!ml/*.md
+!science/
+!science/motion/
+!science/motion/*.py

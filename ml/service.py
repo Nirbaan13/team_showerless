@@ -4,7 +4,9 @@ Exposes REST endpoints for moving-object track detection and NASA 3I/ATLAS comet
 """
 
 import json
+from datetime import date, datetime, timezone
 from pathlib import Path
+from threading import BoundedSemaphore
 from typing import List, Optional
 
 import numpy as np
@@ -13,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from detector import find_candidates
+from science.motion.live import SearchError, search_motion
 
 app = FastAPI(
     title="SPHEREx Blink ML Inference Service",
@@ -29,6 +32,32 @@ app.add_middleware(
 )
 
 DIR_PATH = Path(__file__).resolve().parent
+MOTION_SLOTS = BoundedSemaphore(2)
+
+
+class MotionSearchRequest(BaseModel):
+    ra_deg: float = Field(ge=0, lt=360)
+    dec_deg: float = Field(gt=-90, lt=90)
+    detector: int = Field(ge=1, le=6)
+    start_date: date
+    end_date: date
+    size_arcmin: float = Field(default=15, ge=2, le=30)
+    retain_outliers: bool = True
+
+
+@app.post('/api/motion/search')
+def live_motion_search(req: MotionSearchRequest):
+    if not 0 <= (req.end_date - req.start_date).days <= 6 or req.end_date > datetime.now(timezone.utc).date():
+        raise HTTPException(422, 'Choose an ordered date range of up to 7 days ending today or earlier (UTC).')
+    if not MOTION_SLOTS.acquire(blocking=False):
+        raise HTTPException(503, 'Both motion search slots are busy. Try again shortly.')
+    try:
+        return search_motion(req.ra_deg, req.dec_deg, req.detector, req.start_date, req.end_date,
+                             req.size_arcmin, req.retain_outliers)
+    except SearchError as exc:
+        raise HTTPException(exc.status, str(exc)) from exc
+    finally:
+        MOTION_SLOTS.release()
 
 
 class DetectionRequest(BaseModel):

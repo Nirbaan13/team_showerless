@@ -6,7 +6,10 @@ ephemerides are never inputs to the model.
 
 import numpy as np
 
-from detector import find_candidates
+if __package__:
+    from .detector import find_candidates
+else:
+    from detector import find_candidates
 
 TRAINING_FIELDS = 80
 MATCH_TOLERANCE = 1.5

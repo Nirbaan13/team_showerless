@@ -48,6 +48,25 @@ def align_exposure(path, sky_ra, sky_dec, retain_outliers, include_bloom):
         return header['MJD-AVG'], header['DATE-AVG'], path.stem, projected, flagged > 0, bloom
 
 
+def grid_coordinates(ra, dec, width, height, pixel_scale):
+    grid = make_grid(ra, dec, width, height, pixel_scale)
+    yy, xx = np.indices((height, width))
+    return grid, grid.pixel_to_world_values(xx, yy)
+
+
+def stack_payload(rows, center, pixel_scale, retain_outliers):
+    mjd, dates, ids, images, flags, bloom = zip(*sorted(rows, key=lambda row: row[0]))
+    times = (np.array(mjd) - mjd[0]) * 24
+    if not np.isfinite(times).all() or np.any(np.diff(times) <= 0) or len(set(ids)) != len(ids):
+        raise ValueError('Observation IDs and exposure midpoints must be unique and valid')
+    payload = dict(images=np.array(images, dtype='float32'), times=times, dates=dates,
+                   observation_ids=ids, outlier=np.array(flags), center_deg=center,
+                   pixel_scale_arcsec=pixel_scale, retain_outliers=retain_outliers)
+    if bloom[0] is not None:
+        payload['bloom'] = np.stack(bloom)
+    return payload
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('fits', type=Path, nargs='+', metavar='FITS', help='Cutouts named by observation ID')
@@ -65,26 +84,15 @@ def main():
             or not 0 <= ra < 360 or not -90 < dec < 90 or not 0 < args.pixel_scale <= 60):
         parser.error('Use at least three exposures, a sky center in degrees, and a grid from 8 to 512 pixels')
 
-    grid = make_grid(*args.center, width, height, args.pixel_scale)
-    yy, xx = np.indices((height, width))
-    sky_ra, sky_dec = grid.pixel_to_world_values(xx, yy)
+    grid, (sky_ra, sky_dec) = grid_coordinates(*args.center, width, height, args.pixel_scale)
     try:
         rows = [align_exposure(path, sky_ra, sky_dec, args.retain_outliers, args.include_bloom) for path in args.fits]
-        mjd, dates, ids, images, flags, bloom = zip(*sorted(rows, key=lambda row: row[0]))
-        times = (np.array(mjd) - mjd[0]) * 24
-        if np.any(np.diff(times) <= 0) or len(set(ids)) != len(ids):
-            raise ValueError('Observation IDs and exposure midpoints must be unique')
-        payload = dict(images=np.array(images, dtype='float32'), times=times, dates=dates,
-                       observation_ids=ids, outlier=np.array(flags),
-                       center_deg=args.center, pixel_scale_arcsec=args.pixel_scale,
-                       retain_outliers=args.retain_outliers)
-        if args.include_bloom:
-            payload['bloom'] = np.stack(bloom)
+        payload = stack_payload(rows, args.center, args.pixel_scale, args.retain_outliers)
         if args.ephemeris:
             with args.ephemeris.open(newline='') as source:
                 values = {row['observation_id']: (float(row['ra_deg']), float(row['dec_deg']))
                           for row in csv.DictReader(source)}
-            target_ra, target_dec = np.array([values[identifier] for identifier in ids]).T
+            target_ra, target_dec = np.array([values[identifier] for identifier in payload['observation_ids']]).T
             x, y = grid.world_to_pixel_values(target_ra, target_dec)
             payload['expected_xy'] = np.column_stack((x, y))
     except (KeyError, OSError, ValueError) as error:

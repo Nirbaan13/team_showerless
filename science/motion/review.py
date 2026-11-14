@@ -11,8 +11,12 @@ from pathlib import Path
 import numpy as np
 from scipy.ndimage import center_of_mass, label, map_coordinates
 
-from detector import difference_frames, filtered_evidence, find_candidates, link_detections
-from ranker import TRAINING_FIELDS, random_forest_order, train_random_forest
+if __package__:
+    from .detector import difference_frames, filtered_evidence, find_candidates, link_detections
+    from .ranker import TRAINING_FIELDS, random_forest_order, train_random_forest
+else:
+    from detector import difference_frames, filtered_evidence, find_candidates, link_detections
+    from ranker import TRAINING_FIELDS, random_forest_order, train_random_forest
 
 PIXEL_RADIUS = 14
 MIN_SUPPORT = 0.8
@@ -148,15 +152,20 @@ def best_match(tracks, expected):
 
 def make_review(path, max_speed=60, forest=None):
     with np.load(path) as data:
-        images = data['images'].astype(float)
-        times, dates, ids = data['times'], data['dates'], data['observation_ids']
-        outlier = data['outlier']
-        expected = data.get('expected_xy')
-        bloom = data.get('bloom')
-        grid = (*map(float, data['center_deg']), float(data['pixel_scale_arcsec']))
-        retains_outliers = bool(data['retain_outliers'])
+        target, detector, source = SERIES.get(path.stem, (None, None, None))
+        return build_review(data, path.stem, target, detector, source, max_speed=max_speed, forest=forest)
+
+
+def build_review(data, series_id, target, detector, source, *, max_speed=60, forest=None, track_limit=None):
+    images = data['images'].astype(float)
+    times, dates, ids = data['times'], data['dates'], data['observation_ids']
+    outlier = data['outlier']
+    expected = data.get('expected_xy')
+    bloom = data.get('bloom')
+    grid = (*map(float, data['center_deg']), float(data['pixel_scale_arcsec']))
+    retains_outliers = bool(data['retain_outliers'])
     if expected is not None and (expected.shape != (len(images), 2) or not np.isfinite(expected).all()):
-        raise ValueError(f'{path.name} needs one finite ephemeris position per exposure')
+        raise ValueError(f'{series_id} needs one finite ephemeris position per exposure')
     settings = {'max_speed': max_speed, 'min_support': MIN_SUPPORT, 'psf_sigma': PSF_SIGMA}
     tracks = find_candidates(images, times, leave_one_out=True, **settings)
     forest_order = random_forest_order(forest, tracks) if forest is not None else []
@@ -188,9 +197,8 @@ def make_review(path, max_speed=60, forest=None):
     if bloom is not None:
         for frame, mask in zip(frames, bloom):
             frame['bloom'] = png_url(stretch(mask, 0, 1))
-    target, detector, source = SERIES.get(path.stem, (None, None, None))
     return {
-        'id': path.stem,
+        'id': series_id,
         'target': target,
         'detector': detector,
         'source': source,
@@ -206,10 +214,10 @@ def make_review(path, max_speed=60, forest=None):
         'tracks': [{**candidate_record(track, index + 1, images, times, significance, supports,
                                        outlier, expected, grid),
                     'random_forest_rank': forest_ranks.get(index)}
-                   for index, track in enumerate(tracks)],
+                   for index, track in enumerate(tracks[:track_limit])],
         'bloom_tracks': [candidate_record(track, index + 1, images, times, significance, supports,
                                           outlier, expected, grid, bloom=bloom)
-                         for index, track in enumerate(bloom_tracks)],
+                         for index, track in enumerate(bloom_tracks[:track_limit])],
         'comparison': {
             'shared_median': {'candidates': len(baseline), 'match': best_match(baseline, expected)},
             'leave_one_out': {'candidates': len(tracks), 'match': best_match(tracks, expected)},

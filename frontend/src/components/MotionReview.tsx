@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Crosshair, Download, ExternalLink, Pause, Play } from 'lucide-react';
 
 type TrackMatch = { rank: number; exposures: number; max_offset_px: number };
@@ -23,7 +23,7 @@ type Candidate = {
   motion_stack: string;
   stack_contributing_exposures: number;
 };
-type Frame = { id: string; time: string; coverage: number; aligned: string; residual: string; bloom?: string };
+type Frame = { id: string; time: string; coverage: number; aligned: string; residual: string; bloom?: string; archive_url?: string; release?: string };
 type SearchResult = { candidates: number; match: TrackMatch | null };
 type Review = {
   id: string;
@@ -42,6 +42,13 @@ type Review = {
   tracks: Candidate[];
   bloom_tracks: Candidate[];
   comparison: { shared_median: SearchResult; leave_one_out: SearchResult; outliers_masked: SearchResult; random_forest: SearchResult | null; bloom: SearchResult | null };
+  live_search?: {
+    archive_exposures: number;
+    archive_visits: number;
+    attempted_exposures: number;
+    skipped: { observation_id: string; reason: string }[];
+    result_limit_per_method: number;
+  };
 };
 type Ranking = 'heuristic' | 'forest' | 'bloom';
 type Layer = 'aligned' | 'residual' | 'bloom';
@@ -63,7 +70,7 @@ function exportCandidate(review: Review, candidate: Candidate) {
     source: review.source,
     ranking: {
       rank: candidate.rank,
-      total: isBloom ? review.bloom_tracks.length : review.tracks.length,
+      total: (isBloom ? review.comparison.bloom : review.comparison.leave_one_out)?.candidates ?? 0,
       method: candidate.method,
       random_forest_rank: candidate.random_forest_rank ?? null,
       random_forest_simulated_training_fields: isBloom ? null : review.simulated_training_fields,
@@ -76,6 +83,8 @@ function exportCandidate(review: Review, candidate: Candidate) {
     retains_outlier_pixels: review.retains_outliers,
     detections: candidate.epochs.map((epoch, index) => ({
       observation_id: review.frames[epoch].id,
+      archive_url: review.frames[epoch].archive_url,
+      release: review.frames[epoch].release,
       utc_midpoint: review.frames[epoch].time,
       x_px: candidate.positions_xy[index][0],
       y_px: candidate.positions_xy[index][1],
@@ -107,6 +116,7 @@ function MotionField({ review }: { review: Review }) {
     ? [...review.tracks].sort((a, b) => (a.random_forest_rank ?? a.rank) - (b.random_forest_rank ?? b.rank))
     : review.tracks;
   const candidate = ranked[trackIndex];
+  const totalTracks = (ranking === 'bloom' ? review.comparison.bloom : review.comparison.leave_one_out)?.candidates ?? 0;
   const frame = review.frames[frameIndex];
   const detection = candidate?.epochs.indexOf(frameIndex) ?? -1;
   const position = candidate?.positions_xy[detection];
@@ -159,7 +169,8 @@ function MotionField({ review }: { review: Review }) {
           ))}
         </div>
         <div className="flex flex-wrap justify-between gap-2 text-xs text-paper-400 font-mono break-all">
-          <span>{frame.id}</span><span>{(frame.coverage * 100).toFixed(1)}% valid pixels</span>
+          {frame.archive_url ? <a className="hover:underline" href={frame.archive_url} target="_blank" rel="noreferrer">{frame.id} · {frame.release} FITS</a> : <span>{frame.id}</span>}
+          <span>{(frame.coverage * 100).toFixed(1)}% valid pixels</span>
         </div>
         {candidate && (
           <section className="rounded-xl border border-paper-800 bg-paper-900 p-4 space-y-3" aria-labelledby="motion-stack-label">
@@ -182,7 +193,7 @@ function MotionField({ review }: { review: Review }) {
 
       <aside className="space-y-4" aria-label="Candidate evidence">
         <section className="rounded-xl border border-paper-800 bg-paper-900 p-4 space-y-3">
-          <h3 className="font-semibold">Ranked candidates <span className="text-paper-400 text-xs font-mono">{ranked.length}</span></h3>
+          <h3 className="font-semibold">Ranked candidates <span className="text-paper-400 text-xs font-mono">{ranked.length}{totalTracks > ranked.length && ` of ${totalTracks}`}</span></h3>
           <div className="flex flex-wrap gap-1.5" aria-label="Ranking method">
             <button type="button" className={`${toggleStyle} ${ranking === 'heuristic' ? active : inactive}`} aria-pressed={ranking === 'heuristic'} onClick={() => selectRanking('heuristic')}>Heuristic</button>
             {review.comparison.random_forest && <button type="button" className={`${toggleStyle} ${ranking === 'forest' ? active : inactive}`} aria-pressed={ranking === 'forest'} onClick={() => selectRanking('forest')}>Random Forest</button>}
@@ -242,10 +253,20 @@ function MotionField({ review }: { review: Review }) {
   );
 }
 
-export function MotionReview() {
+export function MotionReview({ ra, dec, detector }: { ra: number; dec: number; detector: number | 'all' }) {
   const [reviews, setReviews] = useState<Review[] | null>(null);
   const [selected, setSelected] = useState(0);
   const [status, setStatus] = useState<'loading' | 'failed'>('loading');
+  const [live, setLive] = useState<Review | null>(null);
+  const [mode, setMode] = useState<'live' | 'saved'>('saved');
+  const [searching, setSearching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const request = useRef<AbortController | null>(null);
+
+  useEffect(() => () => {
+    request.current?.abort();
+    request.current = null;
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -264,7 +285,54 @@ export function MotionReview() {
     return () => controller.abort();
   }, []);
 
-  const review = reviews?.[selected];
+  async function search(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const values = new FormData(event.currentTarget);
+    const controller = new AbortController();
+    request.current?.abort();
+    request.current = controller;
+    setLive(null);
+    setSearching(true);
+    setError(null);
+    const timeout = window.setTimeout(() => controller.abort('timeout'), 290000);
+    try {
+      const response = await fetch('/api/motion/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          ra_deg: Number(values.get('ra')), dec_deg: Number(values.get('dec')),
+          detector: Number(values.get('detector')), size_arcmin: Number(values.get('size')),
+          start_date: values.get('start'), end_date: values.get('end'),
+          retain_outliers: values.get('outliers') === 'on',
+        }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data?.live_search || !data?.frames?.length) {
+        throw new Error(typeof data?.detail === 'string' ? data.detail : 'Motion service unavailable or invalid search parameters.');
+      }
+      if (request.current === controller) setLive(data as Review);
+    } catch (err) {
+      if (request.current !== controller) return;
+      if (controller.signal.reason === 'timeout') setError('The archive search timed out. Try a smaller date range or field.');
+      else if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Motion search failed.');
+    } finally {
+      window.clearTimeout(timeout);
+      if (request.current === controller && (!controller.signal.aborted || controller.signal.reason === 'timeout')) {
+        request.current = null;
+        setSearching(false);
+      }
+    }
+  }
+
+  function cancelSearch() {
+    request.current?.abort();
+    request.current = null;
+    setSearching(false);
+  }
+
+  const review = mode === 'live' ? live : reviews?.[selected];
+  const inputStyle = 'mt-1 block w-full rounded-md border border-paper-700 bg-paper-950 p-2 text-paper-100';
   return (
     <main className="flex-1 min-h-0 overflow-y-auto bg-paper-950" aria-labelledby="motion-review-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 py-6 sm:py-8 space-y-5">
@@ -275,13 +343,42 @@ export function MotionReview() {
           </div>
           {review?.source && <a href={review.source} target="_blank" rel="noreferrer" className="inline-flex gap-1.5 items-center text-xs text-emerald-200 hover:underline">NASA/IPAC IRSA observations <ExternalLink size={13} /></a>}
         </header>
-        {!review && <p role={status === 'failed' ? 'alert' : 'status'} className="text-sm text-paper-400">{status === 'failed' ? 'Unavailable: the observation bundle could not be loaded.' : 'Loading SPHEREx observations…'}</p>}
-        {review && <>
+        <div className="flex flex-wrap gap-2" aria-label="Data source">
+          <button type="button" className={`${toggleStyle} ${mode === 'live' ? active : inactive}`} aria-pressed={mode === 'live'} onClick={() => setMode('live')}>Live archive search</button>
+          <button type="button" className={`${toggleStyle} ${mode === 'saved' ? active : inactive}`} aria-pressed={mode === 'saved'} onClick={() => setMode('saved')}>Saved observations</button>
+        </div>
+        <section hidden={mode !== 'live'} aria-label="Search SPHEREx" className="rounded-xl border border-paper-800 p-4 space-y-3">
+          <form className="space-y-3" onSubmit={search}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs text-paper-300">
+              <label>RA (degrees)<input className={inputStyle} name="ra" type="number" required min="0" max="359.999999999" step="any" defaultValue={ra} /></label>
+              <label>Dec (degrees)<input className={inputStyle} name="dec" type="number" required min="-89.999999999" max="89.999999999" step="any" defaultValue={dec} /></label>
+              <label>Detector<select className={inputStyle} name="detector" defaultValue={detector === 'all' ? 6 : detector}>{[1, 2, 3, 4, 5, 6].map(value => <option key={value} value={value}>D{value}</option>)}</select></label>
+              <label>Field size (arcmin)<input className={inputStyle} name="size" type="number" required min="2" max="30" step="any" defaultValue={15} /></label>
+              <label>Start date (UTC)<input className={inputStyle} name="start" type="date" required /></label>
+              <label>End date (UTC)<input className={inputStyle} name="end" type="date" required /></label>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button className={`${toggleStyle} ${active} disabled:opacity-50`} disabled={searching}>Find moving objects</button>
+              {searching && <button type="button" className={`${toggleStyle} ${inactive}`} onClick={cancelSearch}>Cancel</button>}
+              <label className="inline-flex items-center gap-2 text-xs text-paper-300"><input type="checkbox" name="outliers" defaultChecked /> Retain OUTLIER pixels</label>
+              <p className="text-xs text-paper-400">Search up to 7 days using one detector. Candidates need detections in at least 3 visits.</p>
+            </div>
+          </form>
+          {searching && <p role="status" className="text-sm text-paper-300">Searching IRSA and aligning exposures. This can take a few minutes.</p>}
+          {error && <p role="alert" className="text-sm text-amber-300">{error}</p>}
+          {live?.live_search && <p role="status" className="text-sm text-paper-300">Aligned {live.frames.length} of {live.live_search.archive_visits ?? live.live_search.archive_exposures} archive visits. {live.live_search.skipped.length > 0 && `${live.live_search.skipped.length} of ${live.live_search.attempted_exposures} exposure attempts were skipped.`}</p>}
+          {live?.live_search && live.live_search.skipped.length > 0 && <details className="text-xs text-paper-400">
+            <summary>Skipped exposures</summary>
+            <ul className="mt-2 space-y-1">{live.live_search.skipped.map(item => <li key={item.observation_id}>{item.observation_id} · {item.reason}</li>)}</ul>
+          </details>}
+        </section>
+        {mode === 'saved' && !review && <p role={status === 'failed' ? 'alert' : 'status'} className="text-sm text-paper-400">{status === 'failed' ? 'Unavailable: the observation bundle could not be loaded.' : 'Loading SPHEREx observations…'}</p>}
+        {mode === 'saved' && review && (
           <div className="flex gap-2 flex-wrap" aria-label="Observation series">
             {reviews?.map((item, index) => <button type="button" className={`${toggleStyle} ${selected === index ? active : inactive}`} aria-pressed={selected === index} key={item.id} onClick={() => setSelected(index)}>{item.target ?? item.id} · {item.detector ?? 'SPHEREx'} · {item.frames.length} exposures</button>)}
           </div>
-          <MotionField key={review.id} review={review} />
-        </>}
+        )}
+        {review && <MotionField key={review.id} review={review} />}
       </div>
     </main>
   );

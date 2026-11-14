@@ -432,7 +432,7 @@ export function App() {
         </div>
       </header>
 
-      {activeTab === 'motion' && <MotionReview />}
+      {activeTab === 'motion' && <MotionReview ra={ra} dec={dec} detector={selectedArray} />}
 
       {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
