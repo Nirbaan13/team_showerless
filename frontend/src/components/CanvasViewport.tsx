@@ -11,6 +11,7 @@ interface CanvasViewportProps {
   onSelectCandidate: (candidateId: string) => void;
   overlays: CatalogOverlayState;
   subtractionMode: SubtractionMode;
+  onChangeSubtractionMode?: (mode: SubtractionMode) => void;
   centerRa: number;
   centerDec: number;
   skippedNotice: string | null;
@@ -26,6 +27,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   onSelectCandidate,
   overlays,
   subtractionMode,
+  onChangeSubtractionMode,
   centerRa,
   centerDec,
   skippedNotice,
@@ -141,6 +143,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.scale(zoom, zoom);
 
     const isDifferenceMode = subtractionMode === 'epoch_difference';
+    const isBloomMode = subtractionMode === 'bloom_mask';
 
     // Procedural field stars deterministically generated from celestial coordinates (centerRa, centerDec)
     let seed = Math.abs(Math.sin(centerRa * 12.9898 + centerDec * 78.233) * 43758.5453);
@@ -193,15 +196,21 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     const currentFrame = frames[activeFrameIndex];
     let hasDrawnRealImage = false;
 
-    if (currentFrame?.imageDataUrl && !isDifferenceMode) {
-      let cachedImg = imgCacheRef.current.get(currentFrame.imageDataUrl);
+    const targetBitmapUrl = isBloomMode
+      ? currentFrame?.bloomDataUrl || currentFrame?.residualDataUrl || currentFrame?.imageDataUrl
+      : isDifferenceMode
+      ? currentFrame?.residualDataUrl
+      : currentFrame?.imageDataUrl;
+
+    if (targetBitmapUrl) {
+      let cachedImg = imgCacheRef.current.get(targetBitmapUrl);
       if (!cachedImg) {
         cachedImg = new Image();
-        cachedImg.src = currentFrame.imageDataUrl;
+        cachedImg.src = targetBitmapUrl;
         cachedImg.onload = () => {
           setRepaintCount((c) => c + 1);
         };
-        imgCacheRef.current.set(currentFrame.imageDataUrl, cachedImg);
+        imgCacheRef.current.set(targetBitmapUrl, cachedImg);
       }
 
       if (cachedImg.complete && cachedImg.naturalWidth > 0) {
@@ -210,7 +219,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const aspect = cachedImg.naturalWidth / cachedImg.naturalHeight;
         const imgW = 512;
         const imgH = 512 / aspect;
-        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.88;
+        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
         if (isWhiteBg) {
           ctx.filter = 'invert(1)';
         }
@@ -220,7 +229,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
     }
 
-    if (!isDifferenceMode && !hasDrawnRealImage) {
+    if (!isDifferenceMode && !isBloomMode && !hasDrawnRealImage) {
       staticStars.forEach((star) => {
         const grad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.mag * 3);
         if (isWhiteBg) {
@@ -254,9 +263,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     // Helper to calculate canvas coordinates from image pixel coordinates
     const getCanvasCoords = (x: number, y: number) => {
-      const isAtlasAspect = currentFrame?.detectorArray === 6 && y <= 144;
-      const cx = x * 2 - 256;
-      const cy = isAtlasAspect ? y * 2 - 144 : y * 2 - 256;
+      const natW = currentFrame?.imageWidth || 256;
+      const natH = currentFrame?.imageHeight || (currentFrame?.detectorArray === 6 && y <= 144 ? 144 : 256);
+      const scale = 512 / natW;
+      const imgH = 512 * (natH / natW);
+      const cx = (x + 0.5) * scale - 256;
+      const cy = (y + 0.5) * scale - imgH / 2;
       return { cx, cy };
     };
 
@@ -510,11 +522,15 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     const transformedX = (clickX - (width / 2 + pan.x)) / zoom;
     const transformedY = (clickY - (height / 2 + pan.y)) / zoom;
 
+    const natW = activeFrame?.imageWidth || 256;
+    const natH = activeFrame?.imageHeight || (activeFrame?.detectorArray === 6 ? 144 : 256);
+    const scale = 512 / natW;
+    const imgH = 512 * (natH / natW);
+
     for (const cand of candidates) {
       const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-      const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
-      const cx = pos.x * 2 - 256;
-      const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
+      const cx = (pos.x + 0.5) * scale - 256;
+      const cy = (pos.y + 0.5) * scale - imgH / 2;
       const dist = Math.hypot(transformedX - cx, transformedY - cy);
       if (dist < 28 / zoom) {
         onSelectCandidate(cand.id);
@@ -583,11 +599,15 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           const transformedX = (clickX - (width / 2 + pan.x)) / zoom;
           const transformedY = (clickY - (height / 2 + pan.y)) / zoom;
 
+          const natW = activeFrame?.imageWidth || 256;
+          const natH = activeFrame?.imageHeight || (activeFrame?.detectorArray === 6 ? 144 : 256);
+          const scale = 512 / natW;
+          const imgH = 512 * (natH / natW);
+
           for (const cand of candidates) {
             const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-            const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
-            const cx = pos.x * 2 - 256;
-            const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
+            const cx = (pos.x + 0.5) * scale - 256;
+            const cy = (pos.y + 0.5) * scale - imgH / 2;
             const dist = Math.hypot(transformedX - cx, transformedY - cy);
             if (dist < 32 / zoom) {
               onSelectCandidate(cand.id);
@@ -700,8 +720,50 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         </div>
       )}
 
-      {/* Viewport Toolbar */}
-      <div className="absolute top-2.5 right-2.5 bg-paper-900/90 border border-paper-800 p-1 rounded flex items-center space-x-1 z-10">
+      {/* Viewport Toolbar: Quick Layer Toggle + Colormap + Zoom */}
+      <div className="absolute top-2.5 right-2.5 bg-paper-900/95 border-2 border-black p-1 rounded-xl flex items-center space-x-1 z-10 shadow-lg">
+        {onChangeSubtractionMode && (
+          <div className="hidden sm:flex items-center gap-1 pr-1.5 mr-1 border-r border-paper-800 font-mono text-[10px]">
+            <button
+              type="button"
+              onClick={() => onChangeSubtractionMode('raw_calibrated')}
+              className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                subtractionMode === 'raw_calibrated'
+                  ? 'bg-emerald-400 text-gray-950 border-black font-bold'
+                  : 'bg-paper-950 text-paper-300 border-paper-800 hover:text-white'
+              }`}
+              title="Aligned SPHEREx Exposure"
+            >
+              Aligned
+            </button>
+            <button
+              type="button"
+              onClick={() => onChangeSubtractionMode('epoch_difference')}
+              className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                subtractionMode === 'epoch_difference'
+                  ? 'bg-sky-400 text-gray-950 border-black font-bold'
+                  : 'bg-paper-950 text-paper-300 border-paper-800 hover:text-white'
+              }`}
+              title="Leave-one-out Difference Image"
+            >
+              Diff
+            </button>
+            {activeFrame?.bloomDataUrl && (
+              <button
+                type="button"
+                onClick={() => onChangeSubtractionMode('bloom_mask')}
+                className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                  subtractionMode === 'bloom_mask'
+                    ? 'bg-amber-400 text-gray-950 border-black font-bold'
+                    : 'bg-paper-950 text-amber-300 border-paper-800 hover:text-white'
+                }`}
+                title="BLOOM Detector Saturation Bitmask"
+              >
+                BLOOM
+              </button>
+            )}
+          </div>
+        )}
         <select
           value={colorMap}
           onChange={(e) => setColorMap(e.target.value as any)}
@@ -741,6 +803,18 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
           <span>|</span>
           <span>Band {activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>
+          {subtractionMode === 'epoch_difference' && (
+            <>
+              <span>|</span>
+              <span className="text-sky-400 font-bold">Diff Image</span>
+            </>
+          )}
+          {subtractionMode === 'bloom_mask' && (
+            <>
+              <span>|</span>
+              <span className="text-amber-400 font-bold">BLOOM Mask</span>
+            </>
+          )}
         </div>
       )}
     </div>

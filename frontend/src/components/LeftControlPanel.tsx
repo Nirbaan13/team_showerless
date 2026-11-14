@@ -223,18 +223,23 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           {[
             {
               id: 'raw_calibrated',
-              label: viewMode === 'scientist' ? 'Level 2/3 Calibrated FITS' : 'Natural Sky (Raw)',
-              desc: viewMode === 'scientist' ? 'Native flux in MJy/sr' : 'Standard telescope image',
+              label: viewMode === 'scientist' ? 'Level 2/3 Aligned FITS' : 'Aligned Sky (Raw)',
+              desc: viewMode === 'scientist' ? 'Gnomonic WCS aligned flux (MJy/sr)' : 'Standard telescope exposure',
+            },
+            {
+              id: 'epoch_difference',
+              label: viewMode === 'scientist' ? 'Per-Frame Difference (LOO Δt)' : 'Difference Image (Motion)',
+              desc: viewMode === 'scientist' ? 'Leave-one-out median reference subtracted' : 'Subtracts static stars to reveal motion',
+            },
+            {
+              id: 'bloom_mask',
+              label: viewMode === 'scientist' ? 'BLOOM Bitmask Core Overlay' : 'BLOOM Mask (Bright Cores)',
+              desc: viewMode === 'scientist' ? 'Detector saturation core flags (e.g. Vesta)' : 'Links bright saturated asteroid cores',
             },
             {
               id: 'zodi_reference_subtracted',
               label: viewMode === 'scientist' ? 'Zodi Reference Subtracted' : 'Remove Dust Glare (Clean)',
               desc: viewMode === 'scientist' ? 'Diffuse interplanetary dust model removed' : 'Cuts out solar system dust haze',
-            },
-            {
-              id: 'epoch_difference',
-              label: viewMode === 'scientist' ? 'Epoch Difference (Δt Residual)' : 'Highlight Motion (Diff)',
-              desc: viewMode === 'scientist' ? 'Temporal frame differencing' : 'Subtracts dates to spot moving dots',
             },
           ].map((mode) => {
             const isSelected = subtractionMode === mode.id;

@@ -20,7 +20,7 @@ info:
     region without reprojection or exact polygon masking; it can be clipped at
     the parent image boundary. Failed cutouts never trigger a full-image fallback.
 servers:
-  - url: http://35.159.162.202
+  - url: http://144.124.238.101
 tags:
   - name: Observations
   - name: Downloads

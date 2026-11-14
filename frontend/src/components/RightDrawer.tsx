@@ -9,6 +9,7 @@ import type {
 import { SpectrumPlot } from './SpectrumPlot';
 import { CommunityVerificationStream } from './CommunityVerificationStream';
 import { MLDetectionsPanel } from './MLDetectionsPanel';
+import { getOrCreateEvidenceStacks } from '../services/motionReviewService';
 import {
   CheckCircle,
   Radio,
@@ -22,6 +23,7 @@ import {
   ShieldAlert,
   Compass,
   Info,
+  Layers,
 } from 'lucide-react';
 
 interface ClassificationGuideItem {
@@ -325,6 +327,47 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                     </div>
                   </div>
                 )}
+
+                {/* Stack the Evidence (Fixed vs Moving Coadd Stamps) */}
+                {(() => {
+                  const stacks = getOrCreateEvidenceStacks(candidate);
+                  if (!stacks.fixedStack && !stacks.motionStack) return null;
+                  return (
+                    <div className="p-2.5 rounded-xl bg-paper-950 border-2 border-black space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-paper-200 font-bold flex items-center gap-1.5">
+                          <Layers className="w-3 h-3 text-emerald-400" />
+                          Stack the Evidence
+                        </span>
+                        <span className="text-[9px] font-mono text-emerald-400">
+                          {stacks.contributingExposures} exposures
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-paper-900 p-1.5 rounded-lg border border-paper-800 flex flex-col items-center">
+                          <img
+                            src={stacks.fixedStack}
+                            width={29}
+                            height={29}
+                            alt="Fixed sky position stack"
+                            className="w-full max-w-[5.5rem] aspect-square rounded border border-black bg-black [image-rendering:pixelated]"
+                          />
+                          <span className="text-[9px] font-mono text-paper-400 mt-1">Fixed Sky</span>
+                        </div>
+                        <div className="bg-paper-900 p-1.5 rounded-lg border border-emerald-500/40 flex flex-col items-center">
+                          <img
+                            src={stacks.motionStack}
+                            width={29}
+                            height={29}
+                            alt="Following fitted track stack"
+                            className="w-full max-w-[5.5rem] aspect-square rounded border border-black bg-black [image-rendering:pixelated]"
+                          />
+                          <span className="text-[9px] font-mono text-emerald-300 mt-1">Moving Track</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Candidate Classification */}
                 <div>
