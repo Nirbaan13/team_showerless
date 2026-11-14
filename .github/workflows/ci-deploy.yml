@@ -17,7 +17,11 @@ concurrency:
 jobs:
   ci:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
     defaults:
       run:
         working-directory: backend
@@ -25,6 +29,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/inference/requirements-training.txt
+      - name: Install locked scientific test dependencies
+        run: python -m pip install --require-hashes -r inference/requirements-training.txt
+      - name: Test frozen model and scientific pipeline
+        working-directory: backend/inference
+        run: |
+          python -m pytest
+          python smoke.py
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin
@@ -39,6 +55,11 @@ jobs:
         run: bash -n ../ops/deploy.sh ../ops/bootstrap-vps.sh tests/test_deploy.sh
       - name: Build the exact commit
         run: docker build --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" .
+      - name: Verify packaged real-data inference
+        run: |
+          docker run --rm --read-only --tmpfs /tmp \
+            --entrypoint /opt/inference-venv/bin/python \
+            "spaceapps-api:$GITHUB_SHA" /app/inference/smoke.py
       - name: Test container deployment and rollback
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}

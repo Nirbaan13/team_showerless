@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "model_id": "spherex-track-rf-v2",
+  "selected_before_final_test": true,
+  "promoted_at_utc": "2026-11-14T16:45:43.112721+00:00",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "original_freeze": "freeze.json",
+  "pretest_evaluation_amendment": "pretest-accounting-amendment.json",
+  "artifact_selection": "six-feature weighted RF selected on synthetic validation; no final-test retuning",
+  "runtime_files": [
+    "ranker.onnx",
+    "metadata.json"
+  ],
+  "audit_sha256": {
+    "archive/v1/evaluation-statistics.json": "aa5cc26b600a413ee7e4219a289283554e5dddadae81a394045f788ffd0609ab",
+    "archive/v1/evaluation.json": "6dbb118bfaa944cb215c40f6ce225d573b7c69a744e67c8a166b6ef7629fade9",
+    "archive/v1/metadata.json": "a5121175eae37bad25702f4872e576cc28bd52dedbf5f0ad60ad1e9287ba23ac",
+    "archive/v1/parity-reference.json": "a68637a62d83a433c7c8ce725e2f9964ee26a17bab3c57a83703fa896b8e3884",
+    "archive/v1/ranker.onnx": "030c1edf972b76b3cb8fadcb4adadcc386a36eab9f2cdbcb65527c277c581ab9",
+    "archive/v1/real-background-evaluation.json": "ef5e661f3bdf074d11bea5454bd74da359169935724db19930695e91d76709b7",
+    "archive/v1/real-evaluation.json": "472d8e167cc3ccd90cfbf967e49935f7f0d09e11443f22cdc5abf2a26cc3b351",
+    "archive/v1/training-manifest.json": "d0810c183507af13f12ff91d60aaabca66be0955c3a625dcfb9bb9dbeb9e83b0",
+    "archive/v1/v1-domain-ablation.json": "f06a5c3cb1b3047e35dca4f315cb5b97a85fb21bebb5f93781849a1c9f516b41",
+    "evaluation-statistics.json": "e9be199c1b72dadf272ae971113ee6b24aeb8e19f4d2afef0975a2a8d07d4d13",
+    "evaluation-subsets.json": "d23745201e5d5ac08d8cf8cf0542aaba331efbbd97c05631d490260fc3c0036c",
+    "evaluation.fields.json.gz": "000041e7d113726c0221130ce03eb5aa233e540594213a7ad9955ef16a729345",
+    "evaluation.json": "aa8cf9f9455253d855986dd43da8c0f66afb57c9e7a72cebceee17981c1349c2",
+    "feature-ablation-development.json": "50d27477f27f44a7864874c2a3ef0b0138458c96d1c9291d73c2cd7066ded5ae",
+    "freeze.json": "3188dc9ad5387f77bd3568c84f05c628e70f8da00595bb63ae43220f7a34cbcc",
+    "m101-development-evaluation.json": "1132a505c2254a93fab21862539c886cb6605f1d78fb7fde9024af497aedc2d8",
+    "m101-development-evaluation.trials.json.gz": "6f496d7e9927d373c26b9d17c3a544b6abfc9f4716e02e3e61583074605b37ba",
+    "metadata.json": "56d97071307044ee45740cdc8c36e2f5872cccb5b8db4977edb2ea44b0fe5cab",
+    "parity-reference.json": "ea843eab27f1a983134f96a3e6a03a4f6b11d280f67624d65e94ad5463f76e8a",
+    "pretest-accounting-amendment.json": "739ed43579d7fc37a1589060ea7075d11e07d2b754a20deb176f89f3b8c2fed1",
+    "ranker.onnx": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+    "real-background-evaluation.json": "090c4e944d5c41e97648e62836c025bfe8948eaf41178438d520e0efeba06f96",
+    "real-background-evaluation.trials.json.gz": "33ad3952fe1cbf042388cffdfcdb1701461ef4a157d36e3dc1da302c6f003353",
+    "real-evaluation.json": "0f414d4070138808a26efd744eb60eaca4c7adb61e986efa3463e549d8a4c2cb",
+    "synthetic-development-evaluation.json": "cce2605354ba3637be75148fbef3bf861b1daed525e46c4f052759e21f378ed4",
+    "training-manifest.json": "577c492d424ed21974a8db35d2d5fb0fff2697d605ad921ace2d6057eb796b04",
+    "v2-development-ablation.json": "e6ad4951a6375d5e870832317b8724b24b9ffe5caddb290e73fc7dd55b1abb34"
+  },
+  "evidence_designations": {
+    "evaluation.json": "final reserved independent synthetic fields (400)",
+    "real-background-evaluation.json": "final reserved real parent field (1), 150 correlated derivatives",
+    "synthetic-development-evaluation.json": "validation plus 200 development fields; test key is development only",
+    "m101-development-evaluation.json": "M101 development for v2 after v1 failure",
+    "real-evaluation.json": "selected comet/Vesta development and recovery cases",
+    "archive/v1/": "preserved original v1 model and negative real-background evidence"
+  },
+  "source_audit_rule": "freeze.json is immutable; only training/evaluate_background.py differs as recorded before final real pixels in pretest-accounting-amendment.json",
+  "excluded_regenerable_caches": [
+    "field-candidates.json",
+    "experiments/",
+    "final-field-candidates.json"
+  ]
+}

@@ -1,0 +1,6 @@
+# Scientific inference runtime; training is deliberately separate.
+numpy==2.5.3
+scipy==1.18.1
+astropy==8.0.2
+pillow==12.3.0
+onnxruntime==1.30.0

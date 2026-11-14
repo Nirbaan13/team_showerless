@@ -56,8 +56,13 @@ import {
   Share2,
   Crosshair,
 } from 'lucide-react';
+import { InferencePage } from './components/InferencePage';
 
 export function App() {
+  return new URLSearchParams(window.location.search).has('analysis') ? <InferencePage /> : <ViewerApp />;
+}
+
+function ViewerApp() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode =
     typeof window !== 'undefined' &&
@@ -562,6 +567,9 @@ export function App() {
 
           {/* Simple Tab Navigation */}
           <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
+            <a href="?analysis=1" className="btn-tactile-sm px-3 py-1.5 rounded-lg bg-paper-900 text-emerald-300 border-2 border-black">
+              ML analysis
+            </a>
             <button
               type="button"
               onClick={() => setActiveTab('home')}
@@ -719,6 +727,11 @@ export function App() {
               <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block mb-1">
                 Navigation
               </span>
+
+              <a href="?analysis=1" className="w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold bg-paper-900 text-emerald-300">
+                <Sparkles className="w-4 h-4" />
+                <span>ML analysis</span>
+              </a>
 
               <button
                 onClick={() => {
