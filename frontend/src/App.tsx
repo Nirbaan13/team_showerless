@@ -34,12 +34,12 @@ import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
-import { Compass, Home } from 'lucide-react';
+import { Compass, Home, UserCheck } from 'lucide-react';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
     try {
@@ -352,6 +352,18 @@ export function App() {
               <Compass className="w-3.5 h-3.5" />
               <span>Sky Viewer</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('feed')}
+              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+                activeTab === 'feed'
+                  ? 'bg-sky-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(56,189,248,0.4)]'
+                  : 'bg-paper-900 text-sky-300 hover:text-white hover:bg-sky-950/40'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Verification Feed</span>
+            </button>
           </nav>
         </div>
 
@@ -391,23 +403,58 @@ export function App() {
             subtractionMode={subtractionMode}
             activeFrameIndex={activeFrameIndex}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
-            onOpenVerifyModal={() => setIsVerifyModalOpen(true)}
+            onOpenVerifyModal={() => setActiveTab('feed')}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />
         </div>
       </header>
 
-      {/* 1. Clean Home Page: Starts with big name and coordinate search */}
+      {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
         <HomePage
           onSearchCoordinates={handleSearchCoordinates}
           onSelectPreset={handleSelectPreset}
-          onSelectVerificationTarget={handleSelectVerificationTarget}
+          onOpenFeed={() => setActiveTab('feed')}
         />
       )}
 
-      {/* 2. Dossier Report Page */}
+      {/* 2. Dedicated Community Verification Feed View */}
+      {activeTab === 'feed' && (
+        <div className="flex-1 overflow-y-auto bg-paper-950 p-6 md:p-10 relative anim-fall select-none">
+          <div className="max-w-5xl mx-auto space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-paper-800 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-sky-400/10 border-2 border-sky-400/40 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+                  <UserCheck className="w-6 h-6 stroke-[2.5]" />
+                </div>
+                <div>
+                  <h1 className="text-xl md:text-2xl font-bold font-mono text-white tracking-wide">
+                    NASA Scientist & Community Verification Feed
+                  </h1>
+                  <p className="text-xs text-paper-400 mt-0.5">
+                    Peer-review flagged moving objects, inspect exact observation settings, and verify astrometric tracks.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveTab('viewer')}
+                className="btn-tactile px-4 py-2 rounded-xl border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-xs font-bold flex items-center gap-2 cursor-pointer self-start sm:self-auto shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              >
+                <Compass className="w-4 h-4 stroke-[2.5]" />
+                <span>Open Sky Viewer</span>
+              </button>
+            </div>
+
+            <VerifyScientistPanel
+              onSelectVerificationTarget={handleSelectVerificationTarget}
+              isCompact={false}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 3. Dossier Report Page */}
       {activeTab === 'report' && (
         <DiscoveryReportPage
           candidate={activeCandidate}

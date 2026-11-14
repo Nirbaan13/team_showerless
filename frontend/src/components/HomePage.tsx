@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import type { TargetPreset, VerificationSetting } from '../types/spherex';
+import type { TargetPreset } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
-import { VerifyScientistPanel } from './VerifyScientistPanel';
-import { ArrowRight, Compass } from 'lucide-react';
+import { ArrowRight, Compass, UserCheck } from 'lucide-react';
 
 interface HomePageProps {
   onSearchCoordinates: (ra: number, dec: number) => void;
   onSelectPreset: (preset: TargetPreset) => void;
-  onSelectVerificationTarget?: (setting: VerificationSetting) => void;
+  onOpenFeed?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onSearchCoordinates,
   onSelectPreset,
-  onSelectVerificationTarget,
+  onOpenFeed,
 }) => {
   const [raInput, setRaInput] = useState('');
   const [decInput, setDecInput] = useState('');
@@ -116,10 +115,17 @@ export const HomePage: React.FC<HomePageProps> = ({
           ))}
         </div>
 
-        {/* Scientist & Community Object Verification Feed */}
-        {onSelectVerificationTarget && (
-          <div className="w-full anim-fall pt-4" style={{ animationDelay: '300ms' }}>
-            <VerifyScientistPanel onSelectVerificationTarget={onSelectVerificationTarget} />
+        {/* Dedicated Sky Blue Button: Community Verification Feed */}
+        {onOpenFeed && (
+          <div className="anim-fall pt-1" style={{ animationDelay: '280ms' }}>
+            <button
+              onClick={onOpenFeed}
+              className="btn-tactile px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-gray-950 border-2 border-black font-mono text-xs font-bold flex items-center gap-2 group cursor-pointer shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all"
+            >
+              <UserCheck className="w-4 h-4 stroke-[2.5] text-gray-950 group-hover:scale-110 transition-transform" />
+              <span>Community Verification Feed</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] text-gray-950" />
+            </button>
           </div>
         )}
       </div>
