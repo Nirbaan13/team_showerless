@@ -18,6 +18,7 @@ def load_clean_cutout(path):
     'mjd': head.get("MJD-AVG", head.get("MJD-OBS")),
     'flag_pix_perc': round(flagged, 2),
     'zodi_med_mjy': round(float(np.nanmedian(zodi)), 3),
+    'wcs': WCS(head),
     }
 
     return img, bad, clean_m, meta
