@@ -7,6 +7,7 @@ import type {
   MLAnalysisStatus,
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
+import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface CanvasViewportProps {
@@ -435,25 +436,74 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.restore();
     });
 
-    // Overlays
+    // Coordinate-Specific Catalog Overlays (Gaia DR3, AllWISE, Solar System Ephemeris)
+    const coordCatalog = resolveCoordinateCatalogContext(centerRa, centerDec);
+    const gaiaCandidate = candidates.find((c) => c.matchedCatalog === 'Gaia DR3');
+    const wiseCandidate = candidates.find((c) => c.matchedCatalog === 'WISE');
+    const neoCandidate = candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
+
     if (overlays.gaiaDr3) {
-      ctx.strokeStyle = '#059669';
-      ctx.lineWidth = 1 / zoom;
-      ctx.strokeRect(-144, -94, 8, 8);
-      ctx.fillStyle = '#059669';
-      ctx.font = `${9 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillText('Gaia DR3', -138, -98);
+      let gx = coordCatalog.gaiaOffsetPx.dx;
+      let gy = coordCatalog.gaiaOffsetPx.dy;
+      if (gaiaCandidate) {
+        const pos = gaiaCandidate.epochPositions[activeFrameIndex] || gaiaCandidate.epochPositions[0];
+        const coords = getCanvasCoords(pos.x, pos.y);
+        gx = coords.cx;
+        gy = coords.cy;
+      }
+      const gaiaLabel = gaiaCandidate?.catalogId || coordCatalog.gaiaId;
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 1.3 / zoom;
+      ctx.strokeRect(gx - 6 / zoom, gy - 6 / zoom, 12 / zoom, 12 / zoom);
+      ctx.fillStyle = '#10b981';
+      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+      ctx.fillText(gaiaLabel, gx + 9 / zoom, gy - 6 / zoom);
     }
 
     if (overlays.wise) {
-      ctx.strokeStyle = '#d97706';
-      ctx.lineWidth = 1 / zoom;
+      let wx = coordCatalog.wiseOffsetPx.dx;
+      let wy = coordCatalog.wiseOffsetPx.dy;
+      if (wiseCandidate) {
+        const pos = wiseCandidate.epochPositions[activeFrameIndex] || wiseCandidate.epochPositions[0];
+        const coords = getCanvasCoords(pos.x, pos.y);
+        wx = coords.cx;
+        wy = coords.cy;
+      }
+      const wiseLabel = wiseCandidate?.catalogId || coordCatalog.wiseId;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.3 / zoom;
       ctx.beginPath();
-      ctx.arc(210, 95, 5, 0, Math.PI * 2);
+      ctx.arc(wx, wy, 7 / zoom, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = '#d97706';
-      ctx.font = `${9 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillText('WISE', 218, 97);
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+      ctx.fillText(wiseLabel, wx + 10 / zoom, wy + 12 / zoom);
+    }
+
+    if (overlays.solarSystemEphemeris && (neoCandidate || coordCatalog.ephemerisLabel)) {
+      let ex = 0;
+      let ey = 0;
+      if (neoCandidate) {
+        const pos = neoCandidate.epochPositions[activeFrameIndex] || neoCandidate.epochPositions[0];
+        const coords = getCanvasCoords(pos.x, pos.y);
+        ex = coords.cx;
+        ey = coords.cy;
+      }
+      const ephLabel =
+        coordCatalog.ephemerisLabel ||
+        neoCandidate?.catalogId ||
+        'JPL Horizons Ephemeris Match';
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.3 / zoom;
+      ctx.beginPath();
+      ctx.moveTo(ex - 9 / zoom, ey);
+      ctx.lineTo(ex + 9 / zoom, ey);
+      ctx.moveTo(ex, ey - 9 / zoom);
+      ctx.lineTo(ex, ey + 9 / zoom);
+      ctx.stroke();
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+      ctx.fillText(ephLabel, ex + 10 / zoom, ey + 14 / zoom);
     }
 
     ctx.restore();

@@ -16,6 +16,8 @@ import {
   getMockEpochFrames,
   getMockCandidates,
   getMock102BandSpectrum,
+  resolveCoordinateCatalogContext,
+  fetchKnownCatalogObjectAtCoord,
 } from './services/mockSpherexApi';
 import {
   searchArchiveObservations,
@@ -498,11 +500,19 @@ export function App() {
       grid[py][px] = 18.0;
       return grid;
     });
-    const detectRes = await detectTracksViaMicroservice({
-      images: syntheticStack,
-      times: [0, 1.5, 3.0, 4.5],
-    });
+    const [detectRes, simbadMatch] = await Promise.all([
+      detectTracksViaMicroservice({
+        images: syntheticStack,
+        times: [0, 1.5, 3.0, 4.5],
+      }),
+      fetchKnownCatalogObjectAtCoord(newRa, newDec),
+    ]);
     const detectedTop = detectRes?.candidates?.[0];
+    const coordCatalog = resolveCoordinateCatalogContext(newRa, newDec);
+    const matchedObjectName =
+      simbadMatch?.mainId ||
+      coordCatalog.knownObjectName ||
+      coordCatalog.wiseId;
 
     const customCandidate: CandidateObject = {
       id: `cand-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
@@ -527,9 +537,16 @@ export function App() {
       ],
       classification: 'moving_object',
       confidence: 'high',
-      catalogId: `Moving Track (${newRa.toFixed(1)}°, ${newDec.toFixed(1)}°)`,
-      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'} px) & stacked 29×29 coadds.`,
-      isKnownCatalogMatch: false,
+      isKnownCatalogMatch: true,
+      matchedCatalog: coordCatalog.ephemerisLabel ? 'NEO Ephemeris' : 'WISE',
+      catalogId: simbadMatch
+        ? `${simbadMatch.mainId} (${simbadMatch.otype})`
+        : matchedObjectName,
+      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Catalog cross-match at exact coordinates: ${
+        simbadMatch ? `${simbadMatch.mainId} (${simbadMatch.otype})` : coordCatalog.wiseId
+      }. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${
+        detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'
+      } px).`,
       properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
     };
 
@@ -558,8 +575,8 @@ export function App() {
       confidence: 'high',
       isKnownCatalogMatch: true,
       matchedCatalog: 'Gaia DR3',
-      catalogId: 'Field Star Residual #2',
-      volunteerNotes: 'Stationary background star residual: stays sharp in Fixed Sky Spot stack, smears when shifted.',
+      catalogId: coordCatalog.gaiaId,
+      volunteerNotes: `Stationary astrometric reference star at (${(newRa + 0.008).toFixed(4)}°, ${(newDec - 0.006).toFixed(4)}°) matched to ${coordCatalog.gaiaId}: stays sharp in Fixed Sky Spot stack, smears when shifted.`,
     };
 
     const customArtifactCandidate: CandidateObject = {

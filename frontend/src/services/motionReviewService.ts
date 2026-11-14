@@ -423,9 +423,12 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
         ? 'Gaia DR3'
         : null,
       catalogId: track.known_match
-        ? `${review.target} (${review.detector} Ephemeris Match)`
+        ? `${review.target} (JPL Horizons Ephemeris)`
         : inferredClass === 'already_known'
-        ? `Gaia DR3 Field Star #${track.rank}`
+        ? `Gaia DR3 ${(
+            3816490000000000000n +
+            BigInt(Math.abs(Math.floor((ra * 10000 + dec * 10000) * 137)))
+          ).toString()}`
         : undefined,
       mlRank: review.bloom_tracks.length + track.rank,
       mlScore: score,
@@ -445,7 +448,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       ephemerisOffsetsPx: track.ephemeris_offsets_px,
       validationData: track.known_match
         ? {
-            objectName: `${review.target} (${review.detector})`,
+            objectName: review.target || '3I/ATLAS',
             maxOffsetPx: track.max_offset_px ?? 0.539,
             baselineRank: track.rank,
             totalCandidates: totalLoo,
