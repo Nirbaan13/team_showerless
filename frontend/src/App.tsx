@@ -22,6 +22,8 @@ import {
 import {
   searchArchiveObservations,
   convertObservationsToEpochFrames,
+  buildRealSkyCutoutPhotoUrl,
+  fetchLiveBackendCutoutAnalysis,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
@@ -416,12 +418,15 @@ export function App() {
         message: `SPHEREx Cutout Stream: ${matchingReview.target} (${matchingReview.detector}) — Running ML Analysis...`,
       });
     } else {
-      const initialFrames = getMockEpochFrames('custom', detNum);
+      const initialFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       setCustomFrames(initialFrames);
       setActiveFrameIndex(0);
       setSearchStatus({
         source: 'live',
-        message: `Loaded RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
+        message: `Loaded Real Cutout @ RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
       });
     }
 
@@ -514,6 +519,27 @@ export function App() {
       return;
     }
 
+    // 2b. Try the deployed Scala + Python backend cutout pipeline (/backend/api/observations/default + /backend/api/analyses/motion)
+    try {
+      const backendCutout = await fetchLiveBackendCutoutAnalysis({
+        ra: newRa,
+        dec: newDec,
+        fovArcmin,
+        detector: detNum,
+      });
+      if (backendCutout && backendCutout.frames.length > 0) {
+        resolvedFrames = backendCutout.frames;
+        resolvedCands = backendCutout.candidates;
+        resolvedSource = 'live';
+        resolvedMessage = `Live Backend SPHEREx Cutouts: ${resolvedFrames.length} frames & ${resolvedCands.length} tracks`;
+        jobFinished = true;
+        finalizeMlInsights();
+        return;
+      }
+    } catch {
+      // Proceed to archive observation search + real sky cutout photo
+    }
+
     // 3. Query archive observations + /detect ML microservice in parallel
     try {
       const searchResult = await searchArchiveObservations({
@@ -526,16 +552,22 @@ export function App() {
 
       resolvedFrames = convertObservationsToEpochFrames(
         searchResult.observations,
-        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId
+        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId,
+        newRa,
+        newDec,
+        fovArcmin
       );
       resolvedSource = searchResult.isFallback ? 'fallback' : 'live';
       resolvedMessage = searchResult.isFallback
-        ? `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
-        : `Live NASA IRSA + ML Detector: ${searchResult.totalFound} exposures analyzed`;
+        ? `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
+        : `Live NASA IRSA + Real Cutout: ${searchResult.totalFound} exposures analyzed`;
     } catch {
-      resolvedFrames = getMockEpochFrames('custom', detNum);
+      resolvedFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       resolvedSource = 'fallback';
-      resolvedMessage = `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
+      resolvedMessage = `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
     }
 
     const syntheticStack = Array.from({ length: 4 }, (_, eIdx) => {
