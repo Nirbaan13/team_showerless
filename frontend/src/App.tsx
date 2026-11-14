@@ -34,12 +34,13 @@ import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
-import { Compass, Home, UserCheck } from 'lucide-react';
+import { Compass, Home, UserCheck, Sliders, Sparkles } from 'lucide-react';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
+  const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>('canvas');
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
     try {
@@ -328,41 +329,41 @@ export function App() {
           </div>
 
           {/* Simple Tab Navigation */}
-          <nav className="flex items-center space-x-2 font-mono text-[11px]">
+          <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
             <button
               onClick={() => setActiveTab('home')}
-              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'home'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
                   : 'bg-paper-900 text-paper-300 hover:text-white'
               }`}
             >
               <Home className="w-3.5 h-3.5" />
-              <span>Homepage</span>
+              <span className="hidden sm:inline">Homepage</span>
             </button>
 
             <button
               onClick={() => setActiveTab('viewer')}
-              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'viewer'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
                   : 'bg-paper-900 text-paper-300 hover:text-white'
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>Sky Viewer</span>
+              <span className="hidden sm:inline">Sky Viewer</span>
             </button>
 
             <button
               onClick={() => setActiveTab('feed')}
-              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'feed'
                   ? 'bg-sky-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(56,189,248,0.4)]'
                   : 'bg-paper-900 text-sky-300 hover:text-white hover:bg-sky-950/40'
               }`}
             >
               <UserCheck className="w-3.5 h-3.5" />
-              <span>Verification Feed</span>
+              <span className="hidden sm:inline">Verification Feed</span>
             </button>
           </nav>
         </div>
@@ -464,27 +465,45 @@ export function App() {
 
       {/* 3. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
-        <div className="flex flex-1 overflow-hidden relative anim-fall">
-          <LeftControlPanel
-            ra={ra}
-            dec={dec}
-            fov={fov}
-            onUpdateCoords={(nRa, nDec) => handleSearchCoordinates(nRa, nDec)}
-            onUpdateFov={setFov}
-            selectedArray={selectedArray}
-            onSelectArray={setSelectedArray}
-            selectedChannel={selectedChannel}
-            onSelectChannel={setSelectedChannel}
-            subtractionMode={subtractionMode}
-            onChangeSubtractionMode={setSubtractionMode}
-            overlays={overlays}
-            onToggleOverlay={handleToggleOverlay}
-            onRefreshCutout={handleRefreshCutout}
-            viewMode={viewMode}
-            searchStatus={searchStatus}
-          />
+        <div className="flex flex-1 overflow-hidden relative anim-fall flex-col md:flex-row h-[calc(100vh-3rem)]">
+          {/* Left Control Panel: Desktop side-column, Mobile full-pane overlay */}
+          <div
+            className={`${
+              mobileViewerPane === 'controls'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-30 flex flex-col bg-paper-950'
+                : 'hidden md:flex'
+            }`}
+          >
+            <LeftControlPanel
+              ra={ra}
+              dec={dec}
+              fov={fov}
+              onUpdateCoords={(nRa, nDec) => {
+                handleSearchCoordinates(nRa, nDec);
+                setMobileViewerPane('canvas');
+              }}
+              onUpdateFov={setFov}
+              selectedArray={selectedArray}
+              onSelectArray={setSelectedArray}
+              selectedChannel={selectedChannel}
+              onSelectChannel={setSelectedChannel}
+              subtractionMode={subtractionMode}
+              onChangeSubtractionMode={setSubtractionMode}
+              overlays={overlays}
+              onToggleOverlay={handleToggleOverlay}
+              onRefreshCutout={handleRefreshCutout}
+              viewMode={viewMode}
+              searchStatus={searchStatus}
+              className="h-full w-full"
+            />
+          </div>
 
-          <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
+          {/* Main Viewport: Canvas & Playback */}
+          <main
+            className={`flex-1 flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)] overflow-hidden relative ${
+              mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
+            }`}
+          >
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -515,27 +534,67 @@ export function App() {
             />
           </main>
 
-          {/* Right Drawer: Resizable & Expandable Triage & Telemetry */}
-          <RightDrawer
-            frames={frames}
-            activeFrameIndex={activeFrameIndex}
-            onSelectFrame={setActiveFrameIndex}
-            candidates={candidatesList}
-            selectedCandidateId={activeCandidate?.id ?? null}
-            onSelectCandidate={setSelectedCandidateId}
-            candidate={activeCandidate}
-            spectrumData={spectrumData}
-            onUpdateCandidateClassification={handleUpdateCandidateClassification}
-            onOpenDiscoveryReport={() => setActiveTab('report')}
-            isScientistMode={viewMode === 'scientist'}
-            ra={ra}
-            dec={dec}
-            fov={fov}
-            selectedArray={selectedArray}
-            subtractionMode={subtractionMode}
-            controlledTab={drawerControlledTab}
-            onTabChange={setDrawerControlledTab}
-          />
+          {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
+          <div
+            className={`${
+              mobileViewerPane === 'telemetry'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-30 flex flex-col bg-paper-950'
+                : 'hidden lg:flex'
+            }`}
+          >
+            <RightDrawer
+              frames={frames}
+              activeFrameIndex={activeFrameIndex}
+              onSelectFrame={setActiveFrameIndex}
+              candidates={candidatesList}
+              selectedCandidateId={activeCandidate?.id ?? null}
+              onSelectCandidate={setSelectedCandidateId}
+              candidate={activeCandidate}
+              spectrumData={spectrumData}
+              onUpdateCandidateClassification={handleUpdateCandidateClassification}
+              onOpenDiscoveryReport={() => setActiveTab('report')}
+              isScientistMode={viewMode === 'scientist'}
+              ra={ra}
+              dec={dec}
+              fov={fov}
+              selectedArray={selectedArray}
+              subtractionMode={subtractionMode}
+              controlledTab={drawerControlledTab}
+              onTabChange={setDrawerControlledTab}
+              className="h-full w-full"
+            />
+          </div>
+
+          {/* Mobile Bottom Dock (< md screens) */}
+          <nav className="md:hidden fixed bottom-0 inset-x-0 h-12 bg-paper-950/95 backdrop-blur border-t border-paper-800 z-40 flex items-center justify-around px-2">
+            <button
+              onClick={() => setMobileViewerPane('canvas')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'canvas' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Compass className="w-4 h-4 mb-0.5" />
+              <span>Sky View</span>
+            </button>
+            <button
+              onClick={() => setMobileViewerPane('telemetry')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'telemetry' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 mb-0.5" />
+              <span>Triage & AI</span>
+            </button>
+            <button
+              onClick={() => setMobileViewerPane('controls')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'controls' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Sliders className="w-4 h-4 mb-0.5" />
+              <span>Controls</span>
+            </button>
+          </nav>
         </div>
       )}
 

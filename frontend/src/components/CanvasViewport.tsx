@@ -523,15 +523,94 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     }
   };
 
+  // Mobile Touch Gestures: 1-finger pan, 2-finger pinch-to-zoom, tap to select
+  const touchMetaRef = useRef<{ startX: number; startY: number; pinchDist: number }>({
+    startX: 0,
+    startY: 0,
+    pinchDist: 0,
+  });
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setDragStart({ x: touch.clientX - pan.x, y: touch.clientY - pan.y });
+      touchMetaRef.current = { startX: touch.clientX, startY: touch.clientY, pinchDist: 0 };
+    } else if (e.touches.length === 2) {
+      setIsDragging(false);
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      touchMetaRef.current.pinchDist = dist;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isDragging) {
+      const touch = e.touches[0];
+      setPan({
+        x: touch.clientX - dragStart.x,
+        y: touch.clientY - dragStart.y,
+      });
+    } else if (e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const newDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      if (touchMetaRef.current.pinchDist > 0) {
+        const factor = newDist / touchMetaRef.current.pinchDist;
+        setZoom((prev) => Math.max(0.6, Math.min(8.0, prev * factor)));
+      }
+      touchMetaRef.current.pinchDist = newDist;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length === 0) {
+      setIsDragging(false);
+      const touch = e.changedTouches[0];
+      if (touch && canvasRef.current) {
+        const moved = Math.hypot(
+          touch.clientX - touchMetaRef.current.startX,
+          touch.clientY - touchMetaRef.current.startY
+        );
+        if (moved < 12) {
+          const rect = canvasRef.current.getBoundingClientRect();
+          const clickX = touch.clientX - rect.left;
+          const clickY = touch.clientY - rect.top;
+          const width = rect.width;
+          const height = rect.height;
+
+          const transformedX = (clickX - (width / 2 + pan.x)) / zoom;
+          const transformedY = (clickY - (height / 2 + pan.y)) / zoom;
+
+          for (const cand of candidates) {
+            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+            const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
+            const cx = pos.x * 2 - 256;
+            const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
+            const dist = Math.hypot(transformedX - cx, transformedY - cy);
+            if (dist < 32 / zoom) {
+              onSelectCandidate(cand.id);
+              return;
+            }
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none"
+      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none touch-none"
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onClick={handleCanvasClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <canvas ref={canvasRef} className="w-full h-full block" />
 

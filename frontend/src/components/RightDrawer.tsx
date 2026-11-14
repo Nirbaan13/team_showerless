@@ -22,8 +22,6 @@ import {
   ShieldAlert,
   Compass,
   Info,
-  Check,
-  X,
 } from 'lucide-react';
 
 interface ClassificationGuideItem {
@@ -32,83 +30,46 @@ interface ClassificationGuideItem {
   badge: string;
   badgeBg: string;
   badgeText: string;
-  summary: string;
-  importantForThis: string[];
-  notThisIf: string[];
-  distinctionRule: string;
+  criteria: string;
+  distinction: string;
 }
 
 const CLASSIFICATION_GUIDE: Record<string, ClassificationGuideItem> = {
   transient: {
     id: 'transient',
-    name: 'Transient (Supernova / Stellar Flare)',
-    badge: 'Sudden IR Burst',
+    name: 'Transient (Flare / Supernova)',
+    badge: 'Sudden Burst',
     badgeBg: 'rgba(245, 158, 11, 0.2)',
     badgeText: '#f59e0b',
-    summary: 'A stationary celestial event that flares or dims abruptly between epochs.',
-    importantForThis: [
-      'Sudden flux spike (>3× baseline) in 1–2 epochs; faint or absent in other epochs.',
-      'Stationary coordinates: RA and Dec centroid do NOT move across epochs.',
-      'Physical Optical PSF: Spans multiple pixels with Gaussian wings matching SPHEREx 6.2″ optical beam.',
-    ],
-    notThisIf: [
-      'NOT an Artifact if it exhibits multi-pixel optical beam spread (artifacts are single sharp pixels).',
-      'NOT a Moving Object if coordinates remain fixed (moving bodies shift positions in tracks).',
-      'NOT a Catalog Star if it was absent or magnitudes fainter in Gaia DR3 / AllWISE baseline catalogs.',
-    ],
-    distinctionRule: 'Stationary position + true optical PSF width + multi-epoch brightness surge.',
+    criteria: 'Sudden flux spike in 1–2 epochs + fixed sky coordinates + true multi-pixel optical PSF.',
+    distinction: 'Optical PSF spread distinguishes it from sharp 1px cosmic rays. Fixed position separates it from moving bodies.',
   },
   artifact: {
     id: 'artifact',
-    name: 'Detector Artifact (Cosmic Ray / Glitch)',
-    badge: 'Non-Astronomical',
+    name: 'Artifact (Cosmic Ray / Glitch)',
+    badge: 'Detector Noise',
     badgeBg: 'rgba(244, 63, 94, 0.2)',
     badgeText: '#f43f5e',
-    summary: 'High-energy cosmic ray hit, bad pixel, or stray light diffraction spike.',
-    importantForThis: [
-      'Single-pixel sharpness: Concentrated in 1 or 2 isolated pixels without optical PSF spread.',
-      'Single epoch hit: Appears in only 1 exposure and never repeats at the exact same sky coordinates.',
-      'Detector defects: Unphysical straight-line ionization track or saturated detector column.',
-    ],
-    notThisIf: [
-      'NOT an Artifact if it spans 2–4 pixels with standard instrument PSF—real sky photons always blur through optics!',
-      'NOT an Artifact if it repeats at consistent coordinates across separate telescope pointings.',
-    ],
-    distinctionRule: 'Unnaturally sharp (no PSF wings) or isolated single-frame detector glitch.',
+    criteria: 'Sharp 1-pixel spike or line streak in only 1 exposure with no physical optical beam spread.',
+    distinction: 'Lacks multi-pixel optical PSF wings. Disappears completely in all other telescope pointings.',
   },
   moving_object: {
     id: 'moving_object',
-    name: 'Moving Object (Asteroid / Interstellar Body)',
-    badge: 'Astrometric Track',
+    name: 'Moving Object (Asteroid / Comet)',
+    badge: 'Linear Track',
     badgeBg: 'rgba(16, 185, 129, 0.2)',
     badgeText: '#10b981',
-    summary: 'A solar system body or interstellar interloper travelling across the field of view.',
-    importantForThis: [
-      'Linear or curved positional track across consecutive epochs with consistent dRA/dt and dDec/dt.',
-      'Uniform optical PSF matching SPHEREx 6.2″ beam moving alongside the nucleus.',
-      'Examples: 3I/ATLAS interstellar comet (0.54 px from JPL Horizons), Barnard’s Star (10.3″/yr proper motion).',
-    ],
-    notThisIf: [
-      'NOT a Moving Object if it stays at the exact same pixel coordinates (that is a Transient flare).',
-      'NOT a Moving Object if epoch coordinates jump randomly with erratic non-directional steps.',
-    ],
-    distinctionRule: 'Smooth linear vector motion across epochs + steady optical PSF profile.',
+    criteria: 'Smooth positional track across epochs with steady optical PSF and predictable velocity vector.',
+    distinction: 'Centroid shifts smoothly each epoch (unlike stationary transients that stay at the same pixel).',
   },
   already_known: {
     id: 'already_known',
-    name: 'Known Catalog Star (Gaia / WISE)',
+    name: 'Known Catalog Star',
     badge: 'Catalog Baseline',
     badgeBg: 'rgba(148, 163, 184, 0.2)',
     badgeText: '#94a3b8',
-    summary: 'Confirmed static astronomical source matched in deep baseline catalogs.',
-    importantForThis: [
-      'Positional cross-match within <1.5″ of a known Gaia DR3, 2MASS, or AllWISE catalog source.',
-      'Stationary coordinates and consistent multi-epoch baseline infrared flux.',
-    ],
-    notThisIf: [
-      'NOT a Known Star if it displays rapid displacement or explosive unexpected multi-magnitude outbursts.',
-    ],
-    distinctionRule: 'Matches historical catalog coordinates with stationary multi-epoch flux.',
+    criteria: 'Stationary multi-epoch source matching Gaia DR3 or AllWISE within <1.5″.',
+    distinction: 'Stable baseline brightness catalogued in historical sky surveys; no unexpected outbursts.',
   },
 };
 
@@ -136,6 +97,7 @@ interface RightDrawerProps {
   subtractionMode?: import('../types/spherex').SubtractionMode;
   controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
   onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
+  className?: string;
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
@@ -157,6 +119,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   subtractionMode,
   controlledTab,
   onTabChange,
+  className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
   const activeTab = controlledTab ?? internalTab;
@@ -234,8 +197,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   return (
     <aside
-      style={{ width: `${width}px` }}
-      className="relative bg-paper-900 border-l border-paper-800 flex flex-col h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75"
+      style={typeof window !== 'undefined' && window.innerWidth < 1024 ? undefined : { width: `${width}px` }}
+      className={`relative bg-paper-900 border-l border-paper-800 flex flex-col h-full lg:h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75 ${className}`}
     >
       {/* Draggable Left Resize Handle */}
       <div
@@ -402,68 +365,36 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                     })}
                   </div>
 
-                  {/* TiH Interactive Classification Helper Card */}
-                  <div className="mt-2.5 p-3 rounded-xl bg-paper-950 border-2 border-black card-tactile space-y-2.5 anim-fall">
-                    <div className="flex items-center justify-between border-b border-paper-800/80 pb-2">
-                      <div className="flex items-center gap-1.5">
-                        {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
-                        {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
-                        {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
-                        {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
-                        <span className="font-mono text-[11px] font-bold text-paper-100">
-                          {currentGuide.name}
+                  {/* TiH Classification Helper: Volunteer Mode Only & Decluttered */}
+                  {!isScientistMode && (
+                    <div className="mt-2 p-2.5 rounded-xl bg-paper-950 border border-paper-800 space-y-1.5 anim-fall text-[10px]">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                          {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
+                          {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
+                          {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
+                          <span className="font-mono font-bold text-paper-100">{currentGuide.name}</span>
+                        </div>
+                        <span
+                          style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
+                          className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
+                        >
+                          {currentGuide.badge}
                         </span>
                       </div>
-                      <span
-                        style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
-                        className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
-                      >
-                        {currentGuide.badge}
-                      </span>
-                    </div>
 
-                    <p className="text-[10px] font-sans text-paper-300 leading-relaxed">
-                      {currentGuide.summary}
-                    </p>
+                      <div className="text-paper-300 flex items-start gap-1">
+                        <span className="text-emerald-400 font-bold shrink-0">✓ Key:</span>
+                        <span>{currentGuide.criteria}</span>
+                      </div>
 
-                    {/* What is important for this */}
-                    <div className="space-y-1">
-                      <span className="text-[9.5px] font-mono text-emerald-400 uppercase font-bold tracking-wider flex items-center gap-1">
-                        <Check className="w-3 h-3 stroke-[3]" />
-                        What to look for (Key Indicators):
-                      </span>
-                      <ul className="space-y-1 pl-1 text-[10px] font-sans text-paper-300">
-                        {currentGuide.importantForThis.map((pt, i) => (
-                          <li key={i} className="flex items-start gap-1.5">
-                            <span className="text-emerald-400 shrink-0 font-bold">•</span>
-                            <span>{pt}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="text-paper-400 flex items-start gap-1 pt-1 border-t border-paper-850">
+                        <span className="text-rose-400 font-bold shrink-0">✕ Distinguish:</span>
+                        <span>{currentGuide.distinction}</span>
+                      </div>
                     </div>
-
-                    {/* What rules it out / distinction */}
-                    <div className="space-y-1 pt-1.5 border-t border-paper-800/80">
-                      <span className="text-[9.5px] font-mono text-rose-400 uppercase font-bold tracking-wider flex items-center gap-1">
-                        <X className="w-3 h-3 stroke-[3]" />
-                        It is NOT this if:
-                      </span>
-                      <ul className="space-y-1 pl-1 text-[10px] font-sans text-paper-400">
-                        {currentGuide.notThisIf.map((pt, i) => (
-                          <li key={i} className="flex items-start gap-1.5">
-                            <span className="text-rose-400 shrink-0 font-bold">•</span>
-                            <span>{pt}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Key Distinction Rule Pill */}
-                    <div className="px-2.5 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-[10px] font-mono text-ochre-300 flex items-center gap-1.5">
-                      <span className="font-bold text-emerald-400 uppercase text-[9px]">Key Rule:</span>
-                      <span className="truncate">{currentGuide.distinctionRule}</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Confidence Level */}
