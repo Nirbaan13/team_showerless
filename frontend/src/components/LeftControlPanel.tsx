@@ -19,7 +19,6 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'explorer' | 'scientist';
-  onChangeViewMode?: (mode: 'explorer' | 'scientist') => void;
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -36,13 +35,8 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
-  viewMode: controlledViewMode,
-  onChangeViewMode,
+  viewMode = 'explorer',
 }) => {
-  const [internalViewMode, setInternalViewMode] = useState<'explorer' | 'scientist'>('explorer');
-  const viewMode = controlledViewMode ?? internalViewMode;
-  const setViewMode = onChangeViewMode ?? setInternalViewMode;
-
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
 
@@ -62,39 +56,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
   return (
     <aside className="w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20">
-      {/* 0. Audience Level Toggle: Explorer vs Scientist */}
-      <div className="p-2.5 border-b border-paper-800 bg-paper-950">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono text-paper-400 uppercase tracking-wider font-semibold">
-            Telemetry Mode
-          </span>
-          <div className="flex rounded-lg border-2 border-black bg-paper-900 p-0.5 btn-tactile-sm">
-            <button
-              onClick={() => setViewMode('explorer')}
-              className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
-                viewMode === 'explorer'
-                  ? 'bg-emerald-400 text-gray-950'
-                  : 'text-paper-400 hover:text-paper-200'
-              }`}
-              title="Clean, intuitive labels for public & citizen science volunteers"
-            >
-              Explorer
-            </button>
-            <button
-              onClick={() => setViewMode('scientist')}
-              className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
-                viewMode === 'scientist'
-                  ? 'bg-emerald-400 text-gray-950'
-                  : 'text-paper-400 hover:text-paper-200'
-              }`}
-              title="Full astrophysics metadata: wavelengths, resolving power, and FITS levels"
-            >
-              Scientist
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* 1. Target Query */}
       <div className="p-3 border-b border-paper-800">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">

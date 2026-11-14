@@ -307,7 +307,6 @@ export function App() {
             onToggleOverlay={handleToggleOverlay}
             onRefreshCutout={handleRefreshCutout}
             viewMode={telemetryMode}
-            onChangeViewMode={setTelemetryMode}
           />
 
           <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
@@ -323,6 +322,7 @@ export function App() {
               centerDec={dec}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
+              isScientistMode={telemetryMode === 'scientist'}
             />
 
             <MoviePlayerControls
@@ -349,6 +349,7 @@ export function App() {
             spectrumData={spectrumData}
             onUpdateCandidateClassification={handleUpdateCandidateClassification}
             onOpenDiscoveryReport={() => setActiveTab('report')}
+            isScientistMode={telemetryMode === 'scientist'}
           />
         </div>
       )}

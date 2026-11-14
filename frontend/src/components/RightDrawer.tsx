@@ -24,6 +24,7 @@ interface RightDrawerProps {
   ) => void;
   onBroadcastToChat?: (text: string) => void;
   onOpenDiscoveryReport?: () => void;
+  isScientistMode?: boolean;
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
@@ -34,6 +35,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   spectrumData,
   onUpdateCandidateClassification,
   onOpenDiscoveryReport,
+  isScientistMode = false,
 }) => {
   const [activeTab, setActiveTab] = useState<'triage' | 'spectrum' | 'community' | 'health'>('community');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -45,6 +47,13 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     candidate?.confidence || 'medium'
   );
   const [isSaved, setIsSaved] = useState(false);
+
+  // In Scientist Mode, automatically open the Spectrophotometry analysis tab
+  React.useEffect(() => {
+    if (isScientistMode) {
+      setActiveTab('spectrum');
+    }
+  }, [isScientistMode]);
 
   React.useEffect(() => {
     if (candidate) {
@@ -103,8 +112,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 : 'border-transparent text-paper-400 hover:text-paper-200'
             }`}
           >
-            <Radio className="w-3.5 h-3.5" />
+            <Radio className={`w-3.5 h-3.5 ${isScientistMode ? 'text-emerald-400 animate-pulse' : ''}`} />
             <span>102 Bands</span>
+            {isScientistMode && (
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            )}
           </button>
 
           <button
@@ -115,8 +127,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 : 'border-transparent text-paper-400 hover:text-paper-200'
             }`}
           >
-            <Activity className="w-3.5 h-3.5" />
+            <Activity className={`w-3.5 h-3.5 ${isScientistMode ? 'text-emerald-400' : ''}`} />
             <span>FITS</span>
+            {isScientistMode && (
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            )}
           </button>
         </div>
 
@@ -311,9 +326,35 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         {/* TAB 4: DATA HEALTH TELEMETRY */}
         {activeTab === 'health' && (
           <div className="p-4 space-y-3">
-            <span className="font-semibold text-paper-100 uppercase tracking-wider text-xs block">
-              FITS Frame Telemetry
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-paper-100 uppercase tracking-wider text-xs block">
+                FITS Frame Telemetry
+              </span>
+              <span className="text-[10px] font-mono text-emerald-400 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
+                {isScientistMode ? 'Calibrated L2/L3' : 'Raw Headers'}
+              </span>
+            </div>
+
+            {/* In Scientist Mode: Primary HDU FITS Header Card */}
+            {isScientistMode && (
+              <div className="p-3 bg-paper-950 border border-emerald-500/40 rounded-lg font-mono text-[10px] space-y-1 text-emerald-300">
+                <div className="font-bold text-emerald-400 text-[11px] border-b border-paper-800 pb-1 flex justify-between">
+                  <span>Primary HDU Header</span>
+                  <span className="text-paper-400 font-normal">Level 2 Calibrated</span>
+                </div>
+                <div>SIMPLE  =                    T / Standard FITS</div>
+                <div>BITPIX  =                  -32 / IEEE 32-bit float</div>
+                <div>NAXIS   =                    2 / 2D image matrix</div>
+                <div>NAXIS1  =                 2048 / Fast axis px</div>
+                <div>NAXIS2  =                 2048 / Slow axis px</div>
+                <div>BUNIT   = 'MJy/sr  '           / Flux units</div>
+                <div>RADESYS = 'ICRS    '           / Astrometric ref</div>
+                <div>EQUINOX =               2000.0 / Epoch</div>
+                <div>CD1_1   =        -1.722222E-03 / CD matrix deg/px</div>
+                <div>CD2_2   =         1.722222E-03 / CD matrix deg/px</div>
+              </div>
+            )}
+
             <div className="space-y-1.5">
               {frames.map((f, idx) => (
                 <div
