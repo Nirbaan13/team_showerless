@@ -69,6 +69,18 @@ object ApiSpec extends ZIOSpecDefault:
         yield assertTrue(job.status==Status.NotFound,chunk.status==Status.NotFound,deferred.status==Status.NotImplemented)
       })
     },
+    test("Swagger loads its specification through direct and prefixed docs URLs") {
+      ZIO.scoped(withApi {api=>
+        for
+          response <- api.routes.runZIO(Request.get("http://localhost/docs"))
+          html <- response.body.asString
+          specification <- ZIO.fromOption("""\burl\s*:\s*['"]([^'"]+)['"]""".r.findFirstMatchIn(html).map(_.group(1)))
+            .orElseFail(new RuntimeException("Swagger specification URL is missing"))
+          direct = java.net.URI.create("http://localhost/docs").resolve(specification)
+          proxied = java.net.URI.create("http://localhost/backend/docs").resolve(specification)
+        yield assertTrue(response.status==Status.Ok,direct.getPath=="/openapi.json",proxied.getPath=="/backend/openapi.json")
+      })
+    },
     test("health/version/OpenAPI preserve revision and all contract paths") {
       ZIO.scoped(withApi {api=>
         for
