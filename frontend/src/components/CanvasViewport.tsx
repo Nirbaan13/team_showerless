@@ -863,65 +863,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         </div>
       )}
 
-      {/* Active Selected Object Switcher Bar (Top Center) */}
-      {candidates.length > 0 && (() => {
-        const activeIdx = Math.max(
-          0,
-          candidates.findIndex((c) => c.id === selectedCandidateId)
-        );
-        const activeCand = candidates[activeIdx] || candidates[0];
-        const objName =
-          activeCand.validationData?.objectName ||
-          activeCand.catalogId ||
-          activeCand.id;
-        return (
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="hidden sm:flex absolute top-2.5 left-1/2 -translate-x-1/2 bg-paper-950/95 border-2 border-emerald-400/80 shadow-[0_0_18px_rgba(16,185,129,0.22)] rounded-xl px-2 py-1 items-center gap-2 z-20 font-mono text-[10px] pointer-events-auto"
-          >
-            {candidates.length > 1 && (
-              <button
-                type="button"
-                onClick={() => {
-                  const prevIdx = (activeIdx - 1 + candidates.length) % candidates.length;
-                  onSelectCandidate(candidates[prevIdx].id);
-                }}
-                className="px-1.5 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-paper-200 border border-paper-700 cursor-pointer"
-                title="Select Previous Candidate"
-              >
-                ◀ Prev
-              </button>
-            )}
-            <div className="flex items-center gap-1.5 px-1">
-              <span className="text-gray-950 bg-emerald-400 font-bold px-1.5 py-0.5 rounded text-[9px]">
-                ★ SELECTED #{activeCand.mlRank || activeIdx + 1}/{candidates.length}
-              </span>
-              <span className="text-white font-bold truncate max-w-[11rem]">
-                {objName}
-              </span>
-              {activeCand.speedArcsecPerHour !== undefined && (
-                <span className="text-emerald-300">
-                  · {activeCand.speedArcsecPerHour.toFixed(1)}″/h
-                </span>
-              )}
-            </div>
-            {candidates.length > 1 && (
-              <button
-                type="button"
-                onClick={() => {
-                  const nextIdx = (activeIdx + 1) % candidates.length;
-                  onSelectCandidate(candidates[nextIdx].id);
-                }}
-                className="px-1.5 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-paper-200 border border-paper-700 cursor-pointer"
-                title="Select Next Candidate"
-              >
-                Next ▶
-              </button>
-            )}
-          </div>
-        );
-      })()}
-
       {/* Skipped Frame Notification */}
       {skippedNotice && (
         <div className="absolute top-12 left-2.5 bg-paper-900 border border-ochre-500/60 text-ochre-300 px-3 py-1.5 rounded flex items-center justify-between text-xs font-mono z-30">

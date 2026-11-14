@@ -651,7 +651,9 @@ export function App() {
         const latestCands = getMockCandidates(preset.id, preset.recommendedArray);
         setCandidatesList(latestCands);
         if (latestCands.length > 0) {
-          setSelectedCandidateId(latestCands[0].id);
+          setSelectedCandidateId((prev) =>
+            prev && latestCands.some((c) => c.id === prev) ? prev : latestCands[0].id
+          );
         }
         const top = latestCands[0];
         setMlAnalysisStatus({
@@ -1283,6 +1285,7 @@ export function App() {
               controlledTab={drawerControlledTab}
               onTabChange={setDrawerControlledTab}
               mlAnalysisStatus={mlAnalysisStatus}
+              currentPresetId={currentPresetId}
               className="h-full w-full"
             />
           </div>

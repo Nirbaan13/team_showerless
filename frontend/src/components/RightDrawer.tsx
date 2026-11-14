@@ -98,6 +98,7 @@ interface RightDrawerProps {
   controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
   onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
   mlAnalysisStatus?: import('../types/spherex').MLAnalysisStatus;
+  currentPresetId?: string | null;
   className?: string;
 }
 
@@ -121,6 +122,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   controlledTab,
   onTabChange,
   mlAnalysisStatus,
+  currentPresetId = null,
   className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
@@ -485,8 +487,10 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         {/* TAB 2: VERIFICATION NOTES & SINGLE-OBJECT COMMUNITY CHAT */}
         {activeTab === 'chat' && (
           <CommunityVerificationStream
+            key={candidate?.id || selectedCandidateId || 'none'}
             candidate={candidate}
-            activeCandidateId={candidate?.id || null}
+            activeCandidateId={candidate?.id || selectedCandidateId || null}
+            currentPresetId={currentPresetId}
             ra={ra}
             dec={dec}
             fov={fov}
