@@ -1,0 +1,13 @@
+{
+  "method": "paired bootstrap of whole test fields, 10000 draws, seed274912",
+  "top_k": 3,
+  "top_k_recall_difference_rf_minus_baseline_95percent": [
+    0.14965986394557823,
+    0.23178807947019867
+  ],
+  "false_tracks_per_field_difference_rf_minus_baseline_95percent": [
+    -0.36,
+    -0.225
+  ],
+  "model_sha256": "030c1edf972b76b3cb8fadcb4adadcc386a36eab9f2cdbcb65527c277c581ab9"
+}

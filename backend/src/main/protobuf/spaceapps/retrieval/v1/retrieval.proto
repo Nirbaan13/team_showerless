@@ -64,3 +64,41 @@ message DownloadEvent {
   int64 sequence = 1; string name = 2;
   oneof payload { Download download = 3; ChunkUpdate chunk_update = 4; }
 }
+
+// Durable whole-download inference; review PNGs are fetched using resource URLs.
+service AnalysisService {
+  rpc SubmitAnalysis(SubmitAnalysisRequest) returns (AnalysisJob);
+  rpc GetAnalysis(AnalysisRequest) returns (AnalysisJob);
+  rpc WatchAnalysis(AnalysisRequest) returns (stream AnalysisEvent);
+  rpc GetModels(ModelsRequest) returns (ModelsResponse);
+  rpc GetPresets(PresetsRequest) returns (PresetsResponse);
+}
+enum AnalysisState {
+  ANALYSIS_STATE_UNSPECIFIED = 0;
+  QUEUED = 1;
+  WAITING_FOR_DOWNLOAD = 2;
+  PREPARING = 3;
+  INFERENCING = 4;
+  COMPLETED = 5;
+  FAILED = 6;
+}
+message SubmitAnalysisRequest {
+  oneof source { string download_id = 1; string preset = 2; }
+  google.protobuf.Struct options = 3;
+}
+message AnalysisRequest { string analysis_id = 1; }
+message AnalysisJob {
+  string id = 1;
+  AnalysisState status = 2;
+  optional string download_id = 3;
+  string status_url = 4;
+  string events_url = 5;
+  google.protobuf.Struct result = 6;
+  ApiError error = 7;
+}
+message AnalysisEvent { int64 sequence = 1; string name = 2; AnalysisJob analysis = 3; }
+message ModelsRequest {}
+message ModelsResponse { repeated google.protobuf.Struct models = 1; }
+message PresetsRequest {}
+message AnalysisPreset { string id = 1; string title = 2; string description = 3; string source_url = 4; }
+message PresetsResponse { repeated AnalysisPreset presets = 1; }
