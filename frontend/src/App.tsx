@@ -24,10 +24,11 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
-import { Home, Compass, FileText } from 'lucide-react';
+import { Compass, FileText, Search } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('viewer');
+  // Opens on the clean Home page by default as requested
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('home');
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
   const [ra, setRa] = useState<number>(269.452075);
@@ -96,6 +97,17 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
+  // Handler when user searches custom coordinates on Home page
+  const handleSearchCoordinates = (newRa: number, newDec: number) => {
+    setRa(newRa);
+    setDec(newDec);
+    setCurrentPresetId(null);
+    setActiveTab('viewer');
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), simulateLatency ? 1800 : 500);
+  };
+
+  // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
     setCurrentPresetId(preset.id);
     setRa(preset.raDeg);
@@ -108,6 +120,8 @@ export function App() {
       setSelectedCandidateId(newCands[0].id);
     }
     setActiveTab('viewer');
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), simulateLatency ? 1800 : 500);
   };
 
   const handleRefreshCutout = () => {
@@ -119,13 +133,6 @@ export function App() {
     setSimulateLatency((prev) => !prev);
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 2000);
-  };
-
-  const handleUpdateCoords = (newRa: number, newDec: number) => {
-    setRa(newRa);
-    setDec(newDec);
-    setCurrentPresetId(null);
-    handleRefreshCutout();
   };
 
   const handleToggleOverlay = (key: keyof CatalogOverlayState) => {
@@ -161,60 +168,63 @@ export function App() {
         />
       )}
 
-      {/* Top Header */}
-      <div className="h-12 bg-paper-900 border-b border-paper-800 px-4 flex items-center justify-between text-xs select-none z-30">
+      {/* Top Header: Clean, Uncluttered, Minimal */}
+      <header className="h-12 bg-paper-900 border-b border-paper-800 px-4 flex items-center justify-between text-xs select-none z-30">
         <div className="flex items-center space-x-6">
-          <div className="flex items-center space-x-2">
-            <div className="w-5 h-5 rounded bg-paper-100 text-paper-950 flex items-center justify-center font-bold text-[10px]">
+          <div
+            onClick={() => setActiveTab('home')}
+            className="flex items-center space-x-2 cursor-pointer group"
+          >
+            <div className="w-5 h-5 rounded bg-ochre-400 text-paper-950 flex items-center justify-center font-bold text-[10px]">
               SPX
             </div>
-            <span className="font-medium text-paper-100 tracking-wide text-xs font-sans">
+            <span className="font-medium text-paper-100 tracking-wide text-xs font-sans group-hover:text-ochre-300 transition-colors">
               SPHEREx Sky-Viewer
             </span>
           </div>
 
+          {/* Simple Tab Navigation */}
           <nav className="flex items-center space-x-1 font-mono text-[11px]">
             <button
               onClick={() => setActiveTab('home')}
-              className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
                 activeTab === 'home'
                   ? 'bg-paper-800 text-paper-100 font-medium'
                   : 'text-paper-400 hover:text-paper-200'
               }`}
             >
-              <Home className="w-3.5 h-3.5" />
-              <span>1. Field</span>
+              <Search className="w-3.5 h-3.5" />
+              <span>Search</span>
             </button>
 
             <button
               onClick={() => setActiveTab('viewer')}
-              className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
                 activeTab === 'viewer'
                   ? 'bg-paper-800 text-paper-100 font-medium'
                   : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>2. Blink Player</span>
+              <span>Sky Viewport</span>
             </button>
 
             <button
               onClick={() => setActiveTab('report')}
-              className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
+              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
                 activeTab === 'report'
                   ? 'bg-paper-800 text-paper-100 font-medium'
                   : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>3. Dossier Report</span>
+              <span>Dossier Report</span>
             </button>
           </nav>
         </div>
 
+        {/* Global Toolbar */}
         <TopNav
-          currentPresetId={currentPresetId}
-          onSelectPreset={handleSelectPreset}
           ra={ra}
           dec={dec}
           fov={fov}
@@ -224,21 +234,19 @@ export function App() {
           onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
           simulateLatency={simulateLatency}
           onToggleSimulateLatency={handleToggleSimulateLatency}
+          isViewerActive={activeTab === 'viewer'}
         />
-      </div>
+      </header>
 
+      {/* 1. Clean Home Page: Starts with big name and coordinate search */}
       {activeTab === 'home' && (
         <HomePage
-          onSelectTarget={handleSelectPreset}
-          onEnterCustomCoords={() => setActiveTab('viewer')}
-          onOpenStep={(step) => {
-            if (step === 1 || step === 2) setActiveTab('viewer');
-            else if (step === 4) setActiveTab('report');
-            else setActiveTab('viewer');
-          }}
+          onSearchCoordinates={handleSearchCoordinates}
+          onSelectPreset={handleSelectPreset}
         />
       )}
 
+      {/* 2. Dossier Report Page */}
       {activeTab === 'report' && (
         <DiscoveryReportPage
           candidate={activeCandidate}
@@ -247,13 +255,14 @@ export function App() {
         />
       )}
 
+      {/* 3. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
         <div className="flex flex-1 overflow-hidden relative">
           <LeftControlPanel
             ra={ra}
             dec={dec}
             fov={fov}
-            onUpdateCoords={handleUpdateCoords}
+            onUpdateCoords={(nRa, nDec) => handleSearchCoordinates(nRa, nDec)}
             onUpdateFov={setFov}
             selectedArray={selectedArray}
             onSelectArray={setSelectedArray}
@@ -296,6 +305,7 @@ export function App() {
             />
           </main>
 
+          {/* Right Drawer: Resizable & Expandable Chat / Triage */}
           <RightDrawer
             frames={frames}
             activeFrameIndex={activeFrameIndex}
@@ -307,6 +317,7 @@ export function App() {
         </div>
       )}
 
+      {/* Embed Modal */}
       <EmbedModal
         isOpen={isEmbedModalOpen}
         onClose={() => setIsEmbedModalOpen(false)}
