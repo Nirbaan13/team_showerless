@@ -205,6 +205,41 @@ object EquipmentSpec extends ZIOSpecDefault:
       yield assertTrue(failure.isLeft, hits.get == 1, entries == 0)
       }
     },
+    test("startup reclaims abandoned owned partial files and preserves unrelated files") {
+      fixture() { (base,dir,hits) => for
+        repo <- Repository.open(dir.resolve("db.sqlite"))
+        client <- ZIO.service[Client]
+        cache <- ZIO.attempt(Files.createDirectories(dir.resolve("calibration-cache")))
+        abandoned = cache.resolve("a" * 64 + ".part")
+        sentinel = cache.resolve("unrelated.part")
+        _ <- ZIO.attempt {
+          Files.write(abandoned,Array.fill[Byte](128)(7))
+          Files.write(sentinel,Array[Byte](9,8,7))
+        }
+        equipment <- EquipmentService.make(repo,dir,client,base,CalibrationLimits(maxFileBytes=128,cacheBytes=yaml.length+3,minFreeBytes=0))
+        result <- equipment.catalog("DR1",None)
+        file <- equipment.file(id(products(result).head))
+        retained <- ZIO.attempt(Files.readAllBytes(sentinel))
+        bytes <- ZIO.attempt(Files.readAllBytes(file.path))
+      yield assertTrue(!Files.exists(abandoned),retained.toList == List[Byte](9,8,7),bytes.toList == yaml.toList,hits.get == 1)
+      }
+    },
+    test("startup rejects symlink partial files without changing their targets") {
+      fixture() { (base,dir,hits) => for
+        repo <- Repository.open(dir.resolve("db.sqlite"))
+        client <- ZIO.service[Client]
+        cache <- ZIO.attempt(Files.createDirectories(dir.resolve("calibration-cache")))
+        target = dir.resolve("sentinel")
+        abandoned = cache.resolve("b" * 64 + ".part")
+        _ <- ZIO.attempt {
+          Files.write(target,Array[Byte](9,8,7))
+          Files.createSymbolicLink(abandoned,target)
+        }
+        result <- EquipmentService.make(repo,dir,client,base).either
+        retained <- ZIO.attempt(Files.readAllBytes(target))
+      yield assertTrue(result.isLeft,Files.isSymbolicLink(abandoned),retained.toList == List[Byte](9,8,7),hits.get == 0)
+      }
+    },
     test("quota failure precedes transfer") {
       fixture() { (base,dir,hits) => for
         repo <- Repository.open(dir.resolve("db.sqlite"))

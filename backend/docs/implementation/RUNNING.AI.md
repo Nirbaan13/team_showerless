@@ -44,3 +44,6 @@ GET /api/observationsDeep accepts exactly one geometry family: center RA/Dec wit
 The native FITS cache uses SQLite-backed least-recently-used eviction. Reads and actual reuse update last_accessed_at; download admission reserves its maximum product size and evicts only eligible service-owned FITS files. Processing, FITS-header inspection and HTTP/gRPC readers pin their inputs until completion or cancellation. Active transfer bytes are not counted twice. Atomic publication, restart reconciliation and cache_missing/refetch behavior are preserved; unrelated files and calibration products are never eviction candidates.
 
 Additive gRPC methods mirror the new HTTP capabilities: PrepareDeepObservations, GetObservationMetadata, GetEquipment and streaming GetCalibrationFile. Query.deep selects deep discovery; existing field numbers and RPCs are unchanged. Metadata and equipment documents use google.protobuf.Struct, while calibration bytes use the existing bounded ChunkBytes stream.
+
+
+EquipmentService also assumes a single owning process per data directory. Startup removes only owned regular calibration partials named <64 lowercase hex>.part; unrelated files are retained and symbolic links are rejected. Shared TAP lookups belong to application scope, so one disconnected metadata caller cannot cancel other callers waiting for the same frame.

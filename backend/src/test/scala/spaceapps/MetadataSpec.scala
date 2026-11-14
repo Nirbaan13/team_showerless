@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets.{US_ASCII, UTF_8}
 import java.nio.file.{Files, Path}
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.{CountDownLatch, TimeUnit}
 import scala.jdk.CollectionConverters.*
 
 object MetadataSpec extends ZIOSpecDefault:
@@ -39,7 +40,7 @@ object MetadataSpec extends ZIOSpecDefault:
     val bytes = value.getBytes(UTF_8)
     ex.sendResponseHeaders(status, bytes.length.toLong)
     try ex.getResponseBody.write(bytes) finally ex.close()
-  private def server[A](handler: HttpExchange => Unit)(use: String => ZIO[Client, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
+  private def server[A](handler: HttpExchange => Unit)(use: String => ZIO[Client & Scope, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
     for
       http <- ZIO.acquireRelease(ZIO.attempt {
         val s = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0)
@@ -50,7 +51,7 @@ object MetadataSpec extends ZIOSpecDefault:
       result <- use(s"http://127.0.0.1:${http.getAddress.getPort}")
     yield result
   }
-  private def temporary[A](use: Path => ZIO[Client, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
+  private def temporary[A](use: Path => ZIO[Client & Scope, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
     ZIO.acquireRelease(ZIO.attempt(Files.createTempDirectory("metadata-spec-")))(p => ZIO.attemptBlocking {
       val files = Files.walk(p)
       try files.iterator().asScala.toList.reverse.foreach(Files.deleteIfExists(_)) finally files.close()
@@ -172,6 +173,39 @@ object MetadataSpec extends ZIOSpecDefault:
         result <- service.get("frame-one")
       yield assertTrue(obj(result, "tap", "status") == Json.Str("unavailable"), requests.get == 0) } }
     },
+    test("cancelling the first metadata caller leaves its shared TAP lookup available to followers") {
+      val entered = new CountDownLatch(1)
+      val release = new CountDownLatch(1)
+      val requests = new AtomicInteger()
+      server(ex => {
+        requests.incrementAndGet()
+        entered.countDown()
+        release.await(10, TimeUnit.SECONDS)
+        try respond(ex, 200, votable) catch case _: java.io.IOException => ex.close()
+      }) { base => temporary { dir => (for
+        repository <- Repository.open(dir.resolve("db.sqlite"))
+        _ <- repository.remember(List(image(base)))
+        client <- ZIO.service[Client]
+        service <- MetadataService.make(repository, _ => ZIO.none, client, base + "/tap")
+        owner <- service.get("frame-one").forkScoped
+        started <- ZIO.attemptBlocking(entered.await(3, TimeUnit.SECONDS))
+        _ <- ZIO.fail(new RuntimeException("TAP fixture did not receive the first request")).unless(started)
+        follower <- service.get("frame-one").forkScoped
+        _ <- follower.status.repeatUntil {
+          case suspended: Fiber.Status.Suspended => suspended.blockingOn == owner.id
+          case _ => false
+        }.timeoutFail(new RuntimeException("Follower did not await the shared promise"))(3.seconds)
+        cancelled <- owner.interrupt.timeout(3.seconds)
+        _ <- ZIO.succeed(release.countDown())
+        completed <- follower.await.timeout(3.seconds)
+        metadata = completed match
+          case Some(Exit.Success(value)) => value
+          case _ => Json.Null
+        row = arr(obj(metadata, "tap", "rows")).headOption.getOrElse(Json.Null)
+      yield assertTrue(cancelled.exists(_.isInterrupted), completed.exists(_.isSuccess),
+        obj(metadata, "tap", "status") == Json.Str("available"), obj(row, "contentlength") == Json.Num(63492480), requests.get == 1))
+        .ensuring(ZIO.succeed(release.countDown())) } }
+    },
     test("expired TAP cache refreshes and retains explicitly stale values during upstream failure") {
       val requests = new AtomicInteger()
       server(ex => {
@@ -194,6 +228,36 @@ object MetadataSpec extends ZIOSpecDefault:
       yield assertTrue(requests.get == 2, obj(first, "tap", "status") == Json.Str("available"),
         obj(result, "tap", "status") == Json.Str("stale"), obj(result, "tap", "error", "code") == Json.Str("metadata_http_error"),
         obj(row, "contentchecksum") == Json.Str("md5:abc"), obj(result, "status") == Json.Str("partial")) } }
+    },
+    test("application scope shutdown interrupts shared TAP work and releases its pending callers") {
+      val entered = new CountDownLatch(1)
+      val release = new CountDownLatch(1)
+      val requests = new AtomicInteger()
+      server(ex => {
+        requests.incrementAndGet()
+        entered.countDown()
+        release.await(10, TimeUnit.SECONDS)
+        try respond(ex, 200, votable) catch case _: java.io.IOException => ex.close()
+      }) { base => temporary { dir => (for
+        repository <- Repository.open(dir.resolve("db.sqlite"))
+        _ <- repository.remember(List(image(base)))
+        client <- ZIO.service[Client]
+        applicationScope <- ZIO.acquireRelease(Scope.make)(_.close(Exit.unit))
+        service <- MetadataService.make(repository, _ => ZIO.none, client, base + "/tap")
+          .provideEnvironment(ZEnvironment[Scope](applicationScope))
+        owner <- service.get("frame-one").forkScoped
+        started <- ZIO.attemptBlocking(entered.await(3, TimeUnit.SECONDS))
+        _ <- ZIO.fail(new RuntimeException("TAP fixture did not receive the first request")).unless(started)
+        follower <- service.get("frame-one").forkScoped
+        _ <- follower.status.repeatUntil {
+          case suspended: Fiber.Status.Suspended => suspended.blockingOn == owner.id
+          case _ => false
+        }.timeoutFail(new RuntimeException("Follower did not await the shared promise"))(3.seconds)
+        closed <- applicationScope.close(Exit.unit).timeout(3.seconds)
+        ownerExit <- owner.await.timeout(500.millis)
+        followerExit <- follower.await.timeout(500.millis)
+      yield assertTrue(closed.isDefined, ownerExit.exists(_.isInterrupted), followerExit.exists(_.isInterrupted), requests.get == 1))
+        .ensuring(ZIO.succeed(release.countDown())) } }
     },
     test("TAP metadata rejects oversized replies, unsafe XML and ambiguous exact-product matches") {
       val docs = List(" " * (2 * 1024 * 1024 + 1),

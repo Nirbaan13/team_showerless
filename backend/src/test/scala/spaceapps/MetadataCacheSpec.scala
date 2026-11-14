@@ -14,7 +14,7 @@ import java.net.InetSocketAddress
 import scala.jdk.CollectionConverters.*
 
 object MetadataCacheSpec extends ZIOSpecDefault:
-  private def temporary[A](use: Path => ZIO[Client, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
+  private def temporary[A](use: Path => ZIO[Client & Scope, Throwable, A]): ZIO[Client, Throwable, A] = ZIO.scoped {
     ZIO.acquireRelease(ZIO.attempt(Files.createTempDirectory("metadata-quota-")))(p => ZIO.attemptBlocking {
       val files = Files.walk(p)
       try files.iterator().asScala.toList.reverse.foreach(Files.deleteIfExists(_)) finally files.close()

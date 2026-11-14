@@ -17,7 +17,8 @@ final class MetadataService private (
   tap: TapMetadata,
   endpoint: String,
   pending: Ref.Synchronized[Map[String, Promise[Throwable, Json]]],
-  network: Semaphore
+  network: Semaphore,
+  applicationScope: Scope
 ):
   private def obj(fields: (String, Json)*): Json = Json.Obj(zio.Chunk.fromIterable(fields))
   private def status(value: Json): Option[String] = value match
@@ -60,9 +61,11 @@ final class MetadataService private (
         case None => Promise.make[Throwable, Json].map(promise => ((promise, true), current.updated(key, promise)))
       }
       (promise, owner) = shared
-      value <- if owner then
-        restore(cachedTap(image)).exit.flatMap(exit => promise.done(exit) *> ZIO.done(exit)).ensuring(pending.update(_ - key))
-      else restore(promise.await)
+      _ <- if owner then
+        cachedTap(image).interruptible.exit.flatMap(promise.done)
+          .ensuring(pending.update(_ - key)).forkIn(applicationScope).unit
+      else ZIO.unit
+      value <- restore(promise.await)
     yield value
   }
   def get(frameId: String): Task[Json] =
@@ -82,8 +85,10 @@ final class MetadataService private (
 
 object MetadataService:
   def make(repository: Repository, cachedFile: ArchiveImage => ZIO[Scope, Throwable, Option[Path]], client: Client,
-    tapEndpoint: String = "https://irsa.ipac.caltech.edu/TAP/sync"): Task[MetadataService] =
+    tapEndpoint: String = "https://irsa.ipac.caltech.edu/TAP/sync"): ZIO[Scope, Throwable, MetadataService] =
     for
+      applicationScope <- ZIO.scope
       pending <- Ref.Synchronized.make(Map.empty[String, Promise[Throwable, Json]])
       network <- Semaphore.make(4)
-    yield new MetadataService(repository, cachedFile, new TapMetadata(client, tapEndpoint), tapEndpoint, pending, network)
+      _ <- ZIO.addFinalizer(pending.getAndSet(Map.empty).flatMap(remaining => ZIO.foreachDiscard(remaining.values)(_.interrupt)))
+    yield new MetadataService(repository, cachedFile, new TapMetadata(client, tapEndpoint), tapEndpoint, pending, network, applicationScope)

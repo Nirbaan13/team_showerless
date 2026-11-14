@@ -99,6 +99,7 @@ final class EquipmentService private (repository: Repository, directory: Path, a
     yield result
 
 object EquipmentService:
+  /** One JVM owns the data directory; startup reclaims its abandoned calibration partial files. */
   def make(repository: Repository, dataDir: Path, client: Client, baseUrl: String = "https://nasa-irsa-spherex.s3.amazonaws.com/", limits: CalibrationLimits = CalibrationLimits()): Task[EquipmentService] =
     val archive = new CalibrationArchive(client,baseUrl,limits)
     for
@@ -109,7 +110,18 @@ object EquipmentService:
         val cache = root.resolve("calibration-cache")
         if Files.isSymbolicLink(cache) then throw ApiError("calibration_cache_error", "Calibration cache directory cannot be a symlink")
         Files.createDirectories(cache)
-        cache.toRealPath()
+        val directory = cache.toRealPath()
+        val entries = Files.list(directory)
+        try
+          val iterator = entries.iterator()
+          while iterator.hasNext do
+            val entry = iterator.next()
+            if entry.getFileName.toString.matches("[0-9a-f]{64}\\.part") then
+              if Files.isSymbolicLink(entry) || !Files.isRegularFile(entry,LinkOption.NOFOLLOW_LINKS) then
+                throw ApiError("calibration_cache_error", "Unsafe abandoned calibration partial file")
+              Files.delete(entry)
+        finally entries.close()
+        directory
       }
       catalogGate <- Semaphore.make(1)
       fileGate <- Semaphore.make(1)
