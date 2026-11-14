@@ -8,7 +8,7 @@ from astropy.table import Table
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from app.spherex.query import DEFAULT, cutout, detector, image_search, list_collections
+from spherex.query import DEFAULT, cutout, detector, image_search, list_collections
 
 
 def main():
