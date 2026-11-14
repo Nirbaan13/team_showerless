@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "designation": "selected development/recovery cases",
+  "independent_known_objects": 2,
+  "unmatched_candidates": "unlabeled, never counted as false detections",
+  "cases": {
+    "comet-d6": {
+      "candidates": 10,
+      "known_target_recovered": true,
+      "known_target_matches": [
+        {
+          "heuristic_rank": 1,
+          "model_rank": 3,
+          "epochs": 4,
+          "max_offset_px": 0.5386327528702104
+        }
+      ],
+      "unmatched_candidates_unlabeled": 9,
+      "shared_reference_recovery": {
+        "candidates": 25,
+        "known_target_recovered": true,
+        "known_target_matches": [
+          {
+            "heuristic_rank": 1,
+            "model_rank": 1,
+            "epochs": 4,
+            "max_offset_px": 0.5386327528702104
+          }
+        ],
+        "unmatched_candidates_unlabeled": 24
+      },
+      "fixture_sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+      "object_group": "3I/ATLAS",
+      "exposures": 4,
+      "detector_settings": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 1.2,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8
+      },
+      "source_revision": "2b6dc435b0f73a6f255e50ca795900acfd69cd33"
+    },
+    "comet-d2": {
+      "candidates": 2,
+      "known_target_recovered": true,
+      "known_target_matches": [
+        {
+          "heuristic_rank": 1,
+          "model_rank": 1,
+          "epochs": 3,
+          "max_offset_px": 0.6041444988210316
+        }
+      ],
+      "unmatched_candidates_unlabeled": 1,
+      "shared_reference_recovery": {
+        "candidates": 0,
+        "known_target_recovered": false,
+        "known_target_matches": [],
+        "unmatched_candidates_unlabeled": 0
+      },
+      "fixture_sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+      "object_group": "3I/ATLAS",
+      "exposures": 3,
+      "detector_settings": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 1.2,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8
+      },
+      "source_revision": "2b6dc435b0f73a6f255e50ca795900acfd69cd33"
+    },
+    "vesta-d6": {
+      "candidates": 7,
+      "known_target_recovered": false,
+      "known_target_matches": [],
+      "unmatched_candidates_unlabeled": 7,
+      "shared_reference_recovery": {
+        "candidates": 6,
+        "known_target_recovered": false,
+        "known_target_matches": [],
+        "unmatched_candidates_unlabeled": 6
+      },
+      "bloom_recovery": {
+        "candidates": 1,
+        "known_target_recovered": true,
+        "known_target_matches": [
+          {
+            "heuristic_rank": 1,
+            "model_rank": 1,
+            "epochs": 3,
+            "max_offset_px": 0.2809746015134678
+          }
+        ],
+        "unmatched_candidates_unlabeled": 0,
+        "ml_score_applied": false,
+        "peak_cap_reached": false
+      },
+      "fixture_sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114",
+      "object_group": "Vesta",
+      "exposures": 3,
+      "detector_settings": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 1.2,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8
+      },
+      "source_revision": "2b6dc435b0f73a6f255e50ca795900acfd69cd33"
+    },
+    "vesta-d3": {
+      "candidates": 25,
+      "known_target_recovered": false,
+      "known_target_matches": [],
+      "unmatched_candidates_unlabeled": 25,
+      "shared_reference_recovery": {
+        "candidates": 54,
+        "known_target_recovered": false,
+        "known_target_matches": [],
+        "unmatched_candidates_unlabeled": 54
+      },
+      "bloom_recovery": {
+        "candidates": 1,
+        "known_target_recovered": true,
+        "known_target_matches": [
+          {
+            "heuristic_rank": 1,
+            "model_rank": 1,
+            "epochs": 3,
+            "max_offset_px": 0.3817005658694946
+          }
+        ],
+        "unmatched_candidates_unlabeled": 0,
+        "ml_score_applied": false,
+        "peak_cap_reached": false
+      },
+      "fixture_sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+      "object_group": "Vesta",
+      "exposures": 3,
+      "detector_settings": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 1.2,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8
+      },
+      "source_revision": "2b6dc435b0f73a6f255e50ca795900acfd69cd33"
+    }
+  }
+}

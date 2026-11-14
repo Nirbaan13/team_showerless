@@ -1,0 +1,794 @@
+{
+  "schema_version": 1,
+  "designation": "frozen-final-heldout",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "model_fitted_or_changed": false,
+  "independent_parent_fields": 1,
+  "parent_exposures": 4,
+  "derivative_trials_are_correlated": true,
+  "input_sources": [
+    {
+      "filename": "level2_2025W18_1B_0162_1D1_spx_l2b-v27-2026-196.fits",
+      "sha256": "b9b2023f6ec93b48838db208ad84b6dffb0a21cf5eb4e6aedc7acf410abc0b7e",
+      "bytes": 63492480,
+      "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/level2/2025W18_1B/l2b-v27-2026-196/1/level2_2025W18_1B_0162_1D1_spx_l2b-v27-2026-196.fits"
+    },
+    {
+      "filename": "level2_2025W18_1B_0162_2D1_spx_l2b-v27-2026-196.fits",
+      "sha256": "466bde80eef4ca523ef5086969e8b9352721c6ca733e9f4a2ab08be0a4c7155b",
+      "bytes": 66237120,
+      "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/level2/2025W18_1B/l2b-v27-2026-196/1/level2_2025W18_1B_0162_2D1_spx_l2b-v27-2026-196.fits"
+    },
+    {
+      "filename": "level2_2025W18_1B_0162_3D1_spx_l2b-v27-2026-196.fits",
+      "sha256": "e297cf6964a429c43be5db90970b55a294d357aeeadbb70a4166e65eb1389e65",
+      "bytes": 64160640,
+      "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/level2/2025W18_1B/l2b-v27-2026-196/1/level2_2025W18_1B_0162_3D1_spx_l2b-v27-2026-196.fits"
+    },
+    {
+      "filename": "level2_2025W18_1B_0162_4D1_spx_l2b-v27-2026-196.fits",
+      "sha256": "eb38a1d33669e458d940c8a541e02e8b0ef36358c7f24e7b2bca59350d8d2baf",
+      "bytes": 62899200,
+      "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/level2/2025W18_1B/l2b-v27-2026-196/1/level2_2025W18_1B_0162_4D1_spx_l2b-v27-2026-196.fits"
+    }
+  ],
+  "registered_shape": [
+    4,
+    59,
+    59
+  ],
+  "frames": [
+    {
+      "frame_id": "level2_2025W18_1B_0162_1D1_spx_l2b-v27-2026-196",
+      "observation_id": "2025W18_1B_0162_1:D1",
+      "midpoint_utc": "2025-04-29T14:15:35.680Z",
+      "midpoint_mjd": 60794.59416296296,
+      "detector": 1,
+      "physical_observation_id": "2025W18_1B_0162_1",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-196",
+      "software_version": "7.0.5",
+      "sha256": "b9b2023f6ec93b48838db208ad84b6dffb0a21cf5eb4e6aedc7acf410abc0b7e",
+      "input_size_bytes": 63492480
+    },
+    {
+      "frame_id": "level2_2025W18_1B_0162_2D1_spx_l2b-v27-2026-196",
+      "observation_id": "2025W18_1B_0162_2:D1",
+      "midpoint_utc": "2025-04-29T14:17:44.612Z",
+      "midpoint_mjd": 60794.59565523148,
+      "detector": 1,
+      "physical_observation_id": "2025W18_1B_0162_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-196",
+      "software_version": "7.0.5",
+      "sha256": "466bde80eef4ca523ef5086969e8b9352721c6ca733e9f4a2ab08be0a4c7155b",
+      "input_size_bytes": 66237120
+    },
+    {
+      "frame_id": "level2_2025W18_1B_0162_3D1_spx_l2b-v27-2026-196",
+      "observation_id": "2025W18_1B_0162_3:D1",
+      "midpoint_utc": "2025-04-29T14:19:53.542Z",
+      "midpoint_mjd": 60794.59714747685,
+      "detector": 1,
+      "physical_observation_id": "2025W18_1B_0162_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-196",
+      "software_version": "7.0.5",
+      "sha256": "e297cf6964a429c43be5db90970b55a294d357aeeadbb70a4166e65eb1389e65",
+      "input_size_bytes": 64160640
+    },
+    {
+      "frame_id": "level2_2025W18_1B_0162_4D1_spx_l2b-v27-2026-196",
+      "observation_id": "2025W18_1B_0162_4:D1",
+      "midpoint_utc": "2025-04-29T14:22:02.473Z",
+      "midpoint_mjd": 60794.5986397338,
+      "detector": 1,
+      "physical_observation_id": "2025W18_1B_0162_4",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-196",
+      "software_version": "7.0.5",
+      "sha256": "eb38a1d33669e458d940c8a541e02e8b0ef36358c7f24e7b2bca59350d8d2baf",
+      "input_size_bytes": 62899200
+    }
+  ],
+  "times_hours": [
+    0.0,
+    0.03581444453448057,
+    0.07162833341863006,
+    0.1074425001279451
+  ],
+  "pixel_scale_arcsec": 6.15,
+  "finite_fraction_per_epoch": [
+    0.4294742889974145,
+    0.8836541223786268,
+    0.9232979029014651,
+    0.9215742602700373
+  ],
+  "source_region": {
+    "right_ascension_deg": 127.69444,
+    "declination_deg": -39.1776,
+    "width_arcmin": 6,
+    "height_arcmin": 6
+  },
+  "detector_settings": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 1.2,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "mask_policy": "motion",
+  "seed": 932711,
+  "source_code_sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+  "method": "registered-real-background injection of local native EPSF pixel samples projected with native WCS, bilinear interpolation and production masks",
+  "limitations": [
+    "one real field, not 150 independent fields",
+    "fixed flux density across variable local passbands",
+    "no added photon noise or variance update",
+    "source added after real registration; no raw detector forward simulation",
+    "native EPSF is pixel-convolved; no additional pixel convolution applied",
+    "clustered early cadence and long gap cause blending/self-subtraction or source leaving field",
+    "unmatched real tracks remain unlabeled; no precision or false-positive metrics"
+  ],
+  "warnings": [
+    "passband_variation_not_corrected",
+    "psf_matching_not_applied",
+    "outlier_measurements_retained"
+  ],
+  "background_robust_sigma": [
+    0.03315174000586544,
+    0.03813857355185683,
+    0.03949377120911296,
+    0.04251346981434093
+  ],
+  "unmodified_control": {
+    "candidates": 3,
+    "detection": {
+      "peaks_per_epoch": [
+        4,
+        12,
+        14,
+        22
+      ],
+      "peak_cap_reached": false,
+      "feature_rows": [
+        [
+          3.0,
+          0.23570135235786438,
+          17.217864990234375,
+          16.16360855102539,
+          0.03127950802445412,
+          14.183799743652344
+        ],
+        [
+          3.0,
+          0.30860209465026855,
+          12.426969528198242,
+          6.578592777252197,
+          0.6236825585365295,
+          0.09617031365633011
+        ],
+        [
+          3.0,
+          0.4879472851753235,
+          13.981302261352539,
+          12.777141571044922,
+          0.43115124106407166,
+          1.4414961338043213
+        ]
+      ]
+    },
+    "candidate_scores": [
+      0.08189282566308975,
+      0.2304193079471588,
+      0.43389052152633667
+    ],
+    "labels": "all unmodified real candidates remain unlabeled",
+    "tracks": [
+      {
+        "baseline_rank": 1,
+        "model_rank": 3,
+        "model_score": 0.08189282566308975,
+        "epochs": [
+          1,
+          2,
+          3
+        ],
+        "positions_xy": [
+          [
+            29,
+            42
+          ],
+          [
+            29,
+            42
+          ],
+          [
+            29,
+            43
+          ]
+        ],
+        "features": [
+          3.0,
+          0.23570134617187286,
+          17.21786426776769,
+          16.16360944973731,
+          0.03127950896720544,
+          14.183799369022795
+        ]
+      },
+      {
+        "baseline_rank": 2,
+        "model_rank": 2,
+        "model_score": 0.2304193079471588,
+        "epochs": [
+          0,
+          1,
+          3
+        ],
+        "positions_xy": [
+          [
+            24,
+            51
+          ],
+          [
+            22,
+            51
+          ],
+          [
+            20,
+            51
+          ]
+        ],
+        "features": [
+          3.0,
+          0.30860208294229674,
+          12.426969093144042,
+          6.5785927736766645,
+          0.6236825476045998,
+          0.09617031390821631
+        ]
+      },
+      {
+        "baseline_rank": 3,
+        "model_rank": 1,
+        "model_score": 0.43389052152633667,
+        "epochs": [
+          0,
+          1,
+          3
+        ],
+        "positions_xy": [
+          [
+            20,
+            51
+          ],
+          [
+            22,
+            51
+          ],
+          [
+            23,
+            52
+          ]
+        ],
+        "features": [
+          3.0,
+          0.48794727866676496,
+          13.981302375579737,
+          12.77714182198986,
+          0.4311512555164171,
+          1.441496122167698
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "injections": 150,
+    "attribution_eligible_trials": 150,
+    "eligible_center_coverage_at_least_3": 150,
+    "recovered_before_ranking": 28,
+    "baseline_recovered_at_k": 17,
+    "model_recovered_at_k": 24,
+    "baseline_recovered_at_1": 15,
+    "model_recovered_at_1": 11,
+    "preexisting_control_match_trials": 0,
+    "raw_spatial_matches": {
+      "recovered_before_ranking": 28,
+      "baseline_recovered_at_k": 17,
+      "model_recovered_at_k": 24,
+      "baseline_recovered_at_1": 15,
+      "model_recovered_at_1": 11
+    },
+    "top_k": 3,
+    "total_candidate_rows": 484,
+    "trials_with_peak_cap": 0,
+    "cohort": "all_planned_trials",
+    "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+    "finite_center_coverage_ge3": {
+      "injections": 150,
+      "attribution_eligible_trials": 150,
+      "eligible_center_coverage_at_least_3": 150,
+      "recovered_before_ranking": 28,
+      "baseline_recovered_at_k": 17,
+      "model_recovered_at_k": 24,
+      "baseline_recovered_at_1": 15,
+      "model_recovered_at_1": 11,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 28,
+        "baseline_recovered_at_k": 17,
+        "model_recovered_at_k": 24,
+        "baseline_recovered_at_1": 15,
+        "model_recovered_at_1": 11
+      },
+      "top_k": 3,
+      "total_candidate_rows": 484,
+      "trials_with_peak_cap": 0
+    }
+  },
+  "by_peak_multiplier": {
+    "3.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 0,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 0,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 0,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0
+      },
+      "top_k": 3,
+      "total_candidate_rows": 90,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 0,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 0,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 0
+        },
+        "top_k": 3,
+        "total_candidate_rows": 90,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "6.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 0,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 0,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 0,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0
+      },
+      "top_k": 3,
+      "total_candidate_rows": 91,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 0,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 0,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 0
+        },
+        "top_k": 3,
+        "total_candidate_rows": 91,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "12.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 7,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 6,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 3,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 7,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 6,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 3
+      },
+      "top_k": 3,
+      "total_candidate_rows": 98,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 7,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 6,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 3,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 7,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 6,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 3
+        },
+        "top_k": 3,
+        "total_candidate_rows": 98,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "24.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 10,
+      "baseline_recovered_at_k": 8,
+      "model_recovered_at_k": 8,
+      "baseline_recovered_at_1": 6,
+      "model_recovered_at_1": 4,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 10,
+        "baseline_recovered_at_k": 8,
+        "model_recovered_at_k": 8,
+        "baseline_recovered_at_1": 6,
+        "model_recovered_at_1": 4
+      },
+      "top_k": 3,
+      "total_candidate_rows": 102,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 10,
+        "baseline_recovered_at_k": 8,
+        "model_recovered_at_k": 8,
+        "baseline_recovered_at_1": 6,
+        "model_recovered_at_1": 4,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 10,
+          "baseline_recovered_at_k": 8,
+          "model_recovered_at_k": 8,
+          "baseline_recovered_at_1": 6,
+          "model_recovered_at_1": 4
+        },
+        "top_k": 3,
+        "total_candidate_rows": 102,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "48.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 11,
+      "baseline_recovered_at_k": 9,
+      "model_recovered_at_k": 10,
+      "baseline_recovered_at_1": 9,
+      "model_recovered_at_1": 4,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 11,
+        "baseline_recovered_at_k": 9,
+        "model_recovered_at_k": 10,
+        "baseline_recovered_at_1": 9,
+        "model_recovered_at_1": 4
+      },
+      "top_k": 3,
+      "total_candidate_rows": 103,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 11,
+        "baseline_recovered_at_k": 9,
+        "model_recovered_at_k": 10,
+        "baseline_recovered_at_1": 9,
+        "model_recovered_at_1": 4,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 11,
+          "baseline_recovered_at_k": 9,
+          "model_recovered_at_k": 10,
+          "baseline_recovered_at_1": 9,
+          "model_recovered_at_1": 4
+        },
+        "top_k": 3,
+        "total_candidate_rows": 103,
+        "trials_with_peak_cap": 0
+      }
+    }
+  },
+  "by_speed": {
+    "1.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 0,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 0,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 0,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0
+      },
+      "top_k": 3,
+      "total_candidate_rows": 90,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 0,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 0,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 0,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 0,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 0
+        },
+        "top_k": 3,
+        "total_candidate_rows": 90,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "4.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 1,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 1,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 0,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 1,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 1,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0
+      },
+      "top_k": 3,
+      "total_candidate_rows": 91,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 1,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 1,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 1,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 1,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 0
+        },
+        "top_k": 3,
+        "total_candidate_rows": 91,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "10.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 2,
+      "baseline_recovered_at_k": 0,
+      "model_recovered_at_k": 2,
+      "baseline_recovered_at_1": 0,
+      "model_recovered_at_1": 0,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 2,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 2,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0
+      },
+      "top_k": 3,
+      "total_candidate_rows": 94,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 2,
+        "baseline_recovered_at_k": 0,
+        "model_recovered_at_k": 2,
+        "baseline_recovered_at_1": 0,
+        "model_recovered_at_1": 0,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 2,
+          "baseline_recovered_at_k": 0,
+          "model_recovered_at_k": 2,
+          "baseline_recovered_at_1": 0,
+          "model_recovered_at_1": 0
+        },
+        "top_k": 3,
+        "total_candidate_rows": 94,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "25.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 14,
+      "baseline_recovered_at_k": 9,
+      "model_recovered_at_k": 10,
+      "baseline_recovered_at_1": 8,
+      "model_recovered_at_1": 6,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 14,
+        "baseline_recovered_at_k": 9,
+        "model_recovered_at_k": 10,
+        "baseline_recovered_at_1": 8,
+        "model_recovered_at_1": 6
+      },
+      "top_k": 3,
+      "total_candidate_rows": 106,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 14,
+        "baseline_recovered_at_k": 9,
+        "model_recovered_at_k": 10,
+        "baseline_recovered_at_1": 8,
+        "model_recovered_at_1": 6,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 14,
+          "baseline_recovered_at_k": 9,
+          "model_recovered_at_k": 10,
+          "baseline_recovered_at_1": 8,
+          "model_recovered_at_1": 6
+        },
+        "top_k": 3,
+        "total_candidate_rows": 106,
+        "trials_with_peak_cap": 0
+      }
+    },
+    "50.0": {
+      "injections": 30,
+      "attribution_eligible_trials": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 11,
+      "baseline_recovered_at_k": 8,
+      "model_recovered_at_k": 11,
+      "baseline_recovered_at_1": 7,
+      "model_recovered_at_1": 5,
+      "preexisting_control_match_trials": 0,
+      "raw_spatial_matches": {
+        "recovered_before_ranking": 11,
+        "baseline_recovered_at_k": 8,
+        "model_recovered_at_k": 11,
+        "baseline_recovered_at_1": 7,
+        "model_recovered_at_1": 5
+      },
+      "top_k": 3,
+      "total_candidate_rows": 103,
+      "trials_with_peak_cap": 0,
+      "cohort": "all_planned_trials",
+      "attribution_rule": "Recovery counts exclude trials matching a control track before injection; raw spatial matches are not attributed discoveries.",
+      "finite_center_coverage_ge3": {
+        "injections": 30,
+        "attribution_eligible_trials": 30,
+        "eligible_center_coverage_at_least_3": 30,
+        "recovered_before_ranking": 11,
+        "baseline_recovered_at_k": 8,
+        "model_recovered_at_k": 11,
+        "baseline_recovered_at_1": 7,
+        "model_recovered_at_1": 5,
+        "preexisting_control_match_trials": 0,
+        "raw_spatial_matches": {
+          "recovered_before_ranking": 11,
+          "baseline_recovered_at_k": 8,
+          "model_recovered_at_k": 11,
+          "baseline_recovered_at_1": 7,
+          "model_recovered_at_1": 5
+        },
+        "top_k": 3,
+        "total_candidate_rows": 103,
+        "trials_with_peak_cap": 0
+      }
+    }
+  },
+  "elapsed_seconds": 4.393097767999279,
+  "references": [
+    "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/",
+    "https://docs.astropy.org/en/stable/wcs/"
+  ],
+  "trial_details_file": "real-background-evaluation.trials.json.gz",
+  "trial_details_sha256": "33ad3952fe1cbf042388cffdfcdb1701461ef4a157d36e3dc1da302c6f003353",
+  "full_evaluation_sha256": "12c76a4ba0c8e3142c9a197d1ee153fed833deac13a7f23fa7d57faf30d2ba96"
+}

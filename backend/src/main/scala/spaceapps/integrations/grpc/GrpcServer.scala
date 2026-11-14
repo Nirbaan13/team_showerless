@@ -1,7 +1,7 @@
 package spaceapps.integrations.grpc
 
 import spaceapps.domain.ApiError
-import spaceapps.service.{Jobs, Resource, MetadataService, EquipmentService}
+import spaceapps.service.{Jobs, Resource, MetadataService, EquipmentService, Analyses}
 import spaceapps.integrations.grpc.v1.*
 import spaceapps.integrations.grpc.v1.ZioRetrieval.{RCRetrievalService, GRetrievalService}
 import io.grpc.{Status, StatusException, Metadata}
@@ -17,11 +17,14 @@ object GrpcServer:
   /** The server lifetime belongs to the application scope; port 0 binds an ephemeral port. */
   def start(jobs: Jobs, revision: String, host: String = "0.0.0.0", port: Int = 50051,
     channels: Set[Int] = Set.empty, metadata: Option[MetadataService] = None,
-    equipment: Option[EquipmentService] = None): ZIO[Scope, Throwable, Int] =
+    equipment: Option[EquipmentService] = None, analyses: Option[Analyses] = None): ZIO[Scope, Throwable, Int] =
     for
       definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels, metadata, equipment))
+      analysisDefinition <- ZIO.foreach(analyses)(s => spaceapps.integrations.grpc.v1.ZioRetrieval.GAnalysisService.genericBindable.bind(new AnalysisGrpc(s)))
       server <- ZIO.acquireRelease(ZIO.attempt {
-        NettyServerBuilder.forAddress(new InetSocketAddress(host, port)).addService(definition).build()
+        val builder = NettyServerBuilder.forAddress(new InetSocketAddress(host, port)).addService(definition)
+        analysisDefinition.foreach(builder.addService)
+        builder.build()
       })(shutdown)
       _ <- ZIO.attemptBlocking(server.start())
     yield server.getPort

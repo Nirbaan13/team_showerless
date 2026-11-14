@@ -1,7 +1,7 @@
 package spaceapps.controller
 
 import spaceapps.domain.*
-import spaceapps.service.{Jobs,Resource,MetadataService,EquipmentService}
+import spaceapps.service.{Jobs,Resource,MetadataService,EquipmentService,Analyses}
 
 import zio.{Chunk as _, *}
 import zio.http.*
@@ -15,7 +15,7 @@ import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.jdk.CollectionConverters.*
 
 final class Api private(jobs:Jobs,revision:String,specification:String,openapi:Json, channels:Set[Int],
-  metadata:Option[MetadataService], equipment:Option[EquipmentService]):
+  metadata:Option[MetadataService], equipment:Option[EquipmentService], analyses:Option[Analyses]):
   private def json[A:JsonEncoder](value:A,status:Status=Status.Ok):Response =
     Response.json(value.toJson).status(status).addHeader("Cache-Control","no-store")
   private def errorResponse(t:Throwable):Response =
@@ -107,7 +107,7 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
         .addHeader("X-Accel-Buffering","no")
     }
   private def deferred:Response=json(ApiError("unsupported_processing","PNG previews and scientific processing are deferred until the team supplies its pipeline"),Status.NotImplemented)
-  val routes:Routes[Any,Response]=Routes(
+  private val retrievalRoutes:Routes[Any,Response]=Routes(
     Method.GET / Root -> handler(json(Map("service"->"SPHEREx Backend API","version"->revision,"docs"->"/docs"))),
     Method.GET / "health" -> handler(json(Map("status"->"ok","revision"->revision))),
     Method.GET / "version" -> handler(json(Map("version"->revision))),
@@ -130,6 +130,8 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
     Method.GET / "api" / "chunks" / string("id") / "preview" -> Handler.scoped[Any](handler((id:String,r:Request)=>safe(resource(id,true))))
   )
 
+  val routes:Routes[Any,Response]=analyses.fold(retrievalRoutes)(s=>retrievalRoutes ++ new AnalysisApi(s).routes)
+
 object Api:
   private def ast(value:Any):Json=value match
     case null=>Json.Null
@@ -139,7 +141,7 @@ object Api:
     case n:java.lang.Number=>Json.Num(new java.math.BigDecimal(n.toString))
     case s=>Json.Str(s.toString)
   def make(jobs:Jobs,revision:String,path:FilePath,channels:Set[Int]=Set.empty,
-    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None):Task[Api]=ZIO.attemptBlocking {
+    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None,analyses:Option[Analyses]=None):Task[Api]=ZIO.attemptBlocking {
     val text=Files.readString(path)
     val options=new LoaderOptions();options.setAllowDuplicateKeys(false)
     val document=new Yaml(new SafeConstructor(options)).load[java.util.Map[String,Object]](text)
@@ -151,6 +153,6 @@ object Api:
       operation.put("description","Deferred: scientific pipeline is not available yet. Returns HTTP501.")
       operation.get("responses").asInstanceOf[java.util.Map[String,Object]].put("501",java.util.Map.of("description","Processing is not implemented yet"))
     }
-    new Api(jobs,revision,text,ast(document),channels,metadata,equipment)
+    new Api(jobs,revision,text,ast(document),channels,metadata,equipment,analyses)
   }
-  private val swagger="""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>SPHEREx API</title><link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:'/openapi.json',dom_id:'#swagger-ui'});</script></body></html>"""
+  private val swagger="""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>SPHEREx API</title><link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:'openapi.json',dom_id:'#swagger-ui'});</script></body></html>"""

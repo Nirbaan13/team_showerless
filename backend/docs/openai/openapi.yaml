@@ -26,6 +26,7 @@ tags:
   - name: Downloads
   - name: Chunks
   - name: Equipment
+  - name: Analyses
 paths:
   /api/observations/meta:
     get:
@@ -364,6 +365,150 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/InvalidRequest'
+  /api/analyses/motion:
+    post:
+      tags: [Analyses]
+      operationId: submitMotionAnalysis
+      summary: Queue real-data moving-source inference with the installed frozen model
+      description: |
+        Supply an existing download_id or an explicit archived real-data preset.
+        Live inputs must provide at least three independent usable observations
+        from one detector. Native images remain unchanged; analysis registers a
+        separate bounded grid. At most 32 frames and a 512 by 512 grid are supported.
+        The learned score prioritizes human review and is not a calibrated
+        probability of a real object, a planet, or a new discovery.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MotionAnalysisRequest'
+            example: {preset: comet-d6, options: {mask_policy: motion}}
+      responses:
+        '202':
+          description: Durable analysis accepted; poll status or subscribe to events
+          headers:
+            Location:
+              schema: {type: string, format: uri-reference}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '503':
+          $ref: '#/components/responses/AnalysisUnavailable'
+  /api/analyses/models:
+    get:
+      tags: [Analyses]
+      operationId: listInferenceModels
+      summary: Describe the installed versioned model, checksum and score semantics
+      responses:
+        '200':
+          description: Installed frozen model metadata
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [models]
+                properties:
+                  models:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InferenceModel'
+        '503':
+          $ref: '#/components/responses/AnalysisUnavailable'
+  /api/analyses/presets:
+    get:
+      tags: [Analyses]
+      operationId: listRealAnalysisPresets
+      summary: List archived real-observation sequences available for live inference
+      description: |
+        These selected known-object sequences are recovery/development examples,
+        not a representative survey precision benchmark. Detection and model
+        inference run on submission; results are not hardcoded target coordinates.
+      responses:
+        '200':
+          description: Available real-data presets
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [presets]
+                properties:
+                  presets:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, title, description, source_url]
+                      properties:
+                        id: {type: string}
+                        title: {type: string}
+                        description: {type: string}
+                        source_url: {type: string, format: uri}
+        '503':
+          $ref: '#/components/responses/AnalysisUnavailable'
+  /api/analyses/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Analyses]
+      operationId: getMotionAnalysis
+      summary: Get durable analysis state, computed candidates and review evidence
+      responses:
+        '200':
+          description: Current analysis; failed tasks include a structured error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/analyses/{id}/events:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Analyses]
+      operationId: watchMotionAnalysis
+      summary: Stream analysis progress and terminal state as server-sent events
+      description: |
+        Sends a current-state snapshot, then analysis.updated and analysis.completed
+        events. Event data is an AnalysisJob. A disconnected subscriber does not
+        cancel an accepted analysis. Failure is a terminal job with an error.
+      responses:
+        '200':
+          description: Ordered current-state and progress events
+          content:
+            text/event-stream:
+              schema: {type: string}
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/analyses/{id}/resources/{name}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - name: name
+        in: path
+        required: true
+        description: Exact published PNG filename returned in the analysis result
+        schema: {type: string}
+    get:
+      tags: [Analyses]
+      operationId: getAnalysisEvidence
+      summary: Download an allowlisted image or stack of computed review evidence
+      description: |
+        Resources are available only after successful analysis publication.
+        Images visualize measurements; evidence stacks are not calibrated
+        significance maps or a substitute for native FITS scientific analysis.
+      responses:
+        '200':
+          description: Published PNG review resource
+          content:
+            image/png:
+              schema: {type: string, format: binary}
+        '404':
+          $ref: '#/components/responses/NotFound'
   /api/downloads/{id}:
     parameters:
       - $ref: '#/components/parameters/Id'
@@ -519,6 +664,12 @@ components:
       schema:
         $ref: '#/components/schemas/ObservedBefore'
   responses:
+    AnalysisUnavailable:
+      description: Analysis admission is full or a required installed model/preset is unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     ReadyJob:
       description: Current job manifest; preparation may still be in progress
       content:
@@ -687,6 +838,160 @@ components:
         file_name: {type: string}
         size_bytes: {type: integer, minimum: 1}
         detector_relevance: {type: string, enum: [single_detector, all_detectors]}
+    MotionAnalysisRequest:
+      type: object
+      additionalProperties: false
+      oneOf:
+        - required: [download_id]
+          not: {required: [preset]}
+        - required: [preset]
+          not: {required: [download_id]}
+      properties:
+        download_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: ID returned by a native default-mode observations preparation endpoint. Processed downloads are rejected to avoid applying zodiacal subtraction twice.
+        preset:
+          type: string
+          enum: [comet-d6, comet-d2, vesta-d6, vesta-d3]
+        options:
+          $ref: '#/components/schemas/AnalysisOptions'
+    AnalysisOptions:
+      type: object
+      additionalProperties: false
+      properties:
+        min_snr: {type: number, exclusiveMinimum: 0, maximum: 100, default: 4}
+        min_speed_arcsec_per_hour: {type: number, exclusiveMinimum: 0, default: 3.075}
+        max_speed_arcsec_per_hour: {type: number, exclusiveMinimum: 0, maximum: 100000, default: 369}
+        mask_policy:
+          type: string
+          enum: [motion, science]
+          default: motion
+          description: |
+            Motion retains OUTLIER pixels as explicitly flagged evidence.
+            Science excludes them. Saturated BLOOM tracks are a separate
+            non-photometric evidence stream and have no learned score.
+        max_candidates: {type: integer, minimum: 1, maximum: 100, default: 100}
+        max_peaks: {type: integer, minimum: 1, maximum: 100, default: 100}
+        pixel_scale_arcsec: {type: number, minimum: 0.1, maximum: 60, default: 6.15}
+        min_epochs: {type: integer, minimum: 3, maximum: 32, default: 3}
+      description: Maximum speed must not be less than minimum speed. Caps are reported as incomplete-search warnings.
+    InferenceModel:
+      type: object
+      required: [model_id, sha256, feature_names, score_kind]
+      properties:
+        model_id: {type: string}
+        sha256: {type: string, pattern: '^[a-f0-9]{64}$'}
+        feature_names: {type: array, items: {type: string}}
+        score_kind: {type: string}
+        status: {type: string}
+        score_description: {type: string}
+        training_manifest_sha256: {type: string}
+      additionalProperties: true
+    AnalysisJob:
+      type: object
+      required: [id, status, status_url, events_url]
+      properties:
+        id: {type: string}
+        status:
+          type: string
+          enum: [queued, waiting_for_download, preparing, inferencing, completed, failed]
+        download_id: {type: [string, 'null']}
+        status_url: {type: string, format: uri-reference}
+        events_url: {type: string, format: uri-reference}
+        result:
+          oneOf:
+            - $ref: '#/components/schemas/AnalysisResult'
+            - {type: 'null'}
+        error:
+          oneOf:
+            - $ref: '#/components/schemas/Error'
+            - {type: 'null'}
+    AnalysisResult:
+      type: object
+      required: [schema_version, analysis_id, model, frames, candidates, settings, warnings, provenance, resources]
+      properties:
+        schema_version: {type: integer, const: 1}
+        analysis_id: {type: string}
+        model:
+          $ref: '#/components/schemas/InferenceModel'
+        frames:
+          type: array
+          minItems: 3
+          maxItems: 32
+          items:
+            type: object
+            required: [frame_id, observation_id, midpoint_utc, width, height, image_url, difference_url]
+            properties:
+              frame_id: {type: string}
+              observation_id: {type: string}
+              midpoint_utc: {type: string, format: date-time}
+              width: {type: integer, minimum: 1, maximum: 512}
+              height: {type: integer, minimum: 1, maximum: 512}
+              image_url: {type: string, format: uri-reference}
+              difference_url: {type: string, format: uri-reference}
+              bloom_url: {type: string, format: uri-reference}
+            additionalProperties: true
+        candidates:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/MotionCandidate'
+        settings: {type: object, additionalProperties: true}
+        warnings: {type: array, items: {type: string}}
+        provenance: {type: object, additionalProperties: true}
+        resources:
+          type: array
+          items:
+            type: object
+            required: [name, media_type, size_bytes]
+            properties:
+              name: {type: string}
+              media_type: {type: string, const: image/png}
+              size_bytes: {type: integer, minimum: 1}
+      additionalProperties: true
+    MotionCandidate:
+      type: object
+      required: [id, rank, method, score, score_kind, baseline_rank, right_ascension_deg, declination_deg, speed_arcsec_per_hour, fit_rms_px, detections, warnings]
+      properties:
+        id: {type: string}
+        rank: {type: integer, minimum: 1}
+        method: {type: string, enum: [residual_track, bloom_track]}
+        score:
+          type: [number, 'null']
+          minimum: 0
+          maximum: 1
+          description: Experimental model ranking score; null for non-ML saturated-source evidence
+        score_kind: {type: string}
+        baseline_rank: {type: integer, minimum: 1}
+        baseline_score: {type: [number, 'null']}
+        right_ascension_deg: {type: number, minimum: 0, exclusiveMaximum: 360}
+        declination_deg: {type: number, minimum: -90, maximum: 90}
+        coordinate_epoch_utc: {type: string, format: date-time}
+        speed_arcsec_per_hour: {type: number, minimum: 0}
+        fit_rms_px: {type: number, minimum: 0}
+        detections:
+          type: array
+          minItems: 3
+          items:
+            type: object
+            required: [frame_index, frame_id, midpoint_utc, x, y, right_ascension_deg, declination_deg, residual_snr, warnings]
+            properties:
+              frame_index: {type: integer, minimum: 0, maximum: 31}
+              frame_id: {type: string}
+              midpoint_utc: {type: string, format: date-time}
+              x: {type: number, minimum: 0}
+              y: {type: number, minimum: 0}
+              right_ascension_deg: {type: number, minimum: 0, exclusiveMaximum: 360}
+              declination_deg: {type: number, minimum: -90, maximum: 90}
+              residual_snr: {type: [number, 'null']}
+              warnings: {type: array, items: {type: string}}
+            additionalProperties: true
+        warnings: {type: array, items: {type: string}}
+        moving_stack_url: {type: string, format: uri-reference}
+        stationary_stack_url: {type: string, format: uri-reference}
+      additionalProperties: true
     ObservedAfter:
       type: string
       format: date-time
