@@ -31,6 +31,37 @@ object JobsSpec extends ZIOSpecDefault:
     jobs.get(id).flatMap(d => if d.terminal then ZIO.succeed(d) else Live.live(ZIO.sleep(20.millis)) *> awaitDone(jobs, id))
 
   def spec = suite("Durable jobs")(
+    test("cutout requests replace legacy full-frame dedup entries while old resource URLs stay readable") {
+      ZIO.scoped {
+        for
+          dir <- temp
+          repo <- Repository.open(dir.resolve("jobs.db"))
+          old <- repo.accept(query, "default", None, 32)
+          oldKey = Hash.sha256(s"default||${query.document.toJson}")
+          oldFile = dir.resolve("raw").resolve(Hash.sha256(s"${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}")+".fits")
+          _ <- write(oldFile, "old whole frame")
+          oldChunk = spaceapps.domain.Chunk("legacy-chunk", image.observation.frame_id, "ready", "unavailable", "/api/chunks/legacy-chunk/preview", "/api/chunks/legacy-chunk")
+          _ <- repo.update(old.id, "job.completed")(r=>r.copy(requestKey=oldKey,images=List(image),download=r.download.copy(status="completed",observations=List(image.observation),chunks=List(oldChunk),progress=Progress(true,1,1,0,0))))
+          _ <- ZIO.attemptBlocking {
+            val c=java.sql.DriverManager.getConnection(s"jdbc:sqlite:${dir.resolve("jobs.db")}")
+            try
+              val s=c.prepareStatement("UPDATE jobs SET request_key=? WHERE id=?")
+              try {s.setString(1,oldKey);s.setString(2,old.id);s.executeUpdate();()} finally s.close()
+            finally c.close()
+          }
+          source = new Archive:
+            def search(q: Query)=ZIO.succeed(List(image))
+            override def select(i: ArchiveImage,q: Query)=ZIO.succeed(i.copy(accessUrl=i.accessUrl+"?center=1,2deg&size=0.1deg",sourceUrl=Some(i.accessUrl)))
+            def fetch(i: ArchiveImage,out: Path)=write(out,"new subset")
+          jobs <- Jobs.make(repo, source, NoProcessing, dir)
+          accepted <- jobs.submit(query,"default",None)
+          done <- awaitDone(jobs,accepted.id)
+          oldResource <- jobs.resource(oldChunk.id,false)
+          newResource <- jobs.resource(done.chunks.head.id,false)
+          oldContent <- ZIO.attemptBlocking(Files.readString(oldFile))
+        yield assertTrue(accepted.id!=old.id,done.status=="completed",oldResource==Resource.Ready(oldFile),newResource!=oldResource,oldContent=="old whole frame")
+      }
+    },
     test("concurrent submissions deduplicate while detached workers publish native data") {
       ZIO.scoped {
         for

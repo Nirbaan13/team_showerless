@@ -75,7 +75,10 @@ final class MetadataService private (
       observation <- ZIO.fromEither(image.observation.toJson.fromJson[Json]).mapError(_ => ApiError("metadata_serialization", "Observation metadata could not be encoded"))
       tapResult <- sharedTap(image).catchAll(error => ZIO.succeed(sourceError(error)))
       fitsResult <- ZIO.scoped { cachedFile(image).flatMap {
-        case Some(path) => FitsHeaders.read(path)
+        case Some(path) => FitsHeaders.read(path).map {
+          case Json.Obj(fields) if image.sourceUrl.nonEmpty => Json.Obj(fields :+ ("spatial_subset" -> Json.Bool(true)))
+          case value => value
+        }
         case None => ZIO.succeed(obj("status" -> Json.Str("not_downloaded"), "reason" -> Json.Str("Native FITS has not been cached; metadata does not download image data")))
       } }.catchAll(error => ZIO.succeed(sourceError(error)))
       sia = obj("status" -> Json.Str(if image.observation.header_metadata.isEmpty then "unavailable" else "available"), "data" -> Json.Obj(zio.Chunk.fromIterable(image.observation.header_metadata.toList.sortBy(_._1))))

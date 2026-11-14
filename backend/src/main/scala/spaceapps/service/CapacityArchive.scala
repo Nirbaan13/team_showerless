@@ -8,6 +8,7 @@ import java.nio.file.Path
 object CapacityArchive:
   private[service] final class Bounded(val delegate:Archive,val cache:FitsCache) extends Archive:
     def search(query:Query):Task[List[ArchiveImage]]=delegate.search(query)
+    override def select(image:ArchiveImage,query:Query):Task[ArchiveImage]=delegate.select(image,query)
     def fetch(image:ArchiveImage,destination:Path):Task[Unit]=cache.transfer(destination)(delegate.fetch(image,destination))
   def make(delegate:Archive,root:Path,maxCacheBytes:Long,maxProductBytes:Long,minFreeBytes:Long,
     cache:Option[FitsCache]=None):Task[Archive]=

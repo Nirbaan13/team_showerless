@@ -72,7 +72,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
   private def reference(record: JobRecord): ZIO[Scope, Throwable, Option[Path]] = record.download.reference_frame_id match
     case None => ZIO.none
     case Some(id) => repository.image(id).flatMap {
-      case Some(image) => raw(image).map(Some(_))
+      case Some(image) => archive.select(image, record.query).flatMap(raw).map(Some(_))
       case None => ZIO.fail(ApiError("not_found", "Reference frame not found"))
     }
   private def processChunk(record: JobRecord, image: ArchiveImage, chunk: Chunk): Task[Unit] = ZIO.scoped {
@@ -99,7 +99,8 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
   private def runJob(claimed: JobRecord): Task[Unit] =
     val id = claimed.download.id
     val work = for
-      images <- if claimed.images.nonEmpty || claimed.download.progress.discovery_complete then ZIO.succeed(claimed.images) else archive.search(claimed.query)
+      parents <- if claimed.images.nonEmpty || claimed.download.progress.discovery_complete then ZIO.succeed(claimed.images) else archive.search(claimed.query)
+      images <- ZIO.foreach(parents)(image => if image.observation.is_available then archive.select(image, claimed.query) else ZIO.succeed(image))
       _ <- repository.remember(images)
       record <- repository.update(id, "job.updated") { current =>
         val chunks = images.map { image =>

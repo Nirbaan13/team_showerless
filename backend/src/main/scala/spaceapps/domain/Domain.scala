@@ -17,7 +17,7 @@ final case class Observation(frame_id: String, observation_date: String, detecto
   is_available: Boolean = true, wavelength_min_um: Option[Double] = None, wavelength_max_um: Option[Double] = None,
   channel_index: Option[Int] = None, skip_reason: Option[String] = None,
   header_metadata: Map[String, Json] = Map.empty) derives JsonCodec
-final case class ArchiveImage(observation: Observation, accessUrl: String) derives JsonCodec
+final case class ArchiveImage(observation: Observation, accessUrl: String, sourceUrl: Option[String] = None) derives JsonCodec
 final case class Chunk(id: String, frame_id: String, status: String = "pending", preview_status: String = "pending",
   image_url: String, fits_cutout_url: String, error: Option[ApiError] = None) derives JsonCodec
 final case class Progress(discovery_complete: Boolean = false, total_chunks: Int = 0, ready_chunks: Int = 0,
@@ -33,7 +33,8 @@ final case class JobRecord(download: Download, query: Query, requestKey: String,
 
 final case class Query(document: Json, position: String, detector: Option[Int] = None, channel: Option[Int] = None,
   after: Option[String] = None, before: Option[String] = None, deep: Boolean = false) derives JsonCodec:
-  def key(mode: String, reference: Option[String]): String = Hash.sha256(s"$mode|${reference.getOrElse("")}|${document.toJson}")
+  // Old full-frame jobs stay addressable, but cannot satisfy a new cutout request.
+  def key(mode: String, reference: Option[String]): String = Hash.sha256(s"irsa-cutout-v1|$mode|${reference.getOrElse("")}|${document.toJson}")
   def inDeepSurvey: Query = document match
     case Json.Obj(values) => copy(document = Json.Obj(values.filterNot(_._1 == "survey") :+ ("survey" -> Json.Str("deep"))), deep = true)
     case _ => throw ApiError("invalid_request", "Query must be an object")

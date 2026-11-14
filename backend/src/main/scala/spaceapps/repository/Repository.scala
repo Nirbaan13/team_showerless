@@ -76,7 +76,13 @@ final class Repository private (path: Path, metadataCacheBytes: Long):
     finally c.close()
   }
   def remember(images: List[ArchiveImage]): Task[Unit] = transaction { c =>
-    images.foreach(i => execute(c, "INSERT OR REPLACE INTO images(frame_id,body) VALUES (?,?)", List(i.observation.frame_id, i.toJson)))
+    images.foreach { image =>
+      val previous = rows(c, "SELECT body FROM images WHERE frame_id=?", List(image.observation.frame_id))(r => decode[ArchiveImage](r.getString(1))).headOption
+      // Metadata rediscovery must not discard the last selected subset of the same artifact.
+      val stored = previous.filter(old => image.sourceUrl.isEmpty && old.sourceUrl.contains(image.accessUrl))
+        .fold(image)(old => old.copy(observation = image.observation))
+      execute(c, "INSERT OR REPLACE INTO images(frame_id,body) VALUES (?,?)", List(stored.observation.frame_id, stored.toJson))
+    }
   }
   def image(id: String): Task[Option[ArchiveImage]] = transaction(c => rows(c, "SELECT body FROM images WHERE frame_id=?", List(id))(r => decode[ArchiveImage](r.getString(1))).headOption)
   def cachedMetadata(key: String): Task[Option[(String, Long)]] = transaction { c =>

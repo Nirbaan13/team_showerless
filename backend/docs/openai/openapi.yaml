@@ -14,6 +14,11 @@ info:
     time for every query geometry. The backend converts them to Modified Julian
     Dates (MJD) and sends IRSA TIME=<start_mjd> <end_mjd>. An omitted bound becomes
     -Inf or +Inf; when both bounds are omitted, no TIME filter is sent.
+    Preparing observations retrieves server-side IRSA spatial cutouts of the
+    selected Spectral Image MEFs. The returned FITS retains mission extensions
+    and its native pixel orientation. An enclosing cutout covers the requested
+    region without reprojection or exact polygon masking; it can be clipped at
+    the parent image boundary. Failed cutouts never trigger a full-image fallback.
 servers:
   - url: http://35.159.162.202
 tags:
@@ -30,9 +35,11 @@ paths:
       description: |
         Supply frame_id returned by search or a download job. Combines available
         SIA metadata, additional TAP fields and FITS HDU headers. FITS headers are
-        read only when the native file is already cached; this request never
+        read only when the FITS is already cached; this request never
         downloads a science image. Each source reports its own availability or
         error. Partial metadata remains useful when an external source fails.
+        Cached cutout headers are labelled fits.spatial_subset=true; SIA and TAP
+        metadata continue to describe the parent spectral image.
       parameters:
         - name: frame_id
           in: query
@@ -110,7 +117,8 @@ paths:
         or verices_degrees polygon coordinates. Geometry families cannot be mixed.
         Dates, detector and channel use the same filters as other preparation
         endpoints. Returns the existing asynchronous download job, SSE events and
-        chunk URLs. Query survey is deep; native image boundaries are retained.
+        chunk URLs. Query survey is deep; each chunk is one IRSA spatial cutout
+        from a matching parent spectral image, within its native boundaries.
       parameters:
         - name: right_ascension_deg
           in: query
