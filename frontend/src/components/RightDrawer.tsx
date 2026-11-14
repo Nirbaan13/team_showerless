@@ -7,6 +7,7 @@ import type {
   SpectralDataPoint,
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
+import { CommunityVerificationStream } from './CommunityVerificationStream';
 import {
   CheckCircle,
   Radio,
@@ -18,6 +19,7 @@ import {
   ExternalLink,
   Award,
   GripVertical,
+  MessageSquare,
 } from 'lucide-react';
 
 interface RightDrawerProps {
@@ -46,7 +48,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   onOpenDiscoveryReport,
   isScientistMode = false,
 }) => {
-  const [activeTab, setActiveTab] = useState<'triage' | 'spectrum' | 'health'>('triage');
+  const [activeTab, setActiveTab] = useState<'triage' | 'chat' | 'spectrum' | 'health'>('triage');
   const [width, setWidth] = useState<number>(360);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [notes, setNotes] = useState(candidate?.volunteerNotes || '');
@@ -150,6 +152,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           >
             <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
             <span>Triage</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+              activeTab === 'chat'
+                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                : 'border-transparent text-paper-400 hover:text-paper-200'
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Chat</span>
           </button>
 
           <button
@@ -377,7 +391,12 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 2: 102-BAND SPECTROPHOTOMETRY */}
+        {/* TAB 2: VERIFICATION NOTES & COMMUNITY CHAT */}
+        {activeTab === 'chat' && (
+          <CommunityVerificationStream activeCandidateId={candidate?.id || null} />
+        )}
+
+        {/* TAB 3: 102-BAND SPECTROPHOTOMETRY */}
         {activeTab === 'spectrum' && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between">
