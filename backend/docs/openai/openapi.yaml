@@ -1,4 +1,4 @@
-# Raw OpenAPI YAML; the .AI.md suffix marks AI-generated documentation.
+# AI-generated OpenAPI specification.
 openapi: 3.1.0
 info:
   title: SPHEREx Backend API
