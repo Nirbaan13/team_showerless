@@ -1,5 +1,16 @@
 # ML delivery state — latest checkpoint 2026-11-14 20:38 UTC
 
+Checkpoint 2026-11-14T23:25:18.545564+00:00.
+
+## Delivered: v3 merged and verified on the actual VPS
+
+- Release PR14 https://github.com/Nirbaan13/team_showerless/pull/14 merged as a7493463eaace9af4357dcdeb0c8fa939c016ed5 at23:16:15UTC after both PRchecks passed. Main backend43652383573 andfrontend43652383533 also passed INCLUDING actual deployment.
+- Actual VPS144.124.238.101 runs final-tested C13 model and f137 administrative metadata, ExtraTrees/sigma.8/motion-extra-v3-sigma08. Both services healthy at a749; running image equals exact revision and latest tags; all9 shipped scientific runtime sources hash-match frozen sources; privategRPC127.0.0.1:50051.
+- Fresh productionHTTP job ca9dbf78-3417-4b1a-8cdb-a21afb84a3b8:4frames/27candidates,62decodedPNG/106761bytes,actualSHA/profile/version,SSE/schema/dedup/empty/error pass. gRPC80c99d8a-4e29-426d-8752-9c341c9cd10d:3frames/1candidate; HTTPresult equality/completedwatchreplay pass. Browserpositive/empty/error/PNG/trajectory/heuristic,desktopmobilebounds/navigation andSwaggerTryItOut allpass;0JSerrors.
+- All proofs and post-deploy manifest live in verification/v3-release. Newproof/documentation publication does not alter scientific sources, model, cohorts, data or runtime behavior. Namespace migration and complete prior pushed MLsource/evidence are in ml/pvusatov; teammates' unrelated MLcode stays in place.
+- FINAL mean recovery gate, independent aggregate review, bounded VPSresources and actual full integration gates have all passed. NativeK1confidence interval stillincludeszero; candidate/CPUburdenincreases,cometD6knownrank3→4 remains documented. No realprecision/planetprobability claim. V2frozenrelease preserved forrollback. No final-informedfit/reselection tookplace.
+
+
 Checkpoint 2026-11-14T23:09:37.588465+00:00.
 
 ## Release checkpoint: local integration and portable audit passed
