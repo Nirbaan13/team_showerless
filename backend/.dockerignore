@@ -7,3 +7,8 @@ app
 tests
 __pycache__
 data
+inference/training
+inference/models/archive
+inference/models/experiments
+inference/models/**/field-candidates.json
+inference/models/final-field-candidates.json

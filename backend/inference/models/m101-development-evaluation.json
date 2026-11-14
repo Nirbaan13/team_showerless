@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "designation": "development",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "model_fitted_or_changed": false,
+  "independent_parent_fields": 1,
+  "parent_exposures": 4,
+  "derivative_trials_are_correlated": true,
+  "input_sources": [
+    {
+      "filename": "level2_2025W19_2B_0346_1D2_spx_l2b-v27-2026-198.fits",
+      "sha256": "0143817ceec1a56d8ec85b7f8f5d760e20b3376a7afd73bf637657ff36eb980b",
+      "bytes": 4000320,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0346_1D2_spx_l2b-v27-2026-198.fits?center=210.80227,54.34895d&size=0.1"
+    },
+    {
+      "filename": "level2_2025W19_2B_0346_2D2_spx_l2b-v27-2026-198.fits",
+      "sha256": "5dfccb0e238d3d5b1066eaba1bcc3bc70c6f96e3212495ffb092c9c3946bd8c6",
+      "bytes": 65122560,
+      "url": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0346_2D2_spx_l2b-v27-2026-198.fits"
+    },
+    {
+      "filename": "level2_2025W19_2B_0346_3D2_spx_l2b-v27-2026-198.fits",
+      "sha256": "e94807c1118d905f973b586c87237d6b71b8fe9ae1d418545bc1a9b1d9580ccb",
+      "bytes": 4000320,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0346_3D2_spx_l2b-v27-2026-198.fits?center=210.80227,54.34895d&size=0.1"
+    },
+    {
+      "filename": "level2_2025W19_2B_0377_1D2_spx_l2b-v27-2026-198.fits",
+      "sha256": "c698c4a360e7fc6384462c6aa74f6c010453cce0853e7ba1cc4d8aa3d6978665",
+      "bytes": 3988800,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0377_1D2_spx_l2b-v27-2026-198.fits?center=210.80227,54.34895d&size=0.1"
+    }
+  ],
+  "registered_shape": [
+    4,
+    59,
+    59
+  ],
+  "frames": [
+    {
+      "frame_id": "level2_2025W19_2B_0346_1D2_spx_l2b-v27-2026-198",
+      "observation_id": "2025W19_2B_0346_1:D2",
+      "midpoint_utc": "2025-05-10T17:05:35.300Z",
+      "midpoint_mjd": 60805.71221412037,
+      "detector": 2,
+      "physical_observation_id": "2025W19_2B_0346_1",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-198",
+      "software_version": "7.0.5",
+      "sha256": "0143817ceec1a56d8ec85b7f8f5d760e20b3376a7afd73bf637657ff36eb980b",
+      "input_size_bytes": 4000320
+    },
+    {
+      "frame_id": "level2_2025W19_2B_0346_2D2_spx_l2b-v27-2026-198",
+      "observation_id": "2025W19_2B_0346_2:D2",
+      "midpoint_utc": "2025-05-10T17:07:44.231Z",
+      "midpoint_mjd": 60805.71370637731,
+      "detector": 2,
+      "physical_observation_id": "2025W19_2B_0346_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-198",
+      "software_version": "7.0.5",
+      "sha256": "5dfccb0e238d3d5b1066eaba1bcc3bc70c6f96e3212495ffb092c9c3946bd8c6",
+      "input_size_bytes": 65122560
+    },
+    {
+      "frame_id": "level2_2025W19_2B_0346_3D2_spx_l2b-v27-2026-198",
+      "observation_id": "2025W19_2B_0346_3:D2",
+      "midpoint_utc": "2025-05-10T17:09:53.161Z",
+      "midpoint_mjd": 60805.71519862268,
+      "detector": 2,
+      "physical_observation_id": "2025W19_2B_0346_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-198",
+      "software_version": "7.0.5",
+      "sha256": "e94807c1118d905f973b586c87237d6b71b8fe9ae1d418545bc1a9b1d9580ccb",
+      "input_size_bytes": 4000320
+    },
+    {
+      "frame_id": "level2_2025W19_2B_0377_1D2_spx_l2b-v27-2026-198",
+      "observation_id": "2025W19_2B_0377_1:D2",
+      "midpoint_utc": "2025-05-10T21:59:06.620Z",
+      "midpoint_mjd": 60805.91604884259,
+      "detector": 2,
+      "physical_observation_id": "2025W19_2B_0377_1",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "unknown",
+      "processing_version": "l2b-v27-2026-198",
+      "software_version": "7.0.5",
+      "sha256": "c698c4a360e7fc6384462c6aa74f6c010453cce0853e7ba1cc4d8aa3d6978665",
+      "input_size_bytes": 3988800
+    }
+  ],
+  "times_hours": [
+    0.0,
+    0.03581416653469205,
+    0.07162805541884154,
+    4.892033333249856
+  ],
+  "pixel_scale_arcsec": 6.15,
+  "finite_fraction_per_epoch": [
+    0.787704682562482,
+    0.9511634587762138,
+    0.7753519103705832,
+    0.5998276357368573
+  ],
+  "source_region": {
+    "right_ascension_deg": 210.80227,
+    "declination_deg": 54.34895,
+    "width_arcmin": 6,
+    "height_arcmin": 6
+  },
+  "detector_settings": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 1.2,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "mask_policy": "motion",
+  "seed": 932711,
+  "source_code_sha256": "8739e63b9770ba06b0345cb4b81137c1d18715597072c4769344fc70ea586304",
+  "method": "registered-real-background injection of local native EPSF pixel samples projected with native WCS, bilinear interpolation and production masks",
+  "limitations": [
+    "one real field, not 150 independent fields",
+    "fixed flux density across variable local passbands",
+    "no added photon noise or variance update",
+    "source added after real registration; no raw detector forward simulation",
+    "native EPSF is pixel-convolved; no additional pixel convolution applied",
+    "clustered early cadence and long gap cause blending/self-subtraction or source leaving field",
+    "unmatched real tracks remain unlabeled; no precision or false-positive metrics"
+  ],
+  "warnings": [
+    "passband_variation_not_corrected",
+    "psf_matching_not_applied"
+  ],
+  "background_robust_sigma": [
+    0.3329057189893795,
+    0.33272056568720304,
+    0.3445652323727273,
+    0.4014920532035204
+  ],
+  "unmodified_control": {
+    "candidates": 1,
+    "detection": {
+      "peaks_per_epoch": [
+        1,
+        2,
+        3,
+        1
+      ],
+      "peak_cap_reached": false,
+      "feature_rows": [
+        [
+          4.0,
+          0.5922338962554932,
+          7.994824409484863,
+          5.079248905181885,
+          0.5803300738334656,
+          1.9479055404663086
+        ]
+      ]
+    },
+    "candidate_scores": [
+      0.1665574014186859
+    ],
+    "labels": "all unmodified real candidates remain unlabeled",
+    "tracks": [
+      {
+        "baseline_rank": 1,
+        "model_rank": 1,
+        "model_score": 0.1665574014186859,
+        "epochs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "positions_xy": [
+          [
+            26,
+            42
+          ],
+          [
+            26,
+            43
+          ],
+          [
+            25,
+            42
+          ],
+          [
+            29,
+            29
+          ]
+        ],
+        "features": [
+          4.0,
+          0.5922338878397417,
+          7.994824422924368,
+          5.079248859023018,
+          0.5803300460103719,
+          1.9479055230869986
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "injections": 150,
+    "eligible_center_coverage_at_least_3": 135,
+    "recovered_before_ranking": 67,
+    "baseline_recovered_at_k": 67,
+    "model_recovered_at_k": 67,
+    "baseline_recovered_at_1": 65,
+    "model_recovered_at_1": 52,
+    "preexisting_control_match_trials": 0,
+    "top_k": 3,
+    "total_candidate_rows": 264,
+    "trials_with_peak_cap": 0
+  },
+  "by_peak_multiplier": {
+    "3.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 27,
+      "recovered_before_ranking": 3,
+      "baseline_recovered_at_k": 3,
+      "model_recovered_at_k": 3,
+      "baseline_recovered_at_1": 3,
+      "model_recovered_at_1": 3,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 43,
+      "trials_with_peak_cap": 0
+    },
+    "6.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 27,
+      "recovered_before_ranking": 9,
+      "baseline_recovered_at_k": 9,
+      "model_recovered_at_k": 9,
+      "baseline_recovered_at_1": 8,
+      "model_recovered_at_1": 7,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 49,
+      "trials_with_peak_cap": 0
+    },
+    "12.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 27,
+      "recovered_before_ranking": 17,
+      "baseline_recovered_at_k": 17,
+      "model_recovered_at_k": 17,
+      "baseline_recovered_at_1": 16,
+      "model_recovered_at_1": 13,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 56,
+      "trials_with_peak_cap": 0
+    },
+    "24.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 27,
+      "recovered_before_ranking": 19,
+      "baseline_recovered_at_k": 19,
+      "model_recovered_at_k": 19,
+      "baseline_recovered_at_1": 19,
+      "model_recovered_at_1": 14,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 57,
+      "trials_with_peak_cap": 0
+    },
+    "48.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 27,
+      "recovered_before_ranking": 19,
+      "baseline_recovered_at_k": 19,
+      "model_recovered_at_k": 19,
+      "baseline_recovered_at_1": 19,
+      "model_recovered_at_1": 15,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 59,
+      "trials_with_peak_cap": 0
+    }
+  },
+  "by_speed": {
+    "1.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 13,
+      "baseline_recovered_at_k": 13,
+      "model_recovered_at_k": 13,
+      "baseline_recovered_at_1": 12,
+      "model_recovered_at_1": 7,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 57,
+      "trials_with_peak_cap": 0
+    },
+    "4.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 20,
+      "recovered_before_ranking": 4,
+      "baseline_recovered_at_k": 4,
+      "model_recovered_at_k": 4,
+      "baseline_recovered_at_1": 4,
+      "model_recovered_at_1": 2,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 46,
+      "trials_with_peak_cap": 0
+    },
+    "10.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 16,
+      "baseline_recovered_at_k": 16,
+      "model_recovered_at_k": 16,
+      "baseline_recovered_at_1": 16,
+      "model_recovered_at_1": 14,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 56,
+      "trials_with_peak_cap": 0
+    },
+    "25.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 25,
+      "recovered_before_ranking": 11,
+      "baseline_recovered_at_k": 11,
+      "model_recovered_at_k": 11,
+      "baseline_recovered_at_1": 10,
+      "model_recovered_at_1": 7,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 46,
+      "trials_with_peak_cap": 0
+    },
+    "50.0": {
+      "injections": 30,
+      "eligible_center_coverage_at_least_3": 30,
+      "recovered_before_ranking": 23,
+      "baseline_recovered_at_k": 23,
+      "model_recovered_at_k": 23,
+      "baseline_recovered_at_1": 23,
+      "model_recovered_at_1": 22,
+      "preexisting_control_match_trials": 0,
+      "top_k": 3,
+      "total_candidate_rows": 59,
+      "trials_with_peak_cap": 0
+    }
+  },
+  "elapsed_seconds": 3.032292217001668,
+  "references": [
+    "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/",
+    "https://docs.astropy.org/en/stable/wcs/"
+  ],
+  "trial_details_file": "m101-development-evaluation.trials.json.gz",
+  "trial_details_sha256": "6f496d7e9927d373c26b9d17c3a544b6abfc9f4716e02e3e61583074605b37ba",
+  "full_evaluation_sha256": "597ad5e22875d43ac78e4d4a485f386e660ca12a4f5a0e292ac6bad7d1b29094"
+}

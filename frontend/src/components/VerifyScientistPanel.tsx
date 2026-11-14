@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { VerificationComment, VerificationSetting } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { getInitialVerificationComments } from '../services/mockVerificationData';
+import {
+  subscribeMotionReviews,
+  resolveMotionReviewIdForPreset,
+  getPrecomputedReviewById,
+} from '../services/motionReviewService';
 import {
   UserCheck,
   Sparkles,
@@ -26,6 +31,11 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
   const [allComments] = useState<VerificationComment[]>(getInitialVerificationComments);
   const [filterVote, setFilterVote] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [, setReviewsTick] = useState(0);
+
+  useEffect(() => {
+    return subscribeMotionReviews(() => setReviewsTick((t) => t + 1));
+  }, []);
 
   const filtered = allComments.filter((item) => {
     if (filterVote !== 'all' && item.vote !== filterVote) return false;
@@ -83,7 +93,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
             </h2>
           </div>
           <p className="text-[11px] font-mono text-paper-400 mt-0.5">
-            Click any flagged object to open the exact coordinates, detector array, and observer markings for instant verification.
+            Click any flagged object to open its real multi-epoch cutouts, difference frames, and BLOOM masks in the Sky Viewer.
           </p>
         </div>
 
@@ -95,7 +105,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search objects or notes..."
+              placeholder="Search 3I/ATLAS, Vesta..."
               className="w-full sm:w-44 bg-paper-950 border border-paper-800 rounded-lg pl-7 pr-2 py-1 text-[11px] font-mono text-paper-200 focus:outline-none focus:border-emerald-400"
             />
           </div>
@@ -118,9 +128,22 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
         {filtered.map((item, idx) => {
           const setting = item.setting;
           if (!setting) return null;
-          // Priority rank (1 gets deepest red)
-          const priorityRank = idx === 0 ? 1 : idx === 1 ? 1 : idx === 2 ? 2 : 3;
+          const priorityRank = idx < 2 ? 1 : idx < 4 ? 2 : 3;
           const pColors = getPriorityColors(priorityRank);
+
+          const reviewId = resolveMotionReviewIdForPreset(
+            setting.targetPresetId ?? null,
+            setting.selectedArray
+          );
+          const precomputed = reviewId ? getPrecomputedReviewById(reviewId) : null;
+          const primaryTrack = precomputed?.bloom_tracks?.[0] || precomputed?.tracks?.[0];
+
+          const modeBadge =
+            setting.subtractionMode === 'bloom_mask'
+              ? { label: 'BLOOM Mask', cls: 'text-amber-300 border-amber-500/40 bg-amber-950/40' }
+              : setting.subtractionMode === 'epoch_difference'
+              ? { label: 'Diff Image', cls: 'text-sky-300 border-sky-500/40 bg-sky-950/40' }
+              : { label: 'Aligned Sky', cls: 'text-paper-300 border-paper-800 bg-paper-900' };
 
           return (
             <div
@@ -129,10 +152,9 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
               className="p-3.5 rounded-xl bg-paper-950 border-2 border-black hover:border-emerald-400/80 transition-all card-tactile cursor-pointer group flex flex-col justify-between space-y-3"
             >
               {/* Card Header: Candidate Name, Priority Badge & Vote */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    {/* Priority Hexagon Marker Pill */}
                     <span
                       style={{ backgroundColor: pColors.badgeBg, color: pColors.text }}
                       className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm border border-black/40"
@@ -146,10 +168,24 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
                   {getVoteBadge(item.vote)}
                 </div>
 
-                {/* Top Comment & Author */}
-                <p className="text-[11px] font-sans text-paper-300 leading-relaxed line-clamp-2">
-                  "{item.message}"
-                </p>
+                {/* Optional Stack Preview & Top Comment */}
+                <div className="flex items-start gap-2.5">
+                  {primaryTrack?.motion_stack && (
+                    <div className="shrink-0 flex flex-col items-center">
+                      <img
+                        src={primaryTrack.motion_stack}
+                        alt={`${setting.candidateName} moving stack`}
+                        width={42}
+                        height={42}
+                        className="w-11 h-11 rounded-lg border-2 border-black bg-black [image-rendering:pixelated]"
+                      />
+                      <span className="text-[8px] font-mono text-emerald-400 mt-0.5">Track Stack</span>
+                    </div>
+                  )}
+                  <p className="text-[11px] font-sans text-paper-300 leading-relaxed line-clamp-3">
+                    "{item.message}"
+                  </p>
+                </div>
               </div>
 
               {/* Setting Parameters & Action Link */}
@@ -162,11 +198,11 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
 
                   <span className="px-1.5 py-0.5 rounded bg-paper-900 border border-paper-800 flex items-center gap-1 text-emerald-300">
                     <Layers className="w-2.5 h-2.5" />
-                    Array {setting.selectedArray}
+                    D{setting.selectedArray}
                   </span>
 
-                  <span className="px-1.5 py-0.5 rounded bg-paper-900 border border-paper-800">
-                    Epoch {setting.activeFrameIndex + 1}
+                  <span className={`px-1.5 py-0.5 rounded border ${modeBadge.cls}`}>
+                    {modeBadge.label}
                   </span>
 
                   <span className="ml-auto text-paper-500 flex items-center gap-1">
@@ -181,7 +217,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
                   className="w-full py-1.5 px-3 rounded-lg bg-emerald-400 group-hover:bg-emerald-300 text-gray-950 font-mono text-[11px] font-bold border-2 border-black flex items-center justify-center gap-2 transition-transform group-hover:translate-x-0.5"
                 >
                   <MessageSquare className="w-3 h-3 stroke-[2.5]" />
-                  <span>Verify Object & Open Chat</span>
+                  <span>Open in Sky Viewer & Verify</span>
                   <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </button>
               </div>

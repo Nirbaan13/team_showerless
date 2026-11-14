@@ -153,7 +153,7 @@ These transfers prove protocol, origin and format handling; they do not establis
 cross-survey astrometric agreement, comparable calibration or scientific accuracy.
 Network-dependent live tests are ignored in ordinary CI.
 
-Final offline verification on 2026-11-14 after merging frontend-only main
+Previous offline verification on 2026-11-14 after merging frontend-only main
 `9843157012595ab03cb3e7683bb8a6c731ace489`:
 
 - `./sbtw 'testOnly spaceapps.archive.*'`: 49 passed, zero failed, two optional
@@ -178,3 +178,35 @@ POST redirects, and continuation admission limits. Combined cache and free-space
 guards have four independent tests. Initial TABLEDATA-only parsing, provisional
 clocks, pending providers and unqualified foreign processing remain explicit
 capability boundaries, rather than implementation claims.
+
+## Refresh against ML inference and VPS migration
+
+On 2026-11-14 the branch merged current `origin/main`
+`0a2da5aa13e64c1a8167d94f9f1801ccb49e915a`. The refresh preserves the merged
+ML analysis HTTP/gRPC services, teammates' frontend work, and deployment to
+`144.124.238.101` including CI image delta transfer. No unmerged cutout branch
+was imported, and no deployment was performed as part of this refresh.
+
+The only integration resolutions combine the existing analysis dependency
+injection with the archive runtime and shared FITS capacity coordinator in
+`Main.scala`, and retain both OpenAPI tags. Archive implementation, fixtures and
+tests are unchanged. Existing main services and protobuf definitions, frontend,
+operations scripts and CI workflows remain identical to this main revision.
+
+Fresh verification after those resolutions:
+
+- `./sbtw test stage`: 169 passed, zero failed, two optional live tests ignored;
+  staged runtime built successfully. This includes the unchanged 49 archive tests
+  and 120 existing tests, including the merged ML analysis suite.
+- OpenAPI 3.1 schema validation passed. Semantic YAML comparisons preserve all
+  20 current main paths, 23 schemas, all other component definitions and the
+  migrated server address. The seven additive archive paths and 14 archive
+  schemas are unchanged from the pre-refresh archive branch.
+- Shell syntax checks passed for deployment, frontend deployment, VPS bootstrap,
+  CI SSH helper, their shell test scripts and `backend/sbtw`.
+- `git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+  diff --check origin/main` passed; original HTTP fixture CRLF bytes are retained.
+
+The earlier live-provider and staged bootstrap smoke evidence above was not
+rerun during this merge-only refresh; its scope and scientific limits remain
+unchanged.

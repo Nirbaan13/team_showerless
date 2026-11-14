@@ -49,7 +49,7 @@ private[grpc] object GrpcMapping:
       f.get("observed_after").map(string), f.get("observed_before").map(string),
       deep = f.get("survey").contains(Json.Str("deep")))
 
-  private def value(json: Json): Value = Value(json match
+  def value(json: Json): Value = Value(json match
     case Json.Null => Value.Kind.NullValue(NullValue.NULL_VALUE)
     case Json.Str(s) => Value.Kind.StringValue(s)
     case Json.Bool(b) => Value.Kind.BoolValue(b)

@@ -5,7 +5,7 @@ import spaceapps.archive.{ArchiveRuntime,ArchiveLimits}
 import spaceapps.domain.*
 import spaceapps.integrations.irsa.LiveArchive
 import spaceapps.integrations.grpc.GrpcServer
-import spaceapps.repository.Repository
+import spaceapps.repository.{Repository,AnalysisRepository}
 import spaceapps.service.*
 
 import zio.{Chunk as _, *}
@@ -35,7 +35,9 @@ object Main extends ZIOAppDefault:
       jobs <- Jobs.make(repository,archive,NoProcessing,data,env("WORKERS","2").toInt,env("TRANSFERS","4").toInt,env("MAX_ACTIVE_JOBS","32").toInt)
       metadata <- MetadataService.make(repository,jobs.cachedImage,client,env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync"))
       equipment <- EquipmentService.make(repository,data,client,env("IRSA_CALIBRATION_URL","https://nasa-irsa-spherex.s3.amazonaws.com/"))
-      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openai/openapi.yaml")),channelBands.keySet,Some(metadata),Some(equipment))
+      analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
+      analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","inference")),env("ML_PYTHON","python3")))
+      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openai/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       archiveRuntime <- ArchiveRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(
         global_parallelism=env("ARCHIVE_PARALLELISM","3").toInt,
         per_provider_parallelism=env("ARCHIVE_PROVIDER_PARALLELISM","1").toInt,
@@ -45,7 +47,7 @@ object Main extends ZIOAppDefault:
         file_bytes=math.min(env("ARCHIVE_FILE_BYTES","268435456").toLong,env("MAX_PRODUCT_BYTES","268435456").toLong),
         max_active_jobs=env("ARCHIVE_MAX_ACTIVE_JOBS","32").toInt),Some(cache))
       archiveApi=new ArchiveApi(archiveRuntime)
-      grpcPort <- GrpcServer.start(jobs,env("APP_REVISION","development"),env("GRPC_HOST","0.0.0.0"),env("GRPC_PORT","50051").toInt,channelBands.keySet,Some(metadata),Some(equipment))
+      grpcPort <- GrpcServer.start(jobs,env("APP_REVISION","development"),env("GRPC_HOST","0.0.0.0"),env("GRPC_PORT","50051").toInt,channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       _ <- ZIO.logInfo(s"gRPC listener started on port $grpcPort")
       _ <- ZIO.logInfo(s"Starting IRSA retrieval service, revision ${env("APP_REVISION","development")}")
       _ <- Server.serve(api.routes ++ archiveApi.routes)

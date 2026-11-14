@@ -10,19 +10,65 @@ import {
   REAL_BARNARD_FRAMES,
   REAL_WISE_0855_FRAMES,
 } from './realSpherexFrames';
+import {
+  getPrecomputedReviewById,
+  resolveMotionReviewIdForPreset,
+  convertReviewToEpochFrames,
+  convertReviewToCandidates,
+} from './motionReviewService';
 
 export const NASA_TEST_PRESETS: TargetPreset[] = [
   {
     id: '3i-atlas',
-    name: '3I/ATLAS',
-    subtitle: 'Interstellar Comet (Real SPHEREx Detection)',
+    name: '3I/ATLAS (D6)',
+    subtitle: 'Interstellar Comet · Band 6 Real QR2',
     raHms: '11h 07m 09.6s',
     decDms: '+05° 17\' 24.0"',
     raDeg: 166.790000,
     decDeg: 5.290000,
-    description: 'Real NASA/IPAC IRSA QR2 detection across 4 exposures. Offset within 0.54 px of ephemeris. Ranked #1/25 baseline & #2/25 Random Forest.',
+    description: 'Real NASA/IPAC IRSA QR2 detection across 4 Band-6 exposures. Offset within 0.539 px of ephemeris. Ranked #1 Heuristic & #3 Random Forest.',
     recommendedArray: 6,
     expectedClass: 'moving_object',
+    motionReviewId: 'december-d6',
+  },
+  {
+    id: '3i-atlas-d2',
+    name: '3I/ATLAS (D2)',
+    subtitle: 'Interstellar Comet · Band 2 Mask Gap Recovery',
+    raHms: '11h 08m 49.6s',
+    decDms: '+05° 08\' 48.6"',
+    raDeg: 167.206653,
+    decDeg: 5.146825,
+    description: 'Real SPHEREx D2 sequence across 3 exposures where a shared median fails across a mask gap, but per-frame leave-one-out reference recovers 3I/ATLAS at #1 (0.604 px offset).',
+    recommendedArray: 2,
+    expectedClass: 'moving_object',
+    motionReviewId: 'december-d2',
+  },
+  {
+    id: 'vesta-d6',
+    name: '(4) Vesta (D6)',
+    subtitle: 'Main-Belt Asteroid · BLOOM Core Track (Band 6)',
+    raHms: '14h 52m 05.9s',
+    decDms: '-11° 59\' 32.2"',
+    raDeg: 223.024527,
+    decDeg: -11.992267,
+    description: 'Bright main-belt asteroid in SPHEREx DR1 (Band 6). Saturated core is masked in difference images but recovered at #1 within 0.281 px by linking BLOOM bitmask centroids.',
+    recommendedArray: 6,
+    expectedClass: 'moving_object',
+    motionReviewId: 'vesta-d6',
+  },
+  {
+    id: 'vesta-d3',
+    name: '(4) Vesta (D3)',
+    subtitle: 'Main-Belt Asteroid · Mid-IR BLOOM Track (Band 3)',
+    raHms: '14h 52m 05.9s',
+    decDms: '-11° 59\' 32.2"',
+    raDeg: 223.024527,
+    decDeg: -11.992267,
+    description: 'SPHEREx DR1 Band 3 sequence of (4) Vesta across 3 visits. Compares 25 residual tracks against #1 BLOOM centroid recovery (0.382 px max ephemeris offset).',
+    recommendedArray: 3,
+    expectedClass: 'moving_object',
+    motionReviewId: 'vesta-d3',
   },
   {
     id: 'barnards-star',
@@ -37,18 +83,6 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
     expectedClass: 'moving_object',
   },
   {
-    id: 'epsilon-indi-b',
-    name: 'Epsilon Indi B',
-    subtitle: 'Nearby Binary Brown Dwarf',
-    raHms: '22h 04m 10.595s',
-    decDms: '-56° 46\' 58.239"',
-    raDeg: 331.044146,
-    decDeg: -56.782844,
-    description: 'Early T-dwarf pair showing distinct methane and water ice absorption in mid-IR channels.',
-    recommendedArray: 3,
-    expectedClass: 'moving_object',
-  },
-  {
     id: 'wise-0855',
     name: 'WISE 0855-0714',
     subtitle: 'Coldest Sub-Stellar Object',
@@ -58,6 +92,18 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
     decDeg: -7.245147,
     description: 'Y-type sub-brown dwarf with water-ice cloud evidence at ~250 K. Extremely faint in short-wave; prominent in Bands 5 & 6.',
     recommendedArray: 5,
+    expectedClass: 'moving_object',
+  },
+  {
+    id: 'epsilon-indi-b',
+    name: 'Epsilon Indi B',
+    subtitle: 'Nearby Binary Brown Dwarf',
+    raHms: '22h 04m 10.595s',
+    decDms: '-56° 46\' 58.239"',
+    raDeg: 331.044146,
+    decDeg: -56.782844,
+    description: 'Early T-dwarf pair showing distinct methane and water ice absorption in mid-IR channels.',
+    recommendedArray: 3,
     expectedClass: 'moving_object',
   },
   {
@@ -103,11 +149,20 @@ export const DETECTOR_ARRAY_SPECS = [
 ];
 
 /**
- * Generates simulated multi-epoch frames for the celestial viewport.
+ * Generates multi-epoch frames for the celestial viewport, prioritizing Ivan's precomputed
+ * real SPHEREx datasets from public/motion/review.json when available.
  */
 export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
-  // Real SPHEREx Interim Results: 3I/ATLAS (NASA/IPAC IRSA Quick Release 2)
-  if (targetId === '3i-atlas') {
+  const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
+  if (reviewId) {
+    const precomputed = getPrecomputedReviewById(reviewId);
+    if (precomputed) {
+      return convertReviewToEpochFrames(precomputed);
+    }
+  }
+
+  // Fallback for 3I/ATLAS before review.json finishes async load
+  if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
     const realObservations = [
       { id: '2025W50_2A_0741_2D6', date: '2025-12-14T11:01:45.688Z', wave: 4.475, snr: 12.1, offset: 0.421 },
       { id: '2025W50_2A_0755_2D6', date: '2025-12-14T12:39:42.784Z', wave: 4.608, snr: 13.4, offset: 0.263 },
@@ -118,14 +173,16 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
       frameId: obs.id,
       epochIndex: idx,
       observationDate: obs.date,
-      detectorArray: 6 as any,
-      wavelengthMinUm: 4.42,
-      wavelengthMaxUm: 5.00,
+      detectorArray: (targetId === '3i-atlas-d2' ? 2 : 6) as any,
+      wavelengthMinUm: targetId === '3i-atlas-d2' ? 1.11 : 4.42,
+      wavelengthMaxUm: targetId === '3i-atlas-d2' ? 1.64 : 5.00,
       channelIndex: 94 + idx * 2,
       flaggedPixelPercentage: 0.12,
       cosmicRayHits: 8,
       isAvailable: true,
       imageDataUrl: REAL_3I_ATLAS_FRAMES[idx]?.pngDataUrl,
+      imageWidth: 256,
+      imageHeight: 144,
       headerMetadata: {
         exposureTimeSec: 142.5,
         airmass: 1.0,
@@ -227,40 +284,107 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
 }
 
 /**
- * Generates mock candidate objects in the field of view.
+ * Generates candidate objects in the field of view, prioritizing Ivan's precomputed
+ * real SPHEREx datasets from public/motion/review.json when available.
  */
-export function getMockCandidates(targetId: string): CandidateObject[] {
-  if (targetId === '3i-atlas') {
+export function getMockCandidates(targetId: string, arrayId: number = 6): CandidateObject[] {
+  const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
+  if (reviewId) {
+    const precomputed = getPrecomputedReviewById(reviewId);
+    if (precomputed) {
+      return convertReviewToCandidates(precomputed);
+    }
+  }
+
+  if (targetId === 'vesta-d6' || targetId === 'vesta-d3') {
+    const detLabel = targetId === 'vesta-d3' ? 'D3' : 'D6';
     return [
       {
-        id: '3I/ATLAS',
-        ra: 166.790000,
-        dec: 5.290000,
-        pixelX: 195,
-        pixelY: 47,
+        id: `(4) Vesta (${detLabel} BLOOM)`,
+        ra: 223.024527,
+        dec: -11.992267,
+        pixelX: 111,
+        pixelY: 87,
         mlRank: 1,
-        mlPriorityScore: 0.98,
+        mlScore: 0.99,
+        mlPriorityScore: 0.99,
+        heuristicRank: 1,
+        randomForestRank: 1,
+        detectionMethod: 'bloom_centroids',
+        fitRmsPx: 0.19,
+        speedArcsecPerHour: 49.2,
+        bloomAreaPx: targetId === 'vesta-d3' ? [32, 33, 31] : [10, 11, 7],
         epochPositions: [
-          { epochIndex: 0, x: 19, y: 108, flux: 18.4, snr: 12.1 },
-          { epochIndex: 1, x: 63, y: 93, flux: 19.2, snr: 13.4 },
-          { epochIndex: 2, x: 195, y: 47, flux: 21.0, snr: 14.8 },
-          { epochIndex: 3, x: 237, y: 32, flux: 20.5, snr: 14.2 },
+          { epochIndex: 0, x: 201, y: 37, flux: 240.0, snr: 45.0 },
+          { epochIndex: 1, x: 111, y: 87, flux: 245.0, snr: 48.0 },
+          { epochIndex: 2, x: 19, y: 136, flux: 238.0, snr: 44.0 },
         ],
         classification: 'moving_object',
         confidence: 'high',
-        volunteerNotes: 'Interstellar comet track matched across all 4 real SPHEREx exposures. Max offset 0.539 px from ephemeris. Ranked #1/25 baseline & #2/25 Random Forest.',
+        volunteerNotes: `(4) Vesta saturated core recovered via detector BLOOM bitmask centroids across all 3 DR1 visits. Max offset ${targetId === 'vesta-d3' ? '0.382' : '0.281'} px from JPL Horizons ephemeris.`,
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'NEO Ephemeris',
+        catalogId: '(4) Vesta (JPL Horizons)',
+        validationData: {
+          objectName: `(4) Vesta (${detLabel} BLOOM)`,
+          maxOffsetPx: targetId === 'vesta-d3' ? 0.382 : 0.281,
+          baselineRank: 1,
+          totalCandidates: 1,
+          randomForestRank: 1,
+          datasetDoi: '10.26131/IRSA652',
+          sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/most-queries/',
+          exposuresCount: 3,
+        },
+      },
+    ];
+  }
+
+  if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
+    const isD2 = targetId === '3i-atlas-d2';
+    return [
+      {
+        id: isD2 ? '3I/ATLAS (D2)' : '3I/ATLAS',
+        ra: isD2 ? 167.206653 : 166.790000,
+        dec: isD2 ? 5.146825 : 5.290000,
+        pixelX: isD2 ? 50 : 195,
+        pixelY: isD2 ? 37 : 47,
+        mlRank: 1,
+        mlScore: 0.98,
+        mlPriorityScore: 0.98,
+        heuristicRank: 1,
+        randomForestRank: isD2 ? 2 : 3,
+        detectionMethod: 'heuristic_leave_one_out',
+        fitRmsPx: isD2 ? 0.32 : 0.22,
+        speedArcsecPerHour: isD2 ? 174.0 : 175.7,
+        epochPositions: isD2
+          ? [
+              { epochIndex: 0, x: 9, y: 52, flux: 42.0, snr: 187.8 },
+              { epochIndex: 1, x: 50, y: 37, flux: 45.0, snr: 215.0 },
+              { epochIndex: 2, x: 95, y: 22, flux: 39.0, snr: 150.1 },
+            ]
+          : [
+              { epochIndex: 0, x: 19, y: 108, flux: 18.4, snr: 33.7 },
+              { epochIndex: 1, x: 63, y: 93, flux: 19.2, snr: 84.7 },
+              { epochIndex: 2, x: 195, y: 47, flux: 21.0, snr: 61.8 },
+              { epochIndex: 3, x: 237, y: 32, flux: 20.5, snr: 58.8 },
+            ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: isD2
+          ? 'Real SPHEREx D2 recovery of 3I/ATLAS across 3 exposures bridging a mask gap. Max offset 0.604 px from ephemeris. Heuristic #1/2, Random Forest #2/2.'
+          : 'Interstellar comet track matched across all 4 real SPHEREx D6 exposures. Max offset 0.539 px from ephemeris. Ranked #1/10 Heuristic & #3/10 Random Forest.',
         isKnownCatalogMatch: true,
         matchedCatalog: 'NEO Ephemeris',
         catalogId: '3I/ATLAS (C/2024 S1)',
         validationData: {
-          objectName: '3I/ATLAS',
-          maxOffsetPx: 0.539,
+          objectName: isD2 ? '3I/ATLAS (D2)' : '3I/ATLAS',
+          maxOffsetPx: isD2 ? 0.604 : 0.539,
           baselineRank: 1,
-          totalCandidates: 25,
-          randomForestRank: 2,
+          totalCandidates: isD2 ? 2 : 10,
+          randomForestRank: isD2 ? 2 : 3,
           datasetDoi: '10.26131/IRSA652',
           sourceUrl: 'https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html',
-          exposuresCount: 4,
+          exposuresCount: isD2 ? 3 : 4,
         }
       },
       {
@@ -270,7 +394,13 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelX: 185,
         pixelY: 62,
         mlRank: 2,
+        mlScore: 0.84,
         mlPriorityScore: 0.84,
+        heuristicRank: 2,
+        randomForestRank: 1,
+        detectionMethod: 'heuristic_leave_one_out',
+        fitRmsPx: 0.41,
+        speedArcsecPerHour: 111.0,
         epochPositions: [
           { epochIndex: 0, x: 14, y: 120, flux: 8.2, snr: 7.4 },
           { epochIndex: 1, x: 58, y: 105, flux: 8.8, snr: 7.9 },
@@ -291,7 +421,13 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelX: 320,
         pixelY: 180,
         mlRank: 3,
+        mlScore: 0.65,
         mlPriorityScore: 0.65,
+        heuristicRank: 3,
+        randomForestRank: 4,
+        detectionMethod: 'heuristic_leave_one_out',
+        fitRmsPx: 0.09,
+        speedArcsecPerHour: 186.9,
         epochPositions: [
           { epochIndex: 0, x: 305, y: 195, flux: 5.1, snr: 5.2 },
           { epochIndex: 1, x: 312, y: 190, flux: 5.4, snr: 5.5 },
@@ -310,7 +446,13 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelX: 410,
         pixelY: 290,
         mlRank: 4,
+        mlScore: 0.38,
         mlPriorityScore: 0.38,
+        heuristicRank: 4,
+        randomForestRank: 5,
+        detectionMethod: 'heuristic_leave_one_out',
+        fitRmsPx: 1.45,
+        speedArcsecPerHour: 0.0,
         epochPositions: [
           { epochIndex: 0, x: 410, y: 290, flux: 14.2, snr: 11.2 },
           { epochIndex: 1, x: 410, y: 290, flux: 1.1, snr: 1.2 },
@@ -335,6 +477,10 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelY: 128,
         mlRank: 1,
         mlPriorityScore: 0.96,
+        heuristicRank: 1,
+        randomForestRank: 1,
+        fitRmsPx: 0.14,
+        speedArcsecPerHour: 10.3,
         epochPositions: [
           { epochIndex: 0, x: 122, y: 140, flux: 185.0, snr: 38.2 },
           { epochIndex: 1, x: 125, y: 134, flux: 184.5, snr: 37.9 },
@@ -358,6 +504,10 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelY: 85,
         mlRank: 2,
         mlPriorityScore: 0.79,
+        heuristicRank: 2,
+        randomForestRank: 3,
+        fitRmsPx: 0.42,
+        speedArcsecPerHour: 0.2,
         epochPositions: [
           { epochIndex: 0, x: 190, y: 85, flux: 32.0, snr: 4.1 },
           { epochIndex: 1, x: 190, y: 85, flux: 152.0, snr: 28.4 },
@@ -378,6 +528,10 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelY: 60,
         mlRank: 3,
         mlPriorityScore: 0.63,
+        heuristicRank: 3,
+        randomForestRank: 2,
+        fitRmsPx: 0.28,
+        speedArcsecPerHour: 10.1,
         epochPositions: [
           { epochIndex: 0, x: 45, y: 60, flux: 45.0, snr: 12.4 },
           { epochIndex: 1, x: 45, y: 60, flux: 44.8, snr: 12.1 },
@@ -398,6 +552,10 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelY: 195,
         mlRank: 4,
         mlPriorityScore: 0.48,
+        heuristicRank: 4,
+        randomForestRank: 4,
+        fitRmsPx: 0.11,
+        speedArcsecPerHour: 0.0,
         epochPositions: [
           { epochIndex: 0, x: 220, y: 195, flux: 65.0, snr: 18.2 },
           { epochIndex: 1, x: 220, y: 195, flux: 64.7, snr: 18.0 },
@@ -420,6 +578,10 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         pixelY: 130,
         mlRank: 5,
         mlPriorityScore: 0.28,
+        heuristicRank: 5,
+        randomForestRank: 5,
+        fitRmsPx: 1.85,
+        speedArcsecPerHour: 0.0,
         epochPositions: [
           { epochIndex: 0, x: 110, y: 130, flux: 1.2, snr: 1.4 },
           { epochIndex: 1, x: 110, y: 130, flux: 1.0, snr: 1.2 },

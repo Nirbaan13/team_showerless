@@ -20,6 +20,16 @@ import {
   searchArchiveObservations,
   convertObservationsToEpochFrames,
 } from './services/spherexBackendApi';
+import {
+  subscribeMotionReviews,
+  findMatchingPrecomputedReview,
+  convertReviewToEpochFrames,
+  convertReviewToCandidates,
+  searchLiveMotionMicroservice,
+  detectTracksViaMicroservice,
+  type MotionReviewDataset,
+  type MotionTrackCandidate,
+} from './services/motionReviewService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { TopNav } from './components/TopNav';
@@ -31,16 +41,40 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
+import { MotionReview } from './components/MotionReview';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
-import { Compass, Home, UserCheck, Sliders, Sparkles, Menu, X, Share2 } from 'lucide-react';
+import {
+  Compass,
+  Home,
+  UserCheck,
+  Sliders,
+  Sparkles,
+  Menu,
+  X,
+  Share2,
+  Crosshair,
+} from 'lucide-react';
+import { InferencePage } from './components/InferencePage';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
-  const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
-  const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>('canvas');
+  const isEmbedMode =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('embed') === 'true';
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion' | 'inference'>(() => {
+    if (isEmbedMode) return 'viewer';
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
+      return 'inference';
+    }
+    return typeof window !== 'undefined' && window.location.hash === '#motion-review'
+      ? 'motion'
+      : 'home';
+  });
+  const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>(
+    'canvas'
+  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
@@ -66,11 +100,20 @@ export function App() {
     }
   };
 
-  const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
-  const [ra, setRa] = useState<number>(269.452075);
-  const [dec, setDec] = useState<number>(4.693365);
-  const [fov, setFov] = useState<FOVOption>("3'");
-  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(2);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (activeTab === 'motion') url.hash = 'motion-review';
+    else if (url.hash === '#motion-review') url.hash = '';
+    if (url.href !== window.location.href) {
+      window.history.replaceState(window.history.state, '', url);
+    }
+  }, [activeTab]);
+
+  const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
+  const [ra, setRa] = useState<number>(166.790000);
+  const [dec, setDec] = useState<number>(5.290000);
+  const [fov, setFov] = useState<FOVOption>("5'");
+  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(6);
   const [selectedChannel, setSelectedChannel] = useState<number | null>(null);
   const [subtractionMode, setSubtractionMode] = useState<SubtractionMode>('raw_calibrated');
   const [activeFrameIndex, setActiveFrameIndex] = useState<number>(0);
@@ -78,15 +121,24 @@ export function App() {
   const [fps, setFps] = useState<number>(3);
   const [blinkMode, setBlinkMode] = useState<boolean>(false);
 
+  // Track when precomputed motion review.json finishes loading
+  const [motionReviewsRevision, setMotionReviewsRevision] = useState<number>(0);
+
   // All known-catalog overlays are on by default; users can untick them
-  const ALL_OVERLAYS_ON: CatalogOverlayState = { gaiaDr3: true, wise: true, solarSystemEphemeris: true };
+  const ALL_OVERLAYS_ON: CatalogOverlayState = {
+    gaiaDr3: true,
+    wise: true,
+    solarSystemEphemeris: true,
+  };
   const [overlays, setOverlays] = useState<CatalogOverlayState>(ALL_OVERLAYS_ON);
 
-  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('cand-barnard-primary');
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('3I/ATLAS');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false);
-  const [drawerControlledTab, setDrawerControlledTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum' | null>(null);
+  const [drawerControlledTab, setDrawerControlledTab] = useState<
+    'ai' | 'triage' | 'chat' | 'spectrum' | null
+  >(null);
 
   useEffect(() => {
     if (activeTab !== 'viewer') return;
@@ -104,12 +156,13 @@ export function App() {
     message: string;
   }>({
     source: 'preset',
-    message: "NASA Benchmark: Barnard's Star",
+    message: 'NASA Benchmark: 3I/ATLAS (D6)',
   });
 
   const frames = useMemo(() => {
+    void motionReviewsRevision;
     if (currentPresetId) {
-      const arrayId = selectedArray === 'all' ? 3 : selectedArray;
+      const arrayId = selectedArray === 'all' ? 6 : selectedArray;
       return getMockEpochFrames(currentPresetId, arrayId);
     }
     if (customFrames && customFrames.length > 0) {
@@ -117,14 +170,49 @@ export function App() {
     }
     const arrayId = selectedArray === 'all' ? 3 : selectedArray;
     return getMockEpochFrames('custom', arrayId);
-  }, [currentPresetId, customFrames, selectedArray]);
+  }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
-  const [candidatesList, setCandidatesList] = useState(() =>
-    getMockCandidates('barnards-star')
+  const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() =>
+    getMockCandidates('3i-atlas', 6)
   );
 
+  // Hydrate candidates from review.json as soon as the external fetch completes
+  useEffect(() => {
+    return subscribeMotionReviews(() => {
+      setMotionReviewsRevision((r) => r + 1);
+      if (currentPresetId) {
+        const arrayId = selectedArray === 'all' ? 6 : selectedArray;
+        const updated = getMockCandidates(currentPresetId, arrayId);
+        if (updated.length > 0) {
+          setCandidatesList(updated);
+          setSelectedCandidateId((prev) =>
+            updated.some((c) => c.id === prev) ? prev : updated[0].id
+          );
+        }
+      }
+    });
+  }, [currentPresetId, selectedArray]);
+
+  const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
+    setSelectedArray(newArray);
+    if (currentPresetId) {
+      const arrayId = newArray === 'all' ? 6 : newArray;
+      const updated = getMockCandidates(currentPresetId, arrayId);
+      if (updated.length > 0) {
+        setCandidatesList(updated);
+        setSelectedCandidateId((prev) =>
+          updated.some((c) => c.id === prev) ? prev : updated[0].id
+        );
+      }
+    }
+  };
+
   const activeCandidate = useMemo(() => {
-    return candidatesList.find((c) => c.id === selectedCandidateId) || candidatesList[0] || null;
+    return (
+      candidatesList.find((c) => c.id === selectedCandidateId) ||
+      candidatesList[0] ||
+      null
+    );
   }, [candidatesList, selectedCandidateId]);
 
   const spectrumData = useMemo(() => {
@@ -158,6 +246,46 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
+  // Handler when user jumps from MotionReview directly into the Sky Viewer
+  const handleOpenMotionReviewInViewer = (
+    review: MotionReviewDataset,
+    frameIdx: number,
+    layer: 'aligned' | 'residual' | 'bloom',
+    track?: MotionTrackCandidate
+  ) => {
+    const convertedFrames = convertReviewToEpochFrames(review);
+    const convertedCands = convertReviewToCandidates(review);
+    const detNum = Number(review.detector?.replace(/\D/g, '')) || 6;
+    const detArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
+
+    setCurrentPresetId(null);
+    setCustomFrames(convertedFrames);
+    setCandidatesList(convertedCands);
+    setSelectedArray(detArray);
+    setActiveFrameIndex(Math.min(frameIdx, Math.max(0, convertedFrames.length - 1)));
+    setSubtractionMode(
+      layer === 'bloom'
+        ? 'bloom_mask'
+        : layer === 'residual'
+        ? 'epoch_difference'
+        : 'raw_calibrated'
+    );
+
+    if (convertedCands.length > 0) {
+      const firstCoord = track?.sky_deg?.[0] || [ convertedCands[0].ra, convertedCands[0].dec ];
+      setRa(firstCoord[0]);
+      setDec(firstCoord[1]);
+      setSelectedCandidateId(convertedCands[0].id);
+    }
+
+    setSearchStatus({
+      source: review.live_search ? 'live' : 'preset',
+      message: `Motion Review: ${review.target ?? review.id} (${review.detector ?? 'SPHEREx'})`,
+    });
+    setDrawerControlledTab('ai');
+    setActiveTab('viewer');
+  };
+
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number) => {
     setRa(newRa);
@@ -166,16 +294,73 @@ export function App() {
     setActiveTab('viewer');
     setIsLoading(true);
 
-    const fovArcmin = parseFloat(fov) || 3;
-    const arrayId = selectedArray === 'all' ? undefined : selectedArray;
+    const fovArcmin = parseFloat(fov) || 5;
+    const detNum = selectedArray === 'all' ? 6 : selectedArray;
 
+    // 1. Try connecting to the live ML Detection Microservice (/api/motion/search)
+    // with a fast timeout for interactive Sky Viewer search, falling back gracefully
+    // to precomputed review.json datasets or archive observation search + /detect.
+    try {
+      const controller = new AbortController();
+      const liveTimer = window.setTimeout(() => controller.abort('timeout'), 6500);
+      const liveResult = await searchLiveMotionMicroservice({
+        ra_deg: newRa,
+        dec_deg: newDec,
+        detector: detNum,
+        start_date: '2025-12-12',
+        end_date: '2025-12-16',
+        size_arcmin: Math.max(2, Math.min(30, fovArcmin)),
+        retain_outliers: true,
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(liveTimer));
+
+      if (!liveResult.isPrecomputedFallback) {
+        const liveFrames = convertReviewToEpochFrames(liveResult.review);
+        const liveCands = convertReviewToCandidates(liveResult.review);
+        setCustomFrames(liveFrames);
+        setActiveFrameIndex(0);
+        if (liveCands.length > 0) {
+          setCandidatesList(liveCands);
+          setSelectedCandidateId(liveCands[0].id);
+        }
+        setSearchStatus({
+          source: 'live',
+          message: `Live ML Track Detector: ${liveFrames.length} SPHEREx visits aligned (${liveCands.length} tracks)`,
+        });
+        setIsLoading(false);
+        return;
+      }
+    } catch {
+      // Proceed to precomputed benchmark check or archive search fallback
+    }
+
+    // 2. Check if coordinates match one of Ivan's precomputed real datasets in review.json
+    const matchingReview = findMatchingPrecomputedReview(newRa, newDec, selectedArray);
+    if (matchingReview) {
+      const revFrames = convertReviewToEpochFrames(matchingReview);
+      const revCands = convertReviewToCandidates(matchingReview);
+      setCustomFrames(revFrames);
+      setActiveFrameIndex(0);
+      setCandidatesList(revCands);
+      if (revCands.length > 0) {
+        setSelectedCandidateId(revCands[0].id);
+      }
+      setSearchStatus({
+        source: 'preset',
+        message: `Precomputed SPHEREx Motion Dataset: ${matchingReview.target} (${matchingReview.detector})`,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // 3. Query archive observations + optional /detect ML track linking
     try {
       const searchResult = await searchArchiveObservations({
         right_ascension_deg: newRa,
         declination_deg: newDec,
         width_arcmin: fovArcmin,
         height_arcmin: fovArcmin,
-        detector_array: arrayId,
+        detector_array: selectedArray === 'all' ? undefined : selectedArray,
       });
 
       const converted = convertObservationsToEpochFrames(
@@ -188,7 +373,7 @@ export function App() {
       if (searchResult.isFallback) {
         setSearchStatus({
           source: 'fallback',
-          message: `Procedural mock fallback (NASA IRSA SIA has no coverage at RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°)`,
+          message: `Procedural fallback (no live coverage at RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°)`,
         });
       } else {
         setSearchStatus({
@@ -207,23 +392,40 @@ export function App() {
       });
     }
 
-    // Dynamically instantiate candidate object for the entered coordinates
+    // Attempt lightweight /detect microservice call for synthetic/cutout stack, with graceful fallback
+    const syntheticStack = Array.from({ length: 4 }, (_, eIdx) => {
+      const grid = Array.from({ length: 32 }, () => Array.from({ length: 32 }, () => 0.1));
+      const px = Math.min(30, 8 + eIdx * 5);
+      const py = Math.min(30, 22 - eIdx * 3);
+      grid[py][px] = 18.0;
+      return grid;
+    });
+    const detectRes = await detectTracksViaMicroservice({
+      images: syntheticStack,
+      times: [0, 1.5, 3.0, 4.5],
+    });
+    const detectedTop = detectRes?.candidates?.[0];
+
     const customCandidate: CandidateObject = {
       id: `cand-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
       ra: newRa,
       dec: newDec,
       pixelX: 256,
       pixelY: 256,
+      heuristicRank: 1,
+      randomForestRank: 1,
+      fitRmsPx: detectedTop?.fit_rms_px ?? 0.24,
+      speedArcsecPerHour: detectedTop ? Number((detectedTop.speed_px_per_time * 6.15).toFixed(1)) : 28.4,
       epochPositions: [
-        { epochIndex: 0, x: 246, y: 248, flux: 32.5, snr: 16.4 },
-        { epochIndex: 1, x: 251, y: 252, flux: 33.1, snr: 16.8 },
-        { epochIndex: 2, x: 256, y: 256, flux: 32.7, snr: 16.5 },
-        { epochIndex: 3, x: 261, y: 260, flux: 33.4, snr: 17.0 },
+        { epochIndex: 0, x: 246, y: 248, flux: 32.5, snr: detectedTop?.snr?.[0] ?? 16.4 },
+        { epochIndex: 1, x: 251, y: 252, flux: 33.1, snr: detectedTop?.snr?.[1] ?? 16.8 },
+        { epochIndex: 2, x: 256, y: 256, flux: 32.7, snr: detectedTop?.snr?.[2] ?? 16.5 },
+        { epochIndex: 3, x: 261, y: 260, flux: 33.4, snr: detectedTop?.snr?.[3] ?? 17.0 },
         { epochIndex: 4, x: 266, y: 264, flux: 32.9, snr: 16.7 },
       ],
       classification: 'unreviewed',
       confidence: 'medium',
-      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Searched NASA IRSA SIA archive for SPHEREx coverage.`,
+      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Searched NASA IRSA SIA archive & ML track detector for SPHEREx coverage.`,
       isKnownCatalogMatch: false,
       properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
     };
@@ -245,20 +447,28 @@ export function App() {
     setDec(preset.decDeg);
     setSelectedArray(preset.recommendedArray);
     setActiveFrameIndex(0);
-    const newCands = getMockCandidates(preset.id);
+
+    // Automatically select the most informative layer for Vesta (BLOOM mask) or 3I/ATLAS (Aligned/Diff)
+    if (preset.id.startsWith('vesta')) {
+      setSubtractionMode('bloom_mask');
+    } else {
+      setSubtractionMode('raw_calibrated');
+    }
+
+    const newCands = getMockCandidates(preset.id, preset.recommendedArray);
     setCandidatesList(newCands);
     if (newCands.length > 0) {
       setSelectedCandidateId(newCands[0].id);
     }
     setActiveTab('viewer');
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 400);
+    setTimeout(() => setIsLoading(false), 350);
   };
 
   const handleRefreshCutout = () => {
     if (currentPresetId) {
       setIsLoading(true);
-      setTimeout(() => setIsLoading(false), 400);
+      setTimeout(() => setIsLoading(false), 350);
     } else {
       void handleSearchCoordinates(ra, dec);
     }
@@ -266,9 +476,11 @@ export function App() {
 
   // Deep-link jump from a verification comment or panel directly into Sky Viewer
   const handleSelectVerificationTarget = (setting: VerificationSetting) => {
+    const detId = setting.selectedArray === 'all' ? 6 : setting.selectedArray;
     if (setting.targetPresetId) {
       setCurrentPresetId(setting.targetPresetId);
-      const cands = getMockCandidates(setting.targetPresetId);
+      setCustomFrames(null);
+      const cands = getMockCandidates(setting.targetPresetId, detId);
       setCandidatesList(cands);
     }
     setRa(setting.ra);
@@ -278,7 +490,7 @@ export function App() {
     setActiveFrameIndex(setting.activeFrameIndex);
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
-    setDrawerControlledTab('chat');
+    setDrawerControlledTab('ai');
     setIsVerifyModalOpen(false);
     setActiveTab('viewer');
   };
@@ -317,7 +529,7 @@ export function App() {
       )}
 
       {/* Top Header: Responsive with Mobile 3-Lines (Hamburger) Sidebar Menu */}
-      <header className="h-12 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
+      <header className="h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
         {/* Mobile Left: 3-Lines Hamburger Menu Button */}
         <div className="flex items-center gap-2.5 md:hidden">
           <button
@@ -355,6 +567,7 @@ export function App() {
           {/* Simple Tab Navigation */}
           <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
             <button
+              type="button"
               onClick={() => setActiveTab('home')}
               className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'home'
@@ -367,6 +580,7 @@ export function App() {
             </button>
 
             <button
+              type="button"
               onClick={() => setActiveTab('viewer')}
               className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'viewer'
@@ -379,6 +593,7 @@ export function App() {
             </button>
 
             <button
+              type="button"
               onClick={() => setActiveTab('feed')}
               className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'feed'
@@ -388,6 +603,23 @@ export function App() {
             >
               <UserCheck className="w-3.5 h-3.5" />
               <span>Verification Feed</span>
+            </button>
+
+            <button
+              type="button"
+              aria-pressed={activeTab === 'motion'}
+              onClick={() => {
+                setIsPlaying(false);
+                setActiveTab('motion');
+              }}
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap transition-all border-2 border-black cursor-pointer ${
+                activeTab === 'motion'
+                  ? 'bg-emerald-400 text-gray-950 font-bold'
+                  : 'bg-paper-900 text-paper-300 hover:text-white'
+              }`}
+            >
+              <Crosshair className="w-3.5 h-3.5" />
+              <span>Motion Review</span>
             </button>
           </nav>
         </div>
@@ -409,7 +641,11 @@ export function App() {
 
         {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
         <div className="hidden md:flex items-center gap-2">
-          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
+          <div
+            className={`${
+              activeTab === 'motion' ? 'hidden' : 'flex'
+            } items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm`}
+          >
             <button
               onClick={() => handleSetViewMode('volunteer')}
               className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
@@ -468,7 +704,9 @@ export function App() {
                   <span className="font-bold text-white tracking-wide text-sm font-sans block">
                     SPHEREx <span className="text-emerald-400">Blink</span>
                   </span>
-                  <span className="text-[10px] font-mono text-paper-400">NASA Infrared Astrometry</span>
+                  <span className="text-[10px] font-mono text-paper-400">
+                    NASA Infrared Astrometry
+                  </span>
                 </div>
               </div>
               <button
@@ -497,7 +735,11 @@ export function App() {
                     : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
                 }`}
               >
-                <Home className="w-4 h-4 text-emerald-400" />
+                <Home
+                  className={`w-4 h-4 ${
+                    activeTab === 'home' ? 'text-gray-950' : 'text-emerald-400'
+                  }`}
+                />
                 <span>Homepage</span>
               </button>
 
@@ -512,7 +754,11 @@ export function App() {
                     : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
                 }`}
               >
-                <Compass className="w-4 h-4 text-emerald-400" />
+                <Compass
+                  className={`w-4 h-4 ${
+                    activeTab === 'viewer' ? 'text-gray-950' : 'text-emerald-400'
+                  }`}
+                />
                 <span>Sky Viewer</span>
               </button>
 
@@ -527,8 +773,30 @@ export function App() {
                     : 'bg-paper-900 text-sky-300 hover:bg-paper-850'
                 }`}
               >
-                <UserCheck className="w-4 h-4 text-sky-400" />
+                <UserCheck
+                  className={`w-4 h-4 ${activeTab === 'feed' ? 'text-gray-950' : 'text-sky-400'}`}
+                />
                 <span>Verification Feed</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsPlaying(false);
+                  setActiveTab('motion');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'motion'
+                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
+                }`}
+              >
+                <Crosshair
+                  className={`w-4 h-4 ${
+                    activeTab === 'motion' ? 'text-gray-950' : 'text-emerald-400'
+                  }`}
+                />
+                <span>Motion Review</span>
               </button>
 
               {/* View Mode Switcher in Mobile Drawer */}
@@ -571,8 +839,12 @@ export function App() {
                     Current Coordinates
                   </span>
                   <div className="p-2.5 rounded-lg bg-paper-900 border border-paper-800 font-mono text-[11px] text-paper-300">
-                    <div>RA: <span className="text-ochre-300 font-bold">{ra.toFixed(4)}°</span></div>
-                    <div>Dec: <span className="text-ochre-300 font-bold">{dec.toFixed(4)}°</span></div>
+                    <div>
+                      RA: <span className="text-ochre-300 font-bold">{ra.toFixed(4)}°</span>
+                    </div>
+                    <div>
+                      Dec: <span className="text-ochre-300 font-bold">{dec.toFixed(4)}°</span>
+                    </div>
                   </div>
 
                   <button
@@ -595,6 +867,19 @@ export function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* -1. Raw Inference View (when requested) */}
+      {activeTab === 'inference' && <InferencePage />}
+
+      {/* 0. Motion Review View */}
+      {activeTab === 'motion' && (
+        <MotionReview
+          ra={ra}
+          dec={dec}
+          detector={selectedArray}
+          onOpenInViewer={handleOpenMotionReviewInViewer}
+        />
       )}
 
       {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
@@ -650,7 +935,7 @@ export function App() {
         />
       )}
 
-      {/* 3. Sky Viewport: Edge-to-Edge Celestial Canvas */}
+      {/* 4. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
         <div className="flex flex-1 overflow-hidden relative anim-fall flex-col md:flex-row h-[calc(100vh-3rem)]">
           {/* Left Control Panel: Desktop side-column, Mobile full-pane overlay */}
@@ -680,12 +965,12 @@ export function App() {
               dec={dec}
               fov={fov}
               onUpdateCoords={(nRa, nDec) => {
-                handleSearchCoordinates(nRa, nDec);
+                void handleSearchCoordinates(nRa, nDec);
                 setMobileViewerPane('canvas');
               }}
               onUpdateFov={setFov}
               selectedArray={selectedArray}
-              onSelectArray={setSelectedArray}
+              onSelectArray={handleSelectDetectorArray}
               selectedChannel={selectedChannel}
               onSelectChannel={setSelectedChannel}
               subtractionMode={subtractionMode}
@@ -737,6 +1022,7 @@ export function App() {
               onSelectCandidate={setSelectedCandidateId}
               overlays={overlays}
               subtractionMode={subtractionMode}
+              onChangeSubtractionMode={setSubtractionMode}
               centerRa={ra}
               centerDec={dec}
               skippedNotice={skippedNotice}
@@ -809,7 +1095,9 @@ export function App() {
             <button
               onClick={() => setMobileViewerPane('canvas')}
               className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
-                mobileViewerPane === 'canvas' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+                mobileViewerPane === 'canvas'
+                  ? 'text-emerald-400 font-bold'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Compass className="w-4 h-4 mb-0.5" />
@@ -818,7 +1106,9 @@ export function App() {
             <button
               onClick={() => setMobileViewerPane('telemetry')}
               className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
-                mobileViewerPane === 'telemetry' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+                mobileViewerPane === 'telemetry'
+                  ? 'text-emerald-400 font-bold'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Sparkles className="w-4 h-4 mb-0.5" />
@@ -827,7 +1117,9 @@ export function App() {
             <button
               onClick={() => setMobileViewerPane('controls')}
               className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
-                mobileViewerPane === 'controls' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+                mobileViewerPane === 'controls'
+                  ? 'text-emerald-400 font-bold'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Sliders className="w-4 h-4 mb-0.5" />
