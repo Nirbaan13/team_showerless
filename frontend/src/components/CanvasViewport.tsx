@@ -137,16 +137,21 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     const isDifferenceMode = subtractionMode === 'epoch_difference';
 
-    // Static Field Stars
-    const staticStars = [
-      { x: -140, y: -90, mag: 1.8 },
-      { x: 120, y: -160, mag: 2.2 },
-      { x: -180, y: 130, mag: 1.2 },
-      { x: 210, y: 95, mag: 1.5 },
-      { x: -70, y: 190, mag: 2.0 },
-      { x: 160, y: 180, mag: 1.1 },
-      { x: -30, y: -180, mag: 0.9 },
-    ];
+    // Procedural field stars deterministically generated from celestial coordinates (centerRa, centerDec)
+    let seed = Math.abs(Math.sin(centerRa * 12.9898 + centerDec * 78.233) * 43758.5453);
+    const prng = () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+
+    const staticStars: { x: number; y: number; mag: number }[] = [];
+    for (let i = 0; i < 32; i++) {
+      staticStars.push({
+        x: (prng() - 0.5) * 550,
+        y: (prng() - 0.5) * 550,
+        mag: 0.6 + prng() * 1.8,
+      });
+    }
 
     if (!isDifferenceMode) {
       staticStars.forEach((star) => {

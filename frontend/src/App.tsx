@@ -7,6 +7,7 @@ import type {
   CatalogOverlayState,
   CandidateClassification,
   ConfidenceLevel,
+  CandidateObject,
 } from './types/spherex';
 import {
   getMockEpochFrames,
@@ -103,6 +104,30 @@ export function App() {
     setCurrentPresetId(null);
     setActiveTab('viewer');
     setIsLoading(true);
+
+    // Dynamically instantiate candidate object for the entered coordinates
+    const customCandidate: CandidateObject = {
+      id: `cand-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
+      ra: newRa,
+      dec: newDec,
+      pixelX: 256,
+      pixelY: 256,
+      epochPositions: [
+        { epochIndex: 0, x: 246, y: 248, flux: 32.5, snr: 16.4 },
+        { epochIndex: 1, x: 251, y: 252, flux: 33.1, snr: 16.8 },
+        { epochIndex: 2, x: 256, y: 256, flux: 32.7, snr: 16.5 },
+        { epochIndex: 3, x: 261, y: 260, flux: 33.4, snr: 17.0 },
+        { epochIndex: 4, x: 266, y: 264, flux: 32.9, snr: 16.7 },
+      ],
+      classification: 'unreviewed',
+      confidence: 'medium',
+      volunteerNotes: `User entered coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Detected proper motion candidate awaiting triage.`,
+      isKnownCatalogMatch: false,
+      properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
+    };
+
+    setCandidatesList([customCandidate]);
+    setSelectedCandidateId(customCandidate.id);
     setTimeout(() => setIsLoading(false), 500);
   };
 
