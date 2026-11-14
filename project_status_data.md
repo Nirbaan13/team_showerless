@@ -1,4 +1,4 @@
-# 📊 Project Status & Data Summary: SPHEREx Sky Explorer
+#  Project Status & Data Summary: SPHEREx Sky Explorer
 
 ## 1. Project Objective & Scope
 * **Mission:** Build a public-facing web tool for NASA’s SPHEREx mission to display multi-epoch near-infrared sky cutouts across 102 spectral bands, enabling users to track celestial changes over time (such as moving comets, asteroids, brown dwarfs, stars, and cosmic transients).
