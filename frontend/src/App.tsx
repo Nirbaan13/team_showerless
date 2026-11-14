@@ -33,6 +33,10 @@ import {
   type MotionReviewDataset,
   type MotionTrackCandidate,
 } from './services/motionReviewService';
+import {
+  fetchLiveCatalogForCoordinate,
+  type LiveCatalogResponse,
+} from './services/catalogService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { TopNav } from './components/TopNav';
@@ -230,6 +234,44 @@ export function App() {
       null
     );
   }, [candidatesList, selectedCandidateId]);
+
+  const [liveCatalog, setLiveCatalog] = useState<LiveCatalogResponse | null>(null);
+  const [isCatalogLoading, setIsCatalogLoading] = useState<boolean>(false);
+  const [catalogRefreshCounter, setCatalogRefreshCounter] = useState<number>(0);
+
+  // Automatically query space-agency catalogs (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
+  // whenever the field coordinate (ra, dec), FOV, or selected candidate object changes
+  useEffect(() => {
+    let cancelled = false;
+    const queryRa = activeCandidate?.ra ?? ra;
+    const queryDec = activeCandidate?.dec ?? dec;
+    const fovArcmin = parseFloat(fov) || 5;
+
+    setIsCatalogLoading(true);
+    fetchLiveCatalogForCoordinate({
+      queryRa,
+      queryDec,
+      centerRa: ra,
+      centerDec: dec,
+      fovArcmin,
+      candidateId: activeCandidate ? `${activeCandidate.id}-${catalogRefreshCounter}` : `${catalogRefreshCounter}`,
+    })
+      .then((res) => {
+        if (!cancelled) {
+          setLiveCatalog(res);
+          setIsCatalogLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsCatalogLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ra, dec, fov, activeCandidate?.id, activeCandidate?.ra, activeCandidate?.dec, catalogRefreshCounter]);
 
   const spectrumData = useMemo(() => {
     return getMock102BandSpectrum(activeCandidate?.id || 'default');
@@ -1171,6 +1213,9 @@ export function App() {
               viewMode={viewMode}
               searchStatus={searchStatus}
               activeCandidate={activeCandidate}
+              liveCatalog={liveCatalog}
+              isCatalogLoading={isCatalogLoading}
+              onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
               className="h-full w-full"
             />
           </div>
@@ -1220,6 +1265,7 @@ export function App() {
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
               mlAnalysisStatus={mlAnalysisStatus}
+              liveCatalog={liveCatalog}
               onOpenMlInsights={() => {
                 setDrawerControlledTab('ai');
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) {

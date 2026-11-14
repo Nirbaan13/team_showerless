@@ -1019,7 +1019,7 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
 
   for (const entry of knownCatalogTable) {
     const dist = Math.hypot(normRa - entry.ra, decDeg - entry.dec);
-    if (dist < 0.45) {
+    if (dist < 0.012) {
       return {
         knownObjectName: entry.name,
         constellation: entry.constellation,
@@ -1036,7 +1036,7 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
 
   return {
     knownObjectName: null,
-    constellation: `Custom Field (${normRa.toFixed(2)}°, ${decDeg.toFixed(2)}°)`,
+    constellation: `ICRS (${normRa.toFixed(3)}°, ${decDeg >= 0 ? '+' : ''}${decDeg.toFixed(3)}°)`,
     gaiaId: gaiaSourceId,
     wiseId: wiseJName,
     ephemerisLabel: null,

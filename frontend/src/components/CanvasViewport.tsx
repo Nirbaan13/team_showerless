@@ -8,6 +8,7 @@ import type {
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
+import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
 
 interface CanvasViewportProps {
@@ -26,6 +27,7 @@ interface CanvasViewportProps {
   isScientistMode?: boolean;
   mlAnalysisStatus?: MLAnalysisStatus;
   onOpenMlInsights?: () => void;
+  liveCatalog?: LiveCatalogResponse | null;
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -44,6 +46,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   isScientistMode = false,
   mlAnalysisStatus,
   onOpenMlInsights: _onOpenMlInsights,
+  liveCatalog,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -436,17 +439,27 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.restore();
     });
 
-    // Per-Target & Per-Object Known Catalog Overlays (Gaia DR3, AllWISE, JPL Horizons Ephemeris)
-    // Uses the target field's distinct astronomical catalog inventory (Leo, Ophiuchus, Hydra, Indus, Auriga, Draco)
-    // AND tracks the exact moving pixel coordinates of catalogued candidates across epochs.
-    const coordCatalog = resolveCoordinateCatalogContext(centerRa, centerDec);
+    // Per-Target & Per-Object Live Space Agency Catalog Overlays (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
     const selectedCand =
       candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
+    const coordCatalog = resolveCoordinateCatalogContext(
+      selectedCand?.ra ?? centerRa,
+      selectedCand?.dec ?? centerDec
+    );
+
+    const gaiaOverlaySources =
+      liveCatalog && liveCatalog.gaiaSources.length > 0
+        ? liveCatalog.gaiaSources
+        : coordCatalog.gaiaSources;
+
+    const wiseOverlaySources =
+      liveCatalog && liveCatalog.wiseSources.length > 0
+        ? liveCatalog.wiseSources
+        : coordCatalog.wiseSources;
 
     if (overlays.gaiaDr3) {
-      // 1. Draw target-specific Gaia DR3 stars in this field
-      coordCatalog.gaiaSources.forEach((src, idx) => {
-        // If this is the primary Gaia DR3 moving star (e.g. Barnard's Star, RW Aurigae, R Draconis), lock to its exact epoch pixel
+      // 1. Draw live-pulled ESA Gaia DR3 stars in this field
+      gaiaOverlaySources.forEach((src, idx) => {
         let gx = src.dx;
         let gy = src.dy;
         const matchingGaiaCand =
@@ -472,7 +485,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.strokeRect(gx - boxHalf, gy - boxHalf, boxHalf * 2, boxHalf * 2);
 
         // Label pill
-        const tag = `${isSelectedGaia ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
+        const tag = `${isSelectedGaia ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(6, 78, 59, 0.85)';
         const tw = ctx.measureText(tag).width + 6 / zoom;
@@ -481,7 +494,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.fillText(tag, gx + boxHalf + 6 / zoom, gy - 3 / zoom);
       });
 
-      // If the user explicitly clicked a secondary Gaia DR3 candidate not at index 0, highlight its Gaia box too
       if (
         selectedCand &&
         selectedCand.matchedCatalog === 'Gaia DR3' &&
@@ -505,8 +517,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     }
 
     if (overlays.wise) {
-      // 2. Draw target-specific AllWISE mid-infrared sources in this field
-      coordCatalog.wiseSources.forEach((src, idx) => {
+      // 2. Draw live-pulled NASA/IPAC AllWISE mid-infrared sources in this field
+      wiseOverlaySources.forEach((src, idx) => {
         let wx = src.dx;
         let wy = src.dy;
         const matchingWiseCand =
@@ -533,7 +545,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.arc(wx, wy, rad, 0, Math.PI * 2);
         ctx.stroke();
 
-        const tag = `${isSelectedWise ? '★ ' : ''}${src.label} [F${activeFrameIndex + 1}]`;
+        const tag = `${isSelectedWise ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(69, 26, 3, 0.85)';
         const tw = ctx.measureText(tag).width + 6 / zoom;
@@ -543,46 +555,70 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       });
     }
 
-    // 3. Draw JPL Horizons Solar System Ephemeris crosshair when present in field (e.g. 3I/ATLAS, (4) Vesta)
+    // 3. Draw JPL Horizons Solar System Ephemeris & CDS SIMBAD sources when ticked
     const neoCandidate =
       (selectedCand?.matchedCatalog === 'NEO Ephemeris' ? selectedCand : null) ||
       candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
 
-    if (overlays.solarSystemEphemeris && (neoCandidate || coordCatalog.ephemerisLabel)) {
-      let ex = 0;
-      let ey = 0;
-      if (neoCandidate) {
-        const pos =
-          neoCandidate.epochPositions[activeFrameIndex] ||
-          neoCandidate.epochPositions[0];
-        const coords = getCanvasCoords(pos.x, pos.y);
-        ex = coords.cx;
-        ey = coords.cy;
+    if (overlays.solarSystemEphemeris) {
+      if (neoCandidate || coordCatalog.ephemerisLabel || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
+        let ex = liveCatalog?.ephemerisSources[0]?.dx ?? 0;
+        let ey = liveCatalog?.ephemerisSources[0]?.dy ?? 0;
+        if (neoCandidate) {
+          const pos =
+            neoCandidate.epochPositions[activeFrameIndex] ||
+            neoCandidate.epochPositions[0];
+          const coords = getCanvasCoords(pos.x, pos.y);
+          ex = coords.cx;
+          ey = coords.cy;
+        }
+        const offsetPx =
+          neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
+          neoCandidate?.validationData?.maxOffsetPx ??
+          0.54;
+        const ephLabel = `★ ${
+          liveCatalog?.ephemerisSources[0]?.label ||
+          neoCandidate?.validationData?.objectName ||
+          neoCandidate?.catalogId ||
+          coordCatalog.ephemerisLabel ||
+          'JPL Horizons'
+        } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.8 / zoom;
+        ctx.beginPath();
+        ctx.moveTo(ex - 10 / zoom, ey);
+        ctx.lineTo(ex + 10 / zoom, ey);
+        ctx.moveTo(ex, ey - 10 / zoom);
+        ctx.lineTo(ex, ey + 10 / zoom);
+        ctx.stroke();
+        ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
+        const tw = ctx.measureText(ephLabel).width + 6 / zoom;
+        ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
+        ctx.fillStyle = '#7dd3fc';
+        ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
       }
-      const offsetPx =
-        neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
-        neoCandidate?.validationData?.maxOffsetPx ??
-        0.54;
-      const ephLabel = `★ ${
-        neoCandidate?.validationData?.objectName ||
-        neoCandidate?.catalogId ||
-        coordCatalog.ephemerisLabel ||
-        'JPL Horizons'
-      } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 1.8 / zoom;
-      ctx.beginPath();
-      ctx.moveTo(ex - 10 / zoom, ey);
-      ctx.lineTo(ex + 10 / zoom, ey);
-      ctx.moveTo(ex, ey - 10 / zoom);
-      ctx.lineTo(ex, ey + 10 / zoom);
-      ctx.stroke();
-      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
-      const tw = ctx.measureText(ephLabel).width + 6 / zoom;
-      ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
-      ctx.fillStyle = '#7dd3fc';
-      ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
+
+      // Also draw live-pulled CDS SIMBAD objects
+      (liveCatalog?.simbadSources ?? []).slice(0, 3).forEach((simSrc) => {
+        const sx = simSrc.dx;
+        const sy = simSrc.dy;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.4 / zoom;
+        ctx.beginPath();
+        ctx.moveTo(sx - 7 / zoom, sy);
+        ctx.lineTo(sx + 7 / zoom, sy);
+        ctx.moveTo(sx, sy - 7 / zoom);
+        ctx.lineTo(sx, sy + 7 / zoom);
+        ctx.stroke();
+        const sTag = `SIMBAD: ${simSrc.label}`;
+        ctx.font = `bold ${7.5 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = 'rgba(8, 47, 73, 0.85)';
+        const tw = ctx.measureText(sTag).width + 5 / zoom;
+        ctx.fillRect(sx + 8 / zoom, sy - 10 / zoom, tw, 10 / zoom);
+        ctx.fillStyle = '#7dd3fc';
+        ctx.fillText(sTag, sx + 10 / zoom, sy - 2.5 / zoom);
+      });
     }
 
     // 4. If the currently selected candidate is UNCATALOGUED (new moving track / flare / artifact),
@@ -635,7 +671,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
