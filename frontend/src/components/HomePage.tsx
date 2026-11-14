@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import type { TargetPreset } from '../types/spherex';
+import type { TargetPreset, VerificationSetting } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
+import { VerifyScientistPanel } from './VerifyScientistPanel';
 import { ArrowRight, Compass } from 'lucide-react';
 
 interface HomePageProps {
   onSearchCoordinates: (ra: number, dec: number) => void;
   onSelectPreset: (preset: TargetPreset) => void;
+  onSelectVerificationTarget?: (setting: VerificationSetting) => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onSearchCoordinates,
   onSelectPreset,
+  onSelectVerificationTarget,
 }) => {
   const [raInput, setRaInput] = useState('');
   const [decInput, setDecInput] = useState('');
@@ -112,6 +115,13 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           ))}
         </div>
+
+        {/* Scientist & Community Object Verification Feed */}
+        {onSelectVerificationTarget && (
+          <div className="w-full anim-fall pt-4" style={{ animationDelay: '300ms' }}>
+            <VerifyScientistPanel onSelectVerificationTarget={onSelectVerificationTarget} />
+          </div>
+        )}
       </div>
     </div>
   );

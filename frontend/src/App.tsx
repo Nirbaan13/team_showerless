@@ -9,6 +9,7 @@ import type {
   ConfidenceLevel,
   CandidateObject,
   SpherexEpochFrame,
+  VerificationSetting,
 } from './types/spherex';
 import {
   getMockEpochFrames,
@@ -30,6 +31,7 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
+import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
 import { Compass, Home } from 'lucide-react';
@@ -81,6 +83,8 @@ export function App() {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('cand-barnard-primary');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false);
+  const [drawerControlledTab, setDrawerControlledTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum' | null>(null);
 
   useEffect(() => {
     if (activeTab !== 'viewer') return;
@@ -258,6 +262,25 @@ export function App() {
     }
   };
 
+  // Deep-link jump from a verification comment or panel directly into Sky Viewer
+  const handleSelectVerificationTarget = (setting: VerificationSetting) => {
+    if (setting.targetPresetId) {
+      setCurrentPresetId(setting.targetPresetId);
+      const cands = getMockCandidates(setting.targetPresetId);
+      setCandidatesList(cands);
+    }
+    setRa(setting.ra);
+    setDec(setting.dec);
+    setFov(setting.fov);
+    setSelectedArray(setting.selectedArray);
+    setActiveFrameIndex(setting.activeFrameIndex);
+    setSubtractionMode(setting.subtractionMode);
+    setSelectedCandidateId(setting.candidateId);
+    setDrawerControlledTab('chat');
+    setIsVerifyModalOpen(false);
+    setActiveTab('viewer');
+  };
+
   const handleToggleOverlay = (key: keyof CatalogOverlayState) => {
     setOverlays((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -368,6 +391,7 @@ export function App() {
             subtractionMode={subtractionMode}
             activeFrameIndex={activeFrameIndex}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
+            onOpenVerifyModal={() => setIsVerifyModalOpen(true)}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />
@@ -379,6 +403,7 @@ export function App() {
         <HomePage
           onSearchCoordinates={handleSearchCoordinates}
           onSelectPreset={handleSelectPreset}
+          onSelectVerificationTarget={handleSelectVerificationTarget}
         />
       )}
 
@@ -457,6 +482,13 @@ export function App() {
             onUpdateCandidateClassification={handleUpdateCandidateClassification}
             onOpenDiscoveryReport={() => setActiveTab('report')}
             isScientistMode={viewMode === 'scientist'}
+            ra={ra}
+            dec={dec}
+            fov={fov}
+            selectedArray={selectedArray}
+            subtractionMode={subtractionMode}
+            controlledTab={drawerControlledTab}
+            onTabChange={setDrawerControlledTab}
           />
         </div>
       )}
@@ -480,6 +512,34 @@ export function App() {
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
       />
+
+      {/* Verify Scientist Object Dialog Modal */}
+      {isVerifyModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm anim-fall">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-paper-950 border-2 border-paper-700 rounded-2xl shadow-2xl p-6">
+            <div className="flex items-center justify-between pb-4 border-b border-paper-800 mb-6">
+              <div>
+                <h2 className="text-xl font-bold font-mono text-emerald-400">
+                  🔬 NASA Scientist & Community Verification Feed
+                </h2>
+                <p className="text-xs text-paper-400 mt-1">
+                  Inspect flagged candidate objects, view exact observation settings, and verify astrometric tracks.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsVerifyModalOpen(false)}
+                className="btn-tactile-sm px-3 py-1.5 rounded-lg border-2 border-black bg-paper-900 text-paper-300 hover:text-white font-mono text-xs cursor-pointer"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <VerifyScientistPanel
+              onSelectVerificationTarget={handleSelectVerificationTarget}
+              isCompact={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

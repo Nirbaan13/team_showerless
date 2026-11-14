@@ -70,3 +70,61 @@ export function rankCandidates(list: CandidateObject[]): RankedCandidate[] {
     })
     .map((r, i) => ({ ...r, rank: r.candidate.validationData?.baselineRank ?? i + 1 }));
 }
+
+export interface PriorityColorDef {
+  border: string;
+  fill: string;
+  text: string;
+  badgeBg: string;
+  label: string;
+}
+
+/**
+ * Returns priority-graded red colors.
+ * Priority 1 gets the deepest intense crimson red, progressively fading to lighter reds for lower priority.
+ */
+export function getPriorityColors(rank: number): PriorityColorDef {
+  switch (rank) {
+    case 1:
+      return {
+        border: '#ef4444', // Intense Crimson Red
+        fill: 'rgba(239, 68, 68, 0.45)',
+        text: '#fee2e2',
+        badgeBg: '#dc2626',
+        label: 'Priority 1 (Highest Confidence)',
+      };
+    case 2:
+      return {
+        border: '#f87171', // Bright Red
+        fill: 'rgba(248, 113, 113, 0.35)',
+        text: '#fee2e2',
+        badgeBg: '#ef4444',
+        label: 'Priority 2',
+      };
+    case 3:
+      return {
+        border: '#fca5a5', // Medium Red
+        fill: 'rgba(252, 165, 165, 0.25)',
+        text: '#fecaca',
+        badgeBg: '#f87171',
+        label: 'Priority 3',
+      };
+    case 4:
+      return {
+        border: '#fecaca', // Soft Light Red
+        fill: 'rgba(254, 202, 202, 0.18)',
+        text: '#fca5a5',
+        badgeBg: '#fca5a5',
+        label: 'Priority 4',
+      };
+    default:
+      return {
+        border: 'rgba(254, 226, 226, 0.6)', // Faint Light Red
+        fill: 'rgba(254, 226, 226, 0.10)',
+        text: '#fecaca',
+        badgeBg: '#fecaca',
+        label: `Priority ${rank}`,
+      };
+  }
+}
+

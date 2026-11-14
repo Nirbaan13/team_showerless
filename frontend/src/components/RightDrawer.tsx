@@ -37,9 +37,19 @@ interface RightDrawerProps {
   ) => void;
   onOpenDiscoveryReport?: () => void;
   isScientistMode?: boolean;
+  ra?: number;
+  dec?: number;
+  fov?: import('../types/spherex').FOVOption;
+  selectedArray?: import('../types/spherex').DetectorArrayId | 'all';
+  subtractionMode?: import('../types/spherex').SubtractionMode;
+  controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
+  onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
+  frames: _frames,
+  activeFrameIndex = 0,
+  onSelectFrame: _onSelectFrame,
   candidates,
   selectedCandidateId,
   onSelectCandidate,
@@ -48,8 +58,20 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   onUpdateCandidateClassification,
   onOpenDiscoveryReport,
   isScientistMode = false,
+  ra,
+  dec,
+  fov,
+  selectedArray,
+  subtractionMode,
+  controlledTab,
+  onTabChange,
 }) => {
-  const [activeTab, setActiveTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
+  const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
+  const activeTab = controlledTab ?? internalTab;
+  const setActiveTab = (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => {
+    setInternalTab(tab);
+    if (onTabChange) onTabChange(tab);
+  };
   const [width, setWidth] = useState<number>(360);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [notes, setNotes] = useState(candidate?.volunteerNotes || '');
@@ -343,9 +365,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 2: VERIFICATION NOTES & COMMUNITY CHAT */}
+        {/* TAB 2: VERIFICATION NOTES & SINGLE-OBJECT COMMUNITY CHAT */}
         {activeTab === 'chat' && (
-          <CommunityVerificationStream activeCandidateId={candidate?.id || null} />
+          <CommunityVerificationStream
+            candidate={candidate}
+            activeCandidateId={candidate?.id || null}
+            ra={ra}
+            dec={dec}
+            fov={fov}
+            selectedArray={selectedArray}
+            activeFrameIndex={activeFrameIndex}
+            subtractionMode={subtractionMode}
+          />
         )}
 
         {/* TAB 3: 102-BAND SPECTROPHOTOMETRY */}

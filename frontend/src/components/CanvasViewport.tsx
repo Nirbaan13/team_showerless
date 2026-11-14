@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import type { SpherexEpochFrame, CandidateObject, CatalogOverlayState, SubtractionMode } from '../types/spherex';
+import { getPriorityColors } from '../services/mlRanking';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-react';
 
 interface CanvasViewportProps {
@@ -206,13 +207,31 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       });
     }
 
-    // Candidate Point Spread Functions & Motion Track
-    candidates.forEach((cand) => {
+    // Helper to draw a regular hexagon covering pixel cluster
+    const drawHexagon = (hx: number, hy: number, radius: number) => {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const x = hx + radius * Math.cos(angle);
+        const y = hy + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+    };
+
+    // Candidate Point Spread Functions, Motion Track & Priority-Graded Red Hexagons
+    candidates.forEach((cand, candIdx) => {
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
       const offsetX = currentPos.x - 256;
       const offsetY = currentPos.y - 256;
 
+      // Priority ranking: Priority 1 gets intense deep red, fading to softer reds for lower priority
+      const rank = cand.mlRank || (candIdx + 1);
+      const priority = getPriorityColors(rank);
+
+      // 1. Point Spread Function Core
       const psfRadius = Math.max(3, Math.min(9, currentPos.flux / 16));
       const psfGrad = ctx.createRadialGradient(offsetX, offsetY, 0, offsetX, offsetY, psfRadius * 2);
 
@@ -231,11 +250,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.arc(offsetX, offsetY, psfRadius * 2, 0, Math.PI * 2);
       ctx.fill();
 
-      // Motion Track
+      // 2. Motion Track Across Epochs
       if (cand.epochPositions.length > 1) {
-        ctx.strokeStyle = isSelected ? '#d97706' : 'rgba(168, 162, 158, 0.4)';
-        ctx.lineWidth = 1 / zoom;
-        ctx.setLineDash([2, 2]);
+        ctx.strokeStyle = isSelected ? priority.border : 'rgba(239, 68, 68, 0.45)';
+        ctx.lineWidth = (isSelected ? 1.6 : 1.0) / zoom;
+        ctx.setLineDash([3 / zoom, 2 / zoom]);
         ctx.beginPath();
         cand.epochPositions.forEach((pos, idx) => {
           const px = pos.x - 256;
@@ -247,34 +266,95 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
       }
 
-      // Selected Reticle (Ochre accent without glow)
-      if (isSelected) {
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 1.2 / zoom;
+      // 3. ML Priority Hexagon Covering Detected Pixel Region
+      // Priority 1 is deep red, fading to lighter shades for lower priority
+      const hexRadius = Math.max(12, Math.min(26, psfRadius * 2 + 6));
+      ctx.save();
+      drawHexagon(offsetX, offsetY, hexRadius);
+      ctx.fillStyle = priority.fill;
+      ctx.fill();
+
+      ctx.strokeStyle = priority.border;
+      ctx.lineWidth = (rank === 1 ? 2.2 : rank === 2 ? 1.8 : 1.2) / zoom;
+      ctx.stroke();
+
+      // Priority Pill Badge (e.g. "P1", "P2", "P3")
+      const badgeText = `P${rank}`;
+      ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
+      const badgeWidth = ctx.measureText(badgeText).width + 6 / zoom;
+      const badgeHeight = 11 / zoom;
+      const badgeX = offsetX - hexRadius;
+      const badgeY = offsetY - hexRadius - 1 / zoom;
+
+      ctx.fillStyle = priority.badgeBg;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(badgeX, badgeY - badgeHeight, badgeWidth, badgeHeight, 2.5 / zoom);
+      } else {
+        ctx.rect(badgeX, badgeY - badgeHeight, badgeWidth, badgeHeight);
+      }
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(badgeText, badgeX + 3 / zoom, badgeY - 2.5 / zoom);
+
+      // 4. Object Name Label (for known / confirmed objects like 3I/ATLAS, Gaia DR3, WISE)
+      const objectLabel =
+        cand.catalogId ||
+        cand.matchedCatalog ||
+        cand.validationData?.objectName ||
+        (cand.isKnownCatalogMatch ? 'Known Object' : null);
+
+      if (objectLabel) {
+        ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
+        const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
+        const labelHeight = 13 / zoom;
+        const labelX = offsetX + hexRadius + 4 / zoom;
+        const labelY = offsetY - 7 / zoom;
+
+        // Label background pill
+        ctx.fillStyle = 'rgba(10, 10, 14, 0.9)';
+        ctx.strokeStyle = priority.border;
+        ctx.lineWidth = 1 / zoom;
         ctx.beginPath();
-        ctx.arc(offsetX, offsetY, psfRadius * 2 + 4, 0, Math.PI * 2);
+        if (typeof ctx.roundRect === 'function') {
+          ctx.roundRect(labelX, labelY, labelWidth, labelHeight, 3 / zoom);
+        } else {
+          ctx.rect(labelX, labelY, labelWidth, labelHeight);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#34d399'; // Emerald text for confirmed object names
+        ctx.fillText(objectLabel, labelX + 4 / zoom, labelY + 9.5 / zoom);
+      } else if (isSelected) {
+        ctx.font = `${9 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
+        ctx.fillText(`Candidate #${rank}`, offsetX + hexRadius + 4 / zoom, offsetY + 3 / zoom);
+      }
+
+      // 5. Selected Reticle & Crosshairs
+      if (isSelected) {
+        ctx.strokeStyle = priority.border;
+        ctx.lineWidth = 1.6 / zoom;
+        ctx.beginPath();
+        ctx.arc(offsetX, offsetY, hexRadius + 4 / zoom, 0, Math.PI * 2);
         ctx.stroke();
 
         const tLen = 6 / zoom;
         ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY - psfRadius * 2 - 2);
-        ctx.lineTo(offsetX, offsetY - psfRadius * 2 - 2 - tLen);
-        ctx.moveTo(offsetX, offsetY + psfRadius * 2 + 2);
-        ctx.lineTo(offsetX, offsetY + psfRadius * 2 + 2 + tLen);
-        ctx.moveTo(offsetX - psfRadius * 2 - 2, offsetY);
-        ctx.lineTo(offsetX - psfRadius * 2 - 2 - tLen, offsetY);
-        ctx.moveTo(offsetX + psfRadius * 2 + 2, offsetY);
-        ctx.lineTo(offsetX + psfRadius * 2 + 2 + tLen, offsetY);
+        ctx.moveTo(offsetX, offsetY - hexRadius - 2 / zoom);
+        ctx.lineTo(offsetX, offsetY - hexRadius - 2 / zoom - tLen);
+        ctx.moveTo(offsetX, offsetY + hexRadius + 2 / zoom);
+        ctx.lineTo(offsetX, offsetY + hexRadius + 2 / zoom + tLen);
+        ctx.moveTo(offsetX - hexRadius - 2 / zoom, offsetY);
+        ctx.lineTo(offsetX - hexRadius - 2 / zoom - tLen, offsetY);
+        ctx.moveTo(offsetX + hexRadius + 2 / zoom, offsetY);
+        ctx.lineTo(offsetX + hexRadius + 2 / zoom + tLen, offsetY);
         ctx.stroke();
 
-        ctx.font = `${10 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
-        ctx.fillText(cand.matchedCatalog || cand.id, offsetX + psfRadius * 2 + 6, offsetY - 2);
-
-        // In Scientist Mode: Draw Gaussian PSF Apertures (1σ, 2σ, background annulus) + flux readout
+        // Scientist HUD telemetry apertures
         if (isScientistMode) {
-          ctx.save();
-          // 1-sigma aperture
           ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
           ctx.lineWidth = 1 / zoom;
           ctx.setLineDash([2 / zoom, 2 / zoom]);
@@ -282,7 +362,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           ctx.arc(offsetX, offsetY, psfRadius * 1.5, 0, Math.PI * 2);
           ctx.stroke();
 
-          // 3-sigma background annulus
           ctx.strokeStyle = 'rgba(52, 211, 153, 0.3)';
           ctx.beginPath();
           ctx.arc(offsetX, offsetY, psfRadius * 3.2, 0, Math.PI * 2);
@@ -291,11 +370,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           ctx.setLineDash([]);
           ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
           ctx.fillStyle = '#34d399';
-          ctx.fillText(`FWHM: 1.42px (8.8″)`, offsetX + psfRadius * 2 + 6, offsetY + 10 / zoom);
-          ctx.fillText(`Flux: 14.82 mJy`, offsetX + psfRadius * 2 + 6, offsetY + 20 / zoom);
-          ctx.restore();
+          ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + hexRadius + 4 / zoom, offsetY + 18 / zoom);
+          ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + hexRadius + 4 / zoom, offsetY + 28 / zoom);
         }
       }
+
+      ctx.restore();
     });
 
     // Overlays
@@ -346,7 +426,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -397,7 +477,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const cx = pos.x - 256;
       const cy = pos.y - 256;
       const dist = Math.hypot(transformedX - cx, transformedY - cy);
-      if (dist < 18 / zoom) {
+      if (dist < 28 / zoom) {
         onSelectCandidate(cand.id);
         return;
       }
