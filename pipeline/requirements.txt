@@ -1,1 +1,8 @@
-
+astropy
+astroquery
+pyvo
+requests
+numpy
+matplotlib
+reproject
+photoutils
