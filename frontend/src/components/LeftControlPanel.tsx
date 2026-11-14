@@ -18,6 +18,8 @@ interface LeftControlPanelProps {
   overlays: CatalogOverlayState;
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
+  viewMode?: 'explorer' | 'scientist';
+  onChangeViewMode?: (mode: 'explorer' | 'scientist') => void;
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -34,8 +36,13 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
+  viewMode: controlledViewMode,
+  onChangeViewMode,
 }) => {
-  const [viewMode, setViewMode] = useState<'explorer' | 'scientist'>('explorer');
+  const [internalViewMode, setInternalViewMode] = useState<'explorer' | 'scientist'>('explorer');
+  const viewMode = controlledViewMode ?? internalViewMode;
+  const setViewMode = onChangeViewMode ?? setInternalViewMode;
+
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
 

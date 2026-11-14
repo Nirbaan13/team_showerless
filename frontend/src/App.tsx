@@ -30,6 +30,7 @@ import { Compass, Home } from 'lucide-react';
 export function App() {
   // Opens on the clean Home page by default as requested
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('home');
+  const [telemetryMode, setTelemetryMode] = useState<'explorer' | 'scientist'>('explorer');
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
   const [ra, setRa] = useState<number>(269.452075);
@@ -229,17 +230,45 @@ export function App() {
           </nav>
         </div>
 
-        {/* Global Toolbar (Only active when in Sky Viewer) */}
-        <TopNav
-          ra={ra}
-          dec={dec}
-          fov={fov}
-          selectedArray={selectedArray}
-          subtractionMode={subtractionMode}
-          activeFrameIndex={activeFrameIndex}
-          onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
-          isViewerActive={activeTab === 'viewer'}
-        />
+        {/* Global Explorer vs Scientist Mode Switch (Always Visible) */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
+            <button
+              onClick={() => setTelemetryMode('explorer')}
+              className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                telemetryMode === 'explorer'
+                  ? 'bg-emerald-400 text-gray-950'
+                  : 'text-paper-400 hover:text-paper-100'
+              }`}
+              title="Explorer View: Clean, intuitive labels for public & citizen science volunteers"
+            >
+              Explorer
+            </button>
+            <button
+              onClick={() => setTelemetryMode('scientist')}
+              className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                telemetryMode === 'scientist'
+                  ? 'bg-emerald-400 text-gray-950'
+                  : 'text-paper-400 hover:text-paper-100'
+              }`}
+              title="Scientist View: Full astrophysics metadata (wavelengths, resolving power, and FITS levels)"
+            >
+              Scientist
+            </button>
+          </div>
+
+          {/* Global Toolbar (Only active when in Sky Viewer) */}
+          <TopNav
+            ra={ra}
+            dec={dec}
+            fov={fov}
+            selectedArray={selectedArray}
+            subtractionMode={subtractionMode}
+            activeFrameIndex={activeFrameIndex}
+            onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
+            isViewerActive={activeTab === 'viewer'}
+          />
+        </div>
       </header>
 
       {/* 1. Clean Home Page: Starts with big name and coordinate search */}
@@ -277,6 +306,8 @@ export function App() {
             overlays={overlays}
             onToggleOverlay={handleToggleOverlay}
             onRefreshCutout={handleRefreshCutout}
+            viewMode={telemetryMode}
+            onChangeViewMode={setTelemetryMode}
           />
 
           <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
