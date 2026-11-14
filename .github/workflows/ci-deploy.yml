@@ -1,0 +1,72 @@
+name: CI and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Test API
+        run: python -m pytest -q
+      - name: Check deployment scripts
+        run: bash -n ops/deploy.sh ops/bootstrap-vps.sh tests/test_deploy.sh
+      - name: Build the exact commit
+        run: docker build --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" .
+      - name: Test container deployment and rollback
+        env:
+          TEST_IMAGE_REVISION: ${{ github.sha }}
+        run: bash tests/test_deploy.sh
+      - name: Deploy main to VPS
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          key="$RUNNER_TEMP/vps_deploy_key"
+          known_hosts="$RUNNER_TEMP/vps_known_hosts"
+          trap 'rm -f "$key" "$known_hosts"' EXIT
+          printf '%s\n' "$VPS_SSH_KEY" > "$key"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "$known_hosts"
+          docker image save "spaceapps-api:$GITHUB_SHA" | gzip -1 | \
+            ssh -i "$key" -o IdentitiesOnly=yes -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts" \
+              -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+              "$VPS_USER@$VPS_HOST" "deploy $GITHUB_SHA"
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          url = f"http://{os.environ['VPS_HOST']}/version"
+          with urllib.request.urlopen(url, timeout=15) as response:
+              version = json.load(response)['version']
+          assert version == os.environ['GITHUB_SHA'], (version, os.environ['GITHUB_SHA'])
+          print(f"Public endpoint verified: {version}")
+          PY
