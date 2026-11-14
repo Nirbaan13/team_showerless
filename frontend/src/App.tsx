@@ -29,8 +29,9 @@ import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { Compass, Home } from 'lucide-react';
 
 export function App() {
-  // Opens on the clean Home page by default as requested
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('home');
+  // Check if loaded inside an iframe (?embed=true)
+  const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
     try {
