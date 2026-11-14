@@ -48,7 +48,7 @@ jobs:
       - name: Deploy main frontend to VPS
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_HOST: 144.124.238.101
           VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
           FRONTEND_VPS_SSH_KEY: ${{ secrets.FRONTEND_VPS_SSH_KEY }}
         shell: bash

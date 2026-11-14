@@ -15,7 +15,7 @@ info:
     Dates (MJD) and sends IRSA TIME=<start_mjd> <end_mjd>. An omitted bound becomes
     -Inf or +Inf; when both bounds are omitted, no TIME filter is sent.
 servers:
-  - url: http://35.159.162.202
+  - url: http://144.124.238.101
 tags:
   - name: Observations
   - name: Downloads
