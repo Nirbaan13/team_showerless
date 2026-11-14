@@ -276,8 +276,8 @@ export function App() {
   }, [ra, dec, fov, activeCandidate?.id, activeCandidate?.ra, activeCandidate?.dec, catalogRefreshCounter]);
 
   const spectrumData = useMemo(() => {
-    return getMock102BandSpectrum(activeCandidate?.id || 'default');
-  }, [activeCandidate]);
+    return getMock102BandSpectrum(activeCandidate?.id || 'default', activeCandidate?.ra ?? ra, activeCandidate?.dec ?? dec);
+  }, [activeCandidate, ra, dec]);
 
   useUrlSync(
     {
