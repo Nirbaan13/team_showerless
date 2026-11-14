@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, X } from 'lucide-react';
+import { Copy, Check, X, Code2 } from 'lucide-react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
 
 interface EmbedModalProps {
@@ -40,7 +40,7 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
   });
 
   const embedUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-  const iframeSnippet = `<iframe src="${embedUrl}" width="${width}" height="${height}" frameborder="0" allowfullscreen style="border: 1px solid #21262d; border-radius: 8px;"></iframe>`;
+  const iframeSnippet = `<iframe src="${embedUrl}" width="${width}" height="${height}" frameborder="0" allowfullscreen style="border: 2px solid #000; border-radius: 12px;"></iframe>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(iframeSnippet).then(() => {
@@ -50,68 +50,68 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-space-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-space-900 border border-space-700 rounded-lg max-w-lg w-full p-5 space-y-4 shadow-2xl animate-in fade-in duration-150">
-        <div className="flex items-center justify-between border-b border-space-800 pb-3">
-          <div className="font-telemetry font-bold text-space-100 text-sm tracking-wide flex items-center gap-2">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 select-none">
+      <div className="bg-paper-900 border-2 border-black rounded-2xl max-w-lg w-full p-6 space-y-4 card-tactile text-paper-100 anim-fall">
+        <div className="flex items-center justify-between border-b border-paper-800 pb-3">
+          <div className="font-sans font-bold text-white text-base tracking-tight flex items-center gap-2">
+            <Code2 className="w-5 h-5 text-emerald-400" />
             <span>Embed SPHEREx Sky-Viewer</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded text-space-400 hover:text-space-200 transition-colors"
+            className="p-1.5 rounded-lg text-paper-400 hover:text-white hover:bg-paper-800 transition-colors cursor-pointer"
+            title="Close"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <p className="text-xs text-space-300 font-sans leading-relaxed">
-          Embed this interactive celestial blink viewport directly into external citizen science research blogs, NASA Space Apps showcase pages, or community discovery forums.
+        <p className="text-xs text-paper-300 font-sans leading-relaxed">
+          Embed this live, interactive celestial blink viewport directly into external science blogs, research write-ups, or project showcase pages.
         </p>
 
         {/* Dimension inputs */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-[10px] font-mono text-space-400 block mb-1">Width (px)</label>
+            <label className="text-[10px] font-mono text-paper-400 block mb-1 uppercase font-semibold">Width (px)</label>
             <input
               type="text"
               value={width}
               onChange={(e) => setWidth(e.target.value)}
-              className="w-full bg-space-950 border border-space-700 rounded px-2.5 py-1.5 font-mono text-xs text-space-100 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-paper-950 border-2 border-black rounded-lg px-2.5 py-1.5 font-mono text-xs text-paper-100 focus:outline-none focus:border-emerald-400"
             />
           </div>
           <div>
-            <label className="text-[10px] font-mono text-space-400 block mb-1">Height (px)</label>
+            <label className="text-[10px] font-mono text-paper-400 block mb-1 uppercase font-semibold">Height (px)</label>
             <input
               type="text"
               value={height}
               onChange={(e) => setHeight(e.target.value)}
-              className="w-full bg-space-950 border border-space-700 rounded px-2.5 py-1.5 font-mono text-xs text-space-100 focus:outline-none focus:border-cyan-400"
+              className="w-full bg-paper-950 border-2 border-black rounded-lg px-2.5 py-1.5 font-mono text-xs text-paper-100 focus:outline-none focus:border-emerald-400"
             />
           </div>
         </div>
 
         {/* Snippet box */}
         <div>
-          <label className="text-[10px] font-mono text-space-400 block mb-1">HTML Embed Snippet</label>
-          <div className="relative">
-            <pre className="p-3 rounded bg-space-950 border border-space-700 font-mono text-[11px] text-cyan-300 overflow-x-auto whitespace-pre-wrap break-all max-h-28">
-              {iframeSnippet}
-            </pre>
-          </div>
+          <label className="text-[10px] font-mono text-paper-400 block mb-1 uppercase font-semibold">HTML Embed Snippet</label>
+          <pre className="p-3 rounded-lg bg-paper-950 border-2 border-black font-mono text-[11px] text-emerald-300 overflow-x-auto whitespace-pre-wrap break-all max-h-28">
+            {iframeSnippet}
+          </pre>
         </div>
 
-        <div className="flex items-center justify-end space-x-2 pt-2 border-t border-space-800">
+        <div className="flex items-center justify-end space-x-2 pt-3 border-t border-paper-800">
           <button
             onClick={onClose}
-            className="px-3 py-1.5 rounded bg-space-850 border border-space-700 text-space-300 hover:text-space-100 text-xs font-mono transition-colors"
+            className="btn-tactile-sm px-3.5 py-2 rounded-xl bg-paper-950 border-2 border-black text-paper-300 hover:text-white text-xs font-mono cursor-pointer"
           >
-            Cancel
+            Close
           </button>
           <button
             onClick={handleCopy}
-            className="px-4 py-1.5 rounded bg-cyan-950 border border-cyan-400 text-cyan-300 hover:bg-cyan-900 text-xs font-mono font-semibold flex items-center gap-1.5 shadow-[0_0_8px_rgba(0,242,254,0.3)] transition-all"
+            className="btn-tactile px-4 py-2 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 stroke-[2.5]" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? 'Copied to Clipboard!' : 'Copy Snippet'}</span>
           </button>
         </div>

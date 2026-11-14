@@ -18,6 +18,7 @@ interface LeftControlPanelProps {
   overlays: CatalogOverlayState;
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
+  viewMode?: 'volunteer' | 'scientist';
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -34,6 +35,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
+  viewMode = 'volunteer',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
@@ -53,56 +55,56 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-[#0d131f] border-r border-slate-800 flex flex-col h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20">
+    <aside className="w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20">
       {/* 1. Target Query */}
-      <div className="p-3 border-b border-slate-800/80">
-        <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
-          <Search className="w-3.5 h-3.5 text-blue-400" />
+      <div className="p-3 border-b border-paper-800">
+        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
+          <Search className="w-3.5 h-3.5 text-ochre-400" />
           Coordinates (J2000)
         </span>
 
         <form onSubmit={handleApplyCoords} className="space-y-2">
           <div className="grid grid-cols-2 gap-1.5">
             <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-0.5">RA (deg)</label>
+              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
               <input
                 type="text"
                 value={raInput}
                 onChange={(e) => setRaInput(e.target.value)}
-                className="w-full bg-[#080c14] border border-slate-700/80 rounded px-2 py-1 font-mono text-[11px] text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
               />
             </div>
             <div>
-              <label className="text-[10px] font-mono text-slate-400 block mb-0.5">Dec (deg)</label>
+              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">Dec (deg)</label>
               <input
                 type="text"
                 value={decInput}
                 onChange={(e) => setDecInput(e.target.value)}
-                className="w-full bg-[#080c14] border border-slate-700/80 rounded px-2 py-1 font-mono text-[11px] text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-1 bg-blue-600 hover:bg-blue-700 text-white rounded font-mono text-[11px] font-medium transition-colors"
+            className="btn-tactile w-full py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer mt-1"
           >
             Update Field
           </button>
         </form>
 
         {/* FOV Area Size */}
-        <div className="mt-2.5 pt-2 border-t border-slate-800">
-          <span className="text-[10px] font-mono text-slate-400 block mb-1">Field of View (FOV)</span>
-          <div className="grid grid-cols-4 gap-1">
+        <div className="mt-2.5 pt-2 border-t border-paper-800">
+          <span className="text-[10px] font-mono text-paper-400 block mb-1">Field of View (FOV)</span>
+          <div className="grid grid-cols-4 gap-1.5">
             {(["1'", "3'", "5'", "10'"] as FOVOption[]).map((f) => (
               <button
                 key={f}
                 onClick={() => onUpdateFov(f)}
-                className={`py-0.5 rounded font-mono text-[11px] border transition-colors ${
+                className={`btn-tactile-sm py-1 rounded-lg font-mono text-[11px] border-2 border-black transition-all cursor-pointer ${
                   fov === f
-                    ? 'bg-blue-900/60 border-blue-500 text-blue-200 font-semibold'
-                    : 'bg-[#080c14] border-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-emerald-400 text-gray-950 font-bold'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
               >
                 {f}
@@ -112,29 +114,30 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* 2. SPHEREx Detector Arrays */}
-      <div className="p-3 border-b border-slate-800/80">
+      {/* 2. SPHEREx Infrared Filter Bands */}
+      <div className="p-3 border-b border-paper-800">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-blue-400" />
-            Detector Band
+          <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-emerald-400" />
+            Infrared Filter
           </span>
           <button
             onClick={() => {
               onSelectArray('all');
               onSelectChannel(null);
             }}
-            className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${
+            title="Combine all 6 infrared bands into a stacked composite image"
+            className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
               selectedArray === 'all'
-                ? 'bg-blue-900/60 border-blue-500 text-blue-200 font-medium'
-                : 'bg-[#080c14] border-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-emerald-400 text-gray-950 font-bold'
+                : 'bg-paper-950 border-black text-paper-400 hover:text-paper-100'
             }`}
           >
-            Stacked
+            All Bands
           </button>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {DETECTOR_ARRAY_SPECS.map((spec) => {
             const isSelected = selectedArray === spec.id;
             return (
@@ -144,22 +147,36 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   onSelectArray(spec.id as DetectorArrayId);
                   onSelectChannel(null);
                 }}
-                className={`w-full px-2 py-1.5 rounded border text-left flex items-center justify-between transition-colors ${
+                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-950/40 border-blue-500 text-white'
-                    : 'bg-[#080c14] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-white'
+                    ? 'bg-paper-800 text-paper-100 font-medium'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                 }`}
+                title={`Wavelength: ${spec.range} | ${spec.res}\n${spec.desc}`}
               >
                 <div>
-                  <div className="font-mono text-[11px] font-medium text-slate-200">
-                    {spec.name}
+                  <div className="font-mono text-[11px] font-semibold text-paper-200 flex items-center gap-1.5">
+                    <span>{spec.name}</span>
+                    {viewMode === 'scientist' ? (
+                      <span className="text-[10px] font-mono text-emerald-400 font-normal">
+                        ({spec.range})
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-sans font-normal text-paper-400">
+                        ({spec.label})
+                      </span>
+                    )}
                   </div>
-                  <div className="text-[10px] font-mono text-slate-500">
-                    {spec.range}
+                  <div className="text-[10px] font-mono text-paper-500">
+                    {viewMode === 'scientist' ? (
+                      <span className="text-paper-400">Resolving Power: {spec.res}</span>
+                    ) : (
+                      spec.desc
+                    )}
                   </div>
                 </div>
                 {isSelected && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 )}
               </button>
             );
@@ -167,31 +184,45 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* 3. Subtraction Mode */}
-      <div className="p-3 border-b border-slate-800/80">
-        <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
-          <Filter className="w-3.5 h-3.5 text-blue-400" />
-          Background Subtraction
+      {/* 3. Image Filtering & Movement Isolation */}
+      <div className="p-3 border-b border-paper-800">
+        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
+          <Filter className="w-3.5 h-3.5 text-emerald-400" />
+          {viewMode === 'scientist' ? 'Background Subtraction Algorithm' : 'Image Filter'}
         </span>
 
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {[
-            { id: 'raw_calibrated', label: 'Raw Calibrated FITS' },
-            { id: 'zodi_reference_subtracted', label: 'Zodiacal Light Subtracted' },
-            { id: 'epoch_difference', label: 'Epoch Difference Residual' },
+            {
+              id: 'raw_calibrated',
+              label: viewMode === 'scientist' ? 'Level 2/3 Calibrated FITS' : 'Natural Sky (Raw)',
+              desc: viewMode === 'scientist' ? 'Native flux in MJy/sr' : 'Standard telescope image',
+            },
+            {
+              id: 'zodi_reference_subtracted',
+              label: viewMode === 'scientist' ? 'Zodi Reference Subtracted' : 'Remove Dust Glare (Clean)',
+              desc: viewMode === 'scientist' ? 'Diffuse interplanetary dust model removed' : 'Cuts out solar system dust haze',
+            },
+            {
+              id: 'epoch_difference',
+              label: viewMode === 'scientist' ? 'Epoch Difference (Δt Residual)' : 'Highlight Motion (Diff)',
+              desc: viewMode === 'scientist' ? 'Temporal frame differencing' : 'Subtracts dates to spot moving dots',
+            },
           ].map((mode) => {
             const isSelected = subtractionMode === mode.id;
             return (
               <button
                 key={mode.id}
                 onClick={() => onChangeSubtractionMode(mode.id as SubtractionMode)}
-                className={`w-full px-2 py-1.5 rounded border text-left font-mono text-[11px] transition-colors ${
+                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-950/40 border-blue-500 text-blue-200'
-                    : 'bg-[#080c14] border-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-paper-800 text-emerald-300 font-semibold'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
+                title={mode.desc}
               >
-                {mode.label}
+                <div className="font-mono text-[11px]">{mode.label}</div>
+                <div className="text-[10px] text-paper-500 font-sans">{mode.desc}</div>
               </button>
             );
           })}
@@ -200,35 +231,41 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
       {/* 4. Known Astronomical Catalogs */}
       <div className="p-3">
-        <span className="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
-          <Database className="w-3.5 h-3.5 text-blue-400" />
-          Catalog Overlays
+        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
+          <Database className="w-3.5 h-3.5 text-emerald-400" />
+          Known Catalog Overlays
         </span>
 
-        <div className="space-y-1">
-          <label className="flex items-center justify-between px-2 py-1.5 rounded bg-[#080c14] border border-slate-800 cursor-pointer hover:border-slate-700">
-            <span className="font-mono text-[11px] text-slate-300 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Gaia DR3
-            </span>
+        <div className="space-y-1.5">
+          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+            <div>
+              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                Gaia DR3
+              </span>
+              <span className="text-[10px] text-paper-500 font-sans block">Known stars & coordinates</span>
+            </div>
             <input
               type="checkbox"
               checked={overlays.gaiaDr3}
               onChange={() => onToggleOverlay('gaiaDr3')}
-              className="accent-blue-500 rounded"
+              className="accent-emerald-400 rounded cursor-pointer"
             />
           </label>
 
-          <label className="flex items-center justify-between px-2 py-1.5 rounded bg-[#080c14] border border-slate-800 cursor-pointer hover:border-slate-700">
-            <span className="font-mono text-[11px] text-slate-300 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
-              AllWISE
-            </span>
+          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
+            <div>
+              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                AllWISE
+              </span>
+              <span className="text-[10px] text-paper-500 font-sans block">Known infrared sources</span>
+            </div>
             <input
               type="checkbox"
               checked={overlays.wise}
               onChange={() => onToggleOverlay('wise')}
-              className="accent-blue-500 rounded"
+              className="accent-emerald-400 rounded cursor-pointer"
             />
           </label>
         </div>
