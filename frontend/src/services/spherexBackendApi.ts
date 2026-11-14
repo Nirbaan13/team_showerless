@@ -1,6 +1,6 @@
 /**
  * SPHEREx Backend Client Service
- * Fully aligns with backend/docs/openai/openapi.yaml deployed on AWS Lightsail.
+ * Aligns with backend/docs/openai/openapi.yaml on the configured VPS.
  * Includes resilient auto-fallback so the frontend NEVER crashes if the VPS goes offline.
  */
 
@@ -67,7 +67,7 @@ export interface SSEEventHandlers {
   onError?: (error: Event) => void;
 }
 
-const BACKEND_BASE_URL = (import.meta.env.VITE_BACKEND_URL as string) || 'http://35.159.162.202';
+const BACKEND_BASE_URL = (import.meta.env.VITE_BACKEND_URL as string) || 'http://144.124.238.101';
 
 import type { SpherexEpochFrame, DetectorArrayId } from '../types/spherex';
 
