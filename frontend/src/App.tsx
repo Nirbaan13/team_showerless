@@ -59,16 +59,15 @@ import {
 import { InferencePage } from './components/InferencePage';
 
 export function App() {
-  return new URLSearchParams(window.location.search).has('analysis') ? <InferencePage /> : <ViewerApp />;
-}
-
-function ViewerApp() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion'>(() => {
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion' | 'inference'>(() => {
     if (isEmbedMode) return 'viewer';
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
+      return 'inference';
+    }
     return typeof window !== 'undefined' && window.location.hash === '#motion-review'
       ? 'motion'
       : 'home';
@@ -567,9 +566,6 @@ function ViewerApp() {
 
           {/* Simple Tab Navigation */}
           <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
-            <a href="?analysis=1" className="btn-tactile-sm px-3 py-1.5 rounded-lg bg-paper-900 text-emerald-300 border-2 border-black">
-              ML analysis
-            </a>
             <button
               type="button"
               onClick={() => setActiveTab('home')}
@@ -728,11 +724,6 @@ function ViewerApp() {
                 Navigation
               </span>
 
-              <a href="?analysis=1" className="w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold bg-paper-900 text-emerald-300">
-                <Sparkles className="w-4 h-4" />
-                <span>ML analysis</span>
-              </a>
-
               <button
                 onClick={() => {
                   setActiveTab('home');
@@ -877,6 +868,9 @@ function ViewerApp() {
           </div>
         </div>
       )}
+
+      {/* -1. Raw Inference View (when requested) */}
+      {activeTab === 'inference' && <InferencePage />}
 
       {/* 0. Motion Review View */}
       {activeTab === 'motion' && (

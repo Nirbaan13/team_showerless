@@ -134,6 +134,28 @@ export const SEEDED_VERIFICATION_DISCUSSIONS: VerificationComment[] = [
     },
   },
   {
+    id: 'verify-3i-coma',
+    author: 'Shasta P.',
+    role: 'Science Team',
+    timestamp: '7 hours ago',
+    candidateId: 'cand-3i-tail-clump',
+    message:
+      'Cometary dust coma ion clump trailing 0.02 deg southeast of 3I/ATLAS nucleus. High linear correlation with primary ephemeris vector.',
+    vote: 'confirm_motion',
+    upvotes: 8,
+    setting: {
+      targetPresetId: '3i-atlas',
+      candidateId: 'cand-3i-tail-clump',
+      candidateName: '3I/ATLAS Coma Dust Structure',
+      ra: 166.812400,
+      dec: 5.275100,
+      fov: "3'",
+      selectedArray: 6,
+      activeFrameIndex: 2,
+      subtractionMode: 'raw_calibrated',
+    },
+  },
+  {
     id: 'verify-wise-0855',
     author: 'Dr. Marcus Vance',
     role: 'Science Team',
