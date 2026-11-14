@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
-import { Share2, Code, Check, UserCheck } from 'lucide-react';
+import { Share2, Code, Check } from 'lucide-react';
 
 interface TopNavProps {
   ra: number;
@@ -10,7 +10,6 @@ interface TopNavProps {
   subtractionMode: SubtractionMode;
   activeFrameIndex: number;
   onOpenEmbedModal: () => void;
-  onOpenVerifyModal?: () => void;
   isViewerActive: boolean;
   isScientistMode?: boolean;
 }
@@ -23,7 +22,6 @@ export const TopNav: React.FC<TopNavProps> = ({
   subtractionMode,
   activeFrameIndex,
   onOpenEmbedModal,
-  onOpenVerifyModal,
   isViewerActive,
   isScientistMode: _isScientistMode = false,
 }) => {
@@ -63,17 +61,6 @@ export const TopNav: React.FC<TopNavProps> = ({
         <span className="text-ochre-300 font-medium">{dec.toFixed(4)}°</span>
       </div>
 
-      {/* Scientist Verification Feed Modal Trigger */}
-      {onOpenVerifyModal && (
-        <button
-          onClick={onOpenVerifyModal}
-          className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-paper-900 border-2 border-black text-rose-300 hover:text-white text-[11px] font-mono flex items-center gap-1.5 cursor-pointer"
-          title="Open Scientist Verification Feed & Community Discussions"
-        >
-          <UserCheck className="w-3.5 h-3.5 text-rose-400" />
-          <span>Verify Feed</span>
-        </button>
-      )}
 
       {/* Share View: single clean button that copies the link */}
       <button

@@ -34,12 +34,14 @@ import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
-import { Compass, Home } from 'lucide-react';
+import { Compass, Home, UserCheck, Sliders, Sparkles, Menu, X, Share2 } from 'lucide-react';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
+  const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>('canvas');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
     try {
@@ -314,9 +316,32 @@ export function App() {
         />
       )}
 
-      {/* Top Header: Clean, Uncluttered, Minimal */}
-      <header className="h-12 bg-paper-900 border-b border-paper-800 px-4 flex items-center justify-between text-xs select-none z-30">
-        <div className="flex items-center space-x-6">
+      {/* Top Header: Responsive with Mobile 3-Lines (Hamburger) Sidebar Menu */}
+      <header className="h-12 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
+        {/* Mobile Left: 3-Lines Hamburger Menu Button */}
+        <div className="flex items-center gap-2.5 md:hidden">
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="btn-tactile-sm p-1.5 rounded-lg border-2 border-black bg-paper-950 text-paper-200 hover:text-emerald-400 cursor-pointer flex items-center justify-center shadow-sm"
+            aria-label="Open mobile navigation menu"
+            title="Open Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <div
+            onClick={() => setActiveTab('home')}
+            className="flex items-center space-x-2 cursor-pointer group"
+          >
+            <SpherexBlinkLogo size={22} />
+            <span className="font-bold text-white tracking-wide text-xs font-sans group-hover:text-emerald-400 transition-colors">
+              SPHEREx <span className="text-emerald-400">Blink</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Desktop Left: Logo & Direct Tab Navigation */}
+        <div className="hidden md:flex items-center space-x-6">
           <div
             onClick={() => setActiveTab('home')}
             className="flex items-center space-x-2.5 cursor-pointer group"
@@ -328,10 +353,10 @@ export function App() {
           </div>
 
           {/* Simple Tab Navigation */}
-          <nav className="flex items-center space-x-2 font-mono text-[11px]">
+          <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
             <button
               onClick={() => setActiveTab('home')}
-              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'home'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
                   : 'bg-paper-900 text-paper-300 hover:text-white'
@@ -343,7 +368,7 @@ export function App() {
 
             <button
               onClick={() => setActiveTab('viewer')}
-              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'viewer'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
                   : 'bg-paper-900 text-paper-300 hover:text-white'
@@ -352,11 +377,38 @@ export function App() {
               <Compass className="w-3.5 h-3.5" />
               <span>Sky Viewer</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('feed')}
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+                activeTab === 'feed'
+                  ? 'bg-sky-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(56,189,248,0.4)]'
+                  : 'bg-paper-900 text-sky-300 hover:text-white hover:bg-sky-950/40'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Verification Feed</span>
+            </button>
           </nav>
         </div>
 
-        {/* Global Volunteer vs Scientist View Switch */}
-        <div className="flex items-center gap-2">
+        {/* Mobile Right: Quick Experience Mode Toggle */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            onClick={() => handleSetViewMode(viewMode === 'volunteer' ? 'scientist' : 'volunteer')}
+            className={`btn-tactile-sm px-2.5 py-1 rounded-lg border-2 border-black font-mono text-[10px] font-bold cursor-pointer transition-all ${
+              viewMode === 'volunteer'
+                ? 'bg-emerald-400 text-gray-950'
+                : 'bg-paper-950 text-emerald-400 border-emerald-500/50'
+            }`}
+            title="Tap to toggle between Volunteer and Scientist view"
+          >
+            {viewMode === 'volunteer' ? 'Volunteer' : 'Scientist'}
+          </button>
+        </div>
+
+        {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
+        <div className="hidden md:flex items-center gap-2">
           <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
@@ -391,23 +443,205 @@ export function App() {
             subtractionMode={subtractionMode}
             activeFrameIndex={activeFrameIndex}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
-            onOpenVerifyModal={() => setIsVerifyModalOpen(true)}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />
         </div>
       </header>
 
-      {/* 1. Clean Home Page: Starts with big name and coordinate search */}
+      {/* Mobile Left Sidebar Drawer (Opened by 3 lines / Hamburger button) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          {/* Backdrop blur overlay */}
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+          />
+
+          {/* Sidebar Drawer Container */}
+          <div className="relative w-72 max-w-[85vw] bg-paper-950 border-r-2 border-paper-800 h-full flex flex-col p-5 shadow-2xl z-10 anim-fall">
+            {/* Drawer Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-paper-800">
+              <div className="flex items-center space-x-2.5">
+                <SpherexBlinkLogo size={24} />
+                <div>
+                  <span className="font-bold text-white tracking-wide text-sm font-sans block">
+                    SPHEREx <span className="text-emerald-400">Blink</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-paper-400">NASA Infrared Astrometry</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="btn-tactile-sm p-1.5 rounded-lg border-2 border-black bg-paper-900 text-paper-400 hover:text-white cursor-pointer"
+                aria-label="Close menu"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Navigation Options */}
+            <div className="mt-5 space-y-2 flex-1 overflow-y-auto">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block mb-1">
+                Navigation
+              </span>
+
+              <button
+                onClick={() => {
+                  setActiveTab('home');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'home'
+                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
+                }`}
+              >
+                <Home className="w-4 h-4 text-emerald-400" />
+                <span>Homepage</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab('viewer');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'viewer'
+                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
+                }`}
+              >
+                <Compass className="w-4 h-4 text-emerald-400" />
+                <span>Sky Viewer</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab('feed');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'feed'
+                    ? 'bg-sky-400 text-gray-950 shadow-[0_0_15px_rgba(56,189,248,0.4)]'
+                    : 'bg-paper-900 text-sky-300 hover:bg-paper-850'
+                }`}
+              >
+                <UserCheck className="w-4 h-4 text-sky-400" />
+                <span>Verification Feed</span>
+              </button>
+
+              {/* View Mode Switcher in Mobile Drawer */}
+              <div className="pt-4 border-t border-paper-800 space-y-2">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block">
+                  Experience Mode
+                </span>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => handleSetViewMode('volunteer')}
+                    className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex flex-col items-center gap-1 cursor-pointer transition-all ${
+                      viewMode === 'volunteer'
+                        ? 'bg-emerald-400 text-gray-950 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        : 'bg-paper-900 text-paper-400 hover:text-white'
+                    }`}
+                  >
+                    <span>Volunteer</span>
+                    <span className="text-[9px] font-normal opacity-80">Citizen Science</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleSetViewMode('scientist')}
+                    className={`p-2.5 rounded-xl border-2 border-black font-mono text-xs font-bold flex flex-col items-center gap-1 cursor-pointer transition-all ${
+                      viewMode === 'scientist'
+                        ? 'bg-emerald-400 text-gray-950 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                        : 'bg-paper-900 text-paper-400 hover:text-white'
+                    }`}
+                  >
+                    <span>Scientist</span>
+                    <span className="text-[9px] font-normal opacity-80">Research HUD</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Actions (Share & Embed) */}
+              {activeTab === 'viewer' && (
+                <div className="pt-4 border-t border-paper-800 space-y-2">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block">
+                    Current Coordinates
+                  </span>
+                  <div className="p-2.5 rounded-lg bg-paper-900 border border-paper-800 font-mono text-[11px] text-paper-300">
+                    <div>RA: <span className="text-ochre-300 font-bold">{ra.toFixed(4)}°</span></div>
+                    <div>Dec: <span className="text-ochre-300 font-bold">{dec.toFixed(4)}°</span></div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2 px-3 rounded-lg border-2 border-black bg-paper-900 text-paper-200 hover:text-emerald-300 font-mono text-xs flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Share2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Copy Share Link</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="pt-3 border-t border-paper-800 text-[10px] font-mono text-paper-500 text-center">
+              NASA SPHEREx • Caltech / IPAC
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
         <HomePage
           onSearchCoordinates={handleSearchCoordinates}
           onSelectPreset={handleSelectPreset}
-          onSelectVerificationTarget={handleSelectVerificationTarget}
+          onOpenFeed={() => setActiveTab('feed')}
         />
       )}
 
-      {/* 2. Dossier Report Page */}
+      {/* 2. Dedicated Community Verification Feed View */}
+      {activeTab === 'feed' && (
+        <div className="flex-1 overflow-y-auto bg-paper-950 p-3 sm:p-6 md:p-10 relative anim-fall select-none pb-20 sm:pb-10">
+          <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-paper-800 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-sky-400/10 border-2 border-sky-400/40 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)] shrink-0">
+                  <UserCheck className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                </div>
+                <div>
+                  <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-white tracking-wide">
+                    NASA Scientist & Community Verification Feed
+                  </h1>
+                  <p className="text-[11px] sm:text-xs text-paper-400 mt-0.5">
+                    Peer-review flagged moving objects, inspect exact observation settings, and verify astrometric tracks.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveTab('viewer')}
+                className="btn-tactile w-full sm:w-auto px-4 py-2 rounded-xl border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              >
+                <Compass className="w-4 h-4 stroke-[2.5]" />
+                <span>Open Sky Viewer</span>
+              </button>
+            </div>
+
+            <VerifyScientistPanel
+              onSelectVerificationTarget={handleSelectVerificationTarget}
+              isCompact={false}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 3. Dossier Report Page */}
       {activeTab === 'report' && (
         <DiscoveryReportPage
           candidate={activeCandidate}
@@ -418,27 +652,83 @@ export function App() {
 
       {/* 3. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
-        <div className="flex flex-1 overflow-hidden relative anim-fall">
-          <LeftControlPanel
-            ra={ra}
-            dec={dec}
-            fov={fov}
-            onUpdateCoords={(nRa, nDec) => handleSearchCoordinates(nRa, nDec)}
-            onUpdateFov={setFov}
-            selectedArray={selectedArray}
-            onSelectArray={setSelectedArray}
-            selectedChannel={selectedChannel}
-            onSelectChannel={setSelectedChannel}
-            subtractionMode={subtractionMode}
-            onChangeSubtractionMode={setSubtractionMode}
-            overlays={overlays}
-            onToggleOverlay={handleToggleOverlay}
-            onRefreshCutout={handleRefreshCutout}
-            viewMode={viewMode}
-            searchStatus={searchStatus}
-          />
+        <div className="flex flex-1 overflow-hidden relative anim-fall flex-col md:flex-row h-[calc(100vh-3rem)]">
+          {/* Left Control Panel: Desktop side-column, Mobile full-pane overlay */}
+          <div
+            className={`${
+              mobileViewerPane === 'controls'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
+                : 'hidden md:flex'
+            }`}
+          >
+            {/* Mobile Header Bar for Settings */}
+            <div className="flex md:hidden items-center justify-between px-3.5 py-2.5 bg-paper-900 border-b border-paper-800 shrink-0">
+              <div className="flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
+                <Sliders className="w-4 h-4" />
+                <span>Sky Viewer Settings & Calibration</span>
+              </div>
+              <button
+                onClick={() => setMobileViewerPane('canvas')}
+                className="btn-tactile px-3 py-1 rounded-lg border-2 border-black bg-emerald-400 text-gray-950 font-mono text-xs font-bold flex items-center gap-1 cursor-pointer"
+              >
+                <span>✕ Close & Return</span>
+              </button>
+            </div>
 
-          <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
+            <LeftControlPanel
+              ra={ra}
+              dec={dec}
+              fov={fov}
+              onUpdateCoords={(nRa, nDec) => {
+                handleSearchCoordinates(nRa, nDec);
+                setMobileViewerPane('canvas');
+              }}
+              onUpdateFov={setFov}
+              selectedArray={selectedArray}
+              onSelectArray={setSelectedArray}
+              selectedChannel={selectedChannel}
+              onSelectChannel={setSelectedChannel}
+              subtractionMode={subtractionMode}
+              onChangeSubtractionMode={setSubtractionMode}
+              overlays={overlays}
+              onToggleOverlay={handleToggleOverlay}
+              onRefreshCutout={handleRefreshCutout}
+              viewMode={viewMode}
+              searchStatus={searchStatus}
+              className="h-full w-full"
+            />
+          </div>
+
+          {/* Main Viewport: Canvas & Playback */}
+          <main
+            className={`flex-1 flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)] overflow-hidden relative ${
+              mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
+            }`}
+          >
+            {/* Floating Mobile Side Button: Settings (Left Side) */}
+            <div className="md:hidden absolute top-14 left-2.5 z-30 pointer-events-auto">
+              <button
+                onClick={() => setMobileViewerPane('controls')}
+                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
+                title="Change Sky Viewer Settings (FOV, Detector Bands, Overlays, Coordinates)"
+              >
+                <Sliders className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Settings</span>
+              </button>
+            </div>
+
+            {/* Floating Mobile Side Button: Triage (Right Side) */}
+            <div className="md:hidden absolute top-14 right-2.5 z-30 pointer-events-auto">
+              <button
+                onClick={() => setMobileViewerPane('telemetry')}
+                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
+                title="Open Candidate Triage & Classification"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Triage</span>
+              </button>
+            </div>
+
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -469,27 +759,81 @@ export function App() {
             />
           </main>
 
-          {/* Right Drawer: Resizable & Expandable Triage & Telemetry */}
-          <RightDrawer
-            frames={frames}
-            activeFrameIndex={activeFrameIndex}
-            onSelectFrame={setActiveFrameIndex}
-            candidates={candidatesList}
-            selectedCandidateId={activeCandidate?.id ?? null}
-            onSelectCandidate={setSelectedCandidateId}
-            candidate={activeCandidate}
-            spectrumData={spectrumData}
-            onUpdateCandidateClassification={handleUpdateCandidateClassification}
-            onOpenDiscoveryReport={() => setActiveTab('report')}
-            isScientistMode={viewMode === 'scientist'}
-            ra={ra}
-            dec={dec}
-            fov={fov}
-            selectedArray={selectedArray}
-            subtractionMode={subtractionMode}
-            controlledTab={drawerControlledTab}
-            onTabChange={setDrawerControlledTab}
-          />
+          {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
+          <div
+            className={`${
+              mobileViewerPane === 'telemetry'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
+                : 'hidden lg:flex'
+            }`}
+          >
+            {/* Mobile Header Bar for Triage */}
+            <div className="flex md:hidden items-center justify-between px-3.5 py-2.5 bg-paper-900 border-b border-paper-800 shrink-0">
+              <div className="flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
+                <Sparkles className="w-4 h-4" />
+                <span>Candidate Triage & AI Telemetry</span>
+              </div>
+              <button
+                onClick={() => setMobileViewerPane('canvas')}
+                className="btn-tactile px-3 py-1 rounded-lg border-2 border-black bg-emerald-400 text-gray-950 font-mono text-xs font-bold flex items-center gap-1 cursor-pointer"
+              >
+                <span>✕ Close & Return</span>
+              </button>
+            </div>
+
+            <RightDrawer
+              frames={frames}
+              activeFrameIndex={activeFrameIndex}
+              onSelectFrame={setActiveFrameIndex}
+              candidates={candidatesList}
+              selectedCandidateId={activeCandidate?.id ?? null}
+              onSelectCandidate={setSelectedCandidateId}
+              candidate={activeCandidate}
+              spectrumData={spectrumData}
+              onUpdateCandidateClassification={handleUpdateCandidateClassification}
+              onOpenDiscoveryReport={() => setActiveTab('report')}
+              isScientistMode={viewMode === 'scientist'}
+              ra={ra}
+              dec={dec}
+              fov={fov}
+              selectedArray={selectedArray}
+              subtractionMode={subtractionMode}
+              controlledTab={drawerControlledTab}
+              onTabChange={setDrawerControlledTab}
+              className="h-full w-full"
+            />
+          </div>
+
+          {/* Mobile Bottom Dock (< md screens) */}
+          <nav className="md:hidden fixed bottom-0 inset-x-0 h-12 bg-paper-950/95 backdrop-blur border-t border-paper-800 z-40 flex items-center justify-around px-2">
+            <button
+              onClick={() => setMobileViewerPane('canvas')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'canvas' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Compass className="w-4 h-4 mb-0.5" />
+              <span>Sky View</span>
+            </button>
+            <button
+              onClick={() => setMobileViewerPane('telemetry')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'telemetry' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 mb-0.5" />
+              <span>Triage & AI</span>
+            </button>
+            <button
+              onClick={() => setMobileViewerPane('controls')}
+              className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
+                mobileViewerPane === 'controls' ? 'text-emerald-400 font-bold' : 'text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <Sliders className="w-4 h-4 mb-0.5" />
+              <span>Controls</span>
+            </button>
+          </nav>
         </div>
       )}
 
