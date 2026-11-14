@@ -403,7 +403,6 @@ export function App() {
             subtractionMode={subtractionMode}
             activeFrameIndex={activeFrameIndex}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
-            onOpenVerifyModal={() => setActiveTab('feed')}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />

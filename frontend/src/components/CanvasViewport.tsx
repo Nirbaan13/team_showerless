@@ -252,12 +252,19 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.closePath();
     };
 
+    // Helper to calculate canvas coordinates from image pixel coordinates
+    const getCanvasCoords = (x: number, y: number) => {
+      const isAtlasAspect = currentFrame?.detectorArray === 6 && y <= 144;
+      const cx = x * 2 - 256;
+      const cy = isAtlasAspect ? y * 2 - 144 : y * 2 - 256;
+      return { cx, cy };
+    };
+
     // Candidate Point Spread Functions, Motion Track & Priority-Graded Red Hexagons
     candidates.forEach((cand, candIdx) => {
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-      const offsetX = currentPos.x - 256;
-      const offsetY = currentPos.y - 256;
+      const { cx: offsetX, cy: offsetY } = getCanvasCoords(currentPos.x, currentPos.y);
 
       // Priority ranking: Priority 1 gets intense deep red, fading to softer reds for lower priority
       const rank = cand.mlRank || (candIdx + 1);
@@ -289,8 +296,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([3 / zoom, 2 / zoom]);
         ctx.beginPath();
         cand.epochPositions.forEach((pos, idx) => {
-          const px = pos.x - 256;
-          const py = pos.y - 256;
+          const { cx: px, cy: py } = getCanvasCoords(pos.x, pos.y);
           if (idx === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         });
@@ -506,8 +512,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     for (const cand of candidates) {
       const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-      const cx = pos.x - 256;
-      const cy = pos.y - 256;
+      const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
+      const cx = pos.x * 2 - 256;
+      const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
       const dist = Math.hypot(transformedX - cx, transformedY - cy);
       if (dist < 28 / zoom) {
         onSelectCandidate(cand.id);

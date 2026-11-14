@@ -18,7 +18,99 @@ import {
   FileText,
   MessageSquare,
   Cpu,
+  Sparkles,
+  ShieldAlert,
+  Compass,
+  Info,
+  Check,
+  X,
 } from 'lucide-react';
+
+interface ClassificationGuideItem {
+  id: CandidateClassification;
+  name: string;
+  badge: string;
+  badgeBg: string;
+  badgeText: string;
+  summary: string;
+  importantForThis: string[];
+  notThisIf: string[];
+  distinctionRule: string;
+}
+
+const CLASSIFICATION_GUIDE: Record<string, ClassificationGuideItem> = {
+  transient: {
+    id: 'transient',
+    name: 'Transient (Supernova / Stellar Flare)',
+    badge: 'Sudden IR Burst',
+    badgeBg: 'rgba(245, 158, 11, 0.2)',
+    badgeText: '#f59e0b',
+    summary: 'A stationary celestial event that flares or dims abruptly between epochs.',
+    importantForThis: [
+      'Sudden flux spike (>3× baseline) in 1–2 epochs; faint or absent in other epochs.',
+      'Stationary coordinates: RA and Dec centroid do NOT move across epochs.',
+      'Physical Optical PSF: Spans multiple pixels with Gaussian wings matching SPHEREx 6.2″ optical beam.',
+    ],
+    notThisIf: [
+      'NOT an Artifact if it exhibits multi-pixel optical beam spread (artifacts are single sharp pixels).',
+      'NOT a Moving Object if coordinates remain fixed (moving bodies shift positions in tracks).',
+      'NOT a Catalog Star if it was absent or magnitudes fainter in Gaia DR3 / AllWISE baseline catalogs.',
+    ],
+    distinctionRule: 'Stationary position + true optical PSF width + multi-epoch brightness surge.',
+  },
+  artifact: {
+    id: 'artifact',
+    name: 'Detector Artifact (Cosmic Ray / Glitch)',
+    badge: 'Non-Astronomical',
+    badgeBg: 'rgba(244, 63, 94, 0.2)',
+    badgeText: '#f43f5e',
+    summary: 'High-energy cosmic ray hit, bad pixel, or stray light diffraction spike.',
+    importantForThis: [
+      'Single-pixel sharpness: Concentrated in 1 or 2 isolated pixels without optical PSF spread.',
+      'Single epoch hit: Appears in only 1 exposure and never repeats at the exact same sky coordinates.',
+      'Detector defects: Unphysical straight-line ionization track or saturated detector column.',
+    ],
+    notThisIf: [
+      'NOT an Artifact if it spans 2–4 pixels with standard instrument PSF—real sky photons always blur through optics!',
+      'NOT an Artifact if it repeats at consistent coordinates across separate telescope pointings.',
+    ],
+    distinctionRule: 'Unnaturally sharp (no PSF wings) or isolated single-frame detector glitch.',
+  },
+  moving_object: {
+    id: 'moving_object',
+    name: 'Moving Object (Asteroid / Interstellar Body)',
+    badge: 'Astrometric Track',
+    badgeBg: 'rgba(16, 185, 129, 0.2)',
+    badgeText: '#10b981',
+    summary: 'A solar system body or interstellar interloper travelling across the field of view.',
+    importantForThis: [
+      'Linear or curved positional track across consecutive epochs with consistent dRA/dt and dDec/dt.',
+      'Uniform optical PSF matching SPHEREx 6.2″ beam moving alongside the nucleus.',
+      'Examples: 3I/ATLAS interstellar comet (0.54 px from JPL Horizons), Barnard’s Star (10.3″/yr proper motion).',
+    ],
+    notThisIf: [
+      'NOT a Moving Object if it stays at the exact same pixel coordinates (that is a Transient flare).',
+      'NOT a Moving Object if epoch coordinates jump randomly with erratic non-directional steps.',
+    ],
+    distinctionRule: 'Smooth linear vector motion across epochs + steady optical PSF profile.',
+  },
+  already_known: {
+    id: 'already_known',
+    name: 'Known Catalog Star (Gaia / WISE)',
+    badge: 'Catalog Baseline',
+    badgeBg: 'rgba(148, 163, 184, 0.2)',
+    badgeText: '#94a3b8',
+    summary: 'Confirmed static astronomical source matched in deep baseline catalogs.',
+    importantForThis: [
+      'Positional cross-match within <1.5″ of a known Gaia DR3, 2MASS, or AllWISE catalog source.',
+      'Stationary coordinates and consistent multi-epoch baseline infrared flux.',
+    ],
+    notThisIf: [
+      'NOT a Known Star if it displays rapid displacement or explosive unexpected multi-magnitude outbursts.',
+    ],
+    distinctionRule: 'Matches historical catalog coordinates with stationary multi-epoch flux.',
+  },
+};
 
 interface RightDrawerProps {
   frames?: SpherexEpochFrame[];
@@ -82,6 +174,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     candidate?.confidence || 'medium'
   );
   const [isSaved, setIsSaved] = useState(false);
+  const [hoveredClassId, setHoveredClassId] = useState<string | null>(null);
+  const currentGuide =
+    CLASSIFICATION_GUIDE[
+      hoveredClassId || (selectedClass !== 'unreviewed' ? selectedClass : 'transient')
+    ] || CLASSIFICATION_GUIDE.transient;
 
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(360);
@@ -268,9 +365,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
                 {/* Candidate Classification */}
                 <div>
-                  <label className="text-[10px] font-mono text-paper-400 block mb-1.5 uppercase font-semibold">
-                    Volunteer Classification
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-[10px] font-mono text-paper-400 uppercase font-semibold">
+                      Volunteer Classification
+                    </label>
+                    <span className="text-[9px] font-mono text-paper-500">
+                      Hover for TiH Guide
+                    </span>
+                  </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {[
                       { id: 'moving_object', label: 'Moving Object', desc: 'Consistent track' },
@@ -279,13 +381,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                       { id: 'artifact', label: 'Artifact', desc: 'Bad pixel / CR' },
                     ].map((item) => {
                       const isSelected = selectedClass === item.id;
+                      const isHovered = hoveredClassId === item.id;
                       return (
                         <button
                           key={item.id}
                           onClick={() => setSelectedClass(item.id as CandidateClassification)}
+                          onMouseEnter={() => setHoveredClassId(item.id)}
+                          onMouseLeave={() => setHoveredClassId(null)}
                           className={`btn-tactile-sm p-2 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-emerald-400 text-gray-950 font-bold'
+                              : isHovered
+                              ? 'bg-paper-800 text-emerald-300'
                               : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                           }`}
                         >
@@ -293,6 +400,69 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                         </button>
                       );
                     })}
+                  </div>
+
+                  {/* TiH Interactive Classification Helper Card */}
+                  <div className="mt-2.5 p-3 rounded-xl bg-paper-950 border-2 border-black card-tactile space-y-2.5 anim-fall">
+                    <div className="flex items-center justify-between border-b border-paper-800/80 pb-2">
+                      <div className="flex items-center gap-1.5">
+                        {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                        {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
+                        {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
+                        {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
+                        <span className="font-mono text-[11px] font-bold text-paper-100">
+                          {currentGuide.name}
+                        </span>
+                      </div>
+                      <span
+                        style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
+                        className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
+                      >
+                        {currentGuide.badge}
+                      </span>
+                    </div>
+
+                    <p className="text-[10px] font-sans text-paper-300 leading-relaxed">
+                      {currentGuide.summary}
+                    </p>
+
+                    {/* What is important for this */}
+                    <div className="space-y-1">
+                      <span className="text-[9.5px] font-mono text-emerald-400 uppercase font-bold tracking-wider flex items-center gap-1">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                        What to look for (Key Indicators):
+                      </span>
+                      <ul className="space-y-1 pl-1 text-[10px] font-sans text-paper-300">
+                        {currentGuide.importantForThis.map((pt, i) => (
+                          <li key={i} className="flex items-start gap-1.5">
+                            <span className="text-emerald-400 shrink-0 font-bold">•</span>
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* What rules it out / distinction */}
+                    <div className="space-y-1 pt-1.5 border-t border-paper-800/80">
+                      <span className="text-[9.5px] font-mono text-rose-400 uppercase font-bold tracking-wider flex items-center gap-1">
+                        <X className="w-3 h-3 stroke-[3]" />
+                        It is NOT this if:
+                      </span>
+                      <ul className="space-y-1 pl-1 text-[10px] font-sans text-paper-400">
+                        {currentGuide.notThisIf.map((pt, i) => (
+                          <li key={i} className="flex items-start gap-1.5">
+                            <span className="text-rose-400 shrink-0 font-bold">•</span>
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Key Distinction Rule Pill */}
+                    <div className="px-2.5 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-[10px] font-mono text-ochre-300 flex items-center gap-1.5">
+                      <span className="font-bold text-emerald-400 uppercase text-[9px]">Key Rule:</span>
+                      <span className="truncate">{currentGuide.distinctionRule}</span>
+                    </div>
                   </div>
                 </div>
 

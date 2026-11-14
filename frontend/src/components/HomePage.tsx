@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import type { TargetPreset } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
+import {
+  REAL_3I_ATLAS_FRAMES,
+  REAL_BARNARD_FRAMES,
+  REAL_WISE_0855_FRAMES,
+} from '../services/realSpherexFrames';
 import { ArrowRight, Compass, UserCheck } from 'lucide-react';
 
 interface HomePageProps {
@@ -128,6 +133,122 @@ export const HomePage: React.FC<HomePageProps> = ({
             </button>
           </div>
         )}
+
+        {/* 2D Verification Feed: Real NASA SPHEREx Calibrated Targets */}
+        <div className="anim-fall w-full max-w-4xl pt-4 space-y-3" style={{ animationDelay: '340ms' }}>
+          <div className="flex items-center justify-between px-1">
+            <span className="font-mono text-[11px] text-emerald-400 uppercase font-bold tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              2D Verification Feed: Calibrated SPHEREx Images
+            </span>
+            {onOpenFeed && (
+              <button
+                onClick={onOpenFeed}
+                className="text-[11px] font-mono text-sky-400 hover:text-sky-300 transition-colors cursor-pointer flex items-center gap-1"
+              >
+                <span>View All Discussions</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              {
+                id: '3i-atlas',
+                name: '3I/ATLAS Comet',
+                type: 'Interstellar Interloper',
+                badge: 'NASA QR2 Detection',
+                priority: 'P1',
+                pBg: '#ef4444',
+                thumb: REAL_3I_ATLAS_FRAMES[2]?.pngDataUrl,
+                coords: 'RA 166.790°, Dec +05.290°',
+                desc: 'Hyperbolic track across 4 QR2 frames within 0.54 px of JPL Horizons.',
+              },
+              {
+                id: 'barnards-star',
+                name: "Barnard's Star",
+                type: 'High Proper Motion Red Dwarf',
+                badge: '5-Epoch Multi-Blink',
+                priority: 'P1',
+                pBg: '#ef4444',
+                thumb: REAL_BARNARD_FRAMES[2]?.pngDataUrl,
+                coords: 'RA 269.452°, Dec +04.693°',
+                desc: 'Fast apparent vector motion (10.3″/yr) with confirmed Gaia DR3 cross-match.',
+              },
+              {
+                id: 'wise-0855',
+                name: 'WISE 0855-0714',
+                type: 'Coldest Sub-Brown Dwarf',
+                badge: 'Band 5/6 Ice Clouds',
+                priority: 'P1',
+                pBg: '#ef4444',
+                thumb: REAL_WISE_0855_FRAMES[0]?.pngDataUrl,
+                coords: 'RA 133.795°, Dec -07.245°',
+                desc: 'Y-type sub-stellar object exhibiting strong atmospheric H2O ice absorption.',
+              },
+            ].map((feedItem) => {
+              const matchingPreset = NASA_TEST_PRESETS.find((p) => p.id === feedItem.id);
+              if (!matchingPreset) return null;
+
+              return (
+                <div
+                  key={feedItem.id}
+                  onClick={() => onSelectPreset(matchingPreset)}
+                  className="p-3 rounded-xl bg-paper-900/95 border-2 border-black hover:border-emerald-400/80 transition-all card-tactile cursor-pointer group flex flex-col justify-between space-y-2.5 text-left"
+                >
+                  <div className="space-y-2">
+                    {/* 2D Cutout Thumbnail */}
+                    <div className="relative w-full h-28 rounded-lg overflow-hidden bg-black border border-black/80 flex items-center justify-center">
+                      <img
+                        src={feedItem.thumb}
+                        alt={feedItem.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                      {/* Optical Reticle */}
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                        <div className="w-5 h-5 rounded-full border border-rose-500/90 animate-pulse flex items-center justify-center">
+                          <div className="w-1 h-1 rounded-full bg-rose-400" />
+                        </div>
+                      </div>
+                      <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/85 font-mono text-[8px] text-emerald-300 font-bold border border-emerald-400/30">
+                        2D FITS Cutout
+                      </span>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span
+                          style={{ backgroundColor: feedItem.pBg }}
+                          className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded text-white shadow-sm border border-black/40"
+                        >
+                          {feedItem.priority}
+                        </span>
+                        <span className="text-[9px] font-mono text-emerald-300 px-1.5 py-0.5 rounded bg-paper-950 border border-paper-800">
+                          {feedItem.badge}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-bold font-sans text-paper-100 group-hover:text-emerald-300 transition-colors">
+                        {feedItem.name}
+                      </h4>
+                      <p className="text-[10px] font-sans text-paper-400 leading-snug line-clamp-2">
+                        {feedItem.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="w-full py-1.5 rounded-lg bg-emerald-400 group-hover:bg-emerald-300 text-gray-950 font-mono text-[10px] font-bold border-2 border-black flex items-center justify-center gap-1.5 transition-transform"
+                  >
+                    <span>Verify in Sky Viewer</span>
+                    <ArrowRight className="w-3 h-3 stroke-[2.5]" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,11 @@ import type {
   SpectralDataPoint,
   MolecularLine,
 } from '../types/spherex';
-import { REAL_3I_ATLAS_FRAMES } from './realSpherexFrames';
+import {
+  REAL_3I_ATLAS_FRAMES,
+  REAL_BARNARD_FRAMES,
+  REAL_WISE_0855_FRAMES,
+} from './realSpherexFrames';
 
 export const NASA_TEST_PRESETS: TargetPreset[] = [
   {
@@ -128,6 +132,50 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
         zodiBrightnessMjySr: 12.43,
         snrEstimated: obs.snr,
       }
+    }));
+  }
+
+  if (targetId === 'barnards-star') {
+    return REAL_BARNARD_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 2,
+      wavelengthMinUm: 1.11,
+      wavelengthMaxUm: 1.64,
+      channelIndex: 26,
+      flaggedPixelPercentage: 0.18,
+      cosmicRayHits: 11,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.05,
+        zodiBrightnessMjySr: Number((12.4 + idx * 0.7).toFixed(2)),
+        snrEstimated: 38.0,
+      },
+    }));
+  }
+
+  if (targetId === 'wise-0855') {
+    return REAL_WISE_0855_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 5,
+      wavelengthMinUm: 3.82,
+      wavelengthMaxUm: 4.42,
+      channelIndex: 82,
+      flaggedPixelPercentage: 0.22,
+      cosmicRayHits: 14,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.12,
+        zodiBrightnessMjySr: Number((16.8 + idx * 0.9).toFixed(2)),
+        snrEstimated: 16.2,
+      },
     }));
   }
 
@@ -283,16 +331,16 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         id: 'cand-barnard-primary',
         ra: 269.452075,
         dec: 4.693365,
-        pixelX: 250,
-        pixelY: 250,
+        pixelX: 128,
+        pixelY: 128,
         mlRank: 1,
         mlPriorityScore: 0.96,
         epochPositions: [
-          { epochIndex: 0, x: 235, y: 240, flux: 142.0, snr: 38.2 },
-          { epochIndex: 1, x: 242, y: 245, flux: 141.5, snr: 37.9 },
-          { epochIndex: 2, x: 250, y: 250, flux: 143.1, snr: 38.0 },
-          { epochIndex: 3, x: 258, y: 255, flux: 140.8, snr: 37.4 },
-          { epochIndex: 4, x: 265, y: 260, flux: 142.9, snr: 38.5 },
+          { epochIndex: 0, x: 122, y: 140, flux: 185.0, snr: 38.2 },
+          { epochIndex: 1, x: 125, y: 134, flux: 184.5, snr: 37.9 },
+          { epochIndex: 2, x: 128, y: 128, flux: 185.1, snr: 38.0 },
+          { epochIndex: 3, x: 131, y: 122, flux: 183.8, snr: 37.4 },
+          { epochIndex: 4, x: 134, y: 116, flux: 186.2, snr: 38.5 },
         ],
         classification: 'moving_object',
         confidence: 'high',
@@ -306,16 +354,16 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         id: 'cand-barnard-anomaly-1',
         ra: 269.461100,
         dec: 4.689200,
-        pixelX: 380,
-        pixelY: 170,
+        pixelX: 190,
+        pixelY: 85,
         mlRank: 2,
         mlPriorityScore: 0.79,
         epochPositions: [
-          { epochIndex: 0, x: 380, y: 170, flux: 3.2, snr: 4.1 },
-          { epochIndex: 1, x: 380, y: 170, flux: 18.8, snr: 15.4 },
-          { epochIndex: 2, x: 380, y: 170, flux: 2.9, snr: 3.8 },
-          { epochIndex: 3, x: 380, y: 170, flux: 1.8, snr: 2.1 },
-          { epochIndex: 4, x: 380, y: 170, flux: 2.0, snr: 2.3 },
+          { epochIndex: 0, x: 190, y: 85, flux: 32.0, snr: 4.1 },
+          { epochIndex: 1, x: 190, y: 85, flux: 152.0, snr: 28.4 },
+          { epochIndex: 2, x: 190, y: 85, flux: 31.8, snr: 3.8 },
+          { epochIndex: 3, x: 190, y: 85, flux: 32.1, snr: 2.1 },
+          { epochIndex: 4, x: 190, y: 85, flux: 31.9, snr: 2.3 },
         ],
         classification: 'transient',
         confidence: 'medium',
@@ -326,16 +374,16 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         id: 'cand-barnard-companion',
         ra: 269.438000,
         dec: 4.712000,
-        pixelX: 160,
-        pixelY: 340,
+        pixelX: 45,
+        pixelY: 60,
         mlRank: 3,
         mlPriorityScore: 0.63,
         epochPositions: [
-          { epochIndex: 0, x: 152, y: 334, flux: 7.8, snr: 6.4 },
-          { epochIndex: 1, x: 156, y: 337, flux: 8.1, snr: 6.7 },
-          { epochIndex: 2, x: 160, y: 340, flux: 7.9, snr: 6.5 },
-          { epochIndex: 3, x: 164, y: 343, flux: 8.3, snr: 6.9 },
-          { epochIndex: 4, x: 168, y: 346, flux: 8.0, snr: 6.6 },
+          { epochIndex: 0, x: 45, y: 60, flux: 45.0, snr: 12.4 },
+          { epochIndex: 1, x: 45, y: 60, flux: 44.8, snr: 12.1 },
+          { epochIndex: 2, x: 45, y: 60, flux: 45.2, snr: 12.5 },
+          { epochIndex: 3, x: 45, y: 60, flux: 45.0, snr: 12.3 },
+          { epochIndex: 4, x: 45, y: 60, flux: 44.9, snr: 12.2 },
         ],
         classification: 'moving_object',
         confidence: 'medium',
@@ -346,16 +394,16 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         id: 'cand-barnard-wise-match',
         ra: 269.475000,
         dec: 4.671000,
-        pixelX: 430,
-        pixelY: 360,
+        pixelX: 220,
+        pixelY: 195,
         mlRank: 4,
         mlPriorityScore: 0.48,
         epochPositions: [
-          { epochIndex: 0, x: 430, y: 360, flux: 14.5, snr: 12.1 },
-          { epochIndex: 1, x: 430, y: 360, flux: 14.2, snr: 11.9 },
-          { epochIndex: 2, x: 430, y: 360, flux: 14.7, snr: 12.3 },
-          { epochIndex: 3, x: 430, y: 360, flux: 14.4, snr: 12.0 },
-          { epochIndex: 4, x: 430, y: 360, flux: 14.6, snr: 12.2 },
+          { epochIndex: 0, x: 220, y: 195, flux: 65.0, snr: 18.2 },
+          { epochIndex: 1, x: 220, y: 195, flux: 64.7, snr: 18.0 },
+          { epochIndex: 2, x: 220, y: 195, flux: 65.3, snr: 18.4 },
+          { epochIndex: 3, x: 220, y: 195, flux: 65.1, snr: 18.1 },
+          { epochIndex: 4, x: 220, y: 195, flux: 64.9, snr: 18.3 },
         ],
         classification: 'already_known',
         confidence: 'high',
@@ -383,6 +431,52 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         confidence: 'low',
         volunteerNotes: 'High-energy cosmic ray strike on detector pixels during Epoch 3. Filtered out by difference imaging.',
         isKnownCatalogMatch: false,
+      }
+    ];
+  }
+
+  if (targetId === 'wise-0855') {
+    return [
+      {
+        id: 'cand-wise-0855-01',
+        ra: 133.795129,
+        dec: -7.245147,
+        pixelX: 128,
+        pixelY: 128,
+        mlRank: 1,
+        mlPriorityScore: 0.95,
+        epochPositions: [
+          { epochIndex: 0, x: 128, y: 128, flux: 95.0, snr: 16.2 },
+          { epochIndex: 1, x: 132, y: 126, flux: 94.5, snr: 15.9 },
+          { epochIndex: 2, x: 136, y: 124, flux: 96.0, snr: 16.5 },
+        ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: 'Ultra-cold Y-type sub-brown dwarf detected in Band 5/6 (4.42–5.00 µm). Atmospheric water ice absorption verified.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'WISE',
+        catalogId: 'WISE 0855-0714 (Coldest Sub-Brown Dwarf)',
+        properMotionMasYr: { pmRa: -8120.0, pmDec: 680.0 }
+      },
+      {
+        id: 'cand-wise-field-star',
+        ra: 133.812000,
+        dec: -7.234000,
+        pixelX: 60,
+        pixelY: 180,
+        mlRank: 2,
+        mlPriorityScore: 0.62,
+        epochPositions: [
+          { epochIndex: 0, x: 60, y: 180, flux: 42.0, snr: 11.4 },
+          { epochIndex: 1, x: 60, y: 180, flux: 42.1, snr: 11.5 },
+          { epochIndex: 2, x: 60, y: 180, flux: 41.9, snr: 11.3 },
+        ],
+        classification: 'already_known',
+        confidence: 'high',
+        volunteerNotes: 'Stationary reference field star. Clean astrometric anchor.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'Gaia DR3',
+        catalogId: 'Gaia DR3 5671948291038291024',
       }
     ];
   }

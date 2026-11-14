@@ -3,6 +3,11 @@ import type { VerificationComment, VerificationSetting } from '../types/spherex'
 import { getPriorityColors } from '../services/mlRanking';
 import { getInitialVerificationComments } from '../services/mockVerificationData';
 import {
+  REAL_3I_ATLAS_FRAMES,
+  REAL_BARNARD_FRAMES,
+  REAL_WISE_0855_FRAMES,
+} from '../services/realSpherexFrames';
+import {
   UserCheck,
   Sparkles,
   ShieldAlert,
@@ -13,6 +18,19 @@ import {
   Layers,
   Search,
 } from 'lucide-react';
+
+const getThumbnailForSetting = (setting: VerificationSetting): string | null => {
+  if (setting.targetPresetId === '3i-atlas') {
+    return REAL_3I_ATLAS_FRAMES[setting.activeFrameIndex]?.pngDataUrl || REAL_3I_ATLAS_FRAMES[2]?.pngDataUrl || null;
+  }
+  if (setting.targetPresetId === 'barnards-star') {
+    return REAL_BARNARD_FRAMES[setting.activeFrameIndex]?.pngDataUrl || REAL_BARNARD_FRAMES[2]?.pngDataUrl || null;
+  }
+  if (setting.targetPresetId === 'wise-0855') {
+    return REAL_WISE_0855_FRAMES[setting.activeFrameIndex]?.pngDataUrl || REAL_WISE_0855_FRAMES[0]?.pngDataUrl || null;
+  }
+  return null;
+};
 
 interface VerifyScientistPanelProps {
   onSelectVerificationTarget: (setting: VerificationSetting) => void;
@@ -122,34 +140,58 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
           const priorityRank = idx === 0 ? 1 : idx === 1 ? 1 : idx === 2 ? 2 : 3;
           const pColors = getPriorityColors(priorityRank);
 
+          const thumbUrl = getThumbnailForSetting(setting);
+
           return (
             <div
               key={item.id}
               onClick={() => onSelectVerificationTarget(setting)}
               className="p-3.5 rounded-xl bg-paper-950 border-2 border-black hover:border-emerald-400/80 transition-all card-tactile cursor-pointer group flex flex-col justify-between space-y-3"
             >
-              {/* Card Header: Candidate Name, Priority Badge & Vote */}
-              <div className="space-y-1.5">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    {/* Priority Hexagon Marker Pill */}
-                    <span
-                      style={{ backgroundColor: pColors.badgeBg, color: pColors.text }}
-                      className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm border border-black/40"
-                    >
-                      P{priorityRank}
+              {/* 2D Cutout Thumbnail + Header Info */}
+              <div className="flex flex-col sm:flex-row gap-3 items-start">
+                {thumbUrl && (
+                  <div className="relative w-full sm:w-28 h-24 sm:h-24 rounded-lg overflow-hidden bg-black border-2 border-black/80 shrink-0 group-hover:border-emerald-400/80 transition-colors shadow-inner flex items-center justify-center">
+                    <img
+                      src={thumbUrl}
+                      alt={setting.candidateName}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                    {/* Optical crosshairs reticle overlay */}
+                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full border border-rose-500/80 animate-pulse flex items-center justify-center">
+                        <div className="w-1 h-1 rounded-full bg-rose-400" />
+                      </div>
+                    </div>
+                    {/* 2D FITS Cutout badge */}
+                    <span className="absolute bottom-1 left-1 px-1 py-0.5 rounded bg-black/80 backdrop-blur font-mono text-[8px] text-emerald-300 font-bold border border-emerald-400/30">
+                      2D Cutout
                     </span>
-                    <h3 className="text-xs font-bold font-sans text-paper-100 group-hover:text-emerald-300 transition-colors">
-                      {setting.candidateName}
-                    </h3>
                   </div>
-                  {getVoteBadge(item.vote)}
-                </div>
+                )}
 
-                {/* Top Comment & Author */}
-                <p className="text-[11px] font-sans text-paper-300 leading-relaxed line-clamp-2">
-                  "{item.message}"
-                </p>
+                <div className="flex-1 space-y-1.5 w-full">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {/* Priority Hexagon Marker Pill */}
+                      <span
+                        style={{ backgroundColor: pColors.badgeBg, color: pColors.text }}
+                        className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm border border-black/40"
+                      >
+                        P{priorityRank}
+                      </span>
+                      <h3 className="text-xs font-bold font-sans text-paper-100 group-hover:text-emerald-300 transition-colors">
+                        {setting.candidateName}
+                      </h3>
+                    </div>
+                    {getVoteBadge(item.vote)}
+                  </div>
+
+                  {/* Top Comment & Author */}
+                  <p className="text-[11px] font-sans text-paper-300 leading-relaxed line-clamp-2">
+                    "{item.message}"
+                  </p>
+                </div>
               </div>
 
               {/* Setting Parameters & Action Link */}
