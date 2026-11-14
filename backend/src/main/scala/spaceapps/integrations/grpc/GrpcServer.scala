@@ -1,7 +1,7 @@
 package spaceapps.integrations.grpc
 
 import spaceapps.domain.ApiError
-import spaceapps.service.{Jobs, Resource}
+import spaceapps.service.{Jobs, Resource, MetadataService, EquipmentService}
 import spaceapps.integrations.grpc.v1.*
 import spaceapps.integrations.grpc.v1.ZioRetrieval.{RCRetrievalService, GRetrievalService}
 import io.grpc.{Status, StatusException, Metadata}
@@ -16,9 +16,10 @@ import java.util.concurrent.TimeUnit
 object GrpcServer:
   /** The server lifetime belongs to the application scope; port 0 binds an ephemeral port. */
   def start(jobs: Jobs, revision: String, host: String = "0.0.0.0", port: Int = 50051,
-    channels: Set[Int] = Set.empty): ZIO[Scope, Throwable, Int] =
+    channels: Set[Int] = Set.empty, metadata: Option[MetadataService] = None,
+    equipment: Option[EquipmentService] = None): ZIO[Scope, Throwable, Int] =
     for
-      definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels))
+      definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels, metadata, equipment))
       server <- ZIO.acquireRelease(ZIO.attempt {
         NettyServerBuilder.forAddress(new InetSocketAddress(host, port)).addService(definition).build()
       })(shutdown)
@@ -36,12 +37,17 @@ object GrpcServer:
       ZIO.logWarningCause("gRPC server shutdown failed", Cause.fail(error)) *>
         ZIO.attempt(server.shutdownNow()).ignore)
 
-private final class Retrieval(jobs: Jobs, revision: String, channels: Set[Int]) extends RCRetrievalService:
+private final class Retrieval(jobs: Jobs, revision: String, channels: Set[Int],
+  metadata: Option[MetadataService], equipment: Option[EquipmentService]) extends RCRetrievalService:
   private def failure(t: Throwable): StatusException =
     val e = ApiError.from(t)
     val status = e.code match
-      case "invalid_request" | "unsupported_channel" => Status.INVALID_ARGUMENT
+      case "invalid_request" | "unsupported_channel" | "invalid_release" | "invalid_detector" => Status.INVALID_ARGUMENT
       case "not_found" => Status.NOT_FOUND
+      case "service_unavailable" => Status.UNAVAILABLE
+      case "calibration_cache_full" | "calibration_size_limit" | "metadata_cache_capacity" => Status.RESOURCE_EXHAUSTED
+      case "calibration_configuration" | "calibration_cache_error" => Status.INTERNAL
+      case code if code.startsWith("calibration_") => Status.UNAVAILABLE
       case code if code.startsWith("archive_") || code == "upstream_error" => Status.UNAVAILABLE
       case "capacity_exceeded" | "cache_capacity" | "storage_full" | "insufficient_storage" => Status.RESOURCE_EXHAUSTED
       case "unsupported_processing" | "preview_unavailable" => Status.UNIMPLEMENTED
@@ -63,13 +69,33 @@ private final class Retrieval(jobs: Jobs, revision: String, channels: Set[Int]) 
   def prepareObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] = run(context) {
     query(request.query).flatMap(jobs.submit(_, "default", None)).flatMap(v => ZIO.attempt(GrpcMapping.download(v)))
   }
+  def prepareDeepObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] = run(context) {
+    query(request.query).map(_.inDeepSurvey).flatMap(jobs.submit(_, "default", None)).flatMap(v => ZIO.attempt(GrpcMapping.download(v)))
+  }
+  def getObservationMetadata(request: ObservationMetadataRequest, context: RequestContext): IO[StatusException, ObservationMetadataResponse] = run(context) {
+    ZIO.fromOption(metadata).orElseFail(ApiError("service_unavailable", "Metadata service is not configured", true))
+      .flatMap(_.get(request.frameId)).map(doc => ObservationMetadataResponse(Some(GrpcMapping.document(doc))))
+  }
+  def getEquipment(request: EquipmentRequest, context: RequestContext): IO[StatusException, EquipmentResponse] = run(context) {
+    ZIO.fromOption(equipment).orElseFail(ApiError("service_unavailable", "Equipment service is not configured", true))
+      .flatMap(_.catalog(if request.release.isEmpty then "DR1" else request.release, request.detectorArray))
+      .map(doc => EquipmentResponse(Some(GrpcMapping.document(doc))))
+  }
+  def getCalibrationFile(request: CalibrationFileRequest, context: RequestContext): Stream[StatusException, ChunkBytes] =
+    ZStream.unwrap(run(context) {
+      ZIO.fromOption(equipment).orElseFail(ApiError("service_unavailable", "Equipment service is not configured", true))
+        .flatMap(_.file(request.calibrationId)).map { file =>
+          ZStream.fromFile(file.path.toFile, chunkSize = 64 * 1024).chunks
+            .map(bytes => ChunkBytes(ByteString.copyFrom(bytes.toArray))).mapError(failure)
+        }
+    }).tapError(preserve(_, context))
   def getDownload(request: DownloadRequest, context: RequestContext): IO[StatusException, Download] = run(context) {
     jobs.get(request.downloadId).flatMap(v => ZIO.attempt(GrpcMapping.download(v)))
   }
   def watchDownload(request: DownloadRequest, context: RequestContext): Stream[StatusException, DownloadEvent] =
     jobs.events(request.downloadId).mapZIO(v => ZIO.attempt(GrpcMapping.event(v))).mapError(failure).tapError(preserve(_, context))
-  def getChunk(request: ChunkRequest, context: RequestContext): Stream[StatusException, ChunkBytes] = ZStream.unwrap {
-    run(context)(jobs.resource(request.chunkId, false)).flatMap {
+  def getChunk(request: ChunkRequest, context: RequestContext): Stream[StatusException, ChunkBytes] = ZStream.unwrapScoped {
+    jobs.leasedResource(request.chunkId, false).mapError(failure).flatMap {
       case Resource.Pending => ZIO.fail(statusError(Status.FAILED_PRECONDITION, ApiError("resource_pending", "The native chunk is not ready", true)))
       case Resource.Failed(e) => ZIO.fail(statusError(Status.FAILED_PRECONDITION, e))
       case Resource.Ready(path) => ZIO.succeed(

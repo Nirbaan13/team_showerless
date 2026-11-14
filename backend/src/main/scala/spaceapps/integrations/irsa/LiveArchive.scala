@@ -57,7 +57,8 @@ final class LiveArchive(
       "BAND" -> s"$lo $hi"
     }
     val time = Option.when(query.after.nonEmpty || query.before.nonEmpty)("TIME" -> s"${query.after.fold("-Inf")(mjd)} ${query.before.fold("+Inf")(mjd)}")
-    val params = List("POS" -> query.position, "COLLECTION" -> "spherex_dr1", "COLLECTION" -> "spherex_qr3", "CALIB" -> "2", "DPTYPE" -> "image", "MAXREC" -> maxRecords.toString, "RESPONSEFORMAT" -> "VOTABLE") ++ band ++ time
+    val collections = if query.deep then List("spherex_dr1_deep", "spherex_qr3_deep") else List("spherex_dr1", "spherex_qr3")
+    val params = List("POS" -> query.position) ++ collections.map("COLLECTION" -> _) ++ List("CALIB" -> "2", "DPTYPE" -> "image", "MAXREC" -> maxRecords.toString, "RESPONSEFORMAT" -> "VOTABLE") ++ band ++ time
     endpoint + (if endpoint.contains("?") then "&" else "?") + params.map((key, value) => key + "=" + URLEncoder.encode(value, UTF_8)).mkString("&")
   private def transportError(error: Throwable): ApiError = error match
     case e: ApiError => e
@@ -179,9 +180,10 @@ final class LiveArchive(
         n
       }
       val collection = required("obs_collection")
+      if collection.endsWith("_deep") != query.deep then invalid("Archive returned an unexpected survey")
       val release = collection match
-        case "spherex_dr1" => "DR1"
-        case "spherex_qr3" => "QR3"
+        case "spherex_dr1" | "spherex_dr1_deep" => "DR1"
+        case "spherex_qr3" | "spherex_qr3_deep" => "QR3"
         case _ => invalid("Archive returned an unexpected release")
       val detector = "(?i)^SPHEREx-D([1-6])$".r.findFirstMatchIn(required("energy_bandpassname")).map(_.group(1).toInt).getOrElse(invalid("Missing SPHEREx detector identity"))
       if query.detector.exists(_ != detector) then Nil

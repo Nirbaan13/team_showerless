@@ -39,6 +39,31 @@ object GrpcSpec extends ZIOSpecDefault:
     jobs.get(id).flatMap(d => if d.chunks.nonEmpty then ZIO.succeed(d) else ZIO.sleep(10.millis) *> awaitDiscovered(jobs, id))
 
   def spec = suite("Native gRPC TCP adapter")(
+    test("deep preparation retains its survey through protobuf and durable storage") {
+      ZIO.scoped {
+        for
+          f <- fixture()
+          (_, repo, client) = f
+          wide <- client.prepareObservations(PrepareRequest(Some(query)))
+          deep <- client.prepareDeepObservations(PrepareRequest(Some(query)))
+          stored <- repo.get(deep.id)
+          fetched <- client.getDownload(DownloadRequest(deep.id))
+        yield assertTrue(wide.id != deep.id, deep.query.exists(_.deep), fetched.query.exists(_.deep), stored.query.deep,
+          !wide.query.exists(_.deep))
+      }
+    },
+    test("optional archive details services report explicit unavailable statuses when unconfigured") {
+      ZIO.scoped {
+        for
+          f <- fixture()
+          (_, _, client) = f
+          meta <- client.getObservationMetadata(ObservationMetadataRequest("missing")).either
+          equipment <- client.getEquipment(EquipmentRequest()).either
+          file <- client.getCalibrationFile(CalibrationFileRequest("missing")).runCollect.either
+        yield assertTrue(status(meta, Status.Code.UNAVAILABLE), status(equipment, Status.Code.UNAVAILABLE),
+          status(file, Status.Code.UNAVAILABLE))
+      }
+    },
     test("serves revision and typed observations over a real ephemeral TCP port") {
       ZIO.scoped {
         for
