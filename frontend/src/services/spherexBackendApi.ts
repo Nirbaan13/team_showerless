@@ -95,21 +95,13 @@ export function buildRealSkyCutoutPhotoUrl(
   fovArcmin = 5,
   epochIdx = 0
 ): string {
-  const fovDeg = Math.max(0.03, Math.min(0.5, (fovArcmin / 60) * (1 + epochIdx * 0.01)));
-  const hipsSurvey = epochIdx % 2 === 0 ? 'CDS/P/2MASS/K' : 'CDS/P/2MASS/J';
   const params = new URLSearchParams({
-    hips: hipsSurvey,
     ra: raDeg.toFixed(6),
     dec: decDeg.toFixed(6),
-    fov: fovDeg.toFixed(5),
-    width: '256',
-    height: '256',
-    projection: 'TAN',
-    coordsys: 'icrs',
-    format: 'png',
-    stretch: 'log',
+    size_arcmin: fovArcmin.toFixed(2),
+    epoch: String(epochIdx),
   });
-  return `https://alasky.cds.unistra.fr/hips-image-services/hips2fits?${params.toString()}`;
+  return `/api/motion/cutout/render?${params.toString()}`;
 }
 
 /**

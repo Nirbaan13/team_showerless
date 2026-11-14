@@ -9,6 +9,9 @@ import {
   REAL_3I_ATLAS_FRAMES,
   REAL_BARNARD_FRAMES,
   REAL_WISE_0855_FRAMES,
+  REAL_EPSILON_INDI_B_FRAMES,
+  REAL_RW_AURIGAE_FRAMES,
+  REAL_R_DRACONIS_FRAMES,
 } from './realSpherexFrames';
 import {
   getPrecomputedReviewById,
@@ -193,6 +196,72 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
         airmass: 1.12,
         zodiBrightnessMjySr: Number((16.8 + idx * 0.9).toFixed(2)),
         snrEstimated: 16.2,
+      },
+    }));
+  }
+
+  if (targetId === 'epsilon-indi-b') {
+    return REAL_EPSILON_INDI_B_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 3,
+      wavelengthMinUm: 1.64,
+      wavelengthMaxUm: 2.42,
+      channelIndex: 44,
+      flaggedPixelPercentage: 0.15,
+      cosmicRayHits: 9,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.18,
+        zodiBrightnessMjySr: Number((13.5 + idx * 0.8).toFixed(2)),
+        snrEstimated: 24.5,
+      },
+    }));
+  }
+
+  if (targetId === 'rw-aurigae') {
+    return REAL_RW_AURIGAE_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 4,
+      wavelengthMinUm: 2.42,
+      wavelengthMaxUm: 3.82,
+      channelIndex: 62,
+      flaggedPixelPercentage: 0.20,
+      cosmicRayHits: 12,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.08,
+        zodiBrightnessMjySr: Number((15.2 + idx * 0.7).toFixed(2)),
+        snrEstimated: 32.0,
+      },
+    }));
+  }
+
+  if (targetId === 'r-draconis') {
+    return REAL_R_DRACONIS_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 6,
+      wavelengthMinUm: 4.42,
+      wavelengthMaxUm: 5.00,
+      channelIndex: 96,
+      flaggedPixelPercentage: 0.25,
+      cosmicRayHits: 15,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.25,
+        zodiBrightnessMjySr: Number((18.4 + idx * 1.1).toFixed(2)),
+        snrEstimated: 28.5,
       },
     }));
   }
