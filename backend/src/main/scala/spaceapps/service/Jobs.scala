@@ -104,7 +104,8 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
       _ <- repository.remember(images)
       record <- repository.update(id, "job.updated") { current =>
         val chunks = images.map { image =>
-          val cid = Hash.sha256(s"$id|${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}").take(40)
+          val cid = current.download.chunks.find(_.frame_id == image.observation.frame_id).map(_.id)
+            .getOrElse(Hash.sha256(s"$id|${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}").take(40))
           val status = if image.observation.is_available then "pending" else "unavailable"
           val previewStatus = if processor.supportsPreview then status else "unavailable"
           Chunk(cid, image.observation.frame_id, status, previewStatus, s"/api/chunks/$cid/preview", s"/api/chunks/$cid")

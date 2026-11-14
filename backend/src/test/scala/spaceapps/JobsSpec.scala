@@ -31,6 +31,22 @@ object JobsSpec extends ZIOSpecDefault:
     jobs.get(id).flatMap(d => if d.terminal then ZIO.succeed(d) else Live.live(ZIO.sleep(20.millis)) *> awaitDone(jobs, id))
 
   def spec = suite("Durable jobs")(
+    test("an interrupted full-frame job keeps its already promised chunk URL when recovering as a cutout") {
+      ZIO.scoped { for
+        dir <- temp
+        repo <- Repository.open(dir.resolve("jobs.db"))
+        accepted <- repo.accept(query,"default",None,32)
+        promised=spaceapps.domain.Chunk("promised-before-upgrade",image.observation.frame_id,"pending","unavailable","/api/chunks/promised-before-upgrade/preview","/api/chunks/promised-before-upgrade")
+        _ <- repo.update(accepted.id,"job.updated")(r=>r.copy(images=List(image),download=r.download.copy(status="preparing",chunks=List(promised),progress=Progress(true,1))))
+        source=new Archive:
+          def search(q:Query)=ZIO.fail(ApiError("unexpected_search","Stored discovery must be recovered"))
+          override def select(i:ArchiveImage,q:Query)=ZIO.succeed(i.copy(accessUrl=i.accessUrl+"?center=1,2deg&size=0.1deg",sourceUrl=Some(i.accessUrl)))
+          def fetch(i:ArchiveImage,out:Path)=write(out,"recovered subset")
+        jobs <- Jobs.make(repo,source,NoProcessing,dir)
+        done <- awaitDone(jobs,accepted.id)
+        originalUrl <- jobs.resource(promised.id,false).either
+      yield assertTrue(done.status=="completed",done.chunks.head.id==promised.id,originalUrl.toOption.exists(_.isInstanceOf[Resource.Ready])) }
+    },
     test("cutout requests replace legacy full-frame dedup entries while old resource URLs stay readable") {
       ZIO.scoped {
         for

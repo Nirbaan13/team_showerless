@@ -59,7 +59,7 @@ These direct research sizes differ from the deliberately enclosing square used
 by the backend.
 
 Final local regression after merging the latest ML and migration changes:
-`./sbtw test stage` passed 129 tests with zero failures and one optional live
+`./sbtw test stage` passed 130 tests with zero failures and one optional live
 test ignored. Running `IRSA_CUTOUT_LIVE=1 ./sbtw 'testOnly
 spaceapps.IrsaCutoutsLiveSpec'` separately passed against the documented QR3
 product: the actual Scala adapter returned a 4,034,880-byte valid MEF containing
@@ -70,5 +70,8 @@ The live test uses a known product URL to isolate retrieval from discovery. A
 separate full SIA-to-job attempt was accepted with HTTP 202 but failed explicitly
 with `archive_timeout` while querying IRSA metadata. It did not transfer a full
 image or fabricate a result. This external discovery availability issue remains
-independent of the verified cutout transport. Whitespace, shell syntax and YAML
+independent of the verified cutout transport. A separate red/green recovery
+regression verifies that an interrupted legacy job retains already-issued chunk
+URLs when its parent products are selected as cutouts during recovery.
+Whitespace, shell syntax and YAML
 checks passed; independent code review found no blocking issues.
