@@ -72,10 +72,10 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 4. Python IRSA Cutout Worker (Astroquery / NASA IRSA SIA)
+  # 4. Python IRSA Cutout Worker (Astroquery / NASA IRSA SIA Pipeline)
   cutout-worker:
     build:
-      context: ./backend/app/spherex
+      context: ./pipeline
       dockerfile: Dockerfile
     image: ${CUTOUT_IMAGE:-spaceapps-cutout:latest}
     restart: unless-stopped
