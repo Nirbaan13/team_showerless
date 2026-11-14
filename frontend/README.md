@@ -1,32 +1,37 @@
-# React + TypeScript + Vite
+# Running the SPHEREx Sky-Viewer Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This frontend is a modern React + TypeScript + Vite web app built with Tailwind CSS.
 
-Currently, two official plugins are available:
+## 🚀 Run in 1 Command (Anyone on the team or GitHub)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+From the root of the repository:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Then open `http://localhost:5173` in your browser.
+
+---
+
+## 📦 Production Build
+
+To produce an optimized production bundle:
+
+```bash
+cd frontend
+npm run build
+npm run preview
+```
+
+---
+
+## 🌌 Core Features
+
+1. **Top Bar**: NASA test presets (Barnard's Star, WISE 0855, Epsilon Indi B, etc.), direct URL synchronization, and iframe embed snippet generator.
+2. **Left Panel**: RA/Dec inputs, FOV size selector with estimated IRSA data transfer size, detector array selector (Bands 1–6), background subtraction modes, and catalog overlays (Gaia DR3, WISE, Asteroids).
+3. **Center Viewport**: WorldWideTelescope-inspired celestial canvas with mouse pan/zoom, live cursor coordinates (HMS/DMS), and reticle overlays.
+4. **Blink Timeline**: Multi-epoch playback with FPS controls and resilient skip handling for offline detector array frames.
+5. **Right Drawer**: Data health telemetry (% flagged pixels, cosmic rays), 102-band continuous spectrum plot ($0.75 - 5.00\,\mu\text{m}$) with molecular absorption lines ($H_2O, CO_2, CO$), and 1-click citizen science triage.
