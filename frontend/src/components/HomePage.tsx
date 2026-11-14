@@ -41,7 +41,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className="relative flex-1 flex flex-col items-center justify-center text-paper-100 p-6 md:p-12 select-none overflow-y-auto">
+    <div className="relative flex-1 w-full h-[calc(100vh-3rem)] overflow-y-auto overscroll-y-contain text-paper-100 px-4 py-6 sm:py-12 md:p-12 select-none flex flex-col items-center">
       {/* Wide space photo background */}
       <div
         aria-hidden
@@ -50,9 +50,9 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#0a0a0e]/90" />
 
-      <div className="relative w-full max-w-4xl flex flex-col items-center text-center space-y-8 my-auto">
+      <div className="relative w-full max-w-4xl flex flex-col items-center text-center space-y-6 sm:space-y-8 my-auto min-h-min py-4 pb-24 sm:pb-8">
         {/* Big Prominent Name with cinematic reveal & pulse glow */}
-        <h1 className="anim-hero-title text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] select-none">
+        <h1 className="anim-hero-title text-5xl sm:text-7xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] select-none">
           SPHEREx
           <br />
           <span className="text-emerald-400 anim-blink-glow inline-block">Blink</span>

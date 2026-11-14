@@ -657,10 +657,24 @@ export function App() {
           <div
             className={`${
               mobileViewerPane === 'controls'
-                ? 'fixed inset-x-0 top-12 bottom-12 z-30 flex flex-col bg-paper-950'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
                 : 'hidden md:flex'
             }`}
           >
+            {/* Mobile Header Bar for Settings */}
+            <div className="flex md:hidden items-center justify-between px-3.5 py-2.5 bg-paper-900 border-b border-paper-800 shrink-0">
+              <div className="flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
+                <Sliders className="w-4 h-4" />
+                <span>Sky Viewer Settings & Calibration</span>
+              </div>
+              <button
+                onClick={() => setMobileViewerPane('canvas')}
+                className="btn-tactile px-3 py-1 rounded-lg border-2 border-black bg-emerald-400 text-gray-950 font-mono text-xs font-bold flex items-center gap-1 cursor-pointer"
+              >
+                <span>✕ Close & Return</span>
+              </button>
+            </div>
+
             <LeftControlPanel
               ra={ra}
               dec={dec}
@@ -691,6 +705,30 @@ export function App() {
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}
           >
+            {/* Floating Mobile Side Button: Settings (Left Side) */}
+            <div className="md:hidden absolute top-14 left-2.5 z-30 pointer-events-auto">
+              <button
+                onClick={() => setMobileViewerPane('controls')}
+                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
+                title="Change Sky Viewer Settings (FOV, Detector Bands, Overlays, Coordinates)"
+              >
+                <Sliders className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Settings</span>
+              </button>
+            </div>
+
+            {/* Floating Mobile Side Button: Triage (Right Side) */}
+            <div className="md:hidden absolute top-14 right-2.5 z-30 pointer-events-auto">
+              <button
+                onClick={() => setMobileViewerPane('telemetry')}
+                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
+                title="Open Candidate Triage & Classification"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Triage</span>
+              </button>
+            </div>
+
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -725,10 +763,24 @@ export function App() {
           <div
             className={`${
               mobileViewerPane === 'telemetry'
-                ? 'fixed inset-x-0 top-12 bottom-12 z-30 flex flex-col bg-paper-950'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
                 : 'hidden lg:flex'
             }`}
           >
+            {/* Mobile Header Bar for Triage */}
+            <div className="flex md:hidden items-center justify-between px-3.5 py-2.5 bg-paper-900 border-b border-paper-800 shrink-0">
+              <div className="flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
+                <Sparkles className="w-4 h-4" />
+                <span>Candidate Triage & AI Telemetry</span>
+              </div>
+              <button
+                onClick={() => setMobileViewerPane('canvas')}
+                className="btn-tactile px-3 py-1 rounded-lg border-2 border-black bg-emerald-400 text-gray-950 font-mono text-xs font-bold flex items-center gap-1 cursor-pointer"
+              >
+                <span>✕ Close & Return</span>
+              </button>
+            </div>
+
             <RightDrawer
               frames={frames}
               activeFrameIndex={activeFrameIndex}
