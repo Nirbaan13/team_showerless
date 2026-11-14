@@ -6,7 +6,7 @@ from astropy.io import fits
 from astropy.table import Table
 from astroquery.ipac.irsa import Irsa
 
-DEFAULT = "spherex_qr" #May change based on data, pls check
+DEFAULT = "spherex_dr1" #May change based on data, pls check
 
 def list_collections():
     tbl = Irsa.list_collections(servicetype = "SIA", filter ="spherex")
