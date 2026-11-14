@@ -30,7 +30,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
   onStepBackward,
 }) => {
   return (
-    <div className="h-16 bg-paper-900 border-t border-paper-800 px-4 flex items-center justify-between text-xs select-none z-20">
+    <div className="h-16 bg-paper-900 border-t border-paper-800 px-2 sm:px-4 flex items-center justify-between text-xs select-none z-20 overflow-x-auto gap-2">
       {/* 1. Playback Engine Controls */}
       <div className="flex items-center space-x-1.5 shrink-0">
         <button
@@ -125,7 +125,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
       </div>
 
       {/* 3. FPS Speed Control */}
-      <div className="flex items-center space-x-2 shrink-0">
+      <div className="hidden sm:flex items-center space-x-2 shrink-0">
         <div className="flex items-center gap-1.5 bg-paper-950 border border-paper-800 px-2.5 py-1 rounded">
           <FastForward className="w-3 h-3 text-paper-400" />
           <span className="text-[10px] font-mono text-paper-400">Speed:</span>

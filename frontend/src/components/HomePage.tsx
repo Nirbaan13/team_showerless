@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import type { TargetPreset, VerificationSetting } from '../types/spherex';
+import type { TargetPreset } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
-import { VerifyScientistPanel } from './VerifyScientistPanel';
-import { ArrowRight, Compass } from 'lucide-react';
+import { ArrowRight, Compass, UserCheck } from 'lucide-react';
 
 interface HomePageProps {
   onSearchCoordinates: (ra: number, dec: number) => void;
   onSelectPreset: (preset: TargetPreset) => void;
-  onSelectVerificationTarget?: (setting: VerificationSetting) => void;
+  onOpenFeed?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onSearchCoordinates,
   onSelectPreset,
-  onSelectVerificationTarget,
+  onOpenFeed,
 }) => {
   const [raInput, setRaInput] = useState('');
   const [decInput, setDecInput] = useState('');
@@ -42,7 +41,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className="relative flex-1 flex flex-col items-center justify-center text-paper-100 p-6 md:p-12 select-none overflow-y-auto">
+    <div className="relative flex-1 w-full h-[calc(100vh-3rem)] overflow-y-auto overscroll-y-contain text-paper-100 px-4 py-6 sm:py-12 md:p-12 select-none flex flex-col items-center">
       {/* Wide space photo background */}
       <div
         aria-hidden
@@ -51,9 +50,9 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
       <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#0a0a0e]/90" />
 
-      <div className="relative w-full max-w-4xl flex flex-col items-center text-center space-y-8 my-auto">
+      <div className="relative w-full max-w-4xl flex flex-col items-center text-center space-y-6 sm:space-y-8 my-auto min-h-min py-4 pb-24 sm:pb-8">
         {/* Big Prominent Name with cinematic reveal & pulse glow */}
-        <h1 className="anim-hero-title text-6xl sm:text-8xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] select-none">
+        <h1 className="anim-hero-title text-5xl sm:text-7xl md:text-9xl font-bold tracking-tight text-white font-sans leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] select-none">
           SPHEREx
           <br />
           <span className="text-emerald-400 anim-blink-glow inline-block">Blink</span>
@@ -116,10 +115,17 @@ export const HomePage: React.FC<HomePageProps> = ({
           ))}
         </div>
 
-        {/* Scientist & Community Object Verification Feed */}
-        {onSelectVerificationTarget && (
-          <div className="w-full anim-fall pt-4" style={{ animationDelay: '300ms' }}>
-            <VerifyScientistPanel onSelectVerificationTarget={onSelectVerificationTarget} />
+        {/* Dedicated Sky Blue Button: Community Verification Feed */}
+        {onOpenFeed && (
+          <div className="anim-fall pt-1" style={{ animationDelay: '280ms' }}>
+            <button
+              onClick={onOpenFeed}
+              className="btn-tactile px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-gray-950 border-2 border-black font-mono text-xs font-bold flex items-center gap-2 group cursor-pointer shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all"
+            >
+              <UserCheck className="w-4 h-4 stroke-[2.5] text-gray-950 group-hover:scale-110 transition-transform" />
+              <span>Community Verification Feed</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] text-gray-950" />
+            </button>
           </div>
         )}
       </div>

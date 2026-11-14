@@ -23,6 +23,7 @@ interface LeftControlPanelProps {
     source: 'live' | 'fallback' | 'preset';
     message: string;
   };
+  className?: string;
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -41,6 +42,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onToggleOverlay,
   viewMode = 'volunteer',
   searchStatus,
+  className = '',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
@@ -60,7 +62,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20">
+    <aside className={`w-full md:w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-full md:h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20 ${className}`}>
       {/* 1. Target Query */}
       <div className="p-3 border-b border-paper-800">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">

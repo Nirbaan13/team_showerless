@@ -72,7 +72,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
   };
 
   return (
-    <div className={`w-full ${isCompact ? 'p-3' : 'max-w-4xl p-4 sm:p-6'} bg-paper-900/90 rounded-2xl border-2 border-black card-tactile space-y-4`}>
+    <div className={`w-full ${isCompact ? 'p-3' : 'max-w-4xl p-3 sm:p-6'} bg-paper-900/90 rounded-2xl border-2 border-black card-tactile space-y-4`}>
       {/* Panel Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-paper-800 pb-3">
         <div>
@@ -88,22 +88,22 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center gap-2">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <div className="relative flex-1 sm:flex-none">
             <Search className="w-3 h-3 text-paper-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search objects or notes..."
-              className="bg-paper-950 border border-paper-800 rounded-lg pl-7 pr-2 py-1 text-[11px] font-mono text-paper-200 focus:outline-none focus:border-emerald-400 w-36 sm:w-44"
+              className="w-full sm:w-44 bg-paper-950 border border-paper-800 rounded-lg pl-7 pr-2 py-1 text-[11px] font-mono text-paper-200 focus:outline-none focus:border-emerald-400"
             />
           </div>
 
           <select
             value={filterVote}
             onChange={(e) => setFilterVote(e.target.value)}
-            className="bg-paper-950 border border-paper-800 rounded-lg px-2 py-1 text-[11px] font-mono text-paper-200 focus:outline-none cursor-pointer"
+            className="w-full sm:w-auto bg-paper-950 border border-paper-800 rounded-lg px-2.5 py-1 text-[11px] font-mono text-paper-200 focus:outline-none cursor-pointer"
           >
             <option value="all">All Discussions ({allComments.length})</option>
             <option value="confirm_motion">Confirmed Motion</option>
@@ -114,7 +114,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
       </div>
 
       {/* Verification Cards Feed */}
-      <div className={`grid ${isCompact ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'} gap-3 max-h-[460px] overflow-y-auto pr-1`}>
+      <div className={`grid ${isCompact ? 'grid-cols-1 max-h-[460px] overflow-y-auto' : 'grid-cols-1 md:grid-cols-2'} gap-3 pr-1`}>
         {filtered.map((item, idx) => {
           const setting = item.setting;
           if (!setting) return null;
