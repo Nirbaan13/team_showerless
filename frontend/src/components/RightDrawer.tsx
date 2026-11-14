@@ -58,15 +58,15 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   };
 
   return (
-    <aside className="w-96 bg-space-900/95 border-l border-space-700/80 flex flex-col h-[calc(100vh-3.5rem)] text-xs select-none z-20">
+    <aside className="w-80 bg-nasa-surface border-l border-nasa-border flex flex-col h-[calc(100vh-3rem)] text-xs select-none z-20">
       {/* Tab Navigation */}
-      <div className="flex border-b border-space-700/80 bg-space-950/60">
+      <div className="flex border-b border-nasa-border bg-nasa-dark">
         <button
           onClick={() => setActiveTab('triage')}
-          className={`flex-1 py-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
+          className={`flex-1 py-2 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
             activeTab === 'triage'
-              ? 'border-cyan-400 text-cyan-300 bg-space-900'
-              : 'border-transparent text-space-400 hover:text-space-200'
+              ? 'border-blue-500 text-blue-200 bg-nasa-surface'
+              : 'border-transparent text-nasa-textMuted hover:text-nasa-textMain'
           }`}
         >
           <CheckCircle className="w-3.5 h-3.5" />
@@ -75,94 +75,91 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
         <button
           onClick={() => setActiveTab('spectrum')}
-          className={`flex-1 py-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
+          className={`flex-1 py-2 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
             activeTab === 'spectrum'
-              ? 'border-cyan-400 text-cyan-300 bg-space-900'
-              : 'border-transparent text-space-400 hover:text-space-200'
+              ? 'border-blue-500 text-blue-200 bg-nasa-surface'
+              : 'border-transparent text-nasa-textMuted hover:text-nasa-textMain'
           }`}
         >
           <Radio className="w-3.5 h-3.5" />
-          <span>102-Band Spectra</span>
+          <span>102 Bands</span>
         </button>
 
         <button
           onClick={() => setActiveTab('health')}
-          className={`flex-1 py-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
+          className={`flex-1 py-2 font-mono text-[11px] font-medium border-b-2 flex items-center justify-center gap-1.5 transition-colors ${
             activeTab === 'health'
-              ? 'border-cyan-400 text-cyan-300 bg-space-900'
-              : 'border-transparent text-space-400 hover:text-space-200'
+              ? 'border-blue-500 text-blue-200 bg-nasa-surface'
+              : 'border-transparent text-nasa-textMuted hover:text-nasa-textMain'
           }`}
         >
           <Activity className="w-3.5 h-3.5" />
-          <span>Data Health</span>
+          <span>FITS Health</span>
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {/* TAB 1: CITIZEN SCIENCE TRIAGE */}
         {activeTab === 'triage' && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-telemetry text-space-100 font-semibold text-[11px] uppercase tracking-wider">
-                  Target Inspection
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="font-semibold text-nasa-textMain uppercase tracking-wider text-[11px]">
+                  Object Inspection
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400">
-                  {candidate ? candidate.id : 'No Target Selected'}
+                <span className="text-[10px] font-mono text-blue-400">
+                  {candidate ? candidate.id : 'None'}
                 </span>
               </div>
-              <p className="text-[11px] text-space-400 leading-relaxed font-sans">
-                Review candidate motion across SPHEREx epochs. Confirm or dismiss based on motion consistency and catalog cross-matches.
+              <p className="text-[11px] text-nasa-textMuted leading-normal">
+                Classify candidate motion between SPHEREx observation epochs.
               </p>
             </div>
 
             {candidate ? (
-              <div className="space-y-3.5">
-                {/* Catalog Match Pill */}
+              <div className="space-y-2.5">
+                {/* Catalog Cross-match Info */}
                 {candidate.isKnownCatalogMatch && (
-                  <div className="p-2.5 rounded bg-space-950 border border-space-700/80 flex items-start gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 mt-1 shrink-0" />
-                    <div>
-                      <div className="font-mono text-[11px] text-emerald-300 font-medium">
-                        Catalog Cross-Match: {candidate.matchedCatalog}
-                      </div>
-                      <div className="text-[10px] font-mono text-space-400">
-                        ID: {candidate.catalogId || 'N/A'}
-                      </div>
-                      {candidate.properMotionMasYr && (
-                        <div className="text-[10px] font-mono text-space-400">
-                          μ_RA: {candidate.properMotionMasYr.pmRa} mas/yr | μ_Dec: {candidate.properMotionMasYr.pmDec} mas/yr
-                        </div>
-                      )}
+                  <div className="p-2 rounded bg-nasa-dark border border-nasa-border">
+                    <div className="font-mono text-[11px] text-emerald-400 font-medium">
+                      Matched: {candidate.matchedCatalog}
                     </div>
+                    <div className="text-[10px] font-mono text-nasa-textMuted">
+                      {candidate.catalogId || 'N/A'}
+                    </div>
+                    {candidate.properMotionMasYr && (
+                      <div className="text-[10px] font-mono text-nasa-textMuted">
+                        pmRA: {candidate.properMotionMasYr.pmRa} mas/yr | pmDec: {candidate.properMotionMasYr.pmDec} mas/yr
+                      </div>
+                    )}
                   </div>
                 )}
 
-                {/* 1-Click Classification Buttons (Zooniverse Backyard Worlds Style) */}
+                {/* 1-Click Classification Buttons */}
                 <div>
-                  <label className="text-[10px] font-mono text-space-400 block mb-1.5 uppercase">
-                    Discovery Classification
+                  <label className="text-[10px] font-mono text-nasa-textMuted block mb-1 uppercase">
+                    Classification
                   </label>
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <div className="grid grid-cols-2 gap-1">
                     {[
-                      { id: 'moving_object', label: 'Moving Object', desc: 'Proper motion dipoles' },
-                      { id: 'transient', label: 'Transient / Flare', desc: 'Single epoch flux burst' },
-                      { id: 'already_known', label: 'Already Known', desc: 'Verified catalog match' },
-                      { id: 'artifact', label: 'Artifact / Noise', desc: 'Bad pixel / cosmic ray' },
+                      { id: 'moving_object', label: 'Moving Object', desc: 'Proper motion dipole' },
+                      { id: 'transient', label: 'Transient / Flare', desc: 'Episodic flux burst' },
+                      { id: 'already_known', label: 'Already Known', desc: 'Catalog verified' },
+                      { id: 'artifact', label: 'Artifact', desc: 'Bad pixel / cosmic ray' },
                     ].map((item) => {
                       const isSelected = selectedClass === item.id;
                       return (
                         <button
                           key={item.id}
                           onClick={() => setSelectedClass(item.id as CandidateClassification)}
-                          className={`p-2 rounded border text-left transition-all ${
+                          className={`p-1.5 rounded border text-left transition-colors ${
                             isSelected
-                              ? 'bg-cyan-950/70 border-cyan-400 text-cyan-200 shadow-[0_0_8px_rgba(0,242,254,0.2)]'
-                              : 'bg-space-950 border-space-700/80 text-space-300 hover:border-space-600'
+                              ? 'bg-blue-900/50 border-blue-500 text-blue-100 font-medium'
+                              : 'bg-nasa-dark border-nasa-border text-nasa-textMuted hover:border-nasa-subtle'
                           }`}
                         >
-                          <div className="font-mono text-[11px] font-semibold">{item.label}</div>
-                          <div className="text-[9px] text-space-400 font-sans">{item.desc}</div>
+                          <div className="font-mono text-[11px]">{item.label}</div>
+                          <div className="text-[9px] text-nasa-textMuted">{item.desc}</div>
                         </button>
                       );
                     })}
@@ -171,18 +168,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
                 {/* Confidence Level */}
                 <div>
-                  <label className="text-[10px] font-mono text-space-400 block mb-1.5 uppercase">
-                    Confidence Level
+                  <label className="text-[10px] font-mono text-nasa-textMuted block mb-1 uppercase">
+                    Confidence
                   </label>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-3 gap-1">
                     {(['low', 'medium', 'high'] as ConfidenceLevel[]).map((lvl) => (
                       <button
                         key={lvl}
                         onClick={() => setSelectedConfidence(lvl)}
-                        className={`py-1 rounded font-mono text-[11px] uppercase border transition-all ${
+                        className={`py-1 rounded font-mono text-[10px] uppercase border transition-colors ${
                           selectedConfidence === lvl
-                            ? 'bg-cyan-950 border-cyan-400 text-cyan-300 font-bold'
-                            : 'bg-space-950 border-space-700 text-space-400 hover:text-space-200'
+                            ? 'bg-blue-900/60 border-blue-500 text-blue-200 font-semibold'
+                            : 'bg-nasa-dark border-nasa-border text-nasa-textMuted hover:text-nasa-textMain'
                         }`}
                       >
                         {lvl}
@@ -193,33 +190,33 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
                 {/* Notes Input */}
                 <div>
-                  <label className="text-[10px] font-mono text-space-400 block mb-1 uppercase">
-                    Observer Log / Rationale
+                  <label className="text-[10px] font-mono text-nasa-textMuted block mb-1 uppercase">
+                    Observation Notes
                   </label>
                   <textarea
-                    rows={3}
+                    rows={2}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Enter observation rationale, PSF anomaly notes, or motion characteristics..."
-                    className="w-full bg-space-950 border border-space-700 rounded p-2 font-mono text-[11px] text-space-200 focus:outline-none focus:border-cyan-400 resize-none"
+                    placeholder="Enter observation notes or PSF characteristics..."
+                    className="w-full bg-nasa-dark border border-nasa-border rounded p-1.5 font-mono text-[11px] text-nasa-textMain focus:outline-none focus:border-blue-500 resize-none"
                   />
                 </div>
 
-                {/* Save Confirmation Button */}
+                {/* Submit Button */}
                 <button
                   onClick={handleSaveTriage}
-                  className="w-full py-2 bg-cyan-950 border border-cyan-400 text-cyan-300 hover:bg-cyan-900 rounded font-mono text-xs font-semibold shadow-[0_0_12px_rgba(0,242,254,0.2)] transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-1.5 bg-nasa-blue text-white hover:bg-blue-600 rounded font-mono text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
                 >
                   <CheckCircle className="w-3.5 h-3.5" />
-                  <span>{isSaved ? 'Classification Recorded ✓' : 'Submit Candidate Triage'}</span>
+                  <span>{isSaved ? 'Recorded ✓' : 'Save Classification'}</span>
                 </button>
               </div>
             ) : (
-              <div className="p-6 rounded border border-dashed border-space-700 text-center space-y-2">
-                <HelpCircle className="w-8 h-8 text-space-600 mx-auto" />
-                <div className="font-mono text-xs text-space-300">No Candidate Selected</div>
-                <p className="text-[10px] text-space-500 font-sans">
-                  Click any object in the celestial canvas to inspect its multi-epoch motion vectors and classify it.
+              <div className="p-4 rounded border border-dashed border-nasa-border text-center space-y-1">
+                <HelpCircle className="w-6 h-6 text-nasa-textMuted mx-auto" />
+                <div className="font-mono text-xs text-nasa-textMuted">No Target Selected</div>
+                <p className="text-[10px] text-nasa-textMuted">
+                  Click any object in the viewport to classify it.
                 </p>
               </div>
             )}
@@ -228,13 +225,13 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
         {/* TAB 2: 102-BAND SPECTRUM */}
         {activeTab === 'spectrum' && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div>
-              <div className="font-telemetry text-space-100 font-semibold text-[11px] uppercase tracking-wider mb-1">
+              <span className="font-semibold text-nasa-textMain uppercase tracking-wider text-[11px] block mb-0.5">
                 Spectral Decomposition
-              </div>
-              <p className="text-[11px] text-space-400 leading-relaxed font-sans">
-                Full 0.75 – 5.00 µm continuous spectrophotometry resolved across SPHEREx's 102 linear-variable filter (LVF) channels.
+              </span>
+              <p className="text-[11px] text-nasa-textMuted">
+                Calibrated 0.75 – 5.00 µm spectrophotometry across 102 channels.
               </p>
             </div>
 
@@ -243,34 +240,31 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
               objectLabel={candidate?.matchedCatalog || candidate?.id || "Target"}
             />
 
-            {/* Material Classification Badge */}
-            <div className="p-3 rounded bg-space-950 border border-space-700/80 space-y-2">
-              <div className="font-mono text-[11px] font-semibold text-cyan-300 flex items-center justify-between">
-                <span>Spectroscopic Signature</span>
-                <span className="text-[10px] bg-cyan-950 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/30">
-                  Model Fit: 94.2%
-                </span>
+            <div className="p-2.5 rounded bg-nasa-dark border border-nasa-border space-y-1">
+              <div className="font-mono text-[11px] font-medium text-blue-300 flex items-center justify-between">
+                <span>Atmospheric Signature</span>
+                <span className="text-[10px] text-nasa-textMuted">Fit: 94.2%</span>
               </div>
-              <p className="text-[10px] font-sans text-space-300 leading-relaxed">
-                Strong 3.05 µm water-ice feature depression and 4.27 µm carbon dioxide absorption signature consistent with cold sub-stellar atmosphere (T_eff ≈ 280 K).
+              <p className="text-[10px] text-nasa-textMuted leading-relaxed">
+                Depression at 3.05 µm (H₂O) and 4.27 µm (CO₂) consistent with cold sub-stellar atmosphere.
               </p>
             </div>
           </div>
         )}
 
-        {/* TAB 3: DATA HEALTH SEQUENCE */}
+        {/* TAB 3: DATA HEALTH */}
         {activeTab === 'health' && (
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div>
-              <div className="font-telemetry text-space-100 font-semibold text-[11px] uppercase tracking-wider mb-1">
-                Epoch Sequence Telemetry
-              </div>
-              <p className="text-[11px] text-space-400 leading-relaxed font-sans">
-                FITS exposure data health, bad pixel flagging, and cosmic ray identification per epoch.
+              <span className="font-semibold text-nasa-textMain uppercase tracking-wider text-[11px] block mb-0.5">
+                FITS Frame Telemetry
+              </span>
+              <p className="text-[11px] text-nasa-textMuted">
+                Exposure metadata, flagged pixels, and cosmic ray identification.
               </p>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {frames.map((f, idx) => {
                 const isActive = idx === activeFrameIndex;
                 const isSkipped = !f.isAvailable;
@@ -279,20 +273,20 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                   <div
                     key={f.frameId}
                     onClick={() => f.isAvailable && onSelectFrame(idx)}
-                    className={`p-2.5 rounded border transition-all ${
+                    className={`p-2 rounded border transition-colors ${
                       isSkipped
-                        ? 'bg-red-950/20 border-red-500/40 text-red-300/80 cursor-not-allowed'
+                        ? 'bg-red-950/20 border-red-900/50 text-red-300/80 cursor-not-allowed'
                         : isActive
-                        ? 'bg-space-800 border-cyan-400 text-space-100 shadow-[0_0_8px_rgba(0,242,254,0.15)] cursor-pointer'
-                        : 'bg-space-950 border-space-700/80 text-space-300 hover:border-space-600 cursor-pointer'
+                        ? 'bg-nasa-dark border-blue-500 text-nasa-textMain cursor-pointer'
+                        : 'bg-nasa-dark/60 border-nasa-border text-nasa-textMuted hover:border-nasa-subtle cursor-pointer'
                     }`}
                   >
                     <div className="flex items-center justify-between font-mono text-[11px]">
-                      <div className="flex items-center gap-1.5 font-semibold">
-                        <span className={`w-1.5 h-1.5 rounded-full ${isSkipped ? 'bg-red-400' : 'bg-cyan-400'}`} />
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <span className={`w-1.5 h-1.5 rounded-full ${isSkipped ? 'bg-red-500' : 'bg-blue-400'}`} />
                         <span>Epoch {f.epochIndex + 1} ({f.observationDate.split('T')[0]})</span>
                       </div>
-                      <span className="text-[10px] text-space-400">Band {f.detectorArray}</span>
+                      <span className="text-[10px] text-nasa-textMuted">Band {f.detectorArray}</span>
                     </div>
 
                     {isSkipped ? (
@@ -301,22 +295,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                         <span>{f.skipReason}</span>
                       </div>
                     ) : (
-                      <div className="mt-1.5 grid grid-cols-2 gap-2 text-[10px] font-mono text-space-400">
-                        <div>
-                          Flagged Pixels:{' '}
-                          <span className={f.flaggedPixelPercentage > 1.0 ? 'text-amber-400' : 'text-space-200'}>
-                            {f.flaggedPixelPercentage}%
-                          </span>
-                        </div>
-                        <div>
-                          CR Hits: <span className="text-space-200">{f.cosmicRayHits}</span>
-                        </div>
-                        <div>
-                          Exp Time: <span className="text-space-200">{f.headerMetadata.exposureTimeSec}s</span>
-                        </div>
-                        <div>
-                          SNR (est): <span className="text-cyan-400">{f.headerMetadata.snrEstimated}</span>
-                        </div>
+                      <div className="mt-1 grid grid-cols-2 gap-1.5 text-[10px] font-mono text-nasa-textMuted">
+                        <div>Flagged: {f.flaggedPixelPercentage}%</div>
+                        <div>CR Hits: {f.cosmicRayHits}</div>
+                        <div>Exp: {f.headerMetadata.exposureTimeSec}s</div>
+                        <div>SNR: {f.headerMetadata.snrEstimated}</div>
                       </div>
                     )}
                   </div>

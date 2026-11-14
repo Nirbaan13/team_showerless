@@ -7,45 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        space: {
-          950: '#06070a',
-          900: '#090a0f',
-          850: '#0d1117',
-          800: '#161b22',
-          700: '#21262d',
-          600: '#30363d',
-          500: '#484f58',
-          400: '#8b949e',
-          300: '#c9d1d9',
-          200: '#e6edf3',
-          100: '#f0f6fc',
-        },
-        cyan: {
-          glow: '#00f2fe',
-        },
-        amber: {
-          glow: '#f59e0b',
+        nasa: {
+          blue: '#1d4ed8',     // NASA Deep Mission Blue
+          lightBlue: '#3b82f6',
+          dark: '#0b0f19',     // Slate scientific background
+          surface: '#111827',  // Neutral panel surface
+          border: '#1f2937',   // Clean 1px border
+          subtle: '#374151',
+          textMuted: '#9ca3af',
+          textMain: '#f3f4f6',
         }
       },
       fontFamily: {
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'Menlo', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
       },
-      animation: {
-        'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'shimmer': 'shimmer 2s linear infinite',
-        'radar-sweep': 'radarSweep 4s linear infinite',
-      },
-      keyframes: {
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        },
-        radarSweep: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        }
-      }
     },
   },
   plugins: [],
