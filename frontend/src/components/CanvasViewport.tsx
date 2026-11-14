@@ -390,10 +390,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         <select
           value={colorMap}
           onChange={(e) => setColorMap(e.target.value as any)}
-          className="bg-paper-950 border border-paper-800 text-paper-300 text-[10px] font-mono rounded px-1.5 py-0.5 mr-1"
+          title="Colormap: Standard dark sky or inverted negative film (makes faint objects easier to see)"
+          className="bg-paper-950 border border-paper-800 text-paper-300 text-[10px] font-mono rounded px-1.5 py-0.5 mr-1 focus:outline-none focus:border-ochre-400"
         >
-          <option value="grayscale">Grayscale</option>
-          <option value="inverted">Inverted (Print)</option>
+          <option value="grayscale">Standard (Dark Sky)</option>
+          <option value="inverted">Negative (White Sky)</option>
         </select>
         <button
           onClick={() => setZoom((z) => Math.min(8.0, z * 1.25))}

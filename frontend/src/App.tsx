@@ -24,7 +24,7 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
-import { Compass, FileText, Search } from 'lucide-react';
+import { Compass, Home } from 'lucide-react';
 
 export function App() {
   // Opens on the clean Home page by default as requested
@@ -49,7 +49,6 @@ export function App() {
   });
 
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('cand-barnard-primary');
-  const [simulateLatency, setSimulateLatency] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
 
@@ -104,7 +103,7 @@ export function App() {
     setCurrentPresetId(null);
     setActiveTab('viewer');
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), simulateLatency ? 1800 : 500);
+    setTimeout(() => setIsLoading(false), 500);
   };
 
   // Handler when user clicks a benchmark preset on Home page
@@ -121,18 +120,12 @@ export function App() {
     }
     setActiveTab('viewer');
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), simulateLatency ? 1800 : 500);
+    setTimeout(() => setIsLoading(false), 500);
   };
 
   const handleRefreshCutout = () => {
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), simulateLatency ? 2000 : 500);
-  };
-
-  const handleToggleSimulateLatency = () => {
-    setSimulateLatency((prev) => !prev);
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 500);
   };
 
   const handleToggleOverlay = (key: keyof CatalogOverlayState) => {
@@ -189,41 +182,29 @@ export function App() {
               onClick={() => setActiveTab('home')}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
                 activeTab === 'home'
-                  ? 'bg-paper-800 text-paper-100 font-medium'
+                  ? 'bg-paper-800 text-ochre-300 font-semibold'
                   : 'text-paper-400 hover:text-paper-200'
               }`}
             >
-              <Search className="w-3.5 h-3.5" />
-              <span>Search</span>
+              <Home className="w-3.5 h-3.5" />
+              <span>Homepage</span>
             </button>
 
             <button
               onClick={() => setActiveTab('viewer')}
               className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
                 activeTab === 'viewer'
-                  ? 'bg-paper-800 text-paper-100 font-medium'
+                  ? 'bg-paper-800 text-ochre-300 font-semibold'
                   : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>Sky Viewport</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('report')}
-              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
-                activeTab === 'report'
-                  ? 'bg-paper-800 text-paper-100 font-medium'
-                  : 'text-paper-400 hover:text-paper-200'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Candidate Report</span>
+              <span>Sky Viewer</span>
             </button>
           </nav>
         </div>
 
-        {/* Global Toolbar */}
+        {/* Global Toolbar (Only active when in Sky Viewer) */}
         <TopNav
           ra={ra}
           dec={dec}
@@ -232,8 +213,6 @@ export function App() {
           subtractionMode={subtractionMode}
           activeFrameIndex={activeFrameIndex}
           onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
-          simulateLatency={simulateLatency}
-          onToggleSimulateLatency={handleToggleSimulateLatency}
           isViewerActive={activeTab === 'viewer'}
         />
       </header>
@@ -313,6 +292,7 @@ export function App() {
             candidate={activeCandidate}
             spectrumData={spectrumData}
             onUpdateCandidateClassification={handleUpdateCandidateClassification}
+            onOpenDiscoveryReport={() => setActiveTab('report')}
           />
         </div>
       )}

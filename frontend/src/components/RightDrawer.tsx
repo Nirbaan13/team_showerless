@@ -8,7 +8,7 @@ import type {
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
 import { CommunityVerificationStream } from './CommunityVerificationStream';
-import { CheckCircle, Radio, Activity, HelpCircle, MessageSquare, Maximize2, Minimize2 } from 'lucide-react';
+import { CheckCircle, Radio, Activity, HelpCircle, MessageSquare, Maximize2, Minimize2, FileText } from 'lucide-react';
 
 interface RightDrawerProps {
   frames: SpherexEpochFrame[];
@@ -23,6 +23,7 @@ interface RightDrawerProps {
     notes: string
   ) => void;
   onBroadcastToChat?: (text: string) => void;
+  onOpenDiscoveryReport?: () => void;
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
@@ -32,6 +33,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   candidate,
   spectrumData,
   onUpdateCandidateClassification,
+  onOpenDiscoveryReport,
 }) => {
   const [activeTab, setActiveTab] = useState<'triage' | 'spectrum' | 'community' | 'health'>('community');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -240,6 +242,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                   <CheckCircle className="w-3.5 h-3.5 text-ochre-600" />
                   <span>{isSaved ? 'Classification Recorded ✓' : 'Save Classification'}</span>
                 </button>
+
+                {/* View Full Candidate Discovery Report */}
+                {onOpenDiscoveryReport && (
+                  <button
+                    onClick={onOpenDiscoveryReport}
+                    className="w-full py-2 bg-paper-800 hover:bg-paper-750 border border-ochre-400 text-ochre-300 rounded-lg font-mono text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
+                    title="Open full scientific summary with 102-band spectrum plot, Gaia/WISE cross-check, and JSON export"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-ochre-400" />
+                    <span>View Candidate Discovery Report →</span>
+                  </button>
+                )}
 
                 {/* Clear Future Feature Badges */}
                 <div className="pt-2 border-t border-paper-800 space-y-1.5">
