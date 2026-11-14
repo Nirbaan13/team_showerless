@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import type { SpherexEpochFrame, CandidateObject, CatalogOverlayState, SubtractionMode } from '../types/spherex';
+import { getPriorityColors } from '../services/mlRanking';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-react';
 
 interface CanvasViewportProps {
@@ -40,6 +41,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
+  const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const [, setRepaintCount] = useState(0);
 
   // Smooth Zoom-in transition state when target changes
   const prevRaRef = useRef(centerRa);
@@ -187,7 +190,37 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.restore();
     }
 
-    if (!isDifferenceMode) {
+    const currentFrame = frames[activeFrameIndex];
+    let hasDrawnRealImage = false;
+
+    if (currentFrame?.imageDataUrl && !isDifferenceMode) {
+      let cachedImg = imgCacheRef.current.get(currentFrame.imageDataUrl);
+      if (!cachedImg) {
+        cachedImg = new Image();
+        cachedImg.src = currentFrame.imageDataUrl;
+        cachedImg.onload = () => {
+          setRepaintCount((c) => c + 1);
+        };
+        imgCacheRef.current.set(currentFrame.imageDataUrl, cachedImg);
+      }
+
+      if (cachedImg.complete && cachedImg.naturalWidth > 0) {
+        ctx.save();
+        ctx.imageSmoothingEnabled = false;
+        const aspect = cachedImg.naturalWidth / cachedImg.naturalHeight;
+        const imgW = 512;
+        const imgH = 512 / aspect;
+        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.88;
+        if (isWhiteBg) {
+          ctx.filter = 'invert(1)';
+        }
+        ctx.drawImage(cachedImg, -imgW / 2, -imgH / 2, imgW, imgH);
+        ctx.restore();
+        hasDrawnRealImage = true;
+      }
+    }
+
+    if (!isDifferenceMode && !hasDrawnRealImage) {
       staticStars.forEach((star) => {
         const grad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.mag * 3);
         if (isWhiteBg) {
@@ -206,13 +239,38 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       });
     }
 
-    // Candidate Point Spread Functions & Motion Track
-    candidates.forEach((cand) => {
+    // Helper to draw a regular hexagon covering pixel cluster
+    const drawHexagon = (hx: number, hy: number, radius: number) => {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const x = hx + radius * Math.cos(angle);
+        const y = hy + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+    };
+
+    // Helper to calculate canvas coordinates from image pixel coordinates
+    const getCanvasCoords = (x: number, y: number) => {
+      const isAtlasAspect = currentFrame?.detectorArray === 6 && y <= 144;
+      const cx = x * 2 - 256;
+      const cy = isAtlasAspect ? y * 2 - 144 : y * 2 - 256;
+      return { cx, cy };
+    };
+
+    // Candidate Point Spread Functions, Motion Track & Priority-Graded Red Hexagons
+    candidates.forEach((cand, candIdx) => {
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-      const offsetX = currentPos.x - 256;
-      const offsetY = currentPos.y - 256;
+      const { cx: offsetX, cy: offsetY } = getCanvasCoords(currentPos.x, currentPos.y);
 
+      // Priority ranking: Priority 1 gets intense deep red, fading to softer reds for lower priority
+      const rank = cand.mlRank || (candIdx + 1);
+      const priority = getPriorityColors(rank);
+
+      // 1. Point Spread Function Core
       const psfRadius = Math.max(3, Math.min(9, currentPos.flux / 16));
       const psfGrad = ctx.createRadialGradient(offsetX, offsetY, 0, offsetX, offsetY, psfRadius * 2);
 
@@ -231,15 +289,14 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.arc(offsetX, offsetY, psfRadius * 2, 0, Math.PI * 2);
       ctx.fill();
 
-      // Motion Track
+      // 2. Motion Track Across Epochs
       if (cand.epochPositions.length > 1) {
-        ctx.strokeStyle = isSelected ? '#d97706' : 'rgba(168, 162, 158, 0.4)';
-        ctx.lineWidth = 1 / zoom;
-        ctx.setLineDash([2, 2]);
+        ctx.strokeStyle = isSelected ? priority.border : 'rgba(239, 68, 68, 0.45)';
+        ctx.lineWidth = (isSelected ? 1.6 : 1.0) / zoom;
+        ctx.setLineDash([3 / zoom, 2 / zoom]);
         ctx.beginPath();
         cand.epochPositions.forEach((pos, idx) => {
-          const px = pos.x - 256;
-          const py = pos.y - 256;
+          const { cx: px, cy: py } = getCanvasCoords(pos.x, pos.y);
           if (idx === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         });
@@ -247,34 +304,95 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
       }
 
-      // Selected Reticle (Ochre accent without glow)
-      if (isSelected) {
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 1.2 / zoom;
+      // 3. ML Priority Hexagon Covering Detected Pixel Region
+      // Priority 1 is deep red, fading to lighter shades for lower priority
+      const hexRadius = Math.max(12, Math.min(26, psfRadius * 2 + 6));
+      ctx.save();
+      drawHexagon(offsetX, offsetY, hexRadius);
+      ctx.fillStyle = priority.fill;
+      ctx.fill();
+
+      ctx.strokeStyle = priority.border;
+      ctx.lineWidth = (rank === 1 ? 2.2 : rank === 2 ? 1.8 : 1.2) / zoom;
+      ctx.stroke();
+
+      // Priority Pill Badge (e.g. "P1", "P2", "P3")
+      const badgeText = `P${rank}`;
+      ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
+      const badgeWidth = ctx.measureText(badgeText).width + 6 / zoom;
+      const badgeHeight = 11 / zoom;
+      const badgeX = offsetX - hexRadius;
+      const badgeY = offsetY - hexRadius - 1 / zoom;
+
+      ctx.fillStyle = priority.badgeBg;
+      ctx.beginPath();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(badgeX, badgeY - badgeHeight, badgeWidth, badgeHeight, 2.5 / zoom);
+      } else {
+        ctx.rect(badgeX, badgeY - badgeHeight, badgeWidth, badgeHeight);
+      }
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(badgeText, badgeX + 3 / zoom, badgeY - 2.5 / zoom);
+
+      // 4. Object Name Label (for known / confirmed objects like 3I/ATLAS, Gaia DR3, WISE)
+      const objectLabel =
+        cand.catalogId ||
+        cand.matchedCatalog ||
+        cand.validationData?.objectName ||
+        (cand.isKnownCatalogMatch ? 'Known Object' : null);
+
+      if (objectLabel) {
+        ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
+        const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
+        const labelHeight = 13 / zoom;
+        const labelX = offsetX + hexRadius + 4 / zoom;
+        const labelY = offsetY - 7 / zoom;
+
+        // Label background pill
+        ctx.fillStyle = 'rgba(10, 10, 14, 0.9)';
+        ctx.strokeStyle = priority.border;
+        ctx.lineWidth = 1 / zoom;
         ctx.beginPath();
-        ctx.arc(offsetX, offsetY, psfRadius * 2 + 4, 0, Math.PI * 2);
+        if (typeof ctx.roundRect === 'function') {
+          ctx.roundRect(labelX, labelY, labelWidth, labelHeight, 3 / zoom);
+        } else {
+          ctx.rect(labelX, labelY, labelWidth, labelHeight);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#34d399'; // Emerald text for confirmed object names
+        ctx.fillText(objectLabel, labelX + 4 / zoom, labelY + 9.5 / zoom);
+      } else if (isSelected) {
+        ctx.font = `${9 / zoom}px "JetBrains Mono", monospace`;
+        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
+        ctx.fillText(`Candidate #${rank}`, offsetX + hexRadius + 4 / zoom, offsetY + 3 / zoom);
+      }
+
+      // 5. Selected Reticle & Crosshairs
+      if (isSelected) {
+        ctx.strokeStyle = priority.border;
+        ctx.lineWidth = 1.6 / zoom;
+        ctx.beginPath();
+        ctx.arc(offsetX, offsetY, hexRadius + 4 / zoom, 0, Math.PI * 2);
         ctx.stroke();
 
         const tLen = 6 / zoom;
         ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY - psfRadius * 2 - 2);
-        ctx.lineTo(offsetX, offsetY - psfRadius * 2 - 2 - tLen);
-        ctx.moveTo(offsetX, offsetY + psfRadius * 2 + 2);
-        ctx.lineTo(offsetX, offsetY + psfRadius * 2 + 2 + tLen);
-        ctx.moveTo(offsetX - psfRadius * 2 - 2, offsetY);
-        ctx.lineTo(offsetX - psfRadius * 2 - 2 - tLen, offsetY);
-        ctx.moveTo(offsetX + psfRadius * 2 + 2, offsetY);
-        ctx.lineTo(offsetX + psfRadius * 2 + 2 + tLen, offsetY);
+        ctx.moveTo(offsetX, offsetY - hexRadius - 2 / zoom);
+        ctx.lineTo(offsetX, offsetY - hexRadius - 2 / zoom - tLen);
+        ctx.moveTo(offsetX, offsetY + hexRadius + 2 / zoom);
+        ctx.lineTo(offsetX, offsetY + hexRadius + 2 / zoom + tLen);
+        ctx.moveTo(offsetX - hexRadius - 2 / zoom, offsetY);
+        ctx.lineTo(offsetX - hexRadius - 2 / zoom - tLen, offsetY);
+        ctx.moveTo(offsetX + hexRadius + 2 / zoom, offsetY);
+        ctx.lineTo(offsetX + hexRadius + 2 / zoom + tLen, offsetY);
         ctx.stroke();
 
-        ctx.font = `${10 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
-        ctx.fillText(cand.matchedCatalog || cand.id, offsetX + psfRadius * 2 + 6, offsetY - 2);
-
-        // In Scientist Mode: Draw Gaussian PSF Apertures (1σ, 2σ, background annulus) + flux readout
+        // Scientist HUD telemetry apertures
         if (isScientistMode) {
-          ctx.save();
-          // 1-sigma aperture
           ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
           ctx.lineWidth = 1 / zoom;
           ctx.setLineDash([2 / zoom, 2 / zoom]);
@@ -282,7 +400,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           ctx.arc(offsetX, offsetY, psfRadius * 1.5, 0, Math.PI * 2);
           ctx.stroke();
 
-          // 3-sigma background annulus
           ctx.strokeStyle = 'rgba(52, 211, 153, 0.3)';
           ctx.beginPath();
           ctx.arc(offsetX, offsetY, psfRadius * 3.2, 0, Math.PI * 2);
@@ -291,11 +408,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           ctx.setLineDash([]);
           ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
           ctx.fillStyle = '#34d399';
-          ctx.fillText(`FWHM: 1.42px (8.8″)`, offsetX + psfRadius * 2 + 6, offsetY + 10 / zoom);
-          ctx.fillText(`Flux: 14.82 mJy`, offsetX + psfRadius * 2 + 6, offsetY + 20 / zoom);
-          ctx.restore();
+          ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + hexRadius + 4 / zoom, offsetY + 18 / zoom);
+          ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + hexRadius + 4 / zoom, offsetY + 28 / zoom);
         }
       }
+
+      ctx.restore();
     });
 
     // Overlays
@@ -346,7 +464,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -394,12 +512,89 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     for (const cand of candidates) {
       const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-      const cx = pos.x - 256;
-      const cy = pos.y - 256;
+      const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
+      const cx = pos.x * 2 - 256;
+      const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
       const dist = Math.hypot(transformedX - cx, transformedY - cy);
-      if (dist < 18 / zoom) {
+      if (dist < 28 / zoom) {
         onSelectCandidate(cand.id);
         return;
+      }
+    }
+  };
+
+  // Mobile Touch Gestures: 1-finger pan, 2-finger pinch-to-zoom, tap to select
+  const touchMetaRef = useRef<{ startX: number; startY: number; pinchDist: number }>({
+    startX: 0,
+    startY: 0,
+    pinchDist: 0,
+  });
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setDragStart({ x: touch.clientX - pan.x, y: touch.clientY - pan.y });
+      touchMetaRef.current = { startX: touch.clientX, startY: touch.clientY, pinchDist: 0 };
+    } else if (e.touches.length === 2) {
+      setIsDragging(false);
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      touchMetaRef.current.pinchDist = dist;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isDragging) {
+      const touch = e.touches[0];
+      setPan({
+        x: touch.clientX - dragStart.x,
+        y: touch.clientY - dragStart.y,
+      });
+    } else if (e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const newDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      if (touchMetaRef.current.pinchDist > 0) {
+        const factor = newDist / touchMetaRef.current.pinchDist;
+        setZoom((prev) => Math.max(0.6, Math.min(8.0, prev * factor)));
+      }
+      touchMetaRef.current.pinchDist = newDist;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.touches.length === 0) {
+      setIsDragging(false);
+      const touch = e.changedTouches[0];
+      if (touch && canvasRef.current) {
+        const moved = Math.hypot(
+          touch.clientX - touchMetaRef.current.startX,
+          touch.clientY - touchMetaRef.current.startY
+        );
+        if (moved < 12) {
+          const rect = canvasRef.current.getBoundingClientRect();
+          const clickX = touch.clientX - rect.left;
+          const clickY = touch.clientY - rect.top;
+          const width = rect.width;
+          const height = rect.height;
+
+          const transformedX = (clickX - (width / 2 + pan.x)) / zoom;
+          const transformedY = (clickY - (height / 2 + pan.y)) / zoom;
+
+          for (const cand of candidates) {
+            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+            const isAtlasAspect = activeFrame?.detectorArray === 6 && pos.y <= 144;
+            const cx = pos.x * 2 - 256;
+            const cy = isAtlasAspect ? pos.y * 2 - 144 : pos.y * 2 - 256;
+            const dist = Math.hypot(transformedX - cx, transformedY - cy);
+            if (dist < 32 / zoom) {
+              onSelectCandidate(cand.id);
+              return;
+            }
+          }
+        }
       }
     }
   };
@@ -407,12 +602,15 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none"
+      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none touch-none"
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onClick={handleCanvasClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <canvas ref={canvasRef} className="w-full h-full block" />
 

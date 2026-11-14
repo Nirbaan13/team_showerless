@@ -21,7 +21,7 @@ private[grpc] object GrpcMapping:
         case p.Query.Region.Empty => Left(d.ApiError("invalid_request", "A query region is required"))
       geometry.flatMap((shape, values) => d.Query.fromParameters(shape, values ++ filters)).flatMap { validated =>
         if validated.channel.exists(c => !channels.contains(c)) then Left(d.ApiError("invalid_request", "The requested channel has no configured wavelength mapping"))
-        else Right(validated)
+        else Right(if q.deep then validated.inDeepSurvey else validated)
       }
     }
 
@@ -46,7 +46,8 @@ private[grpc] object GrpcMapping:
       p.Query.Region.Range(p.Range(n("right_ascension_min_deg"), n("right_ascension_max_deg"), n("declination_min_deg"), n("declination_max_deg")))
     else p.Query.Region.Center(p.Center(n("right_ascension_deg"), n("declination_deg"), f.get("width_arcmin").map(number), f.get("height_arcmin").map(number)))
     p.Query(region, f.get("detector_array").collect { case Json.Num(v) => v.intValue }, f.get("channel_index").map(number(_).toInt),
-      f.get("observed_after").map(string), f.get("observed_before").map(string))
+      f.get("observed_after").map(string), f.get("observed_before").map(string),
+      deep = f.get("survey").contains(Json.Str("deep")))
 
   private def value(json: Json): Value = Value(json match
     case Json.Null => Value.Kind.NullValue(NullValue.NULL_VALUE)
@@ -55,6 +56,7 @@ private[grpc] object GrpcMapping:
     case Json.Num(n) => Value.Kind.NumberValue(n.doubleValue)
     case Json.Arr(vs) => Value.Kind.ListValue(ListValue(vs.map(value).toSeq))
     case Json.Obj(vs) => Value.Kind.StructValue(Struct(vs.map((k,v) => k -> value(v)).toMap)))
+  def document(json: Json): Struct = Struct(fields(json).map((k,v) => k -> value(v)))
   def error(e: d.ApiError): p.ApiError = p.ApiError(e.code, e.message, e.retryable)
   def observation(o: d.Observation): p.Observation = p.Observation(o.frame_id, o.observation_date, o.detector_array, o.release,
     o.is_available, o.wavelength_min_um, o.wavelength_max_um, o.channel_index, o.skip_reason,

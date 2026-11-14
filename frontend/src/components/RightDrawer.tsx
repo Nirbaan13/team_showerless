@@ -18,7 +18,60 @@ import {
   FileText,
   MessageSquare,
   Cpu,
+  Sparkles,
+  ShieldAlert,
+  Compass,
+  Info,
 } from 'lucide-react';
+
+interface ClassificationGuideItem {
+  id: CandidateClassification;
+  name: string;
+  badge: string;
+  badgeBg: string;
+  badgeText: string;
+  criteria: string;
+  distinction: string;
+}
+
+const CLASSIFICATION_GUIDE: Record<string, ClassificationGuideItem> = {
+  transient: {
+    id: 'transient',
+    name: 'Transient (Flare / Supernova)',
+    badge: 'Sudden Burst',
+    badgeBg: 'rgba(245, 158, 11, 0.2)',
+    badgeText: '#f59e0b',
+    criteria: 'Sudden flux spike in 1–2 epochs + fixed sky coordinates + true multi-pixel optical PSF.',
+    distinction: 'Optical PSF spread distinguishes it from sharp 1px cosmic rays. Fixed position separates it from moving bodies.',
+  },
+  artifact: {
+    id: 'artifact',
+    name: 'Artifact (Cosmic Ray / Glitch)',
+    badge: 'Detector Noise',
+    badgeBg: 'rgba(244, 63, 94, 0.2)',
+    badgeText: '#f43f5e',
+    criteria: 'Sharp 1-pixel spike or line streak in only 1 exposure with no physical optical beam spread.',
+    distinction: 'Lacks multi-pixel optical PSF wings. Disappears completely in all other telescope pointings.',
+  },
+  moving_object: {
+    id: 'moving_object',
+    name: 'Moving Object (Asteroid / Comet)',
+    badge: 'Linear Track',
+    badgeBg: 'rgba(16, 185, 129, 0.2)',
+    badgeText: '#10b981',
+    criteria: 'Smooth positional track across epochs with steady optical PSF and predictable velocity vector.',
+    distinction: 'Centroid shifts smoothly each epoch (unlike stationary transients that stay at the same pixel).',
+  },
+  already_known: {
+    id: 'already_known',
+    name: 'Known Catalog Star',
+    badge: 'Catalog Baseline',
+    badgeBg: 'rgba(148, 163, 184, 0.2)',
+    badgeText: '#94a3b8',
+    criteria: 'Stationary multi-epoch source matching Gaia DR3 or AllWISE within <1.5″.',
+    distinction: 'Stable baseline brightness catalogued in historical sky surveys; no unexpected outbursts.',
+  },
+};
 
 interface RightDrawerProps {
   frames?: SpherexEpochFrame[];
@@ -37,9 +90,20 @@ interface RightDrawerProps {
   ) => void;
   onOpenDiscoveryReport?: () => void;
   isScientistMode?: boolean;
+  ra?: number;
+  dec?: number;
+  fov?: import('../types/spherex').FOVOption;
+  selectedArray?: import('../types/spherex').DetectorArrayId | 'all';
+  subtractionMode?: import('../types/spherex').SubtractionMode;
+  controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
+  onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
+  className?: string;
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
+  frames: _frames,
+  activeFrameIndex = 0,
+  onSelectFrame: _onSelectFrame,
   candidates,
   selectedCandidateId,
   onSelectCandidate,
@@ -48,8 +112,21 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   onUpdateCandidateClassification,
   onOpenDiscoveryReport,
   isScientistMode = false,
+  ra,
+  dec,
+  fov,
+  selectedArray,
+  subtractionMode,
+  controlledTab,
+  onTabChange,
+  className = '',
 }) => {
-  const [activeTab, setActiveTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
+  const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
+  const activeTab = controlledTab ?? internalTab;
+  const setActiveTab = (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => {
+    setInternalTab(tab);
+    if (onTabChange) onTabChange(tab);
+  };
   const [width, setWidth] = useState<number>(360);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [notes, setNotes] = useState(candidate?.volunteerNotes || '');
@@ -60,6 +137,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     candidate?.confidence || 'medium'
   );
   const [isSaved, setIsSaved] = useState(false);
+  const [hoveredClassId, setHoveredClassId] = useState<string | null>(null);
+  const currentGuide =
+    CLASSIFICATION_GUIDE[
+      hoveredClassId || (selectedClass !== 'unreviewed' ? selectedClass : 'transient')
+    ] || CLASSIFICATION_GUIDE.transient;
 
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(360);
@@ -115,8 +197,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   return (
     <aside
-      style={{ width: `${width}px` }}
-      className="relative bg-paper-900 border-l border-paper-800 flex flex-col h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75"
+      style={typeof window !== 'undefined' && window.innerWidth < 1024 ? undefined : { width: `${width}px` }}
+      className={`relative bg-paper-900 border-l border-paper-800 flex flex-col h-full lg:h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75 ${className}`}
     >
       {/* Draggable Left Resize Handle */}
       <div
@@ -246,9 +328,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
                 {/* Candidate Classification */}
                 <div>
-                  <label className="text-[10px] font-mono text-paper-400 block mb-1.5 uppercase font-semibold">
-                    Volunteer Classification
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-[10px] font-mono text-paper-400 uppercase font-semibold">
+                      Volunteer Classification
+                    </label>
+                    <span className="text-[9px] font-mono text-paper-500">
+                      Hover for TiH Guide
+                    </span>
+                  </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {[
                       { id: 'moving_object', label: 'Moving Object', desc: 'Consistent track' },
@@ -257,13 +344,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                       { id: 'artifact', label: 'Artifact', desc: 'Bad pixel / CR' },
                     ].map((item) => {
                       const isSelected = selectedClass === item.id;
+                      const isHovered = hoveredClassId === item.id;
                       return (
                         <button
                           key={item.id}
                           onClick={() => setSelectedClass(item.id as CandidateClassification)}
+                          onMouseEnter={() => setHoveredClassId(item.id)}
+                          onMouseLeave={() => setHoveredClassId(null)}
                           className={`btn-tactile-sm p-2 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-emerald-400 text-gray-950 font-bold'
+                              : isHovered
+                              ? 'bg-paper-800 text-emerald-300'
                               : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                           }`}
                         >
@@ -272,6 +364,37 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                       );
                     })}
                   </div>
+
+                  {/* TiH Classification Helper: Volunteer Mode Only & Decluttered */}
+                  {!isScientistMode && (
+                    <div className="mt-2 p-2.5 rounded-xl bg-paper-950 border border-paper-800 space-y-1.5 anim-fall text-[10px]">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                          {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
+                          {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
+                          {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
+                          <span className="font-mono font-bold text-paper-100">{currentGuide.name}</span>
+                        </div>
+                        <span
+                          style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
+                          className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
+                        >
+                          {currentGuide.badge}
+                        </span>
+                      </div>
+
+                      <div className="text-paper-300 flex items-start gap-1">
+                        <span className="text-emerald-400 font-bold shrink-0">✓ Key:</span>
+                        <span>{currentGuide.criteria}</span>
+                      </div>
+
+                      <div className="text-paper-400 flex items-start gap-1 pt-1 border-t border-paper-850">
+                        <span className="text-rose-400 font-bold shrink-0">✕ Distinguish:</span>
+                        <span>{currentGuide.distinction}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Confidence Level */}
@@ -343,9 +466,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 2: VERIFICATION NOTES & COMMUNITY CHAT */}
+        {/* TAB 2: VERIFICATION NOTES & SINGLE-OBJECT COMMUNITY CHAT */}
         {activeTab === 'chat' && (
-          <CommunityVerificationStream activeCandidateId={candidate?.id || null} />
+          <CommunityVerificationStream
+            candidate={candidate}
+            activeCandidateId={candidate?.id || null}
+            ra={ra}
+            dec={dec}
+            fov={fov}
+            selectedArray={selectedArray}
+            activeFrameIndex={activeFrameIndex}
+            subtractionMode={subtractionMode}
+          />
         )}
 
         {/* TAB 3: 102-BAND SPECTROPHOTOMETRY */}

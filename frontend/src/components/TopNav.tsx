@@ -61,6 +61,7 @@ export const TopNav: React.FC<TopNavProps> = ({
         <span className="text-ochre-300 font-medium">{dec.toFixed(4)}°</span>
       </div>
 
+
       {/* Share View: single clean button that copies the link */}
       <button
         onClick={handleCopyShareLink}

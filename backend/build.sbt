@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-http" % "3.11.6",
   "dev.zio" %% "zio-json" % "1.1.2",
   "org.xerial" % "sqlite-jdbc" % "3.54.1.0",
+  "gov.nasa.gsfc.heasarc" % "nom-tam-fits" % "1.23.1",
   "org.yaml" % "snakeyaml" % "2.5",
   "dev.zio" %% "zio-test" % zioVersion % Test,
   "dev.zio" %% "zio-test-sbt" % zioVersion % Test

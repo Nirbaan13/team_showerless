@@ -8,6 +8,10 @@ option (scalapb.options) = { package_name: "spaceapps.integrations.grpc.v1" flat
 service RetrievalService {
   rpc SearchObservations(SearchRequest) returns (SearchResponse);
   rpc PrepareObservations(PrepareRequest) returns (Download);
+  rpc PrepareDeepObservations(PrepareRequest) returns (Download);
+  rpc GetObservationMetadata(ObservationMetadataRequest) returns (ObservationMetadataResponse);
+  rpc GetEquipment(EquipmentRequest) returns (EquipmentResponse);
+  rpc GetCalibrationFile(CalibrationFileRequest) returns (stream ChunkBytes);
   rpc GetDownload(DownloadRequest) returns (Download);
   rpc WatchDownload(DownloadRequest) returns (stream DownloadEvent);
   rpc GetChunk(ChunkRequest) returns (stream ChunkBytes);
@@ -23,6 +27,7 @@ message Query {
   optional int32 channel_index = 5;
   optional string observed_after = 6;
   optional string observed_before = 7;
+  bool deep = 8;
 }
 message SearchRequest { Query query = 1; }
 message SearchResponse { repeated Observation observations = 1; }
@@ -33,6 +38,11 @@ message ChunkRequest { string chunk_id = 1; }
 message ChunkBytes { bytes data = 1; }
 message VersionRequest {}
 message VersionResponse { string revision = 1; string api_version = 2; }
+message ObservationMetadataRequest { string frame_id = 1; }
+message ObservationMetadataResponse { google.protobuf.Struct metadata = 1; }
+message EquipmentRequest { string release = 1; optional int32 detector_array = 2; }
+message EquipmentResponse { google.protobuf.Struct equipment = 1; }
+message CalibrationFileRequest { string calibration_id = 1; }
 message ApiError { string code = 1; string message = 2; bool retryable = 3; }
 message Observation {
   string frame_id = 1; string observation_date = 2; int32 detector_array = 3; string release = 4;

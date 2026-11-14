@@ -88,6 +88,33 @@ export interface CandidateObject {
   };
   /** Detector score 0–1 (higher = more likely a real moving object). Supplied by the ML pipeline when available. */
   mlScore?: number;
+  mlRank?: number; // 1 = highest priority
+  mlPriorityScore?: number; // 0.0 - 1.0
+  priorityHexColor?: string;
+}
+
+export interface VerificationSetting {
+  targetPresetId?: string | null;
+  candidateId: string;
+  candidateName: string;
+  ra: number;
+  dec: number;
+  fov: FOVOption;
+  selectedArray: DetectorArrayId | 'all';
+  activeFrameIndex: number;
+  subtractionMode: SubtractionMode;
+}
+
+export interface VerificationComment {
+  id: string;
+  author: string;
+  role: 'Volunteer' | 'Researcher' | 'Science Team';
+  timestamp: string;
+  candidateId: string;
+  message: string;
+  vote: 'confirm_motion' | 'artifact' | 'investigate' | 'known';
+  upvotes: number;
+  setting?: VerificationSetting;
 }
 
 export interface SpectralDataPoint {

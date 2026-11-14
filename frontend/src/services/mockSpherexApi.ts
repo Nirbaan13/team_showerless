@@ -5,6 +5,11 @@ import type {
   SpectralDataPoint,
   MolecularLine,
 } from '../types/spherex';
+import {
+  REAL_3I_ATLAS_FRAMES,
+  REAL_BARNARD_FRAMES,
+  REAL_WISE_0855_FRAMES,
+} from './realSpherexFrames';
 
 export const NASA_TEST_PRESETS: TargetPreset[] = [
   {
@@ -120,12 +125,57 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
       flaggedPixelPercentage: 0.12,
       cosmicRayHits: 8,
       isAvailable: true,
+      imageDataUrl: REAL_3I_ATLAS_FRAMES[idx]?.pngDataUrl,
       headerMetadata: {
         exposureTimeSec: 142.5,
         airmass: 1.0,
         zodiBrightnessMjySr: 12.43,
         snrEstimated: obs.snr,
       }
+    }));
+  }
+
+  if (targetId === 'barnards-star') {
+    return REAL_BARNARD_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 2,
+      wavelengthMinUm: 1.11,
+      wavelengthMaxUm: 1.64,
+      channelIndex: 26,
+      flaggedPixelPercentage: 0.18,
+      cosmicRayHits: 11,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.05,
+        zodiBrightnessMjySr: Number((12.4 + idx * 0.7).toFixed(2)),
+        snrEstimated: 38.0,
+      },
+    }));
+  }
+
+  if (targetId === 'wise-0855') {
+    return REAL_WISE_0855_FRAMES.map((obs, idx) => ({
+      frameId: obs.frameId,
+      epochIndex: idx,
+      observationDate: obs.observationDate,
+      detectorArray: 5,
+      wavelengthMinUm: 3.82,
+      wavelengthMaxUm: 4.42,
+      channelIndex: 82,
+      flaggedPixelPercentage: 0.22,
+      cosmicRayHits: 14,
+      isAvailable: true,
+      imageDataUrl: obs.pngDataUrl,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.12,
+        zodiBrightnessMjySr: Number((16.8 + idx * 0.9).toFixed(2)),
+        snrEstimated: 16.2,
+      },
     }));
   }
 
@@ -188,6 +238,8 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         dec: 5.290000,
         pixelX: 195,
         pixelY: 47,
+        mlRank: 1,
+        mlPriorityScore: 0.98,
         epochPositions: [
           { epochIndex: 0, x: 19, y: 108, flux: 18.4, snr: 12.1 },
           { epochIndex: 1, x: 63, y: 93, flux: 19.2, snr: 13.4 },
@@ -210,6 +262,65 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
           sourceUrl: 'https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html',
           exposuresCount: 4,
         }
+      },
+      {
+        id: 'cand-3i-tail-clump',
+        ra: 166.812400,
+        dec: 5.275100,
+        pixelX: 185,
+        pixelY: 62,
+        mlRank: 2,
+        mlPriorityScore: 0.84,
+        epochPositions: [
+          { epochIndex: 0, x: 14, y: 120, flux: 8.2, snr: 7.4 },
+          { epochIndex: 1, x: 58, y: 105, flux: 8.8, snr: 7.9 },
+          { epochIndex: 2, x: 185, y: 62, flux: 9.4, snr: 8.5 },
+          { epochIndex: 3, x: 228, y: 46, flux: 9.1, snr: 8.1 },
+        ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: 'Cometary dust coma / tail ion emission trailing 3I/ATLAS nucleus. High linear correlation with primary ephemeris.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'NEO Ephemeris',
+        catalogId: '3I/ATLAS Coma Dust Structure',
+      },
+      {
+        id: 'cand-3i-faint-track',
+        ra: 166.745000,
+        dec: 5.342000,
+        pixelX: 320,
+        pixelY: 180,
+        mlRank: 3,
+        mlPriorityScore: 0.65,
+        epochPositions: [
+          { epochIndex: 0, x: 305, y: 195, flux: 5.1, snr: 5.2 },
+          { epochIndex: 1, x: 312, y: 190, flux: 5.4, snr: 5.5 },
+          { epochIndex: 2, x: 320, y: 180, flux: 5.2, snr: 5.3 },
+          { epochIndex: 3, x: 328, y: 172, flux: 5.6, snr: 5.7 },
+        ],
+        classification: 'moving_object',
+        confidence: 'medium',
+        volunteerNotes: 'Faint linear track detected in background. Likely uncatalogued main-belt asteroid crossing the SPHEREx field of view.',
+        isKnownCatalogMatch: false,
+      },
+      {
+        id: 'cand-3i-artifact-4',
+        ra: 166.852000,
+        dec: 5.215000,
+        pixelX: 410,
+        pixelY: 290,
+        mlRank: 4,
+        mlPriorityScore: 0.38,
+        epochPositions: [
+          { epochIndex: 0, x: 410, y: 290, flux: 14.2, snr: 11.2 },
+          { epochIndex: 1, x: 410, y: 290, flux: 1.1, snr: 1.2 },
+          { epochIndex: 2, x: 410, y: 290, flux: 0.8, snr: 0.9 },
+          { epochIndex: 3, x: 410, y: 290, flux: 1.2, snr: 1.3 },
+        ],
+        classification: 'artifact',
+        confidence: 'low',
+        volunteerNotes: 'Single-epoch cosmic ray hit / diffraction spike anomaly in Frame 1. Stationary coordinates with no multi-epoch track.',
+        isKnownCatalogMatch: false,
       }
     ];
   }
@@ -220,40 +331,152 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
         id: 'cand-barnard-primary',
         ra: 269.452075,
         dec: 4.693365,
-        pixelX: 250,
-        pixelY: 250,
+        pixelX: 128,
+        pixelY: 128,
+        mlRank: 1,
+        mlPriorityScore: 0.96,
         epochPositions: [
-          { epochIndex: 0, x: 235, y: 240, flux: 142.0, snr: 38.2 },
-          { epochIndex: 1, x: 242, y: 245, flux: 141.5, snr: 37.9 },
-          { epochIndex: 2, x: 250, y: 250, flux: 143.1, snr: 38.0 },
-          { epochIndex: 3, x: 258, y: 255, flux: 140.8, snr: 37.4 },
-          { epochIndex: 4, x: 265, y: 260, flux: 142.9, snr: 38.5 },
+          { epochIndex: 0, x: 122, y: 140, flux: 185.0, snr: 38.2 },
+          { epochIndex: 1, x: 125, y: 134, flux: 184.5, snr: 37.9 },
+          { epochIndex: 2, x: 128, y: 128, flux: 185.1, snr: 38.0 },
+          { epochIndex: 3, x: 131, y: 122, flux: 183.8, snr: 37.4 },
+          { epochIndex: 4, x: 134, y: 116, flux: 186.2, snr: 38.5 },
         ],
         classification: 'moving_object',
         confidence: 'high',
-        volunteerNotes: 'Clear high proper motion vector confirmed across all epochs. Consistent with Gaia DR3 cross-match.',
+        volunteerNotes: 'High proper motion vector confirmed across all epochs. Matched in Gaia DR3 (proper motion ~10.3 arcsec/yr).',
         isKnownCatalogMatch: true,
         matchedCatalog: 'Gaia DR3',
-        catalogId: 'Gaia DR3 4472832130942575872',
+        catalogId: "Barnard's Star (Gaia DR3 4472832130942575872)",
         properMotionMasYr: { pmRa: -802.8, pmDec: 10362.5 }
       },
       {
         id: 'cand-barnard-anomaly-1',
         ra: 269.461100,
         dec: 4.689200,
-        pixelX: 380,
-        pixelY: 170,
+        pixelX: 190,
+        pixelY: 85,
+        mlRank: 2,
+        mlPriorityScore: 0.79,
         epochPositions: [
-          { epochIndex: 0, x: 380, y: 170, flux: 3.2, snr: 4.1 },
-          { epochIndex: 1, x: 380, y: 170, flux: 14.8, snr: 12.4 },
-          { epochIndex: 2, x: 380, y: 170, flux: 2.9, snr: 3.8 },
-          { epochIndex: 3, x: 380, y: 170, flux: 1.8, snr: 2.1 },
-          { epochIndex: 4, x: 380, y: 170, flux: 2.0, snr: 2.3 },
+          { epochIndex: 0, x: 190, y: 85, flux: 32.0, snr: 4.1 },
+          { epochIndex: 1, x: 190, y: 85, flux: 152.0, snr: 28.4 },
+          { epochIndex: 2, x: 190, y: 85, flux: 31.8, snr: 3.8 },
+          { epochIndex: 3, x: 190, y: 85, flux: 32.1, snr: 2.1 },
+          { epochIndex: 4, x: 190, y: 85, flux: 31.9, snr: 2.3 },
         ],
         classification: 'transient',
         confidence: 'medium',
-        volunteerNotes: 'Epoch 2 flare event. No match in Gaia DR3 or WISE within 3 arcsec radius. Candidate optical/IR flare.',
+        volunteerNotes: 'Epoch 2 flare event. No match in Gaia DR3 or WISE within 3 arcsec radius. Candidate stellar optical/infrared flare.',
         isKnownCatalogMatch: false,
+      },
+      {
+        id: 'cand-barnard-companion',
+        ra: 269.438000,
+        dec: 4.712000,
+        pixelX: 45,
+        pixelY: 60,
+        mlRank: 3,
+        mlPriorityScore: 0.63,
+        epochPositions: [
+          { epochIndex: 0, x: 45, y: 60, flux: 45.0, snr: 12.4 },
+          { epochIndex: 1, x: 45, y: 60, flux: 44.8, snr: 12.1 },
+          { epochIndex: 2, x: 45, y: 60, flux: 45.2, snr: 12.5 },
+          { epochIndex: 3, x: 45, y: 60, flux: 45.0, snr: 12.3 },
+          { epochIndex: 4, x: 45, y: 60, flux: 44.9, snr: 12.2 },
+        ],
+        classification: 'moving_object',
+        confidence: 'medium',
+        volunteerNotes: 'Faint co-moving candidate detected 90 arcseconds southwest. Parallax investigation requested by Science Team.',
+        isKnownCatalogMatch: false,
+      },
+      {
+        id: 'cand-barnard-wise-match',
+        ra: 269.475000,
+        dec: 4.671000,
+        pixelX: 220,
+        pixelY: 195,
+        mlRank: 4,
+        mlPriorityScore: 0.48,
+        epochPositions: [
+          { epochIndex: 0, x: 220, y: 195, flux: 65.0, snr: 18.2 },
+          { epochIndex: 1, x: 220, y: 195, flux: 64.7, snr: 18.0 },
+          { epochIndex: 2, x: 220, y: 195, flux: 65.3, snr: 18.4 },
+          { epochIndex: 3, x: 220, y: 195, flux: 65.1, snr: 18.1 },
+          { epochIndex: 4, x: 220, y: 195, flux: 64.9, snr: 18.3 },
+        ],
+        classification: 'already_known',
+        confidence: 'high',
+        volunteerNotes: 'Stationary mid-infrared field star catalogued in AllWISE catalog. Zero detected proper motion.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'WISE',
+        catalogId: 'AllWISE J175754.00+044015.6',
+      },
+      {
+        id: 'cand-barnard-cosmic-ray',
+        ra: 269.431000,
+        dec: 4.654000,
+        pixelX: 110,
+        pixelY: 130,
+        mlRank: 5,
+        mlPriorityScore: 0.28,
+        epochPositions: [
+          { epochIndex: 0, x: 110, y: 130, flux: 1.2, snr: 1.4 },
+          { epochIndex: 1, x: 110, y: 130, flux: 1.0, snr: 1.2 },
+          { epochIndex: 2, x: 110, y: 130, flux: 24.5, snr: 18.2 },
+          { epochIndex: 3, x: 110, y: 130, flux: 1.1, snr: 1.3 },
+          { epochIndex: 4, x: 110, y: 130, flux: 1.3, snr: 1.5 },
+        ],
+        classification: 'artifact',
+        confidence: 'low',
+        volunteerNotes: 'High-energy cosmic ray strike on detector pixels during Epoch 3. Filtered out by difference imaging.',
+        isKnownCatalogMatch: false,
+      }
+    ];
+  }
+
+  if (targetId === 'wise-0855') {
+    return [
+      {
+        id: 'cand-wise-0855-01',
+        ra: 133.795129,
+        dec: -7.245147,
+        pixelX: 128,
+        pixelY: 128,
+        mlRank: 1,
+        mlPriorityScore: 0.95,
+        epochPositions: [
+          { epochIndex: 0, x: 128, y: 128, flux: 95.0, snr: 16.2 },
+          { epochIndex: 1, x: 132, y: 126, flux: 94.5, snr: 15.9 },
+          { epochIndex: 2, x: 136, y: 124, flux: 96.0, snr: 16.5 },
+        ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: 'Ultra-cold Y-type sub-brown dwarf detected in Band 5/6 (4.42–5.00 µm). Atmospheric water ice absorption verified.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'WISE',
+        catalogId: 'WISE 0855-0714 (Coldest Sub-Brown Dwarf)',
+        properMotionMasYr: { pmRa: -8120.0, pmDec: 680.0 }
+      },
+      {
+        id: 'cand-wise-field-star',
+        ra: 133.812000,
+        dec: -7.234000,
+        pixelX: 60,
+        pixelY: 180,
+        mlRank: 2,
+        mlPriorityScore: 0.62,
+        epochPositions: [
+          { epochIndex: 0, x: 60, y: 180, flux: 42.0, snr: 11.4 },
+          { epochIndex: 1, x: 60, y: 180, flux: 42.1, snr: 11.5 },
+          { epochIndex: 2, x: 60, y: 180, flux: 41.9, snr: 11.3 },
+        ],
+        classification: 'already_known',
+        confidence: 'high',
+        volunteerNotes: 'Stationary reference field star. Clean astrometric anchor.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'Gaia DR3',
+        catalogId: 'Gaia DR3 5671948291038291024',
       }
     ];
   }
@@ -266,6 +489,8 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
       dec: -7.245,
       pixelX: 256,
       pixelY: 256,
+      mlRank: 1,
+      mlPriorityScore: 0.94,
       epochPositions: [
         { epochIndex: 0, x: 248, y: 252, flux: 22.0, snr: 14.2 },
         { epochIndex: 1, x: 252, y: 254, flux: 21.8, snr: 13.9 },
@@ -279,6 +504,48 @@ export function getMockCandidates(targetId: string): CandidateObject[] {
       isKnownCatalogMatch: true,
       matchedCatalog: 'WISE',
       catalogId: 'WISE J085510.83-071442.5'
+    },
+    {
+      id: `cand-${targetId}-02`,
+      ra: 133.815,
+      dec: -7.230,
+      pixelX: 340,
+      pixelY: 190,
+      mlRank: 2,
+      mlPriorityScore: 0.76,
+      epochPositions: [
+        { epochIndex: 0, x: 334, y: 194, flux: 12.0, snr: 8.8 },
+        { epochIndex: 1, x: 337, y: 192, flux: 12.3, snr: 9.1 },
+        { epochIndex: 2, x: 340, y: 190, flux: 12.1, snr: 8.9 },
+        { epochIndex: 3, x: 343, y: 188, flux: 12.5, snr: 9.3 },
+        { epochIndex: 4, x: 346, y: 186, flux: 12.2, snr: 9.0 },
+      ],
+      classification: 'moving_object',
+      confidence: 'medium',
+      volunteerNotes: 'Slowly moving point source across 5 epochs. Potential Kuiper Belt object.',
+      isKnownCatalogMatch: false,
+    },
+    {
+      id: `cand-${targetId}-03`,
+      ra: 133.775,
+      dec: -7.265,
+      pixelX: 180,
+      pixelY: 320,
+      mlRank: 3,
+      mlPriorityScore: 0.54,
+      epochPositions: [
+        { epochIndex: 0, x: 180, y: 320, flux: 6.2, snr: 5.1 },
+        { epochIndex: 1, x: 180, y: 320, flux: 6.0, snr: 4.9 },
+        { epochIndex: 2, x: 180, y: 320, flux: 6.4, snr: 5.3 },
+        { epochIndex: 3, x: 180, y: 320, flux: 6.1, snr: 5.0 },
+        { epochIndex: 4, x: 180, y: 320, flux: 6.3, snr: 5.2 },
+      ],
+      classification: 'already_known',
+      confidence: 'medium',
+      volunteerNotes: 'Gaia DR3 catalogued background stellar source.',
+      isKnownCatalogMatch: true,
+      matchedCatalog: 'Gaia DR3',
+      catalogId: 'Gaia DR3 57291038411',
     }
   ];
 }

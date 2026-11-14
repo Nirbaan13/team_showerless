@@ -7,9 +7,10 @@ import zio.json.*
 import java.nio.file.{Files, Path}
 import java.sql.{Connection, DriverManager, ResultSet}
 import java.util.UUID
+import java.nio.charset.StandardCharsets.UTF_8
 
 /** Short transactions keep claims, manifests and ordered events consistent across workers. */
-final class Repository private (path: Path):
+final class Repository private (path: Path, metadataCacheBytes: Long):
   private def transaction[A](body: Connection => A): Task[A] = ZIO.attemptBlocking {
     val connection = DriverManager.getConnection(s"jdbc:sqlite:${path.toAbsolutePath}")
     try
@@ -69,6 +70,8 @@ final class Repository private (path: Path):
         s.execute("CREATE TABLE IF NOT EXISTS events(sequence INTEGER PRIMARY KEY AUTOINCREMENT,job_id TEXT NOT NULL,name TEXT NOT NULL,data TEXT NOT NULL)")
         s.execute("CREATE INDEX IF NOT EXISTS events_job ON events(job_id,sequence)")
         s.execute("CREATE TABLE IF NOT EXISTS images(frame_id TEXT PRIMARY KEY,body TEXT NOT NULL)")
+        s.execute("CREATE TABLE IF NOT EXISTS archive_metadata(cache_key TEXT PRIMARY KEY,body TEXT NOT NULL,stored_at INTEGER NOT NULL)")
+        s.execute("CREATE INDEX IF NOT EXISTS archive_metadata_age ON archive_metadata(stored_at)")
       finally s.close()
     finally c.close()
   }
@@ -76,6 +79,28 @@ final class Repository private (path: Path):
     images.foreach(i => execute(c, "INSERT OR REPLACE INTO images(frame_id,body) VALUES (?,?)", List(i.observation.frame_id, i.toJson)))
   }
   def image(id: String): Task[Option[ArchiveImage]] = transaction(c => rows(c, "SELECT body FROM images WHERE frame_id=?", List(id))(r => decode[ArchiveImage](r.getString(1))).headOption)
+  def cachedMetadata(key: String): Task[Option[(String, Long)]] = transaction { c =>
+    rows(c, "SELECT body,stored_at FROM archive_metadata WHERE cache_key=?", List(key))(r => (r.getString(1), r.getLong(2))).headOption
+  }
+  def cacheMetadata(key: String, body: String): Task[Unit] = ZIO.suspendSucceed {
+    val bodyLimit = 4 * 1024 * 1024
+    if body.length > bodyLimit || body.getBytes(UTF_8).length > bodyLimit then
+      ZIO.fail(ApiError("metadata_cache_size_limit", "Metadata cache body exceeds the 4 MiB limit"))
+    else transaction { c =>
+      execute(c, "INSERT OR REPLACE INTO archive_metadata(cache_key,body,stored_at) VALUES (?,?,?)",
+        List(key, body, java.time.Instant.now().getEpochSecond))
+      var used = rows(c, "SELECT COALESCE(SUM(length(CAST(body AS BLOB))),0) FROM archive_metadata")(_.getLong(1)).head
+      while used > metadataCacheBytes do
+        val candidates = rows(c,
+          "SELECT cache_key,length(CAST(body AS BLOB)) FROM archive_metadata WHERE cache_key <> ? AND cache_key NOT GLOB 'equipment:file:*' ORDER BY stored_at,rowid LIMIT 128",
+          List(key))(r => (r.getString(1), r.getLong(2)))
+        if candidates.isEmpty then throw ApiError("metadata_cache_capacity", "Protected calibration identities and the current entry exceed metadata cache capacity")
+        candidates.iterator.takeWhile(_ => used > metadataCacheBytes).foreach { (candidate, bytes) =>
+          execute(c, "DELETE FROM archive_metadata WHERE cache_key=?", List(candidate))
+          used -= bytes
+        }
+    }
+  }
   def accept(query: Query, mode: String, reference: Option[String], maxJobs: Int): Task[Download] = transaction { c =>
     val key = query.key(mode, reference)
     val existing = rows(c, "SELECT body FROM jobs WHERE request_key=? AND status NOT IN ('failed','completed_with_errors') ORDER BY rowid DESC LIMIT 1", List(key))(r => decode[JobRecord](r.getString(1)))
@@ -127,9 +152,11 @@ final class Repository private (path: Path):
   def eventsAfter(id: String, cursor: Long): Task[List[Event]] = transaction(c => rows(c, "SELECT sequence,name,data FROM events WHERE job_id=? AND sequence>? ORDER BY sequence LIMIT 256", List(id, cursor))(r => Event(r.getLong(1), r.getString(2), r.getString(3))))
 
 object Repository:
-  def open(path: Path): Task[Repository] =
-    val repository = new Repository(path)
-    repository.initialize.as(repository)
+  def open(path: Path, metadataCacheBytes: Long = 64L * 1024 * 1024): Task[Repository] =
+    if metadataCacheBytes <= 0 then ZIO.fail(ApiError("metadata_cache_configuration", "Metadata cache capacity must be positive"))
+    else
+      val repository = new Repository(path, metadataCacheBytes)
+      repository.initialize.as(repository)
   def payload(download: Download, chunk: Option[String] = None): String =
     val job = s",\"job_id\":${download.id.toJson}"
     chunk.flatMap(id => download.chunks.find(_.id == id)) match

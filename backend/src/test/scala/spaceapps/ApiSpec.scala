@@ -26,6 +26,22 @@ object ApiSpec extends ZIOSpecDefault:
       result <- use(api)
     yield result
   def spec=suite("HTTP contract")(
+    test("deep observations reuse durable jobs and retain the requested date interval") {
+      ZIO.scoped(withApi {api=>
+        for
+          response <- api.routes.runZIO(Request.get(s"http://localhost/api/observationsDeep?$geometry&observed_after=2025-04-29T00:00:00Z&observed_before=2025-04-30T00:00:00Z"))
+          body <- response.body.asString
+          job <- ZIO.fromEither(body.fromJson[Download]).mapError(new RuntimeException(_))
+        yield assertTrue(response.status==Status.Accepted, job.query.toJson.contains("\"survey\":\"deep\""),
+          job.query.toJson.contains("2025-04-29T00:00:00Z"), job.status_url==s"/api/downloads/${job.id}")
+      })
+    },
+    test("deep observations reject ambiguous geometry instead of selecting one silently") {
+      ZIO.scoped(withApi {api=>
+        api.routes.runZIO(Request.get(s"http://localhost/api/observationsDeep?$geometry&right_ascension_deg=1&declination_deg=2"))
+          .map(response=>assertTrue(response.status==Status.UnprocessableEntity))
+      })
+    },
     test("range is accepted immediately, cached completion and URLs match contract") {
       ZIO.scoped(withApi {api=>
         for

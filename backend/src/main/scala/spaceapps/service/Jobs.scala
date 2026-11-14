@@ -14,7 +14,7 @@ enum Resource:
   case Failed(error: ApiError)
 
 final class Jobs private (repository: Repository, archive: Archive, processor: Processor, dataDir: Path,
-  transfer: Semaphore, cacheLocks: Vector[Semaphore], maxJobs: Int):
+  transfer: Semaphore, cacheLocks: Vector[Semaphore], maxJobs: Int, cache: Option[FitsCache]):
   def search(query: Query): Task[List[Observation]] = archive.search(query).tap(repository.remember).map(_.map(_.observation))
   def submit(query: Query, mode: String, reference: Option[String]): Task[Download] =
     val validate = reference match
@@ -37,18 +37,31 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
     if record.download.mode == "default" then rawPath(record.images.find(_.observation.frame_id == chunk.frame_id).get)
     else preparedPath(record.download.id, chunk.id)
   private def exists(path: Path): Task[Boolean] = ZIO.attemptBlocking(Files.isRegularFile(path) && Files.size(path) > 0)
-  private def publish(output: Path)(produce: Path => Task[Unit]): Task[Unit] =
+  def cachedImage(image: ArchiveImage): ZIO[Scope, Throwable, Option[Path]] =
+    val path = rawPath(image)
+    cache match
+      case Some(value) => value.cached(path)
+      case None => exists(path).map(present => Option.when(present)(path))
+  private def publish(output: Path)(produce: Path => Task[Unit]): Task[Unit] = cache match
+    case Some(value) => value.publish(output)(produce)
+    case None => publishUnbounded(output)(produce)
+  private def publishUnbounded(output: Path)(produce: Path => Task[Unit]): Task[Unit] =
     val part = output.resolveSibling(output.getFileName.toString + "." + UUID.randomUUID().toString + ".part")
     (ZIO.attemptBlocking(Files.createDirectories(output.getParent)) *> produce(part) *> exists(part).flatMap { valid =>
       if !valid then ZIO.fail(ApiError("invalid_product", "The generated file was empty or absent"))
       else ZIO.attemptBlocking { Files.move(part, output, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); () }
     }).ensuring(ZIO.attemptBlocking(Files.deleteIfExists(part)).ignore)
-  private def raw(image: ArchiveImage): Task[Path] =
+  private def raw(image: ArchiveImage): ZIO[Scope, Throwable, Path] =
     val path = rawPath(image)
     val lock = cacheLocks((java.lang.Long.parseLong(Hash.sha256(path.toString).take(8), 16) % cacheLocks.size).toInt)
-    lock.withPermit(exists(path).flatMap { cached =>
-      if cached then ZIO.succeed(path)
-      else transfer.withPermit(publish(path)(archive.fetch(image, _))).as(path)
+    val fetch = archive match
+      case bounded: CapacityArchive.Bounded => bounded.delegate
+      case other => other
+    // Acquire the processing lease before checking/reusing or publishing the file.
+    val protect = cache.fold[ZIO[Scope, Throwable, Unit]](ZIO.unit)(_.protect(path))
+    protect *> lock.withPermit(cachedImage(image).flatMap { cached =>
+      if cached.isDefined then ZIO.succeed(path)
+      else transfer.withPermit(publish(path)(fetch.fetch(image, _))).as(path)
     })
   private def progress(chunks: List[Chunk]): Progress = Progress(true, chunks.size, chunks.count(_.status == "ready"), chunks.count(_.status == "failed"), chunks.count(_.status == "unavailable"))
   private def changeChunk(id: String, chunk: String, name: String)(f: Chunk => Chunk): Task[Unit] =
@@ -56,13 +69,13 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
       val chunks = record.download.chunks.map(c => if c.id == chunk then f(c) else c)
       record.copy(download = record.download.copy(chunks = chunks, progress = progress(chunks)))
     }.unit
-  private def reference(record: JobRecord): Task[Option[Path]] = record.download.reference_frame_id match
+  private def reference(record: JobRecord): ZIO[Scope, Throwable, Option[Path]] = record.download.reference_frame_id match
     case None => ZIO.none
     case Some(id) => repository.image(id).flatMap {
       case Some(image) => raw(image).map(Some(_))
       case None => ZIO.fail(ApiError("not_found", "Reference frame not found"))
     }
-  private def processChunk(record: JobRecord, image: ArchiveImage, chunk: Chunk): Task[Unit] =
+  private def processChunk(record: JobRecord, image: ArchiveImage, chunk: Chunk): Task[Unit] = ZIO.scoped {
     if !image.observation.is_available then ZIO.unit
     else
       val id = record.download.id
@@ -70,6 +83,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         source <- raw(image)
         ref <- if record.download.mode == "default" then ZIO.none else reference(record)
         path = if record.download.mode == "default" then source else preparedPath(id, chunk.id)
+        _ <- cache.fold[ZIO[Scope, Throwable, Unit]](ZIO.unit)(_.protect(path))
         _ <- if record.download.mode == "default" then ZIO.unit else publish(path)(processor.prepare(source, _, record.download.mode, ref, record.query))
         _ <- changeChunk(id, chunk.id, "chunk.ready")(_.copy(status = "ready", error = None))
       yield path
@@ -81,6 +95,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
           _ => changeChunk(id, chunk.id, "preview.ready")(_.copy(preview_status = "ready"))
         )
       )
+  }
   private def runJob(claimed: JobRecord): Task[Unit] =
     val id = claimed.download.id
     val work = for
@@ -143,6 +158,12 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         case "ready" => ZIO.succeed(Resource.Ready(if preview then previewPath(record.download.id, chunk.id) else fitsPath(record, chunk)))
         case _ => ZIO.fail(ApiError("internal_error", "Unknown resource state"))
     yield result
+  /** The caller's scope must include the complete streaming response lifetime. */
+  def leasedResource(chunkId: String, preview: Boolean): ZIO[Scope, Throwable, Resource] =
+    repository.chunk(chunkId).flatMap { (record, chunk) =>
+      val path = if preview then previewPath(record.download.id, chunk.id) else fitsPath(record, chunk)
+      cache.fold[ZIO[Scope, Throwable, Unit]](ZIO.unit)(_.cached(path).unit) *> resource(chunkId, preview)
+    }
   def events(id: String): ZStream[Any, Throwable, Event] = ZStream.unwrap {
     get(id) *> repository.snapshot(id).map { (download, cursor) =>
       val snapshot = ZStream.succeed(Event(cursor, "job.updated", Repository.payload(download)))
@@ -179,7 +200,10 @@ object Jobs:
       _ <- repository.recover
       semaphore <- Semaphore.make(transfers.toLong)
       locks <- ZIO.foreach(1 to 64)(_ => Semaphore.make(1))
-      jobs = new Jobs(repository, archive, processor, dataDir, semaphore, locks.toVector, maxJobs)
+      cache = archive match
+        case bounded: CapacityArchive.Bounded => Some(bounded.cache)
+        case _ => None
+      jobs = new Jobs(repository, archive, processor, dataDir, semaphore, locks.toVector, maxJobs, cache)
       records <- repository.records
       _ <- ZIO.foreachDiscard(records)(jobs.checkFiles)
       _ <- ZIO.foreachDiscard(1 to workers)(_ => jobs.worker.forkScoped)
