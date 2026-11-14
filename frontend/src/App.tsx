@@ -177,13 +177,13 @@ export function App() {
           </div>
 
           {/* Simple Tab Navigation */}
-          <nav className="flex items-center space-x-1 font-mono text-[11px]">
+          <nav className="flex items-center space-x-2 font-mono text-[11px]">
             <button
               onClick={() => setActiveTab('home')}
-              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
+              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'home'
-                  ? 'bg-paper-800 text-ochre-300 font-semibold'
-                  : 'text-paper-400 hover:text-paper-200'
+                  ? 'bg-emerald-400 text-gray-950 font-bold'
+                  : 'bg-paper-900 text-paper-300 hover:text-white'
               }`}
             >
               <Home className="w-3.5 h-3.5" />
@@ -192,10 +192,10 @@ export function App() {
 
             <button
               onClick={() => setActiveTab('viewer')}
-              className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${
+              className={`btn-tactile-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
                 activeTab === 'viewer'
-                  ? 'bg-paper-800 text-ochre-300 font-semibold'
-                  : 'text-paper-400 hover:text-paper-200'
+                  ? 'bg-emerald-400 text-gray-950 font-bold'
+                  : 'bg-paper-900 text-paper-300 hover:text-white'
               }`}
             >
               <Compass className="w-3.5 h-3.5" />

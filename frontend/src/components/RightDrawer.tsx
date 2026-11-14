@@ -237,9 +237,9 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 {/* Save Confirmation */}
                 <button
                   onClick={handleSaveTriage}
-                  className="w-full py-2 bg-paper-100 hover:bg-white text-paper-950 rounded-lg font-mono text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="btn-tactile w-full py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <CheckCircle className="w-3.5 h-3.5 text-ochre-600" />
+                  <CheckCircle className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>{isSaved ? 'Classification Recorded ✓' : 'Save Classification'}</span>
                 </button>
 
@@ -247,10 +247,10 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 {onOpenDiscoveryReport && (
                   <button
                     onClick={onOpenDiscoveryReport}
-                    className="w-full py-2 bg-paper-800 hover:bg-paper-750 border border-ochre-400 text-ochre-300 rounded-lg font-mono text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
+                    className="btn-tactile w-full py-2.5 bg-paper-800 hover:bg-paper-750 border-2 border-black text-emerald-300 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
                     title="Open full scientific summary with 102-band spectrum plot, Gaia/WISE cross-check, and JSON export"
                   >
-                    <FileText className="w-3.5 h-3.5 text-ochre-400" />
+                    <FileText className="w-3.5 h-3.5 text-emerald-400" />
                     <span>View Candidate Discovery Report →</span>
                   </button>
                 )}

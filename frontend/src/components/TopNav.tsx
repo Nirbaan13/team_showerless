@@ -60,17 +60,17 @@ export const TopNav: React.FC<TopNavProps> = ({
       {/* Share Direct Coordinate URL */}
       <button
         onClick={handleCopyShareLink}
-        className="px-2.5 py-1 rounded bg-paper-950 border border-paper-800 text-paper-200 hover:border-ochre-500 hover:text-ochre-300 text-[11px] font-mono flex items-center gap-1.5 transition-colors"
+        className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-paper-900 border-2 border-black text-paper-200 hover:text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 cursor-pointer"
         title="Copy direct shareable link for this coordinate and band"
       >
-        {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+        {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-emerald-400" />}
         <span>{copiedLink ? 'Link Copied!' : 'Share View'}</span>
       </button>
 
       {/* Embed Iframe Snippet */}
       <button
         onClick={onOpenEmbedModal}
-        className="px-2.5 py-1 rounded bg-paper-950 border border-paper-800 text-paper-200 hover:border-ochre-500 hover:text-ochre-300 text-[11px] font-mono flex items-center gap-1.5 transition-colors"
+        className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-paper-900 border-2 border-black text-paper-200 hover:text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 cursor-pointer"
         title="Generate responsive <iframe> embed snippet"
       >
         <Code className="w-3.5 h-3.5 text-ochre-400" />

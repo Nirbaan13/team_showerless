@@ -147,17 +147,17 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
         {filteredComments.map((item) => (
           <div
             key={item.id}
-            className="p-3.5 rounded-xl bg-paper-950 border border-paper-800 space-y-2 hover:border-paper-700 transition-colors"
+            className="p-3.5 rounded-xl bg-paper-950 border-2 border-black/80 space-y-2 card-tactile"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-paper-800 flex items-center justify-center font-bold text-[9px] text-paper-300">
+                <div className="w-5 h-5 rounded-full bg-paper-800 flex items-center justify-center font-bold text-[9px] text-emerald-400 border border-black">
                   {item.author.charAt(0)}
                 </div>
-                <span className="font-medium text-paper-100 text-xs font-sans">
+                <span className="font-semibold text-paper-100 text-xs font-sans">
                   {item.author}
                 </span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-paper-800/80 text-paper-400">
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-paper-800 text-paper-300 border border-black/60">
                   {item.role}
                 </span>
               </div>
@@ -172,7 +172,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
               {item.message}
             </p>
 
-            <div className="pt-2 flex items-center justify-between border-t border-paper-850">
+            <div className="pt-2 flex items-center justify-between border-t border-paper-800">
               {getVoteBadge(item.vote)}
               <span className="text-[10px] font-mono text-paper-500">
                 {item.candidateId}
@@ -185,13 +185,13 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
       {/* Input Message Area */}
       <form onSubmit={handlePostComment} className="p-3.5 border-t border-paper-800 bg-paper-950 space-y-2.5">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono text-paper-400 uppercase tracking-wider">
-            Your Verification Tag
+          <span className="text-[10px] font-mono text-paper-400 uppercase tracking-wider font-semibold">
+            Verification Tag
           </span>
           <select
             value={selectedVote}
             onChange={(e) => setSelectedVote(e.target.value as any)}
-            className="bg-paper-900 border border-paper-800 rounded px-2 py-1 text-[10px] font-mono text-paper-200 focus:outline-none"
+            className="bg-paper-900 border-2 border-black rounded-lg px-2 py-1 text-[10px] font-mono text-paper-200 focus:outline-none cursor-pointer"
           >
             <option value="confirm_motion">Confirm Motion</option>
             <option value="investigate">Needs Investigation</option>
@@ -206,13 +206,13 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Share observation note with NASA volunteers..."
-            className="flex-1 bg-paper-900 border border-paper-800 rounded-lg px-3 py-2 text-xs font-sans text-paper-100 focus:outline-none focus:border-ochre-500 placeholder:text-paper-600"
+            className="flex-1 bg-paper-900 border-2 border-black rounded-xl px-3 py-2 text-xs font-sans text-paper-100 focus:outline-none focus:border-emerald-400 placeholder:text-paper-600"
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-paper-100 hover:bg-white text-paper-950 rounded-lg text-xs font-mono font-semibold transition-all shrink-0 flex items-center gap-1.5 shadow-sm"
+            className="btn-tactile px-4 py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl text-xs font-mono font-bold border-2 border-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer"
           >
-            <Send className="w-3 h-3" />
+            <Send className="w-3 h-3 stroke-[2.5]" />
             <span>Post</span>
           </button>
         </div>

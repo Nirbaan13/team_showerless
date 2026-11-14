@@ -85,7 +85,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
           <button
             type="submit"
-            className="w-full py-1.5 bg-ochre-400 hover:bg-ochre-300 text-paper-950 rounded font-mono text-[11px] font-semibold transition-colors"
+            className="btn-tactile w-full py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer mt-1"
           >
             Update Field
           </button>
@@ -94,15 +94,15 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         {/* FOV Area Size */}
         <div className="mt-2.5 pt-2 border-t border-paper-800">
           <span className="text-[10px] font-mono text-paper-400 block mb-1">Field of View (FOV)</span>
-          <div className="grid grid-cols-4 gap-1">
+          <div className="grid grid-cols-4 gap-1.5">
             {(["1'", "3'", "5'", "10'"] as FOVOption[]).map((f) => (
               <button
                 key={f}
                 onClick={() => onUpdateFov(f)}
-                className={`py-1 rounded font-mono text-[11px] border transition-colors ${
+                className={`btn-tactile-sm py-1 rounded-lg font-mono text-[11px] border-2 border-black transition-all cursor-pointer ${
                   fov === f
-                    ? 'bg-paper-800 border-ochre-400 text-ochre-300 font-semibold'
-                    : 'bg-paper-950 border-paper-800 text-paper-400 hover:text-paper-100'
+                    ? 'bg-emerald-400 text-gray-950 font-bold'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
               >
                 {f}
@@ -124,17 +124,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               onSelectArray('all');
               onSelectChannel(null);
             }}
-            className={`text-[10px] font-mono px-1.5 py-0.5 rounded border transition-colors ${
+            className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
               selectedArray === 'all'
-                ? 'bg-paper-800 border-ochre-400 text-ochre-300 font-semibold'
-                : 'bg-paper-950 border-paper-800 text-paper-400 hover:text-paper-100'
+                ? 'bg-emerald-400 text-gray-950 font-bold'
+                : 'bg-paper-950 border-black text-paper-400 hover:text-paper-100'
             }`}
           >
             Stacked
           </button>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {DETECTOR_ARRAY_SPECS.map((spec) => {
             const isSelected = selectedArray === spec.id;
             return (
@@ -144,14 +144,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   onSelectArray(spec.id as DetectorArrayId);
                   onSelectChannel(null);
                 }}
-                className={`w-full px-2 py-1.5 rounded border text-left flex items-center justify-between transition-colors ${
+                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-paper-800 border-ochre-400 text-paper-100'
-                    : 'bg-paper-950 border-paper-800 text-paper-400 hover:border-paper-700 hover:text-paper-200'
+                    ? 'bg-paper-800 text-paper-100 font-medium'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                 }`}
               >
                 <div>
-                  <div className="font-mono text-[11px] font-medium text-paper-200">
+                  <div className="font-mono text-[11px] font-semibold text-paper-200">
                     {spec.name}
                   </div>
                   <div className="text-[10px] font-mono text-paper-500">
@@ -159,7 +159,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   </div>
                 </div>
                 {isSelected && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 )}
               </button>
             );
@@ -169,12 +169,12 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
       {/* 3. Subtraction Mode */}
       <div className="p-3 border-b border-paper-800">
-        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
-          <Filter className="w-3.5 h-3.5 text-ochre-400" />
+        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
+          <Filter className="w-3.5 h-3.5 text-emerald-400" />
           Background Subtraction
         </span>
 
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {[
             { id: 'raw_calibrated', label: 'Raw Calibrated FITS' },
             { id: 'zodi_reference_subtracted', label: 'Zodiacal Light Subtracted' },
@@ -185,10 +185,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <button
                 key={mode.id}
                 onClick={() => onChangeSubtractionMode(mode.id as SubtractionMode)}
-                className={`w-full px-2 py-1.5 rounded border text-left font-mono text-[11px] transition-colors ${
+                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left font-mono text-[11px] transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-paper-800 border-ochre-400 text-ochre-300 font-medium'
-                    : 'bg-paper-950 border-paper-800 text-paper-400 hover:text-paper-100'
+                    ? 'bg-paper-800 text-emerald-300 font-semibold'
+                    : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
               >
                 {mode.label}
