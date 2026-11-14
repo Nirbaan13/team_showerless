@@ -55,7 +55,6 @@ import {
   Menu,
   X,
   Share2,
-  Crosshair,
 } from 'lucide-react';
 import { InferencePage } from './components/InferencePage';
 
@@ -528,12 +527,67 @@ export function App() {
       ],
       classification: 'moving_object',
       confidence: 'high',
+      catalogId: `Moving Track (${newRa.toFixed(1)}°, ${newDec.toFixed(1)}°)`,
       volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'} px) & stacked 29×29 coadds.`,
       isKnownCatalogMatch: false,
       properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
     };
 
-    resolvedCands = [customCandidate];
+    const customStarCandidate: CandidateObject = {
+      id: `star-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
+      ra: newRa + 0.008,
+      dec: newDec - 0.006,
+      pixelX: 192,
+      pixelY: 184,
+      mlRank: 2,
+      mlScore: 0.42,
+      mlPriorityScore: 0.42,
+      heuristicRank: 2,
+      randomForestRank: 2,
+      detectionMethod: 'heuristic_leave_one_out',
+      fitRmsPx: 0.48,
+      speedArcsecPerHour: 0.9,
+      epochPositions: [
+        { epochIndex: 0, x: 192, y: 184, flux: 24.0, snr: 13.8 },
+        { epochIndex: 1, x: 192, y: 184, flux: 23.8, snr: 13.5 },
+        { epochIndex: 2, x: 192, y: 184, flux: 24.2, snr: 14.0 },
+        { epochIndex: 3, x: 192, y: 184, flux: 23.9, snr: 13.7 },
+        { epochIndex: 4, x: 192, y: 184, flux: 24.1, snr: 13.9 },
+      ],
+      classification: 'already_known',
+      confidence: 'high',
+      isKnownCatalogMatch: true,
+      matchedCatalog: 'Gaia DR3',
+      catalogId: 'Field Star Residual #2',
+      volunteerNotes: 'Stationary background star residual: stays sharp in Fixed Sky Spot stack, smears when shifted.',
+    };
+
+    const customArtifactCandidate: CandidateObject = {
+      id: `art-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
+      ra: newRa - 0.009,
+      dec: newDec + 0.007,
+      pixelX: 310,
+      pixelY: 212,
+      mlRank: 3,
+      mlScore: 0.18,
+      mlPriorityScore: 0.18,
+      heuristicRank: 3,
+      randomForestRank: 3,
+      detectionMethod: 'heuristic_leave_one_out',
+      fitRmsPx: 2.35,
+      speedArcsecPerHour: 4.1,
+      epochPositions: [
+        { epochIndex: 0, x: 310, y: 212, flux: 29.0, snr: 8.6 },
+        { epochIndex: 1, x: 315, y: 205, flux: 4.1, snr: 1.4 },
+      ],
+      classification: 'artifact',
+      confidence: 'medium',
+      isKnownCatalogMatch: false,
+      catalogId: 'Detector Spike #3',
+      volunteerNotes: 'Single-exposure cosmic-ray hit: does not reinforce along a multi-epoch track.',
+    };
+
+    resolvedCands = [customCandidate, customStarCandidate, customArtifactCandidate];
     jobFinished = true;
     finalizeMlInsights();
   };
@@ -753,23 +807,6 @@ export function App() {
               <UserCheck className="w-3.5 h-3.5" />
               <span>Verification Feed</span>
             </button>
-
-            <button
-              type="button"
-              aria-pressed={activeTab === 'motion'}
-              onClick={() => {
-                setIsPlaying(false);
-                setActiveTab('motion');
-              }}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap transition-all border-2 border-black cursor-pointer ${
-                activeTab === 'motion'
-                  ? 'bg-emerald-400 text-gray-950 font-bold'
-                  : 'bg-paper-900 text-paper-300 hover:text-white'
-              }`}
-            >
-              <Crosshair className="w-3.5 h-3.5" />
-              <span>Motion Review</span>
-            </button>
           </nav>
         </div>
 
@@ -926,26 +963,6 @@ export function App() {
                   className={`w-4 h-4 ${activeTab === 'feed' ? 'text-gray-950' : 'text-sky-400'}`}
                 />
                 <span>Verification Feed</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setIsPlaying(false);
-                  setActiveTab('motion');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
-                  activeTab === 'motion'
-                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
-                }`}
-              >
-                <Crosshair
-                  className={`w-4 h-4 ${
-                    activeTab === 'motion' ? 'text-gray-950' : 'text-emerald-400'
-                  }`}
-                />
-                <span>Motion Review</span>
               </button>
 
               {/* View Mode Switcher in Mobile Drawer */}

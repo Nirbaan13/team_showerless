@@ -330,23 +330,24 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       // Priority 1 is deep red, fading to lighter shades for lower priority
       const hexRadius = Math.max(12, Math.min(26, psfRadius * 2 + 6));
       ctx.save();
+      ctx.globalAlpha = isSelected ? 1.0 : 0.65;
       drawHexagon(offsetX, offsetY, hexRadius);
-      ctx.fillStyle = priority.fill;
+      ctx.fillStyle = isSelected ? 'rgba(16, 185, 129, 0.22)' : priority.fill;
       ctx.fill();
 
-      ctx.strokeStyle = priority.border;
-      ctx.lineWidth = (rank === 1 ? 2.2 : rank === 2 ? 1.8 : 1.2) / zoom;
+      ctx.strokeStyle = isSelected ? '#34d399' : priority.border;
+      ctx.lineWidth = (isSelected ? 2.4 : rank === 1 ? 1.8 : 1.2) / zoom;
       ctx.stroke();
 
-      // Priority Pill Badge (e.g. "P1", "P2", "P3")
-      const badgeText = `P${rank}`;
-      ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
-      const badgeWidth = ctx.measureText(badgeText).width + 6 / zoom;
-      const badgeHeight = 11 / zoom;
+      // Priority Pill Badge (e.g. "★ #1" when selected, or "P2", "P3" when unselected)
+      const badgeText = isSelected ? `★ #${rank} SELECTED` : `#${rank}`;
+      ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
+      const badgeWidth = ctx.measureText(badgeText).width + 7 / zoom;
+      const badgeHeight = 12 / zoom;
       const badgeX = offsetX - hexRadius;
-      const badgeY = offsetY - hexRadius - 1 / zoom;
+      const badgeY = offsetY - hexRadius - 2 / zoom;
 
-      ctx.fillStyle = priority.badgeBg;
+      ctx.fillStyle = isSelected ? '#10b981' : priority.badgeBg;
       ctx.beginPath();
       if (typeof ctx.roundRect === 'function') {
         ctx.roundRect(badgeX, badgeY - badgeHeight, badgeWidth, badgeHeight, 2.5 / zoom);
@@ -355,17 +356,17 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
       ctx.fill();
 
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(badgeText, badgeX + 3 / zoom, badgeY - 2.5 / zoom);
+      ctx.fillStyle = isSelected ? '#052e16' : '#ffffff';
+      ctx.fillText(badgeText, badgeX + 3.5 / zoom, badgeY - 3 / zoom);
 
-      // 4. Object Name Label (for known / confirmed objects like 3I/ATLAS, Gaia DR3, WISE)
+      // 4. Object Name Label (for known / confirmed objects or selected candidate)
       const objectLabel =
+        cand.validationData?.objectName ||
         cand.catalogId ||
         cand.matchedCatalog ||
-        cand.validationData?.objectName ||
-        (cand.isKnownCatalogMatch ? 'Known Object' : null);
+        (cand.isKnownCatalogMatch ? 'Known Object' : `Candidate #${rank}`);
 
-      if (objectLabel) {
+      if (objectLabel && (isSelected || cand.isKnownCatalogMatch || rank <= 4)) {
         ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
         const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
         const labelHeight = 13 / zoom;
@@ -373,9 +374,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const labelY = offsetY - 7 / zoom;
 
         // Label background pill
-        ctx.fillStyle = 'rgba(10, 10, 14, 0.9)';
-        ctx.strokeStyle = priority.border;
-        ctx.lineWidth = 1 / zoom;
+        ctx.fillStyle = isSelected ? 'rgba(6, 78, 59, 0.92)' : 'rgba(10, 10, 14, 0.88)';
+        ctx.strokeStyle = isSelected ? '#34d399' : priority.border;
+        ctx.lineWidth = (isSelected ? 1.5 : 1) / zoom;
         ctx.beginPath();
         if (typeof ctx.roundRect === 'function') {
           ctx.roundRect(labelX, labelY, labelWidth, labelHeight, 3 / zoom);
@@ -385,23 +386,19 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#34d399'; // Emerald text for confirmed object names
+        ctx.fillStyle = isSelected ? '#ecfdf5' : '#cbd5e1';
         ctx.fillText(objectLabel, labelX + 4 / zoom, labelY + 9.5 / zoom);
-      } else if (isSelected) {
-        ctx.font = `${9 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
-        ctx.fillText(`Candidate #${rank}`, offsetX + hexRadius + 4 / zoom, offsetY + 3 / zoom);
       }
 
       // 5. Selected Reticle & Crosshairs
       if (isSelected) {
-        ctx.strokeStyle = priority.border;
-        ctx.lineWidth = 1.6 / zoom;
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.8 / zoom;
         ctx.beginPath();
-        ctx.arc(offsetX, offsetY, hexRadius + 4 / zoom, 0, Math.PI * 2);
+        ctx.arc(offsetX, offsetY, hexRadius + 4.5 / zoom, 0, Math.PI * 2);
         ctx.stroke();
 
-        const tLen = 6 / zoom;
+        const tLen = 7 / zoom;
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY - hexRadius - 2 / zoom);
         ctx.lineTo(offsetX, offsetY - hexRadius - 2 / zoom - tLen);
@@ -713,6 +710,65 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           </span>
         </div>
       )}
+
+      {/* Active Selected Object Switcher Bar (Top Center) */}
+      {candidates.length > 0 && (() => {
+        const activeIdx = Math.max(
+          0,
+          candidates.findIndex((c) => c.id === selectedCandidateId)
+        );
+        const activeCand = candidates[activeIdx] || candidates[0];
+        const objName =
+          activeCand.validationData?.objectName ||
+          activeCand.catalogId ||
+          activeCand.id;
+        return (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="hidden sm:flex absolute top-2.5 left-1/2 -translate-x-1/2 bg-paper-950/95 border-2 border-emerald-400/80 shadow-[0_0_18px_rgba(16,185,129,0.22)] rounded-xl px-2 py-1 items-center gap-2 z-20 font-mono text-[10px] pointer-events-auto"
+          >
+            {candidates.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  const prevIdx = (activeIdx - 1 + candidates.length) % candidates.length;
+                  onSelectCandidate(candidates[prevIdx].id);
+                }}
+                className="px-1.5 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-paper-200 border border-paper-700 cursor-pointer"
+                title="Select Previous Candidate"
+              >
+                ◀ Prev
+              </button>
+            )}
+            <div className="flex items-center gap-1.5 px-1">
+              <span className="text-gray-950 bg-emerald-400 font-bold px-1.5 py-0.5 rounded text-[9px]">
+                ★ SELECTED #{activeCand.mlRank || activeIdx + 1}/{candidates.length}
+              </span>
+              <span className="text-white font-bold truncate max-w-[11rem]">
+                {objName}
+              </span>
+              {activeCand.speedArcsecPerHour !== undefined && (
+                <span className="text-emerald-300">
+                  · {activeCand.speedArcsecPerHour.toFixed(1)}″/h
+                </span>
+              )}
+            </div>
+            {candidates.length > 1 && (
+              <button
+                type="button"
+                onClick={() => {
+                  const nextIdx = (activeIdx + 1) % candidates.length;
+                  onSelectCandidate(candidates[nextIdx].id);
+                }}
+                className="px-1.5 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-paper-200 border border-paper-700 cursor-pointer"
+                title="Select Next Candidate"
+              >
+                Next ▶
+              </button>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Skipped Frame Notification */}
       {skippedNotice && (

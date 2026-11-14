@@ -307,15 +307,26 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         {/* TAB 1: CANDIDATE TRIAGE & VERIFICATION */}
         {activeTab === 'triage' && (
           <div className="p-4 space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-paper-100 uppercase tracking-wider text-[11px]">
-                  Object Inspection
+            <div className="p-2.5 rounded-xl bg-emerald-950/30 border-2 border-emerald-400/60 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <span className="font-mono text-[9px] text-emerald-400 uppercase tracking-wider font-bold block">
+                  ★ Selected Object on Sky
                 </span>
-                <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                  {candidate ? candidate.id : 'None Selected'}
+                <span className="text-xs font-mono text-white font-bold truncate block">
+                  {candidate
+                    ? `#${candidate.mlRank} · ${
+                        candidate.validationData?.objectName ||
+                        candidate.catalogId ||
+                        candidate.id
+                      }`
+                    : 'None Selected'}
                 </span>
               </div>
+              {candidate && (
+                <span className="text-[9px] font-mono font-bold text-gray-950 bg-emerald-400 px-2 py-0.5 rounded border border-black shrink-0">
+                  ACTIVE
+                </span>
+              )}
             </div>
 
             {candidate ? (
@@ -333,23 +344,27 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                   </div>
                 )}
 
-                {/* Stack the Evidence (Fixed vs Moving Coadd Stamps) */}
+                {/* Shift & Stack Motion Proof (Fixed vs Moving Coadd Stamps) */}
                 {(() => {
                   const stacks = getOrCreateEvidenceStacks(candidate);
                   if (!stacks.fixedStack && !stacks.motionStack) return null;
                   return (
                     <div className="p-2.5 rounded-xl bg-paper-950 border-2 border-black space-y-2">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-1.5">
                         <span className="text-[10px] font-mono uppercase tracking-wider text-paper-200 font-bold flex items-center gap-1.5">
                           <Layers className="w-3 h-3 text-emerald-400" />
-                          Stack the Evidence
+                          Shift &amp; Stack Motion Proof
                         </span>
-                        <span className="text-[9px] font-mono text-emerald-400">
-                          {stacks.contributingExposures} exposures
+                        <span className="text-[9px] font-mono font-bold text-emerald-300 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/40">
+                          {stacks.verdictBadge}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-paper-900 p-1.5 rounded-lg border border-paper-800 flex flex-col items-center">
+                          <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                            <span className="text-paper-300 font-bold">1. Fixed Sky</span>
+                            <span className="text-paper-400">{stacks.fixedSnr}σ</span>
+                          </div>
                           <img
                             src={stacks.fixedStack}
                             width={29}
@@ -357,9 +372,15 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                             alt="Fixed sky position stack"
                             className="w-full max-w-[5.5rem] aspect-square rounded border border-black bg-black [image-rendering:pixelated]"
                           />
-                          <span className="text-[9px] font-mono text-paper-400 mt-1">Fixed Sky</span>
+                          <span className="text-[9px] font-mono text-paper-200 font-bold mt-1">
+                            {stacks.fixedStatus}
+                          </span>
                         </div>
-                        <div className="bg-paper-900 p-1.5 rounded-lg border border-emerald-500/40 flex flex-col items-center">
+                        <div className="bg-paper-900 p-1.5 rounded-lg border border-emerald-500/50 flex flex-col items-center">
+                          <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                            <span className="text-emerald-300 font-bold">2. Follow Track</span>
+                            <span className="text-emerald-300 font-bold">{stacks.motionSnr}σ</span>
+                          </div>
                           <img
                             src={stacks.motionStack}
                             width={29}
@@ -367,9 +388,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                             alt="Following fitted track stack"
                             className="w-full max-w-[5.5rem] aspect-square rounded border border-black bg-black [image-rendering:pixelated]"
                           />
-                          <span className="text-[9px] font-mono text-emerald-300 mt-1">Moving Track</span>
+                          <span className="text-[9px] font-mono text-emerald-300 font-bold mt-1">
+                            {stacks.motionStatus}
+                          </span>
                         </div>
                       </div>
+                      <p className="text-[10px] text-paper-300 leading-relaxed">
+                        {stacks.plainExplanation}
+                      </p>
                     </div>
                   );
                 })()}

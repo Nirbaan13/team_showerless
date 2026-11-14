@@ -314,63 +314,143 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         </div>
       )}
 
-      {/* Ivan's "Stack the Evidence" (Comparing Fixed vs Moving Stacks) */}
+      {/* Intuitive "Shift & Stack Motion Proof" (Comparing Fixed Sky vs Following Fitted Track) */}
       {activeCandidate && evidenceStacks && (
         <section
-          className="p-3 rounded-xl bg-paper-950 border-2 border-black space-y-2.5 anim-fall"
+          className="p-3 rounded-xl bg-paper-950 border-2 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.12)] space-y-2.5 anim-fall"
           aria-labelledby="drawer-stack-evidence-label"
         >
+          {/* Active Selected Candidate Differentiator Header */}
+          <div className="flex items-center justify-between gap-2 pb-2 border-b border-paper-800">
+            <div className="min-w-0">
+              <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
+                ★ Currently Inspecting Object
+              </span>
+              <span className="font-mono text-xs font-bold text-white truncate block">
+                #{activeCandidate.mlRank} ·{' '}
+                {activeCandidate.validationData?.objectName ||
+                  activeCandidate.catalogId ||
+                  activeCandidate.id}
+              </span>
+            </div>
+            <span
+              className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border shrink-0 ${
+                evidenceStacks.winnerMode === 'motion'
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/60'
+                  : evidenceStacks.winnerMode === 'fixed'
+                  ? 'bg-sky-500/20 text-sky-300 border-sky-400/60'
+                  : 'bg-rose-500/20 text-rose-300 border-rose-400/60'
+              }`}
+            >
+              {evidenceStacks.verdictBadge}
+            </span>
+          </div>
+
           <div className="flex items-center justify-between gap-2">
             <h3
               id="drawer-stack-evidence-label"
               className="font-mono text-[11px] font-bold text-paper-100 uppercase tracking-wider flex items-center gap-1.5"
             >
               <Layers className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Stack the Evidence</span>
+              <span>Shift &amp; Stack Motion Proof</span>
             </h3>
-            <span className="text-[10px] font-mono text-emerald-300 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
-              {evidenceStacks.contributingExposures} exposures
+            <span className="text-[10px] font-mono text-paper-300 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
+              {evidenceStacks.contributingExposures} epochs co-added
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-2.5">
-            <figure className="bg-paper-900 p-2 rounded-lg border border-paper-800 flex flex-col items-center">
-              {evidenceStacks.fixedStack ? (
-                <img
-                  src={evidenceStacks.fixedStack}
-                  width={29}
-                  height={29}
-                  alt="Fixed sky position stack"
-                  className="w-full max-w-[7rem] aspect-square rounded border-2 border-black bg-black [image-rendering:pixelated]"
-                />
-              ) : (
-                <div className="w-full max-w-[7rem] aspect-square rounded border-2 border-black bg-black" />
-              )}
-              <figcaption className="text-[10px] font-mono text-paper-300 mt-1.5 text-center font-semibold">
-                Fixed sky position
+            {/* Box 1: Fixed Sky Position */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'fixed'
+                  ? 'bg-sky-950/25 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-paper-300 font-bold">1. Fixed Sky Spot</span>
+                <span className="text-paper-400">{evidenceStacks.fixedSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.fixedStack ? (
+                  <img
+                    src={evidenceStacks.fixedStack}
+                    width={29}
+                    height={29}
+                    alt="Fixed sky position stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                {/* Center target ring to make smearing vs pinpoint dot obvious */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full border border-dashed border-white/45" />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-paper-200 mt-1.5 text-center font-bold">
+                {evidenceStacks.fixedStatus}
               </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Camera stays still on RA/Dec
+              </span>
             </figure>
 
-            <figure className="bg-paper-900 p-2 rounded-lg border border-emerald-500/40 flex flex-col items-center">
-              {evidenceStacks.motionStack ? (
-                <img
-                  src={evidenceStacks.motionStack}
-                  width={29}
-                  height={29}
-                  alt="Following the fitted track stack"
-                  className="w-full max-w-[7rem] aspect-square rounded border-2 border-black bg-black [image-rendering:pixelated]"
-                />
-              ) : (
-                <div className="w-full max-w-[7rem] aspect-square rounded border-2 border-black bg-black" />
-              )}
-              <figcaption className="text-[10px] font-mono text-emerald-300 mt-1.5 text-center font-semibold">
-                Following fitted track
+            {/* Box 2: Following Fitted Track */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'motion'
+                  ? 'bg-emerald-950/30 border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-emerald-300 font-bold">2. Follow Track</span>
+                <span className="text-emerald-300 font-bold">{evidenceStacks.motionSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.motionStack ? (
+                  <img
+                    src={evidenceStacks.motionStack}
+                    width={29}
+                    height={29}
+                    alt="Following the fitted track stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                {/* Center target ring to highlight concentrated central peak */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div
+                    className={`w-5 h-5 rounded-full border ${
+                      evidenceStacks.winnerMode === 'motion'
+                        ? 'border-emerald-400/90'
+                        : 'border-dashed border-white/45'
+                    }`}
+                  />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-emerald-300 mt-1.5 text-center font-bold">
+                {evidenceStacks.motionStatus}
               </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Shifts frames along path
+              </span>
             </figure>
           </div>
 
+          {/* Plain-English Takeaway Callout */}
+          <div className="p-2 rounded-lg bg-paper-900/90 border border-paper-800 text-[10px] text-paper-200 leading-relaxed">
+            <span className="font-mono font-bold text-emerald-400 uppercase mr-1">
+              How to read this:
+            </span>
+            {evidenceStacks.plainExplanation}
+          </div>
+
           {/* Track Kinematics & Fit Telemetry */}
-          <div className="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono">
+          <div className="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px] font-mono">
             <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
               <span className="text-paper-500 block text-[9px]">Fit RMS</span>
               <span className="text-paper-100 font-bold">
@@ -390,17 +470,21 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
               </span>
             </div>
           </div>
-
-          <p className="text-[10px] text-paper-400 leading-relaxed">
-            {activeCandidate.detectionMethod === 'bloom_centroids'
-              ? 'Both views stack the detector BLOOM masks. Bright pixels show where core masks overlap along the linear trajectory.'
-              : 'Both views coadd the same difference frames at identical contrast. Co-adding along the fitted trajectory concentrates a true moving body into a central peak.'}
-          </p>
         </section>
       )}
 
+      {/* Ranked Candidates List Header */}
+      <div className="flex items-center justify-between pt-1 px-0.5">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-paper-400 font-bold">
+          Select Object to Compare ({ranked.length})
+        </span>
+        <span className="text-[9px] font-mono text-emerald-400">
+          Click any row to switch
+        </span>
+      </div>
+
       {/* Ranked Candidates List */}
-      <ol className="space-y-1.5">
+      <ol className="space-y-2">
         {ranked.map((r, i) => {
           const isSelected = r.candidate.id === selectedCandidateId;
           const pct = Math.round(r.score * 100);
@@ -417,28 +501,35 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectCandidate(r.candidate.id)}
-                className={`btn-tactile-sm w-full p-2.5 rounded-lg border-2 border-black text-left flex items-center gap-2.5 cursor-pointer transition-all ${
+                className={`btn-tactile-sm w-full p-2.5 rounded-xl border-2 text-left flex items-center gap-2.5 cursor-pointer transition-all relative overflow-hidden ${
                   isSelected
-                    ? 'bg-paper-800 ring-1 ring-emerald-400'
-                    : 'bg-paper-950 hover:bg-paper-900'
+                    ? 'bg-emerald-950/35 border-emerald-400 ring-2 ring-emerald-400/50 shadow-[0_0_18px_rgba(16,185,129,0.25)]'
+                    : 'bg-paper-950 border-black opacity-80 hover:opacity-100 hover:bg-paper-900 hover:border-paper-700'
                 }`}
               >
+                {/* Left Accent Stripe on Selected Candidate */}
+                {isSelected && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-400" />
+                )}
+
                 <span
                   className={`w-7 h-7 shrink-0 rounded-md border-2 border-black flex items-center justify-center font-mono font-bold text-[11px] ${
-                    r.displayRank === 1
+                    isSelected
+                      ? 'bg-emerald-400 text-gray-950'
+                      : r.displayRank === 1
                       ? rankingMode === 'forest'
                         ? 'bg-sky-400 text-gray-950'
                         : isBloom
                         ? 'bg-amber-400 text-gray-950'
-                        : 'bg-emerald-400 text-gray-950'
-                      : 'bg-paper-800 text-paper-200'
+                        : 'bg-emerald-400/80 text-gray-950'
+                      : 'bg-paper-800 text-paper-300'
                   }`}
                 >
                   #{r.displayRank}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[11px] text-paper-100 font-semibold truncate flex items-center gap-1">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="font-mono text-[11px] text-paper-100 font-bold truncate flex items-center gap-1">
                       {r.candidate.isKnownCatalogMatch && (
                         <Sparkles className="w-3 h-3 text-emerald-400 shrink-0" />
                       )}
@@ -448,16 +539,25 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
                           r.candidate.id}
                       </span>
                     </span>
-                    <span className="text-[9px] font-mono text-paper-400 shrink-0 px-1.5 py-0.5 rounded bg-paper-900 border border-paper-800">
-                      {isBloom ? 'BLOOM' : CLASS_LABEL[r.candidate.classification] || 'Track'}
-                    </span>
+                    {isSelected ? (
+                      <span className="text-[9px] font-mono font-bold text-gray-950 bg-emerald-400 shrink-0 px-1.5 py-0.5 rounded border border-black shadow-sm">
+                        ★ SELECTED
+                      </span>
+                    ) : (
+                      <span className="text-[9px] font-mono text-paper-400 shrink-0 px-1.5 py-0.5 rounded bg-paper-900 border border-paper-800">
+                        {isBloom ? 'BLOOM' : CLASS_LABEL[r.candidate.classification] || 'Track'}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 flex items-center justify-between text-[9px] font-mono text-paper-400">
                     <span>
                       H:#{hRank}
-                      {rfRank != null ? ` · RF:#${rfRank}` : ''} · {r.candidate.epochPositions.length} epochs
+                      {rfRank != null ? ` · RF:#${rfRank}` : ''} ·{' '}
+                      {(r.candidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/h
                     </span>
-                    <span className="text-emerald-300 font-bold">{pct}%</span>
+                    <span className={isSelected ? 'text-emerald-300 font-bold' : 'text-paper-300 font-semibold'}>
+                      {isSelected ? `Active (${pct}%)` : `Inspect (${pct}%)`}
+                    </span>
                   </div>
                   <div className="mt-1 h-1.5 rounded-full bg-paper-800 overflow-hidden">
                     <div
