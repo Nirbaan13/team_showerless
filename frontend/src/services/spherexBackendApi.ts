@@ -570,3 +570,67 @@ export function getChunkPreviewUrl(chunkId: string): string {
 export function getChunkFitsUrl(chunkId: string): string {
   return `${BACKEND_BASE_URL}/api/chunks/${chunkId}`;
 }
+
+export interface MolecularDetection {
+  species: string;
+  formula: string;
+  wavelength_um: number;
+  center_um: number;
+  bandwidth_um: number;
+  depth_pct: number;
+  significance_snr: number;
+  type: string;
+  interpretation: string;
+}
+
+export interface TargetSpectrumResult {
+  target: string;
+  ra: number;
+  dec: number;
+  candidate_id?: string | null;
+  aperture_radius_pix: number;
+  subtraction_mode: string;
+  bad_pixel_mask: string;
+  wcs_mode: string;
+  molecular_detections: MolecularDetection[];
+  detectors_summary: Record<string, { range: string; mean_flux_mjy: number; mean_snr: number; channels: number }>;
+  total_channels: number;
+  spectrum: Array<{
+    channel: number;
+    detector: string;
+    detector_array: 1 | 2 | 3 | 4 | 5 | 6;
+    wavelength_um: number;
+    bandwidth_um: number;
+    flux_mjy: number;
+    uncertainty_mjy: number;
+    snr: number;
+    flagged: boolean;
+  }>;
+}
+
+/**
+ * Fetches Shasta's 102-band calibrated spectrophotometry across SPHEREx detectors D1-D6.
+ */
+export async function fetchTargetSpectrum(
+  ra: number,
+  dec: number,
+  candidateId?: string | null,
+  radiusPix: number = 2.0,
+  subtraction: string = 'zodi_subtracted'
+): Promise<TargetSpectrumResult> {
+  const params = new URLSearchParams({
+    ra: ra.toString(),
+    dec: dec.toString(),
+    radius_pix: radiusPix.toString(),
+    subtraction,
+  });
+  if (candidateId) {
+    params.set('candidate_id', candidateId);
+  }
+  const res = await fetch(`/api/motion/spectrum?${params.toString()}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch target spectrum: ${res.statusText}`);
+  }
+  return await res.json();
+}
+
