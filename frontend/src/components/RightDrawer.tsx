@@ -99,6 +99,7 @@ interface RightDrawerProps {
   subtractionMode?: import('../types/spherex').SubtractionMode;
   controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
   onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
+  mlAnalysisStatus?: import('../types/spherex').MLAnalysisStatus;
   className?: string;
 }
 
@@ -121,6 +122,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   subtractionMode,
   controlledTab,
   onTabChange,
+  mlAnalysisStatus,
   className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
@@ -296,6 +298,9 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
               onSelectCandidate(id);
             }}
             isScientistMode={isScientistMode}
+            mlAnalysisStatus={mlAnalysisStatus}
+            ra={ra}
+            dec={dec}
           />
         )}
 
