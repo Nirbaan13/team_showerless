@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
 import { Share2, Code, Check } from 'lucide-react';
 
+// Toggle to bring the Share View button back
+const SHOW_SHARE_VIEW = false;
+
 interface TopNavProps {
   ra: number;
   dec: number;
@@ -57,7 +60,8 @@ export const TopNav: React.FC<TopNavProps> = ({
         <span className="text-ochre-300 font-medium">{dec.toFixed(4)}°</span>
       </div>
 
-      {/* Share Direct Coordinate URL */}
+      {/* Share Direct Coordinate URL — hidden for now (we'll work on sharing later); code kept */}
+      {SHOW_SHARE_VIEW && (
       <button
         onClick={handleCopyShareLink}
         className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-paper-900 border-2 border-black text-paper-200 hover:text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 cursor-pointer"
@@ -66,6 +70,7 @@ export const TopNav: React.FC<TopNavProps> = ({
         {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-emerald-400" />}
         <span>{copiedLink ? 'Link Copied!' : 'Share View'}</span>
       </button>
+      )}
 
       {/* Embed Iframe Snippet */}
       <button

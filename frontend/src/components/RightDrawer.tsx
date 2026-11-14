@@ -8,24 +8,25 @@ import type {
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
 import { CommunityVerificationStream } from './CommunityVerificationStream';
+import { MLDetectionsPanel } from './MLDetectionsPanel';
 import {
   CheckCircle,
   Radio,
-  Activity,
   HelpCircle,
   Maximize2,
   Minimize2,
   FileText,
-  ExternalLink,
-  Award,
-  GripVertical,
   MessageSquare,
+  Cpu,
 } from 'lucide-react';
 
 interface RightDrawerProps {
-  frames: SpherexEpochFrame[];
-  activeFrameIndex: number;
-  onSelectFrame: (index: number) => void;
+  frames?: SpherexEpochFrame[];
+  activeFrameIndex?: number;
+  onSelectFrame?: (index: number) => void;
+  candidates: CandidateObject[];
+  selectedCandidateId: string | null;
+  onSelectCandidate: (id: string) => void;
   candidate: CandidateObject | null;
   spectrumData: SpectralDataPoint[];
   onUpdateCandidateClassification: (
@@ -39,16 +40,16 @@ interface RightDrawerProps {
 }
 
 export const RightDrawer: React.FC<RightDrawerProps> = ({
-  frames,
-  activeFrameIndex,
-  onSelectFrame,
+  candidates,
+  selectedCandidateId,
+  onSelectCandidate,
   candidate,
   spectrumData,
   onUpdateCandidateClassification,
   onOpenDiscoveryReport,
   isScientistMode = false,
 }) => {
-  const [activeTab, setActiveTab] = useState<'triage' | 'chat' | 'spectrum' | 'health'>('triage');
+  const [activeTab, setActiveTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
   const [width, setWidth] = useState<number>(360);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [notes, setNotes] = useState(candidate?.volunteerNotes || '');
@@ -62,13 +63,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(360);
-
-  // In Scientist Mode, prioritize the Spectrophotometry analysis tab
-  useEffect(() => {
-    if (isScientistMode) {
-      setActiveTab('spectrum');
-    }
-  }, [isScientistMode]);
 
   useEffect(() => {
     if (candidate) {
@@ -143,6 +137,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       <div className="flex border-b border-paper-800 bg-paper-950 items-center justify-between px-2">
         <div className="flex space-x-1">
           <button
+            onClick={() => setActiveTab('ai')}
+            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+              activeTab === 'ai'
+                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                : 'border-transparent text-paper-400 hover:text-paper-200'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5 text-emerald-400" />
+            <span>AI</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('triage')}
             className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
               activeTab === 'triage'
@@ -181,28 +187,10 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             )}
           </button>
 
-          <button
-            onClick={() => setActiveTab('health')}
-            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === 'health'
-                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                : 'border-transparent text-paper-400 hover:text-paper-200'
-            }`}
-          >
-            <Activity className={`w-3.5 h-3.5 ${isScientistMode ? 'text-emerald-400' : ''}`} />
-            <span>FITS</span>
-            {isScientistMode && (
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            )}
-          </button>
         </div>
 
         {/* Quick Expand/Shrink Button + Drag hint */}
         <div className="flex items-center gap-1">
-          <span className="text-[10px] font-mono text-paper-600 mr-1 hidden sm:inline flex items-center gap-0.5">
-            <GripVertical className="w-3 h-3" />
-            {width}px
-          </span>
           <button
             onClick={handleToggleExpand}
             className="p-1.5 rounded hover:bg-paper-800 text-paper-400 hover:text-paper-100 transition-colors cursor-pointer"
@@ -215,6 +203,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
       {/* Drawer Body Content */}
       <div className="flex-1 overflow-y-auto">
+        {/* TAB 0: AI-RANKED DETECTIONS (main feature) */}
+        {activeTab === 'ai' && (
+          <MLDetectionsPanel
+            candidates={candidates}
+            selectedCandidateId={selectedCandidateId}
+            onSelectCandidate={(id) => {
+              onSelectCandidate(id);
+            }}
+            isScientistMode={isScientistMode}
+          />
+        )}
+
         {/* TAB 1: CANDIDATE TRIAGE & VERIFICATION */}
         {activeTab === 'triage' && (
           <div className="p-4 space-y-4">
@@ -227,57 +227,12 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                   {candidate ? candidate.id : 'None Selected'}
                 </span>
               </div>
-              <p className="text-xs text-paper-400 leading-relaxed">
-                Review candidate motion across SPHEREx observation epochs and record your verification.
-              </p>
             </div>
 
             {candidate ? (
               <div className="space-y-3.5">
-                {/* 3I/ATLAS Real Interim Detection Callout */}
-                {candidate.validationData && (
-                  <div className="p-3 rounded-xl bg-emerald-950/40 border-2 border-emerald-500/60 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[11px] text-emerald-300 flex items-center gap-1.5">
-                        <Award className="w-4 h-4 text-emerald-400" />
-                        Real SPHEREx Detection
-                      </span>
-                      <span className="text-[9px] font-mono bg-emerald-900/60 text-emerald-200 px-1.5 py-0.5 rounded border border-emerald-700">
-                        {candidate.validationData.exposuresCount} Real Exposures
-                      </span>
-                    </div>
-
-                    <p className="text-[11px] text-paper-300 leading-relaxed font-sans">
-                      Detector successfully identified <strong className="text-white">3I/ATLAS</strong> across all {candidate.validationData.exposuresCount} real SPHEREx frames within <strong className="text-emerald-300">{candidate.validationData.maxOffsetPx} pixels</strong> of published ephemeris.
-                    </p>
-
-                    <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono pt-1 border-t border-emerald-800/60">
-                      <div className="bg-paper-950/70 p-1.5 rounded border border-emerald-900/60">
-                        <span className="text-paper-400 block text-[9px]">Baseline Heuristic</span>
-                        <span className="text-emerald-400 font-bold">Rank 1st of 25</span>
-                      </div>
-                      <div className="bg-paper-950/70 p-1.5 rounded border border-emerald-900/60">
-                        <span className="text-paper-400 block text-[9px]">Random Forest ML</span>
-                        <span className="text-emerald-400 font-bold">Rank 2nd of 25</span>
-                      </div>
-                    </div>
-
-                    <div className="text-[9px] text-paper-400 flex items-center justify-between pt-0.5 font-mono">
-                      <span>DOI: {candidate.validationData.datasetDoi}</span>
-                      <a
-                        href={candidate.validationData.sourceUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 underline"
-                      >
-                        NASA IRSA <ExternalLink className="w-2.5 h-2.5" />
-                      </a>
-                    </div>
-                  </div>
-                )}
-
                 {/* Known Catalog Match Badge */}
-                {candidate.isKnownCatalogMatch && !candidate.validationData && (
+                {candidate.isKnownCatalogMatch && (
                   <div className="p-2.5 rounded-lg bg-paper-950 border border-paper-800 space-y-1">
                     <span className="font-mono text-[10px] text-paper-400 block uppercase">
                       Known Catalog Cross-Match
@@ -313,9 +268,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                           }`}
                         >
                           <div className="font-mono text-[11px]">{item.label}</div>
-                          <div className={`text-[9px] mt-0.5 ${isSelected ? 'text-gray-900' : 'text-paper-500'}`}>
-                            {item.desc}
-                          </div>
                         </button>
                       );
                     })}
@@ -413,74 +365,39 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
               objectLabel={candidate?.matchedCatalog || candidate?.id || "Target"}
             />
 
-            <div className="p-3 rounded-lg bg-paper-950 border border-paper-800 text-xs text-paper-400 leading-relaxed font-sans space-y-1">
-              <div className="font-mono text-[11px] text-paper-200 font-semibold">
-                Molecular Absorption Diagnostics:
-              </div>
-              <p>
-                Depressions at 3.05 µm (H₂O ice) and 4.27 µm (CO₂) match cold sub-stellar dwarf and cometary coma spectra.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: DATA HEALTH & FITS TELEMETRY */}
-        {activeTab === 'health' && (
-          <div className="p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-paper-100 uppercase tracking-wider text-xs block">
-                FITS Frame Telemetry
-              </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
-                {isScientistMode ? 'Calibrated L2/L3' : 'Raw Headers'}
-              </span>
-            </div>
-
-            {/* In Scientist Mode: Primary HDU FITS Header Card */}
-            {isScientistMode && (
-              <div className="p-3 bg-paper-950 border border-emerald-500/40 rounded-lg font-mono text-[10px] space-y-1 text-emerald-300">
-                <div className="font-bold text-emerald-400 text-[11px] border-b border-paper-800 pb-1 flex justify-between">
-                  <span>Primary HDU Header</span>
-                  <span className="text-paper-400 font-normal">Level 2 Calibrated</span>
-                </div>
-                <div>SIMPLE  =                    T / Standard FITS</div>
-                <div>BITPIX  =                  -32 / IEEE 32-bit float</div>
-                <div>NAXIS   =                    2 / 2D image matrix</div>
-                <div>NAXIS1  =                 2048 / Fast axis px</div>
-                <div>NAXIS2  =                 2048 / Slow axis px</div>
-                <div>BUNIT   = 'MJy/sr  '           / Flux units</div>
-                <div>RADESYS = 'ICRS    '           / Astrometric ref</div>
-                <div>EQUINOX =               2000.0 / Epoch</div>
-                <div>CD1_1   =        -1.722222E-03 / CD matrix deg/px</div>
-                <div>CD2_2   =         1.722222E-03 / CD matrix deg/px</div>
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              {frames.map((f, idx) => (
-                <div
-                  key={f.frameId}
-                  onClick={() => f.isAvailable && onSelectFrame(idx)}
-                  className={`p-2.5 rounded-lg border text-xs font-mono transition-colors ${
-                    !f.isAvailable
-                      ? 'bg-rose-950/20 border-rose-900/50 text-rose-300'
-                      : idx === activeFrameIndex
-                      ? 'bg-paper-800 border-emerald-400 text-paper-100'
-                      : 'bg-paper-950 border-paper-800 text-paper-400 hover:text-paper-200 cursor-pointer'
-                  }`}
-                >
-                  <div className="flex justify-between font-medium">
-                    <span>Epoch {f.epochIndex + 1} ({f.observationDate.split('T')[0]})</span>
-                    <span className="text-emerald-400">Band {f.detectorArray}</span>
-                  </div>
-                  <div className="text-[11px] text-paper-500 mt-1">
-                    Flagged: {f.flaggedPixelPercentage}% • CR: {f.cosmicRayHits} • SNR: {f.headerMetadata.snrEstimated}
-                  </div>
+            {/* 102 bands = 6 detectors x 17 channels (matches IRSA cutouts grouped per detector D1–D6) */}
+            <div className="grid grid-cols-6 gap-1 text-[10px] font-mono text-center">
+              {[
+                ['D1', '0.75–1.1'],
+                ['D2', '1.1–1.6'],
+                ['D3', '1.6–2.4'],
+                ['D4', '2.4–3.8'],
+                ['D5', '3.8–4.4'],
+                ['D6', '4.4–5.0'],
+              ].map(([d, r]) => (
+                <div key={d} className="p-1 rounded bg-paper-950 border border-paper-800">
+                  <div className="text-emerald-400 font-bold">{d}</div>
+                  {isScientistMode && <div className="text-paper-500">{r}µm</div>}
                 </div>
               ))}
             </div>
+
+            {isScientistMode && (
+              <details className="p-3 bg-paper-950 border border-emerald-500/40 rounded-lg font-mono text-[10px] text-emerald-300">
+                <summary className="cursor-pointer font-bold text-emerald-400 text-[11px]">FITS header (Primary HDU)</summary>
+                <div className="mt-2 space-y-1">
+                  <div>BITPIX  = -32 / IEEE 32-bit float</div>
+                  <div>NAXIS1  = 2048 / NAXIS2 = 2048</div>
+                  <div>BUNIT   = 'MJy/sr' / Flux units</div>
+                  <div>RADESYS = 'ICRS' / EQUINOX = 2000.0</div>
+                  <div>CD1_1   = -1.722222E-03 / deg/px</div>
+                  <div>CD2_2   =  1.722222E-03 / deg/px</div>
+                </div>
+              </details>
+            )}
           </div>
         )}
+
       </div>
     </aside>
   );

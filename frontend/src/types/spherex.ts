@@ -86,6 +86,8 @@ export interface CandidateObject {
     sourceUrl: string;
     exposuresCount: number;
   };
+  /** Detector score 0–1 (higher = more likely a real moving object). Supplied by the ML pipeline when available. */
+  mlScore?: number;
 }
 
 export interface SpectralDataPoint {

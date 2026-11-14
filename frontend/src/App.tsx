@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import type {
   TargetPreset,
   FOVOption,
@@ -42,13 +42,9 @@ export function App() {
     return 'volunteer';
   });
 
-  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('spherex_view_mode') === null;
-    } catch {
-      return false;
-    }
-  });
+  // "Choose your view" pop-up: shown the first time the Sky Viewer is opened on each page load (never on Home)
+  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
+  const hasPromptedViewRef = useRef(false);
 
   const handleSetViewMode = (mode: 'volunteer' | 'scientist') => {
     setViewMode(mode);
@@ -71,15 +67,23 @@ export function App() {
   const [fps, setFps] = useState<number>(3);
   const [blinkMode, setBlinkMode] = useState<boolean>(false);
 
-  const [overlays, setOverlays] = useState<CatalogOverlayState>({
-    gaiaDr3: true,
-    wise: false,
-    solarSystemEphemeris: false,
-  });
+  // All known-catalog overlays are on by default; users can untick them
+  const ALL_OVERLAYS_ON: CatalogOverlayState = { gaiaDr3: true, wise: true, solarSystemEphemeris: true };
+  const [overlays, setOverlays] = useState<CatalogOverlayState>(ALL_OVERLAYS_ON);
 
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('cand-barnard-primary');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (activeTab !== 'viewer') return;
+    // Entering the Sky Viewer: re-enable every catalog overlay
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
+    if (!hasPromptedViewRef.current) {
+      hasPromptedViewRef.current = true;
+      setIsViewModalOpen(true);
+    }
+  }, [activeTab]);
 
   const frames = useMemo(() => {
     const arrayId = selectedArray === 'all' ? 3 : selectedArray;
@@ -317,7 +321,7 @@ export function App() {
 
       {/* 3. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
-        <div className="flex flex-1 overflow-hidden relative">
+        <div className="flex flex-1 overflow-hidden relative anim-fall">
           <LeftControlPanel
             ra={ra}
             dec={dec}
@@ -372,6 +376,9 @@ export function App() {
             frames={frames}
             activeFrameIndex={activeFrameIndex}
             onSelectFrame={setActiveFrameIndex}
+            candidates={candidatesList}
+            selectedCandidateId={activeCandidate?.id ?? null}
+            onSelectCandidate={setSelectedCandidateId}
             candidate={activeCandidate}
             spectrumData={spectrumData}
             onUpdateCandidateClassification={handleUpdateCandidateClassification}
