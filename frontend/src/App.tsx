@@ -25,13 +25,17 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
+import { MotionReview } from './components/MotionReview';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { Compass, Home } from 'lucide-react';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>(() => (isEmbedMode ? 'viewer' : 'home'));
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report' | 'motion'>(() => {
+    if (isEmbedMode) return 'viewer';
+    return typeof window !== 'undefined' && window.location.hash === '#motion-review' ? 'motion' : 'home';
+  });
 
   const [viewMode, setViewMode] = useState<'volunteer' | 'scientist'>(() => {
     try {
@@ -55,6 +59,13 @@ export function App() {
       // sandboxed
     }
   };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (activeTab === 'motion') url.hash = 'motion-review';
+    else if (url.hash === '#motion-review') url.hash = '';
+    if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url);
+  }, [activeTab]);
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
   const [ra, setRa] = useState<number>(269.452075);
@@ -220,8 +231,8 @@ export function App() {
       )}
 
       {/* Top Header: Clean, Uncluttered, Minimal */}
-      <header className="h-12 bg-paper-900 border-b border-paper-800 px-4 flex items-center justify-between text-xs select-none z-30">
-        <div className="flex items-center space-x-6">
+      <header className="min-h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-4 py-1 flex flex-wrap items-center justify-between gap-2 text-xs select-none z-30">
+        <div className="flex items-center gap-2 sm:gap-6">
           <div
             onClick={() => setActiveTab('home')}
             className="flex items-center space-x-2 cursor-pointer group"
@@ -229,7 +240,7 @@ export function App() {
             <div className="w-5 h-5 rounded bg-ochre-400 text-paper-950 flex items-center justify-center font-bold text-[10px]">
               SPX
             </div>
-            <span className="font-medium text-paper-100 tracking-wide text-xs font-sans group-hover:text-ochre-300 transition-colors">
+            <span className="hidden lg:inline font-medium text-paper-100 tracking-wide text-xs font-sans group-hover:text-ochre-300 transition-colors">
               SPHEREx Sky-Viewer
             </span>
           </div>
@@ -245,7 +256,7 @@ export function App() {
               }`}
             >
               <Home className="w-3.5 h-3.5" />
-              <span>Homepage</span>
+              <span>Home</span>
             </button>
 
             <button
@@ -259,12 +270,23 @@ export function App() {
               <Compass className="w-3.5 h-3.5" />
               <span>Sky Viewer</span>
             </button>
+
+            <button
+              type="button"
+              aria-pressed={activeTab === 'motion'}
+              onClick={() => { setIsPlaying(false); setActiveTab('motion'); }}
+              className={`btn-tactile-sm px-3 py-1.5 rounded-lg whitespace-nowrap transition-all border-2 border-black cursor-pointer ${
+                activeTab === 'motion' ? 'bg-emerald-400 text-gray-950 font-bold' : 'bg-paper-900 text-paper-300 hover:text-white'
+              }`}
+            >
+              Motion Review
+            </button>
           </nav>
         </div>
 
         {/* Global Volunteer vs Scientist View Switch */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
+          <div className={`${activeTab === 'motion' ? 'hidden' : 'flex'} items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm`}>
             <button
               onClick={() => handleSetViewMode('volunteer')}
               className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
@@ -303,6 +325,8 @@ export function App() {
           />
         </div>
       </header>
+
+      {activeTab === 'motion' && <MotionReview />}
 
       {/* 1. Clean Home Page: Starts with big name and coordinate search */}
       {activeTab === 'home' && (
