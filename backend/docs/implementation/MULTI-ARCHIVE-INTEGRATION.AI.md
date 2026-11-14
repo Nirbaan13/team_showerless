@@ -40,6 +40,12 @@ satisfy an exact UTC filter; their independent provider outcome reports
 intervals. Missing brightness units, proper motions and wavelengths are omitted.
 Gaia source IDs and other native identities remain strings.
 
+ObsTAP records' `original` and `cutout` flags identify provider-level delivery
+candidates before per-record DataLink resolution. They do not promise a public
+file or a usable SODA descriptor for every matching record. Resolution and the
+persisted download outcome qualify authorization, service availability and whether
+the selected subset actually contains pixels.
+
 SQLite stores separate `federated_*` tables alongside the existing jobs database.
 Queued/running searches and download work survive restarts; completed provider
 outcomes and native assets are retained. Local cursors belong to a persisted
@@ -145,5 +151,30 @@ On 2026-11-14 both live tests passed in 43.317 seconds:
 
 These transfers prove protocol, origin and format handling; they do not establish
 cross-survey astrometric agreement, comparable calibration or scientific accuracy.
-Network-dependent live tests are ignored in ordinary CI. Full regression results
-are recorded below after the final run.
+Network-dependent live tests are ignored in ordinary CI.
+
+Final offline verification on 2026-11-14 after merging frontend-only main
+`9843157012595ab03cb3e7683bb8a6c731ace489`:
+
+- `./sbtw 'testOnly spaceapps.archive.*'`: 49 passed, zero failed, two optional
+  live tests ignored.
+- `./sbtw test stage`: 153 passed, zero failed, two optional live tests ignored;
+  staged runtime built successfully. The 104 existing SPHEREx tests remain green.
+- `git diff --check` and deployment/bootstrap/test shell syntax checks passed.
+- OpenAPI validation retained all 14 legacy paths and 17 legacy schemas
+  structurally, and added exactly seven archive paths.
+- The staged `spaceapps.bootstrap.Main` started with a fresh isolated `DATA_DIR`,
+  HTTP on local port 15843 and private gRPC on an ephemeral port. Health, Swagger,
+  JSON OpenAPI and all 14 inventory entries were reachable. A locally submitted
+  ESASky-only search returned 202, ran through the real background worker, and
+  persisted a terminal `failed` job with provider status `unavailable` rather
+  than a fabricated empty success. No upstream network was required for this
+  bootstrap smoke; the test process was stopped afterwards.
+
+Review regressions ran red before their fixes and are included in the green
+suite: responsive download admission, sanitized discovery/resolution defects,
+malformed Gaia HTTP 200 rows, ambiguous multiple science originals, preserved
+POST redirects, and continuation admission limits. Combined cache and free-space
+guards have four independent tests. Initial TABLEDATA-only parsing, provisional
+clocks, pending providers and unqualified foreign processing remain explicit
+capability boundaries, rather than implementation claims.

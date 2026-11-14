@@ -1114,8 +1114,12 @@ components:
           description: Omitted when BUNIT or equivalent units are unknown
         native: {type: object, additionalProperties: {type: string}}
         provenance: {type: object, additionalProperties: {type: string}}
-        original: {type: boolean}
-        cutout: {type: boolean}
+        original:
+          type: boolean
+          description: Provider-level original-delivery candidate; individual asset availability and authorization are qualified at resolution
+        cutout:
+          type: boolean
+          description: Provider-level cutout candidate; DataLink must advertise a usable per-record SODA service at resolution
         analysisEligible: {type: boolean, const: false}
     ArchiveSearchPage:
       type: object

@@ -33,3 +33,17 @@ provider continuation honors the same bounded admission queue as a new search.
 Final targeted archive run: 49 passed, zero failed, two optional network tests
 ignored (`/tmp/spaceapps-archive-final-targeted.log`, 2026-11-14). Final regression
 and merge with current main follow this checkpoint; root owns PR delivery.
+
+Task 6 complete locally: merged main `9843157` without conflicts (frontend changes
+only). Full `./sbtw test stage` passed 153 tests, zero failures, two optional live
+tests ignored (`/tmp/spaceapps-archive-final-suite.log`). Existing SPHEREx routes,
+protobuf, service and domain sources remain unchanged, apart from additive Main
+dependency/route binding. OpenAPI preserves 14 existing paths and 17 existing
+schemas, adding seven archive paths. Shell syntax and diff whitespace checks pass.
+
+Staged Main smoke passed with fresh temporary data: HTTP health, Swagger, JSON
+OpenAPI and 14-provider inventory are reachable; an accepted ESASky-only job runs
+through the actual background executor and returns explicit unavailable status.
+The isolated process was stopped. Evidence and limitations are recorded in
+`MULTI-ARCHIVE-INTEGRATION.AI.md`. Independent protocol and lifecycle reviewers
+approved the corrected implementation; root owns push and the separate PR.
