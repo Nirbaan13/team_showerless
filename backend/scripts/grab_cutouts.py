@@ -6,7 +6,7 @@ import astropy.units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 
-# Let this script import from backend/app
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.spherex.query import DEFAULT, cutout, detector, image_search, list_collections
 
