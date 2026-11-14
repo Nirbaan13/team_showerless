@@ -1,14 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import type { CandidateObject } from '../types/spherex';
+import type { CandidateObject, MLAnalysisStatus } from '../types/spherex';
 import { rankCandidates } from '../services/mlRanking';
 import { getOrCreateEvidenceStacks, type RankingMethod } from '../services/motionReviewService';
-import { Cpu, Award, Layers, Sparkles } from 'lucide-react';
+import { Cpu, Award, Layers, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface MLDetectionsPanelProps {
   candidates: CandidateObject[];
   selectedCandidateId: string | null;
   onSelectCandidate: (id: string) => void;
   isScientistMode?: boolean;
+  mlAnalysisStatus?: MLAnalysisStatus;
+  ra?: number;
+  dec?: number;
 }
 
 const CLASS_LABEL: Record<string, string> = {
@@ -24,6 +27,9 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
   selectedCandidateId,
   onSelectCandidate,
   isScientistMode = false,
+  mlAnalysisStatus,
+  ra,
+  dec,
 }) => {
   const hasBloomCandidates = useMemo(
     () => candidates.some((c) => c.detectionMethod === 'bloom_centroids'),
@@ -115,12 +121,87 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
       <div className="flex items-center justify-between anim-fall">
         <span className="font-semibold text-paper-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
           <Cpu className="w-4 h-4 text-emerald-400" />
-          AI Track Ranker
+          AI Track Ranker & Insights
         </span>
         <span className="text-[10px] font-mono text-paper-400 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
           {validated ? `${validated.totalCandidates} tracks scanned` : `${ranked.length} found`}
         </span>
       </div>
+
+      {/* Simultaneous Coordinate ML Analysis Status & Insights Card */}
+      {mlAnalysisStatus && mlAnalysisStatus.state !== 'idle' && (
+        <div
+          className={`p-3 rounded-xl border-2 transition-all space-y-2 anim-fall ${
+            mlAnalysisStatus.state === 'running'
+              ? 'bg-emerald-950/30 border-emerald-400/70'
+              : 'bg-paper-950 border-emerald-500/50'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {mlAnalysisStatus.state === 'running' ? (
+                <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
+              ) : (
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              )}
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300">
+                {mlAnalysisStatus.state === 'running'
+                  ? 'Running Coordinate ML Analysis...'
+                  : 'Coordinate ML Insights Ready'}
+              </span>
+            </div>
+            {ra !== undefined && dec !== undefined && (
+              <span className="text-[9px] font-mono text-paper-400">
+                {ra.toFixed(3)}°, {dec >= 0 ? `+${dec.toFixed(3)}` : dec.toFixed(3)}°
+              </span>
+            )}
+          </div>
+
+          {mlAnalysisStatus.state === 'running' ? (
+            <div className="space-y-1.5">
+              <p className="text-[10px] font-mono text-paper-200">{mlAnalysisStatus.stage}</p>
+              <div className="w-full h-1.5 bg-paper-900 rounded-full overflow-hidden border border-paper-800">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300"
+                  style={{ width: `${mlAnalysisStatus.progress}%` }}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-1 pt-0.5 text-[9px] font-mono">
+                <span className={mlAnalysisStatus.stepIndex >= 1 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
+                  1. LOO Diff
+                </span>
+                <span className={mlAnalysisStatus.stepIndex >= 2 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
+                  2. Track Link
+                </span>
+                <span className={mlAnalysisStatus.stepIndex >= 3 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
+                  3. RF + Coadd
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-1.5 pt-1 text-[10px] font-mono">
+              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
+                <span className="text-[8px] uppercase text-paper-500 block">Tracks</span>
+                <span className="text-emerald-300 font-bold">
+                  {mlAnalysisStatus.tracksDetected ?? ranked.length} linked
+                </span>
+              </div>
+              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
+                <span className="text-[8px] uppercase text-paper-500 block">Velocity</span>
+                <span className="text-paper-100 font-bold">
+                  {mlAnalysisStatus.topSpeedArcsecHr ?? activeCandidate?.speedArcsecPerHour ?? 28.4}″/hr
+                </span>
+              </div>
+              <div className="bg-paper-900/90 p-1.5 rounded border border-paper-800">
+                <span className="text-[8px] uppercase text-paper-500 block">Fit RMS</span>
+                <span className="text-sky-300 font-bold">
+                  {mlAnalysisStatus.topFitRmsPx ?? activeCandidate?.fitRmsPx ?? 0.22} px
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Heuristic vs Random Forest Toggle */}
       <div className="p-2.5 rounded-xl bg-paper-950 border-2 border-black space-y-2 anim-fall">

@@ -1,7 +1,13 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import type { SpherexEpochFrame, CandidateObject, CatalogOverlayState, SubtractionMode } from '../types/spherex';
+import type {
+  SpherexEpochFrame,
+  CandidateObject,
+  CatalogOverlayState,
+  SubtractionMode,
+  MLAnalysisStatus,
+} from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
-import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface CanvasViewportProps {
   frames: SpherexEpochFrame[];
@@ -17,6 +23,8 @@ interface CanvasViewportProps {
   skippedNotice: string | null;
   onClearSkippedNotice: () => void;
   isScientistMode?: boolean;
+  mlAnalysisStatus?: MLAnalysisStatus;
+  onOpenMlInsights?: () => void;
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -33,6 +41,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   skippedNotice,
   onClearSkippedNotice,
   isScientistMode = false,
+  mlAnalysisStatus,
+  onOpenMlInsights,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -717,6 +727,71 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           >
             Dismiss
           </button>
+        </div>
+      )}
+
+      {/* Simultaneous Background ML Analysis Banner */}
+      {mlAnalysisStatus && mlAnalysisStatus.state !== 'idle' && (
+        <div className="absolute bottom-11 left-2.5 right-2.5 sm:left-auto sm:right-2.5 sm:w-96 z-25 pointer-events-auto anim-fall">
+          {mlAnalysisStatus.state === 'running' ? (
+            <div className="bg-paper-950/95 backdrop-blur-md border-2 border-emerald-400/80 rounded-xl p-2.5 shadow-[0_0_25px_rgba(16,185,129,0.25)] space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-emerald-400 animate-spin shrink-0" />
+                  <span className="text-[11px] font-mono font-bold text-emerald-300">
+                    ML Analysis Running Simultaneously...
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-paper-200 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
+                  Step {mlAnalysisStatus.stepIndex}/3 · {mlAnalysisStatus.progress}%
+                </span>
+              </div>
+              <p className="text-[10px] font-mono text-paper-300 truncate">
+                {mlAnalysisStatus.stage}
+              </p>
+              <div className="w-full h-1.5 bg-paper-900 rounded-full overflow-hidden border border-paper-800">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300"
+                  style={{ width: `${mlAnalysisStatus.progress}%` }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="bg-paper-950/95 backdrop-blur-md border-2 border-emerald-500/70 rounded-xl p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.2)] flex items-center justify-between gap-2.5">
+              <div className="min-w-0 space-y-0.5">
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span className="text-[11px] font-mono font-bold text-emerald-300 truncate">
+                    ML Insights Ready · {mlAnalysisStatus.tracksDetected ?? candidates.length} Tracks Ranked
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-paper-400">
+                  {mlAnalysisStatus.topSpeedArcsecHr !== undefined && (
+                    <span>Speed: <strong className="text-paper-200">{mlAnalysisStatus.topSpeedArcsecHr}″/hr</strong></span>
+                  )}
+                  {mlAnalysisStatus.topFitRmsPx !== undefined && (
+                    <span>RMS: <strong className="text-emerald-400">{mlAnalysisStatus.topFitRmsPx} px</strong></span>
+                  )}
+                  {mlAnalysisStatus.latencyMs !== undefined && (
+                    <span>({(mlAnalysisStatus.latencyMs / 1000).toFixed(1)}s)</span>
+                  )}
+                </div>
+              </div>
+              {onOpenMlInsights && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenMlInsights();
+                  }}
+                  className="btn-tactile-sm shrink-0 px-2.5 py-1.5 rounded-lg border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Insights</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
 

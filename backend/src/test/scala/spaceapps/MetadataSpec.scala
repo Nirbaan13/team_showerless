@@ -72,6 +72,21 @@ object MetadataSpec extends ZIOSpecDefault:
     finally file.close()
 
   def spec = suite("MetadataSpec")(
+    test("cutout FITS headers are labelled and TAP continues to identify the parent artifact") {
+      val requests=new ConcurrentLinkedQueue[String]()
+      server(ex=>{requests.add(URLDecoder.decode(ex.getRequestURI.toString,UTF_8));respond(ex,200,votable)}) { base=>temporary {dir=>for
+        repository <- Repository.open(dir.resolve("db.sqlite"))
+        parent=image(base)
+        subset=parent.copy(observation=parent.observation.copy(header_metadata=parent.observation.header_metadata-"access_url"),accessUrl=parent.accessUrl+"?center=1,2deg&size=0.1deg",sourceUrl=Some(parent.accessUrl))
+        _ <- repository.remember(List(subset))
+        path=dir.resolve("cutout.fits")
+        _ <- ZIO.attemptBlocking(multiFits(path))
+        client <- ZIO.service[Client]
+        service <- MetadataService.make(repository,_=>ZIO.some(path),client,base+"/tap")
+        result <- service.get("frame-one")
+      yield assertTrue(obj(result,"fits","status")==Json.Str("available"),obj(result,"fits","spatial_subset")==Json.Bool(true),
+        requests.peek().contains("a.uri = 'ibe/data/spherex/dr1/one.fits'"),!requests.peek().contains("center=")) }}
+    },
     test("unknown frame fails before TAP or cached file lookup") {
       val requests = new AtomicInteger()
       server(ex => { requests.incrementAndGet(); respond(ex, 200, votable) }) { base => temporary { dir => for

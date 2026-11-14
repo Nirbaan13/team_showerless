@@ -210,3 +210,31 @@ Fresh verification after those resolutions:
 The earlier live-provider and staged bootstrap smoke evidence above was not
 rerun during this merge-only refresh; its scope and scientific limits remain
 unchanged.
+
+## Compatibility refresh after merged IRSA cutouts
+
+On 2026-11-14 the branch merged `origin/main`
+`d2d18d22d87b84546a45d26fe30e7a30db966fb6`, which includes the reviewed IRSA
+server cutout work from PR #10 and the latest frontend analysis changes. The
+merge required no conflict resolutions. Archive implementation, fixtures, tests,
+and the combined bootstrap wiring are unchanged from `bb9927d`; main cutout,
+ML, frontend, protobuf, operations and CI changes are retained exactly.
+
+OpenAPI 3.1 validation and semantic YAML comparisons preserve all 20 current
+main paths, 23 schemas, all other components and the migrated server address.
+The seven archive paths and 14 archive schemas remain unchanged. Shell syntax
+checks and the CRLF-aware `diff --check origin/main` pass. Main's existing extra
+EOF blank line in `frontend/src/types/spherex.ts` is retained without alteration.
+
+This compatibility refresh does not add archive cutout support: the federated
+IRSA bridge still advertises native originals and explicitly rejects its own
+`require_cutout` mode. The merged server cutout behavior belongs to the existing
+SPHEREx observation job API. No live-provider smoke, deployment, remote VPS
+operation, push or PR merge was performed during this refresh.
+
+Fresh `./sbtw test stage` verification completed after the compatibility merge:
+179 tests passed, zero failed, three optional live tests ignored; the staged
+runtime built successfully. This includes the unchanged 49 archive tests and
+130 main tests, including IRSA cutout, ML analysis, recovery and shared-cache
+regressions. The ignored tests are the two archive live checks and the merged
+IRSA cutout live check.

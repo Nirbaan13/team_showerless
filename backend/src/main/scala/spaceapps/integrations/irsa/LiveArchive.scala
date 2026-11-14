@@ -103,6 +103,14 @@ final class LiveArchive(
         }.timeoutFail(ApiError("archive_timeout", "Archive metadata request timed out", true))(30.seconds)
       }
     }
+  override def select(image: ArchiveImage, query: Query): Task[ArchiveImage] = ZIO.attempt {
+    val parent = image.sourceUrl.getOrElse(image.accessUrl)
+    val trusted = trustedUrl(parent)
+    val local = Option(URI.create(endpoint).getHost).exists(Set("localhost", "127.0.0.1", "::1", "[::1]").contains)
+    if trusted.getHost != "irsa.ipac.caltech.edu" && !local then
+      throw ApiError("archive_cutout_unavailable", "Spatial subsets require the IRSA on-premises IBE product URL")
+    image.copy(accessUrl = Cutouts.url(parent, query), sourceUrl = Some(parent))
+  }
   def fetch(image: ArchiveImage, destination: Path): Task[Unit] =
     ZIO.attempt { checkedConfiguration(); trustedUrl(image.accessUrl) }.flatMap { uri =>
       retry {

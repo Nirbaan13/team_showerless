@@ -191,3 +191,18 @@ export interface ViewerState {
   panOffset: { x: number; y: number };
   simulateNetworkLatency: boolean;
 }
+
+export interface MLAnalysisStatus {
+  state: 'idle' | 'running' | 'completed';
+  stage: string;
+  progress: number;
+  stepIndex: 1 | 2 | 3;
+  tracksDetected?: number;
+  modelName?: string;
+  latencyMs?: number;
+  topScore?: number;
+  topSpeedArcsecHr?: number;
+  topFitRmsPx?: number;
+  targetLabel?: string;
+}
+
