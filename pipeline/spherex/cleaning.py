@@ -9,7 +9,7 @@ def load_clean_cutout(path):
     head = hdul["IMAGE"].header
 
     bad = flags != 0
-    flagged = float(np.man(bad) * 100.0)
+    flagged = float(np.mean(bad) * 100.0)
     clean = img - zodi
     clean_m = np.where(bad, np.nan, clean)
 
