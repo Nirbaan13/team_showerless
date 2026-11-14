@@ -1,10 +1,7 @@
-import argparse
 import time
-from pathlib import Path
 
 import requests
 import astropy.units as u
-from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astropy.table import Table
 from astroquery.ipac.irsa import Irsa
