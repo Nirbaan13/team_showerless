@@ -34,6 +34,8 @@ final class ArchiveRepository private(path: Path):
         r.getString(1).fromJson[A].fold(_=>throw ArchiveFailure("storage_error","Invalid stored archive metadata"),identity)
       finally r.close()
     finally s.close()
+  def rememberIrsa(images: List[spaceapps.domain.ArchiveImage]): IO[ArchiveFailure,Unit] = tx(c=>images.foreach(i=>put(c,"federated_irsa_products",i.observation.frame_id,i.toJson)))
+  def irsaImage(id: String): IO[ArchiveFailure,spaceapps.domain.ArchiveImage] = tx(get[spaceapps.domain.ArchiveImage](_,"federated_irsa_products",id))
   def saveSearch(job: SearchSnapshot): IO[ArchiveFailure,Unit] = tx { c=>
     put(c,"federated_searches",job.id,job.toJson)
     job.records.foreach(r=>put(c,"federated_records",r.id,r.toJson))
@@ -74,7 +76,7 @@ object ArchiveRepository:
       val s=c.createStatement()
       try
         s.execute("PRAGMA journal_mode=WAL")
-        List("federated_searches","federated_records","federated_downloads").foreach(t=>s.execute(s"CREATE TABLE IF NOT EXISTS $t(id TEXT PRIMARY KEY,body TEXT NOT NULL)"))
+        List("federated_searches","federated_records","federated_downloads","federated_irsa_products").foreach(t=>s.execute(s"CREATE TABLE IF NOT EXISTS $t(id TEXT PRIMARY KEY,body TEXT NOT NULL)"))
       finally s.close()
     finally c.close()
     new ArchiveRepository(path)
