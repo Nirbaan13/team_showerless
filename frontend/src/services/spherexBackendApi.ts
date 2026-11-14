@@ -609,7 +609,7 @@ export interface TargetSpectrumResult {
 }
 
 /**
- * Fetches Shasta's 102-band calibrated spectrophotometry across SPHEREx detectors D1-D6.
+ * Fetches measured SPHEREx spectrophotometry
  */
 export async function fetchTargetSpectrum(
   ra: number,
@@ -627,7 +627,7 @@ export async function fetchTargetSpectrum(
   if (candidateId) {
     params.set('candidate_id', candidateId);
   }
-  const res = await fetch(`/api/motion/spectrum?${params.toString()}`);
+  const res = await fetch(`/api/spectrum?${params.toString()}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch target spectrum: ${res.statusText}`);
   }
