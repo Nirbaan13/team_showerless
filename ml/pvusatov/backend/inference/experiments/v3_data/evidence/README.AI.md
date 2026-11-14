@@ -1,0 +1,11 @@
+# Native v3 acquisition and orientation evidence
+
+This compact publication preserves the acquisition declarations, selected exposure metadata, audits and handoffs for **200 native MEFs across 29 independent sky parents**: eight training, eleven development validation and ten quarantined final parents. The raw FITS files and the approximately 30 MB official PDF are not included.
+
+`publication-manifest.json` gives each published file's SHA-256 and original path. Files beneath `acquisition/` are exact byte copies of their immutable acquisition records; their historical absolute paths have not been rewritten. `path-translation.json` and the relocation snapshot explain how historical source paths map into `ml/pvusatov/`. Native FITS paths remain external storage handles; their exact IRSA URLs, byte hashes, physical OBSIDs and MJD bounds are preserved in the audit and final-byte manifests. `query-provenance.json` records all 29 exact SIA query URLs, response hashes and row counts.
+
+The initial declaration is `acquisition/partition-plan.json`; cadence supplements and crowded development validation additions have separate declarations. The six additional validation and six final parents are declared in `acquisition/expansion-v2/partition-plan.json`. Original and augmented variants remain the same parent field; they never add independent observations to uncertainty calculations.
+
+The completed expanded handoff is `acquisition/expansion-v2/data-handoff-v2.json`. It binds the separate development and final byte-audit manifests and the official orientation evidence: SPHEREx Explanatory Supplement v2.1, dated 2026-11-10, pages 52,59,60,74,81, exact PDF URL/hash, and asymmetric marker source/result hashes. The marker passed on twelve development frames across SWIR detectors 1–3 with maximum registered centroid error 0.02415 pixel. MWIR detectors 4–6 remain unsupported by this verification.
+
+At acquisition handoff, no final pixel had been opened by the data agent. These files do not freeze a model or authorize final evaluation. The coordinator's prospective protocol and later freeze/evaluation records govern any subsequent final access. All unmodified real controls remain scientifically unlabeled.

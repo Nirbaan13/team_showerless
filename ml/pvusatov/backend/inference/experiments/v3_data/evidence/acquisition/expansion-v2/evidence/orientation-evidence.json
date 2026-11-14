@@ -1,0 +1,396 @@
+{
+  "schema_version": 1,
+  "scope": "SWIR1\u20133 development only; no final pixel access or detector/model calls",
+  "physical_interpretation": "The ePSF defines native detector-pixel response. DETCOORD=sky is the common SWIR view, not ICRS north-up. Sample the ePSF on native IMAGE axes, then WCS-project that response to the registered grid exactly once.",
+  "primary_sources": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf",
+      "version": "2.1,2026-11-10",
+      "pages": [
+        52,
+        59,
+        60,
+        74,
+        81
+      ],
+      "sha256": "9f3085cea74c6cdb647cc373bef27aaae50e394d348402e68ea2558ea06011cd"
+    },
+    {
+      "url": "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/",
+      "sections": [
+        "4.3",
+        "5.1",
+        "6.2"
+      ]
+    }
+  ],
+  "caveats": [
+    "No MWIR4\u20136 orientation claim; MWIR requires explicit flip/zone-frame verification.",
+    "Numerical axis consistency and authoritative format support do not independently validate empirical shape fidelity or color-dependent source flux."
+  ],
+  "source_code_sha256": "8f89583855cb400941b2c8c5545f88eddcbf8a63ea368445b2374e4ce4b34935",
+  "probe_frames": 12,
+  "max_centroid_error_px": 0.02414033838337186,
+  "records": [
+    {
+      "parent_group_id": "train04",
+      "filename": "level2_2025W39_2A_0550_1D1_spx_l2b-v27-2026-239.fits",
+      "detector": 1,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.109915866808898,
+        31.153537808304577
+      ],
+      "registered_centroid_xy": [
+        30.102924092624235,
+        31.14485741556676
+      ],
+      "centroid_error_px": 0.011146036261022707,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9908932737268188,
+          -0.14187469135914554
+        ],
+        [
+          0.11815036814795121,
+          0.9887014648738166
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train04",
+      "filename": "level2_2025W39_2A_0550_2D1_spx_l2b-v27-2026-239.fits",
+      "detector": 1,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.074047646910067,
+        31.591017504822588
+      ],
+      "registered_centroid_xy": [
+        30.066074317491385,
+        31.59391062937296
+      ],
+      "centroid_error_px": 0.00848198984217682,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9904829827843145,
+          -0.1417570372779977
+        ],
+        [
+          0.11835589452799766,
+          0.988276702557485
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train04",
+      "filename": "level2_2025W39_2A_0550_3D1_spx_l2b-v27-2026-239.fits",
+      "detector": 1,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.67956188262266,
+        30.902261122974274
+      ],
+      "registered_centroid_xy": [
+        29.683737421194653,
+        30.91173715982276
+      ],
+      "centroid_error_px": 0.010355211090077612,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9899538446461627,
+          -0.14169831523133425
+        ],
+        [
+          0.11836436157971164,
+          0.987911961547244
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train04",
+      "filename": "level2_2025W39_2A_0550_4D1_spx_l2b-v27-2026-239.fits",
+      "detector": 1,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.46684230579968,
+        31.34517456469544
+      ],
+      "registered_centroid_xy": [
+        29.4659469203112,
+        31.341319123189283
+      ],
+      "centroid_error_px": 0.003958048051803233,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9895173588782669,
+          -0.14156516108967665
+        ],
+        [
+          0.11850707429758955,
+          0.9874655614106835
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train02",
+      "filename": "level2_2025W32_1A_0502_1D2_spx_l2b-v27-2026-226.fits",
+      "detector": 2,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.434073952466292,
+        30.430923174081162
+      ],
+      "registered_centroid_xy": [
+        30.430907948656948,
+        30.425554859917327
+      ],
+      "centroid_error_px": 0.00623236528794771,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9609038320511232,
+          0.2642083842476062
+        ],
+        [
+          -0.2802301401737566,
+          0.9672973843543105
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train02",
+      "filename": "level2_2025W32_1A_0502_2D2_spx_l2b-v27-2026-226.fits",
+      "detector": 2,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.084356875790984,
+        30.568420680143618
+      ],
+      "registered_centroid_xy": [
+        30.061342894955665,
+        30.575708520933265
+      ],
+      "centroid_error_px": 0.02414033838337186,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9605688341890755,
+          0.2641545459004533
+        ],
+        [
+          -0.2799615187976343,
+          0.9667285248370519
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train02",
+      "filename": "level2_2025W32_1A_0502_3D2_spx_l2b-v27-2026-226.fits",
+      "detector": 2,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.23245999496439,
+        30.580184123483594
+      ],
+      "registered_centroid_xy": [
+        30.211058100035952,
+        30.579864931434763
+      ],
+      "centroid_error_px": 0.021404275042428752,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9601078958625351,
+          0.26399354144722764
+        ],
+        [
+          -0.27974309451506585,
+          0.9661812062284092
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train02",
+      "filename": "level2_2025W32_1A_0502_4D2_spx_l2b-v27-2026-226.fits",
+      "detector": 2,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.65876578707244,
+        30.53237590638704
+      ],
+      "registered_centroid_xy": [
+        30.66989268396821,
+        30.53748437879319
+      ],
+      "centroid_error_px": 0.012243542169386518,
+      "native_to_registered_local_jacobian": [
+        [
+          0.9597573497660967,
+          0.26386264024013073
+        ],
+        [
+          -0.27945355004080596,
+          0.9657440253580063
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train03",
+      "filename": "level2_2025W36_1A_0489_1D3_spx_l2b-v27-2026-232.fits",
+      "detector": 3,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.865599576081838,
+        30.721048577886194
+      ],
+      "registered_centroid_xy": [
+        29.863153580572515,
+        30.720861263380062
+      ],
+      "centroid_error_px": 0.0024531573035242987,
+      "native_to_registered_local_jacobian": [
+        [
+          1.0031404397122898,
+          0.07885780331433168
+        ],
+        [
+          -0.04120091456766417,
+          1.0008098523427726
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train03",
+      "filename": "level2_2025W36_1A_0489_2D3_spx_l2b-v27-2026-232.fits",
+      "detector": 3,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.2497552088893,
+        31.446714789350935
+      ],
+      "registered_centroid_xy": [
+        30.251093905228313,
+        31.446633507186686
+      ],
+      "centroid_error_px": 0.0013411616898453126,
+      "native_to_registered_local_jacobian": [
+        [
+          1.0025940605275245,
+          0.07866462775677618
+        ],
+        [
+          -0.04145854714228392,
+          1.0002857968669971
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train03",
+      "filename": "level2_2025W36_1A_0489_3D3_spx_l2b-v27-2026-232.fits",
+      "detector": 3,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.052821039078065,
+        31.2071784848753
+      ],
+      "registered_centroid_xy": [
+        30.054868503904903,
+        31.2068301825994
+      ],
+      "centroid_error_px": 0.002076879075086868,
+      "native_to_registered_local_jacobian": [
+        [
+          1.0021152271295222,
+          0.07856545767440082
+        ],
+        [
+          -0.04169175130986602,
+          0.9996979878811203
+        ]
+      ]
+    },
+    {
+      "parent_group_id": "train03",
+      "filename": "level2_2025W36_1A_0489_4D3_spx_l2b-v27-2026-232.fits",
+      "detector": 3,
+      "image_frame": "sky",
+      "epsf_frame": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.06224942838738,
+        30.973798166706775
+      ],
+      "registered_centroid_xy": [
+        30.064085289716925,
+        30.974447810942916
+      ],
+      "centroid_error_px": 0.0019474148132522322,
+      "native_to_registered_local_jacobian": [
+        [
+          1.0015586397651006,
+          0.07842622520636766
+        ],
+        [
+          -0.04196457824900435,
+          0.9992011042904494
+        ]
+      ]
+    }
+  ]
+}

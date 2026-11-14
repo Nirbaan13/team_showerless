@@ -58,7 +58,7 @@ import {
   X,
   Share2,
 } from 'lucide-react';
-import { InferencePage } from './components/InferencePage';
+import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)

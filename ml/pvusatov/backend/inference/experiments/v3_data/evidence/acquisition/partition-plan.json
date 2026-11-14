@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-14T20:13:00Z",
+  "unit": "sky field containing all physical exposure OBSIDs and all detector/crop/version derivatives",
+  "final_policy": "Bytes and hash metadata only until coordinator freezes model/code; no final pixel access, injection, detection or scoring.",
+  "detectors": [
+    1,
+    2,
+    3
+  ],
+  "cutout_size_deg": 0.12,
+  "target_exposures_per_group": 5,
+  "minimum_exposures_per_group": 3,
+  "selection": "Metadata only: one SWIR detector; earliest metadata cadence window with >=3 unique OBSIDs in <=1.5 hours; prefer five exposures and temporal span, alternate preferred detector by group index. Fallback earliest five unique exposures within <=48 hours, flagged long-cadence.",
+  "groups": [
+    {
+      "group_id": "train01",
+      "split": "train",
+      "center": [
+        15.0,
+        -30.0
+      ]
+    },
+    {
+      "group_id": "train02",
+      "split": "train",
+      "center": [
+        45.0,
+        20.0
+      ]
+    },
+    {
+      "group_id": "train03",
+      "split": "train",
+      "center": [
+        75.0,
+        -15.0
+      ]
+    },
+    {
+      "group_id": "train04",
+      "split": "train",
+      "center": [
+        105.0,
+        40.0
+      ]
+    },
+    {
+      "group_id": "train05",
+      "split": "train",
+      "center": [
+        150.0,
+        -20.0
+      ]
+    },
+    {
+      "group_id": "train06",
+      "split": "train",
+      "center": [
+        180.0,
+        25.0
+      ]
+    },
+    {
+      "group_id": "train07",
+      "split": "train",
+      "center": [
+        240.0,
+        -25.0
+      ]
+    },
+    {
+      "group_id": "train08",
+      "split": "train",
+      "center": [
+        270.0,
+        35.0
+      ]
+    },
+    {
+      "group_id": "validation01",
+      "split": "validation",
+      "center": [
+        30.0,
+        45.0
+      ]
+    },
+    {
+      "group_id": "validation02",
+      "split": "validation",
+      "center": [
+        165.0,
+        5.0
+      ]
+    },
+    {
+      "group_id": "validation03",
+      "split": "validation",
+      "center": [
+        300.0,
+        -20.0
+      ]
+    },
+    {
+      "group_id": "final01",
+      "split": "final",
+      "center": [
+        60.0,
+        -45.0
+      ]
+    },
+    {
+      "group_id": "final02",
+      "split": "final",
+      "center": [
+        135.0,
+        20.0
+      ]
+    },
+    {
+      "group_id": "final03",
+      "split": "final",
+      "center": [
+        225.0,
+        15.0
+      ]
+    },
+    {
+      "group_id": "final04",
+      "split": "final",
+      "center": [
+        330.0,
+        40.0
+      ]
+    }
+  ],
+  "excluded_development_fields": [
+    [
+      210.80227,
+      54.34895
+    ],
+    [
+      127.69444,
+      -39.1776
+    ]
+  ],
+  "notes": [
+    "M101, v2 final, comet and Vesta are v3 development only.",
+    "Unknown unmodified real controls stay unlabeled.",
+    "Field feasibility failures remain recorded; no model-outcome-based replacement."
+  ]
+}

@@ -3,7 +3,7 @@ package spaceapps.integrations.grpc
 import spaceapps.{domain as d}
 import spaceapps.service.Analyses
 import spaceapps.integrations.grpc.v1.*
-import spaceapps.integrations.grpc.v1.ZioRetrieval.RCAnalysisService
+import spaceapps.integrations.grpc.v1.ZioAnalysis.RCAnalysisService
 import com.google.protobuf.struct.{Struct,Value}
 import io.grpc.{Status,StatusException,Metadata}
 import scalapb.zio_grpc.RequestContext

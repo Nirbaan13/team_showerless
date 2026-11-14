@@ -6,7 +6,7 @@ import spaceapps.repository.{Repository,AnalysisRepository}
 import spaceapps.controller.Api
 import spaceapps.integrations.grpc.GrpcServer
 import spaceapps.integrations.grpc.{v1 as pb}
-import spaceapps.integrations.grpc.v1.ZioRetrieval.AnalysisServiceClient
+import spaceapps.integrations.grpc.v1.ZioAnalysis.AnalysisServiceClient
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder
 import scalapb.zio_grpc.ZManagedChannel
 import zio.http.{Request,Body,Status}
@@ -45,6 +45,14 @@ r=json.load(open(a.request));o=pathlib.Path(a.output);o.mkdir(exist_ok=True)
   private def untilFile(p:Path):Task[Unit]=ZIO.attempt(Files.exists(p)).flatMap(yes=>if yes then ZIO.unit else ZIO.sleep(20.millis) *> untilFile(p))
   private def untilStatus(s:Analyses,id:String,status:String):Task[Analysis]=s.get(id).flatMap(a=>if a.status==status then ZIO.succeed(a) else ZIO.sleep(20.millis) *> untilStatus(s,id,status))
   def spec=suite("Durable ML analyses")(
+    test("preserves published analysis RPC and message wire names") {
+      assertTrue(
+        pb.AnalysisServiceGrpc.METHOD_SUBMIT_ANALYSIS.getFullMethodName=="spaceapps.retrieval.v1.AnalysisService/SubmitAnalysis",
+        pb.AnalysisServiceGrpc.METHOD_WATCH_ANALYSIS.getFullMethodName=="spaceapps.retrieval.v1.AnalysisService/WatchAnalysis",
+        pb.AnalysisJob.scalaDescriptor.fullName=="spaceapps.retrieval.v1.AnalysisJob",
+        pb.SubmitAnalysisRequest.scalaDescriptor.fullName=="spaceapps.retrieval.v1.SubmitAnalysisRequest"
+      )
+    },
     test("rejects ambiguous sources, unknown settings, invalid numerical limits and oversized regions") {
       val bad=List("{}","""{"preset":"comet-d6","download_id":"x"}""","""{"preset":"comet-d6","options":{"max_peaks":10000000}}""","""{"preset":"comet-d6","options":{"typo":1}}""")
       val range=Query.fromParameters("range",Map("right_ascension_min_deg"->"1","right_ascension_max_deg"->"2","declination_min_deg"->"2","declination_max_deg"->"3")).toOption.get

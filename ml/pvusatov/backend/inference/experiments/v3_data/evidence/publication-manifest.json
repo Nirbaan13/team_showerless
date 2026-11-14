@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-14T20:50:10.723127+00:00",
+  "designation": "Compact native v3 acquisition and orientation metadata; no native pixels",
+  "files": [
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/partition-plan.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/partition-plan.json",
+      "sha256": "50e6308863b1d7d3cb46f09157b48ced6410578674ecce15eb54ce6922211b7f",
+      "size_bytes": 2949,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/selected-groups.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/selected-groups.json",
+      "sha256": "5e1969f4f3583375344d4b624ba02390c0d41e486621f37cb51a56273076c8e8",
+      "size_bytes": 132301,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/cadence-supplement-plan.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/cadence-supplement-plan.json",
+      "sha256": "4a3558f6f2fbef5d2051bf1204d57953b7152b04388c224f6a9eed406f2b6f8c",
+      "size_bytes": 101544,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/crowded-development/partition-plan.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/crowded-development/partition-plan.json",
+      "sha256": "975a8b6799b8c44d0954b98b0b46726f8d1ac4bcdb5e48b1260d783a3922ed63",
+      "size_bytes": 1777,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/crowded-development/selected-groups.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/crowded-development/selected-groups.json",
+      "sha256": "a53dd2395d871e43e744ef44af179fed61d6ab4193f77fb571beda64bc4b8212",
+      "size_bytes": 18906,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/audit.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/audit.json",
+      "sha256": "134088ce787f42415f4d366edbc3d11245bc46ff683f8bf8b80035484974f456",
+      "size_bytes": 144880,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/data-handoff.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/data-handoff.json",
+      "sha256": "1d173f83d934c7cae8763053e1028a2f5ceb148818c7768aee7826e4bc4f2de2",
+      "size_bytes": 2610,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/partition-plan.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/partition-plan.json",
+      "sha256": "75dd1751b06852b1f6430ae34a0945456621ca7513b5638a5ede0ec19647d05a",
+      "size_bytes": 5761,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/selected-groups.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/selected-groups.json",
+      "sha256": "e206f893d483034a6c596226fd69120c4c1ec3aede1de9ed2a0c47fa7d7bbfac",
+      "size_bytes": 325887,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/audit-expanded-v2.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/audit-expanded-v2.json",
+      "sha256": "c09d22e1b6e8fbbe04e57c7a3b799b966c089caf5baa7d8e9a615f77f1bf76b1",
+      "size_bytes": 118628,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/development-handoff-v2.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/development-handoff-v2.json",
+      "sha256": "6b0624b8f0a470f1c5331b81f0d396ed1ae8771caf5b1236650123ba152314e5",
+      "size_bytes": 2179,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/final-byte-audit-v2.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/final-byte-audit-v2.json",
+      "sha256": "b87db92a0db85c3ffa7943b556be8844fd4fb8e768a15b49786c1507be39ace0",
+      "size_bytes": 63000,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/data-handoff-v2.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/data-handoff-v2.json",
+      "sha256": "b78b3266bd3805786172cf866c258b13f04dbc9a210560c02beefe3287ff3333",
+      "size_bytes": 4506,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-native-data/expansion-v2/evidence/orientation-evidence.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/evidence/orientation-evidence.json",
+      "sha256": "45f6a96072313b516b80c1b73f47b4ad17463f90ffcd9df15462a7233c2545c1",
+      "size_bytes": 9982,
+      "copy_policy": "exact bytes; original paths inside JSON retained"
+    },
+    {
+      "original_path": null,
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/query-provenance.json",
+      "sha256": "57bc5663814f8e881f8490585d9f4fe5640e79e2bdb7285a439df162d064b2d1",
+      "size_bytes": 25883
+    },
+    {
+      "original_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/relocation-manifest.json",
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/relocation-manifest.snapshot.json",
+      "sha256": "e38c3b902f80146f417e9a77af2f6064f960fd07b301028f362e4385daeff0a9",
+      "size_bytes": 48811
+    },
+    {
+      "original_path": null,
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/path-translation.json",
+      "sha256": "aab2806ef2ceb12df015471f73cac092dae3dba370dfb91d0863147ae4d622b1",
+      "size_bytes": 2002
+    },
+    {
+      "original_path": null,
+      "published_path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/README.AI.md",
+      "sha256": "7cf10e6dc9d7778176c0dfca05f686a61b554394f15011a8358af572f4bea3cc",
+      "size_bytes": 2226
+    }
+  ],
+  "copied_immutable_source_files": 14,
+  "native_mefs_referenced": 200,
+  "independent_parent_fields": 29,
+  "parent_counts": {
+    "train": 8,
+    "development_validation": 11,
+    "quarantined_final_at_acquisition": 10
+  },
+  "source_metadata_bytes": 1013832,
+  "native_fits_or_pdf_bytes_included": false,
+  "final_pixels_opened_by_data_agent": false
+}
