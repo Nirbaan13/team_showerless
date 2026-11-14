@@ -299,6 +299,7 @@ export function App() {
             activeFrameIndex={activeFrameIndex}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
             isViewerActive={activeTab === 'viewer'}
+            isScientistMode={viewMode === 'scientist'}
           />
         </div>
       </header>
