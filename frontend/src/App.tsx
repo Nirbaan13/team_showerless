@@ -218,7 +218,7 @@ export function App() {
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>Dossier Report</span>
+              <span>Candidate Report</span>
             </button>
           </nav>
         </div>

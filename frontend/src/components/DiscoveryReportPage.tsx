@@ -98,7 +98,7 @@ export const DiscoveryReportPage: React.FC<DiscoveryReportPageProps> = ({
         {/* Dossier Title & Header */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400">
-            Citizen Science Verification Dossier
+            Citizen Science Discovery Report
           </div>
           <h1 className="text-2xl md:text-3xl font-semibold text-white font-sans flex items-center gap-3">
             <span>{candidate.matchedCatalog || candidate.id}</span>
