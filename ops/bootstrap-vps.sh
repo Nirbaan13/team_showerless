@@ -11,6 +11,10 @@ if [[ ! $public_key =~ ^ssh-ed25519\ [A-Za-z0-9+/=]+(\ .*)?$ ]]; then
     exit 64
 fi
 repo_root=$(cd "$(dirname "$0")/.." && pwd)
+if ! command -v rsync >/dev/null; then
+    apt-get update -qq
+    DEBIAN_FRONTEND=noninteractive apt-get install -y rsync
+fi
 if ! command -v docker >/dev/null || ! docker compose version >/dev/null 2>&1; then
     apt-get update -qq
     DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io docker-compose-v2
@@ -22,9 +26,10 @@ fi
 usermod -aG docker deploy
 install -d -o deploy -g deploy -m 0750 /opt/spaceapps
 install -o root -g root -m 0755 "$repo_root/ops/deploy.sh" /usr/local/bin/spaceapps-deploy
+install -o root -g root -m 0755 "$repo_root/ops/ci-ssh.sh" /usr/local/bin/spaceapps-ci-ssh
 install -o root -g root -m 0644 "$repo_root/compose.yaml" /opt/spaceapps/compose.yaml
 install -d -o deploy -g deploy -m 0700 /home/deploy/.ssh
-printf 'restrict,command="/usr/local/bin/spaceapps-deploy" %s\n' "$public_key" \
+printf 'restrict,command="/usr/local/bin/spaceapps-ci-ssh" %s\n' "$public_key" \
     >/home/deploy/.ssh/authorized_keys
 chown deploy:deploy /home/deploy/.ssh/authorized_keys
 chmod 0600 /home/deploy/.ssh/authorized_keys
