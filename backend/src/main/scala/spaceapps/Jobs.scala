@@ -20,7 +20,12 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         case _ => ZIO.fail(ApiError("not_found", "Reference frame not found"))
       }
       case None => ZIO.unit
-    validate *> repository.accept(query, mode, reference, maxJobs)
+    validate *> repository.accept(query, mode, reference, maxJobs).flatMap { candidate =>
+      if !candidate.terminal then ZIO.succeed(candidate)
+      else
+        repository.get(candidate.id).flatMap(checkFiles) *>
+          repository.accept(query, mode, reference, maxJobs)
+    }
 
   private def rawPath(image: ArchiveImage): Path = dataDir.resolve("raw").resolve(Hash.sha256(s"${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}") + ".fits")
   private def preparedPath(job: String, chunk: String): Path = dataDir.resolve("jobs").resolve(job).resolve(chunk + ".fits")
@@ -92,7 +97,7 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         current.copy(download = current.download.copy(status = if failed then "completed_with_errors" else "completed"))
       }
     yield ()
-    work.catchAll(error => repository.update(id, "job.completed") { current =>
+    work.catchAll(error => ZIO.logErrorCause(s"Download $id failed", Cause.fail(error)) *> repository.update(id, "job.completed") { current =>
       current.copy(download = current.download.copy(status = "failed", errors = List(ApiError.from(error))))
     }.unit)
 
@@ -155,6 +160,18 @@ object Jobs:
     for
       _ <- ZIO.fail(ApiError("invalid_configuration", "Worker and queue limits must be positive")).when(workers < 1 || transfers < 1 || maxJobs < 1)
       _ <- ZIO.attemptBlocking(Files.createDirectories(dataDir))
+      _ <- ZIO.attemptBlocking {
+        val uuid = "[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}"
+        val owned = List("raw" -> s"[0-9a-f]{64}[.]fits[.]$uuid[.]part", "jobs" -> s"[0-9a-f]{40}[.](?:fits|png)[.]$uuid[.]part")
+        owned.foreach { (directory, expression) =>
+          val root = dataDir.resolve(directory)
+          if Files.isDirectory(root) then
+            val pattern = java.util.regex.Pattern.compile(expression)
+            val paths = Files.walk(root)
+            try paths.filter(p => Files.isRegularFile(p) && pattern.matcher(p.getFileName.toString).matches()).forEach(p => Files.deleteIfExists(p))
+            finally paths.close()
+        }
+      }
       _ <- repository.recover
       semaphore <- Semaphore.make(transfers.toLong)
       locks <- ZIO.foreach(1 to 64)(_ => Semaphore.make(1))

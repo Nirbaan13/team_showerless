@@ -56,10 +56,17 @@ final class LiveArchive(
     val time = Option.when(query.after.nonEmpty || query.before.nonEmpty)("TIME" -> s"${query.after.fold("-Inf")(mjd)} ${query.before.fold("+Inf")(mjd)}")
     val params = List("POS" -> query.position, "COLLECTION" -> "spherex_dr1", "COLLECTION" -> "spherex_qr3", "CALIB" -> "2", "DPTYPE" -> "image", "MAXREC" -> maxRecords.toString, "RESPONSEFORMAT" -> "VOTABLE") ++ band ++ time
     endpoint + (if endpoint.contains("?") then "&" else "?") + params.map((key, value) => key + "=" + URLEncoder.encode(value, UTF_8)).mkString("&")
+  private def transportError(error: Throwable): ApiError = error match
+    case e: ApiError => e
+    case _ => ApiError("archive_unavailable", "The archive connection could not complete the transfer", true)
+  private def request(url: String): ZIO[Scope, Throwable, Response] =
+    client.request(Request.get(url))
+      .tapError(error => ZIO.logWarningCause("Archive connection failed", Cause.fail(error)))
+      .mapError(transportError)
   private def bounded(response: Response, limit: Long): ZStream[Any, Throwable, Byte] =
     ZStream.unwrap {
       Ref.make(0L).map { count =>
-        response.body.asStream.mapChunksZIO { bytes =>
+        response.body.asStream.tapError(error => ZIO.logWarningCause("Archive response stream failed", Cause.fail(error))).mapError(transportError).mapChunksZIO { bytes =>
           count.updateAndGet(_ + bytes.size.toLong).flatMap { size =>
             if size > limit then ZIO.fail(ApiError("archive_size_limit", "Archive response exceeds the configured byte limit")) else ZIO.succeed(bytes)
           }
@@ -84,7 +91,7 @@ final class LiveArchive(
       retry {
         ZIO.scoped {
           for
-            response <- client.request(Request.get(url))
+            response <- request(url)
             _ <- checkStatus(response)
             bytes <- bounded(response, metadataLimit).runCollect
             images <- ZIO.attemptBlocking(decode(bytes.toArray, query))
@@ -97,7 +104,7 @@ final class LiveArchive(
       retry {
         (ZIO.scoped {
           for
-            response <- client.request(Request.get(uri.toString))
+            response <- request(uri.toString)
             _ <- checkStatus(response)
             output <- ZIO.acquireRelease(ZIO.attemptBlocking(Files.newOutputStream(destination, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)))(out => ZIO.attemptBlocking(out.close()).orDie)
             _ <- bounded(response, maxBytes).chunks.runForeach(bytes => ZIO.attemptBlocking(output.write(bytes.toArray)))

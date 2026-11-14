@@ -67,10 +67,14 @@ object Query:
       val normal=vs(i).cross(vs((i+1)%vs.size))
       if normal.norm < 1e-10 then invalid("Polygon has duplicate or antipodal vertices")
       val sign=math.signum(normal.dot(center))
-      if sign == 0 || vs.exists(v => normal.dot(v)*sign < -1e-10) then invalid("Polygon must be convex and in boundary order")
+      if sign == 0 || vs.exists(v => normal.dot(v)*sign < -1e-12*normal.norm) then invalid("Polygon must be convex and in boundary order")
       sign
     if signs.distinct.size != 1 then invalid("Polygon must be convex")
-    if vs.sliding(3).forall(p => math.abs(p(0).cross(p(1)).dot(p(2))) < 1e-10) then invalid("Polygon is degenerate")
+    val degenerate=vs.sliding(3).forall { p =>
+      val first=p(0).cross(p(1));val second=p(1).cross(p(2))
+      math.abs(first.dot(p(2))) / (first.norm*second.norm) < 1e-10
+    }
+    if degenerate then invalid("Polygon is degenerate")
   def fromJson(body: String): Either[ApiError, Query] =
     body.fromJson[Json].left.map(_ => ApiError("invalid_request", "Expected a JSON object")).flatMap:
       case Json.Obj(values) =>

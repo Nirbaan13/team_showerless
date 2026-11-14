@@ -169,6 +169,46 @@ object JobsSpec extends ZIOSpecDefault:
         yield assertTrue(done.status == "completed", rejected.left.exists { case e: ApiError => e.code == "capacity_exceeded"; case _ => false })
       }
     },
+    test("direct concurrent resubmissions replace a completed job whose native file was evicted") {
+      ZIO.scoped {
+        for
+          dir <- temp
+          repo <- Repository.open(dir.resolve("jobs.db"))
+          fetched <- Ref.make(0)
+          source = new Archive:
+            def search(q: Query) = ZIO.succeed(List(image))
+            def fetch(i: ArchiveImage, out: Path) = fetched.update(_ + 1) *> write(out, "native data")
+          jobs <- Jobs.make(repo, source, processor, dir)
+          accepted <- jobs.submit(query, "default", None)
+          first <- awaitDone(jobs, accepted.id)
+          resource <- jobs.resource(first.chunks.head.id, false)
+          _ <- resource match
+            case Resource.Ready(path) => ZIO.attemptBlocking(Files.delete(path))
+            case _ => ZIO.fail(new IllegalStateException("Expected a published native file"))
+          retried <- ZIO.foreachPar(1 to 8)(_ => jobs.submit(query, "default", None))
+          done <- awaitDone(jobs, retried.head.id)
+          count <- fetched.get
+        yield assertTrue(retried.forall(_.id != accepted.id), retried.map(_.id).distinct.size == 1,
+          done.status == "completed", done.chunks.head.status == "ready", count == 2)
+      }
+    },
+    test("startup removes only service-owned orphan partial files") {
+      ZIO.scoped {
+        for
+          dir <- temp
+          repo <- Repository.open(dir.resolve("jobs.db"))
+          suffix = ".12345678-1234-1234-1234-123456789abc.part"
+          raw = dir.resolve("raw").resolve("a" * 64 + ".fits" + suffix)
+          prepared = dir.resolve("jobs/job-1").resolve("b" * 40 + ".png" + suffix)
+          complete = dir.resolve("raw").resolve("c" * 64 + ".fits")
+          unrelated = dir.resolve("raw/user.part")
+          outside = dir.resolve("d" * 64 + ".fits" + suffix)
+          _ <- ZIO.foreachDiscard(List(raw, prepared, complete, unrelated, outside))(write(_, "keep or clean"))
+          _ <- Jobs.make(repo, archive(), processor, dir)
+          remaining <- ZIO.attemptBlocking(List(raw, prepared, complete, unrelated, outside).map(Files.exists(_)))
+        yield assertTrue(remaining == List(false, false, true, true, true))
+      }
+    },
     test("restart detects evicted completed files before deduplication") {
       ZIO.scoped {
         for

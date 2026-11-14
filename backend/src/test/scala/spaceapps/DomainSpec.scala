@@ -13,6 +13,9 @@ object DomainSpec extends ZIOSpecDefault:
         Query.fromJson("""{"right_ascension_deg":1,"declination_deg":2,"detector_array":"1"}""").isLeft,
         Query.fromJson("""{"right_ascension_deg":1,"right_ascension_deg":2,"declination_deg":2}""").isLeft)
     },
+    test("a small valid convex polygon is not classified as degenerate") {
+      assertTrue(Query.fromParameters("polygon",Map("verices_degrees"->"0,0,0.0001,0,0.0001,0.0001,0,0.0001")).isRight)
+    },
     test("range is forwarded in ICRS degrees") {
       val result = Query.fromParameters("range", Map("right_ascension_min_deg" -> "210.8", "right_ascension_max_deg" -> "210.81", "declination_min_deg" -> "54.34", "declination_max_deg" -> "54.35"))
       assertTrue(result.exists(_.position.startsWith("RANGE 210.8 210.81 54.34 54.35")))

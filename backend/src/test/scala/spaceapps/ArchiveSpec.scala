@@ -107,6 +107,11 @@ object ArchiveSpec extends ZIOSpecDefault:
         ZIO.serviceWithZIO[Client](c => LiveArchive(c, base + "/SIA").search(query)).map(images => assertTrue(images.isEmpty, attempts.get == 3))
       }
     } @@ TestAspect.withLiveClock,
+    test("transport failures are explicit retryable archive errors") {
+      ZIO.serviceWithZIO[Client](c=>LiveArchive(c,"http://127.0.0.1:1/SIA").search(query).either).map { result=>
+        assertTrue(result.left.toOption.exists { case e:ApiError=>e.code=="archive_unavailable" && e.retryable;case _=>false })
+      }
+    } @@ TestAspect.withLiveClock,
     test("metadata size and record limits fail explicitly") {
       val docs = List(" " * (8 * 1024 * 1024 + 1), table(List(row("https://irsa.ipac.caltech.edu/a"), row("https://irsa.ipac.caltech.edu/b"))))
       ZIO.foreach(docs)(doc => server((_, ex) => respond(ex, 200, doc.getBytes(UTF_8)))(base => ZIO.serviceWithZIO[Client](c => LiveArchive(c, base + "/SIA", maxRecords = 1).search(query).either))).map(rs => assertTrue(rs.map(code) == List(Some("archive_size_limit"), Some("archive_overflow"))))
