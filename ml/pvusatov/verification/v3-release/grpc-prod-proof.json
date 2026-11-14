@@ -1,0 +1,26 @@
+{
+  "http_base": "http://144.124.238.101",
+  "grpc_target": "127.0.0.1:15057",
+  "checked_at_utc": "2026-11-14T23:23:29.606303+00:00",
+  "job_id": "80c99d8a-4e29-426d-8752-9c341c9cd10d",
+  "frames": 3,
+  "candidates": 1,
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "http_grpc_result_equal": true,
+  "completed_watch_replays": true,
+  "revision": "a7493463eaace9af4357dcdeb0c8fa939c016ed5",
+  "model_family": "ExtraTreesClassifier",
+  "algorithm_version": "motion-extra-v3-sigma08",
+  "detector_profile": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "binding_verified_after_utc": "2026-11-14T23:24:22.341342+00:00"
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T23:25:18.544873+00:00",
+  "production_verified": true,
+  "revision": "a7493463eaace9af4357dcdeb0c8fa939c016ed5",
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "administrative_metadata_sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5",
+  "scientific_sources_or_model_changed_after_final": false,
+  "release_pr": "https://github.com/Nirbaan13/team_showerless/pull/14",
+  "main_ci": [
+    {
+      "url": "https://github.com/Nirbaan13/team_showerless/actions/runs/43652383573",
+      "conclusion": "success"
+    },
+    {
+      "url": "https://github.com/Nirbaan13/team_showerless/actions/runs/43652383533",
+      "conclusion": "success"
+    }
+  ],
+  "proofs": [
+    {
+      "path": "http-prod-proof.json",
+      "sha256": "c0f29e3b257cbcafd9d5764c25ff60c248a5c53ce7b76300c243d28ad2da9041"
+    },
+    {
+      "path": "grpc-prod-proof.json",
+      "sha256": "1bf0a74b737ee9c54764618c0610c91cef9d57c1d1700a05a483926fc20d1993"
+    },
+    {
+      "path": "browser-prod-proof.json",
+      "sha256": "1265cb0f0b4a749eff8a4f7c2accaa03b2bb9bb699395c369f2a542c1aad8c47"
+    },
+    {
+      "path": "swagger-prod-proof.json",
+      "sha256": "893373c4a1dcf18a529d9303fd7aef6323fc59fad544ba1077913be8a42fbf7a"
+    },
+    {
+      "path": "server-prod-proof.json",
+      "sha256": "6864444fcca428cecce1117df11e5b6ad391d82e89873d588b1bbbe0b71a5d02"
+    }
+  ],
+  "scope": "Production deployment and integration verification; scientific limitations remain those of the immutable final report."
+}
