@@ -98,6 +98,57 @@ object ArchiveSpec extends ZIOSpecDefault:
         bytes <- ZIO.attempt(Files.readAllBytes(path))
       yield assertTrue(bytes.toList == fits.toList) } }
     },
+    test("preparation fetches an IRSA cutout while discovery retains its parent identity") {
+      val requests = new ConcurrentLinkedQueue[String]()
+      server((base, ex) => {
+        requests.add(ex.getRequestURI.toString)
+        if ex.getRequestURI.getPath == "/SIA" then respond(ex, 200, table(List(row(base + "/ibe/data/spherex/dr1/level2/native.fits"))).getBytes(UTF_8))
+        else if Option(ex.getRequestURI.getRawQuery).exists(_.contains("center=")) then respond(ex, 200, fits)
+        else respond(ex, 500, "Full image download is forbidden".getBytes(UTF_8))
+      }) { base => ZIO.scoped { for
+        client <- ZIO.service[Client]
+        source = LiveArchive(client, base + "/SIA")
+        q = Query.fromParameters("default", Map("right_ascension_deg" -> "1", "declination_deg" -> "2", "width_arcmin" -> "3", "height_arcmin" -> "5")).toOption.get
+        dir <- ZIO.attempt(Files.createTempDirectory("cutout-job-"))
+        repo <- Repository.open(dir.resolve("jobs.sqlite"))
+        bounded <- CapacityArchive.make(source, dir, 1024*1024, 2880, 0)
+        jobs <- Jobs.make(repo, bounded, NoProcessing, dir)
+        originals <- jobs.search(q)
+        accepted <- jobs.submit(q, "default", None)
+        done <- (ZIO.sleep(20.millis) *> jobs.get(accepted.id)).repeatUntil(_.terminal)
+        stored <- repo.get(done.id)
+        firstFile <- jobs.resource(done.chunks.head.id, false)
+        wider = Query.fromParameters("default", Map("right_ascension_deg" -> "1", "declination_deg" -> "2", "width_arcmin" -> "5", "height_arcmin" -> "5")).toOption.get
+        second <- jobs.submit(wider, "default", None)
+        secondDone <- (ZIO.sleep(20.millis) *> jobs.get(second.id)).repeatUntil(_.terminal)
+        secondFile <- jobs.resource(secondDone.chunks.head.id, false)
+        secondStored <- repo.get(second.id)
+        reselected <- source.select(stored.images.head, wider)
+        reused <- jobs.submit(q, "default", None)
+        decoded = URLDecoder.decode(requests.toArray.toList.last.toString, UTF_8)
+        _ <- jobs.search(q)
+        remembered <- repo.image(originals.head.frame_id)
+      yield assertTrue(done.status == "completed", secondDone.status == "completed", requests.size == 6, stored.images.head.observation == originals.head,
+        remembered.contains(secondStored.images.head),
+        firstFile != secondFile, reused.id == accepted.id, reselected == secondStored.images.head,
+        originals.head.header_metadata("access_url").toString.contains("native.fits"), decoded.contains("center=1,2deg"), decoded.contains("size=")) } }
+    } @@ TestAspect.withLiveClock @@ TestAspect.timeout(15.seconds),
+    test("failed cutouts do not fall back to downloading a full image") {
+      val fullRequests = new AtomicInteger()
+      server((base, ex) => {
+        if ex.getRequestURI.getPath == "/SIA" then respond(ex, 200, table(List(row(base + "/ibe/data/spherex/dr1/level2/native.fits"))).getBytes(UTF_8))
+        else if Option(ex.getRequestURI.getRawQuery).exists(_.contains("center=")) then respond(ex, 404, "Cutout unavailable".getBytes(UTF_8))
+        else { fullRequests.incrementAndGet(); respond(ex, 200, fits) }
+      }) { base => ZIO.scoped { for
+        client <- ZIO.service[Client]
+        dir <- ZIO.attempt(Files.createTempDirectory("cutout-failure-"))
+        repo <- Repository.open(dir.resolve("jobs.sqlite"))
+        jobs <- Jobs.make(repo, LiveArchive(client, base + "/SIA"), NoProcessing, dir)
+        q = Query.fromParameters("default", Map("right_ascension_deg" -> "1", "declination_deg" -> "2")).toOption.get
+        accepted <- jobs.submit(q, "default", None)
+        done <- (ZIO.sleep(20.millis) *> jobs.get(accepted.id)).repeatUntil(_.terminal)
+      yield assertTrue(done.status == "completed_with_errors", done.chunks.head.error.exists(_.code == "archive_http_error"), fullRequests.get == 0) } }
+    } @@ TestAspect.withLiveClock @@ TestAspect.timeout(15.seconds),
     test("false FITS, truncated records and oversize streams remove partial destinations") {
       ZIO.foreach(List("<html>failure</html>".getBytes(UTF_8), fits.take(100), fits ++ fits)) { bytes =>
         server((_, ex) => respond(ex, 200, bytes)) { base => temporary { path => for
