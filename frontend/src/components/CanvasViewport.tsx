@@ -37,7 +37,39 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
-  const [colorMap, setColorMap] = useState<'grayscale' | 'inverted' | 'heat'>('grayscale');
+  const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
+
+  // Smooth Zoom-in transition state when target changes
+  const prevRaRef = useRef(centerRa);
+  const prevDecRef = useRef(centerDec);
+
+  useEffect(() => {
+    if (prevRaRef.current !== centerRa || prevDecRef.current !== centerDec) {
+      prevRaRef.current = centerRa;
+      prevDecRef.current = centerDec;
+
+      // Animate smooth zoom into the new coordinate field
+      let startZoom = 0.8;
+      let targetZoom = 1.4;
+      let startTime = performance.now();
+      const duration = 600; // ms
+
+      const animateZoom = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        // Ease-out cubic
+        const ease = 1 - Math.pow(1 - progress, 3);
+        setZoom(startZoom + (targetZoom - startZoom) * ease);
+        setPan({ x: 0, y: 0 });
+
+        if (progress < 1) {
+          requestAnimationFrame(animateZoom);
+        }
+      };
+
+      requestAnimationFrame(animateZoom);
+    }
+  }, [centerRa, centerDec]);
 
   const activeFrame = frames[activeFrameIndex] || null;
 
@@ -80,7 +112,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     [pan, zoom, centerRa, centerDec]
   );
 
-  // Astronomical FITS Canvas Rendering Engine
+  // Minimalist Astronomical Rendering Engine
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -94,9 +126,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
-    // Astronomical background (scientific black or inverted paper white)
     const isWhiteBg = colorMap === 'inverted';
-    ctx.fillStyle = isWhiteBg ? '#f8fafc' : '#040711';
+    // Warm Charcoal (#0a0a0c) or Editorial Paper Ivory (#f4f1ea)
+    ctx.fillStyle = isWhiteBg ? '#f4f1ea' : '#0a0a0c';
     ctx.fillRect(0, 0, width, height);
 
     ctx.save();
@@ -105,7 +137,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     const isDifferenceMode = subtractionMode === 'epoch_difference';
 
-    // Static Field Stars (rendered as authentic astronomical point-spread functions)
+    // Static Field Stars
     const staticStars = [
       { x: -140, y: -90, mag: 1.8 },
       { x: 120, y: -160, mag: 2.2 },
@@ -120,13 +152,13 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       staticStars.forEach((star) => {
         const grad = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.mag * 3);
         if (isWhiteBg) {
-          grad.addColorStop(0, '#0f172a');
-          grad.addColorStop(0.5, 'rgba(15, 23, 42, 0.4)');
-          grad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+          grad.addColorStop(0, '#1c1c22');
+          grad.addColorStop(0.5, 'rgba(28, 28, 34, 0.4)');
+          grad.addColorStop(1, 'rgba(28, 28, 34, 0)');
         } else {
-          grad.addColorStop(0, '#f8fafc');
-          grad.addColorStop(0.5, 'rgba(203, 213, 225, 0.4)');
-          grad.addColorStop(1, 'rgba(203, 213, 225, 0)');
+          grad.addColorStop(0, '#f4f1ea');
+          grad.addColorStop(0.5, 'rgba(244, 241, 234, 0.4)');
+          grad.addColorStop(1, 'rgba(244, 241, 234, 0)');
         }
         ctx.fillStyle = grad;
         ctx.beginPath();
@@ -135,25 +167,24 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       });
     }
 
-    // Candidate Objects (Proper Motion PSF)
+    // Candidate Point Spread Functions & Motion Track
     candidates.forEach((cand) => {
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
       const offsetX = currentPos.x - 256;
       const offsetY = currentPos.y - 256;
 
-      // Authentic astronomical PSF
       const psfRadius = Math.max(3, Math.min(9, currentPos.flux / 16));
       const psfGrad = ctx.createRadialGradient(offsetX, offsetY, 0, offsetX, offsetY, psfRadius * 2);
 
       if (isWhiteBg) {
-        psfGrad.addColorStop(0, '#0284c7');
-        psfGrad.addColorStop(0.5, 'rgba(2, 132, 199, 0.4)');
-        psfGrad.addColorStop(1, 'rgba(2, 132, 199, 0)');
+        psfGrad.addColorStop(0, '#d97706'); // Warm Ochre
+        psfGrad.addColorStop(0.5, 'rgba(217, 119, 6, 0.4)');
+        psfGrad.addColorStop(1, 'rgba(217, 119, 6, 0)');
       } else {
         psfGrad.addColorStop(0, '#ffffff');
-        psfGrad.addColorStop(0.4, '#93c5fd');
-        psfGrad.addColorStop(1, 'rgba(147, 197, 253, 0)');
+        psfGrad.addColorStop(0.4, '#fbbf24');
+        psfGrad.addColorStop(1, 'rgba(251, 191, 36, 0)');
       }
 
       ctx.fillStyle = psfGrad;
@@ -161,9 +192,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       ctx.arc(offsetX, offsetY, psfRadius * 2, 0, Math.PI * 2);
       ctx.fill();
 
-      // Motion vector track (clean dashed line)
+      // Motion Track
       if (cand.epochPositions.length > 1) {
-        ctx.strokeStyle = isSelected ? '#3b82f6' : 'rgba(148, 163, 184, 0.4)';
+        ctx.strokeStyle = isSelected ? '#d97706' : 'rgba(168, 162, 158, 0.4)';
         ctx.lineWidth = 1 / zoom;
         ctx.setLineDash([2, 2]);
         ctx.beginPath();
@@ -177,37 +208,35 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
       }
 
-      // Standard Astronomy Reticle (Crosshairs without neon glow)
+      // Selected Reticle (Ochre accent without glow)
       if (isSelected) {
-        ctx.strokeStyle = '#2563eb';
+        ctx.strokeStyle = '#d97706';
         ctx.lineWidth = 1.2 / zoom;
         ctx.beginPath();
-        ctx.arc(offsetX, offsetY, psfRadius * 2 + 5, 0, Math.PI * 2);
+        ctx.arc(offsetX, offsetY, psfRadius * 2 + 4, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 4 crosshair ticks
         const tLen = 6 / zoom;
         ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY - psfRadius * 2 - 3);
-        ctx.lineTo(offsetX, offsetY - psfRadius * 2 - 3 - tLen);
-        ctx.moveTo(offsetX, offsetY + psfRadius * 2 + 3);
-        ctx.lineTo(offsetX, offsetY + psfRadius * 2 + 3 + tLen);
-        ctx.moveTo(offsetX - psfRadius * 2 - 3, offsetY);
-        ctx.lineTo(offsetX - psfRadius * 2 - 3 - tLen, offsetY);
-        ctx.moveTo(offsetX + psfRadius * 2 + 3, offsetY);
-        ctx.lineTo(offsetX + psfRadius * 2 + 3 + tLen, offsetY);
+        ctx.moveTo(offsetX, offsetY - psfRadius * 2 - 2);
+        ctx.lineTo(offsetX, offsetY - psfRadius * 2 - 2 - tLen);
+        ctx.moveTo(offsetX, offsetY + psfRadius * 2 + 2);
+        ctx.lineTo(offsetX, offsetY + psfRadius * 2 + 2 + tLen);
+        ctx.moveTo(offsetX - psfRadius * 2 - 2, offsetY);
+        ctx.lineTo(offsetX - psfRadius * 2 - 2 - tLen, offsetY);
+        ctx.moveTo(offsetX + psfRadius * 2 + 2, offsetY);
+        ctx.lineTo(offsetX + psfRadius * 2 + 2 + tLen, offsetY);
         ctx.stroke();
 
-        // Scientific label
         ctx.font = `${10 / zoom}px "JetBrains Mono", monospace`;
-        ctx.fillStyle = isWhiteBg ? '#1e293b' : '#f8fafc';
-        ctx.fillText(cand.matchedCatalog || cand.id, offsetX + psfRadius * 2 + 7, offsetY - 2);
+        ctx.fillStyle = isWhiteBg ? '#1c1c22' : '#f4f1ea';
+        ctx.fillText(cand.matchedCatalog || cand.id, offsetX + psfRadius * 2 + 6, offsetY - 2);
       }
     });
 
-    // Catalog Overlays (Standard astronomical markers)
+    // Overlays
     if (overlays.gaiaDr3) {
-      ctx.strokeStyle = '#059669'; // Emerald
+      ctx.strokeStyle = '#059669';
       ctx.lineWidth = 1 / zoom;
       ctx.strokeRect(-144, -94, 8, 8);
       ctx.fillStyle = '#059669';
@@ -216,7 +245,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     }
 
     if (overlays.wise) {
-      ctx.strokeStyle = '#d97706'; // Amber
+      ctx.strokeStyle = '#d97706';
       ctx.lineWidth = 1 / zoom;
       ctx.beginPath();
       ctx.arc(210, 95, 5, 0, Math.PI * 2);
@@ -228,39 +257,31 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     ctx.restore();
 
-    // Center Crosshairs (Standard telescope reticle)
+    // Center Crosshair
     const cx = width / 2;
     const cy = height / 2;
-    ctx.strokeStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)';
+    ctx.strokeStyle = isWhiteBg ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.15)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(cx - 12, cy);
-    ctx.lineTo(cx + 12, cy);
-    ctx.moveTo(cx, cy - 12);
-    ctx.lineTo(cx, cy + 12);
+    ctx.moveTo(cx - 10, cy);
+    ctx.lineTo(cx + 10, cy);
+    ctx.moveTo(cx, cy - 10);
+    ctx.lineTo(cx, cy + 10);
     ctx.stroke();
 
-    // WCS Compass
-    ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.fillStyle = isWhiteBg ? '#64748b' : '#94a3b8';
-    ctx.fillText('N ▲', cx - 8, cy - 24);
-    ctx.fillText('E ◀', cx - 44, cy + 4);
-
-    // Scale bar in bottom right (e.g., 30 arcsec)
+    // Scale bar
     const scaleBarPixels = (30 / 6.2) * zoom;
-    const sbX = width - 90;
+    const sbX = width - 80;
     const sbY = height - 20;
-    ctx.strokeStyle = isWhiteBg ? '#334155' : '#cbd5e1';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = isWhiteBg ? '#57534e' : '#a8a29e';
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.moveTo(sbX, sbY);
     ctx.lineTo(sbX + scaleBarPixels, sbY);
-    ctx.moveTo(sbX, sbY - 3);
-    ctx.lineTo(sbX, sbY + 3);
-    ctx.moveTo(sbX + scaleBarPixels, sbY - 3);
-    ctx.lineTo(sbX + scaleBarPixels, sbY + 3);
     ctx.stroke();
-    ctx.fillText('30″', sbX + scaleBarPixels / 2 - 8, sbY - 5);
+    ctx.font = '10px "JetBrains Mono", monospace';
+    ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
+    ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
   }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap]);
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -322,7 +343,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 h-[calc(100vh-3rem-4.5rem)] bg-nasa-dark overflow-hidden cursor-crosshair select-none"
+      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none"
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -331,66 +352,66 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     >
       <canvas ref={canvasRef} className="w-full h-full block" />
 
-      {/* Scientific Coordinate HUD */}
-      <div className="absolute top-2.5 left-2.5 bg-nasa-surface/90 border border-nasa-border px-2.5 py-1 rounded text-[11px] font-mono text-nasa-textMain pointer-events-none flex items-center gap-3">
+      {/* Coordinate HUD */}
+      <div className="absolute top-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[11px] font-mono text-paper-200 pointer-events-none flex items-center gap-3">
         <div>
-          <span className="text-nasa-textMuted mr-1">RA:</span>
-          <span className="text-white font-medium">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
+          <span className="text-paper-500 mr-1">RA:</span>
+          <span className="text-paper-100 font-medium">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
         </div>
-        <div className="w-[1px] h-3 bg-nasa-border" />
+        <div className="w-[1px] h-3 bg-paper-800" />
         <div>
-          <span className="text-nasa-textMuted mr-1">Dec:</span>
-          <span className="text-white font-medium">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
+          <span className="text-paper-500 mr-1">Dec:</span>
+          <span className="text-paper-100 font-medium">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
         </div>
-        <div className="w-[1px] h-3 bg-nasa-border" />
-        <span className="text-[10px] text-nasa-textMuted">
-          Scale: {(6.2 / zoom).toFixed(2)}″/px
+        <div className="w-[1px] h-3 bg-paper-800" />
+        <span className="text-[10px] text-paper-400">
+          {(6.2 / zoom).toFixed(2)}″/px
         </span>
       </div>
 
       {/* Skipped Frame Notification */}
       {skippedNotice && (
-        <div className="absolute top-12 left-2.5 bg-amber-950/90 border border-amber-600 text-amber-200 px-3 py-1.5 rounded flex items-center justify-between text-xs font-mono z-30">
+        <div className="absolute top-12 left-2.5 bg-paper-900 border border-ochre-500/60 text-ochre-300 px-3 py-1.5 rounded flex items-center justify-between text-xs font-mono z-30">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <AlertTriangle className="w-3.5 h-3.5 text-ochre-400 shrink-0" />
             <span>{skippedNotice}</span>
           </div>
           <button
             onClick={onClearSkippedNotice}
-            className="ml-3 text-[10px] text-amber-300 underline"
+            className="ml-3 text-[10px] text-ochre-400 underline"
           >
             Dismiss
           </button>
         </div>
       )}
 
-      {/* Viewport & Colormap Controls */}
-      <div className="absolute top-2.5 right-2.5 bg-nasa-surface/90 border border-nasa-border p-1 rounded flex items-center space-x-1 z-10">
+      {/* Viewport Toolbar */}
+      <div className="absolute top-2.5 right-2.5 bg-paper-900/90 border border-paper-800 p-1 rounded flex items-center space-x-1 z-10">
         <select
           value={colorMap}
           onChange={(e) => setColorMap(e.target.value as any)}
-          className="bg-nasa-dark border border-nasa-border text-nasa-textMuted text-[10px] font-mono rounded px-1.5 py-0.5 mr-1"
+          className="bg-paper-950 border border-paper-800 text-paper-300 text-[10px] font-mono rounded px-1.5 py-0.5 mr-1"
         >
           <option value="grayscale">Grayscale</option>
           <option value="inverted">Inverted (Print)</option>
         </select>
         <button
           onClick={() => setZoom((z) => Math.min(8.0, z * 1.25))}
-          className="p-1 rounded hover:bg-nasa-dark text-nasa-textMuted hover:text-white transition-colors"
+          className="p-1 rounded hover:bg-paper-800 text-paper-400 hover:text-paper-100 transition-colors"
           title="Zoom In"
         >
           <ZoomIn className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={() => setZoom((z) => Math.max(0.6, z * 0.8))}
-          className="p-1 rounded hover:bg-nasa-dark text-nasa-textMuted hover:text-white transition-colors"
+          className="p-1 rounded hover:bg-paper-800 text-paper-400 hover:text-paper-100 transition-colors"
           title="Zoom Out"
         >
           <ZoomOut className="w-3.5 h-3.5" />
         </button>
         <button
           onClick={handleResetView}
-          className="p-1 rounded hover:bg-nasa-dark text-nasa-textMuted hover:text-white transition-colors"
+          className="p-1 rounded hover:bg-paper-800 text-paper-400 hover:text-paper-100 transition-colors"
           title="Reset View"
         >
           <RotateCcw className="w-3.5 h-3.5" />
@@ -399,8 +420,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
       {/* Frame Status Pill */}
       {activeFrame && (
-        <div className="absolute bottom-2.5 left-2.5 bg-nasa-surface/90 border border-nasa-border px-2 py-0.5 rounded text-[10px] font-mono text-nasa-textMuted flex items-center gap-2 pointer-events-none">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+        <div className="absolute bottom-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2 py-0.5 rounded text-[10px] font-mono text-paper-400 flex items-center gap-2 pointer-events-none">
+          <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
           <span>|</span>
           <span>Band {activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>

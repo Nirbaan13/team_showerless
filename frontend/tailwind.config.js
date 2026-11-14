@@ -7,15 +7,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        nasa: {
-          blue: '#1d4ed8',     // NASA Deep Mission Blue
-          lightBlue: '#3b82f6',
-          dark: '#0b0f19',     // Slate scientific background
-          surface: '#111827',  // Neutral panel surface
-          border: '#1f2937',   // Clean 1px border
-          subtle: '#374151',
-          textMuted: '#9ca3af',
-          textMain: '#f3f4f6',
+        paper: {
+          50: '#faf8f5',
+          100: '#f4f1ea',  // Warm Editorial Cream
+          200: '#e8e4da',
+          300: '#d7d2c6',
+          400: '#a8a29e',  // Muted Sand
+          500: '#78716c',
+          600: '#57534e',
+          700: '#292524',
+          800: '#1c1c22',  // Soft Stone
+          900: '#121216',  // Warm Charcoal
+          950: '#0a0a0c',  // Deep Ink Black
+        },
+        ochre: {
+          400: '#fbbf24',
+          500: '#d97706',  // Warm scientific accent
+          600: '#b45309',
         }
       },
       fontFamily: {

@@ -27,10 +27,8 @@ import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { Home, Compass, FileText } from 'lucide-react';
 
 export function App() {
-  // Navigation View State: 'home' | 'viewer' | 'report'
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'report'>('viewer');
 
-  // Core astronomical query state
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('barnards-star');
   const [ra, setRa] = useState<number>(269.452075);
   const [dec, setDec] = useState<number>(4.693365);
@@ -54,7 +52,6 @@ export function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
 
-  // Data Synthesis
   const frames = useMemo(() => {
     const arrayId = selectedArray === 'all' ? 3 : selectedArray;
     return getMockEpochFrames(currentPresetId || 'custom', arrayId);
@@ -72,7 +69,6 @@ export function App() {
     return getMock102BandSpectrum(activeCandidate?.id || 'default');
   }, [activeCandidate]);
 
-  // URL synchronization
   useUrlSync(
     {
       ra,
@@ -92,7 +88,6 @@ export function App() {
     }
   );
 
-  // Blink movie player hook
   const { skippedNotice, clearSkippedNotice, stepForward, stepBackward } = useSpherexPlayer({
     frames,
     fps,
@@ -158,7 +153,7 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#080c14] text-slate-100">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-paper-950 text-paper-100">
       {isLoading && (
         <ReactBitsLoader
           label="Fetching SPHEREx Cutout Stream"
@@ -166,59 +161,57 @@ export function App() {
         />
       )}
 
-      {/* Top Header with App-Level Navigation */}
-      <div className="h-12 bg-[#0d131f] border-b border-slate-800 px-4 flex items-center justify-between text-xs select-none z-30">
+      {/* Top Header */}
+      <div className="h-12 bg-paper-900 border-b border-paper-800 px-4 flex items-center justify-between text-xs select-none z-30">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center font-bold text-white text-[11px]">
-              NASA
+            <div className="w-5 h-5 rounded bg-paper-100 text-paper-950 flex items-center justify-center font-bold text-[10px]">
+              SPX
             </div>
-            <span className="font-semibold text-white tracking-wide text-xs">
+            <span className="font-medium text-paper-100 tracking-wide text-xs font-sans">
               SPHEREx Sky-Viewer
             </span>
           </div>
 
-          {/* Primary View Switcher: Home / Sky Viewport / Dossier */}
           <nav className="flex items-center space-x-1 font-mono text-[11px]">
             <button
               onClick={() => setActiveTab('home')}
               className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
                 activeTab === 'home'
-                  ? 'bg-blue-900/60 text-white font-medium'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-paper-800 text-paper-100 font-medium'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Home className="w-3.5 h-3.5" />
-              <span>Home</span>
+              <span>1. Field</span>
             </button>
 
             <button
               onClick={() => setActiveTab('viewer')}
               className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
                 activeTab === 'viewer'
-                  ? 'bg-blue-900/60 text-white font-medium'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-paper-800 text-paper-100 font-medium'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>Sky Viewport</span>
+              <span>2. Blink Player</span>
             </button>
 
             <button
               onClick={() => setActiveTab('report')}
               className={`px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors ${
                 activeTab === 'report'
-                  ? 'bg-blue-900/60 text-white font-medium'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-paper-800 text-paper-100 font-medium'
+                  : 'text-paper-400 hover:text-paper-200'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>Discovery Dossier</span>
+              <span>3. Dossier Report</span>
             </button>
           </nav>
         </div>
 
-        {/* Global Controls & Presets */}
         <TopNav
           currentPresetId={currentPresetId}
           onSelectPreset={handleSelectPreset}
@@ -234,11 +227,15 @@ export function App() {
         />
       </div>
 
-      {/* Main Content Area */}
       {activeTab === 'home' && (
         <HomePage
           onSelectTarget={handleSelectPreset}
           onEnterCustomCoords={() => setActiveTab('viewer')}
+          onOpenStep={(step) => {
+            if (step === 1 || step === 2) setActiveTab('viewer');
+            else if (step === 4) setActiveTab('report');
+            else setActiveTab('viewer');
+          }}
         />
       )}
 
@@ -252,7 +249,6 @@ export function App() {
 
       {activeTab === 'viewer' && (
         <div className="flex flex-1 overflow-hidden relative">
-          {/* Streamlined Left Control Panel */}
           <LeftControlPanel
             ra={ra}
             dec={dec}
@@ -270,7 +266,6 @@ export function App() {
             onRefreshCutout={handleRefreshCutout}
           />
 
-          {/* Center Celestial Viewport & Movie Scrubber */}
           <main className="flex-1 flex flex-col h-[calc(100vh-3rem)] overflow-hidden relative">
             <CanvasViewport
               frames={frames}
@@ -301,7 +296,6 @@ export function App() {
             />
           </main>
 
-          {/* Right Drawer: Inspection, Spectra, Health */}
           <RightDrawer
             frames={frames}
             activeFrameIndex={activeFrameIndex}
@@ -313,7 +307,6 @@ export function App() {
         </div>
       )}
 
-      {/* Embed Modal */}
       <EmbedModal
         isOpen={isEmbedModalOpen}
         onClose={() => setIsEmbedModalOpen(false)}
