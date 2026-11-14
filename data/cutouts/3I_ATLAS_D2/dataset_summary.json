@@ -1,0 +1,41 @@
+{
+  "id": "december-d2",
+  "target": "3I/ATLAS",
+  "detector": "D2",
+  "pixel_scale_arcsec": 6.15,
+  "width": 104,
+  "height": 76,
+  "total_frames": 3,
+  "tracks_count": 2,
+  "bloom_tracks_count": 0,
+  "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html",
+  "frames": [
+    {
+      "frame_id": "2025W50_2A_0685_2D2",
+      "time": "2025-12-14T04:29:52.701Z",
+      "coverage": 0.978,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_00_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D2/frame_00_residual.png"
+    },
+    {
+      "frame_id": "2025W50_2A_0698_1D2",
+      "time": "2025-12-14T06:02:09.050Z",
+      "coverage": 0.947,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_01_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D2/frame_01_residual.png"
+    },
+    {
+      "frame_id": "2025W50_2A_0712_2D2",
+      "time": "2025-12-14T07:43:04.194Z",
+      "coverage": 0.9498,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D2/frame_02_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D2/frame_02_residual.png"
+    }
+  ]
+}
