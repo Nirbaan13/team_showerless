@@ -7,6 +7,7 @@ import java.net.{URI,URLDecoder}
 import java.nio.charset.StandardCharsets.UTF_8
 
 final class ObsTapProvider(val id: String,endpoint: String,policy: OriginPolicy,transport: ArchiveTransport) extends ArchiveProvider:
+  override def origins=policy
   def capabilities=ZIO.succeed(ProviderCapabilities(List(ProductKind.image,ProductKind.cube,ProductKind.spectrum),TimeFilterMode.exact_utc,original=true,cutout=true,restrictions=List("Native products only; instrument processing is unqualified")))
   def search(q: ArchiveQuery,cursor: Option[ProviderCursor]) =
     if cursor.nonEmpty then ZIO.fail(ArchiveFailure("unsupported_continuation","Provider supplies no qualified continuation"))

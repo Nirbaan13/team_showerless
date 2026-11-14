@@ -7,7 +7,7 @@ final case class DataLinks(links: List[DataLink],services: List[SodaDescriptor])
 object DataLinkResolver:
   def decode(bytes: Array[Byte]): DataLinks =
     val table=VOTableCodec.decode(bytes,requireStatus=false)
-    val links=table.rows.map(r=>DataLink(r.get("access_url"),r.get("service_def"),r.getOrElse("semantics",""),r.getOrElse("content_type","application/fits"),r.get("content_length").flatMap(_.toLongOption),r.get("link_authorized").exists(v=>v=="false" || v=="0") || r.get("link_auth").contains("required"),r.get("error_message")))
+    val links=table.rows.map(r=>DataLink(r.get("access_url"),r.get("service_def"),r.getOrElse("semantics","").stripPrefix("http://www.ivoa.net/rdf/datalink/core").stripPrefix("https://www.ivoa.net/rdf/datalink/core"),r.getOrElse("content_type","application/fits"),r.get("content_length").flatMap(_.toLongOption),r.get("link_authorized").exists(v=>v=="false" || v=="0") || r.get("link_auth").contains("required"),r.get("error_message")))
     val services=VOTableCodec.elements(table.root,"RESOURCE").filter(_.getAttribute("utype")=="adhoc:service").flatMap { r=>
       val params=VOTableCodec.elements(r,"PARAM").map(e=>e.getAttribute("name")->e.getAttribute("value")).toMap
       if params.get("standardID").exists(_.contains("SODA#sync")) then

@@ -40,6 +40,15 @@ final class ArchiveRepository private(path: Path):
     put(c,"federated_searches",job.id,job.toJson)
     job.records.foreach(r=>put(c,"federated_records",r.id,r.toJson))
   }
+  def updateSearch(id: String)(f: SearchSnapshot=>SearchSnapshot): IO[ArchiveFailure,SearchSnapshot] = tx { c=>
+    val next=f(get[SearchSnapshot](c,"federated_searches",id))
+    put(c,"federated_searches",id,next.toJson)
+    next.records.foreach(r=>put(c,"federated_records",r.id,r.toJson))
+    next
+  }
+  def updateDownload(id: String)(f: DownloadSnapshot=>DownloadSnapshot): IO[ArchiveFailure,DownloadSnapshot] = tx { c=>
+    val next=f(get[DownloadSnapshot](c,"federated_downloads",id));put(c,"federated_downloads",id,next.toJson);next
+  }
   def search(id: String): IO[ArchiveFailure,SearchSnapshot] = tx(get[SearchSnapshot](_,"federated_searches",id))
   def record(id: String): IO[ArchiveFailure,ArchiveRecord] = tx(get[ArchiveRecord](_,"federated_records",id))
   def saveDownload(job: DownloadSnapshot): IO[ArchiveFailure,Unit] = tx(put(_,"federated_downloads",job.id,job.toJson))
@@ -75,6 +84,7 @@ object ArchiveRepository:
     try
       val s=c.createStatement()
       try
+        s.execute("PRAGMA busy_timeout=10000")
         s.execute("PRAGMA journal_mode=WAL")
         List("federated_searches","federated_records","federated_downloads","federated_irsa_products").foreach(t=>s.execute(s"CREATE TABLE IF NOT EXISTS $t(id TEXT PRIMARY KEY,body TEXT NOT NULL)"))
       finally s.close()

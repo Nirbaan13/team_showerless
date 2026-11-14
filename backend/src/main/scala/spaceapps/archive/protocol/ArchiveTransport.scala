@@ -16,7 +16,7 @@ final case class OriginPolicy(hosts: Set[String],localOrigins: Set[String] = Set
     uri
 object OriginPolicy:
   val eso=OriginPolicy(Set("archive.eso.org","dataportal.eso.org"))
-  val cadc=OriginPolicy(Set("ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","cadc.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","cadc-west-01.canfar.net","cadc-west-02.canfar.net","ws-cadc.canfar.net"))
+  val cadc=OriginPolicy(Set("ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","cadc.cadc-ccda.hia-iha.nrc-cnrc.gc.ca","cadc-west-01.canfar.net","cadc-west-02.canfar.net","ws-cadc.canfar.net","ws-uv.canfar.net","ws-sf.canfar.net"))
   val gaia=OriginPolicy(Set("gea.esac.esa.int"))
   val bass=OriginPolicy(Set("nadc.china-vo.org","das101.china-vo.org"))
   val artxc=OriginPolicy(Set("heaiki.ru"))
@@ -44,11 +44,12 @@ final class ArchiveTransport(client: Client,val metadataBytes: Long = 8L*1024*10
           else
             val location=response.headers.get("Location").getOrElse("")
             val target=URI.create(url).resolve(location).toString
-            this.response(target,policy,redirects=redirects+1)(use)
+            if Set(307,308)(response.status.code) then this.response(target,policy,method,body,contentType,redirects+1)(use)
+            else this.response(target,policy,redirects=redirects+1)(use)
         else if response.status.code==204 then ZIO.fail(ArchiveFailure("no_content","Requested subset contains no product"))
         else if response.status.code==401 || response.status.code==403 then ZIO.fail(ArchiveFailure("requires_auth","Archive product requires authorization"))
         else if response.status.code<200 || response.status.code>=300 then
-          ZIO.fail(ArchiveFailure("http_error",s"Archive returned HTTP ${response.status.code}",Set(408,429,500,502,503,504)(response.status.code),response.headers.get("Retry-After").flatMap(_.toLongOption)))
+          ZIO.fail(ArchiveFailure("http_error",s"Archive returned HTTP ${response.status.code}",Set(408,429,500,502,503,504)(response.status.code),response.headers.get("Retry-After").flatMap(s=>ArchiveTransport.retryAfter(s))))
         else use(response)
       yield result
     }.mapError(ArchiveFailure.from)
@@ -59,4 +60,6 @@ final class ArchiveTransport(client: Client,val metadataBytes: Long = 8L*1024*10
     response(url,policy,method,body,contentType)(r=>bounded(r,metadataBytes).runCollect.map(_.toArray))
       .timeoutFail(ArchiveFailure("timeout","Archive metadata request timed out",true))(requestTimeout)
 object ArchiveTransport:
+  def retryAfter(value: String,now: java.time.Instant = java.time.Instant.now()): Option[Long] =
+    value.toLongOption.filter(_>=0).orElse(scala.util.Try(java.time.ZonedDateTime.parse(value,java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME).toInstant).toOption.map(t=>math.max(0L,java.time.Duration.between(now,t).getSeconds)))
   def params(base: String,values: List[(String,String)]): String = base+(if base.contains("?") then "&" else "?")+values.map((k,v)=>URLEncoder.encode(k,UTF_8)+"="+URLEncoder.encode(v,UTF_8)).mkString("&")

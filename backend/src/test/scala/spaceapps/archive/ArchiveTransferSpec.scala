@@ -49,6 +49,82 @@ object ArchiveTransferSpec extends ZIOSpecDefault:
         count <- ZIO.attempt { val stream=Files.list(dir);try stream.count() finally stream.close() }
       yield assertTrue(result.left.toOption.exists(_.code=="byte_limit"),count==0) }
     },
+    test("every redirect is checked before following a different origin") {
+      ZIO.foreach(List(false,true)) { untrusted=>ZIO.scoped {
+        val followed=new java.util.concurrent.atomic.AtomicInteger(0)
+        for
+          client <- ZIO.service[Client]
+          server <- ZIO.acquireRelease(ZIO.attempt {
+            val s=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0)
+            s.createContext("/",e=> {
+              if e.getRequestURI.getPath=="/redirect" then
+                e.getResponseHeaders.add("Location",if untrusted then s"http://localhost:${s.getAddress.getPort}/final?grant=temporary-secret" else "/final")
+                e.sendResponseHeaders(302,-1)
+              else
+                followed.incrementAndGet();e.sendResponseHeaders(200,fits.length);e.getResponseBody.write(fits)
+              e.close()
+            });s.start();s
+          })(s=>ZIO.succeed(s.stop(0)))
+          base=s"http://127.0.0.1:${server.getAddress.getPort}"
+          dir <- ZIO.attempt(Files.createTempDirectory("archive-redirect-"))
+          result <- new StreamingDownloader(new ArchiveTransport(client),dir).fetch(ArchiveAsset("key","cadc",base+"/redirect"),OriginPolicy(Set.empty,Set(base))).either
+        yield if untrusted then result.left.toOption.exists(e=>e.code=="untrusted_origin" && !e.getMessage.contains("temporary-secret")) && followed.get()==0 else result.isRight && followed.get()==1
+      }}.map(results=>assertTrue(results.forall(identity)))
+    },
+    test("startup recovery removes abandoned partial files and preserves complete artifacts") {
+      for
+        client <- ZIO.service[Client]
+        dir <- ZIO.attempt(Files.createTempDirectory("archive-recovery-"))
+        _ <- ZIO.attempt {Files.write(dir.resolve("abandoned.part"),fits);Files.write(dir.resolve("complete"),fits)}
+        downloader=new StreamingDownloader(new ArchiveTransport(client),dir)
+        _ <- downloader.recover
+      yield assertTrue(!Files.exists(dir.resolve("abandoned.part")),Files.exists(dir.resolve("complete")))
+    },
+    test("307 metadata redirects preserve POST method and body") {
+      ZIO.scoped {
+        val observed=new java.util.concurrent.atomic.AtomicReference[(String,String)]()
+        for
+          client <- ZIO.service[Client]
+          server <- ZIO.acquireRelease(ZIO.attempt {
+            val s=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0)
+            s.createContext("/",e=> {
+              if e.getRequestURI.getPath=="/redirect" then
+                e.getResponseHeaders.add("Location","/final");e.sendResponseHeaders(307,-1)
+              else
+                observed.set(e.getRequestMethod->new String(e.getRequestBody.readAllBytes(),UTF_8))
+                e.sendResponseHeaders(200,2);e.getResponseBody.write("ok".getBytes(UTF_8))
+              e.close()
+            });s.start();s
+          })(s=>ZIO.succeed(s.stop(0)))
+          base=s"http://127.0.0.1:${server.getAddress.getPort}"
+          _ <- new ArchiveTransport(client).metadata(base+"/redirect",OriginPolicy(Set.empty,Set(base)),"POST","ADQL=select","application/x-www-form-urlencoded")
+        yield assertTrue(observed.get()==("POST"->"ADQL=select"))
+      }
+    },
+    test("interrupted response stream removes its partial cache entry") {
+      ZIO.scoped {
+        for
+          client <- ZIO.service[Client]
+          dir <- ZIO.attempt(Files.createTempDirectory("archive-interrupt-"))
+          server <- ZIO.acquireRelease(ZIO.attempt {
+            val s=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0)
+            s.createContext("/",e=> { e.sendResponseHeaders(200,0);e.getResponseBody.write(fits);e.getResponseBody.flush();Thread.sleep(1500);e.close() });s.start();s
+          })(s=>ZIO.succeed(s.stop(0)))
+          base=s"http://127.0.0.1:${server.getAddress.getPort}"
+          fiber <- new StreamingDownloader(new ArchiveTransport(client),dir).fetch(ArchiveAsset("interrupted","eso",base),OriginPolicy(Set.empty,Set(base))).fork
+          _ <- ZIO.sleep(100.millis)
+          _ <- fiber.interrupt
+          files <- ZIO.attempt {val s=Files.list(dir);try s.count() finally s.close()}
+        yield assertTrue(files==0)
+      }
+    },
+    test("invalid gzip is a permanent format error") {
+      server(Array[Byte](0x1f,0x8b.toByte,1,2,3)) { (base,policy)=>for
+        client <- ZIO.service[Client]
+        dir <- ZIO.attempt(Files.createTempDirectory("archive-gzip-"))
+        result <- new StreamingDownloader(new ArchiveTransport(client),dir).fetch(ArchiveAsset("key","eso",base),policy).either
+      yield assertTrue(result.left.toOption.exists(e=>e.code=="invalid_fits" && !e.retryable),!Files.exists(dir.resolve("key"))) }
+    },
     test("invalid FITS and NoContent never create cached assets") {
       ZIO.foreach(List(("bad".getBytes,200),(fits,204))) { (bytes,status)=>server(bytes,status) { (base,policy)=>for
         client <- ZIO.service[Client]

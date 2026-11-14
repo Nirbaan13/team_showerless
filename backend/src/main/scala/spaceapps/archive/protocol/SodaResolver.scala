@@ -16,4 +16,5 @@ object SodaResolver:
       if science.exists(_.requires_auth) && !science.exists(l=> !l.requires_auth && l.url.nonEmpty) then throw ArchiveFailure("requires_auth","Science product requires authorization")
       science.filter(l=>l.error.isEmpty && !l.requires_auth).flatMap(l=>l.url.map(u=>ArchiveAsset(key,record.provider,u,l.semantic,l.format,l.estimated_bytes))) match
         case Nil=>throw ArchiveFailure("missing_product","No science asset was advertised")
-        case assets=>assets
+        case asset::Nil=>List(asset)
+        case _=>throw ArchiveFailure("ambiguous_science_asset","Multiple science originals need a qualified per-artifact identity; select an advertised cutout or another product")

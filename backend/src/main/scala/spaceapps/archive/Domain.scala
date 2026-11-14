@@ -8,6 +8,7 @@ final case class ArchiveFailure(code: String, message: String, retryable: Boolea
 object ArchiveFailure:
   def from(t: Throwable): ArchiveFailure = t match
     case e: ArchiveFailure => e
+    case e: spaceapps.domain.ApiError => ArchiveFailure(e.code,e.message,e.retryable)
     case _ => ArchiveFailure("transport_error","Archive request could not complete",true)
 enum ProductKind derives JsonCodec:
   case image, cube, spectrum, catalog_source, coverage
@@ -46,7 +47,7 @@ final case class DeliveryRequest(mode: DeliveryMode = DeliveryMode.prefer_cutout
 /** URLs are ephemeral and intentionally never serialized to public or persistent metadata. */
 final case class ArchiveAsset(id: String, provider: String, url: String, semantic: String = "#this", format: String = "application/fits", estimated_bytes: Option[Long] = None, requires_auth: Boolean = false)
 final case class StoredAsset(id: String, bytes: Long, sha256: String, compression: String, brightness_unit: Option[String] = None, analysisEligible: Boolean = false, artifact_url: String = "") derives JsonCodec
-final case class SearchSnapshot(id: String, query: ArchiveQuery, status: String = "queued", records: List[ArchiveRecord] = Nil, outcomes: List[ProviderOutcome] = Nil, continuations: Map[String,ProviderCursor] = Map.empty, generation: Long = 0, status_url: String = "") derives JsonCodec
+final case class SearchSnapshot(id: String, query: ArchiveQuery, status: String = "queued", records: List[ArchiveRecord] = Nil, outcomes: List[ProviderOutcome] = Nil, continuations: Map[String,ProviderCursor] = Map.empty, generation: Long = 0, status_url: String = "", pending_provider: Option[String] = None) derives JsonCodec
 final case class SearchPage(id: String, status: String, outcomes: List[ProviderOutcome], records: List[ArchiveRecord], returned_count: Int, next_cursor: Option[String]) derives JsonCodec
 final case class DownloadSelection(record_ids: List[String], delivery: DeliveryRequest = DeliveryRequest()) derives JsonCodec
 final case class AssetOutcome(record_id: String, status: String, asset: Option[StoredAsset] = None, error: Option[ArchiveFailure] = None, provenance: Map[String,String] = Map.empty) derives JsonCodec
