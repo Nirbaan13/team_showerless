@@ -305,10 +305,13 @@ paths:
     get:
       tags: [Observations]
       operationId: prepareZodiSubtractedObservations
-      summary: Prepare observations with zodiacal reference subtraction
+      summary: Subtract the observation's native zodiacal-background model
       description: |
-        Uses the processing pipeline to prepare the requested mode.
-        Immediately returns a job; it does not wait for processing to finish.
+        Subtracts the observation's own ZODI layer from its calibrated IMAGE on
+        the original pixel grid, masks the validated bad-pixel bits, and preserves
+        ancillary FITS HDUs, WCS and source provenance. This mode does not subtract
+        a separate observation or reproject images. Immediately returns a job;
+        processed FITS and real PNG previews become ready in the background.
       parameters:
         - $ref: '#/components/parameters/RightAscension'
         - $ref: '#/components/parameters/Declination'

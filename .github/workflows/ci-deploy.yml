@@ -33,12 +33,20 @@ jobs:
           cache-dependency-path: |
             backend/build.sbt
             backend/project/build.properties
+      - name: Install and test verified scientific processing
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/processing-venv"
+          "$RUNNER_TEMP/processing-venv/bin/pip" install --only-binary=:all: --require-hashes -r processing/requirements-test.txt
+          "$RUNNER_TEMP/processing-venv/bin/python" -m pytest processing/tests -q
+          printf 'PROCESSING_PYTHON=%s\n' "$RUNNER_TEMP/processing-venv/bin/python" >> "$GITHUB_ENV"
       - name: Test and stage Scala API
         run: ./sbtw test stage
       - name: Check deployment scripts
         run: bash -n ../ops/deploy.sh ../ops/bootstrap-vps.sh tests/test_deploy.sh
       - name: Build the exact commit
-        run: docker build --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" .
+        run: docker build --file Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" ..
       - name: Test container deployment and rollback
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}

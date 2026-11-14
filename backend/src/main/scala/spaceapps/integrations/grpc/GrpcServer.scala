@@ -17,9 +17,9 @@ object GrpcServer:
   /** The server lifetime belongs to the application scope; port 0 binds an ephemeral port. */
   def start(jobs: Jobs, revision: String, host: String = "0.0.0.0", port: Int = 50051,
     channels: Set[Int] = Set.empty, metadata: Option[MetadataService] = None,
-    equipment: Option[EquipmentService] = None): ZIO[Scope, Throwable, Int] =
+    equipment: Option[EquipmentService] = None,processingModes:Set[String]=Set.empty): ZIO[Scope, Throwable, Int] =
     for
-      definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels, metadata, equipment))
+      definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels, metadata, equipment,processingModes))
       server <- ZIO.acquireRelease(ZIO.attempt {
         NettyServerBuilder.forAddress(new InetSocketAddress(host, port)).addService(definition).build()
       })(shutdown)
@@ -38,7 +38,7 @@ object GrpcServer:
         ZIO.attempt(server.shutdownNow()).ignore)
 
 private final class Retrieval(jobs: Jobs, revision: String, channels: Set[Int],
-  metadata: Option[MetadataService], equipment: Option[EquipmentService]) extends RCRetrievalService:
+  metadata: Option[MetadataService], equipment: Option[EquipmentService],processingModes:Set[String]) extends RCRetrievalService:
   private def failure(t: Throwable): StatusException =
     val e = ApiError.from(t)
     val status = e.code match
@@ -66,12 +66,21 @@ private final class Retrieval(jobs: Jobs, revision: String, channels: Set[Int],
   def searchObservations(request: SearchRequest, context: RequestContext): IO[StatusException, SearchResponse] = run(context) {
     query(request.query).flatMap(jobs.search).map(os => SearchResponse(os.map(GrpcMapping.observation)))
   }
-  def prepareObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] = run(context) {
-    query(request.query).flatMap(jobs.submit(_, "default", None)).flatMap(v => ZIO.attempt(GrpcMapping.download(v)))
-  }
-  def prepareDeepObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] = run(context) {
-    query(request.query).map(_.inDeepSurvey).flatMap(jobs.submit(_, "default", None)).flatMap(v => ZIO.attempt(GrpcMapping.download(v)))
-  }
+  private def prepareRequest(request:PrepareRequest,deep:Boolean):Task[Download]=
+    val mode=if request.mode.isEmpty then "default" else request.mode
+    for
+      _ <- ZIO.fail(ApiError("unsupported_processing","The requested scientific mode is not validated"))
+        .unless(mode=="default" || processingModes.contains(mode))
+      _ <- ZIO.fail(ApiError("invalid_request","Validated modes do not use a separate reference frame"))
+        .when(request.referenceFrameId.nonEmpty)
+      q <- query(request.query)
+      download <- jobs.submit(if deep then q.inDeepSurvey else q,mode,None)
+      result <- ZIO.attempt(GrpcMapping.download(download))
+    yield result
+  def prepareObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] =
+    run(context)(prepareRequest(request,false))
+  def prepareDeepObservations(request: PrepareRequest, context: RequestContext): IO[StatusException, Download] =
+    run(context)(prepareRequest(request,true))
   def getObservationMetadata(request: ObservationMetadataRequest, context: RequestContext): IO[StatusException, ObservationMetadataResponse] = run(context) {
     ZIO.fromOption(metadata).orElseFail(ApiError("service_unavailable", "Metadata service is not configured", true))
       .flatMap(_.get(request.frameId)).map(doc => ObservationMetadataResponse(Some(GrpcMapping.document(doc))))

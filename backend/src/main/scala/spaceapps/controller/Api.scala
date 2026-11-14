@@ -15,7 +15,7 @@ import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.jdk.CollectionConverters.*
 
 final class Api private(jobs:Jobs,revision:String,specification:String,openapi:Json, channels:Set[Int],
-  metadata:Option[MetadataService], equipment:Option[EquipmentService]):
+  metadata:Option[MetadataService], equipment:Option[EquipmentService],processingModes:Set[String]):
   private def json[A:JsonEncoder](value:A,status:Status=Status.Ok):Response =
     Response.json(value.toJson).status(status).addHeader("Cache-Control","no-store")
   private def errorResponse(t:Throwable):Response =
@@ -42,10 +42,10 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
     if query.channel.exists(c=> !channels.contains(c)) then ZIO.fail(ApiError("unsupported_channel","No authoritative wavelength calibration is configured for this channel"))
     else ZIO.succeed(query)
   private def query(shape:String,request:Request):Task[Query]=parameters(request).flatMap(p=>ZIO.fromEither(Query.fromParameters(shape,p))).flatMap(supported)
-  private def prepare(shape:String,request:Request):Task[Response]=
+  private def prepare(shape:String,request:Request,mode:String="default"):Task[Response]=
     for
       q <- query(shape,request)
-      job <- jobs.submit(q,"default",None)
+      job <- jobs.submit(q,mode,None)
     yield json(job,if job.terminal then Status.Ok else Status.Accepted).addHeader("Location",job.status_url)
   private def prepareDeep(request:Request):Task[Response]=
     for
@@ -106,7 +106,7 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
         .addHeader("Content-Type","text/event-stream").addHeader("Cache-Control","no-store")
         .addHeader("X-Accel-Buffering","no")
     }
-  private def deferred:Response=json(ApiError("unsupported_processing","PNG previews and scientific processing are deferred until the team supplies its pipeline"),Status.NotImplemented)
+  private def deferred:Response=json(ApiError("unsupported_processing","The requested scientific mode is not validated"),Status.NotImplemented)
   val routes:Routes[Any,Response]=Routes(
     Method.GET / Root -> handler(json(Map("service"->"SPHEREx Backend API","version"->revision,"docs"->"/docs"))),
     Method.GET / "health" -> handler(json(Map("status"->"ok","revision"->revision))),
@@ -122,7 +122,8 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
     Method.GET / "api" / "observations" / "default" -> handler((r:Request)=>safe(prepare("default",r))),
     Method.GET / "api" / "observations" / "range" -> handler((r:Request)=>safe(prepare("range",r))),
     Method.GET / "api" / "observations" / "polygon" -> handler((r:Request)=>safe(prepare("polygon",r))),
-    Method.GET / "api" / "observations" / "zodi-reference-subtracted" -> handler(deferred),
+    Method.GET / "api" / "observations" / "zodi-reference-subtracted" -> handler((r:Request)=>
+      if processingModes.contains("zodi_reference_subtracted") then safe(prepare("default",r,"zodi_reference_subtracted")) else ZIO.succeed(deferred)),
     Method.GET / "api" / "observations" / "epoch-difference" -> handler(deferred),
     Method.GET / "api" / "downloads" / string("id") -> handler((id:String,r:Request)=>safe(jobs.get(id).map(json(_)))),
     Method.GET / "api" / "downloads" / string("id") / "events" -> handler((id:String,r:Request)=>safe(events(id))),
@@ -139,18 +140,19 @@ object Api:
     case n:java.lang.Number=>Json.Num(new java.math.BigDecimal(n.toString))
     case s=>Json.Str(s.toString)
   def make(jobs:Jobs,revision:String,path:FilePath,channels:Set[Int]=Set.empty,
-    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None):Task[Api]=ZIO.attemptBlocking {
+    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None,processingModes:Set[String]=Set.empty):Task[Api]=ZIO.attemptBlocking {
     val text=Files.readString(path)
     val options=new LoaderOptions();options.setAllowDuplicateKeys(false)
     val document=new Yaml(new SafeConstructor(options)).load[java.util.Map[String,Object]](text)
     document.get("info").asInstanceOf[java.util.Map[String,Object]].put("version",revision)
     document.put("servers",java.util.List.of(java.util.Map.of("url","/")))
     val paths=document.get("paths").asInstanceOf[java.util.Map[String,java.util.Map[String,java.util.Map[String,Object]]]]
-    List("/api/observations/zodi-reference-subtracted","/api/observations/epoch-difference").foreach { p=>
+    List("/api/observations/zodi-reference-subtracted"->"zodi_reference_subtracted","/api/observations/epoch-difference"->"epoch_difference")
+      .filterNot((_,mode)=>processingModes.contains(mode)).foreach { (p,_)=>
       val operation=paths.get(p).get("get")
-      operation.put("description","Deferred: scientific pipeline is not available yet. Returns HTTP501.")
+      operation.put("description","This scientific processing mode is not validated. Returns HTTP501.")
       operation.get("responses").asInstanceOf[java.util.Map[String,Object]].put("501",java.util.Map.of("description","Processing is not implemented yet"))
     }
-    new Api(jobs,revision,text,ast(document),channels,metadata,equipment)
+    new Api(jobs,revision,text,ast(document),channels,metadata,equipment,processingModes)
   }
   private val swagger="""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>SPHEREx API</title><link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:'/openapi.json',dom_id:'#swagger-ui'});</script></body></html>"""
