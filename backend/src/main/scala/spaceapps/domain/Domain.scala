@@ -32,8 +32,11 @@ final case class JobRecord(download: Download, query: Query, requestKey: String,
   images: List[ArchiveImage] = Nil) derives JsonCodec
 
 final case class Query(document: Json, position: String, detector: Option[Int] = None, channel: Option[Int] = None,
-  after: Option[String] = None, before: Option[String] = None) derives JsonCodec:
+  after: Option[String] = None, before: Option[String] = None, deep: Boolean = false) derives JsonCodec:
   def key(mode: String, reference: Option[String]): String = Hash.sha256(s"$mode|${reference.getOrElse("")}|${document.toJson}")
+  def inDeepSurvey: Query = document match
+    case Json.Obj(values) => copy(document = Json.Obj(values.filterNot(_._1 == "survey") :+ ("survey" -> Json.Str("deep"))), deep = true)
+    case _ => throw ApiError("invalid_request", "Query must be an object")
 
 object Hash:
   def sha256(text: String): String = MessageDigest.getInstance("SHA-256").digest(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)).map(b => f"${b & 255}%02x").mkString
@@ -83,7 +86,7 @@ object Query:
           else if key == "detector_array" then value match
             case Json.Str("all") | Json.Num(_) => false
             case _ => true
-          else if Set("observed_after","observed_before").contains(key) then !value.isInstanceOf[Json.Str]
+          else if Set("observed_after","observed_before","survey").contains(key) then !value.isInstanceOf[Json.Str]
           else false
         }
         if values.map(_._1).distinct.size != values.size || invalidType then
@@ -138,6 +141,10 @@ object Query:
             val latitude=math.toDegrees(math.atan2(v.z,math.hypot(v.x,v.y)))
             s"$longitude $latitude"
           (List("right_ascension_deg"->jsonNumber(a),"declination_deg"->jsonNumber(d),"width_arcmin"->jsonNumber(w),"height_arcmin"->jsonNumber(h)),"POLYGON "+corners.mkString(" "))
-      Query(Json.Obj(zio.Chunk.fromIterable(geometry++common)),position,detector,channel,dates(0),dates(1))
+      val query = Query(Json.Obj(zio.Chunk.fromIterable(geometry++common)),position,detector,channel,dates(0),dates(1))
+      params.getOrElse("survey", "wide") match
+        case "wide" => query
+        case "deep" => query.inDeepSurvey
+        case _ => invalid("survey must be wide or deep")
     .toEither.left.map(ApiError.from)
 

@@ -20,7 +20,143 @@ tags:
   - name: Observations
   - name: Downloads
   - name: Chunks
+  - name: Equipment
 paths:
+  /api/observations/meta:
+    get:
+      tags: [Observations]
+      operationId: getObservationMetadata
+      summary: Get expanded metadata for a previously discovered frame
+      description: |
+        Supply frame_id returned by search or a download job. Combines available
+        SIA metadata, additional TAP fields and FITS HDU headers. FITS headers are
+        read only when the native file is already cached; this request never
+        downloads a science image. Each source reports its own availability or
+        error. Partial metadata remains useful when an external source fails.
+      parameters:
+        - name: frame_id
+          in: query
+          required: true
+          description: Frame identifier returned by observation search
+          schema: {type: string, minLength: 1}
+      responses:
+        '200':
+          description: Available metadata with explicit source status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationMetadata'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  /api/equipment:
+    get:
+      tags: [Equipment]
+      operationId: getEquipment
+      summary: Get SPHEREx equipment and available calibration products
+      description: |
+        Discovers actual calibration files in the official IRSA public archive
+        mirror. Results are cached by release and detector. Calibration versions
+        are listed explicitly; a catalogue entry does not imply applicability to
+        every frame. Files are fetched through the calibration resource endpoint.
+      parameters:
+        - name: release
+          in: query
+          schema: {type: string, enum: [DR1, QR3], default: DR1}
+        - $ref: '#/components/parameters/Detector'
+      responses:
+        '200':
+          description: Equipment details and discovered calibration catalogue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentCatalogue'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '503':
+          $ref: '#/components/responses/ArchiveUnavailable'
+  /api/equipment/calibrations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Equipment]
+      operationId: getCalibrationFile
+      summary: Download a calibration file through the backend cache
+      description: |
+        Supply a calibration file ID returned by equipment. The backend resolves
+        its persisted archive identity, downloads the original file when needed
+        and serves the cached bytes. Arbitrary archive URLs are not accepted.
+      responses:
+        '200':
+          description: Original calibration file bytes (FITS, YAML, ECSV or another listed format)
+          content:
+            application/octet-stream:
+              schema: {type: string, format: binary}
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '503':
+          $ref: '#/components/responses/ArchiveUnavailable'
+  /api/observationsDeep:
+    get:
+      tags: [Observations]
+      operationId: prepareDeepObservations
+      summary: Prepare native observations from the SPHEREx deep surveys
+      description: |
+        Queries spherex_dr1_deep and spherex_qr3_deep. Supply exactly one complete
+        geometry: center RA/Dec with optional width/height, four range boundaries,
+        or verices_degrees polygon coordinates. Geometry families cannot be mixed.
+        Dates, detector and channel use the same filters as other preparation
+        endpoints. Returns the existing asynchronous download job, SSE events and
+        chunk URLs. Query survey is deep; native image boundaries are retained.
+      parameters:
+        - name: right_ascension_deg
+          in: query
+          schema: {type: number, minimum: 0, exclusiveMaximum: 360}
+        - name: declination_deg
+          in: query
+          schema: {type: number, minimum: -90, maximum: 90}
+        - name: width_arcmin
+          in: query
+          description: Center geometry only; defaults to3 when omitted
+          schema: {type: number, exclusiveMinimum: 0}
+        - name: height_arcmin
+          in: query
+          description: Center geometry only; defaults to3 when omitted
+          schema: {type: number, exclusiveMinimum: 0}
+        - name: right_ascension_min_deg
+          in: query
+          schema: {type: number, minimum: 0, maximum: 360}
+        - name: right_ascension_max_deg
+          in: query
+          schema: {type: number, minimum: 0, maximum: 360}
+        - name: declination_min_deg
+          in: query
+          schema: {type: number, minimum: -90, maximum: 90}
+        - name: declination_max_deg
+          in: query
+          schema: {type: number, minimum: -90, maximum: 90}
+        - name: verices_degrees
+          in: query
+          style: form
+          explode: false
+          schema:
+            $ref: '#/components/schemas/PolygonCoordinates'
+        - $ref: '#/components/parameters/Detector'
+        - $ref: '#/components/parameters/Channel'
+        - $ref: '#/components/parameters/ObservedAfter'
+        - $ref: '#/components/parameters/ObservedBefore'
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadyJob'
+        '202':
+          $ref: '#/components/responses/PendingJob'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '503':
+          $ref: '#/components/responses/ArchiveUnavailable'
   /api/observations/search:
     post:
       tags: [Observations]
@@ -430,6 +566,119 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ObservationMetadata:
+      type: object
+      required: [frame_id, status, observation, sia, tap, fits]
+      properties:
+        frame_id: {type: string}
+        status: {type: string, enum: [complete, partial], description: Aggregate availability of the requested metadata sources}
+        observation:
+          $ref: '#/components/schemas/Observation'
+        sia:
+          $ref: '#/components/schemas/MetadataSource'
+        tap:
+          $ref: '#/components/schemas/MetadataSource'
+        fits:
+          $ref: '#/components/schemas/MetadataSource'
+    MetadataSource:
+      type: object
+      required: [status]
+      description: Source-specific metadata with availability, values, field definitions, HDU headers or an explicit error
+      properties:
+        status: {type: string, enum: [available, unavailable, not_found, not_downloaded, error, stale]}
+        reason: {type: string}
+        data:
+          type: object
+          additionalProperties: true
+        fields:
+          type: array
+          items:
+            type: object
+            description: Original TAP field name, datatype, unit, description and available VO annotations
+            additionalProperties: true
+        rows:
+          type: array
+          items:
+            type: object
+            description: Typed TAP row; missing values are null
+            additionalProperties: true
+        hdus:
+          type: array
+          items:
+            $ref: '#/components/schemas/FitsHdu'
+        error:
+          $ref: '#/components/schemas/Error'
+      additionalProperties: true
+    FitsHdu:
+      type: object
+      required: [index, type, bitpix, axes, cards]
+      properties:
+        index: {type: integer, minimum: 0}
+        name: {type: [string, 'null']}
+        type: {type: string}
+        bitpix: {type: integer}
+        axes:
+          type: array
+          items: {type: integer, minimum: 0}
+        header_offset_bytes: {type: integer, minimum: 0}
+        data_offset_bytes: {type: integer, minimum: 0}
+        data_size_bytes: {type: integer, minimum: 0}
+        cards:
+          type: array
+          description: Physical header cards in original order, including repeated COMMENT and HISTORY cards
+          items:
+            type: object
+            required: [raw]
+            properties:
+              key: {type: [string, 'null']}
+              value: {}
+              comment: {type: [string, 'null']}
+              raw: {type: string}
+    EquipmentCatalogue:
+      type: object
+      required: [facility, instrument, release, detectors, calibration_products, catalogue_source, catalogue_complete]
+      properties:
+        facility: {type: string}
+        instrument: {type: string}
+        release: {type: string, enum: [DR1, QR3]}
+        detectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentDetector'
+        calibration_products:
+          type: array
+          items:
+            $ref: '#/components/schemas/CalibrationProduct'
+        catalogue_source: {type: string, format: uri}
+        catalogue_complete: {type: boolean}
+        catalogue_ttl_seconds: {type: integer, minimum: 0}
+        catalogue_scope: {type: string}
+        not_listed_product_types:
+          type: array
+          items: {type: string}
+        frame_applicability: {type: string}
+    EquipmentDetector:
+      type: object
+      required: [detector_array, wavelength_min_um, wavelength_max_um, resolving_power]
+      properties:
+        detector_array: {type: integer, minimum: 1, maximum: 6}
+        wavelength_min_um: {type: number}
+        wavelength_max_um: {type: number}
+        resolving_power: {type: integer}
+    CalibrationProduct:
+      type: object
+      required: [id, product_type, version, release, source_url, download_url, file_name, size_bytes, detector_relevance]
+      properties:
+        id: {type: string}
+        product_type: {type: string}
+        version: {type: string}
+        detector_array: {type: [integer, 'null'], minimum: 1, maximum: 6}
+        release: {type: string, enum: [DR1, QR3]}
+        source_url: {type: string, format: uri}
+        download_url: {type: string, format: uri-reference}
+        file_name: {type: string}
+        size_bytes: {type: integer, minimum: 1}
+        detector_relevance: {type: string, enum: [single_detector, all_detectors]}
     ObservedAfter:
       type: string
       format: date-time
@@ -449,6 +698,11 @@ components:
       type: object
       required: [right_ascension_deg, declination_deg]
       properties:
+        survey:
+          type: string
+          enum: [wide, deep]
+          default: wide
+          description: Survey selection; deep preparation always selects deep
         right_ascension_deg: {type: number, minimum: 0, exclusiveMaximum: 360}
         declination_deg: {type: number, minimum: -90, maximum: 90}
         width_arcmin: {type: number, exclusiveMinimum: 0, default: 3}
@@ -468,6 +722,11 @@ components:
         - declination_min_deg
         - declination_max_deg
       properties:
+        survey:
+          type: string
+          enum: [wide, deep]
+          default: wide
+          description: Survey selection; deep preparation always selects deep
         right_ascension_min_deg: {type: number, minimum: 0, maximum: 360}
         right_ascension_max_deg: {type: number, minimum: 0, maximum: 360}
         declination_min_deg: {type: number, minimum: -90, maximum: 90}
@@ -491,6 +750,11 @@ components:
       type: object
       required: [verices_degrees]
       properties:
+        survey:
+          type: string
+          enum: [wide, deep]
+          default: wide
+          description: Survey selection; deep preparation always selects deep
         verices_degrees:
           $ref: '#/components/schemas/PolygonCoordinates'
         detector_array:
