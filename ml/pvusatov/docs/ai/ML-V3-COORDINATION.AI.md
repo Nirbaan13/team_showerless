@@ -18,6 +18,8 @@ Native acquisition predeclared 8 training, 11 validation and 10 final independen
 
 Synthetic training seeds are 1300000..1302999, validation 1400000..1400799; detector development starts at 1200000. Native moving injection RNGs use 1500000+/1600000+/1610000+, stationary artifacts 1700000+, and the detector slow diagnostic 1800000+. These use different generators but numerical overlap is avoided for clarity. Root's provisional reservations of 1700000 and 1800000 were withdrawn before generation on learning of those existing development draws. The sole final synthetic reservation is **2000000..2001999 (2,000 independent fields)**. No agent may generate or inspect it before freeze.
 
+Prospective final native injection RNGs are **2200001..2200010**, mapped to canonical sorted final parent IDs in the eventual trusted freeze manifest. Runner development/toy simulations use1900000..1999999. The root will supply a freeze JSON plus an external digest trust anchor; model/metadata/source/acquisition hashes and fixed profiles must validate before any final reader or simulator call. No final authorization file exists yet.
+
 Expanded validation and final native injections use six deterministic directions, speeds `[0.01, 0.03, 0.1, 0.3, 1, 4, 10, 25, 50]` pixels/hour, and brightness multipliers `[3, 6, 12, 24, 48]`: 270 planned correlated derivatives per parent. Coordinates are not moved back into coverage when they leave the field. Actual ePSF, native WCS, masks and timestamps are used. Existing native calibration/ePSF orientation must be verified against primary documentation and an asymmetric development-only marker before final use; `DETCOORD=sky` alone does not mean north-up ICRS.
 
 ## Comparators and interpretation
@@ -29,6 +31,8 @@ Native unknown control candidates are unlabeled, not negatives. Positive-only na
 Selection prioritizes native validation macro-parent recovery at one review, then three reviews, with synthetic validation and both detector profiles reported as safeguards. Publish every grid outcome, including failed ablations and the digital-tracking prototype's negative result. The deployment candidate must fit <=32 MiB, existing six measured features and the production CPU/memory budget. A selected ExtraTrees ensemble must be named accurately; scores are not calibrated probabilities.
 
 Development-only safeguard amendment: after the initial five-parent ablation and before scoring the complete eleven-parent validation set, eligibility was strengthened to require both K1/K3 no worse than deployed sigma1.2/v2 and both original/candidate-profile heuristics, using native macro-parent and synthetic macro-cadence recovery. This change is explicitly development-informed. Same-detector v2 scores remain a ranker ablation, not the deployed system comparator. No candidate selection or guard amendment uses final pixels; the final gate below is unchanged.
+
+Independent pre-score review caught unequal attribution denominators between detector profiles. Before any expanded forest scores, selection was corrected to use one shared sigma1.2/intersection/sigma0.8 mask for all132 alternatives and every eligibility/key comparison. This retains2360 of2370 development derivatives across11 parents; raw planned and individual-pair reports remain separately visible. Cache features and attribution bits were not changed. Source/cache/estimator integrity and the common denominators passed independent review before scoring began.
 
 ## Final gate and reporting
 

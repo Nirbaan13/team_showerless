@@ -5,11 +5,11 @@ The Python runtime, training, fixtures, frozen models, reports, experimental sou
 Validation before publication:
 
 - 131 Scala tests passed and staging succeeded; one existing optional live-IRSA test was ignored.
-- 78 Python package tests and29 experimental tests passed; the real-data smoke loaded the unchanged v2 model.
+- 78 Python package tests and30 experimental tests passed after the reviewed shared-selection-cohort correction; the real-data smoke loaded the unchanged v2 model.
 - All78 frozen runtime/scientific files retained their original byte hashes; modelSHA is `dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9`.
 - Frontend lint/build passed. Five existing shared React-hook warnings and the existing bundle-size warning remain.
 - Running local HTTP/gRPC returned equal real results;28PNGresources, SSE, deduplication, empty/error responses and result schema passed. Actual browser Swagger execution and desktop/mobile result bounds passed.
 - A client generated from the extracted protobuf interoperated with the existing VPS service before rollout.
-- Independent review reproduced and verified the fresh-CI scratch-directory fix; no remaining concrete Docker/CI/frontend blocker was found. Actual image build and clean CI checks remain pending until the PR runs.
+- Independent review reproduced and verified the fresh-CI scratch-directory fix; no remaining concrete Docker/CI/frontend blocker was found. Initial PR12 CI passed clean Python/Scala/frontend checks, image build, packaged real-data inference and current/legacy rollback. A subsequent experimental selection-cohort correction receives fresh checks before merge.
 
 V3 experiments are development evidence only. Their final synthetic/native inputs remain closed, and this relocation does not promote a new model. `relocation-manifest.json` retains original path/hash records; historical manifests are preserved rather than rewritten.

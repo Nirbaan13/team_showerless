@@ -63,3 +63,24 @@ def normalize_native_pair(baseline,candidate):
 
 def paired_native_report(baseline,candidate,baseline_scores,candidate_scores,bootstrap_samples=10000):
     return paired_report(baseline,candidate,baseline_scores,candidate_scores,bootstrap_samples=bootstrap_samples,bootstrap_seed=20261114)
+
+
+def shared_selection_cohort(baseline,candidate):
+    # Root validation rejects missing/duplicate identities and altered latent
+    # trajectories before the shared mask is formed. These are actual heuristic
+    # scores, used only to reuse its alignment checks; no fake model scores.
+    paired_report(baseline,candidate,[f['baseline'] for f in baseline],[f['baseline'] for f in candidate],bootstrap_samples=1)
+    left={_identity(f):f for f in baseline};right={_identity(f):f for f in candidate}
+    shared={k for k in left if left[k].get('attribution_eligible',True) and right[k].get('attribution_eligible',True)}
+    parents=sorted({f['parent_id'] for f in baseline});counts={}
+    for parent in parents:
+        keys=[k for k in left if left[k]['parent_id']==parent]
+        counts[parent]=dict(planned=len(keys),sigma12_eligible=sum(left[k].get('attribution_eligible',True) for k in keys),sigma08_eligible=sum(right[k].get('attribution_eligible',True) for k in keys),shared_eligible=sum(k in shared for k in keys))
+    return shared,dict(planned=len(left),sigma12_eligible=sum(f.get('attribution_eligible',True) for f in baseline),sigma08_eligible=sum(f.get('attribution_eligible',True) for f in candidate),shared_eligible=len(shared),by_parent=counts,features_labels_and_attribution_bits_changed=False)
+
+
+def selection_subset(fields,values,shared_keys):
+    if len(fields)!=len(values):raise ValueError('selection scores length mismatch')
+    indices=[i for i,f in enumerate(fields) if _identity(f) in shared_keys]
+    if len(indices)!=len(shared_keys):raise ValueError('selection cohort identities missing or duplicated')
+    return [fields[i] for i in indices],[values[i] for i in indices]

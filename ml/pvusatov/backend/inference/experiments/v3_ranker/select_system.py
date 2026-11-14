@@ -13,7 +13,7 @@ import joblib
 import numpy as np
 import train_grid as grid
 from select_cached import qualifies,key,write
-from selection_integrity import validate_hashes,validate_relocated_source_hashes,normalize_native_pair,paired_native_report
+from selection_integrity import validate_hashes,validate_relocated_source_hashes,normalize_native_pair,paired_native_report,shared_selection_cohort,selection_subset
 from experiments.v3_evaluation.paired import paired_report
 from ml_inference.model import load_ranker
 
@@ -56,12 +56,15 @@ def load_profiles(baseline_paths,candidate_dir):
 def run(args):
     output=Path(args.output);output.mkdir(parents=True,exist_ok=True)
     baseline_native,narrow_native,native_provenance=load_profiles(args.baseline_native,args.candidate_native_dir)
+    shared_keys,shared_denominators=shared_selection_cohort(baseline_native,narrow_native)
     baseline_synthetic=grid.read(args.baseline_synthetic)['fields']
     v2ranker=load_ranker(args.baseline_model)
     if v2ranker.metadata['sha256']!=V2_SHA:raise ValueError('deployed frozen v2 comparator changed')
     v2=grid.v2adapter(v2ranker)
     baseline_native_v2=scores(baseline_native,v2)
     baseline_native_heuristic=[np.asarray(f['baseline']) for f in baseline_native]
+    selection_baseline,selection_v2=selection_subset(baseline_native,baseline_native_v2,shared_keys)
+    _,selection_old_heuristic=selection_subset(baseline_native,baseline_native_heuristic,shared_keys)
     baseline_synthetic_v2=scores(baseline_synthetic,v2)
     baseline_synthetic_heuristic=[np.asarray(f['baseline']) for f in baseline_synthetic]
     bsynthetic=grid.synthetic_report(baseline_synthetic,grid.scorer(baseline_synthetic,v2))
@@ -80,8 +83,9 @@ def run(args):
         candidate_native_heuristic=[np.asarray(f['baseline']) for f in candidate_native]
         # Baseline/candidate options and full latent identities are validated even
         # for zero-candidate trials before any candidate eligibility is computed.
-        reference=paired_native_report(baseline_native,candidate_native,baseline_native_v2,candidate_native_heuristic)
-        href=paired_native_report(baseline_native,candidate_native,baseline_native_heuristic,candidate_native_heuristic)
+        selection_candidate,selection_heuristic=selection_subset(candidate_native,candidate_native_heuristic,shared_keys)
+        reference=paired_native_report(selection_baseline,selection_candidate,selection_v2,selection_heuristic)
+        href=paired_native_report(selection_baseline,selection_candidate,selection_old_heuristic,selection_heuristic)
         v2_reference=dict(native=native_view(reference,'baseline'),synthetic=bsynthetic)
         old_heuristic=dict(native=native_view(href,'baseline'),synthetic=asynthetic)
         candidate_heuristic=dict(native=native_view(reference,'candidate'),synthetic=grid.synthetic_report(candidate_synthetic,lambda f:np.asarray(f['baseline'])))
@@ -98,12 +102,17 @@ def run(args):
             forest=joblib.load(record['estimator_cache_path'])
             nv=scores(candidate_native,forest);sv=scores(candidate_synthetic,forest)
             native_paired=paired_native_report(baseline_native,candidate_native,baseline_native_v2,nv)
+            _,selection_values=selection_subset(candidate_native,nv,shared_keys)
+            selection_paired=paired_native_report(selection_baseline,selection_candidate,selection_v2,selection_values)
             synthetic_paired=paired_report(baseline_synthetic,candidate_synthetic,baseline_synthetic_v2,sv)
             score_lookup={id(f):values for f,values in zip(candidate_synthetic,sv)}
-            result=dict(native=native_view(native_paired,'candidate'),synthetic=grid.synthetic_report(candidate_synthetic,lambda f:score_lookup[id(f)]))
+            result=dict(native=native_view(selection_paired,'candidate'),synthetic=grid.synthetic_report(candidate_synthetic,lambda f:score_lookup[id(f)]))
+            result['native']['selection_cohort']='One shared sigma1.2 intersection sigma0.8 eligibility set across all132 candidates'
+            result['native']['full_planned_injections']=len(baseline_native)
+            result['native']['full_all_planned_spatial']=native_paired['all_planned']['candidate']
             eligible=qualifies(result,old_heuristic,v2_reference) and qualifies(result,candidate_heuristic,v2_reference)
             row=dict(id=record['id'],profile=profile_label,cache=str(cache),config=record['config'],training=record['training'],validation=result,
-                selection_key=key(result),eligible=eligible,paired_system=dict(native=native_paired,synthetic=synthetic_paired),
+                selection_key=key(result),eligible=eligible,paired_system=dict(native=native_paired,synthetic=synthetic_paired),selection_shared_native_pair=selection_paired,
                 estimator_cache_path=record['estimator_cache_path'],estimator_cache_sha256=record['estimator_cache_sha256'])
             all_outcomes.append(row)
             print(json.dumps(dict(profile=profile_label,index=i,total=len(records),id=row['id'],eligible=eligible,key=row['selection_key'],native=result['native'],synthetic_counts=[result['synthetic'][str(k)]['recovered_in_top_k'] for k in [1,3]])),flush=True)
@@ -112,9 +121,9 @@ def run(args):
     selected=max(eligible,key=lambda r:r['selection_key']) if eligible else None
     report=dict(schema_version=1,designation='eleven-parent primary validation DEVELOPMENT; no final access',generated_utc=datetime.now(timezone.utc).isoformat(),
         final_fields_opened=False,expected_configurations=132,completed_configurations=len(all_outcomes),profiles=profile_reports,outcomes=all_outcomes,selected=selected,
-        eligibility='Both native common-attributable macro-parent K1/K3 and synthetic macro-cadence K1/K3 must reach deployed sigma1.2/v2, deployed sigma1.2 heuristic and candidate-profile heuristic; then nativeK1,K3,syntheticK1,K3,AP',
+        eligibility='One shared sigma1.2 intersection sigma0.8 cohort across all132 candidates for native macro-parent K1/K3 and synthetic macro-cadence K1/K3 must reach deployed sigma1.2/v2, deployed sigma1.2 heuristic and candidate-profile heuristic; then nativeK1,K3,syntheticK1,K3,AP',
         eligibility_amendment='Explicit development amendment approved before expanded eleven-parent model scoring; final gate unchanged',
-        native_cache_provenance=native_provenance,training_manifests=fit_manifests,resolved_fitting_source_locations=resolved_sources,
+        shared_selection_cohort=shared_denominators,native_cache_provenance=native_provenance,training_manifests=fit_manifests,resolved_fitting_source_locations=resolved_sources,
         baseline_model_sha256=V2_SHA,baseline_synthetic_cache=args.baseline_synthetic,baseline_synthetic_sha256=grid.sha(args.baseline_synthetic),
         source_snapshot='/tmp/spaceapps-v3-ranker/pre-selection-audit-source-snapshot/snapshot-manifest.json')
     if len(all_outcomes)!=132:raise ValueError('all132 configurations must be published before final selection')

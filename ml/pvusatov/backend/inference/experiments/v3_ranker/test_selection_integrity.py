@@ -39,3 +39,17 @@ def test_legacy_same_detector_tool_cannot_freeze_a_release_candidate():
     from select_cached import run
     with pytest.raises(ValueError,match='cannot freeze'):
         run(SimpleNamespace(evaluate_only=False,cache='/nonexistent-legacy-cache'))
+
+def test_all_profiles_use_one_shared_selection_cohort_without_mutating_attribution():
+    from selection_integrity import shared_selection_cohort,selection_subset
+    def f(i,eligible):
+        return dict(parent_id='p',seed=1,trajectory_id=i,brightness=3.,truth_count=1,matches=[0],baseline=[1.],attribution_eligible=eligible)
+    baseline=[f(0,True),f(1,True)]
+    narrow=[f(0,False),f(1,True)]
+    shared,denominators=shared_selection_cohort(baseline,narrow)
+    default_fields,_=selection_subset(baseline,[[1],[1]],shared)
+    narrow_fields,_=selection_subset(narrow,[[1],[1]],shared)
+    assert [x['trajectory_id'] for x in default_fields]==[1]
+    assert [x['trajectory_id'] for x in narrow_fields]==[1]
+    assert baseline[0]['attribution_eligible'] is True
+    assert denominators['by_parent']['p']==dict(planned=2,sigma12_eligible=2,sigma08_eligible=1,shared_eligible=1)
