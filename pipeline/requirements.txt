@@ -1,0 +1,8 @@
+astropy
+astroquery>=0.4.10
+pyvo
+requests
+numpy
+matplotlib
+reproject
+photutils
