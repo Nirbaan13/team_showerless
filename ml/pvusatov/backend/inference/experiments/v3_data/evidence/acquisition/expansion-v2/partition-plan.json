@@ -1,0 +1,203 @@
+{
+  "schema_version": 2,
+  "declared_utc": "2026-11-14T20:28:12.087015+00:00",
+  "groups": [
+    {
+      "group_id": "validation06",
+      "split": "validation",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        45.0,
+        0.0
+      ],
+      "center": [
+        288.4275759,
+        10.7237033
+      ],
+      "preferred_detector": 1
+    },
+    {
+      "group_id": "validation07",
+      "split": "validation",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        90.0,
+        0.0
+      ],
+      "center": [
+        318.0043815,
+        48.3296372
+      ],
+      "preferred_detector": 2
+    },
+    {
+      "group_id": "validation08",
+      "split": "validation",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        140.0,
+        0.0
+      ],
+      "center": [
+        46.8132814,
+        58.2977051
+      ],
+      "preferred_detector": 3
+    },
+    {
+      "group_id": "validation09",
+      "split": "validation",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        50.0,
+        50.0
+      ],
+      "center": [
+        238.7463378,
+        31.1454092
+      ],
+      "preferred_detector": 1
+    },
+    {
+      "group_id": "validation10",
+      "split": "validation",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        160.0,
+        -50.0
+      ],
+      "center": [
+        35.7948783,
+        6.1519051
+      ],
+      "preferred_detector": 2
+    },
+    {
+      "group_id": "validation11",
+      "split": "validation",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        280.0,
+        50.0
+      ],
+      "center": [
+        178.1156476,
+        -10.2275287
+      ],
+      "preferred_detector": 3
+    },
+    {
+      "group_id": "final05",
+      "split": "final",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        10.0,
+        0.0
+      ],
+      "center": [
+        271.9404223,
+        -20.2900295
+      ],
+      "preferred_detector": 1
+    },
+    {
+      "group_id": "final06",
+      "split": "final",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        70.0,
+        0.0
+      ],
+      "center": [
+        301.866188,
+        32.4424569
+      ],
+      "preferred_detector": 2
+    },
+    {
+      "group_id": "final07",
+      "split": "final",
+      "stratum": "crowded_low_galactic_latitude",
+      "galactic_lon_lat_deg": [
+        190.0,
+        0.0
+      ],
+      "center": [
+        91.9404223,
+        20.2900295
+      ],
+      "preferred_detector": 3
+    },
+    {
+      "group_id": "final08",
+      "split": "final",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        0.0,
+        50.0
+      ],
+      "center": [
+        225.5362254,
+        2.195004
+      ],
+      "preferred_detector": 1
+    },
+    {
+      "group_id": "final09",
+      "split": "final",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        120.0,
+        50.0
+      ],
+      "center": [
+        197.6899661,
+        67.0181134
+      ],
+      "preferred_detector": 2
+    },
+    {
+      "group_id": "final10",
+      "split": "final",
+      "stratum": "off_plane",
+      "galactic_lon_lat_deg": [
+        280.0,
+        -50.0
+      ],
+      "center": [
+        44.1650668,
+        -61.1831929
+      ],
+      "preferred_detector": 3
+    }
+  ],
+  "coordinate_selection": "Fixed Galactic longitudes/latitudes transformed to ICRS, checked geometrically against all original17 parents and all new parents; no archive query, pixel or model score used.",
+  "minimum_center_separation_deg": 8.0,
+  "selection": "Per detector, inspect metadata windows starting at an exposure with >=3 unique OBSIDs in the first1.5h; retain earliest up-to4 short-cluster epochs, add uniformly spanning metadata followups to at most8total. Priority tiers:8epochs spanning>=2h within48h;6\u20137epochs spanning>=2h within48h;8epochs spanning>=2h within168h;6\u20137epochs spanning>=2h within168h; otherwise explicitly constrained earliest short group. Prefer declared balanced detector within the best feasible tier, then earliest physical date. No model/pixel filter.",
+  "primary_final": "Original4 final augmented8epoch variants plus new6 augmented variants; metadata-only primary selection declared by coordinator before any final pixel access. Short clusters secondary, never additional independent units.",
+  "quarantine": "Final bytes, primary FITS signature and hash metadata only; no FITS reader, pixels, injections, detector, features or model score until coordinator freezes model and evaluation source/protocol.",
+  "parent_unit": "Every crop, version, detector, epoch and short/augmented variant of the same physical OBSID stays in one sky parent and split.",
+  "source_code_sha256": "c215538ed3b3f8526702b5e6b04a6556e1402782d116665d0d76c37bc8da9a6b",
+  "original_sources": [
+    {
+      "path": "/tmp/spaceapps-v3-native-data/partition-plan.json",
+      "sha256": "50e6308863b1d7d3cb46f09157b48ced6410578674ecce15eb54ce6922211b7f"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/cadence-supplement-plan.json",
+      "sha256": "4a3558f6f2fbef5d2051bf1204d57953b7152b04388c224f6a9eed406f2b6f8c"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/crowded-development/partition-plan.json",
+      "sha256": "975a8b6799b8c44d0954b98b0b46726f8d1ac4bcdb5e48b1260d783a3922ed63"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/audit.json",
+      "sha256": "134088ce787f42415f4d366edbc3d11245bc46ff683f8bf8b80035484974f456"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/data-handoff.json",
+      "sha256": "1d173f83d934c7cae8763053e1028a2f5ceb148818c7768aee7826e4bc4f2de2"
+    }
+  ]
+}

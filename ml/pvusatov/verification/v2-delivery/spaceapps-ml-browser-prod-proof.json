@@ -1,0 +1,13 @@
+{
+  "analysis_id": "e56a45c5-9951-4590-9a60-a128b09f21c4",
+  "frames": 4,
+  "candidates": 9,
+  "model": "spherex-track-rf-v2",
+  "positive": true,
+  "real_png_loaded": true,
+  "heuristic_comparison": true,
+  "empty": true,
+  "missing_download_error": true,
+  "desktop_mobile_navigation": true,
+  "javascript_errors": []
+}

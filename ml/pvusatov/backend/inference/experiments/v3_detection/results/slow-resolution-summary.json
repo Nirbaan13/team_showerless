@@ -1,0 +1,79 @@
+{
+  "criterion": "evaluation-only expected position span>=3px among matched epochs",
+  "all_planned_denominator": 450,
+  "methods": {
+    "1.2": {
+      "detected": 74,
+      "at1": 55,
+      "at3": 68
+    },
+    "0.8": {
+      "detected": 90,
+      "at1": 68,
+      "at3": 81
+    }
+  },
+  "by_speed": {
+    "0.01": {
+      "1.2": {
+        "detected": 0,
+        "at1": 0,
+        "at3": 0
+      },
+      "0.8": {
+        "detected": 0,
+        "at1": 0,
+        "at3": 0
+      }
+    },
+    "0.03": {
+      "1.2": {
+        "detected": 0,
+        "at1": 0,
+        "at3": 0
+      },
+      "0.8": {
+        "detected": 0,
+        "at1": 0,
+        "at3": 0
+      }
+    },
+    "0.1": {
+      "1.2": {
+        "detected": 13,
+        "at1": 9,
+        "at3": 13
+      },
+      "0.8": {
+        "detected": 13,
+        "at1": 12,
+        "at3": 13
+      }
+    },
+    "0.3": {
+      "1.2": {
+        "detected": 34,
+        "at1": 26,
+        "at3": 31
+      },
+      "0.8": {
+        "detected": 48,
+        "at1": 34,
+        "at3": 43
+      }
+    },
+    "1.0": {
+      "1.2": {
+        "detected": 27,
+        "at1": 20,
+        "at3": 24
+      },
+      "0.8": {
+        "detected": 29,
+        "at1": 22,
+        "at3": 25
+      }
+    }
+  },
+  "full_scratch_report_sha256": "d72ad6c232572ec92340ef57e9cf5928c21b1cf96e0f36ded1e2d23b7674fbd6"
+}

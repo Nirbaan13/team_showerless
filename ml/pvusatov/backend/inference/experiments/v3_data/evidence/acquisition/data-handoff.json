@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "purpose": "native v3 data handoff; no model freeze or final pixel authorization implied",
+  "sources": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/acquire.py",
+      "sha256": "c1176f90d153e5511570d97c91c75e5e4f7445b9029af522310e700695db3ecf"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/audit.py",
+      "sha256": "b21d9a16f40dde9886c48589079dedb374ff4e085318d3fa97a64825e0bd12b8"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/materialize_variants.py",
+      "sha256": "694d31aaf6decc76171be6b32fb697787902852a11ddde0fbfb3eadd7ac7a0eb"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/docs/implementation/ML-NATIVE-V3-DATA.AI.md",
+      "sha256": "034d3a5aeba2999e90a481942965248b5bcd2561c33a8d14005e6cb3019ea347"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/partition-plan.json",
+      "sha256": "50e6308863b1d7d3cb46f09157b48ced6410578674ecce15eb54ce6922211b7f"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/cadence-supplement-plan.json",
+      "sha256": "4a3558f6f2fbef5d2051bf1204d57953b7152b04388c224f6a9eed406f2b6f8c"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/crowded-development/partition-plan.json",
+      "sha256": "975a8b6799b8c44d0954b98b0b46726f8d1ac4bcdb5e48b1260d783a3922ed63"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/audit.json",
+      "sha256": "134088ce787f42415f4d366edbc3d11245bc46ff683f8bf8b80035484974f456"
+    }
+  ],
+  "parent_counts": {
+    "train": 8,
+    "validation_development": 5,
+    "final_quarantined": 4
+  },
+  "native_mefs": 104,
+  "native_bytes": 421436160,
+  "final_pixels_opened": false,
+  "cross_parent_obsid_overlap": 0,
+  "minimum_all_center_separation_deg": 18.50911875693224,
+  "final_short_dirs": [
+    "/tmp/spaceapps-v3-native-data/quarantine_final/final01",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/final02",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/final03",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/final04"
+  ],
+  "final_augmented_dirs": [
+    "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final01-augmented",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final02-augmented",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final03-augmented",
+    "/tmp/spaceapps-v3-native-data/quarantine_final/variants/final04-augmented"
+  ]
+}

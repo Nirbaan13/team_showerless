@@ -1,0 +1,889 @@
+{
+  "revision": "0bf04fa481fca611f8edeaf7a312cc000f0735f3",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "positive_job": "371d71cf-c31b-4394-aa8f-36878e5ce2c1",
+  "empty_job": "e0b9b90f-432f-456d-bee1-dc38ffd87164",
+  "frames": 4,
+  "candidates": 10,
+  "verified_png_resources": 28,
+  "resource_bytes": 89233,
+  "elapsed_seconds": 6.319648933998906,
+  "sse_completed": true,
+  "deduplication_verified": true,
+  "schema_validated": true,
+  "result": {
+    "schema_version": 1,
+    "analysis_id": "371d71cf-c31b-4394-aa8f-36878e5ce2c1",
+    "algorithm_version": "spherex-motion-1",
+    "model": {
+      "schema_version": 1,
+      "model_id": "spherex-track-rf-v2",
+      "sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+      "feature_names": [
+        "epoch_count",
+        "fit_rms_px",
+        "median_snr",
+        "min_snr",
+        "snr_coefficient_of_variation",
+        "median_peak_ratio"
+      ],
+      "class_labels": [
+        0,
+        1
+      ],
+      "positive_class": 1,
+      "score_kind": "random_forest_vote_fraction"
+    },
+    "settings": {
+      "min_snr": 4.0,
+      "min_speed_arcsec_per_hour": 3.075,
+      "max_speed_arcsec_per_hour": 369.0,
+      "mask_policy": "motion",
+      "max_candidates": 100,
+      "max_peaks": 100,
+      "pixel_scale_arcsec": 6.15,
+      "min_epochs": 3,
+      "leave_one_out": true,
+      "min_support": 0.8,
+      "psf_sigma_px": 1.2,
+      "match_radius_px": 1.4
+    },
+    "frames": [
+      {
+        "frame_id": "2025W50_2A_0741_2D6",
+        "observation_id": "2025W50_2A_0741_2D6",
+        "midpoint_utc": "2025-12-14T11:01:45.688Z",
+        "midpoint_mjd": 61023.459556574075,
+        "detector": 6,
+        "units": "MJy/sr",
+        "release": "qr2",
+        "processing_version": "l2b-v20-2025-349",
+        "width": 256,
+        "height": 144,
+        "image_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/frame-000.png",
+        "difference_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/difference-000.png",
+        "coverage_fraction": 0.9691297743055556,
+        "outlier_fraction": 0.07647026909722222
+      },
+      {
+        "frame_id": "2025W50_2A_0755_2D6",
+        "observation_id": "2025W50_2A_0755_2D6",
+        "midpoint_utc": "2025-12-14T12:39:42.784Z",
+        "midpoint_mjd": 61023.527578518515,
+        "detector": 6,
+        "units": "MJy/sr",
+        "release": "qr2",
+        "processing_version": "l2b-v20-2025-349",
+        "width": 256,
+        "height": 144,
+        "image_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/frame-001.png",
+        "difference_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/difference-001.png",
+        "coverage_fraction": 0.972412109375,
+        "outlier_fraction": 0.08284505208333333
+      },
+      {
+        "frame_id": "2025W50_2A_0797_4D6",
+        "observation_id": "2025W50_2A_0797_4D6",
+        "midpoint_utc": "2025-12-14T17:33:31.003Z",
+        "midpoint_mjd": 61023.73160883102,
+        "detector": 6,
+        "units": "MJy/sr",
+        "release": "qr2",
+        "processing_version": "l2b-v20-2025-349",
+        "width": 256,
+        "height": 144,
+        "image_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/frame-002.png",
+        "difference_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/difference-002.png",
+        "coverage_fraction": 0.9734700520833334,
+        "outlier_fraction": 0.08170572916666667
+      },
+      {
+        "frame_id": "2025W50_2A_0813_1D6",
+        "observation_id": "2025W50_2A_0813_1D6",
+        "midpoint_utc": "2025-12-14T19:06:21.122Z",
+        "midpoint_mjd": 61023.79607780093,
+        "detector": 6,
+        "units": "MJy/sr",
+        "release": "qr2",
+        "processing_version": "l2b-v20-2025-349",
+        "width": 256,
+        "height": 144,
+        "image_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/frame-003.png",
+        "difference_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/difference-003.png",
+        "coverage_fraction": 0.9723036024305556,
+        "outlier_fraction": 0.0846896701388889
+      }
+    ],
+    "candidates": [
+      {
+        "id": "candidate-000",
+        "rank": 1,
+        "method": "residual_track",
+        "score": 0.7459002733230591,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 13.938503145029058,
+        "baseline_rank": 4,
+        "right_ascension_deg": 166.72052474202067,
+        "declination_deg": 5.217392057714535,
+        "coordinate_epoch_utc": "2025-12-14T11:01:45.688Z",
+        "speed_arcsec_per_hour": 40.6454203934665,
+        "fit_rms_px": 0.13380965222930935,
+        "detections": [
+          {
+            "frame_index": 0,
+            "frame_id": "2025W50_2A_0741_2D6",
+            "observation_id": "2025W50_2A_0741_2D6",
+            "midpoint_utc": "2025-12-14T11:01:45.688Z",
+            "x": 168.0,
+            "y": 114.0,
+            "right_ascension_deg": 166.72052474202067,
+            "declination_deg": 5.217392057714535,
+            "residual_snr": 4.61307139161778,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 126.0,
+            "y": 124.0,
+            "right_ascension_deg": 166.79257308793538,
+            "declination_deg": 5.200312568038315,
+            "residual_snr": 5.267869801154177,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 116.0,
+            "y": 126.0,
+            "right_ascension_deg": 166.809726897834,
+            "declination_deg": 5.196895608943065,
+            "residual_snr": 5.3183404182620375,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-000-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-000-stationary.png"
+      },
+      {
+        "id": "candidate-001",
+        "rank": 2,
+        "method": "residual_track",
+        "score": 0.703391969203949,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 19.389672539947632,
+        "baseline_rank": 3,
+        "right_ascension_deg": 166.9349587139102,
+        "declination_deg": 5.236170850737361,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 186.95459148612264,
+        "fit_rms_px": 0.091016530770471,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 43.0,
+            "y": 103.0,
+            "right_ascension_deg": 166.9349587139102,
+            "declination_deg": 5.236170850737361,
+            "residual_snr": 4.556879467008454,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 182.0,
+            "y": 50.0,
+            "right_ascension_deg": 166.696492121149,
+            "declination_deg": 5.3267221085960825,
+            "residual_snr": 7.051484422436377,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 226.0,
+            "y": 33.0,
+            "right_ascension_deg": 166.62099192947844,
+            "declination_deg": 5.355747639645868,
+            "residual_snr": 7.747801157045281,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-001-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-001-stationary.png"
+      },
+      {
+        "id": "candidate-002",
+        "rank": 3,
+        "method": "residual_track",
+        "score": 0.6414848566055298,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 197.403138629684,
+        "baseline_rank": 1,
+        "right_ascension_deg": 166.97612759303567,
+        "declination_deg": 5.227618427108073,
+        "coordinate_epoch_utc": "2025-12-14T11:01:45.688Z",
+        "speed_arcsec_per_hour": 175.7333783750264,
+        "fit_rms_px": 0.2216184581993558,
+        "detections": [
+          {
+            "frame_index": 0,
+            "frame_id": "2025W50_2A_0741_2D6",
+            "observation_id": "2025W50_2A_0741_2D6",
+            "midpoint_utc": "2025-12-14T11:01:45.688Z",
+            "x": 19.0,
+            "y": 108.0,
+            "right_ascension_deg": 166.97612759303567,
+            "declination_deg": 5.227618427108073,
+            "residual_snr": 33.72651794483428,
+            "warnings": []
+          },
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 63.0,
+            "y": 93.0,
+            "right_ascension_deg": 166.90065211217123,
+            "declination_deg": 5.253261096610465,
+            "residual_snr": 84.67195854060564,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 195.0,
+            "y": 47.0,
+            "right_ascension_deg": 166.67418658516604,
+            "declination_deg": 5.331843329672072,
+            "residual_snr": 61.778887714694555,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 237.0,
+            "y": 32.0,
+            "right_ascension_deg": 166.60211754152013,
+            "declination_deg": 5.3574504987706195,
+            "residual_snr": 58.79677121355958,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-002-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-002-stationary.png"
+      },
+      {
+        "id": "candidate-003",
+        "rank": 4,
+        "method": "residual_track",
+        "score": 0.5305567383766174,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 12.473198479009488,
+        "baseline_rank": 5,
+        "right_ascension_deg": 166.8680595509229,
+        "declination_deg": 5.273765966980928,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 130.08948151302582,
+        "fit_rms_px": 0.17608708944235482,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 82.0,
+            "y": 81.0,
+            "right_ascension_deg": 166.8680595509229,
+            "declination_deg": 5.273765966980928,
+            "residual_snr": 5.689330662043816,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 179.0,
+            "y": 45.0,
+            "right_ascension_deg": 166.70163811566454,
+            "declination_deg": 5.335264515825837,
+            "residual_snr": 4.47209642558296,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 210.0,
+            "y": 34.0,
+            "right_ascension_deg": 166.64844528536005,
+            "declination_deg": 5.35404622808875,
+            "residual_snr": 4.889855898405025,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-003-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-003-stationary.png"
+      },
+      {
+        "id": "candidate-004",
+        "rank": 5,
+        "method": "residual_track",
+        "score": 0.32936418056488037,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 9.904057707342115,
+        "baseline_rank": 6,
+        "right_ascension_deg": 166.871485111697,
+        "declination_deg": 5.231057259948545,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 141.5139830007631,
+        "fit_rms_px": 0.47886447510111296,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 80.0,
+            "y": 106.0,
+            "right_ascension_deg": 166.871485111697,
+            "declination_deg": 5.231057259948545,
+            "residual_snr": 4.799722912825679,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 178.0,
+            "y": 52.0,
+            "right_ascension_deg": 166.70335555228354,
+            "declination_deg": 5.323306444427033,
+            "residual_snr": 4.882253034246543,
+            "warnings": []
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 210.0,
+            "y": 34.0,
+            "right_ascension_deg": 166.64844528536005,
+            "declination_deg": 5.35404622808875,
+            "residual_snr": 4.889855898405025,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-004-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-004-stationary.png"
+      },
+      {
+        "id": "candidate-005",
+        "rank": 6,
+        "method": "residual_track",
+        "score": 0.27197492122650146,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 9.51634938160541,
+        "baseline_rank": 8,
+        "right_ascension_deg": 166.85604584265076,
+        "declination_deg": 5.2310590646623645,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 169.2546125518646,
+        "fit_rms_px": 0.5025401663871589,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 89.0,
+            "y": 106.0,
+            "right_ascension_deg": 166.85604584265076,
+            "declination_deg": 5.2310590646623645,
+            "residual_snr": 4.76623239441191,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 208.0,
+            "y": 44.0,
+            "right_ascension_deg": 166.6518807147873,
+            "declination_deg": 5.336963738648879,
+            "residual_snr": 4.905218593181659,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 246.0,
+            "y": 23.0,
+            "right_ascension_deg": 166.58667021988992,
+            "declination_deg": 5.372820474616935,
+            "residual_snr": 4.665983393667069,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-005-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-005-stationary.png"
+      },
+      {
+        "id": "candidate-006",
+        "rank": 7,
+        "method": "residual_track",
+        "score": 0.1985829770565033,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 8.530434824657076,
+        "baseline_rank": 10,
+        "right_ascension_deg": 166.85261817680924,
+        "declination_deg": 5.263517709458044,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 140.8899025485348,
+        "fit_rms_px": 0.5212160664228518,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 91.0,
+            "y": 87.0,
+            "right_ascension_deg": 166.85261817680924,
+            "declination_deg": 5.263517709458044,
+            "residual_snr": 4.325544836280449,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 200.0,
+            "y": 57.0,
+            "right_ascension_deg": 166.66561127394795,
+            "declination_deg": 5.314758378702277,
+            "residual_snr": 5.429187384921601,
+            "warnings": []
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 233.0,
+            "y": 48.0,
+            "right_ascension_deg": 166.6089887774448,
+            "declination_deg": 5.330119380403146,
+            "residual_snr": 4.3046025885979535,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-006-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-006-stationary.png"
+      },
+      {
+        "id": "candidate-007",
+        "rank": 8,
+        "method": "residual_track",
+        "score": 0.1792173981666565,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 9.662714579740314,
+        "baseline_rank": 7,
+        "right_ascension_deg": 166.97097175114072,
+        "declination_deg": 5.195161813589011,
+        "coordinate_epoch_utc": "2025-12-14T11:01:45.688Z",
+        "speed_arcsec_per_hour": 171.81842239333852,
+        "fit_rms_px": 0.5199450650474601,
+        "detections": [
+          {
+            "frame_index": 0,
+            "frame_id": "2025W50_2A_0741_2D6",
+            "observation_id": "2025W50_2A_0741_2D6",
+            "midpoint_utc": "2025-12-14T11:01:45.688Z",
+            "x": 22.0,
+            "y": 127.0,
+            "right_ascension_deg": 166.97097175114072,
+            "declination_deg": 5.195161813589011,
+            "residual_snr": 4.895598446812811,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 64.0,
+            "y": 112.0,
+            "right_ascension_deg": 166.89893086628084,
+            "declination_deg": 5.2208031502769225,
+            "residual_snr": 5.245904471029875,
+            "warnings": []
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 233.0,
+            "y": 48.0,
+            "right_ascension_deg": 166.6089887774448,
+            "declination_deg": 5.330119380403146,
+            "residual_snr": 4.3046025885979535,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-007-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-007-stationary.png"
+      },
+      {
+        "id": "candidate-008",
+        "rank": 9,
+        "method": "residual_track",
+        "score": 0.13612264394760132,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 9.148341961517236,
+        "baseline_rank": 9,
+        "right_ascension_deg": 166.88178453878697,
+        "declination_deg": 5.275472436152649,
+        "coordinate_epoch_utc": "2025-12-14T12:39:42.784Z",
+        "speed_arcsec_per_hour": 175.54089497434,
+        "fit_rms_px": 0.6082417461853286,
+        "detections": [
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 74.0,
+            "y": 80.0,
+            "right_ascension_deg": 166.88178453878697,
+            "declination_deg": 5.275472436152649,
+            "residual_snr": 4.904248483630331,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 208.0,
+            "y": 44.0,
+            "right_ascension_deg": 166.6518807147873,
+            "declination_deg": 5.336963738648879,
+            "residual_snr": 4.905218593181659,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          },
+          {
+            "frame_index": 3,
+            "frame_id": "2025W50_2A_0813_1D6",
+            "observation_id": "2025W50_2A_0813_1D6",
+            "midpoint_utc": "2025-12-14T19:06:21.122Z",
+            "x": 252.0,
+            "y": 32.0,
+            "right_ascension_deg": 166.57638044258334,
+            "declination_deg": 5.357442115812428,
+            "residual_snr": 4.182019665626864,
+            "warnings": []
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-008-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-008-stationary.png"
+      },
+      {
+        "id": "candidate-009",
+        "rank": 10,
+        "method": "residual_track",
+        "score": 0.1292327344417572,
+        "score_kind": "random_forest_vote_fraction",
+        "baseline_score": 22.094363858318268,
+        "baseline_rank": 2,
+        "right_ascension_deg": 166.97612759303567,
+        "declination_deg": 5.227618427108073,
+        "coordinate_epoch_utc": "2025-12-14T11:01:45.688Z",
+        "speed_arcsec_per_hour": 111.04385366802127,
+        "fit_rms_px": 0.4073242962811087,
+        "detections": [
+          {
+            "frame_index": 0,
+            "frame_id": "2025W50_2A_0741_2D6",
+            "observation_id": "2025W50_2A_0741_2D6",
+            "midpoint_utc": "2025-12-14T11:01:45.688Z",
+            "x": 19.0,
+            "y": 108.0,
+            "right_ascension_deg": 166.97612759303567,
+            "declination_deg": 5.227618427108073,
+            "residual_snr": 33.72651794483428,
+            "warnings": []
+          },
+          {
+            "frame_index": 1,
+            "frame_id": "2025W50_2A_0755_2D6",
+            "observation_id": "2025W50_2A_0755_2D6",
+            "midpoint_utc": "2025-12-14T12:39:42.784Z",
+            "x": 49.0,
+            "y": 108.0,
+            "right_ascension_deg": 166.92466396816718,
+            "declination_deg": 5.227631499068782,
+            "residual_snr": 5.944713601784302,
+            "warnings": []
+          },
+          {
+            "frame_index": 2,
+            "frame_id": "2025W50_2A_0797_4D6",
+            "observation_id": "2025W50_2A_0797_4D6",
+            "midpoint_utc": "2025-12-14T17:33:31.003Z",
+            "x": 137.0,
+            "y": 111.0,
+            "right_ascension_deg": 166.7737031920443,
+            "declination_deg": 5.222520654444185,
+            "residual_snr": 10.364645022895507,
+            "warnings": [
+              "outlier_flag_at_detection"
+            ]
+          }
+        ],
+        "warnings": [],
+        "moving_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-009-moving.png",
+        "stationary_stack_url": "/api/analyses/371d71cf-c31b-4394-aa8f-36878e5ce2c1/resources/candidate-009-stationary.png"
+      }
+    ],
+    "comparison": {
+      "shared_median_count": 25,
+      "leave_one_out_count": 10,
+      "bloom_track_count": 0
+    },
+    "warnings": [
+      "selected_development_case",
+      "legacy_decreasing_declination_grid",
+      "outlier_measurements_retained",
+      "experimental_synthetic_trained_ranking",
+      "short_linear_arc_model",
+      "uncalibrated_residual_snr",
+      "passband_variation_not_corrected",
+      "psf_matching_not_applied"
+    ],
+    "provenance": {
+      "source_kind": "preset",
+      "preset_id": "comet-d6",
+      "source_revision": "2b6dc435b0f73a6f255e50ca795900acfd69cd33",
+      "grid_convention": "legacy_cd_negative_negative",
+      "grid": {
+        "projection": "TAN",
+        "center_deg": [
+          166.79,
+          5.29
+        ],
+        "crpix_fits": [
+          128.5,
+          72.5
+        ],
+        "cdelt_deg": [
+          -0.0017083333333333334,
+          -0.0017083333333333334
+        ],
+        "width": 256,
+        "height": 144,
+        "coordinate_origin": "zero_based_xy"
+      }
+    },
+    "resources": [
+      {
+        "name": "frame-000.png",
+        "media_type": "image/png",
+        "size_bytes": 14591
+      },
+      {
+        "name": "difference-000.png",
+        "media_type": "image/png",
+        "size_bytes": 3798
+      },
+      {
+        "name": "frame-001.png",
+        "media_type": "image/png",
+        "size_bytes": 15558
+      },
+      {
+        "name": "difference-001.png",
+        "media_type": "image/png",
+        "size_bytes": 4799
+      },
+      {
+        "name": "frame-002.png",
+        "media_type": "image/png",
+        "size_bytes": 16733
+      },
+      {
+        "name": "difference-002.png",
+        "media_type": "image/png",
+        "size_bytes": 3920
+      },
+      {
+        "name": "frame-003.png",
+        "media_type": "image/png",
+        "size_bytes": 17017
+      },
+      {
+        "name": "difference-003.png",
+        "media_type": "image/png",
+        "size_bytes": 3976
+      },
+      {
+        "name": "candidate-000-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 174
+      },
+      {
+        "name": "candidate-000-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 138
+      },
+      {
+        "name": "candidate-001-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 599
+      },
+      {
+        "name": "candidate-001-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 324
+      },
+      {
+        "name": "candidate-002-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 591
+      },
+      {
+        "name": "candidate-002-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 96
+      },
+      {
+        "name": "candidate-003-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 666
+      },
+      {
+        "name": "candidate-003-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 304
+      },
+      {
+        "name": "candidate-004-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 645
+      },
+      {
+        "name": "candidate-004-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 278
+      },
+      {
+        "name": "candidate-005-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 598
+      },
+      {
+        "name": "candidate-005-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 380
+      },
+      {
+        "name": "candidate-006-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 645
+      },
+      {
+        "name": "candidate-006-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 402
+      },
+      {
+        "name": "candidate-007-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 599
+      },
+      {
+        "name": "candidate-007-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 432
+      },
+      {
+        "name": "candidate-008-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 581
+      },
+      {
+        "name": "candidate-008-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 367
+      },
+      {
+        "name": "candidate-009-moving.png",
+        "media_type": "image/png",
+        "size_bytes": 617
+      },
+      {
+        "name": "candidate-009-stationary.png",
+        "media_type": "image/png",
+        "size_bytes": 405
+      }
+    ]
+  }
+}

@@ -9,7 +9,7 @@ The public Scala service owns admission, persistence and resource URLs. Python i
 Use Python3.12 or later in an existing environment, then install the hash-locked runtime requirements. Training requirements are separate.
 
 ```bash
-cd backend/inference
+cd ml/pvusatov/backend/inference
 python -m pip install --require-hashes -r requirements-inference.txt
 python smoke.py
 ```
@@ -56,6 +56,8 @@ These are trusted local CLI paths. Public HTTP/gRPC callers cannot supply filesy
 
 ## Server API
 
+Run the Scala launcher from `backend/` using `./sbtw run`. Its local `ML_ROOT` default is `../ml/pvusatov/backend/inference`; `ML_PYTHON` selects the existing Python environment containing the runtime requirements. An explicit `ML_ROOT` overrides that local default for an installed runtime.
+
 With the Scala service running, get its installed model and available real presets:
 
 ```bash
@@ -96,7 +98,7 @@ The initial workload bounds are32frames, one detector per analysis, a grid up to
 
 The same persisted jobs are available through `spaceapps.retrieval.v1.AnalysisService`: `SubmitAnalysis`, `GetAnalysis`, `WatchAnalysis`, `GetModels` and `GetPresets`. The service uses the existing private gRPC listener. Result image links remain HTTP resource URLs.
 
-Use the checked-in `backend/src/main/protobuf/spaceapps/retrieval/v1/retrieval.proto`. Its ScalaPB custom-option import requires the corresponding `scalapb.proto` include file when invoking standalone protoc/grpcurl; sbt resolves it during code generation. For generated applications, use the descriptor and dependencies emitted by the normal protobuf toolchain. The server's existing retrieval service remains wire-compatible.
+Use the checked-in `ml/pvusatov/backend/src/main/protobuf/spaceapps/retrieval/v1/analysis.proto`, which imports shared retrieval types from `backend/src/main/protobuf/spaceapps/retrieval/v1/retrieval.proto`. Both protobuf source roots are needed. The ScalaPB custom-option import also requires the corresponding `scalapb.proto` include file when invoking standalone protoc/grpcurl; sbt resolves it during code generation. For generated applications, use the descriptor and dependencies emitted by the normal protobuf toolchain. The public `spaceapps.retrieval.v1.AnalysisService` wire name and existing retrieval service remain unchanged.
 
 After the normal sbt code-generation step, grpcurl can use the resolved imports:
 
@@ -104,8 +106,10 @@ After the normal sbt code-generation step, grpcurl can use the resolved imports:
 cd backend
 ./sbtw compile
 grpcurl -plaintext \
-  -import-path src/main/protobuf -import-path target/protobuf_external \
-  -proto spaceapps/retrieval/v1/retrieval.proto \
+  -import-path src/main/protobuf \
+  -import-path ../ml/pvusatov/backend/src/main/protobuf \
+  -import-path target/protobuf_external \
+  -proto spaceapps/retrieval/v1/analysis.proto \
   -d '{"preset":"comet-d6"}' \
   127.0.0.1:50051 spaceapps.retrieval.v1.AnalysisService/SubmitAnalysis
 ```

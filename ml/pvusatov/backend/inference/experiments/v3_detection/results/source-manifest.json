@@ -1,0 +1,29 @@
+{
+  "designation": "post-relocation development experiment source checksums, not production freeze",
+  "historical_result_source_hashes_preserved": true,
+  "source_sha256": {
+    "experiments/v3_detection/audit_slow_matches.py": "2bff1b492f53c08d06eaf446f2cad49a1893cca4b9c87087b2da7ddec444af91",
+    "experiments/v3_detection/cache_native_narrow.py": "68ffe5e77988eeebb22fc2dfc399481adf7feb2084b21f9a3fee3fb3688115ea",
+    "experiments/v3_detection/cache_synthetic.py": "40ddc16d46cd9db129e6fd746182d327bef07c7ee6d4062cac173c3462443ac2",
+    "experiments/v3_detection/confirm_scan.py": "b97403c083c16f0e1007c364a06b0ac763f8e6bc2d31072d08784e696b3429f4",
+    "experiments/v3_detection/digital_tracking.cpp": "621702d513cd59af82babf695e54e8ec09ffa4b4613d06ed1731982a6327b229",
+    "experiments/v3_detection/digital_tracking.py": "1eb626f2c06ac1c41e7723a02d4bf91ac5d8b4f37a2ec616e4e80f641feddbb0",
+    "experiments/v3_detection/joint_scan.py": "dbe2353b85a0a10fe516b76411173cb9822bb3f069dc16cdc6cfe7bae291172a",
+    "experiments/v3_detection/native_scan.py": "bb33b4b959eb48f7ff25758f63fbd7913d07928e616c6b3cd98126ad58fe9f3b",
+    "experiments/v3_detection/psf_scan.py": "1a0d69bddddea20ac18e2deaa4106d63b99fccb4420d1c65dcf921e9b49df870",
+    "experiments/v3_detection/recache_expanded.py": "02e92d4a8415ed300a4efbcfe6ffb3c7f2601e1965483bc62e4bd621e3e2da98",
+    "experiments/v3_detection/slow_profile.py": "8bf8c02c8805e11da8d4664ee22ded6f952660da03f980405a06eaacf1b055de",
+    "experiments/v3_detection/summarize_native.py": "c3f014a12ac6a70e285a45208f74f29c84f8285056a75853bc8ff46d8298bc3d",
+    "experiments/v3_detection/summarize_slow.py": "c1007c48247ae6f13b5c6dddb77698903697221a55b5b50671158c3e21312e8e",
+    "experiments/v3_detection/test_digital_tracking.py": "ab85711b135b3bc3455c81d5c2e7e98630df21497f69af14b776be4e4fd0401f",
+    "experiments/v3_detection/test_expanded_recache.py": "9a48a817096612ed3f9a627142996ff843ff8e892b382c0327878c606d12677e",
+    "experiments/v3_detection/threshold_scan.py": "f0504fb7cb1f8c82a25cc2b271de160b5f0944e5031bff617e593a6e1c67b43a",
+    "experiments/v3_detection/validate_expanded_cache.py": "8740ffb19f9e1b994695a81efcb88e384ffc393205934591f5fb41ccf846a076"
+  },
+  "frozen_model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "current_production_source_sha256": {
+    "ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "ml_inference/pipeline.py": "7f53685b822b7c94945c6bda383e8fcb2213c231d8a68973638eced1cf0e4dc0"
+  }
+}
