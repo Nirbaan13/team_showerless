@@ -12,6 +12,10 @@ def validate_cache_pair(baseline, candidate):
     This validates metadata before trial-level pairing. Absolute input paths may
     change during relocation; their ordered byte digests remain authoritative.
     """
+    for column in ['freeze_sha256', 'preparation_options']:
+        if column in baseline or column in candidate:
+            if column not in baseline or column not in candidate or baseline[column] != candidate[column]:
+                raise ValueError('paired cache '+column+' differs')
     for column in ['parent_id', 'partition', 'input_sources', 'times_hours',
                    'registered_shape', 'center_deg', 'detector_settings']:
         if column not in baseline or column not in candidate:

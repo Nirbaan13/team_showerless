@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 import subprocess
 import time
@@ -30,13 +31,13 @@ while job['status'] not in ('COMPLETED','FAILED'):
     job=rpc('GetAnalysis',{'analysisId':job['id']})
 assert job['status']=='COMPLETED',job
 with urllib.request.urlopen(http+'/api/analyses/'+job['id'],timeout=15) as response:
-    http=json.load(response)
-assert http['result']==job['result']
+    http_job=json.load(response)
+assert http_job['result']==job['result']
 assert len(job['result']['frames'])==3 and job['result']['candidates']
 watch=subprocess.run(command+['-d',json.dumps({'analysisId':job['id']}),target,
                              'spaceapps.retrieval.v1.AnalysisService/WatchAnalysis'],capture_output=True,text=True,timeout=30)
 assert watch.returncode==0 and 'COMPLETED' in watch.stdout,watch.stderr
-proof=dict(job_id=job['id'],frames=len(job['result']['frames']),candidates=len(job['result']['candidates']),
+proof=dict(http_base=http,grpc_target=target,checked_at_utc=datetime.now(timezone.utc).isoformat(),job_id=job['id'],frames=len(job['result']['frames']),candidates=len(job['result']['candidates']),
            model_sha256=job['result']['model']['sha256'],http_grpc_result_equal=True,
            completed_watch_replays=True)
 Path(os.environ.get('PROBE_OUTPUT',str(Path(__file__).with_name('grpc-proof.json')))).write_text(json.dumps(proof,indent=2))

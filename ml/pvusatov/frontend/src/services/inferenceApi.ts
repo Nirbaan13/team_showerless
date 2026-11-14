@@ -4,6 +4,9 @@ export interface InferenceModel {
   status?: string;
   score_kind: string;
   score_description?: string;
+  model_family?: 'RandomForestClassifier' | 'ExtraTreesClassifier';
+  detector_profile?: Record<string, unknown>;
+  algorithm_version_proposal?: string;
 }
 export interface InferencePreset {
   id: string;

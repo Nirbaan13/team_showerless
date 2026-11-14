@@ -4,8 +4,10 @@ import hashlib
 import json
 from pathlib import Path
 
-MODELS = Path(__file__).resolve().parents[1] / 'models'
-ROOT = MODELS.parents[2]
+# Historical freeze checks use the immutable, self-contained release. Current
+# runtime behavior is exercised separately against the active installation.
+ROOT = Path(__file__).resolve().parents[3] / 'releases' / 'v2'
+MODELS = ROOT / 'backend' / 'inference' / 'models'
 
 
 def read(name):

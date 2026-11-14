@@ -12,6 +12,23 @@ from .render import stretch, write_png, track_images
 ALGORITHM_VERSION='spherex-motion-1'
 
 
+def select_review_entries(entries,limit,preserve_bloom=False):
+    """Protect three residual reviews and keep flagged evidence within one cap.
+
+    BLOOM measurements never receive learned scores. Legacy installations keep
+    their original truncation behavior; artifact-bound profiles opt into this
+    versioned output policy independently of detector/forest calculations.
+    """
+    if not preserve_bloom or len(entries)<=limit:
+        return entries[:limit]
+    residual=[entry for entry in entries if not entry[3]]
+    bloom=[entry for entry in entries if entry[3]]
+    protected=min(3,len(residual),limit)
+    bloom_count=min(len(bloom),limit-protected)
+    residual_count=min(len(residual),limit-bloom_count)
+    return residual[:residual_count]+bloom[:bloom_count]
+
+
 def _bloom_tracks(masks,times,settings):
     peaks=[]; capped=False
     for mask in masks:
@@ -61,10 +78,12 @@ def run(request,output,progress=None):
         ranker=load_ranker(request.get('model_dir'))
     except (ValueError,OSError,RuntimeError):
         raise InferenceError('model_unavailable','The installed frozen model could not be verified or loaded') from None
+    sigma=ranker.detector_profile['psf_sigma']
+    settings['psf_sigma']=sigma
     residuals=difference_frames(stack.images,leave_one_out=True)
-    evidence=[filtered_evidence(diff,np.isfinite(diff),1.2,.8) for diff in residuals]
+    evidence=[filtered_evidence(diff,np.isfinite(diff),sigma,.8) for diff in residuals]
     significance=np.stack([row[1] for row in evidence])
-    peaks=[_detect_peaks(diff,np.isfinite(diff),1.2,settings['min_snr'],settings['max_peaks'],.8) for diff in residuals]
+    peaks=[_detect_peaks(diff,np.isfinite(diff),sigma,settings['min_snr'],settings['max_peaks'],.8) for diff in residuals]
     capped=any(len(p)>=settings['max_peaks'] for p in peaks)
     tracks=link_detections(peaks,stack.times,settings['min_speed'],settings['max_speed'],1.4,settings['min_epochs'])
     # Shared-median reference is retained as an explicit classical ablation.
@@ -82,7 +101,11 @@ def run(request,output,progress=None):
                                   'passband_variation_not_corrected','psf_matching_not_applied']
     if capped or bloom_capped: warnings.append('peak_cap_reached_search_incomplete')
     if len(entries)>options['max_candidates']: warnings.append('candidate_cap_reached_search_incomplete')
-    entries=entries[:options['max_candidates']]
+    bound_profile='detector_profile' in ranker.metadata
+    all_bloom=sum(entry[3] for entry in entries)
+    entries=select_review_entries(entries,options['max_candidates'],preserve_bloom=bound_profile)
+    if bound_profile and sum(entry[3] for entry in entries)<all_bloom:
+        warnings.append('flagged_bloom_omitted_by_candidate_limit')
     if not entries: warnings.append('no_candidates_above_thresholds')
     if progress: progress('rendering')
     finite_raw=stack.images[np.isfinite(stack.images)]
@@ -111,11 +134,13 @@ def run(request,output,progress=None):
             resources.append(write_png(output,name,pixels)); record[f'{kind}_stack_url']=name
         candidates.append(record)
     manifest={key:ranker.metadata[key] for key in ('schema_version','model_id','sha256','feature_names','class_labels','positive_class','score_kind')}
+    manifest.update({key:ranker.metadata[key] for key in ('model_family','detector_profile','algorithm_version_proposal') if key in ranker.metadata})
     provenance={**stack.provenance,'grid':dict(projection='TAN',center_deg=stack.grid.wcs.crval.tolist(),
                 crpix_fits=stack.grid.wcs.crpix.tolist(),cdelt_deg=stack.grid.wcs.cdelt.tolist(),
                 width=width,height=height,coordinate_origin='zero_based_xy')}
-    return dict(schema_version=1,analysis_id=request['analysis_id'],algorithm_version=ALGORITHM_VERSION,
+    return dict(schema_version=1,analysis_id=request['analysis_id'],algorithm_version=ranker.metadata.get('algorithm_version_proposal',ALGORITHM_VERSION),
                 model=manifest,settings={**options,'pixel_scale_arcsec':stack.pixel_scale,'leave_one_out':True,'min_support':.8,
-                                         'psf_sigma_px':1.2,'match_radius_px':1.4},frames=frames,candidates=candidates,
+                                         'psf_sigma_px':sigma,'match_radius_px':1.4,
+                                         **({'review_policy':'protect_first3_residual_then_flagged_bloom'} if bound_profile else {})},frames=frames,candidates=candidates,
                 comparison={'shared_median_count':len(shared),'leave_one_out_count':len(tracks),'bloom_track_count':len(bloom_tracks)},
                 warnings=list(dict.fromkeys(warnings)),provenance=provenance,resources=resources)

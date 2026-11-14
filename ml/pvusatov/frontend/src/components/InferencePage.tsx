@@ -17,6 +17,7 @@ const warningText: Record<string, string> = {
   uncalibrated_residual_snr: 'Residual S/N is an empirical detection measure, not formal statistical significance.',
   peak_cap_reached_search_incomplete: 'The detection limit was reached. This search is incomplete; use a smaller region or stricter threshold.',
   candidate_cap_reached_search_incomplete: 'The candidate limit was reached. This list is incomplete.',
+  flagged_bloom_omitted_by_candidate_limit: 'Some saturated-source evidence is outside the review limit. It has no model score.',
   no_candidates_above_thresholds: 'No tracks met the selected thresholds. This does not establish that the field contains no moving sources.',
 };
 const message = (error: unknown) => error instanceof Error ? error.message : 'The analysis could not complete.';
@@ -161,7 +162,7 @@ export function InferencePage() {
           </details>
           <button className="inference-primary" disabled={pending || !model || (mode === 'preset' && !presets.length)} type="submit">{pending ? 'Analysis running…' : 'Run analysis'}</button>
         </form>
-        {model && <div className="inference-model"><strong>{model.model_id}</strong><span>Frozen Random Forest · experimental ranking</span><code title={model.sha256}>SHA-256 {model.sha256.slice(0, 16)}…</code></div>}
+        {model && <div className="inference-model"><strong>{model.model_id}</strong><span>Frozen {model.model_family === 'ExtraTreesClassifier' ? 'ExtraTrees' : model.model_family === 'RandomForestClassifier' ? 'Random Forest' : 'tree ensemble'} · experimental ranking</span><code title={model.sha256}>SHA-256 {model.sha256.slice(0, 16)}…</code></div>}
       </aside>
       <section className="inference-results">
         {error && <div role="alert" className="inference-error">{error}</div>}
@@ -196,7 +197,7 @@ export function InferencePage() {
             <div className="inference-candidate-list"><label>Rank candidates<select value={order} onChange={e => setOrder(e.target.value as typeof order)}><option value="model">Model ranking</option><option value="baseline">Heuristic comparison</option></select></label>
               <p className="inference-hint">The score orders candidates for review. Compare several candidates with the heuristic order: the model can move a real source down the list. Scores are not discovery probabilities.</p>
               {!candidates.length && <p>No candidate met the selected detection and motion thresholds.</p>}
-              {candidates.map(c => <button key={c.id} className={`inference-candidate ${selected?.id === c.id ? 'selected' : ''}`} onClick={() => setActiveId(c.id)}><strong>{c.id} <span>{c.method === 'bloom_track' ? 'Flagged source' : `Model #${c.rank}`}</span></strong><span>RA {number(c.right_ascension_deg, 6)}° · Dec {number(c.declination_deg, 6)}°</span><span>{c.detections.length} detections · {number(c.speed_arcsec_per_hour)} arcsec/h</span><span>{c.score === null ? 'No model score: saturated-source evidence' : `RF score ${number(c.score)} · heuristic #${c.baseline_rank}`}</span></button>)}
+              {candidates.map(c => <button key={c.id} className={`inference-candidate ${selected?.id === c.id ? 'selected' : ''}`} onClick={() => setActiveId(c.id)}><strong>{c.id} <span>{c.method === 'bloom_track' ? 'Flagged source' : `Model #${c.rank}`}</span></strong><span>RA {number(c.right_ascension_deg, 6)}° · Dec {number(c.declination_deg, 6)}°</span><span>{c.detections.length} detections · {number(c.speed_arcsec_per_hour)} arcsec/h</span><span>{c.score === null ? 'No model score: saturated-source evidence' : `Model score ${number(c.score)} · heuristic #${c.baseline_rank}`}</span></button>)}
             </div>
           </div>
           <details className="inference-limitations" open><summary>Quality and interpretation</summary><ul>{result.warnings.map(w => <li key={w}>{warningText[w] || w.replaceAll('_', ' ')}</li>)}</ul></details>

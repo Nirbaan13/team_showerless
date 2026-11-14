@@ -21,8 +21,8 @@ const {firefox}=require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_modul
     assert.equal((await actual.json()).models[0].model_id,'spherex-track-rf-v2');
     assert.deepEqual(errors,[]);
     await page.screenshot({path:'/tmp/spaceapps-ml-relocation-swagger.png',fullPage:true});
-    const proof={frontend_proxy_spec_loaded:true,openapi_paths:Object.keys(spec.paths).length,swagger_try_it_out:true,model:'spherex-track-rf-v2',javascript_errors:errors};
-    fs.writeFileSync(path.join(__dirname,'swagger-proof.json'),JSON.stringify(proof,null,2));
+    const proof={frontend_base:base,checked_at_utc:new Date().toISOString(),frontend_proxy_spec_loaded:true,openapi_paths:Object.keys(spec.paths).length,swagger_try_it_out:true,model:'spherex-track-rf-v2',javascript_errors:errors};
+    fs.writeFileSync(process.env.PROBE_OUTPUT||path.join(__dirname,'swagger-proof.json'),JSON.stringify(proof,null,2));
     console.log(JSON.stringify(proof,null,2));
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "designation": "Selected real DEVELOPMENT compatibility; no model reselection/final data",
+  "baseline_model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "candidate_model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "files": [
+    {
+      "path": "backend/inference/experiments/v3_evaluation/evaluate_presets.py",
+      "sha256": "af40c7f77f721506508796125efd0d45fb61497616954c737a268231a9278a69",
+      "bytes": 16244
+    },
+    {
+      "path": "backend/inference/experiments/v3_evaluation/test_evaluate_presets.py",
+      "sha256": "cea715c3e47e6dd2334963823a862568489ad4710b3d5283d193dfc3d00051bf",
+      "bytes": 2578
+    },
+    {
+      "path": "backend/inference/experiments/v3_evaluation/results/preset-compatibility.json",
+      "sha256": "6f98ce350160be88aa783aabf334a08f60020d1836d7e44c0dc25ffb0b9d48dd",
+      "bytes": 461363
+    },
+    {
+      "path": "backend/inference/experiments/v3_evaluation/results/preset-compatibility-summary.json",
+      "sha256": "2816bc71d713694ee11192a675ba6a07052434161f2200796f4a13653e08385f",
+      "bytes": 9361
+    },
+    {
+      "path": "backend/docs/implementation/ML-V3-PRESET-COMPATIBILITY.AI.md",
+      "sha256": "7784c6d41ac960cafafe2717df137a669f70332d5f4666bff3362b5d1b4fd321",
+      "bytes": 7641
+    }
+  ]
+}
