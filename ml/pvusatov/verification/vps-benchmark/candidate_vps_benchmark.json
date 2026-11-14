@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T22:16:04.519437+00:00",
+  "run_id": "6bee3f6211cb",
+  "backend_before": {
+    "container_id": "5d4d2b477b6429edd357801b956ff36c5c006ce125e6198f6a31f79484d4e041",
+    "image_id": "sha256:6df625fa2845fdd7004c98d7149489776585680859237aa409aca193a670331a",
+    "revision": "5d9f117e19a7a010503db655259466cf36c22dfa",
+    "health": "healthy"
+  },
+  "backend_after": {
+    "container_id": "5d4d2b477b6429edd357801b956ff36c5c006ce125e6198f6a31f79484d4e041",
+    "image_id": "sha256:6df625fa2845fdd7004c98d7149489776585680859237aa409aca193a670331a",
+    "revision": "5d9f117e19a7a010503db655259466cf36c22dfa",
+    "health": "healthy"
+  },
+  "pinned_image_id": "sha256:6df625fa2845fdd7004c98d7149489776585680859237aa409aca193a670331a",
+  "image_created": "2026-11-14T21:57:00.088041135Z",
+  "image_revision": "5d9f117e19a7a010503db655259466cf36c22dfa",
+  "production_identity_unchanged": true,
+  "production_change_scope": "No production exec/restart/write performed; any before/after difference is external to this probe",
+  "requested_limits": {
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "pids": 128,
+    "tmpfs_tmp_bytes": 268435456,
+    "network": "none",
+    "read_only_root": true,
+    "remove_after_exit": true,
+    "candidate_bind_read_only": true
+  },
+  "uploaded_files": [
+    {
+      "name": "ranker.onnx",
+      "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "bytes": 5552706
+    },
+    {
+      "name": "metadata.json",
+      "sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+      "bytes": 1123
+    },
+    {
+      "name": "parity-reference.json",
+      "sha256": "53bb2b7aefc79d7b5a17613a25eb0a365a221fc34008d0d87decf6792ee3b89f",
+      "bytes": 632319
+    }
+  ],
+  "probe_source_sha256": "175e67ae6c733b056d6aa635f17c5d332dd3bb4920b163cd13fa6fd0d0943baa",
+  "executed_probes": 1,
+  "result": {
+    "container_name": "spaceapps-candidate-probe-6bee3f6211cb",
+    "docker_returncode": 0,
+    "docker_timed_out": false,
+    "docker_wall_seconds": 1.4149458350002533,
+    "container_probe": {
+      "schema_version": 1,
+      "success": true,
+      "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+      "parity_reference_sha256": "53bb2b7aefc79d7b5a17613a25eb0a365a221fc34008d0d87decf6792ee3b89f",
+      "model_family": "ExtraTreesClassifier",
+      "detector_profile": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 0.8,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8,
+        "leave_one_out": true
+      },
+      "model_py_path": "/app/inference/ml_inference/model.py",
+      "model_py_sha256": "3e9cabef0b68c60c154ee91cc51a54aeccbab3339b52a2b2aa21f06c7d8881c5",
+      "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "versions": {
+        "numpy": "2.5.3",
+        "scipy": "1.18.1",
+        "astropy": "8.0.2",
+        "onnxruntime": "1.30.0",
+        "pillow": "12.3.0"
+      },
+      "model_load_seconds": 0.13256834100138803,
+      "parity": {
+        "rows": 3584,
+        "feature_count": 6,
+        "rtol": 2e-06,
+        "atol": 2e-06,
+        "max_absolute_error": 5.963422665677953e-07,
+        "passed": true
+      },
+      "warm_timing": {
+        "rows_per_batch": 1000,
+        "warmups": 3,
+        "repetitions": 20,
+        "wall_seconds": [
+          0.016540078999241814,
+          0.01556774900018354,
+          0.016654848001053324,
+          0.014335874999233056,
+          0.012274663999050972,
+          0.011444327999925008,
+          0.01126810099958675,
+          0.011093365999840898,
+          0.011671121001199936,
+          0.013608212999315583,
+          0.018256690000271192,
+          0.01723488700008602,
+          0.014599358999475953,
+          0.012546324000140885,
+          0.013371883000218077,
+          0.013334060000488535,
+          0.01918383199881646,
+          0.013897497001380543,
+          0.014402433000213932,
+          0.020974355000362266
+        ],
+        "cpu_seconds": [
+          0.016461833000000037,
+          0.01556295799999996,
+          0.01665005700000005,
+          0.01433141799999993,
+          0.012270163000000056,
+          0.011440736999999923,
+          0.011264285999999957,
+          0.011089047000000019,
+          0.011667071999999945,
+          0.013549802,
+          0.018237504000000015,
+          0.01721595900000006,
+          0.014593730999999943,
+          0.01254016899999999,
+          0.01336691000000001,
+          0.013321043000000032,
+          0.019177438000000047,
+          0.013892585999999985,
+          0.01439497699999992,
+          0.020951845999999996
+        ],
+        "median_seconds": 0.0141166860003068,
+        "p95_seconds": 0.01927335814889375,
+        "max_seconds": 0.020974355000362266
+      },
+      "numeric_process_memory": {
+        "vm_hwm_kib": 139436,
+        "vm_rss_kib": 139436,
+        "measurement": "Linux current-process /proc/self/status VmHWM; not inherited getrusage"
+      },
+      "whole_probe_memory": {
+        "vm_hwm_kib": 179012,
+        "vm_rss_kib": 179012,
+        "measurement": "Linux current-process /proc/self/status VmHWM; not inherited getrusage"
+      },
+      "cgroup_limits": {
+        "cpu.max": "100000 100000",
+        "memory.max": "1073741824",
+        "pids.max": "128"
+      },
+      "cgroup_memory_peak_bytes": "150835200",
+      "tmp_mount": [
+        "604 591 0:97 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=262144k,inode64"
+      ],
+      "candidate_read_only_mount": [
+        "605 591 0:35 /spaceapps-candidate-probe-6bee3f6211cb-h9gzzh9a /candidate ro,nosuid,nodev - tmpfs tmpfs rw,size=3801136k,nr_inodes=1048576,inode64,usrquota"
+      ],
+      "loader_has_profile_binding": false,
+      "profile_binding_probe": {
+        "rejected_mismatched_profile": false,
+        "error": null
+      },
+      "claim_scope": "Pure ONNX numeric/resource compatibility in this exact image; no v3 pipeline end-to-end execution",
+      "inference_pipeline_executed": false,
+      "fitting_performed": false,
+      "final_data_or_labels_uploaded": false,
+      "production_model_overwritten": false
+    },
+    "docker_stderr": "\u001b[0;93m2026-11-14 22:16:03.511362267 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n",
+    "unparsed_stdout": null
+  },
+  "forced_cleanup": false,
+  "remote_staging_deleted": true,
+  "leftover_containers_for_run": 0,
+  "production_service_changes_performed": false,
+  "final_data_or_labels_uploaded": false,
+  "driver_source_sha256": {
+    "candidate_container_probe.py": "175e67ae6c733b056d6aa635f17c5d332dd3bb4920b163cd13fa6fd0d0943baa",
+    "candidate_remote_runner.py": "2b97babd0b7d05326084def490017e5cf8b2c485b8eed79f1f890c379efc9eec",
+    "candidate_run_ssh.py": "c34e8d0f57a2f2c40ab999230bfa81cb3e9aa68e4b67db746f2ccca32bcfe051"
+  }
+}

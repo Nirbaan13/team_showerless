@@ -1,0 +1,51 @@
+# SPHEREx experimental v3 release model card
+
+This release packages the single pre-final selected ExtraTrees model without refitting or changing one ONNX byte. The preregistered primary final recovery gate passed: neither mean K1 nor K3 regressed in either primary final cohort, with positive improvements. Deployment remains a separate coordinator action. This is an experimental ranking model, not a calibrated planet probability or a survey discovery claim.
+
+The 5,552,706-byte ONNX SHA-256 is `c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204`. `model/metadata.json` is a separate administrative release copy, SHA-256 `f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5`. Its final-tested status and evidence references replace the original development status; all required model, feature, class, score, detector, family and algorithm fields remain identical. The original metadata is preserved verbatim in `model/frozen-development-metadata.json`, SHA-256 `983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04`. The frozen candidate, V2 defaults and self-contained V2 release are unchanged.
+
+## Model and use
+
+The CPU-only ensemble is `ExtraTreesClassifier`, 160 trees, maximum depth 16, minimum leaf 12, maximum 512 leaves per tree, sqrt feature subsampling, random seed 20261114. Runtime imports no training library. The six measured residual-track features are epoch count, fit RMS in pixels, median SNR, minimum SNR, SNR coefficient of variation and median peak ratio. The score is the arithmetic mean of class-1 weighted leaf fractions across trees. The legacy `random_forest_vote_fraction` kind is retained for loader compatibility; the ensemble family and precise mean-leaf semantics are explicit. It is an uncalibrated review ranking value.
+
+The graph binds the full detector profile and requires matching external metadata: PSF sigma 0.8 px, SNR 4, at most 100 peaks per epoch, speed 0.5–60 px/hour, match radius 1.4 px, at least three epochs, support 0.8 and leave-one-out preparation. The algorithm version is `motion-extra-v3-sigma08`. Scores apply to measured residual tracks. BLOOM tracks remain unscored with null score and null residual SNR. The runtime's generic output policy protects the first three residual reviews and then retains flagged BLOOM tracks within the 100-result cap.
+
+## Training and selection
+
+Training used 3,000 independent synthetic fields (seeds 1300000–1302999) and eight native training parent fields. Synthetic backgrounds, detector ePSFs, epoch PSF variation, masks, irregular cadence and extended sources varied. Native moving injection positives and attributable stationary injected artifact negatives supplemented synthetic examples, with class mass 2 for each native class. Unknown real controls were excluded from labels; unmatched controls were never declared negatives. Acquisition-domain separation was substantial in a diagnostic (AUC 0.873), so zero-native-mass and artifact ablations were retained rather than claiming that native injections eliminate domain bias.
+
+Selection considered all 132 reported forest candidates, using 800 synthetic validation fields and 11 native validation parents. All candidates shared one 2,360-trial attributable cohort out of 2,370 planned native validation derivatives. Eligibility required K1 and K3 at least the deployed V2 system and both deployed-profile and candidate-profile heuristic safeguards on native macro-parent and synthetic macro-cadence validation metrics. These stronger development safeguards were explicitly amended before expanded validation model scoring. A single cached estimator (`4650f3f2a39c496d`) was selected and exported without refit; final results did not select a second model.
+
+## Final evidence
+
+The trusted external freeze is `verification/final/frozen-331c6b1/final-freeze.json`, SHA-256 `2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75`. The complete integrity-verified summary is `artifacts/v3-final-331c6b1/summary.json`, SHA-256 `3c0be474cc46488b159e72ebf56fd7a0862fea614a5d1de77c45925143386b9b`. This package also includes a compact, unmodified metric extract in `final-evaluation-summary.json`; references and package file hashes are in `release-manifest.json`.
+
+Primary native evaluation used 10 independent, previously quarantined D1–D3 parent fields with eight epochs each and 270 correlated injection derivatives per parent. Planned grid: six directions × nine speeds (0.01, 0.03, 0.1, 0.3, 1, 4, 10, 25, 50 px/hour) × five brightness levels (3, 6, 12, 24, 48). Positions were not moved to improve coverage. Primary synthetic evaluation used 2,000 independent fields, seeds 2000000–2001999, with 3,998 injected objects. Each system received identical latent images/trajectories/flux/options, differing only in the frozen detector sigma and ranker. Evaluation used the actual exported ONNX.
+
+| Primary cohort | Denominator | V2 detected → v3 | V2 K1 → v3 | V2 K3 → v3 |
+|---|---:|---:|---:|---:|
+| Native, all planned | 2,700 derivatives / 10 parents | 488 → 575 | 264 → 330 | 367 → 437 |
+| Native, common attributable | 2,695 derivatives / 10 parents | 486 → 574 | 264 → 330 | 367 → 437 |
+| Synthetic, all planned and attributable | 3,998 objects / 2,000 fields | 1,064 → 1,303 | 398 → 483 | 674 → 831 |
+
+Primary common-attributable native macro-parent K1 improved by 2.46 percentage points (95% parent bootstrap interval −0.63 to +5.87); K3 improved by 2.60 points (+0.81 to +4.67). Native K1's interval includes zero: a statistically established K1 gain is not claimed. Synthetic macro-field K1 improved by 1.93 points (+0.89 to +2.95), K3 by 3.85 points (+2.76 to +4.96). The complete summaries retain all-planned, common-attributable and finite-center coverage denominators.
+
+A secondary comparison lowered minimum speed equally to 0.005 px/hour on the SAME eight-epoch parents. Native all-planned K1/K3 were 470/578 → 501/642; common-attributable (2,690) were 469/577 → 501/642. Macro-parent deltas were +1.21 points (−2.71 to +5.20) and +2.42 (−0.97 to +5.75), both intervals including zero. Synthetic secondary K1/K3 were 397/674 → 483/830. Secondary observations are correlated with primary and are not extra independent fields. Original short 3/4-epoch final variants were explicitly deferred BEFORE final opening and were not tested.
+
+Spatial recovery does not establish resolved motion. The matched-epoch ≥3 px truth-span native diagnostic retained 1,090 attributable eligible derivatives: K1/K3 204/282 → 254/342. Its K1 interval also includes zero. Unknown controls remain unknown; neither these experiments nor injection recovery measure real-sky precision or new-object discovery rates.
+
+All four final cohort/profile evaluations completed with zero evaluation errors, unknown-truth trials or peak-cap trials. Final worker peak RSS was at most 289.15 MiB native and 227.76 MiB synthetic. Candidate native primary rows increased from 55,412 to 184,701 (3.33×), and synthetic from 66,649 to 104,549 (1.57×): improved recall carries additional candidate and compute burden.
+
+## Export, resources and compatibility limits
+
+The original full-order export guard failed on one native low-rank float32 tie (ranks 99/100, source gap approximately 3.72e-8). Its failure artifact was preserved. Before final, the export policy was explicitly amended: all scores must satisfy BOTH relative and absolute tolerance 2e-6; ordered top1/top3 and their known retention must match in every validation field; unreserved raw top100 membership must match. Full-order swaps outside protected budgets remain recorded. Native validation had one low-rank swap and maximum absolute error 6.66e-7; synthetic had no swaps and maximum 8.64e-7. Raw top100 parity does not guarantee residual-quota-99 membership when one BLOOM result is reserved; `artifacts/v3-selected-output-policy-parity.json` records the affected reduced cut. No exact full-order/output-membership claim is made; final metrics use actual ONNX output.
+
+The isolated, read-only VPS proof used the deployed profile-binding runtime image `sha256:a7a09a3f08074570110dfe1dbb714d378047ea1bb3ca19f278ba2a08c4aa64c7`, revision `5867ff8ac88087acb36cbfdb168b6d2299fef97a`, with one CPU and 1 GiB memory. All 3,584 numeric probes passed tolerance (maximum absolute error 5.97e-7). Twenty warm 1,000-row calls had median 11.59 ms and p95 13.68 ms; numeric VmHWM was 137.08 MiB, maximum container cgroup charge 286.35 MiB. Four actual packaged development CLI cases finished in 1.15–1.56 seconds with child VmHWM ≤193.34 MiB and 342 decoded PNG resources. These are bounded fixture measurements, not a workload-independent latency promise. Evidence: `verification/vps-benchmark/candidate_bound_vps_benchmark.json`, SHA-256 `dbc09b49a7796d83c0e160c6ac96a8e3f16571ec6e4f8ae8919d6ad12b51ca52`.
+
+The known packaged comet D2 target stays model rank 1. Comet D6 changes from V2 model rank 3 to v3 rank 4, a documented K3 regression on an existing development fixture. Vesta D3/D6 remain unscored BLOOM targets; D3 is retained at published rank 100 under the explicit output policy, while two development epochs hit the peak cap. D1–D3 native final evidence does not establish general D4–D6 transfer. Four packaged views concern two known objects and do not estimate survey precision.
+
+## Installation and smoke
+
+Copy only `model/ranker.onnx` and administrative `model/metadata.json` into the trusted installation's existing inference `models/` directory. The Docker build chooses this versioned release; repository V2 defaults remain preserved. Existing Scala model ID/SHA checks and directory layout require no change. The runtime must support artifact-bound detector profiles; older numeric-only loaders are insufficient for the v3 pipeline.
+
+From repository root: `PYTHONPATH=ml/pvusatov/backend/inference python ml/pvusatov/releases/v3/smoke.py --model-dir ml/pvusatov/releases/v3/model`. In the image: `python /app/inference/release-smoke.py --model-dir /app/inference/models`. `--inference-root`/`ML_ROOT` select runtime modules and fixtures; `--model-dir`/`ML_RELEASE_MODEL_DIR` select the trusted model. The smoke uses an explicit model directory, verifies bound family/profile/version/SHA, executes the real fixed comet D6 CLI, decodes every PNG and removes temporary outputs.

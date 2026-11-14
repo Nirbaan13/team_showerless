@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "model_id": "spherex-track-extra-v3",
+  "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "feature_names": [
+    "epoch_count",
+    "fit_rms_px",
+    "median_snr",
+    "min_snr",
+    "snr_coefficient_of_variation",
+    "median_peak_ratio"
+  ],
+  "class_labels": [
+    0,
+    1
+  ],
+  "positive_class": 1,
+  "score_kind": "random_forest_vote_fraction",
+  "status": "experimental",
+  "release_state": "final-tested experimental model release",
+  "model_family": "ExtraTreesClassifier",
+  "detector_profile": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "algorithm_version_proposal": "motion-extra-v3-sigma08",
+  "score_description": "Arithmetic mean of class-1 weighted leaf fractions across the named randomized decision-tree ensemble; an uncalibrated ranking value, not a planet probability",
+  "training_manifest_sha256": "8e3d795ae63d886bb64ed8fd1e22ebc120d470752297d81543554486bc11ada5",
+  "final_evaluation_status": "passed preregistered primary recovery gate; runtime and integration evidence recorded separately",
+  "original_frozen_metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+  "final_freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "final_summary_sha256": "3c0be474cc46488b159e72ebf56fd7a0862fea614a5d1de77c45925143386b9b"
+}

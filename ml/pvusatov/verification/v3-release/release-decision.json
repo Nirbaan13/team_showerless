@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-11-14T23:08:05.778066+00:00",
+  "decision": "Eligible for release through passing PR CI and revision-based deployment",
+  "scientific_model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "recovery_gate_passed": true,
+  "bounded_vps_runtime_gate_passed": true,
+  "local_http_grpc_png_integration_gate_passed": true,
+  "required_before_merge": "PR tests, exact packaged image smoke and deployment rollback checks must pass",
+  "required_after_deployment": "Public fresh HTTP/PNG/SSE, private gRPC equality, browser/Swagger and installed model/image/revision verification",
+  "production_deployment_verified": false,
+  "selection_or_refit_after_final": false,
+  "freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "summary_sha256": "3c0be474cc46488b159e72ebf56fd7a0862fea614a5d1de77c45925143386b9b",
+  "evidence": [
+    {
+      "path": "verification/final/FINAL-INDEPENDENT-AGGREGATE-REVIEW.AI.md",
+      "sha256": "1e10fc26ef21c5ecc6209e67695b86f11353655ea4dd9340cc335272aa481b27"
+    },
+    {
+      "path": "verification/final/FINAL-SCIENTIFIC-RESULTS.AI.md",
+      "sha256": "61e6268954da6a828d6240f17cededfc71413e36e8a50e8d1f171af8971f158f"
+    },
+    {
+      "path": "verification/vps-benchmark/candidate_bound_vps_benchmark.json",
+      "sha256": "dbc09b49a7796d83c0e160c6ac96a8e3f16571ec6e4f8ae8919d6ad12b51ca52"
+    },
+    {
+      "path": "verification/v3-release/http-local-proof.json",
+      "sha256": "4afb0a84470ef8cef5b1dd1892c3ffe5f6fae4c5c03cd9043daba9038f0c70fe"
+    },
+    {
+      "path": "verification/v3-release/grpc-local-proof.json",
+      "sha256": "7b3cea1d7c7f67065194c01cbe70b23c420c4f47d8ed93c95e806416935dc058"
+    }
+  ],
+  "limitations": [
+    "Native top1 confidence interval crosses zero; ten independent parent fields",
+    "More candidate rows and detector CPU; fixed review budget recovery improves",
+    "Known cometD6 development target model rank3 to4; no MWIR final claim",
+    "Injection recovery only; unknown real controls do not establish precision or planet probability"
+  ],
+  "rollback": {
+    "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+    "last_verified_v2_main_revision": "66ac8d4539d277a3f378d714d41ea8b5a3e1dc72",
+    "source_archive": "releases/v2"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "original_metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+  "administrative_metadata_sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5",
+  "administrative_change": "Only release status and evidence references differ; required schema, features, score contract, family, detector profile, algorithm version and weights are unchanged.",
+  "original_candidate_directory": "artifacts/v3-development-candidate",
+  "final_freeze": {
+    "path": "verification/final/frozen-331c6b1/final-freeze.json",
+    "sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75"
+  },
+  "final_summary": {
+    "path": "artifacts/v3-final-331c6b1/summary.json",
+    "sha256": "3c0be474cc46488b159e72ebf56fd7a0862fea614a5d1de77c45925143386b9b"
+  },
+  "vps_runtime_evidence": {
+    "path": "verification/vps-benchmark/candidate_bound_vps_benchmark.json",
+    "sha256": "dbc09b49a7796d83c0e160c6ac96a8e3f16571ec6e4f8ae8919d6ad12b51ca52"
+  },
+  "files": {
+    "frozen-development-metadata.json": {
+      "sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+      "bytes": 1123
+    },
+    "metadata.json": {
+      "sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5",
+      "bytes": 1539
+    },
+    "parity-reference.json": {
+      "sha256": "53bb2b7aefc79d7b5a17613a25eb0a365a221fc34008d0d87decf6792ee3b89f",
+      "bytes": 632319
+    },
+    "ranker.onnx": {
+      "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "bytes": 5552706
+    },
+    "training-manifest.json": {
+      "sha256": "8e3d795ae63d886bb64ed8fd1e22ebc120d470752297d81543554486bc11ada5",
+      "bytes": 48482
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "checked_at_utc": "2026-11-14T22:15:46.254773+00:00",
+  "freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "source_commit": "331c6b170da23809123f18387236a3fac1400a82",
+  "candidate_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "baseline_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "native_independent_parents": 10,
+  "native_observations": 80,
+  "native_derivatives_planned": 2700,
+  "synthetic_independent_fields": 2000,
+  "source_refs": 15,
+  "preflight_metadata_and_opaque_bytes_only": true,
+  "scientific_loader_called": false
+}

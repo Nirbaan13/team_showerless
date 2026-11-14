@@ -1,0 +1,2294 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T22:31:33.395914+00:00",
+  "run_id": "4d65d3ab452a",
+  "backend_before": {
+    "container_id": "f8e5029317d4fd1c48f2ad0f7899d7f46b7800bb56aced60ab9b963545f5b563",
+    "image_id": "sha256:a7a09a3f08074570110dfe1dbb714d378047ea1bb3ca19f278ba2a08c4aa64c7",
+    "revision": "5867ff8ac88087acb36cbfdb168b6d2299fef97a",
+    "health": "healthy"
+  },
+  "backend_after": {
+    "container_id": "f8e5029317d4fd1c48f2ad0f7899d7f46b7800bb56aced60ab9b963545f5b563",
+    "image_id": "sha256:a7a09a3f08074570110dfe1dbb714d378047ea1bb3ca19f278ba2a08c4aa64c7",
+    "revision": "5867ff8ac88087acb36cbfdb168b6d2299fef97a",
+    "health": "healthy"
+  },
+  "pinned_image_id": "sha256:a7a09a3f08074570110dfe1dbb714d378047ea1bb3ca19f278ba2a08c4aa64c7",
+  "image_created": "2026-11-14T22:18:05.277703833Z",
+  "image_revision": "5867ff8ac88087acb36cbfdb168b6d2299fef97a",
+  "production_identity_unchanged": true,
+  "production_change_scope": "No production exec/restart/write performed; any before/after difference is external to this probe",
+  "requested_limits": {
+    "cpus": 1,
+    "memory_bytes": 1073741824,
+    "pids": 128,
+    "tmpfs_tmp_bytes": 268435456,
+    "network": "none",
+    "read_only_root": true,
+    "remove_after_exit": true,
+    "candidate_bind_read_only": true
+  },
+  "uploaded_files": [
+    {
+      "name": "ranker.onnx",
+      "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "bytes": 5552706
+    },
+    {
+      "name": "metadata.json",
+      "sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+      "bytes": 1123
+    },
+    {
+      "name": "parity-reference.json",
+      "sha256": "53bb2b7aefc79d7b5a17613a25eb0a365a221fc34008d0d87decf6792ee3b89f",
+      "bytes": 632319
+    }
+  ],
+  "probe_source_sha256": "48aab5b3414457fc8771bb91e505bd4851848f47e11ce1c1f58bce44ef7b796a",
+  "executed_probes": 1,
+  "result": {
+    "container_name": "spaceapps-candidate-probe-4d65d3ab452a",
+    "docker_returncode": 0,
+    "docker_timed_out": false,
+    "docker_wall_seconds": 6.932499653999912,
+    "container_probe": {
+      "schema_version": 1,
+      "success": true,
+      "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+      "parity_reference_sha256": "53bb2b7aefc79d7b5a17613a25eb0a365a221fc34008d0d87decf6792ee3b89f",
+      "model_family": "ExtraTreesClassifier",
+      "detector_profile": {
+        "min_snr": 4.0,
+        "max_peaks": 100,
+        "psf_sigma": 0.8,
+        "min_speed": 0.5,
+        "max_speed": 60.0,
+        "match_radius": 1.4,
+        "min_epochs": 3,
+        "min_support": 0.8,
+        "leave_one_out": true
+      },
+      "model_py_path": "/app/inference/ml_inference/model.py",
+      "model_py_sha256": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083",
+      "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "versions": {
+        "numpy": "2.5.3",
+        "scipy": "1.18.1",
+        "astropy": "8.0.2",
+        "onnxruntime": "1.30.0",
+        "pillow": "12.3.0"
+      },
+      "model_load_seconds": 0.13613055499990878,
+      "parity": {
+        "rows": 3584,
+        "feature_count": 6,
+        "rtol": 2e-06,
+        "atol": 2e-06,
+        "max_absolute_error": 5.963422665677953e-07,
+        "passed": true
+      },
+      "warm_timing": {
+        "rows_per_batch": 1000,
+        "warmups": 3,
+        "repetitions": 20,
+        "wall_seconds": [
+          0.011300672000288614,
+          0.011399941999115981,
+          0.01102176899985352,
+          0.011222512001040741,
+          0.011337502999595017,
+          0.011306493999654776,
+          0.011173449000125402,
+          0.011431832001107978,
+          0.01155451699924015,
+          0.012909417999253492,
+          0.011726566999641364,
+          0.012193578000733396,
+          0.011585967000428354,
+          0.011862696999742184,
+          0.011585456999455346,
+          0.012678144999881624,
+          0.01178513800005021,
+          0.013485028001014143,
+          0.017407015000571846,
+          0.013281038000059198
+        ],
+        "cpu_seconds": [
+          0.011290314999999995,
+          0.011395523000000018,
+          0.011009338000000035,
+          0.011218962000000055,
+          0.011332164000000033,
+          0.01130238699999997,
+          0.011169557999999968,
+          0.011427511999999918,
+          0.011549971999999964,
+          0.012904882999999923,
+          0.011722055000000009,
+          0.012188690000000002,
+          0.011581981999999935,
+          0.011858570999999984,
+          0.01158054899999994,
+          0.012672357000000023,
+          0.011779461999999907,
+          0.013455936000000057,
+          0.017402028000000014,
+          0.013275458000000073
+        ],
+        "median_seconds": 0.01158571199994185,
+        "p95_seconds": 0.013681127350992032,
+        "max_seconds": 0.017407015000571846
+      },
+      "numeric_process_memory": {
+        "vm_hwm_kib": 140372,
+        "vm_rss_kib": 140372,
+        "measurement": "Linux current-process /proc/self/status VmHWM; not inherited getrusage"
+      },
+      "whole_probe_memory": {
+        "vm_hwm_kib": 180012,
+        "vm_rss_kib": 180012,
+        "measurement": "Linux current-process /proc/self/status VmHWM; not inherited getrusage"
+      },
+      "cgroup_limits": {
+        "cpu.max": "100000 100000",
+        "memory.max": "1073741824",
+        "pids.max": "128"
+      },
+      "cgroup_memory_peak_bytes": "153108480",
+      "tmp_mount": [
+        "565 507 0:96 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=262144k,inode64"
+      ],
+      "candidate_read_only_mount": [
+        "589 507 0:35 /spaceapps-candidate-probe-4d65d3ab452a-3e9931aa /candidate ro,nosuid,nodev - tmpfs tmpfs rw,size=3801136k,nr_inodes=1048576,inode64,usrquota"
+      ],
+      "loader_has_profile_binding": true,
+      "profile_binding_probe": {
+        "rejected_mismatched_profile": true,
+        "error": {
+          "type": "ValueError",
+          "message": "cannot load frozen ONNX model: embedded detector_profile does not match metadata"
+        }
+      },
+      "claim_scope": "Actual frozen-c13 CLI on four PACKAGED DEVELOPMENT views of two objects; numeric/resource and output-policy compatibility only, no final-science claim",
+      "inference_pipeline_executed": true,
+      "fitting_performed": false,
+      "final_data_or_labels_uploaded": false,
+      "production_model_overwritten": false,
+      "profile_binding_required": true,
+      "cli_cases": {
+        "comet-d2": {
+          "success": true,
+          "returncode": 0,
+          "wall_seconds": 1.151930612999422,
+          "linux_process_memory_kib": {
+            "VmHWM": 196784,
+            "VmRSS": 176116
+          },
+          "fixture_sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+          "stderr": "\u001b[0;93m2026-11-14 22:31:28.346055096 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+          "model": {
+            "schema_version": 1,
+            "model_id": "spherex-track-extra-v3",
+            "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+            "feature_names": [
+              "epoch_count",
+              "fit_rms_px",
+              "median_snr",
+              "min_snr",
+              "snr_coefficient_of_variation",
+              "median_peak_ratio"
+            ],
+            "class_labels": [
+              0,
+              1
+            ],
+            "positive_class": 1,
+            "score_kind": "random_forest_vote_fraction",
+            "model_family": "ExtraTreesClassifier",
+            "detector_profile": {
+              "min_snr": 4.0,
+              "max_peaks": 100,
+              "psf_sigma": 0.8,
+              "min_speed": 0.5,
+              "max_speed": 60.0,
+              "match_radius": 1.4,
+              "min_epochs": 3,
+              "min_support": 0.8,
+              "leave_one_out": true
+            },
+            "algorithm_version_proposal": "motion-extra-v3-sigma08"
+          },
+          "algorithm_version": "motion-extra-v3-sigma08",
+          "settings": {
+            "min_snr": 4.0,
+            "min_speed_arcsec_per_hour": 3.075,
+            "max_speed_arcsec_per_hour": 369.0,
+            "mask_policy": "motion",
+            "max_candidates": 100,
+            "max_peaks": 100,
+            "pixel_scale_arcsec": 6.15,
+            "min_epochs": 3,
+            "leave_one_out": true,
+            "min_support": 0.8,
+            "psf_sigma_px": 0.8,
+            "match_radius_px": 1.4,
+            "review_policy": "protect_first3_residual_then_flagged_bloom"
+          },
+          "frames": 3,
+          "candidates": 1,
+          "comparison": {
+            "shared_median_count": 2,
+            "leave_one_out_count": 1,
+            "bloom_track_count": 0
+          },
+          "warnings": [
+            "selected_development_case",
+            "legacy_decreasing_declination_grid",
+            "outlier_measurements_retained",
+            "experimental_synthetic_trained_ranking",
+            "short_linear_arc_model",
+            "uncalibrated_residual_snr",
+            "passband_variation_not_corrected",
+            "psf_matching_not_applied"
+          ],
+          "resource_count": 8,
+          "resource_bytes": 7964,
+          "resource_hashes": [
+            {
+              "name": "frame-000.png",
+              "sha256": "e4fcc1359fbe42df79895ac81f43d2bc964b0c6ad03f82d7313fbca6f1fd59b3",
+              "bytes": 1087
+            },
+            {
+              "name": "difference-000.png",
+              "sha256": "762e17e8636bcec198b263154de536246fe9fb64278c04ec4a59200ccf1751aa",
+              "bytes": 957
+            },
+            {
+              "name": "frame-001.png",
+              "sha256": "2dec6eedd9739342bd954ebd900d422bd76715217f96a4228f98c70267bf5866",
+              "bytes": 1258
+            },
+            {
+              "name": "difference-001.png",
+              "sha256": "ec04452dee5802d80288f6ca82245824a6ea125ac3c9d97a2d59b691d2653768",
+              "bytes": 1284
+            },
+            {
+              "name": "frame-002.png",
+              "sha256": "2fb95e8afe37f041a47d1853d9775a4262675d44cff93c986378df87a72138b0",
+              "bytes": 1302
+            },
+            {
+              "name": "difference-002.png",
+              "sha256": "d9dc4111f3e769afdd7cd37557c821480f56c379b12e06b9b333a8ab7ed3abc6",
+              "bytes": 1300
+            },
+            {
+              "name": "candidate-000-moving.png",
+              "sha256": "15d0c6a6fbae792d39eb6e4849ee3d40809a6f0f9ea073bc15c9630670ab964b",
+              "bytes": 532
+            },
+            {
+              "name": "candidate-000-stationary.png",
+              "sha256": "f4f8664347da99d319ff14b8ca119a265a4825e2683725b24996dd851e109f30",
+              "bytes": 244
+            }
+          ],
+          "known_target_evaluation_only": {
+            "matches": [
+              {
+                "published_rank": 1,
+                "method": "residual_track",
+                "score": 0.7204204797744751,
+                "max_offset_px": 0.6041444988210316
+              }
+            ],
+            "match_tolerance_px": 1.5,
+            "labels_loaded_after_all_four_inference_runs": true,
+            "other_track_identities": "unknown; never negatives"
+          }
+        },
+        "comet-d6": {
+          "success": true,
+          "returncode": 0,
+          "wall_seconds": 1.4082323549991997,
+          "linux_process_memory_kib": {
+            "VmHWM": 197960,
+            "VmRSS": 177252
+          },
+          "fixture_sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+          "stderr": "\u001b[0;93m2026-11-14 22:31:29.477376140 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+          "model": {
+            "schema_version": 1,
+            "model_id": "spherex-track-extra-v3",
+            "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+            "feature_names": [
+              "epoch_count",
+              "fit_rms_px",
+              "median_snr",
+              "min_snr",
+              "snr_coefficient_of_variation",
+              "median_peak_ratio"
+            ],
+            "class_labels": [
+              0,
+              1
+            ],
+            "positive_class": 1,
+            "score_kind": "random_forest_vote_fraction",
+            "model_family": "ExtraTreesClassifier",
+            "detector_profile": {
+              "min_snr": 4.0,
+              "max_peaks": 100,
+              "psf_sigma": 0.8,
+              "min_speed": 0.5,
+              "max_speed": 60.0,
+              "match_radius": 1.4,
+              "min_epochs": 3,
+              "min_support": 0.8,
+              "leave_one_out": true
+            },
+            "algorithm_version_proposal": "motion-extra-v3-sigma08"
+          },
+          "algorithm_version": "motion-extra-v3-sigma08",
+          "settings": {
+            "min_snr": 4.0,
+            "min_speed_arcsec_per_hour": 3.075,
+            "max_speed_arcsec_per_hour": 369.0,
+            "mask_policy": "motion",
+            "max_candidates": 100,
+            "max_peaks": 100,
+            "pixel_scale_arcsec": 6.15,
+            "min_epochs": 3,
+            "leave_one_out": true,
+            "min_support": 0.8,
+            "psf_sigma_px": 0.8,
+            "match_radius_px": 1.4,
+            "review_policy": "protect_first3_residual_then_flagged_bloom"
+          },
+          "frames": 4,
+          "candidates": 36,
+          "comparison": {
+            "shared_median_count": 136,
+            "leave_one_out_count": 36,
+            "bloom_track_count": 0
+          },
+          "warnings": [
+            "selected_development_case",
+            "legacy_decreasing_declination_grid",
+            "outlier_measurements_retained",
+            "experimental_synthetic_trained_ranking",
+            "short_linear_arc_model",
+            "uncalibrated_residual_snr",
+            "passband_variation_not_corrected",
+            "psf_matching_not_applied"
+          ],
+          "resource_count": 80,
+          "resource_bytes": 115967,
+          "resource_hashes": [
+            {
+              "name": "frame-000.png",
+              "sha256": "52e437976d6285b0d447af5feba8f8ddc7e0ad03a67ddae2bdb542e875e5a152",
+              "bytes": 14591
+            },
+            {
+              "name": "difference-000.png",
+              "sha256": "3ea7b90ea6095683ffc51b512b53cae70c96bf2e9bc99ff3132c3538fd5d3ce6",
+              "bytes": 4201
+            },
+            {
+              "name": "frame-001.png",
+              "sha256": "569925c6fca5ff4131f921386f45db29c6e15ec29b15a99a250802c41649bd23",
+              "bytes": 15558
+            },
+            {
+              "name": "difference-001.png",
+              "sha256": "dfe94593070113bddfc35a8ba1cb5b2a4424740be3eb4a56d757c1448d014912",
+              "bytes": 5136
+            },
+            {
+              "name": "frame-002.png",
+              "sha256": "91d59ed7d34fb39c99301323f9b6335cef0a718c29e55b98ff7d1f6f013dd934",
+              "bytes": 16733
+            },
+            {
+              "name": "difference-002.png",
+              "sha256": "f6e46d9d2d16d2f2c5b06da7b1db20d23ffbc899f270f716c7d7761682f72368",
+              "bytes": 4307
+            },
+            {
+              "name": "frame-003.png",
+              "sha256": "511c41547cbd179581f8a26c54ee6bb33b30ea1e91956d7cf448fb9bc7e4ddf5",
+              "bytes": 17017
+            },
+            {
+              "name": "difference-003.png",
+              "sha256": "925ddf3fcaf9c2f2d6813284bfa82c85a50087f7e26bcd5269611c0abfdbe34e",
+              "bytes": 4205
+            },
+            {
+              "name": "candidate-000-moving.png",
+              "sha256": "de80e1eef12ee19657a0fde1381a317e8a50abf740d474c46e3463b9f0cc5aba",
+              "bytes": 159
+            },
+            {
+              "name": "candidate-000-stationary.png",
+              "sha256": "f17633101b251a875b722b9ef9aa2bd3152f4e3843e00956baa086fd4bced685",
+              "bytes": 109
+            },
+            {
+              "name": "candidate-001-moving.png",
+              "sha256": "f90e4c4c32eb9eee4d207cc63a8fcb3b921aeab1452a5ebe972b79f2fde82f97",
+              "bytes": 727
+            },
+            {
+              "name": "candidate-001-stationary.png",
+              "sha256": "2f3da2ddf4fd6967c317a4486730e7d249bf8e3350493a8c43640bc687703c9f",
+              "bytes": 291
+            },
+            {
+              "name": "candidate-002-moving.png",
+              "sha256": "1452c0eb01f5912a4dd43fb5cdb214933f1c6ca66ca9d19594db3a1ef5bdd2a3",
+              "bytes": 630
+            },
+            {
+              "name": "candidate-002-stationary.png",
+              "sha256": "bf722eb06a5e5d6b98678bf053923d8a96406ab6d3f67fca48add3ebeffa345f",
+              "bytes": 343
+            },
+            {
+              "name": "candidate-003-moving.png",
+              "sha256": "65176f09917278274bd66866dd25acb15d007668f382fd922e2807f1faa66d4c",
+              "bytes": 597
+            },
+            {
+              "name": "candidate-003-stationary.png",
+              "sha256": "44c0b218f9603b1418f2a8672662565b0807d4854630505813fdb8d175abe068",
+              "bytes": 86
+            },
+            {
+              "name": "candidate-004-moving.png",
+              "sha256": "10f20b83a83c4031f9a60b71c522a2a957a0ed091a7bfd6f786824b2be098505",
+              "bytes": 741
+            },
+            {
+              "name": "candidate-004-stationary.png",
+              "sha256": "8784f3e38974094f39614ea671332578c36fce54987c3c2e4287c80739f04e9a",
+              "bytes": 296
+            },
+            {
+              "name": "candidate-005-moving.png",
+              "sha256": "36ce3bd2d909843bdec076ab2c1ac385a7cbda30e0ac51dec2ff0125581154c6",
+              "bytes": 628
+            },
+            {
+              "name": "candidate-005-stationary.png",
+              "sha256": "47fac5ee80426c3b4fb9d3fca2d58ab7b8a74be8dc36cd412b4360182de3aa53",
+              "bytes": 353
+            },
+            {
+              "name": "candidate-006-moving.png",
+              "sha256": "1d887b23b5ee7ff9630d9d01c3c4c9bf11e58ab54f19fb44bad9d71d8f23beea",
+              "bytes": 658
+            },
+            {
+              "name": "candidate-006-stationary.png",
+              "sha256": "6dfde816ad53112c8ec6db1262b18d345fe5e99727a449a37d29b4c372c9ffff",
+              "bytes": 346
+            },
+            {
+              "name": "candidate-007-moving.png",
+              "sha256": "8d143a7b9a9391fd5784007ee6dc9a0b1e3b684543d7d8eaa9a19dd778028a8f",
+              "bytes": 581
+            },
+            {
+              "name": "candidate-007-stationary.png",
+              "sha256": "4e8c6555d6e1cb8c131bd9b68fbc32adaa685331b766474c9a9e91313a3d557e",
+              "bytes": 295
+            },
+            {
+              "name": "candidate-008-moving.png",
+              "sha256": "80738e45493b161ceea1d0162b1c62983d608658c6cb0dd3111bc9bde06df413",
+              "bytes": 638
+            },
+            {
+              "name": "candidate-008-stationary.png",
+              "sha256": "2b0f4c3aa4ffca3316d5ccfc67d3b9f1b32f96aee9985840053544a90d63d42e",
+              "bytes": 389
+            },
+            {
+              "name": "candidate-009-moving.png",
+              "sha256": "94d27f61d179893065f8e1c96e6c7f5988f1da06adacfc450ba6046b699a5d72",
+              "bytes": 665
+            },
+            {
+              "name": "candidate-009-stationary.png",
+              "sha256": "e1337282c12e3ada8744075fec51a7033b5cc549d9a7315b880af130277d05b3",
+              "bytes": 352
+            },
+            {
+              "name": "candidate-010-moving.png",
+              "sha256": "46413e99eed514369daa99704143d1df523159413286c23be643cc1bde1dae8d",
+              "bytes": 626
+            },
+            {
+              "name": "candidate-010-stationary.png",
+              "sha256": "5fdcf49b737aeb03467d09ad9e730686789495d4458bad6ce5eafc9cf0c51086",
+              "bytes": 354
+            },
+            {
+              "name": "candidate-011-moving.png",
+              "sha256": "c823ed64a3648d8319f9c07598f495a84621afaf08782e23b3b0e6b26c80413f",
+              "bytes": 639
+            },
+            {
+              "name": "candidate-011-stationary.png",
+              "sha256": "62d63d54757190fe1438e78f408e0f37d529d0ec8648d6ec47481bdfce6f0675",
+              "bytes": 323
+            },
+            {
+              "name": "candidate-012-moving.png",
+              "sha256": "e4b6c0cad9045ee761050486cfb6269ddf397d10d0829f8578541f96a9e3a214",
+              "bytes": 607
+            },
+            {
+              "name": "candidate-012-stationary.png",
+              "sha256": "41d2117486fa2b98d6728282ef0fd970c1f062d5de708db0797e8772edc3f779",
+              "bytes": 297
+            },
+            {
+              "name": "candidate-013-moving.png",
+              "sha256": "112fe65ac48f12136b8f9c979389a1162aca4b65cc8cc67e941115a170916f88",
+              "bytes": 645
+            },
+            {
+              "name": "candidate-013-stationary.png",
+              "sha256": "1e7d72f3bcdd5d845dd301684a639e8c25637765f6d682eea8021e49faa8bd91",
+              "bytes": 348
+            },
+            {
+              "name": "candidate-014-moving.png",
+              "sha256": "f686d2a6f24ca32cf4657bf6421b927e84d3d5da3e2c3bcc9957164ccf1639f5",
+              "bytes": 726
+            },
+            {
+              "name": "candidate-014-stationary.png",
+              "sha256": "b3f4180d83fc9276e7f0cebbd84e27cb96da8de37eff8f9dcec6fa5ad9b0e04b",
+              "bytes": 267
+            },
+            {
+              "name": "candidate-015-moving.png",
+              "sha256": "27e4d8955c541dbcc1e8e9fa61c86b52b27490d98b4ed290a94bdcf1db007e7d",
+              "bytes": 607
+            },
+            {
+              "name": "candidate-015-stationary.png",
+              "sha256": "22c8f56cba1b9f8d02b3f855d5464063d171a428627b98568971c0c9eda29430",
+              "bytes": 334
+            },
+            {
+              "name": "candidate-016-moving.png",
+              "sha256": "a57c14c010e08068611dee5693a18609dad96d9942199269403c2b2645b1482a",
+              "bytes": 585
+            },
+            {
+              "name": "candidate-016-stationary.png",
+              "sha256": "3df9738cbe7adb39cfa076e47c533ae4becc3ecee4c5b1734ef52f1272607734",
+              "bytes": 313
+            },
+            {
+              "name": "candidate-017-moving.png",
+              "sha256": "87f13a25300b3dc83cbd3344a0e847654d17b405377590a29a6271504c72aabf",
+              "bytes": 656
+            },
+            {
+              "name": "candidate-017-stationary.png",
+              "sha256": "e3730930d839e58c23451d6df0d97c0de139ffb0c6204e60bd911830be6b92e4",
+              "bytes": 373
+            },
+            {
+              "name": "candidate-018-moving.png",
+              "sha256": "387e8a113dd74c4a807042cd0a0e9f2ef6bc044712f68de5e4e5c2181c95813f",
+              "bytes": 626
+            },
+            {
+              "name": "candidate-018-stationary.png",
+              "sha256": "531b3a0109bceaa06a397a7de0749d5d273fbccbe61384e3cf5428409b5565f1",
+              "bytes": 339
+            },
+            {
+              "name": "candidate-019-moving.png",
+              "sha256": "e44e1c32d4bafcab346c7f9df25d0abaf00cacb1aea0be4f2144b3655796c01e",
+              "bytes": 611
+            },
+            {
+              "name": "candidate-019-stationary.png",
+              "sha256": "3a33b6bdd53375735ad49c0e802fde07d29742d9bb34ed3a6ad911562317e94c",
+              "bytes": 307
+            },
+            {
+              "name": "candidate-020-moving.png",
+              "sha256": "b40190049edd7f1129463a70e40fbefa949f0a9c240c943b20ef3cf275e6e61f",
+              "bytes": 661
+            },
+            {
+              "name": "candidate-020-stationary.png",
+              "sha256": "4efd3892030bdce8636e6078624862b87dee0e24e35baaeab3075d1ea17888ff",
+              "bytes": 389
+            },
+            {
+              "name": "candidate-021-moving.png",
+              "sha256": "4ace50ef43f3445f0a04fb04e42b2d504de42bc2a193230cf89b1fd9fe9eff30",
+              "bytes": 617
+            },
+            {
+              "name": "candidate-021-stationary.png",
+              "sha256": "4db49c94ba184c60536dce22ee2278f4e3df95ff4c2226dbf4dea8f6ad7e4b5a",
+              "bytes": 334
+            },
+            {
+              "name": "candidate-022-moving.png",
+              "sha256": "33ad6d5ef3449d15b5c35bb930115a4d2abc4fad39c365cc93130d0cc5bcfd1e",
+              "bytes": 634
+            },
+            {
+              "name": "candidate-022-stationary.png",
+              "sha256": "84b033cca2a56562b23bd6d01997f58b84aaa2b9c3e02fd2fdb08adde6c23142",
+              "bytes": 363
+            },
+            {
+              "name": "candidate-023-moving.png",
+              "sha256": "7ecb5625386dea9f086113b203c897a9ad102a306f5c786ffd82a9d638df22eb",
+              "bytes": 574
+            },
+            {
+              "name": "candidate-023-stationary.png",
+              "sha256": "9913a2a9ca864bf5897a650d83c50b4ec0cf9e12730a01a4e8e939e812a25ec7",
+              "bytes": 272
+            },
+            {
+              "name": "candidate-024-moving.png",
+              "sha256": "db4fda959019396a2eefa958d57ff9ee124f65db704acd827e4fd908b8b372cf",
+              "bytes": 661
+            },
+            {
+              "name": "candidate-024-stationary.png",
+              "sha256": "c8275780bbf69f6c66922a4188bd1e7517baa412e816e4c32ab920bd3ed91d61",
+              "bytes": 363
+            },
+            {
+              "name": "candidate-025-moving.png",
+              "sha256": "ecf5210553755bb747290a5e7208f6751b1e3faeb8487b8171fea6476774085b",
+              "bytes": 590
+            },
+            {
+              "name": "candidate-025-stationary.png",
+              "sha256": "fc47495598d8e2cb7c1b3d3f871d8d63513ffeb3213bb3ebfe8a7ef23c508508",
+              "bytes": 307
+            },
+            {
+              "name": "candidate-026-moving.png",
+              "sha256": "d5a6fea939341a9eac339363cc34e7befd860f379ed757676bc4720468a57f4d",
+              "bytes": 548
+            },
+            {
+              "name": "candidate-026-stationary.png",
+              "sha256": "0c0c6b6fb12b7197be8f9d6a10a7f7fc9ecaa81fb27c85494d8678b659b9e829",
+              "bytes": 387
+            },
+            {
+              "name": "candidate-027-moving.png",
+              "sha256": "5bf9c0fe779088018a59daa45845bcff82f03defe97982f46367b6b81039a434",
+              "bytes": 633
+            },
+            {
+              "name": "candidate-027-stationary.png",
+              "sha256": "ed1790c621ec49cfe3f35b4fe659bbb92b212aba98f0457f43ef8a876db63494",
+              "bytes": 380
+            },
+            {
+              "name": "candidate-028-moving.png",
+              "sha256": "02136d26bcabd4dbb73755c56f1b17ac6f222396a31c9103b19dc591ac6f3550",
+              "bytes": 655
+            },
+            {
+              "name": "candidate-028-stationary.png",
+              "sha256": "82a94c51f7e4815fc2ab8eb274d60308c9278f13786b2acec58ee1614e851b06",
+              "bytes": 394
+            },
+            {
+              "name": "candidate-029-moving.png",
+              "sha256": "8159bd1b2255fecd79ef64086ad8e4a407569a8851d2cd8a82a7527220e78f34",
+              "bytes": 662
+            },
+            {
+              "name": "candidate-029-stationary.png",
+              "sha256": "9070dd6e9e042d5e005835fb0df8533ee87071d350134563dd0839561ea808a9",
+              "bytes": 344
+            },
+            {
+              "name": "candidate-030-moving.png",
+              "sha256": "e7eb0668c806a55d7c2d7e3ec6b8d59151af181be3df18350ced4a3a44c0b49e",
+              "bytes": 662
+            },
+            {
+              "name": "candidate-030-stationary.png",
+              "sha256": "5df5f4a55ff3b742220786864f24e1aaa40250c03697cc862820d44592864f3f",
+              "bytes": 429
+            },
+            {
+              "name": "candidate-031-moving.png",
+              "sha256": "e48a48871cf95310e5292ddc1a291d3cb678f30b61d795c1199ced36ff143a56",
+              "bytes": 697
+            },
+            {
+              "name": "candidate-031-stationary.png",
+              "sha256": "2080abb87aa86d5fb3cf82afd7ee81bf48dbbd8a39af7b72fef86062ee99eb42",
+              "bytes": 425
+            },
+            {
+              "name": "candidate-032-moving.png",
+              "sha256": "169bcf5c641b945c1ae5e9a69f55d9108cd61c3568e403f4683e82c05e7bf47c",
+              "bytes": 696
+            },
+            {
+              "name": "candidate-032-stationary.png",
+              "sha256": "6b94b3e6d2aa50e13278a38c086a649fd43ce55f4763ab9c8cb2cc94180ef9ee",
+              "bytes": 485
+            },
+            {
+              "name": "candidate-033-moving.png",
+              "sha256": "46dbb9c363db5687d71ba44154d7b3fb2fb1347abf47a5cb46941a830b43b42e",
+              "bytes": 690
+            },
+            {
+              "name": "candidate-033-stationary.png",
+              "sha256": "733ec218de36480e75ee24a47397c511d390088cd8202136547144488f2306cc",
+              "bytes": 450
+            },
+            {
+              "name": "candidate-034-moving.png",
+              "sha256": "ea0799d5c35f1822996a648dbac048c8d827d481ae4e017ef4b2788596b6dc4b",
+              "bytes": 653
+            },
+            {
+              "name": "candidate-034-stationary.png",
+              "sha256": "4ba35cb9990828bb364b9fe6a655faf83d067ab7aff88a25ae0c6c4459122b87",
+              "bytes": 430
+            },
+            {
+              "name": "candidate-035-moving.png",
+              "sha256": "41d0a68d18b8d965181fee74ef22ecdb99750914c7730e94fdb34f5c171ce144",
+              "bytes": 211
+            },
+            {
+              "name": "candidate-035-stationary.png",
+              "sha256": "373fa18b169ebe31796f463cd2e3bb5557414de6ca81e0abe4a72b71c05c97e8",
+              "bytes": 156
+            }
+          ],
+          "known_target_evaluation_only": {
+            "matches": [
+              {
+                "published_rank": 4,
+                "method": "residual_track",
+                "score": 0.8180041313171387,
+                "max_offset_px": 0.5386327528702104
+              }
+            ],
+            "match_tolerance_px": 1.5,
+            "labels_loaded_after_all_four_inference_runs": true,
+            "other_track_identities": "unknown; never negatives"
+          }
+        },
+        "vesta-d3": {
+          "success": true,
+          "returncode": 0,
+          "wall_seconds": 1.5570273769990308,
+          "linux_process_memory_kib": {
+            "VmHWM": 197732,
+            "VmRSS": 177516
+          },
+          "fixture_sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+          "stderr": "\u001b[0;93m2026-11-14 22:31:30.929508363 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+          "model": {
+            "schema_version": 1,
+            "model_id": "spherex-track-extra-v3",
+            "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+            "feature_names": [
+              "epoch_count",
+              "fit_rms_px",
+              "median_snr",
+              "min_snr",
+              "snr_coefficient_of_variation",
+              "median_peak_ratio"
+            ],
+            "class_labels": [
+              0,
+              1
+            ],
+            "positive_class": 1,
+            "score_kind": "random_forest_vote_fraction",
+            "model_family": "ExtraTreesClassifier",
+            "detector_profile": {
+              "min_snr": 4.0,
+              "max_peaks": 100,
+              "psf_sigma": 0.8,
+              "min_speed": 0.5,
+              "max_speed": 60.0,
+              "match_radius": 1.4,
+              "min_epochs": 3,
+              "min_support": 0.8,
+              "leave_one_out": true
+            },
+            "algorithm_version_proposal": "motion-extra-v3-sigma08"
+          },
+          "algorithm_version": "motion-extra-v3-sigma08",
+          "settings": {
+            "min_snr": 4.0,
+            "min_speed_arcsec_per_hour": 3.075,
+            "max_speed_arcsec_per_hour": 369.0,
+            "mask_policy": "motion",
+            "max_candidates": 100,
+            "max_peaks": 100,
+            "pixel_scale_arcsec": 6.15,
+            "min_epochs": 3,
+            "leave_one_out": true,
+            "min_support": 0.8,
+            "psf_sigma_px": 0.8,
+            "match_radius_px": 1.4,
+            "review_policy": "protect_first3_residual_then_flagged_bloom"
+          },
+          "frames": 3,
+          "candidates": 100,
+          "comparison": {
+            "shared_median_count": 180,
+            "leave_one_out_count": 112,
+            "bloom_track_count": 1
+          },
+          "warnings": [
+            "selected_development_case",
+            "legacy_decreasing_declination_grid",
+            "outlier_measurements_retained",
+            "experimental_synthetic_trained_ranking",
+            "short_linear_arc_model",
+            "uncalibrated_residual_snr",
+            "passband_variation_not_corrected",
+            "psf_matching_not_applied",
+            "peak_cap_reached_search_incomplete",
+            "candidate_cap_reached_search_incomplete"
+          ],
+          "resource_count": 209,
+          "resource_bytes": 100490,
+          "resource_hashes": [
+            {
+              "name": "frame-000.png",
+              "sha256": "c5da6e0f4ead349a18362cad1937b9444e515d57fa4b2ec26dc7bb959f185466",
+              "bytes": 5576
+            },
+            {
+              "name": "difference-000.png",
+              "sha256": "55d0972b7c71da7b925a4150a3415ba87e9ea066be367cbf8a31cbbc5579b7eb",
+              "bytes": 5856
+            },
+            {
+              "name": "bloom-000.png",
+              "sha256": "b4bdde9c5d5cadbcae54d1858e815c6f861dde6dcdb2e781627e36693a19236e",
+              "bytes": 366
+            },
+            {
+              "name": "frame-001.png",
+              "sha256": "17b3b27fe931d5f0471b7fb7a552789a90bd9982c6957b086846dd8503436a9e",
+              "bytes": 5263
+            },
+            {
+              "name": "difference-001.png",
+              "sha256": "812b9bf6376720f2bed8261060f33869b91ec4316f2d7b1cf8299c8fb8831706",
+              "bytes": 5123
+            },
+            {
+              "name": "bloom-001.png",
+              "sha256": "3897b4df2ed5892e9f077ef6603f264d7c73a3963eb21427568a323bc1779bb8",
+              "bytes": 358
+            },
+            {
+              "name": "frame-002.png",
+              "sha256": "f5662ac7f02971b2faec8228b5ef04fe9dc161b6336d8d2d2358b95836d25106",
+              "bytes": 5253
+            },
+            {
+              "name": "difference-002.png",
+              "sha256": "a6518b708bef31d2c6b1c0a852911f0814fb2cf33ad4afc13d96f4a6286c92b3",
+              "bytes": 4703
+            },
+            {
+              "name": "bloom-002.png",
+              "sha256": "4f4b8f1c5a8826760a9c75fe6f841b6e52086451349434a47fcd379bd28dd355",
+              "bytes": 349
+            },
+            {
+              "name": "candidate-000-moving.png",
+              "sha256": "e1a652ee9decf430f561f7fb15553b370ebb49e790cafa6cd9f2357d44a9e763",
+              "bytes": 646
+            },
+            {
+              "name": "candidate-000-stationary.png",
+              "sha256": "f30e64d6981b583dc4bec7f84b1fec809a5003c1ea68873931996b20291184b3",
+              "bytes": 178
+            },
+            {
+              "name": "candidate-001-moving.png",
+              "sha256": "540e8cd217465ea8fc03d7f5294a6a2694e4a937b9099dfe7fffea432de79d43",
+              "bytes": 631
+            },
+            {
+              "name": "candidate-001-stationary.png",
+              "sha256": "338fae4346c885714035a1005076821fb561278d2c6eab095c746edccf700bd8",
+              "bytes": 244
+            },
+            {
+              "name": "candidate-002-moving.png",
+              "sha256": "ddac0e425eac08de8b05f975f37f100c343b3228c2a2afd0c9e9c667c5a25691",
+              "bytes": 631
+            },
+            {
+              "name": "candidate-002-stationary.png",
+              "sha256": "4d3236075559216b5f0fc9bafe6160427a51dec8ef055f872a7d5aa5e88eb3d1",
+              "bytes": 230
+            },
+            {
+              "name": "candidate-003-moving.png",
+              "sha256": "bfdcf5080709708cfc1ba894c218cc4053536b08f97ecdd4ac4fc17d162312fa",
+              "bytes": 661
+            },
+            {
+              "name": "candidate-003-stationary.png",
+              "sha256": "59152f697ee64a3a20f17a4657a8096d8fb96af0cb17ee44abdd3a2acd9fe9bc",
+              "bytes": 237
+            },
+            {
+              "name": "candidate-004-moving.png",
+              "sha256": "0efb625c76bef6b9a2eb4e265e43d7d51cbc12f896d7c39354c2aa4be682bcad",
+              "bytes": 712
+            },
+            {
+              "name": "candidate-004-stationary.png",
+              "sha256": "7440f128d1f769c75372f00c0af48c92b227cd12cfdc93664766b5d82bf1a6c1",
+              "bytes": 270
+            },
+            {
+              "name": "candidate-005-moving.png",
+              "sha256": "302a4ab7e2e93e05fb3e5f9807c8c9d1ca82eaddd21f0dfbe9a7a328be367f2c",
+              "bytes": 641
+            },
+            {
+              "name": "candidate-005-stationary.png",
+              "sha256": "923859331d6c4811a1a95d19fc778c3246244b89aa95ea98d478e4c982b4e2d0",
+              "bytes": 258
+            },
+            {
+              "name": "candidate-006-moving.png",
+              "sha256": "218213f02e43bd7a2d60dc0ba93c9cb17e2df7e6b1a2bfca724c2d905175e267",
+              "bytes": 683
+            },
+            {
+              "name": "candidate-006-stationary.png",
+              "sha256": "25d3f7aeb6bbb63f82727f46dfdad5a89f3f6be476a0ad4898493a1e6b8476e0",
+              "bytes": 220
+            },
+            {
+              "name": "candidate-007-moving.png",
+              "sha256": "6eabd0f37fea037e2715387a88db0ba0e0e3ca0041823adb39aede4c5a3c12de",
+              "bytes": 579
+            },
+            {
+              "name": "candidate-007-stationary.png",
+              "sha256": "a9ca1f28a7d0a610459687efa9a37b7cacc7d42051c5101c4605ad585172361f",
+              "bytes": 149
+            },
+            {
+              "name": "candidate-008-moving.png",
+              "sha256": "3f023a4f8ee4ca23976f13d5b45a52bdc6941cd1e10171798e1fa417c62e3751",
+              "bytes": 544
+            },
+            {
+              "name": "candidate-008-stationary.png",
+              "sha256": "f2f7a9521cb8a4a35cc8ee8bc285b7d0fcf387b62853b773baa3b7e0ee4957d6",
+              "bytes": 200
+            },
+            {
+              "name": "candidate-009-moving.png",
+              "sha256": "782b12d863762d39f159044e65b11517640bc39a52ecc1e0a6a325aa1b4366ca",
+              "bytes": 468
+            },
+            {
+              "name": "candidate-009-stationary.png",
+              "sha256": "dc925d7ae5406490a981c591c77af423a35dd07b3d98f7169d08609b2418b6a7",
+              "bytes": 198
+            },
+            {
+              "name": "candidate-010-moving.png",
+              "sha256": "f291affd624748c73eaca3d49fd96d236569d383fad8c1fc87896075be99928b",
+              "bytes": 175
+            },
+            {
+              "name": "candidate-010-stationary.png",
+              "sha256": "23b6b0fb16cfe848622df1f1cab776969a447572823b0884f8fef3e3d22aab1f",
+              "bytes": 162
+            },
+            {
+              "name": "candidate-011-moving.png",
+              "sha256": "287b3e1da1d8e00b9ba77e1aa2cd5a6557729bc33843f3fe57d8cc28bc6c5d38",
+              "bytes": 558
+            },
+            {
+              "name": "candidate-011-stationary.png",
+              "sha256": "61989b4969d3704832234df021ae487fa9e9bb0662c722f11cbf600fef3276cc",
+              "bytes": 159
+            },
+            {
+              "name": "candidate-012-moving.png",
+              "sha256": "961c32c8ea1bc557f7fc847c196b68c666ca2a40bc40863105fa3a6b90582354",
+              "bytes": 471
+            },
+            {
+              "name": "candidate-012-stationary.png",
+              "sha256": "89c825e84550a86d0fe597854aed1d2e8b2637931d755bd4830c3db9ea82e943",
+              "bytes": 211
+            },
+            {
+              "name": "candidate-013-moving.png",
+              "sha256": "62bc0588ce0d956ae95a842f6ad0d911c90718e8afc3b1a2e822350a5eb1bac5",
+              "bytes": 352
+            },
+            {
+              "name": "candidate-013-stationary.png",
+              "sha256": "f3149298f4d890d970fbd3767143ec1ae0ae9c6d3b9355a93e1c783699c9eae0",
+              "bytes": 125
+            },
+            {
+              "name": "candidate-014-moving.png",
+              "sha256": "a19c99d8479f1f0b38f410c8bd5eadc625fb143190494197483d15358f62acb3",
+              "bytes": 706
+            },
+            {
+              "name": "candidate-014-stationary.png",
+              "sha256": "077421c422ffff58a79bf333ce431541cded4c1cd14d7ab528661e6e5a9a630d",
+              "bytes": 246
+            },
+            {
+              "name": "candidate-015-moving.png",
+              "sha256": "13d95265dbf27e090bfd680eb682a1143a775851f2612a3bd9660d6fccf2e23d",
+              "bytes": 450
+            },
+            {
+              "name": "candidate-015-stationary.png",
+              "sha256": "6b9a2a682d7635fd86f4bb47145f6f541d67e43fab622524b099455f7a4f4efb",
+              "bytes": 182
+            },
+            {
+              "name": "candidate-016-moving.png",
+              "sha256": "e12f4f796e90cb68ffda94f140bbf5c652f464df72df815a92be405d8793c8e3",
+              "bytes": 674
+            },
+            {
+              "name": "candidate-016-stationary.png",
+              "sha256": "9dbf0f6680ceca1634867851e75f68a5ba4d04da68e3a819506734faedd27a3a",
+              "bytes": 189
+            },
+            {
+              "name": "candidate-017-moving.png",
+              "sha256": "8c232ac26e898a6d5ea09a2176691af0e535012d65c09531778eb95aeed242be",
+              "bytes": 762
+            },
+            {
+              "name": "candidate-017-stationary.png",
+              "sha256": "bed95f272e4830fcb254805d713d7fec404d9549894696317e590117d3cf96b8",
+              "bytes": 260
+            },
+            {
+              "name": "candidate-018-moving.png",
+              "sha256": "74da3f317da4f2bfb4b007635d82092075d809f687071c1a171694df1ba7f4be",
+              "bytes": 701
+            },
+            {
+              "name": "candidate-018-stationary.png",
+              "sha256": "f87c0e2381b0c1ef374d83355d3a05e2cc69182ec7a1e45ca3498cc4c6b6fb1a",
+              "bytes": 258
+            },
+            {
+              "name": "candidate-019-moving.png",
+              "sha256": "558ddd249297ae458db924bbf7fc94144134e38982db1772422f1e45cf746a0a",
+              "bytes": 179
+            },
+            {
+              "name": "candidate-019-stationary.png",
+              "sha256": "fc3d32460b61bced7911debc98e5105822abdb57ba426713fbba79f2367a33a8",
+              "bytes": 131
+            },
+            {
+              "name": "candidate-020-moving.png",
+              "sha256": "070757f2689b91b979ef7318b8b2aaeb1211b876d0915605bb8ae04a27c75430",
+              "bytes": 485
+            },
+            {
+              "name": "candidate-020-stationary.png",
+              "sha256": "2d574237142ed29245b213ad250463926aadfe15dd984c01061daff5faed5715",
+              "bytes": 161
+            },
+            {
+              "name": "candidate-021-moving.png",
+              "sha256": "437a8aa2a69dff0f1f2c861c02a4c4dc8723d9d6ffa19efd1140c98ad3b67f12",
+              "bytes": 555
+            },
+            {
+              "name": "candidate-021-stationary.png",
+              "sha256": "b57ac872f25b9143ba4e0ec52681eda51b44b54767ad637a910d686c4d19fd6d",
+              "bytes": 178
+            },
+            {
+              "name": "candidate-022-moving.png",
+              "sha256": "904c75a1b30e9b16bbd03a75d96cc7a90db4fbe651e2faf3327c3427ad229ded",
+              "bytes": 443
+            },
+            {
+              "name": "candidate-022-stationary.png",
+              "sha256": "b615475f2c365c510188a3f96a54269502e5201675d6338566034caf370d86ad",
+              "bytes": 108
+            },
+            {
+              "name": "candidate-023-moving.png",
+              "sha256": "c51e1ea4b9356ea6db9685be377aea51c8399a433671ef9ee89edaaaf98fe5a5",
+              "bytes": 182
+            },
+            {
+              "name": "candidate-023-stationary.png",
+              "sha256": "05243470d53f1e44491de3f0cf729f43aa299ea3216b12a659035cbc3be86964",
+              "bytes": 127
+            },
+            {
+              "name": "candidate-024-moving.png",
+              "sha256": "b2694a83fe9732cfc128eb9b965d6522c3d5eecc7fc6f92512a16ec59218cfc3",
+              "bytes": 267
+            },
+            {
+              "name": "candidate-024-stationary.png",
+              "sha256": "a1c0da7372fc7e96e648c2bee9ad07131c53255ef39a2e051caf74de59d03735",
+              "bytes": 115
+            },
+            {
+              "name": "candidate-025-moving.png",
+              "sha256": "eb6f1c78236653e4087dab10e5913cf28574bd5c2e46ea28adcd3b261062b6b8",
+              "bytes": 478
+            },
+            {
+              "name": "candidate-025-stationary.png",
+              "sha256": "74c98ca232de02e701b89eb4fb5261ff255601fd175cc55e36993b4b25d6e9ad",
+              "bytes": 113
+            },
+            {
+              "name": "candidate-026-moving.png",
+              "sha256": "dc35beae504dda3033746f12483bc253b6c8f5c81fc9019b3a0b8b3211f978db",
+              "bytes": 760
+            },
+            {
+              "name": "candidate-026-stationary.png",
+              "sha256": "1eaf663920ea76003ac25f9b80873a97d5eed6dece14fc1c5e876f328ca80f06",
+              "bytes": 251
+            },
+            {
+              "name": "candidate-027-moving.png",
+              "sha256": "a159f5f0f25225522459ca86253d9fac1ef9bd4f327c977b6e04e213271265f5",
+              "bytes": 689
+            },
+            {
+              "name": "candidate-027-stationary.png",
+              "sha256": "2837dc0443305dad77b9a4aba2d2f6049a1e496d1229e3a3aa3fc8c6f32ea7a0",
+              "bytes": 241
+            },
+            {
+              "name": "candidate-028-moving.png",
+              "sha256": "8ff2c2ce96fb0082a68de22ea217d7a46362b5aeb835377917f50ad68d85ae8a",
+              "bytes": 186
+            },
+            {
+              "name": "candidate-028-stationary.png",
+              "sha256": "6a4d17bde09016d1bb227a7164237e2b0cef45f46683b1f82a646547ab8163d7",
+              "bytes": 155
+            },
+            {
+              "name": "candidate-029-moving.png",
+              "sha256": "c75cd0a9a5cebba67d75ae2580a3e83b4532ef1b8f1c05459da68babf66e9c88",
+              "bytes": 176
+            },
+            {
+              "name": "candidate-029-stationary.png",
+              "sha256": "6872c612ca4a301465a619158848f0ff9a50583c0df628ba888bb9310f22b329",
+              "bytes": 107
+            },
+            {
+              "name": "candidate-030-moving.png",
+              "sha256": "1d343a52d52fa9108e3260662a6dfbbae432ea8fd800e55ec90e7b697c17aa2c",
+              "bytes": 502
+            },
+            {
+              "name": "candidate-030-stationary.png",
+              "sha256": "57fc1e5de023cba160aea095c4b009af73d8fd6f14762e56c9c743bb614b8c81",
+              "bytes": 181
+            },
+            {
+              "name": "candidate-031-moving.png",
+              "sha256": "f30ce190f242d6a7f5cda297213b26a7eed7cbf7256167d2d1747ee99a17cb7a",
+              "bytes": 623
+            },
+            {
+              "name": "candidate-031-stationary.png",
+              "sha256": "d96baac5d4a496b24877795d6f91beb6adba0ed0554fe56b2fe47d3f97a0980c",
+              "bytes": 258
+            },
+            {
+              "name": "candidate-032-moving.png",
+              "sha256": "6c5dcb9883ae85b63657c0d0312f39194fd4c1a6f427021c689827f2b2a540ab",
+              "bytes": 318
+            },
+            {
+              "name": "candidate-032-stationary.png",
+              "sha256": "1621f50562605217e1332a5da292d5bc9767be0e33442e8df68fd0cd1a350c23",
+              "bytes": 149
+            },
+            {
+              "name": "candidate-033-moving.png",
+              "sha256": "1d1f95586ae6e8fce201273969ea7fa6f4a76bdaa55483efdb31c20d5282359e",
+              "bytes": 229
+            },
+            {
+              "name": "candidate-033-stationary.png",
+              "sha256": "3b4b15c028367f9574774131d720d83459693eb71371778c384976c0ec5ceab4",
+              "bytes": 154
+            },
+            {
+              "name": "candidate-034-moving.png",
+              "sha256": "6549d1f59cd5f82697d92110179801c94a6885616c0d7c11a3b23b4ef39c1f00",
+              "bytes": 680
+            },
+            {
+              "name": "candidate-034-stationary.png",
+              "sha256": "fc1b5c7c2eefc016a1d13be2fab6ec1dc26a447a493ea410ac10970263e92308",
+              "bytes": 181
+            },
+            {
+              "name": "candidate-035-moving.png",
+              "sha256": "39d6fa941105a41bbc15df7e3355d2c45ce626f47e7b6d6a95ea146bb2294148",
+              "bytes": 494
+            },
+            {
+              "name": "candidate-035-stationary.png",
+              "sha256": "02a205ad4a8e77538fe58de9145a282f12fac861b2eda7efb8f8c4f601332e2d",
+              "bytes": 173
+            },
+            {
+              "name": "candidate-036-moving.png",
+              "sha256": "91496d284839d13584d63b0b9945dbce1a4b2e8a891cb8c6921e54d5c12c16e0",
+              "bytes": 488
+            },
+            {
+              "name": "candidate-036-stationary.png",
+              "sha256": "75c98c389a026e8ec872d946d189f4f2ac8ff47d414676c6419ee49f06532725",
+              "bytes": 241
+            },
+            {
+              "name": "candidate-037-moving.png",
+              "sha256": "e4caaf5cdd83e693ae5ddbe583079fe61a3f7a0d9a4e3cbc20fb6f7d28c13e78",
+              "bytes": 469
+            },
+            {
+              "name": "candidate-037-stationary.png",
+              "sha256": "1fee6d14f9d4756795dafd1e445e36621bb09abcaff206160d973315a85e23f6",
+              "bytes": 175
+            },
+            {
+              "name": "candidate-038-moving.png",
+              "sha256": "65e1f7c1a40e3f63a00bb32037c58c450896cc8efac7cb4fb945da5e8944b556",
+              "bytes": 647
+            },
+            {
+              "name": "candidate-038-stationary.png",
+              "sha256": "609d4c83d3ecd85634a7e22e128501dcefec758661ff86b97766f676ec0c6c4a",
+              "bytes": 261
+            },
+            {
+              "name": "candidate-039-moving.png",
+              "sha256": "da89da5080368b8d8f5116d9b95aaaab96b3ffcf8656307da43adf211ba23b74",
+              "bytes": 240
+            },
+            {
+              "name": "candidate-039-stationary.png",
+              "sha256": "ed69c0c6fd264594095de979464ec7eec422dc59a899835b384fa47d47676c40",
+              "bytes": 113
+            },
+            {
+              "name": "candidate-040-moving.png",
+              "sha256": "9f4ee1a87a63b4b0fe2622ade445cfc7bfc955191223b1baa1490480c0f337bf",
+              "bytes": 446
+            },
+            {
+              "name": "candidate-040-stationary.png",
+              "sha256": "417592078bca4557059cdb7dc29c34674cc40e2aa2981d61dcb6b36e97c1630e",
+              "bytes": 134
+            },
+            {
+              "name": "candidate-041-moving.png",
+              "sha256": "0083b50a748e2e325f6cbe486b2d321cc6ae316bcec27069f7684e3eb9d93bd6",
+              "bytes": 705
+            },
+            {
+              "name": "candidate-041-stationary.png",
+              "sha256": "130194e3e40138acf21074bacd252b3d97a115249fcc910aac7ef0bdda27bf89",
+              "bytes": 215
+            },
+            {
+              "name": "candidate-042-moving.png",
+              "sha256": "c935614786ddd87c7b73baa8d8d2a1c64ddf28fd971d5495b685ae8bcb2bb428",
+              "bytes": 239
+            },
+            {
+              "name": "candidate-042-stationary.png",
+              "sha256": "bf0dfa94c3f728e7ecd7f48b4f0d6b3defd496edcdbb0816d4fc699be1370da0",
+              "bytes": 88
+            },
+            {
+              "name": "candidate-043-moving.png",
+              "sha256": "686b8b73cc23bf09dcffc0ffefc906d5cb7e3ba2c7364aba9bdbaa67d131d3f3",
+              "bytes": 707
+            },
+            {
+              "name": "candidate-043-stationary.png",
+              "sha256": "b51296862f6ac33a2290e3393d7447f32eca79bbec6c1b155b63779ce4f74ff6",
+              "bytes": 240
+            },
+            {
+              "name": "candidate-044-moving.png",
+              "sha256": "94fba99f31b333edcc5cfa5aaa728f23118fa899b3684716fbda8ded8645e4e1",
+              "bytes": 179
+            },
+            {
+              "name": "candidate-044-stationary.png",
+              "sha256": "fd4050da3a5597c99ee002b33411af6ba63e1bccef9062c65f61636db77cf45f",
+              "bytes": 117
+            },
+            {
+              "name": "candidate-045-moving.png",
+              "sha256": "a2d770e3041801d4182a0e949d20c48d613cfc1ec63d2738ed505e09ac71d879",
+              "bytes": 657
+            },
+            {
+              "name": "candidate-045-stationary.png",
+              "sha256": "c649f3b4cce1bf9441900428d37f9f93a5748ecd8720e30132876b4058393b0f",
+              "bytes": 81
+            },
+            {
+              "name": "candidate-046-moving.png",
+              "sha256": "c9284ef2f3c09ad7b2e8ff54b618a4132a9fe0a7aac3af12a38a8e124f7fb045",
+              "bytes": 137
+            },
+            {
+              "name": "candidate-046-stationary.png",
+              "sha256": "c649f3b4cce1bf9441900428d37f9f93a5748ecd8720e30132876b4058393b0f",
+              "bytes": 81
+            },
+            {
+              "name": "candidate-047-moving.png",
+              "sha256": "6a4a88aaad120042aedfbf8d0670e9f4b0205ee9db505fba8c9dfeb6d6f0d62f",
+              "bytes": 544
+            },
+            {
+              "name": "candidate-047-stationary.png",
+              "sha256": "c2d0f5ec76c0bdb8c754347415da9fe351c39a19df6a88e4335eb980a5f3a69b",
+              "bytes": 209
+            },
+            {
+              "name": "candidate-048-moving.png",
+              "sha256": "dd48a2f9e87ba79d173495bdaa1a2fec87725a9ed4681c6d6763a15e7cc9cfac",
+              "bytes": 686
+            },
+            {
+              "name": "candidate-048-stationary.png",
+              "sha256": "516bc8e5a3c88db0203c7d97419e2d3524cf46550210ccf9253ceb89c85429ed",
+              "bytes": 281
+            },
+            {
+              "name": "candidate-049-moving.png",
+              "sha256": "05322da6a89f2363647e9b7a0b283241c097abdea17ae958147e7bce14b74e62",
+              "bytes": 183
+            },
+            {
+              "name": "candidate-049-stationary.png",
+              "sha256": "8589b48f46057b653e9d9be05e5250be0313394052c6fb30e73ad3e67f8bcffb",
+              "bytes": 108
+            },
+            {
+              "name": "candidate-050-moving.png",
+              "sha256": "54336dbd076c3d0722603365bc62a1ce80cdb068d8dd3a6ac5d53ea1fdf975a4",
+              "bytes": 622
+            },
+            {
+              "name": "candidate-050-stationary.png",
+              "sha256": "9bb0e126fca730ff24fd43baebd8c92185b7eaa92effa95287b69e3e88185acc",
+              "bytes": 152
+            },
+            {
+              "name": "candidate-051-moving.png",
+              "sha256": "11c605fa09f4953b7fe747b2cac9d8a0fcbe72a8cea99af09e5ce504517efd8e",
+              "bytes": 461
+            },
+            {
+              "name": "candidate-051-stationary.png",
+              "sha256": "b5cc45f96bb2de9067a3f64971d01a094d65fa8c3308c6ae57572ad4975006fb",
+              "bytes": 119
+            },
+            {
+              "name": "candidate-052-moving.png",
+              "sha256": "adb55343aeb7dcdaba4445883a93a94bd5b07a7aa05bbe327995e6d4c6f16a66",
+              "bytes": 523
+            },
+            {
+              "name": "candidate-052-stationary.png",
+              "sha256": "2d307e67e6a1763bb7db13cb304d48034ad28a52fd3eaf1d7520f97d4809d8f2",
+              "bytes": 201
+            },
+            {
+              "name": "candidate-053-moving.png",
+              "sha256": "54cc877e3e0c1d489de978ee39634a2936eba391c64beb5b3559e702f5f5b37e",
+              "bytes": 565
+            },
+            {
+              "name": "candidate-053-stationary.png",
+              "sha256": "5eb667359672c91731fc090f6f5ce751a6fe28a30e56e7b6209860b8ade07d7e",
+              "bytes": 140
+            },
+            {
+              "name": "candidate-054-moving.png",
+              "sha256": "af4e5d0d1a2aca5ce258e278b2e6b004e9c6c66d9915b1fe18f0a334570eb9b4",
+              "bytes": 206
+            },
+            {
+              "name": "candidate-054-stationary.png",
+              "sha256": "9575fb82f5b0edf4b34e5265508451b4d8604f663835e00f96c7fced005bd666",
+              "bytes": 114
+            },
+            {
+              "name": "candidate-055-moving.png",
+              "sha256": "755708c25c52bee8bf3e5c8e7f95ac4d59552bdf33de586030c1c3604ad6c80c",
+              "bytes": 728
+            },
+            {
+              "name": "candidate-055-stationary.png",
+              "sha256": "dacec723d399539f5747adcfd72bab7a8fd1f8968416370f6e6b5cebc2afea8b",
+              "bytes": 215
+            },
+            {
+              "name": "candidate-056-moving.png",
+              "sha256": "f5f753b6fc835fddfcaa4270472d9bd1c1aaca435404b176fd41d6bae39ee26e",
+              "bytes": 731
+            },
+            {
+              "name": "candidate-056-stationary.png",
+              "sha256": "40b39b64786a2db0ec201e01aad2ecb10dc00a2a9229414bca029b18e132f6f6",
+              "bytes": 285
+            },
+            {
+              "name": "candidate-057-moving.png",
+              "sha256": "206da7e97af2c876cea7ed22c6dd19fa573652f03dcc4a2872c573e6b03c07c4",
+              "bytes": 131
+            },
+            {
+              "name": "candidate-057-stationary.png",
+              "sha256": "aed79ce1c24dc4a144caa8c77d515ff28a9dc794c1a4c779ff98a32fdf6b226a",
+              "bytes": 107
+            },
+            {
+              "name": "candidate-058-moving.png",
+              "sha256": "7095f8445a9df2ae3d1fea5512580137435d7a3ee371718c5c81a218bc7d4bce",
+              "bytes": 600
+            },
+            {
+              "name": "candidate-058-stationary.png",
+              "sha256": "a0a94de3345fb012c70fedc6e04eaded5f8d16f7b0e15cc81aefb7346a3e1dbf",
+              "bytes": 168
+            },
+            {
+              "name": "candidate-059-moving.png",
+              "sha256": "6872c09edf9629899459a631f43c4419d78b882f9ea8a7df34fed223d263554b",
+              "bytes": 375
+            },
+            {
+              "name": "candidate-059-stationary.png",
+              "sha256": "ea25c87905bddae2e58ed7021543c1d1e610688332a0dac674ea61473723b85b",
+              "bytes": 244
+            },
+            {
+              "name": "candidate-060-moving.png",
+              "sha256": "2a93f08f93a7ff22cb5fb8f494abe42fa141df0b2aae26945dbdfb7b762283c2",
+              "bytes": 700
+            },
+            {
+              "name": "candidate-060-stationary.png",
+              "sha256": "966424c4843633c4207210e0beb28f8694dc29144bf4e7862790a0abc282717f",
+              "bytes": 171
+            },
+            {
+              "name": "candidate-061-moving.png",
+              "sha256": "59e1bd1f459e3f14cc808297c9d4a099dd91c6e877afb0b36dc9d152765b1b03",
+              "bytes": 502
+            },
+            {
+              "name": "candidate-061-stationary.png",
+              "sha256": "21fa490044e6e41a91cc01bab6d801d14fa9d8613c2781848006f2ee535dde81",
+              "bytes": 160
+            },
+            {
+              "name": "candidate-062-moving.png",
+              "sha256": "03412dec0e391cb0dab9293dcf2971623d48245728bc67a00da2c86edaa3a165",
+              "bytes": 359
+            },
+            {
+              "name": "candidate-062-stationary.png",
+              "sha256": "f320a0b196836aed4c925cc260572ba8cca92e92d795935fddab7ec1323d0d26",
+              "bytes": 97
+            },
+            {
+              "name": "candidate-063-moving.png",
+              "sha256": "f8dc11ffd9b4c9617cf1769b7b9baeb56b3802429d1d538f2a8b320cca11b174",
+              "bytes": 569
+            },
+            {
+              "name": "candidate-063-stationary.png",
+              "sha256": "5e86012d3075e8a2c921d0497ea848b492196a50a161a617bf235e62b788ca93",
+              "bytes": 196
+            },
+            {
+              "name": "candidate-064-moving.png",
+              "sha256": "a04e1849173fce62d4dc6d0d1bddd34778a5d75561343d87b4ad9dd72b1b2bfa",
+              "bytes": 732
+            },
+            {
+              "name": "candidate-064-stationary.png",
+              "sha256": "0adf3fb8c3fa95cefa8571fe9082741e3ca72e437e97787dca85e8e1e1290dd1",
+              "bytes": 227
+            },
+            {
+              "name": "candidate-065-moving.png",
+              "sha256": "682285be4f634cca6d90e67debd2ca7726536aae6c37115b2b1692eb4a4a1b32",
+              "bytes": 193
+            },
+            {
+              "name": "candidate-065-stationary.png",
+              "sha256": "89af4d5088acfc5fa1db0274439c78d5e3eeaf87e538747a491346b256577517",
+              "bytes": 94
+            },
+            {
+              "name": "candidate-066-moving.png",
+              "sha256": "5aa1234654a5003ea54a378a75eae6929622a0e3685245e1a2b4c2ce7f4eba49",
+              "bytes": 200
+            },
+            {
+              "name": "candidate-066-stationary.png",
+              "sha256": "bd63d91da0ce50f72748af4875735cf4ac01e66887dd589d0d5f99e53ec40c62",
+              "bytes": 95
+            },
+            {
+              "name": "candidate-067-moving.png",
+              "sha256": "fa4e188e221f2aa0a2b6986dc727840e2a6aee2843af2bb7ceb04e1d8708ea09",
+              "bytes": 483
+            },
+            {
+              "name": "candidate-067-stationary.png",
+              "sha256": "3d4b010cd276a4622cc14397a4c609056d4946c02e92c65a5793d68e43d26ff3",
+              "bytes": 100
+            },
+            {
+              "name": "candidate-068-moving.png",
+              "sha256": "191a3814f68fa11a7218275c1b738612178fa220da5c635e7e3468ff804bbcd6",
+              "bytes": 649
+            },
+            {
+              "name": "candidate-068-stationary.png",
+              "sha256": "64551017ba9915ef1273daeb28bba247296ffeacb6aeb8f6b0f148f68c1f0a25",
+              "bytes": 153
+            },
+            {
+              "name": "candidate-069-moving.png",
+              "sha256": "be4edbc573c99808df5e2816bde3ce7328fa18a97e20d50a147f774cebf5b636",
+              "bytes": 741
+            },
+            {
+              "name": "candidate-069-stationary.png",
+              "sha256": "5db18d427878514e81d79172f185be8c216a32702605c4f99cc1828b3a735d0a",
+              "bytes": 285
+            },
+            {
+              "name": "candidate-070-moving.png",
+              "sha256": "2aadd1e38075006787774661eae709cc98cb0537bf76eefba729a9e07582e5ba",
+              "bytes": 627
+            },
+            {
+              "name": "candidate-070-stationary.png",
+              "sha256": "c649f3b4cce1bf9441900428d37f9f93a5748ecd8720e30132876b4058393b0f",
+              "bytes": 81
+            },
+            {
+              "name": "candidate-071-moving.png",
+              "sha256": "2a6ac40f2cc1a065f789bf8db537206ca630e38872885371f3eebd69f7ec6086",
+              "bytes": 628
+            },
+            {
+              "name": "candidate-071-stationary.png",
+              "sha256": "30579f0fa1168f6c3086f65993f26a14ce22782a911070bce767c349f6a3c7a8",
+              "bytes": 129
+            },
+            {
+              "name": "candidate-072-moving.png",
+              "sha256": "f3432e7b087423cbb3b5838dda3e33ce15f7aa8ad7d408acb581cc10e865f38f",
+              "bytes": 501
+            },
+            {
+              "name": "candidate-072-stationary.png",
+              "sha256": "49cbaecf1a091f1d6dca8042e85b65cb3468a920b1f8f1a2d7fba8cc798a0e0d",
+              "bytes": 149
+            },
+            {
+              "name": "candidate-073-moving.png",
+              "sha256": "f99e6aa1e82ba6f3a5ff96ed68e911045f979bffee0c0194f33a074a98151c9c",
+              "bytes": 518
+            },
+            {
+              "name": "candidate-073-stationary.png",
+              "sha256": "ca94c4839da52e37aa458a39cb74a6c2e86cb9db7fa12ade19d814e1b457df0d",
+              "bytes": 145
+            },
+            {
+              "name": "candidate-074-moving.png",
+              "sha256": "5a9d75c3b51b00b5ecf7630a05b91a0a1e9a46bc0c47b29c9e84e9eb5d492571",
+              "bytes": 391
+            },
+            {
+              "name": "candidate-074-stationary.png",
+              "sha256": "3b23779195c9e47ec5e8e40096c478559468f2883d517305d6ebbdb18839851f",
+              "bytes": 114
+            },
+            {
+              "name": "candidate-075-moving.png",
+              "sha256": "a56ea05be4aa1c7f9c64d66395eca9aca1e21159ca4c43bce5e9dac9ed2504e7",
+              "bytes": 523
+            },
+            {
+              "name": "candidate-075-stationary.png",
+              "sha256": "bd23d526d20591f84bb14cad0abd308adfae97a8ff767a13710ebd019a44e2f9",
+              "bytes": 172
+            },
+            {
+              "name": "candidate-076-moving.png",
+              "sha256": "b52347c9057a34654e7d40b7f00816b406f05ee8a93306d0ed05c422cf7cd928",
+              "bytes": 193
+            },
+            {
+              "name": "candidate-076-stationary.png",
+              "sha256": "5095e5044d435fcdd0a5e034eaead6c4322a85cf590479f6e0222258bc775ed7",
+              "bytes": 147
+            },
+            {
+              "name": "candidate-077-moving.png",
+              "sha256": "f7367c397b885f8fbd03b48327e159dde58c67930d2d364388bf15e379e01a0d",
+              "bytes": 685
+            },
+            {
+              "name": "candidate-077-stationary.png",
+              "sha256": "fef4b50f82e6dc7416b7ef7327ffcf171abea7ada42f8883fef2dbfca0490583",
+              "bytes": 278
+            },
+            {
+              "name": "candidate-078-moving.png",
+              "sha256": "d8d7c79a94f12b97747b2b54367cab9dd23ec6fdcab76ce7087c875fac5633c0",
+              "bytes": 718
+            },
+            {
+              "name": "candidate-078-stationary.png",
+              "sha256": "d08096c91ce6a01e44bef636fc1562e3801839b90c65991ac24054148e5f38af",
+              "bytes": 250
+            },
+            {
+              "name": "candidate-079-moving.png",
+              "sha256": "2a5f462ae0b34650affeb60c05c2fc9cd524b53f861da14ec0cac59de8d41816",
+              "bytes": 514
+            },
+            {
+              "name": "candidate-079-stationary.png",
+              "sha256": "92c6215797623e10abf021cf9a0cf458d23c176cf36cbf6cf0decb2e3988bc7f",
+              "bytes": 103
+            },
+            {
+              "name": "candidate-080-moving.png",
+              "sha256": "fa42f9defbe1794cc13162596dddac87b06c126add75320b862f7da03b6f1a47",
+              "bytes": 450
+            },
+            {
+              "name": "candidate-080-stationary.png",
+              "sha256": "c61aa22727804dd522c19dc2b9a756f0b68bb5e0a0ad83cccac9a99cd353b0ea",
+              "bytes": 88
+            },
+            {
+              "name": "candidate-081-moving.png",
+              "sha256": "e6022955318dbdd45acb5a67bbe2237db87d68b5217a1c22fc61fd71d1fccec4",
+              "bytes": 500
+            },
+            {
+              "name": "candidate-081-stationary.png",
+              "sha256": "f1627eb5fdb91520d2214ab43ab301ac0d5d3e4ab11b29f5471210cb5d7da6f8",
+              "bytes": 192
+            },
+            {
+              "name": "candidate-082-moving.png",
+              "sha256": "bf21eed3c1867fcf57565ce9f8c6658fb5388718a3ce912a738962d51bad7730",
+              "bytes": 718
+            },
+            {
+              "name": "candidate-082-stationary.png",
+              "sha256": "76417cf10b30802a042e15e986aa9086b2daabc3c8bc7bb9f0ae01bc93caad86",
+              "bytes": 283
+            },
+            {
+              "name": "candidate-083-moving.png",
+              "sha256": "809aa6f5df492bddfdf173b73967a065a3e8d587af1b8c428dc9d863f95086f3",
+              "bytes": 114
+            },
+            {
+              "name": "candidate-083-stationary.png",
+              "sha256": "b4e74c9a553f0f4726bf8c925eee143f7f136338974aae2848b495001a7da5d2",
+              "bytes": 90
+            },
+            {
+              "name": "candidate-084-moving.png",
+              "sha256": "534496dfec2866b29ec2c3b2e806f5e3674d30a8e607c3117021f976a41c6218",
+              "bytes": 457
+            },
+            {
+              "name": "candidate-084-stationary.png",
+              "sha256": "910cd6bd24d8116be430f99f1b5bddce069856b28e91a2c69c7ebb4782ab88c0",
+              "bytes": 144
+            },
+            {
+              "name": "candidate-085-moving.png",
+              "sha256": "77d7827929b767872e76872ebae669c396fc65030c9a3fd16a3741e57ad58b5d",
+              "bytes": 647
+            },
+            {
+              "name": "candidate-085-stationary.png",
+              "sha256": "241a1fe96749482c92ba0bc9f4e2c12152fba0f7d0f1bc22b684221ec4fe1d6f",
+              "bytes": 263
+            },
+            {
+              "name": "candidate-086-moving.png",
+              "sha256": "8098613842f54b13859ff5846e73176fde84703b3741128ca6bbb7f244b58871",
+              "bytes": 625
+            },
+            {
+              "name": "candidate-086-stationary.png",
+              "sha256": "45d45eecf5db03ec721693275aa1441cb18b7ece305edccecaa6766d1d30b06f",
+              "bytes": 259
+            },
+            {
+              "name": "candidate-087-moving.png",
+              "sha256": "4bc87bcc44a85d71e257c3e36bd800501dafde7f4e522f9dc010d7fd8ec80f3d",
+              "bytes": 198
+            },
+            {
+              "name": "candidate-087-stationary.png",
+              "sha256": "e0f28d2e1959f4b70c0c7bad3aefd6b57064e281f92d4f11e5e28337bfbdcfd3",
+              "bytes": 108
+            },
+            {
+              "name": "candidate-088-moving.png",
+              "sha256": "bd4b3216b6ed427e0defcf9c20348d0ca894ef7680e8e7b2c783b1023a57bf42",
+              "bytes": 577
+            },
+            {
+              "name": "candidate-088-stationary.png",
+              "sha256": "eddd8bd0e7ef58268462359edae511a15143ae9e5f4ca9dc7633cbf86a9d4bdf",
+              "bytes": 234
+            },
+            {
+              "name": "candidate-089-moving.png",
+              "sha256": "d392fa23286a0a22534f2b14f8122d0d4dd4d4dfbc0fae19e479c7142751637b",
+              "bytes": 714
+            },
+            {
+              "name": "candidate-089-stationary.png",
+              "sha256": "a12722232e974025b7ae1503264300f61f328f82c483e2bad17eade8213cdfd7",
+              "bytes": 270
+            },
+            {
+              "name": "candidate-090-moving.png",
+              "sha256": "2edd61d910142b6acc905ef171c2a25aac769c049fdfabae43b626f7b09b5c37",
+              "bytes": 204
+            },
+            {
+              "name": "candidate-090-stationary.png",
+              "sha256": "c568bda5a9d05b10ce24fa29dcf8395f51178c205d4848f66f5729be65e740de",
+              "bytes": 114
+            },
+            {
+              "name": "candidate-091-moving.png",
+              "sha256": "73a941540ce05db4ff0d8bcd6fcc8e9e4337cd503d129d3027e2fdbdc9e9e9a9",
+              "bytes": 689
+            },
+            {
+              "name": "candidate-091-stationary.png",
+              "sha256": "f97c55a87501497160a6319a6b493539f91bc30371fcd1a5e8290fe1fb94e837",
+              "bytes": 234
+            },
+            {
+              "name": "candidate-092-moving.png",
+              "sha256": "898dbe7b5bfeb18657a8b531fd2bfcd4837fab29522abc53387276e7690d5d17",
+              "bytes": 632
+            },
+            {
+              "name": "candidate-092-stationary.png",
+              "sha256": "559124f78fb2fa7419c67668c23183242ba4704875e76b779c403e3d250fe201",
+              "bytes": 278
+            },
+            {
+              "name": "candidate-093-moving.png",
+              "sha256": "c37e256b7cf999cc5734eb20077246dbb963a10be7b27ca8bd42a7b9eb8290ba",
+              "bytes": 164
+            },
+            {
+              "name": "candidate-093-stationary.png",
+              "sha256": "84b6325b1be7a65eeaafde2bdfc1fc24fa1dff5a4c8391587b3fa9355b29a3c2",
+              "bytes": 112
+            },
+            {
+              "name": "candidate-094-moving.png",
+              "sha256": "98b160c06935ff29c889472119ca1ac286cb2a4a4a1ead992e8ac928181f2c77",
+              "bytes": 687
+            },
+            {
+              "name": "candidate-094-stationary.png",
+              "sha256": "d28f7d3ad3ddae85fa7c02de2038174161dc0cc7c405dc18952b04adda9f22da",
+              "bytes": 155
+            },
+            {
+              "name": "candidate-095-moving.png",
+              "sha256": "3c02ba3a96f6b10bbde9745782a1013af78f5b2d7447a74add1f38ba122a7203",
+              "bytes": 692
+            },
+            {
+              "name": "candidate-095-stationary.png",
+              "sha256": "68c54e7f18ad922594f60ec1a7870f7a870f204ea98385c03a2b206e0cfa3b30",
+              "bytes": 221
+            },
+            {
+              "name": "candidate-096-moving.png",
+              "sha256": "2dde5bb17b1ff5de6e4e3b8773ff19dd01132ac523be2496dd4e3cb0c68bce98",
+              "bytes": 698
+            },
+            {
+              "name": "candidate-096-stationary.png",
+              "sha256": "4a1f990b7dbdbcb5b4417e304c238bed653e5f8acb2cc7658f957c89f1072882",
+              "bytes": 261
+            },
+            {
+              "name": "candidate-097-moving.png",
+              "sha256": "194c62b19acf62d75ce4ae7bcd26e4246a37b9eaaf974b302a6ffc63cd3511f3",
+              "bytes": 650
+            },
+            {
+              "name": "candidate-097-stationary.png",
+              "sha256": "ba7200317a2a69bfb982536f1efebcbd60d9ca75865230c5ff2cea9726d6f721",
+              "bytes": 299
+            },
+            {
+              "name": "candidate-098-moving.png",
+              "sha256": "76925edb67be327a1bd6379e7f359186a3c34e4fc9e9962386505a64004673a9",
+              "bytes": 253
+            },
+            {
+              "name": "candidate-098-stationary.png",
+              "sha256": "68144a6296153089c177f92ab843b011d272e7270a9242cec7010ed4d5da2c50",
+              "bytes": 90
+            },
+            {
+              "name": "candidate-099-moving.png",
+              "sha256": "50983e58c5baf141503a897a0b7a8bbd6fe1d4e4f8f1deabc229fc5e11ef7d20",
+              "bytes": 162
+            },
+            {
+              "name": "candidate-099-stationary.png",
+              "sha256": "d5f92c122b0a0950224835e89f043ef1abd06de2ef2e84e42d3bfa63d10d35a3",
+              "bytes": 137
+            }
+          ],
+          "known_target_evaluation_only": {
+            "matches": [
+              {
+                "published_rank": 100,
+                "method": "bloom_track",
+                "score": null,
+                "max_offset_px": 0.3817005658694946
+              }
+            ],
+            "match_tolerance_px": 1.5,
+            "labels_loaded_after_all_four_inference_runs": true,
+            "other_track_identities": "unknown; never negatives"
+          }
+        },
+        "vesta-d6": {
+          "success": true,
+          "returncode": 0,
+          "wall_seconds": 1.3223406540000724,
+          "linux_process_memory_kib": {
+            "VmHWM": 197968,
+            "VmRSS": 177228
+          },
+          "fixture_sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114",
+          "stderr": "\u001b[0;93m2026-11-14 22:31:32.536050884 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n{\"schema_version\": 1, \"stage\": \"preparing\"}\n{\"schema_version\": 1, \"stage\": \"inferencing\"}\n{\"schema_version\": 1, \"stage\": \"rendering\"}\n",
+          "model": {
+            "schema_version": 1,
+            "model_id": "spherex-track-extra-v3",
+            "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+            "feature_names": [
+              "epoch_count",
+              "fit_rms_px",
+              "median_snr",
+              "min_snr",
+              "snr_coefficient_of_variation",
+              "median_peak_ratio"
+            ],
+            "class_labels": [
+              0,
+              1
+            ],
+            "positive_class": 1,
+            "score_kind": "random_forest_vote_fraction",
+            "model_family": "ExtraTreesClassifier",
+            "detector_profile": {
+              "min_snr": 4.0,
+              "max_peaks": 100,
+              "psf_sigma": 0.8,
+              "min_speed": 0.5,
+              "max_speed": 60.0,
+              "match_radius": 1.4,
+              "min_epochs": 3,
+              "min_support": 0.8,
+              "leave_one_out": true
+            },
+            "algorithm_version_proposal": "motion-extra-v3-sigma08"
+          },
+          "algorithm_version": "motion-extra-v3-sigma08",
+          "settings": {
+            "min_snr": 4.0,
+            "min_speed_arcsec_per_hour": 3.075,
+            "max_speed_arcsec_per_hour": 369.0,
+            "mask_policy": "motion",
+            "max_candidates": 100,
+            "max_peaks": 100,
+            "pixel_scale_arcsec": 6.15,
+            "min_epochs": 3,
+            "leave_one_out": true,
+            "min_support": 0.8,
+            "psf_sigma_px": 0.8,
+            "match_radius_px": 1.4,
+            "review_policy": "protect_first3_residual_then_flagged_bloom"
+          },
+          "frames": 3,
+          "candidates": 18,
+          "comparison": {
+            "shared_median_count": 25,
+            "leave_one_out_count": 17,
+            "bloom_track_count": 1
+          },
+          "warnings": [
+            "selected_development_case",
+            "legacy_decreasing_declination_grid",
+            "outlier_measurements_retained",
+            "experimental_synthetic_trained_ranking",
+            "short_linear_arc_model",
+            "uncalibrated_residual_snr",
+            "passband_variation_not_corrected",
+            "psf_matching_not_applied"
+          ],
+          "resource_count": 45,
+          "resource_bytes": 39435,
+          "resource_hashes": [
+            {
+              "name": "frame-000.png",
+              "sha256": "7927ae39f9415180254c97870fe0d9f431ec384bd84a99580c1962adb3553a52",
+              "bytes": 3659
+            },
+            {
+              "name": "difference-000.png",
+              "sha256": "b6c618f6a39736cda6473a222a7e892194c9d4852ca549c7be5fd36d1f663522",
+              "bytes": 4541
+            },
+            {
+              "name": "bloom-000.png",
+              "sha256": "f1ff959f92c574422e5d909875a659250be554dbe6fdc8e8eb0cbe3338ea2b84",
+              "bytes": 304
+            },
+            {
+              "name": "frame-001.png",
+              "sha256": "fb2e3b3bf8c1016dedd00808d573eeada6e20b4f0656e58f2dac26548f609f9d",
+              "bytes": 3982
+            },
+            {
+              "name": "difference-001.png",
+              "sha256": "e06371b196da6adbca669caa94c838cafd18eaf4fc7cb1512fac84375de56fab",
+              "bytes": 4678
+            },
+            {
+              "name": "bloom-001.png",
+              "sha256": "ff09e177c58bf6725fbf568ade0c6009bd42f1c7fd60e5043d0f26661e60941c",
+              "bytes": 300
+            },
+            {
+              "name": "frame-002.png",
+              "sha256": "a6bdabe71a4392dbe6a9c999dbac6ec0ee67602daf4377bc6f5dea16e7b89c61",
+              "bytes": 3772
+            },
+            {
+              "name": "difference-002.png",
+              "sha256": "5e1e4f690ce5a4dadda11ee98ab1f2fffcda0a0159b830feb3bd44e03ec07f64",
+              "bytes": 4561
+            },
+            {
+              "name": "bloom-002.png",
+              "sha256": "e0b380d87e15c01c710673a58115094e80654feacf7f47221ffe6b4c00077861",
+              "bytes": 301
+            },
+            {
+              "name": "candidate-000-moving.png",
+              "sha256": "4dd35af4ff4f42eea71b7afd9f94f4d154e6eaf6840a8d5a7b4e2bd74b73097a",
+              "bytes": 493
+            },
+            {
+              "name": "candidate-000-stationary.png",
+              "sha256": "236659c42fbfc5d6a49b2a72049f677e9759821a52c503c96f0ea9a4e6e1e986",
+              "bytes": 109
+            },
+            {
+              "name": "candidate-001-moving.png",
+              "sha256": "4e010ec4014584bd1c8919db8abad806a1ba05493ff048d4c8c2d1dd01ca3b75",
+              "bytes": 649
+            },
+            {
+              "name": "candidate-001-stationary.png",
+              "sha256": "93c54be9a11ea5fc87b47147070e6cc7cf5e59922e70fbc32b24a0927b7515f0",
+              "bytes": 239
+            },
+            {
+              "name": "candidate-002-moving.png",
+              "sha256": "5dfc4f37a6751d273bdfd9900c4b47c00b8fda18432da8099c54db867794ef8b",
+              "bytes": 558
+            },
+            {
+              "name": "candidate-002-stationary.png",
+              "sha256": "029c61d6751519daa9aa4d17fe8df666ce0f8d681cc6bc2df0b34e21dc8c537e",
+              "bytes": 228
+            },
+            {
+              "name": "candidate-003-moving.png",
+              "sha256": "dc197e6e883ebf67916ad51877f4cd7650d73a740786fc8190fbec9d6984f6dc",
+              "bytes": 467
+            },
+            {
+              "name": "candidate-003-stationary.png",
+              "sha256": "5e9371556ffbe0c1d5c88b3b37cd0fcd241812a56354a6aa5305dd0614f5de23",
+              "bytes": 184
+            },
+            {
+              "name": "candidate-004-moving.png",
+              "sha256": "3472c47ad5340274c68fcb9df0e68841a29717597be5accfe86699920e119add",
+              "bytes": 519
+            },
+            {
+              "name": "candidate-004-stationary.png",
+              "sha256": "fb241c822132edb4c7fa6fe140c96b9095ffec2350c23ecc5a6cc81bbb7d5ee6",
+              "bytes": 219
+            },
+            {
+              "name": "candidate-005-moving.png",
+              "sha256": "d98e38bf2ffcbc5aafe9509877bdc5561a6388681fcd79f0692bc1fb954fa24a",
+              "bytes": 616
+            },
+            {
+              "name": "candidate-005-stationary.png",
+              "sha256": "dc89059e40b557a9dfe0cf9b6e3289525b331758caae672cebd725be422c1acd",
+              "bytes": 228
+            },
+            {
+              "name": "candidate-006-moving.png",
+              "sha256": "48fde5bf34879dcaac21e339f510915ec43f63b2981c5e88850d656f688600e3",
+              "bytes": 653
+            },
+            {
+              "name": "candidate-006-stationary.png",
+              "sha256": "744907a612d924c2d6238d0a3616e5a685ba700034c61a853e27ee5cd2f93e3d",
+              "bytes": 240
+            },
+            {
+              "name": "candidate-007-moving.png",
+              "sha256": "546ac63495f66023ceb7afc9c179a9e41d59ab17c8a434f23dba0a9d892e398d",
+              "bytes": 175
+            },
+            {
+              "name": "candidate-007-stationary.png",
+              "sha256": "52b0e85c6ace9c0ff893593321ab21cdf56999071430259ab638462d9c06ecbc",
+              "bytes": 113
+            },
+            {
+              "name": "candidate-008-moving.png",
+              "sha256": "fb63f2369594091bac99ee94ce5193f146e2688498714d040434799b2ccfda60",
+              "bytes": 685
+            },
+            {
+              "name": "candidate-008-stationary.png",
+              "sha256": "fc569e9076cddfef510b0ac147350fd6e9b587c56ab04efee64a47f1327e03d8",
+              "bytes": 236
+            },
+            {
+              "name": "candidate-009-moving.png",
+              "sha256": "4e199518f791ff51f50ae29897a8e6a8b50fa85f1b416a4b8993449bfe5369f9",
+              "bytes": 676
+            },
+            {
+              "name": "candidate-009-stationary.png",
+              "sha256": "112947ad90cbc0472170500fed53ecae88ef62e02f83a68a9c9dedf781d42004",
+              "bytes": 248
+            },
+            {
+              "name": "candidate-010-moving.png",
+              "sha256": "299c8c1fdacf6733811e731e574154a21159a0f8d9c6b1ab3dfe3a62dbe88476",
+              "bytes": 544
+            },
+            {
+              "name": "candidate-010-stationary.png",
+              "sha256": "4bd70250d727d9340c81bd92eda315ed8a55309dd42a4dc84d059a8a6b8d4106",
+              "bytes": 170
+            },
+            {
+              "name": "candidate-011-moving.png",
+              "sha256": "0aa4536a6568e18be3b5a61d0cc4d8a9f09fa69da37627e396f00a9b4f798777",
+              "bytes": 673
+            },
+            {
+              "name": "candidate-011-stationary.png",
+              "sha256": "6a27ac5ca32644ad5adb9e0d6cdf87714d1852c8692c7e4cb196ad5e0b871728",
+              "bytes": 243
+            },
+            {
+              "name": "candidate-012-moving.png",
+              "sha256": "8c505816d7a6e7605016b563c4758d9b6a3778c1dc524ab44b094c3fa9ab4e82",
+              "bytes": 552
+            },
+            {
+              "name": "candidate-012-stationary.png",
+              "sha256": "e69e6d0071f6510b36d990229576aa83d4d33c504d2fb309633b5914fec154c6",
+              "bytes": 202
+            },
+            {
+              "name": "candidate-013-moving.png",
+              "sha256": "988fc15bb090f78296dba1fc20a193726ffcdf6b14cb4b745cde02b0a98f976b",
+              "bytes": 664
+            },
+            {
+              "name": "candidate-013-stationary.png",
+              "sha256": "25b4081452815d0459c8b3d1ee1b81872d924983b610cc2981834f40f0200974",
+              "bytes": 244
+            },
+            {
+              "name": "candidate-014-moving.png",
+              "sha256": "ab80edde22f1ea0246c3ebd2c16bd86c37873ad70774687136f6397899dd6923",
+              "bytes": 517
+            },
+            {
+              "name": "candidate-014-stationary.png",
+              "sha256": "2e6932fe470eaa9e5fb157259b5166f5ca0223a76fb07719c9a49221a418c7a4",
+              "bytes": 263
+            },
+            {
+              "name": "candidate-015-moving.png",
+              "sha256": "5d184e9ce3c6053cdc63e0e2c1cd67fbf10f817c258819494c8feb833641d0a8",
+              "bytes": 617
+            },
+            {
+              "name": "candidate-015-stationary.png",
+              "sha256": "b8aaa7292a962ef7d576b7aa5b9cd9a4471b0e9f2d59329a539ec091cc2be8be",
+              "bytes": 244
+            },
+            {
+              "name": "candidate-016-moving.png",
+              "sha256": "5e65abd757186bf99694428f0cd01741269d95b3c687f4bfa1062d739844ccaf",
+              "bytes": 400
+            },
+            {
+              "name": "candidate-016-stationary.png",
+              "sha256": "5ccf55bb5c562f5a73d1dcafb791be1b7ac6e51144b32823d876e37e71dae269",
+              "bytes": 216
+            },
+            {
+              "name": "candidate-017-moving.png",
+              "sha256": "aee34e5dee79eea96ace4355cac5d7981821106cc31394d4ca5ed53c9518a34c",
+              "bytes": 128
+            },
+            {
+              "name": "candidate-017-stationary.png",
+              "sha256": "d41b86b358111f7ad001d1d484f8ad54195f760341dcb98d2c34a5a5deb538a3",
+              "bytes": 125
+            }
+          ],
+          "known_target_evaluation_only": {
+            "matches": [
+              {
+                "published_rank": 18,
+                "method": "bloom_track",
+                "score": null,
+                "max_offset_px": 0.2809746015134678
+              }
+            ],
+            "match_tolerance_px": 1.5,
+            "labels_loaded_after_all_four_inference_runs": true,
+            "other_track_identities": "unknown; never negatives"
+          }
+        }
+      },
+      "cli_validation_checks": {
+        "all_four_cli_success": true,
+        "comet_d2_known_model_rank1": true,
+        "comet_d6_known_model_rank4": true,
+        "vesta_d3_known_unscored_bloom_rank100": true,
+        "vesta_bloom_targets_always_unscored": true
+      },
+      "whole_probe_memory_after_cli": {
+        "vm_hwm_kib": 183216,
+        "vm_rss_kib": 183216,
+        "measurement": "Linux current-process /proc/self/status VmHWM; not inherited getrusage"
+      },
+      "cgroup_memory_peak_bytes_after_cli": "300257280"
+    },
+    "docker_stderr": "\u001b[0;93m2026-11-14 22:31:26.924977967 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier\u001b[m\n",
+    "unparsed_stdout": null
+  },
+  "forced_cleanup": false,
+  "remote_staging_deleted": true,
+  "leftover_containers_for_run": 0,
+  "production_service_changes_performed": false,
+  "final_data_or_labels_uploaded": false,
+  "driver_source_sha256": {
+    "candidate_bound_container_probe.py": "48aab5b3414457fc8771bb91e505bd4851848f47e11ce1c1f58bce44ef7b796a",
+    "candidate_remote_runner.py": "2b97babd0b7d05326084def490017e5cf8b2c485b8eed79f1f890c379efc9eec",
+    "candidate_bound_run_ssh.py": "4674881b88f9bab89b358d617f010d14270fce3d525d1be4fe21f7d73e66baba"
+  }
+}
