@@ -25,15 +25,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
-          python-version: '3.12'
-          cache: pip
-          cache-dependency-path: backend/requirements-dev.txt
-      - name: Install test dependencies
-        run: python -m pip install -r requirements-dev.txt
-      - name: Test API
-        run: python -m pytest -q
+          distribution: temurin
+          java-version: '25'
+          cache: sbt
+          cache-dependency-path: |
+            backend/build.sbt
+            backend/project/build.properties
+      - name: Test and stage Scala API
+        run: ./sbtw test stage
       - name: Check deployment scripts
         run: bash -n ../ops/deploy.sh ../ops/bootstrap-vps.sh tests/test_deploy.sh
       - name: Build the exact commit
@@ -41,6 +42,11 @@ jobs:
       - name: Test container deployment and rollback
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}
+        run: bash tests/test_deploy.sh
+      - name: Verify compatibility with the existing VPS Compose file
+        env:
+          TEST_IMAGE_REVISION: ${{ github.sha }}
+          TEST_COMPOSE_FILE: tests/fixtures/legacy-compose.yaml
         run: bash tests/test_deploy.sh
       - name: Deploy main to VPS
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

@@ -1,6 +1,6 @@
 # Backend bootstrap — AI-generated documentation
 
-Python API bootstrap for the Planet X and SPHEREx challenge.
+Scala/ZIO IRSA retrieval service for the Planet X and SPHEREx challenge. See [running instructions](docs/implementation/RUNNING.AI.md) for API behavior and limits.
 
 ## Live server
 
@@ -18,20 +18,11 @@ streamed directly from CI; this bootstrap does not publish a registry image.
 
 ```bash
 cd backend
-python3.12 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
-uvicorn app.main:app --reload
-python -m pytest -q
+./sbtw test stage
+APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main
 ```
 
-Add application endpoints under `backend/app/`. From `backend/`, add runtime dependencies to
-`requirements.in`, then regenerate both lock files:
-
-```bash
-uv pip compile requirements.in -o requirements.txt
-uv pip compile requirements-dev.in -o requirements-dev.txt
-```
+JDK25 and sbt1.13.1 are the build baseline. Application sources live under backend/src/; persistent state and native FITS are stored under DATA_DIR. Scientific processing and PNG previews are explicitly deferred.
 
 ## CI and deployment
 

@@ -1,0 +1,87 @@
+name: Frontend CI and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+      - name: Lint and build frontend
+        working-directory: frontend
+        env:
+          VITE_BACKEND_URL: /backend
+        run: |
+          npm run lint
+          npm run build
+      - name: Check frontend deployment scripts
+        run: bash -n ops/deploy-frontend.sh ops/bootstrap-frontend.sh ops/frontend/test-deploy.sh
+      - name: Build exact frontend revision
+        run: docker build --file ops/frontend/Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-frontend:$GITHUB_SHA" .
+      - name: Verify frontend deployment and rollback
+        env:
+          TEST_IMAGE_REVISION: ${{ github.sha }}
+        run: bash ops/frontend/test-deploy.sh
+      - name: Deploy main frontend to VPS
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          FRONTEND_VPS_SSH_KEY: ${{ secrets.FRONTEND_VPS_SSH_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          key="$RUNNER_TEMP/frontend_vps_key"
+          known_hosts="$RUNNER_TEMP/frontend_vps_known_hosts"
+          trap 'rm -f "$key" "$known_hosts"' EXIT
+          printf '%s\n' "$FRONTEND_VPS_SSH_KEY" > "$key"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "$known_hosts"
+          docker image save "spaceapps-frontend:$GITHUB_SHA" | gzip -1 | \
+            ssh -i "$key" -o IdentitiesOnly=yes -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts" \
+              -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+              "frontend-deploy@$VPS_HOST" "deploy-frontend $GITHUB_SHA"
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.request
+          base = f"http://{os.environ['VPS_HOST']}:8080"
+          with urllib.request.urlopen(base + '/frontend-version.json', timeout=15) as response:
+              version = json.load(response)['version']
+          assert version == os.environ['GITHUB_SHA'], (version, os.environ['GITHUB_SHA'])
+          with urllib.request.urlopen(base + '/', timeout=15) as response:
+              html = response.read().decode()
+              assert '<div id="root">' in html
+          asset = re.search(r'(?:src|href)="([^\"]*/assets/[^\"]+)"', html)
+          assert asset, 'Built HTML has no asset link'
+          with urllib.request.urlopen(base + '/' + asset[1].removeprefix('./').lstrip('/'), timeout=15) as response:
+              assert response.status == 200
+          with urllib.request.urlopen(base + '/backend/health', timeout=15) as response:
+              assert response.status == 200
+          print(f'Public frontend, asset and API proxy verified: {version}')
+          PY
