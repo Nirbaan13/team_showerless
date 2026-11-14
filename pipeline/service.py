@@ -102,8 +102,8 @@ def render_cutout_png(
     subtraction: str = ApiQuery("raw_calibrated", description="raw_calibrated or zodi_subtracted"),
 ):
     """
-    Directly render and return a ZScale stretched PNG cutout image.
-    Can be used directly inside <img src="..." /> or drawn on HTML5 canvas.
+    return a ZScale stretched PNG cutout image.
+    can be used inside <img src="..." /> or HTML5 canvas.
     """
     size_deg = size_arcmin / 60.0
     coord = SkyCoord(ra * u.deg, dec * u.deg)
@@ -177,10 +177,10 @@ def real_spectrum(
     candidate_id: Optional[str] = None,
 ):
     """
-    Real SPHEREx spectrophotometry at a fixed sky position.
-    Searches IRSA for every exposure covering (ra, dec), downloads small cutouts,
-    and measures zodi-subtracted, flag-masked aperture photometry in each one.
-    Response shape matches the frontend's TargetSpectrumResult.
+    SPHEREx spectrophotometry at fixed sky position.
+    IRSA for every exposure covering (ra, dec), downloads cutout,
+    and measures zodi-subtracted, flag-masked aperture photometry
+    response shape matches the frontend's TargetSpectrumResult.
     """
     coord = SkyCoord(ra * u.deg, dec * u.deg)
     size_deg = size_arcmin / 60.0
