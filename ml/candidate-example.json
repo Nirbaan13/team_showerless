@@ -1,0 +1,64 @@
+{
+  "object": "3I/ATLAS",
+  "status": "known_object_validation",
+  "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html",
+  "dataset_doi": "10.26131/IRSA652",
+  "ranking": {
+    "method": "baseline_heuristic",
+    "rank": 1,
+    "candidate_count": 25,
+    "random_forest_rank": 2,
+    "random_forest_training": "simulated_fields"
+  },
+  "preparation": {
+    "outlier_flag_retained": true,
+    "min_filter_support": 0.8
+  },
+  "max_offset_from_ephemeris_px": 0.539,
+  "observations": [
+    {
+      "observation_id": "2025W50_2A_0741_2D6",
+      "midpoint_utc": "2025-12-14T11:01:45.688Z",
+      "ra_deg": 166.9761276,
+      "dec_deg": 5.2276184,
+      "aligned_x_px": 19,
+      "aligned_y_px": 108,
+      "wavelength_um_at_comet": 4.475,
+      "offset_from_ephemeris_px": 0.421,
+      "fits_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/6/level2_2025W50_2A_0741_2D6_spx_l2b-v20-2025-349.fits?center=166.79,5.29&size=0.55"
+    },
+    {
+      "observation_id": "2025W50_2A_0755_2D6",
+      "midpoint_utc": "2025-12-14T12:39:42.784Z",
+      "ra_deg": 166.9006521,
+      "dec_deg": 5.2532611,
+      "aligned_x_px": 63,
+      "aligned_y_px": 93,
+      "wavelength_um_at_comet": 4.608,
+      "offset_from_ephemeris_px": 0.263,
+      "fits_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/6/level2_2025W50_2A_0755_2D6_spx_l2b-v20-2025-349.fits?center=166.79,5.29&size=0.55"
+    },
+    {
+      "observation_id": "2025W50_2A_0797_4D6",
+      "midpoint_utc": "2025-12-14T17:33:31.003Z",
+      "ra_deg": 166.6741866,
+      "dec_deg": 5.3318433,
+      "aligned_x_px": 195,
+      "aligned_y_px": 47,
+      "wavelength_um_at_comet": 4.813,
+      "offset_from_ephemeris_px": 0.246,
+      "fits_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/6/level2_2025W50_2A_0797_4D6_spx_l2b-v20-2025-349.fits?center=166.79,5.29&size=0.55"
+    },
+    {
+      "observation_id": "2025W50_2A_0813_1D6",
+      "midpoint_utc": "2025-12-14T19:06:21.122Z",
+      "ra_deg": 166.6021175,
+      "dec_deg": 5.3574505,
+      "aligned_x_px": 237,
+      "aligned_y_px": 32,
+      "wavelength_um_at_comet": 4.847,
+      "offset_from_ephemeris_px": 0.539,
+      "fits_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W50_2A/l2b-v20-2025-349/6/level2_2025W50_2A_0813_1D6_spx_l2b-v20-2025-349.fits?center=166.79,5.29&size=0.55"
+    }
+  ]
+}

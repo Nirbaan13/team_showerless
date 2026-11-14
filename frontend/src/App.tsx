@@ -26,6 +26,7 @@ import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
+import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
 import { Compass, Home } from 'lucide-react';
 
 export function App() {
@@ -224,13 +225,11 @@ export function App() {
         <div className="flex items-center space-x-6">
           <div
             onClick={() => setActiveTab('home')}
-            className="flex items-center space-x-2 cursor-pointer group"
+            className="flex items-center space-x-2.5 cursor-pointer group"
           >
-            <div className="w-5 h-5 rounded bg-ochre-400 text-paper-950 flex items-center justify-center font-bold text-[10px]">
-              SPX
-            </div>
-            <span className="font-medium text-paper-100 tracking-wide text-xs font-sans group-hover:text-ochre-300 transition-colors">
-              SPHEREx Sky-Viewer
+            <SpherexBlinkLogo size={24} />
+            <span className="font-bold text-white tracking-wide text-xs font-sans group-hover:text-emerald-400 transition-colors">
+              SPHEREx <span className="text-emerald-400">Blink</span>
             </span>
           </div>
 

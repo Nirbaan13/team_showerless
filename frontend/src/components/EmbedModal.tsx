@@ -55,7 +55,7 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
         <div className="flex items-center justify-between border-b border-paper-800 pb-3">
           <div className="font-sans font-bold text-white text-base tracking-tight flex items-center gap-2">
             <Code2 className="w-5 h-5 text-emerald-400" />
-            <span>Embed SPHEREx Sky-Viewer</span>
+            <span>Embed SPHEREx Blink</span>
           </div>
           <button
             onClick={onClose}
