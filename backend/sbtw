@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+mkdir -p target
+exec 9>.sbtw.lock
+flock 9
+launcher_dir="${XDG_CACHE_HOME:-$HOME/.cache}/spaceapps/sbt/1.13.1"
+mkdir -p "$launcher_dir"
+launcher="$launcher_dir/sbt-launch.jar"
+if [[ ! -s "$launcher" ]]; then
+  curl --fail --location --retry 3 --output "$launcher.part" \
+    https://repo.maven.apache.org/maven2/org/scala-sbt/sbt-launch/1.13.1/sbt-launch-1.13.1.jar
+  mv "$launcher.part" "$launcher"
+fi
+exec java --enable-native-access=ALL-UNNAMED -Xms128m -Xmx1g -XX:ActiveProcessorCount=4 \
+  -Dsbt.supershell=false -Dsbt.log.noformat=true -jar "$launcher" "$@"

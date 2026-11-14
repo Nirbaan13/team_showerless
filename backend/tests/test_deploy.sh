@@ -5,7 +5,7 @@ repo_root=$(cd "$(dirname "$0")/../.." && pwd)
 export APP_DIR
 APP_DIR=$(mktemp -d)
 export APP_PORT=18080 COMPOSE_PROJECT_NAME="spaceapps-ci-$$" DEPLOY_HEALTH_TIMEOUT=15
-cp "$repo_root/compose.yaml" "$APP_DIR/compose.yaml"
+cp "${TEST_COMPOSE_FILE:-$repo_root/compose.yaml}" "$APP_DIR/compose.yaml"
 cleanup() {
     if [[ -f "$APP_DIR/current.env" ]]; then
         docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
@@ -39,6 +39,10 @@ fi
 
 deploy "$first"
 assert_version "$first"
+docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" --env-file "$APP_DIR/current.env" exec -T api sh -c 'printf persisted > /app/data/deploy-sentinel'
+assert_storage() {
+    test "$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" --env-file "$APP_DIR/current.env" exec -T api cat /app/data/deploy-sentinel)" = persisted
+}
 
 docker build --build-arg "BASE_IMAGE=spaceapps-api:$first" --build-arg "REVISION=$second" \
     --tag "spaceapps-api:$second" - <<'DOCKER'
@@ -50,6 +54,7 @@ LABEL org.opencontainers.image.revision=${REVISION}
 DOCKER
 deploy "$second"
 assert_version "$second"
+assert_storage
 test "$(docker image inspect --format '{{.Id}}' spaceapps-api:latest)" = \
     "$(docker image inspect --format '{{.Id}}' "spaceapps-api:$second")"
 
@@ -60,13 +65,14 @@ FROM ${BASE_IMAGE}
 ARG REVISION
 ENV APP_REVISION=${REVISION}
 LABEL org.opencontainers.image.revision=${REVISION}
-CMD ["python", "-c", "raise SystemExit(1)"]
+CMD ["/bin/sh", "-c", "exit 1"]
 DOCKER
 if deploy "$broken"; then
     echo "ERROR: unhealthy deployment was accepted" >&2
     exit 1
 fi
 assert_version "$second"
+assert_storage
 grep -qx "APP_IMAGE=spaceapps-api:$second" "$APP_DIR/current.env"
 test "$(docker image inspect --format '{{.Id}}' spaceapps-api:latest)" = \
     "$(docker image inspect --format '{{.Id}}' "spaceapps-api:$second")"
@@ -81,7 +87,7 @@ FROM ${BASE_IMAGE}
 ARG REVISION
 ENV APP_REVISION=${REVISION}
 LABEL org.opencontainers.image.revision=${REVISION}
-CMD ["python", "-c", "raise SystemExit(1)"]
+CMD ["/bin/sh", "-c", "exit 1"]
 DOCKER
 # Save the replacement, then restore the currently running tag before invoking
 # the deployment, just as CI uploads a newly rebuilt image from another machine.
@@ -92,6 +98,7 @@ if SSH_ORIGINAL_COMMAND="deploy $second" bash "$repo_root/ops/deploy.sh" <"$APP_
     exit 1
 fi
 assert_version "$second"
+assert_storage
 test "$(docker image inspect --format '{{.Id}}' "spaceapps-api:$second")" = "$previous_id"
 test "$(docker image inspect --format '{{.Id}}' spaceapps-api:latest)" = "$previous_id"
 echo "Deployment integration tests passed: update, revision, latest, invalid command, rollback, same-SHA rollback."

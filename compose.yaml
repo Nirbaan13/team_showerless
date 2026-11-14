@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT:-80}:8000"
+    volumes:
+      - api-data:/app/data
     read_only: true
     tmpfs:
       - /tmp
@@ -17,3 +19,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+volumes:
+  api-data:
