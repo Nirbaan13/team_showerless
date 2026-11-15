@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VOTABLE xmlns="http://www.ivoa.net/xml/VOTable/v1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.4">
+  <RESOURCE type="results">
+    <INFO name="QUERY_STATUS" value="OK" />
+    <INFO name="QUERY_TIMESTAMP" value="2026-11-14T16:10:54.080" />
+    <INFO name="QUERY" value="SELECT obs_collection,obs_id,dataproduct_type,s_ra,s_dec,t_min,t_max,access_url,access_format,access_estsize FROM ivoa.ObsCore WHERE dataproduct_type='image' AND INTERSECTS(s_region,CIRCLE('ICRS',210.8,54.35,0.1))=1 AND t_min &lt; 61000 AND t_max &gt; 50000" />
+    <TABLE>
+      <FIELD name="obs_collection" datatype="char" arraysize="128*" ucd="meta.id" utype="obscore:DataID.Collection">
+        <DESCRIPTION>short name for the data colection</DESCRIPTION>
+      </FIELD>
+      <FIELD name="obs_id" datatype="char" arraysize="128*" ucd="meta.id" utype="obscore:DataID.observationID">
+        <DESCRIPTION>internal dataset identifier</DESCRIPTION>
+      </FIELD>
+      <FIELD name="dataproduct_type" datatype="char" arraysize="128*" ucd="meta.code.class" utype="obscore:ObsDataset.dataProductType">
+        <DESCRIPTION>type of product</DESCRIPTION>
+      </FIELD>
+      <FIELD name="s_ra" datatype="double" ucd="pos.eq.ra" unit="deg" utype="obscore:Char.SpatialAxis.Coverage.Location.Coord.Position2D.Value2.C1">
+        <DESCRIPTION>RA of central coordinates</DESCRIPTION>
+      </FIELD>
+      <FIELD name="s_dec" datatype="double" ucd="pos.eq.dec" unit="deg" utype="obscore:Char.SpatialAxis.Coverage.Location.Coord.Position2D.Value2.C2">
+        <DESCRIPTION>DEC of central coordinates</DESCRIPTION>
+      </FIELD>
+      <FIELD name="t_min" datatype="double" ucd="time.start;obs.exposure" unit="d" utype="obscore:Char.TimeAxis.Coverage.Bounds.Limits.StartTime">
+        <DESCRIPTION>start time of observation (MJD)</DESCRIPTION>
+      </FIELD>
+      <FIELD name="t_max" datatype="double" ucd="time.end;obs.exposure" unit="d" utype="obscore:Char.TimeAxis.Coverage.Bounds.Limits.StopTime">
+        <DESCRIPTION>end time of observation (MJD)</DESCRIPTION>
+      </FIELD>
+      <FIELD name="access_url" datatype="char" arraysize="*" ucd="meta.ref.url" utype="obscore:Access.Reference" xtype="clob">
+        <DESCRIPTION>URL to download the data</DESCRIPTION>
+      </FIELD>
+      <FIELD name="access_format" datatype="char" arraysize="128*" ucd="meta.code.mime" utype="obscore:Access.Format">
+        <DESCRIPTION>format of the data file(s)</DESCRIPTION>
+      </FIELD>
+      <FIELD name="access_estsize" datatype="long" ucd="phys.size;meta.file" unit="kbyte" utype="obscore:Access.Size">
+        <DESCRIPTION>estimated size of the download</DESCRIPTION>
+      </FIELD>
+      <DATA>
+        <TABLEDATA>
+<TR><TD>CFHT</TD><TD>1304919</TD><TD>image</TD><TD>210.83936730043183</TD><TD>54.28037733438093</TD><TD>55703.4428195</TD><TD>55703.44302875926</TD><TD>https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/caom2ops/datalink?ID=ivo%3A%2F%2Fcadc.nrc.ca%2FCFHT%3F1304919%2F1304919g</TD><TD>application/x-votable+xml;content=datalink</TD><TD/></TR>
+<TR><TD>CFHT</TD><TD>1709037</TD><TD>image</TD><TD>210.68067501908973</TD><TD>54.398747462229274</TD><TD>56789.4021546</TD><TD>56789.4027333037</TD><TD>https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/caom2ops/datalink?ID=ivo%3A%2F%2Fcadc.nrc.ca%2FCFHT%3F1709037%2F1709037p</TD><TD>application/x-votable+xml;content=datalink</TD><TD/></TR>
+<TR><TD>GEMINI</TD><TD>GN-2010A-Q-27-7-025</TD><TD>image</TD><TD>210.92279886403364</TD><TD>54.31624377912847</TD><TD>55304.44251851852</TD><TD>55304.443097233794</TD><TD>https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/caom2ops/datalink?ID=ivo%3A%2F%2Fcadc.nrc.ca%2FGEMINI%3FGN-2010A-Q-27-7-025%2FN20100418S0164</TD><TD>application/x-votable+xml;content=datalink</TD><TD/></TR></TABLEDATA>
+      </DATA>
+    </TABLE>
+    <INFO name="QUERY_STATUS" value="OVERFLOW" />
+  </RESOURCE>
+</VOTABLE>
