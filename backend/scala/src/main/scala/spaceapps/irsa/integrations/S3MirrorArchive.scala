@@ -26,7 +26,7 @@ final class S3MirrorArchive private(process:MirrorProcess,transfer:Archive,state
   }
   def fetch(image:ArchiveImage,destination:Path):Task[Unit]=transfer.fetch(image,destination)
   private def scan:Task[Boolean]=for
-    value<-process.run(List("scan","--page-size","100","--max-pages","1","--workers","4"))
+    value<-process.run(List("catalog","--page-size","128","--max-pages","4096","--workers","32","--max-seconds","180"))
     errors=value.asObject.flatMap(_.get("errors")).getOrElse(Json.Arr())
     progress=index(value) match
       case Json.Obj(fields)=>Json.Obj(fields :+ ("scan_errors"->errors))
@@ -39,11 +39,23 @@ final class S3MirrorArchive private(process:MirrorProcess,transfer:Archive,state
   yield progress match
     case Json.Obj(fields)=>fields.toMap.get("complete").contains(Json.Bool(true))
     case _=>false
-  def start:ZIO[Scope,Nothing,Unit]=
-    (scan.foldZIO(
+  private def refresh:Task[Unit]=for
+    value<-process.run(List("status"))
+    _<-state.update { previous=>
+      val errors=previous.asObject.flatMap(_.get("scan_errors")).getOrElse(Json.Arr())
+      index(value) match
+        case Json.Obj(fields)=>Json.Obj(fields :+ ("scan_errors"->errors))
+        case other=>other
+    }
+  yield ()
+  def start:ZIO[Scope,Nothing,Unit]=for
+    // Catalogue batches run for minutes; refresh committed progress separately.
+    _<-(refresh.catchAll(error=>ZIO.logWarning(s"Mirror catalogue status unavailable: ${error.getMessage}")) *> ZIO.sleep(15.seconds)).forever.forkScoped
+    _<-(scan.foldZIO(
       error=>ZIO.logWarningCause("Public mirror index scan failed; progress will be retried",Cause.fail(error))*>ZIO.sleep(30.seconds),
       complete=>ZIO.sleep(if complete then 1.hour else 5.seconds)
-    )).forever.forkScoped.unit
+    )).forever.forkScoped
+  yield ()
 
 object S3MirrorArchive:
   def make(process:MirrorProcess,transfer:Archive,maxRecords:Int=256):UIO[S3MirrorArchive]=

@@ -9,7 +9,9 @@ Searches of incomplete indexes never present an empty result as complete sky.
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import datetime as dt
+from functools import wraps
 import hashlib
+import http.client
 import json
 import math
 import os
@@ -17,12 +19,13 @@ from pathlib import Path
 import re
 import sqlite3
 import shutil
+import ssl
+import threading
 import sys
 import time
-import urllib.error
 import urllib.parse
-import urllib.request
 import warnings
+import zlib
 import xml.etree.ElementTree as ET
 
 import numpy as np
@@ -44,11 +47,6 @@ def fail(code, message):
     raise MirrorError(code, message)
 
 
-class _NoRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):
-        fail('archive_mirror_transport', 'Mirror redirects are not permitted')
-
-
 def _root(value):
     p = urllib.parse.urlsplit(value)
     official = value == OFFICIAL_ROOT
@@ -68,38 +66,61 @@ def _key(key, releases):
     return key
 
 
+_connections = threading.local()
+_tls_context = ssl.create_default_context()
+
+
 def _http(url, byte_limit, headers=None, ranged=False):
-    """No redirects, bounded body reads, finite retries and network timeouts."""
+    """Thread-local keepalive, strict TLS, bounded reads and finite retries.
+
+    Only the allowlisted root constructs URLs. Redirects and compressed bodies
+    remain forbidden; reuse never weakens Range/identity validation.
+    """
+    parsed = urllib.parse.urlsplit(url)
+    address = (parsed.scheme, parsed.hostname, parsed.port)
     for attempt in range(2):
+        connection = getattr(_connections, 'connection', None)
+        if connection is None or getattr(_connections, 'address', None) != address:
+            if connection is not None:
+                connection.close()
+            connection = (http.client.HTTPSConnection(parsed.hostname, parsed.port, timeout=10, context=_tls_context)
+                          if parsed.scheme == 'https' else http.client.HTTPConnection(parsed.hostname, parsed.port, timeout=10))
+            _connections.connection, _connections.address = connection, address
         try:
-            request = urllib.request.Request(url, headers={'Accept-Encoding': 'identity', 'User-Agent': 'SpaceApps-SPHEREx-metadata-index/1', **(headers or {})})
-            opener = urllib.request.build_opener(_NoRedirect)
-            with opener.open(request, timeout=10) as response:
-                if response.headers.get('Content-Encoding', 'identity') != 'identity':
-                    fail('archive_mirror_transport', 'Encoded bodies cannot be range-validated')
-                if ranged:
-                    match = re.fullmatch(r'bytes 0-(\d+)/(\d+)', response.headers.get('Content-Range', ''))
-                    if response.status != 206 or not match:
-                        fail('archive_mirror_range_required', 'Server must honor bounded Range with HTTP 206 and Content-Range')
-                    end, size = map(int, match.groups())
-                    if size <= 0 or end != min(byte_limit, size) - 1:
-                        fail('archive_mirror_range_required', 'Unexpected Content-Range extent')
-                    expected = end + 1
+            target = parsed.path or '/'
+            if parsed.query:
+                target += '?' + parsed.query
+            connection.request('GET', target, headers={'Accept-Encoding': 'identity', 'User-Agent': 'SpaceApps-SPHEREx-metadata-index/2', **(headers or {})})
+            with connection.getresponse() as response:
+                if response.status in (429, 500, 502, 503, 504) and attempt == 0:
+                    connection.close()
                 else:
-                    if response.status != 200:
-                        fail('archive_mirror_transport', 'Unexpected listing HTTP status')
-                    expected = None
-                length = response.headers.get('Content-Length')
-                if length is not None and (int(length) > byte_limit or (expected is not None and int(length) != expected)):
-                    fail('archive_mirror_transport', 'Response exceeds requested byte budget')
-                body = response.read(byte_limit + 1)
-                if len(body) > byte_limit or (expected is not None and len(body) != expected):
-                    fail('archive_mirror_transport', 'Response byte count violates range contract')
-                return body, {k.lower(): v for k, v in response.headers.items()}
-        except urllib.error.HTTPError as exc:
-            if exc.code not in (429, 500, 502, 503, 504) or attempt == 1:
-                fail('archive_mirror_transport', f'Mirror HTTP {exc.code}')
-        except (OSError, TimeoutError) as exc:
+                    if response.getheader('Content-Encoding', 'identity') != 'identity':
+                        fail('archive_mirror_transport', 'Encoded bodies cannot be range-validated')
+                    if ranged:
+                        match = re.fullmatch(r'bytes 0-(\d+)/(\d+)', response.getheader('Content-Range', ''))
+                        if response.status != 206 or not match:
+                            fail('archive_mirror_range_required', 'Server must honor bounded Range with HTTP 206 and Content-Range')
+                        end, size = map(int, match.groups())
+                        if size <= 0 or end != min(byte_limit, size) - 1:
+                            fail('archive_mirror_range_required', 'Unexpected Content-Range extent')
+                        expected = end + 1
+                    else:
+                        if response.status != 200:
+                            fail('archive_mirror_transport', f'Mirror HTTP {response.status}')
+                        expected = None
+                    length = response.getheader('Content-Length')
+                    if length is not None and (int(length) > byte_limit or (expected is not None and int(length) != expected)):
+                        fail('archive_mirror_transport', 'Response exceeds requested byte budget')
+                    body = response.read(byte_limit + 1)
+                    if len(body) > byte_limit or (expected is not None and len(body) != expected):
+                        fail('archive_mirror_transport', 'Response byte count violates range contract')
+                    return body, {k.lower(): v for k, v in response.getheaders()}
+        except MirrorError:
+            connection.close()
+            raise
+        except (OSError, TimeoutError, http.client.HTTPException) as exc:
+            connection.close()
             if attempt == 1:
                 fail('archive_mirror_transport', f'Mirror transport failed: {type(exc).__name__}')
         time.sleep(0.25 * (attempt + 1))
@@ -309,6 +330,64 @@ def _region(position):
     fail('invalid_request', 'position must be valid CIRCLE, POLYGON, or RANGE geometry')
 
 
+def _decode(value):
+    return json.loads(zlib.decompress(value) if isinstance(value, bytes) else value)
+
+
+def _cap_bounds(center, radius):
+    """Conservative Cartesian bounds avoid RA seams and singular polar boxes."""
+    if radius >= math.pi / 2:
+        return (-1., 1., -1., 1., -1., 1.)
+    cosine, sine = math.cos(radius), math.sin(radius)
+    bounds = []
+    for axis in center:
+        offset = math.sqrt(max(0, 1 - axis * axis)) * sine
+        lo, hi = axis * cosine - offset, axis * cosine + offset
+        if axis >= cosine:
+            hi = 1.
+        if -axis >= cosine:
+            lo = -1.
+        bounds.extend((max(-1., lo-1e-7), min(1., hi+1e-7)))
+    return tuple(bounds)
+
+
+def _footprint_bounds(poly):
+    center, radius = _cap(poly)
+    return _cap_bounds(center, radius)
+
+
+def _query_bounds(position):
+    fields = position.split()
+    nums = [float(value) for value in fields[1:]]
+    kind = fields[0].upper()
+    if kind == 'CIRCLE':
+        return _cap_bounds(_vectors([nums[:2]])[0], math.radians(nums[2]))
+    if kind == 'POLYGON':
+        return _footprint_bounds(_vectors(np.asarray(nums).reshape(-1, 2)))
+    lo, hi, bottom, top = nums
+    width = 360 if abs(hi-lo) == 360 else (hi-lo) % 360
+    # Cartesian extrema of a longitude/latitude rectangle occur at endpoints
+    # or at stationary angles. This also covers full-longitude polar queries.
+    longitudes = [lo, lo+width] + [v for v in (0, 90, 180, 270) if (v-lo) % 360 <= width]
+    latitudes = [bottom, top] + ([0] if bottom <= 0 <= top else [])
+    points = _vectors([[ra, dec] for ra in longitudes for dec in latitudes])
+    return tuple(v for axis in range(3) for v in (max(-1., float(points[:, axis].min())-1e-7), min(1., float(points[:, axis].max())+1e-7)))
+
+
+def _read_snapshot(method):
+    @wraps(method)
+    def read(self, *args, **kwargs):
+        owner = not self.db.in_transaction
+        if owner:
+            self.db.execute('BEGIN')
+        try:
+            return method(self, *args, **kwargs)
+        finally:
+            if owner:
+                self.db.rollback()
+    return read
+
+
 class MirrorIndex:
     def __init__(self, db, root=OFFICIAL_ROOT, releases=('qr2', 'dr1', 'qr3')):
         self.root = _root(root)
@@ -336,6 +415,22 @@ class MirrorIndex:
             CREATE INDEX IF NOT EXISTS mirror_retry_due ON mirror_retries(next_attempt, release);
             CREATE INDEX IF NOT EXISTS mirror_filter ON mirror_objects(release, detector, observed);
         ''')
+        # Migration is one-time and preserves verified records from the older
+        # sequential scanner. RTree bounds are conservative; exact WCS geometry
+        # remains the final authority for every returned image.
+        spatial_exists = self.db.execute("SELECT 1 FROM sqlite_master WHERE name='mirror_spatial'").fetchone()
+        self.db.executescript("""
+            CREATE VIRTUAL TABLE IF NOT EXISTS mirror_spatial USING rtree(id,min_x,max_x,min_y,max_y,min_z,max_z);
+            CREATE TRIGGER IF NOT EXISTS mirror_spatial_delete AFTER DELETE ON mirror_objects
+              BEGIN DELETE FROM mirror_spatial WHERE id=old.rowid; END;
+        """)
+        spatial_ready = self.db.execute("SELECT 1 FROM mirror_configuration WHERE name='spatial_schema' AND value='1'").fetchone()
+        if not spatial_exists or not spatial_ready:
+            with self.db:
+                for row in self.db.execute('SELECT rowid,footprint FROM mirror_objects'):
+                    self.db.execute('INSERT OR REPLACE INTO mirror_spatial VALUES (?,?,?,?,?,?,?)',
+                                    (row['rowid'], *_footprint_bounds(np.asarray(_decode(row['footprint'])))))
+                self.db.execute("INSERT OR REPLACE INTO mirror_configuration VALUES ('spatial_schema','1')")
         existing = self.db.execute("SELECT value FROM mirror_configuration WHERE name='root'").fetchone()
         if existing and existing[0] != self.root:
             fail('archive_mirror_configuration', 'Index belongs to a different mirror root')
@@ -350,14 +445,23 @@ class MirrorIndex:
         if total + extra > self.max_index_bytes or free - extra < 256 * 1024 * 1024:
             fail('archive_mirror_capacity', 'Mirror metadata disk budget reached or less than 256 MiB free; indexed partial results remain available')
 
+    @_read_snapshot
     def status(self):
         marks = ','.join('?' for _ in self.releases)
         states = [dict(r) for r in self.db.execute(f'SELECT * FROM mirror_pages WHERE release IN ({marks})', self.releases)]
         total = self.db.execute(f'SELECT COUNT(*) FROM mirror_objects WHERE release IN ({marks})', self.releases).fetchone()[0]
         failed = self.db.execute(f'SELECT COUNT(*) FROM mirror_retries WHERE release IN ({marks})', self.releases).fetchone()[0]
         listing_complete = all(bool(s['complete']) for s in states)
+        catalog = self.db.execute("SELECT 1 FROM sqlite_master WHERE name='mirror_catalog_releases'").fetchone()
+        catalog_status = {}
+        if catalog:
+            discovered = self.db.execute(f'SELECT COUNT(*) FROM mirror_catalog_releases WHERE discovered=1 AND release IN ({marks})', self.releases).fetchone()[0]
+            partitions = self.db.execute(f'SELECT COUNT(*),COALESCE(SUM(complete),0),COALESCE(SUM(pages),0) FROM mirror_catalog_partitions WHERE release IN ({marks})', self.releases).fetchone()
+            listing_complete = discovered == len(self.releases) and partitions[0] == partitions[1]
+            catalog_status = {'catalogue': {'releases_discovered': discovered, 'partitions': partitions[0], 'partitions_complete': partitions[1], 'pages_processed': partitions[2]}}
+
         return {'complete': listing_complete and failed == 0, 'listing_complete': listing_complete, 'failed_objects': failed,
-                'objects_indexed': total, 'releases': states, 'source': 's3_mirror'}
+                'objects_indexed': total, 'releases': states, 'source': 's3_mirror', **catalog_status}
 
     def reset(self):
         with self.db:
@@ -365,6 +469,10 @@ class MirrorIndex:
                 self.db.execute('UPDATE mirror_pages SET token=NULL,complete=0,pages=0 WHERE release=?', (release,))
                 self.db.execute('DELETE FROM mirror_objects WHERE release=?', (release,))
                 self.db.execute('DELETE FROM mirror_retries WHERE release=?', (release,))
+                if self.db.execute("SELECT 1 FROM sqlite_master WHERE name='mirror_catalog_releases'").fetchone():
+                    self.db.execute('DELETE FROM mirror_catalog_partitions WHERE release=?', (release,))
+                    self.db.execute('DELETE FROM mirror_catalog_directories WHERE release=?', (release,))
+                    self.db.execute('DELETE FROM mirror_catalog_releases WHERE release=?', (release,))
         return {'index': self.status()}
 
     def _list(self, release, token, page_size):
@@ -490,14 +598,20 @@ class MirrorIndex:
         if capacity_error:
             return written, MirrorError('archive_mirror_capacity', capacity_error['message'])
         try:
-            growth = sum(len(row[3].encode()) + len(row[4].encode()) + 2048 for row in succeeded)
+            stored = [(key, release, identity, zlib.compress(body.encode()), zlib.compress(footprint.encode()), observed, detector)
+                      for key, release, identity, body, footprint, observed, detector in succeeded]
+            growth = sum(len(row[3]) + len(row[4]) + 2048 for row in stored)
             growth += sum(len(item['identity'].encode()) + len(item['key'].encode()) + 2048 for item in failed)
             self._capacity(extra=growth + 16384)
             now = time.time()
             with self.db:
                 for key, _ in pending:
                     self.db.execute('DELETE FROM mirror_objects WHERE key=?', (key,))
-                self.db.executemany('INSERT OR REPLACE INTO mirror_objects VALUES (?,?,?,?,?,?,?)', succeeded)
+                self.db.executemany('INSERT OR REPLACE INTO mirror_objects VALUES (?,?,?,?,?,?,?)', stored)
+                for row in succeeded:
+                    rowid = self.db.execute('SELECT rowid FROM mirror_objects WHERE key=?', (row[0],)).fetchone()[0]
+                    self.db.execute('INSERT OR REPLACE INTO mirror_spatial VALUES (?,?,?,?,?,?,?)',
+                                    (rowid, *_footprint_bounds(np.asarray(json.loads(row[4])))))
                 for item in failed:
                     previous = self.db.execute('SELECT identity,attempts FROM mirror_retries WHERE key=?', (item['key'],)).fetchone()
                     attempts = previous['attempts']+1 if previous and previous['identity'] == item['identity'] else 1
@@ -591,6 +705,7 @@ class MirrorIndex:
             pages += 1
         return result()
 
+    @_read_snapshot
     def search(self, query, limit=256):
         if not isinstance(query, dict) or not 1 <= limit <= 256:
             fail('invalid_request', 'A query object and limit 1..256 are required')
@@ -616,10 +731,19 @@ class MirrorIndex:
                 clauses.append('observed' + op + '?')
                 values.append(bound)
         status = self.status()
+        bounds = _query_bounds(query['position'])
+        spatial_clauses, spatial_values = [], []
+        for axis, lo, hi in zip(('x', 'y', 'z'), bounds[::2], bounds[1::2]):
+            spatial_clauses.extend((f'min_{axis}<=?', f'max_{axis}>=?'))
+            spatial_values.extend((hi, lo))
         images = []
-        for row in self.db.execute('SELECT body,footprint FROM mirror_objects WHERE ' + ' AND '.join(clauses) + ' ORDER BY observed,key', values):
-            if matches(np.asarray(json.loads(row['footprint']))):
-                item = json.loads(row['body'])
+        # CROSS JOIN fixes the RTree as the outer lookup rather than a full
+        # release/time scan. Geometry decoding is limited to sky candidates.
+        sql = 'SELECT body,footprint FROM mirror_spatial CROSS JOIN mirror_objects ON mirror_objects.rowid=mirror_spatial.id WHERE '
+        sql += ' AND '.join(spatial_clauses + clauses) + ' ORDER BY observed,key'
+        for row in self.db.execute(sql, spatial_values + values):
+            if matches(np.asarray(_decode(row['footprint']))):
+                item = _decode(row['body'])
                 item['observation']['header_metadata']['discovery_complete'] = str(status['complete']).lower()
                 images.append(item)
                 if len(images) > limit:
@@ -639,6 +763,12 @@ def main(argv=None):
     scan.add_argument('--page-size', type=int, default=100)
     scan.add_argument('--max-pages', type=int, default=1)
     scan.add_argument('--workers', type=int, default=4)
+    catalog = subs.add_parser('catalog')
+    catalog.add_argument('--page-size', type=int, default=128)
+    catalog.add_argument('--max-pages', type=int, default=64)
+    catalog.add_argument('--workers', type=int, default=32)
+    catalog.add_argument('--max-seconds', type=float, default=180)
+    subs.add_parser('status')
     search = subs.add_parser('search')
     search.add_argument('--limit', type=int, default=256)
     subs.add_parser('reset')
@@ -647,6 +777,12 @@ def main(argv=None):
         idx = MirrorIndex(args.db, args.root, args.releases.split(','))
         if args.command == 'scan':
             result = idx.scan(args.page_size, args.max_pages, args.workers)
+        elif args.command == 'catalog':
+            sys.modules.setdefault('irsa_mirror', sys.modules[__name__])
+            from irsa_catalog import scan_catalog
+            result = scan_catalog(idx, args.page_size, args.max_pages, args.workers, args.max_seconds)
+        elif args.command == 'status':
+            result = {'index': idx.status()}
         elif args.command == 'search':
             raw = sys.stdin.read(65537)
             if len(raw) > 65536:

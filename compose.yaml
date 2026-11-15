@@ -8,6 +8,8 @@ services:
       - "127.0.0.1:${GRPC_PORT:-50051}:50051"
     environment:
       DATA_DIR: /app/data
+      # Persistent metadata only; pixel downloads use the separate file cache.
+      IRSA_MIRROR_MAX_INDEX_BYTES: "8589934592"
       PROCESSING_URL: http://pipeline:8002
     depends_on:
       pipeline:
