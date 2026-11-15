@@ -1,5 +1,8 @@
 package spaceapps
-import spaceapps.irsa.integrations.MirrorProcess
+import spaceapps.irsa.integrations.{MirrorProcess,S3MirrorArchive}
+import spaceapps.irsa.service.Archive
+import spaceapps.irsa.model.{ArchiveImage,Query}
+import java.nio.file.Path
 import spaceapps.irsa.model.ApiError
 import zio.*
 import zio.json.ast.Json
@@ -20,6 +23,16 @@ object MirrorProcessSpec extends ZIOSpecDefault:
     },
     test("mirror warming errors preserve their machine-readable code") {
       script("import json,sys\nprint(json.dumps({'error':{'code':'archive_mirror_index_warming','message':'indexing'}}))\nsys.exit(2)") { p=>p.run(List("search")).either.map(r=>assertTrue(r.left.toOption.exists{case e:ApiError=>e.code=="archive_mirror_index_warming";case _=>false})) }
+    },
+    test("catalogue progress refreshes while an ingestion batch is still running") {
+      script("import json,sys,time\nif 'catalog' in sys.argv: time.sleep(30)\nprint(json.dumps({'index':{'objects_indexed':17,'complete':False}}))") { p=>ZIO.scoped {for
+        mirror<-S3MirrorArchive.make(p,new Archive {
+          def search(query:Query):Task[List[ArchiveImage]]=ZIO.succeed(Nil)
+          def fetch(image:ArchiveImage,path:Path):Task[Unit]=ZIO.unit
+        })
+        _<-mirror.start
+        value<-(mirror.status <* ZIO.sleep(10.millis)).repeatUntil(_.asObject.flatMap(_.get("objects_indexed")).contains(Json.Num(17))).timeout(3.seconds)
+      yield assertTrue(value.nonEmpty)} }
     },
     test("a crashed helper cannot become a successful empty observation list") {
       script("import sys\nsys.exit(1)") { p=>p.run(List("search")).either.map(r=>assertTrue(r.isLeft)) }

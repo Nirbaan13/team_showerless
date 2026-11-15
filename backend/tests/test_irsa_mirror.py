@@ -421,3 +421,58 @@ def test_many_bad_objects_have_bounded_report_and_retry_batch(tmp_path, s3, monk
     assert len(s3['requests']) == 32
     assert second['index']['failed_objects'] == 30
     assert not second['index']['complete']
+
+
+def test_spatial_catalog_filters_before_exact_geometry(tmp_path, s3, monkeypatch):
+    add(s3, 'near')
+    add(s3, 'far', ra=180, dec=-20)
+    s3['page'] = 100
+    idx = index(tmp_path, s3)
+    idx.scan()
+    m = module()
+    original = m._region
+    calls = []
+    def counted(position):
+        exact = original(position)
+        def check(poly):
+            calls.append(poly)
+            return exact(poly)
+        return check
+    monkeypatch.setattr(m, '_region', counted)
+    found = idx.search({'position': 'CIRCLE 359.9 1 0.01'})
+    assert len(found['images']) == 1
+    assert len(calls) == 1
+    assert idx.db.execute('SELECT COUNT(*) FROM mirror_spatial').fetchone()[0] == 2
+
+
+def test_spatial_catalog_migrates_old_rows_without_redownload(tmp_path, s3):
+    add(s3)
+    idx = index(tmp_path, s3)
+    idx.scan()
+    idx.db.execute('DROP TABLE IF EXISTS mirror_spatial')
+    idx.db.commit()
+    idx.db.close()
+    resumed = index(tmp_path, s3)
+    assert len(resumed.search({'position': 'RANGE 359.8 0.1 0.9 1.1'})['images']) == 1
+    assert len(s3['requests']) == 1
+    assert resumed.db.execute('SELECT COUNT(*) FROM mirror_spatial').fetchone()[0] == 1
+
+
+@pytest.mark.parametrize('position', [
+    'CIRCLE 0 89.9 0.2', 'CIRCLE 359.95 1 0.1',
+    'RANGE 350 10 -2 3', 'RANGE 0 360 89 90',
+    'RANGE 170 190 -30 30',
+    'POLYGON 359 -1 1 -1 1 3 359 3',
+    'POLYGON 0 88 120 88 240 88',
+])
+def test_spatial_prefilter_preserves_exact_spherical_results(tmp_path, s3, position):
+    for n, (ra, dec) in enumerate([(359.9, 1), (0, 89.8), (180, 0), (100, -30)]):
+        add(s3, str(n), ra=ra, dec=dec)
+    s3['page'] = 100
+    idx = index(tmp_path, s3)
+    idx.scan()
+    m = module()
+    expected = {m._decode(row['body'])['observation']['frame_id'] for row in idx.db.execute('SELECT body,footprint FROM mirror_objects')
+                if m._region(position)(np.asarray(m._decode(row['footprint'])))}
+    actual = {item['observation']['frame_id'] for item in idx.search({'position': position})['images']}
+    assert actual == expected

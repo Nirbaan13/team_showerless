@@ -21,7 +21,8 @@ RUN python3 -m venv /opt/inference-venv \
     && rm /tmp/inference-requirements.txt /tmp/pipeline-requirements.txt
 COPY --from=build --chown=app:app /build/backend/target/stage ./
 COPY --chown=app:app backend/docs/openapi.yaml ./docs/openapi.yaml
-COPY --chown=app:app backend/python/irsa_mirror.py ./integrations/irsa_mirror.py
+COPY --chown=app:app backend/python/irsa_mirror.py backend/python/irsa_catalog.py ./integrations/
+RUN /opt/inference-venv/bin/python -c "import sys; sys.path.insert(0, '/app/integrations'); import irsa_catalog"
 COPY --chown=app:app science/archive_gateway.py ./science/archive_gateway.py
 COPY --chown=app:app pipeline/service.py ./pipeline/service.py
 COPY --chown=app:app pipeline/spherex ./pipeline/spherex
