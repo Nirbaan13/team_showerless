@@ -5,11 +5,29 @@ import type {
   CatalogOverlayState,
   SubtractionMode,
   MLAnalysisStatus,
+  DetectorArrayId,
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
+
+export const BAND_SPECTRAL_STYLES: Record<number | 'all', {
+  name: string;
+  range: string;
+  tintColor: string;
+  starFluxScale: number;
+  cometFluxScale: number;
+  contrastBoost: number;
+}> = {
+  1: { name: 'Band 1', range: '0.75–1.11 µm', tintColor: 'rgba(99, 102, 241, 0.12)', starFluxScale: 1.45, cometFluxScale: 0.65, contrastBoost: 1.0 },
+  2: { name: 'Band 2', range: '1.11–1.64 µm', tintColor: 'rgba(6, 182, 212, 0.10)', starFluxScale: 1.30, cometFluxScale: 0.85, contrastBoost: 1.05 },
+  3: { name: 'Band 3', range: '1.64–2.42 µm', tintColor: 'rgba(16, 185, 129, 0.10)', starFluxScale: 1.10, cometFluxScale: 1.0, contrastBoost: 1.1 },
+  4: { name: 'Band 4', range: '2.42–3.82 µm', tintColor: 'rgba(245, 158, 11, 0.11)', starFluxScale: 0.90, cometFluxScale: 1.25, contrastBoost: 1.15 },
+  5: { name: 'Band 5', range: '3.82–4.42 µm', tintColor: 'rgba(249, 115, 22, 0.12)', starFluxScale: 0.70, cometFluxScale: 1.55, contrastBoost: 1.2 },
+  6: { name: 'Band 6', range: '4.42–5.00 µm', tintColor: 'rgba(239, 68, 68, 0.13)', starFluxScale: 0.55, cometFluxScale: 1.85, contrastBoost: 1.25 },
+  all: { name: 'All Bands Composite', range: '0.75–5.00 µm', tintColor: 'rgba(52, 211, 153, 0.14)', starFluxScale: 1.25, cometFluxScale: 1.65, contrastBoost: 1.35 },
+};
 
 interface CanvasViewportProps {
   frames: SpherexEpochFrame[];
@@ -29,6 +47,7 @@ interface CanvasViewportProps {
   onOpenMlInsights?: () => void;
   liveCatalog?: LiveCatalogResponse | null;
   fov?: string;
+  selectedArray?: DetectorArrayId | 'all';
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -49,6 +68,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   mlAnalysisStatus,
   onOpenMlInsights: _onOpenMlInsights,
   liveCatalog,
+  selectedArray = 'all',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -234,11 +254,20 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const imgW = 512;
         const imgH = 512 / aspect;
         ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
-        if (subtractionMode === 'zodi_reference_subtracted') {
+
+        const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || currentFrame?.detectorArray || 6);
+        const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
+
+        if (selectedArray === 'all') {
+          // All Bands Stack: coadded composite across all 6 detectors -> elevated SNR (~2.45x) & clarity
+          ctx.filter = isWhiteBg
+            ? 'invert(1) contrast(1.6) brightness(1.15)'
+            : 'contrast(1.55) brightness(1.18)';
+        } else if (subtractionMode === 'zodi_reference_subtracted') {
           // Zodi Subtracted: remove diffuse interplanetary dust haze -> crisp black background & boosted contrast
           ctx.filter = isWhiteBg
-            ? 'invert(1) contrast(1.5) brightness(1.1)'
-            : 'contrast(1.45) brightness(1.15)';
+            ? `invert(1) contrast(${1.5 * bandStyle.contrastBoost}) brightness(1.1)`
+            : `contrast(${1.45 * bandStyle.contrastBoost}) brightness(1.15)`;
         } else if (subtractionMode === 'epoch_difference') {
           // Difference Image: high contrast to pop motion dipole
           ctx.filter = isWhiteBg
@@ -251,9 +280,15 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
         ctx.drawImage(cachedImg, -imgW / 2, -imgH / 2, imgW, imgH);
 
+        // Apply authentic false-color infrared spectral tint per detector array
+        if (!isWhiteBg && bandStyle.tintColor) {
+          ctx.fillStyle = bandStyle.tintColor;
+          ctx.fillRect(-imgW / 2, -imgH / 2, imgW, imgH);
+        }
+
         // If raw_calibrated: overlay subtle diffuse warm zodiacal light haze across the sensor
         if (subtractionMode === 'raw_calibrated' && !isWhiteBg) {
-          ctx.fillStyle = 'rgba(255, 210, 150, 0.06)';
+          ctx.fillStyle = 'rgba(255, 210, 150, 0.05)';
           ctx.fillRect(-imgW / 2, -imgH / 2, imgW, imgH);
         }
         ctx.restore();
@@ -276,7 +311,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       if (offCtx) {
         const imgData = offCtx.createImageData(256, 256);
         const data = imgData.data;
-        const detArray = activeFrame?.detectorArray ?? 6;
+        const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || activeFrame?.detectorArray || 6);
+        const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
+        const detArray = typeof activeBandKey === 'number' ? activeBandKey : 6;
         const seedCoord = (Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) + detArray * 7393) % 100000;
         let rng = seedCoord + activeFrameIndex * 1337;
         const lcg = () => {
@@ -285,8 +322,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         };
 
         // 1. Fill detector readout noise floor with zodiacal background level
-        const basePedestal = subtractionMode === 'raw_calibrated' ? 36 : subtractionMode === 'zodi_reference_subtracted' ? 14 : 4;
-        const noiseSpread = subtractionMode === 'raw_calibrated' ? 18 : 10;
+        const basePedestal = selectedArray === 'all' ? 10 : subtractionMode === 'raw_calibrated' ? 36 : subtractionMode === 'zodi_reference_subtracted' ? 14 : 4;
+        const noiseSpread = selectedArray === 'all' ? 8 : subtractionMode === 'raw_calibrated' ? 18 : 10;
         for (let i = 0; i < 256 * 256; i++) {
           const noise = basePedestal + Math.floor(lcg() * noiseSpread);
           const idx = i * 4;
@@ -297,7 +334,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         }
 
         // 2. Add discrete pixelated stellar PSFs (field stars)
-        // In epoch_difference mode, static field stars cancel out!
+        // In near-IR (Band 1/2), hot stars shine brightest; in mid-IR (Band 5/6), cold dust/gas dominates
         if (subtractionMode !== 'epoch_difference') {
           let starRng = seedCoord;
           const starLcg = () => {
@@ -307,7 +344,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           for (let s = 0; s < 28; s++) {
             const sx = Math.floor(10 + starLcg() * 236);
             const sy = Math.floor(10 + starLcg() * 236);
-            const flux = (subtractionMode === 'zodi_reference_subtracted' ? 110 : 70) + starLcg() * 160;
+            const baseFlux = (subtractionMode === 'zodi_reference_subtracted' ? 110 : 70) + starLcg() * 160;
+            const flux = Math.floor(baseFlux * bandStyle.starFluxScale);
             for (let dy = -3; dy <= 3; dy++) {
               for (let dx = -3; dx <= 3; dx++) {
                 const px = sx + dx;
@@ -755,7 +793,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog]);
+  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -1120,8 +1158,13 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         <div className="absolute bottom-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2 py-0.5 rounded text-[10px] font-mono text-paper-400 flex items-center gap-2 pointer-events-none">
           <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
-          <span>|</span>
-          <span>Band {activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>
+          <span>
+            {selectedArray === 'all' ? (
+              <span className="text-emerald-300 font-bold">All Bands Stack (D1–D6 · SNR ×2.4)</span>
+            ) : (
+              <span>Band {selectedArray || activeFrame.detectorArray} ({BAND_SPECTRAL_STYLES[selectedArray || activeFrame.detectorArray]?.range || `${activeFrame.wavelengthMinUm}–${activeFrame.wavelengthMaxUm} µm`})</span>
+            )}
+          </span>
           <span>|</span>
           <span className="text-amber-300 font-semibold">FOV {fov}</span>
           {subtractionMode === 'zodi_reference_subtracted' && (

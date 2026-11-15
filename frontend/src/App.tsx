@@ -1209,6 +1209,7 @@ export function App() {
               centerRa={ra}
               centerDec={dec}
               fov={fov}
+              selectedArray={selectedArray}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
