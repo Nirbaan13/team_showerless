@@ -73,6 +73,8 @@ image display or historical ML. The ready-file/preview paths are separately
 covered with explicit HTTP protocol fixtures in Playwright.
 
 Machine-readable live evidence: [archive-period-live-proof.json](evidence/archive-period-live-proof.json).
+[Live browser screenshot](evidence/archive-period-live.png) shows the actual failed
+native transfer and unavailable preview without a substituted scientific image.
 An earlier narrow-day live request returned a gateway error; neither that failure
 nor the truncated results were interpreted as complete empty coverage.
 
@@ -103,6 +105,11 @@ order, actual selected IDs, pending/ready file links, server-provided polling UR
 provider failures, unsupported filters, empty/truncated results, ready/unavailable
 preview states, per-record eligibility, clearing stale results, share/reload
 coordinates and embed links. Existing native SPHEREx tests remain enabled.
+
+Final validation after integrating main PR 28: **47 Playwright tests passed**,
+including 13 archive-period tests and all existing tests. Lint and the production
+build passed; existing React lint and bundle-size warnings remain. Independent
+review found no remaining material issues.
 
 Commands: `npm --prefix frontend run lint`, `npm --prefix frontend run build`,
 `cd frontend && npm test`, and `git diff --check`. CI tests are asynchronous and

@@ -1,5 +1,5 @@
 {
-  "query_url": "http://127.0.0.1:4174/backend/api/observations-search?right_ascension_deg=53.16250000000002&declination_deg=-27.7914&radius_degrees=0.011785112936675083&providers=cadc&product_kinds=image&limit_per_provider=100&observed_after=1990-01-01T00%3A00%3A00.000Z&observed_before=2003-01-01T00%3A00%3A00.000Z",
+  "query_url": "http://127.0.0.1:4174/backend/api/observations-search?right_ascension_deg=53.162500&declination_deg=-27.791400&radius_degrees=0.011785112936675083&providers=cadc&product_kinds=image&observed_after=1990-01-01T00%3A00%3A00.000Z&observed_before=2003-01-01T00%3A00%3A00.000Z&limit_per_provider=100",
   "returned_count": 100,
   "outcomes": [
     {
@@ -27,7 +27,7 @@
     }
   },
   "download": {
-    "id": "17ee7ee8-0f51-4ce5-8b87-3f5473a27647",
+    "id": "08e27a7b-e94b-41b0-a2b8-efeeb8a4fe01",
     "status": "failed",
     "progress": {
       "discovery_complete": true,
