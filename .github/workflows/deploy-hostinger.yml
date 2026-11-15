@@ -31,6 +31,11 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build
+          python3 - <<'PYREV'
+          import json, os
+          from pathlib import Path
+          Path('dist/frontend-version.json').write_text(json.dumps({'version': os.environ['GITHUB_SHA']}))
+          PYREV
           if [ -f public/.htaccess ]; then
             cp public/.htaccess dist/.htaccess
           fi
@@ -41,3 +46,29 @@ jobs:
           HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
         run: python3 ops/deploy_hostinger.py
+
+      - name: Verify public revision and API delivery
+        run: |
+          python3 - <<'PYVERIFY'
+          import json, os, time, urllib.request
+          base = 'https://spherexblink.tech'
+          def read(path):
+              request = urllib.request.Request(base + path, headers={'Cache-Control': 'no-cache'})
+              with urllib.request.urlopen(request, timeout=15) as response:
+                  assert response.headers.get_content_type() == 'application/json', (path, response.headers.get_content_type())
+                  return json.load(response)
+          deadline = time.monotonic() + 180
+          while True:
+              try:
+                  assert read('/frontend-version.json')['version'] == os.environ['GITHUB_SHA']
+                  assert isinstance(read('/api/catalogue/kpis'), dict)
+                  assert isinstance(read('/api/motion/verifications'), list)
+                  assert read('/backend/health')['status'] == 'ok'
+                  break
+              except Exception as error:
+                  if time.monotonic() >= deadline:
+                      raise
+                  print(f'Waiting for public API delivery: {error}', flush=True)
+                  time.sleep(5)
+          print('Public frontend revision and JSON API routes verified.')
+          PYVERIFY
