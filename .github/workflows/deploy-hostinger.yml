@@ -34,25 +34,9 @@ jobs:
             cp public/.htaccess dist/.htaccess
           fi
 
-      - name: Inspect FTP Server Structure
+      - name: Deploy to Hostinger Live Site via FTPS
         env:
           HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
           HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
           HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-        run: python3 test_ftp.py
-
-      - name: Deploy to Hostinger via FTP
-        if: ${{ env.HOSTINGER_FTP_SERVER != '' }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        env:
-          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
-        with:
-          server: ${{ secrets.HOSTINGER_FTP_SERVER }}
-          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
-          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          protocol: ftps
-          security: loose
-          port: 21
-          local-dir: ./frontend/dist/
-          server-dir: ./public_html/
-          dangerous-clean-slate: false
+        run: python3 ops/deploy_hostinger.py
