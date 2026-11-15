@@ -234,6 +234,19 @@ Access the application on port `8080` at `http://localhost:8080`.
 
 ---
 
+### Option 3: Deploy the Published Docker Image Locally
+
+Requires Docker Engine with the Docker Compose plugin. The image includes the services and real demo data.
+
+```bash
+docker pull ghcr.io/nirbaan13/team-showerless-demo:v1
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/nirbaan13/team-showerless-demo:v1 --project spaceapps-demo-v1 --port 18081 --timeout 300
+```
+
+After `Demo ready`, open [http://localhost:18081](http://localhost:18081).
+
+---
+
 ## Verification Suite & Automated Testing
 
 Execute the test suites below to verify system integrity, type safety, and pipeline logic:
