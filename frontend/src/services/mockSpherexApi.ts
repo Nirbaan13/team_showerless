@@ -7,7 +7,6 @@ import type {
 } from '../types/spherex';
 import {
   REAL_BARNARD_FRAMES,
-  REAL_CERES_FRAMES,
   REAL_WISE_0855_FRAMES,
   REAL_EPSILON_INDI_B_FRAMES,
   REAL_RW_AURIGAE_FRAMES,
@@ -96,6 +95,8 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
   },
 ];
 
+export const STORED_PRESET_IDS = new Set([...NASA_TEST_PRESETS.map(preset => preset.id), '3i-atlas-d2', 'vesta-d3', 'vesta-d6']);
+
 export const REFERENCE_MOLECULAR_LINES: MolecularLine[] = [
   { name: 'Silicate Features', formula: 'SiO₄', centerUm: 1.25, widthUm: 0.25, color: '#ec4899' },
   { name: 'Water Vapor / Ice', formula: 'H₂O', centerUm: 3.05, widthUm: 0.35, color: '#38bdf8' },
@@ -117,7 +118,7 @@ export const DETECTOR_ARRAY_SPECS = [
  * real SPHEREx datasets from public/motion/review.json when available.
  */
 export function getMockEpochFrames(targetId: string, arrayId: number | 'all'): SpherexEpochFrame[] {
-  if (arrayId === 'all') return [];
+  if (arrayId === 'all' || !STORED_PRESET_IDS.has(targetId)) return [];
   return getStoredEpochFrames(targetId, arrayId).filter(frame => frame.detectorArray === arrayId);
 }
 
@@ -242,36 +243,6 @@ function getStoredEpochFrames(targetId: string, arrayId: number): SpherexEpochFr
     }));
   }
 
-  if (targetId === '1-ceres') {
-    const ceresObs = [
-      { id: '2025W27_1A_0591_1', date: '2025-07-03T02:08:42.024Z', wave: 1.35, snr: 32.4 },
-      { id: '2025W27_1A_0591_2', date: '2025-07-03T02:10:50.955Z', wave: 1.42, snr: 34.1 },
-      { id: '2025W27_1A_0591_3', date: '2025-07-03T02:12:59.886Z', wave: 1.48, snr: 33.7 },
-      { id: '2025W27_1A_0591_4', date: '2025-07-03T02:15:08.816Z', wave: 1.55, snr: 35.2 },
-    ];
-    return ceresObs.map((obs, idx) => ({
-      frameId: obs.id,
-      epochIndex: idx,
-      observationDate: obs.date,
-      detectorArray: 2 as any,
-      wavelengthMinUm: 1.11,
-      wavelengthMaxUm: 1.64,
-      channelIndex: 30 + idx * 3,
-      flaggedPixelPercentage: 0.08,
-      cosmicRayHits: 6,
-      isAvailable: true,
-      imageDataUrl: REAL_CERES_FRAMES[idx]?.pngDataUrl,
-      imageWidth: 256,
-      imageHeight: 144,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.04,
-        zodiBrightnessMjySr: Number((11.8 + idx * 0.4).toFixed(2)),
-        snrEstimated: obs.snr,
-      },
-    }));
-  }
-
   const dates = [
     '2025-06-15T04:12:00Z',
     '2025-09-22T11:45:00Z',
@@ -375,48 +346,6 @@ function getStoredCandidates(targetId: string, arrayId: number): CandidateObject
           datasetDoi: '10.26131/IRSA652',
           sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/most-queries/',
           exposuresCount: 3,
-        },
-      },
-    ];
-  }
-
-  if (targetId === '1-ceres') {
-    return [
-      {
-        id: '(1) Ceres (D2 SWIR Diagnostic)',
-        ra: 15.616171,
-        dec: -5.471297,
-        pixelX: 128,
-        pixelY: 72,
-        mlRank: 1,
-        mlScore: 0.98,
-        mlPriorityScore: 0.98,
-        heuristicRank: 1,
-        randomForestRank: 1,
-        detectionMethod: 'baseline',
-        fitRmsPx: 0.21,
-        speedArcsecPerHour: 29.8,
-        epochPositions: [
-          { epochIndex: 0, x: 126, y: 72, flux: 310.0, snr: 32.4 },
-          { epochIndex: 1, x: 127, y: 72, flux: 315.0, snr: 34.1 },
-          { epochIndex: 2, x: 128, y: 72, flux: 312.0, snr: 33.7 },
-          { epochIndex: 3, x: 129, y: 72, flux: 318.0, snr: 35.2 },
-        ],
-        classification: 'moving_object',
-        confidence: 'high',
-        volunteerNotes: 'Real known-object development diagnostic (1 Ceres). 4 physical D2 exposures on 2025-07-03 spanning 6.45 minutes. Geocentric sky motion 0.52 px matched to JPL Horizons ephemeris.',
-        isKnownCatalogMatch: true,
-        matchedCatalog: 'NEO Ephemeris',
-        catalogId: '1 Ceres (NAIF ID: 2000001)',
-        validationData: {
-          objectName: '(1) Ceres (D2 SWIR Diagnostic)',
-          maxOffsetPx: 0.521,
-          baselineRank: 1,
-          totalCandidates: 1,
-          randomForestRank: 1,
-          datasetDoi: '10.26131/IRSA652',
-          sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/',
-          exposuresCount: 4,
         },
       },
     ];

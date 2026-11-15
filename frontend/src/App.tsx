@@ -19,6 +19,7 @@ import {
   findCandidateAcrossAllPresets,
   getMock102BandSpectrum,
   NASA_TEST_PRESETS,
+  STORED_PRESET_IDS,
 } from './services/mockSpherexApi';
 import {
   fetchLiveBackendCutoutAnalysis,
@@ -219,9 +220,11 @@ export function App() {
   }, []);
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
-  const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>({
-    source: 'preset',
-    message: 'NASA Benchmark: 3I/ATLAS (D6)',
+  const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => {
+    const preset = new URLSearchParams(window.location.search).get('preset');
+    return preset && !STORED_PRESET_IDS.has(preset)
+      ? { source: 'error', message: 'No verified stored image sequence is available for this preset.' }
+      : { source: 'preset', message: 'Stored benchmark sequence' };
   });
 
   const [mlAnalysisStatus, setMlAnalysisStatus] = useState<MLAnalysisStatus>({

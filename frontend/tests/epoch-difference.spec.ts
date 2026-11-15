@@ -436,3 +436,13 @@ test('processing modes require their own artifacts and unsupported Zodi links st
   await page.getByRole('button', { name: 'Diff', exact: true }).click();
   await expect.poll(async () => (await drawn(page)).includes(reviews[0].frames[0].residual)).toBe(true);
 });
+
+test('retired Ceres links show unavailable instead of another object or generated frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=1-ceres&detector=2');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
+  expect(await drawn(page)).toHaveLength(0);
+});
