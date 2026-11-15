@@ -75,6 +75,7 @@ export function App() {
     new URLSearchParams(window.location.search).get('embed') === 'true';
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference' | 'catalogue'>(() => {
     if (isEmbedMode) return 'viewer';
+    if (typeof window !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       const requestedTab = searchParams.get('tab');
       if (

@@ -9,7 +9,7 @@ export interface UrlParamsState {
   subtractionMode: SubtractionMode;
   activeFrameIndex: number;
   candidateId?: string | null;
-  tab?: 'home' | 'viewer' | 'feed' | 'report' | 'inference';
+  tab?: 'home' | 'viewer' | 'feed' | 'report' | 'inference' | 'catalogue';
   presetId?: string | null;
 }
 

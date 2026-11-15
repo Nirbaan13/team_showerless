@@ -21,6 +21,7 @@ import {
   Sparkles,
   MessageSquare,
   Compass,
+  HelpCircle,
   ThumbsUp,
   ShieldCheck,
   Activity,
