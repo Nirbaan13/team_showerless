@@ -262,3 +262,16 @@ for (const width of [1500, 390]) {
     await page.getByRole('button', { name: 'Zoom In', exact: true }).click();
   });
 }
+
+
+test('same-day visits retain distinct UTC labels and select their actual frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  for (const [index, time] of ['11:01', '12:39', '17:33', '19:06'].entries()) {
+    const visit = page.getByRole('button', { name: `12-14 ${time}z`, exact: true });
+    await expect(visit).toHaveAttribute('title', new RegExp(`UTC: 2025-12-14T${time}`));
+    await visit.click();
+    await expect(page.getByText(`Frame ${index + 1} of 4`, { exact: true })).toBeVisible();
+  }
+});
