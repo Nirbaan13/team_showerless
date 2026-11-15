@@ -106,12 +106,6 @@ export function App() {
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
-      setDrawerControlledTab('ai');
-    }
-  }, []);
-
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
