@@ -13,6 +13,11 @@ reject() {
 
 [[ $command != *$'\n'* && $command != *$'\r'* ]] || reject
 
+# A separate Compose project keeps backend --remove-orphans away from ML.
+if [[ $command =~ ^deploy-ml\ ([0-9a-f]{40})$ ]]; then
+    exec /usr/local/bin/spaceapps-deploy-ml
+fi
+
 # Keep supporting direct docker-save streams for manual recovery.
 if [[ $command =~ ^deploy\ ([0-9a-f]{40})$ ]]; then
     exec /usr/local/bin/spaceapps-deploy

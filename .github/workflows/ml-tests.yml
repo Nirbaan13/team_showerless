@@ -1,0 +1,32 @@
+name: ML tests (agents do not wait)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ml-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ml-packaging:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build the ML service
+        run: docker build --file ml/Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-ml:$GITHUB_SHA" .
+      - name: Exercise packaged scientific HTTP service with isolated databases
+        run: docker run --rm --read-only --tmpfs /tmp --entrypoint python "spaceapps-ml:$GITHUB_SHA" /app/smoke_deployment.py --check-runtime
+      - name: Verify durable databases and failed-release rollback
+        env:
+          TEST_IMAGE_REVISION: ${{ github.sha }}
+        run: bash ops/ml/test-deploy.sh
