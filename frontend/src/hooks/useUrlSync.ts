@@ -11,6 +11,7 @@ export interface UrlParamsState {
   candidateId?: string | null;
   tab?: 'home' | 'viewer' | 'feed' | 'report' | 'inference' | 'catalogue';
   presetId?: string | null;
+  objectId?: string | null;
   archive?: string;
   observedFrom?: string;
   observedThrough?: string;
@@ -73,6 +74,7 @@ export function useUrlSync(
         // Direct coordinates provided: clear preset so custom frames are loaded
         partial.presetId = null;
       }
+      if (params.has('object')) { partial.objectId = params.get('object'); partial.presetId = null; }
 
       if ((partial.archive && partial.archive !== 'irsa-spherex') || partial.observedFrom || partial.observedThrough) partial.presetId = null;
       if (params.has('tab')) {
@@ -124,6 +126,7 @@ export function useUrlSync(
     } else {
       params.delete('preset');
     }
+    if (s.objectId) params.set('object', s.objectId); else params.delete('object');
 
     window.history.replaceState(window.history.state, '', url);
   }, []);
@@ -140,6 +143,7 @@ export function useUrlSync(
     state.candidateId,
     state.tab,
     state.presetId,
+    state.objectId,
     state.archive, state.observedFrom, state.observedThrough,
     updateUrl,
   ]);
