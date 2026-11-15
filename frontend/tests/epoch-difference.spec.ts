@@ -422,3 +422,17 @@ test('all-detector links cannot relabel a D6 bitmap as a composite', async ({ pa
   await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
   await expect(page.getByText(/All Bands Stack|SNR ×2.4/)).toHaveCount(0);
 });
+
+test('processing modes require their own artifacts and unsupported Zodi links stay unavailable', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas&subtraction=zodi_reference_subtracted');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Zodi image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Zodi Clean', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Zodi Reference Subtracted', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Aligned', exact: true }).click();
+  await expect(page.getByText('Zodi image unavailable', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'BLOOM Bitmask Core Overlay', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Diff', exact: true }).click();
+  await expect.poll(async () => (await drawn(page)).includes(reviews[0].frames[0].residual)).toBe(true);
+});

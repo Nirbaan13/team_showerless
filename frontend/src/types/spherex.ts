@@ -50,6 +50,7 @@ export interface SpherexEpochFrame {
   skipReason?: string; // Reason if isAvailable is false
   imageDataUrl?: string; // Rendered aligned cutout bitmap or SVG simulation
   residualDataUrl?: string; // Per-frame leave-one-out difference image PNG
+  zodiDataUrl?: string; // Published zodiacal-reference-subtracted artifact
   bloomDataUrl?: string; // Detector BLOOM core bitmask PNG
   imageWidth?: number; // Native pixel width of cutout
   imageHeight?: number; // Native pixel height of cutout

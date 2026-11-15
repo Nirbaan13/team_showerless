@@ -8,6 +8,7 @@ import type {
   ObservationLoadStatus,
   DetectorArrayId,
 } from '../types/spherex';
+import { imageArtifact } from '../services/imageArtifacts';
 import { getPriorityColors } from '../services/mlRanking';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
@@ -139,12 +140,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   }, [loadStatus?.source]);
 
   const activeFrame = frames[activeFrameIndex] || null;
-  const targetBitmapUrl = subtractionMode === 'epoch_difference' ? activeFrame?.residualDataUrl
-    : subtractionMode === 'bloom_mask' ? activeFrame?.bloomDataUrl : activeFrame?.imageDataUrl;
+  const targetBitmapUrl = imageArtifact(activeFrame, subtractionMode);
   const bitmapReady = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'ready');
   const bitmapFailed = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'failed');
   const layerLabel = subtractionMode === 'epoch_difference' ? 'Difference image'
-    : subtractionMode === 'bloom_mask' ? 'BLOOM image' : 'Observation image';
+    : subtractionMode === 'bloom_mask' ? 'BLOOM image' : subtractionMode === 'zodi_reference_subtracted' ? 'Zodi image' : 'Observation image';
 
   const handleResetView = () => {
     setZoom(1.4);
@@ -200,15 +200,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const imgH = 512 / aspect;
         ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
 
-        const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || currentFrame?.detectorArray || 6);
-        const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
-
-        if (subtractionMode === 'zodi_reference_subtracted') {
-          // Zodi Subtracted: remove diffuse interplanetary dust haze -> crisp black background & boosted contrast
-          ctx.filter = isWhiteBg
-            ? `invert(1) contrast(${1.5 * bandStyle.contrastBoost}) brightness(1.1)`
-            : `contrast(${1.45 * bandStyle.contrastBoost}) brightness(1.15)`;
-        } else if (subtractionMode === 'epoch_difference') {
+        if (subtractionMode === 'epoch_difference') {
           // Difference Image: high contrast to pop motion dipole
           ctx.filter = isWhiteBg
             ? 'invert(1) contrast(2.2)'
@@ -877,6 +869,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <div className="hidden sm:flex items-center gap-1 pr-1.5 mr-1 border-r border-paper-800 font-mono text-[10px]">
             <button
               type="button"
+              disabled={!imageArtifact(activeFrame, 'raw_calibrated')}
               onClick={() => onChangeSubtractionMode('raw_calibrated')}
               className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
                 subtractionMode === 'raw_calibrated'
@@ -889,6 +882,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             </button>
             <button
               type="button"
+              disabled={!imageArtifact(activeFrame, 'zodi_reference_subtracted')}
               onClick={() => onChangeSubtractionMode('zodi_reference_subtracted')}
               className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
                 subtractionMode === 'zodi_reference_subtracted'
@@ -901,6 +895,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             </button>
             <button
               type="button"
+              disabled={!imageArtifact(activeFrame, 'epoch_difference')}
               onClick={() => onChangeSubtractionMode('epoch_difference')}
               className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
                 subtractionMode === 'epoch_difference'

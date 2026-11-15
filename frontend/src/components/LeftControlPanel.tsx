@@ -13,6 +13,7 @@ interface LeftControlPanelProps {
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
   subtractionMode: SubtractionMode;
+  availableModes: SubtractionMode[];
   onChangeSubtractionMode: (mode: SubtractionMode) => void;
   overlays: CatalogOverlayState;
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
@@ -38,6 +39,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   selectedArray,
   onSelectArray,
   subtractionMode,
+  availableModes,
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
@@ -282,13 +284,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             return (
               <button
                 key={mode.id}
+                disabled={!availableModes.includes(mode.id as SubtractionMode)}
                 onClick={() => onChangeSubtractionMode(mode.id as SubtractionMode)}
                 className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-emerald-300 font-semibold'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
-                title={mode.desc}
+                title={availableModes.includes(mode.id as SubtractionMode) ? mode.desc : 'Unavailable: the processing artifact has not been supplied'}
               >
                 <span className="font-mono text-[11px]">{mode.label}</span>
                 {isSelected && (

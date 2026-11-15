@@ -30,6 +30,7 @@ import {
   fetchLiveCatalogForCoordinate,
   type LiveCatalogResponse,
 } from './services/catalogService';
+import { availableImageModes } from './services/imageArtifacts';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { startPeriodicVerificationSync } from './services/verificationService';
@@ -1029,6 +1030,7 @@ export function App() {
               onSelectArray={handleSelectDetectorArray}
               subtractionMode={subtractionMode}
               onChangeSubtractionMode={setSubtractionMode}
+              availableModes={availableImageModes(frames[activeFrameIndex])}
               overlays={overlays}
               onToggleOverlay={handleToggleOverlay}
               onRefreshCutout={handleRefreshCutout}
