@@ -145,12 +145,15 @@ flowchart TD
 ### 8. Interactive Guided Beginner Tutorial
 * **Contextual Access**: Located exclusively on the Home section adjacent to the Volunteer / Scientist persona selector to preserve an uncluttered sky observation viewport.
 * **Automated Workflow Routing**: Instantly transitions the user into the Sky Viewer environment and activates an interactive multi-step walkthrough.
-* **Step-by-Step Educational Tour**:
-  * **Step 1 (Celestial Coordinates)**: Focuses on Right Ascension ($RA$) and Declination ($Dec$), explaining celestial longitude/latitude mapping and coordinate updates.
+* **Comprehensive 7-Step Educational Tour**:
+  * **Step 1 (Celestial Coordinates)**: Highlights the RA & Dec section with a bright glow, explaining celestial longitude/latitude mapping and coordinate updates.
   * **Step 2 (Field of View)**: Details angular resolution and sky patch scaling from high magnification ($1' - 3'$) to wide survey mode ($5' - 10'$).
   * **Step 3 (Multi-Epoch Sky View Panel)**: Introduces the canvas, leave-one-out median differencing, dipole identification for moving bodies, and playback controls.
-  * **Step 4 (Spectrophotometric Bands & ML Detection)**: Explains the 6 detector arrays spanning 102 near-infrared channels ($0.75 - 5.0\ \mu\text{m}$), machine learning track correlation, and community consensus routing to the Minor Planet Center.
-* **Mobile-Responsive Adaptations**: Dynamically orchestrates mobile viewport pane transitions (`controls` pane for inputs, `canvas` pane for sky view), guarantees responsive touch targets, and enforces safe bounding limits across small viewports.
+  * **Step 4 (Image Filtering & Subtraction Algorithms)**: Details Level 2/3 Raw Aligned FITS, Zodiacal light subtraction, LOO difference imaging, and BLOOM saturation masks.
+  * **Step 5 (Known Catalogs vs Non-Catalog Candidates)**: Explains astronomical cross-matching against ESA Gaia DR3, NASA AllWISE, and JPL Horizons, detailing how non-catalog detections represent uncatalogued moving candidates and Planet X targets.
+  * **Step 6 (AI & Machine Learning Trajectory Detection)**: Demonstrates the Random Forest reranker, multi-epoch motion vector linking, trajectory speed ($\text{arcsec/hr}$), and astrometric fit RMS ($< 0.50\text{ px}$).
+  * **Step 7 (102-Band Spectroscopy & Community Verification)**: Covers spectrophotometry across all 6 detector arrays ($0.75 - 5.0\ \mu\text{m}$), molecular ice absorption ($H_2O$, $CO_2$, silicates), and the community consensus pipeline routing to the Minor Planet Center.
+* **Mobile-Responsive Adaptations**: Dynamically orchestrates mobile viewport pane transitions (`controls` pane for inputs, `canvas` pane for sky view, `telemetry` pane for AI and spectroscopy), guarantees responsive touch targets, and enforces safe bounding limits across small viewports.
 
 ---
 

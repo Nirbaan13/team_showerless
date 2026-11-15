@@ -66,10 +66,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
   const handleApplyCoords = (e: React.FormEvent) => {
     e.preventDefault();
-    const parsedRa = parseFloat(raInput);
-    const parsedDec = parseFloat(decInput);
+    const cleanRa = raInput.trim().replace(/[^\d.-]/g, '');
+    const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
+    const parsedRa = parseFloat(cleanRa);
+    const parsedDec = parseFloat(cleanDec);
     if (!isNaN(parsedRa) && !isNaN(parsedDec)) {
-      onUpdateCoords(parsedRa, parsedDec);
+      const normalizedRa = ((parsedRa % 360) + 360) % 360;
+      const clampedDec = Math.max(-90, Math.min(90, parsedDec));
+      onUpdateCoords(normalizedRa, clampedDec);
     }
   };
 
@@ -227,7 +231,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       </div>
 
       {/* 3. Image Filtering & Movement Isolation */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Filter className="w-3.5 h-3.5 text-emerald-400" />
           {viewMode === 'scientist' ? 'Background Subtraction Algorithm' : 'Image Filter'}
@@ -295,7 +299,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           null;
 
         return (
-          <div className="p-3 space-y-2">
+          <div id="tutorial-target-catalogs" className="p-3 space-y-2 transition-all duration-300">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-emerald-400" />

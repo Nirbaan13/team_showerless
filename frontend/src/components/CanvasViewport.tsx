@@ -144,11 +144,13 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const dxArcsec = (canvasX - centerX) * scaleArcsecPerPx;
       const dyArcsec = (centerY - canvasY) * scaleArcsecPerPx;
 
-      const raOffsetDeg = dxArcsec / 3600 / Math.cos((centerDec * Math.PI) / 180);
+      const cosDec = Math.cos((centerDec * Math.PI) / 180);
+      const safeCosDec = Math.abs(cosDec) < 1e-5 ? (cosDec < 0 ? -1e-5 : 1e-5) : cosDec;
+      const raOffsetDeg = dxArcsec / 3600 / safeCosDec;
       const decOffsetDeg = dyArcsec / 3600;
 
       const computedRa = (centerRa - raOffsetDeg + 360) % 360;
-      const computedDec = centerDec + decOffsetDeg;
+      const computedDec = Math.max(-90, Math.min(90, centerDec + decOffsetDeg));
 
       const raHours = computedRa / 15;
       const rh = Math.floor(raHours);

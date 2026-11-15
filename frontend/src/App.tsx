@@ -1574,10 +1574,11 @@ export function App() {
       <GuidedTutorialOverlay
         isOpen={isTutorialActive && activeTab === 'viewer'}
         step={tutorialStep}
-        onNext={() => setTutorialStep((s) => Math.min(s + 1, 3))}
+        onNext={() => setTutorialStep((s) => Math.min(s + 1, 6))}
         onPrev={() => setTutorialStep((s) => Math.max(s - 1, 0))}
         onClose={() => setIsTutorialActive(false)}
         onChangeMobilePane={(pane) => setMobileViewerPane(pane)}
+        onSelectDrawerTab={(tab) => setDrawerControlledTab(tab)}
       />
     </div>
   );

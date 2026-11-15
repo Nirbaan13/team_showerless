@@ -416,17 +416,19 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       <div className="flex-1 overflow-y-auto">
         {/* TAB 0: AI-RANKED DETECTIONS (main feature) */}
         {activeTab === 'ai' && (
-          <MLDetectionsPanel
-            candidates={candidates}
-            selectedCandidateId={selectedCandidateId}
-            onSelectCandidate={(id) => {
-              onSelectCandidate(id);
-            }}
-            isScientistMode={isScientistMode}
-            mlAnalysisStatus={mlAnalysisStatus}
-            ra={ra}
-            dec={dec}
-          />
+          <div id="tutorial-target-ai" className="h-full transition-all duration-300">
+            <MLDetectionsPanel
+              candidates={candidates}
+              selectedCandidateId={selectedCandidateId}
+              onSelectCandidate={(id) => {
+                onSelectCandidate(id);
+              }}
+              isScientistMode={isScientistMode}
+              mlAnalysisStatus={mlAnalysisStatus}
+              ra={ra}
+              dec={dec}
+            />
+          </div>
         )}
 
         {/* TAB 1: CANDIDATE TRIAGE & VERIFICATION */}
@@ -676,7 +678,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
         {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}
         {activeTab === 'spectrum' && (
-          <div className="p-3.5 space-y-3">
+          <div id="tutorial-target-spectrum" className="p-3.5 space-y-3 transition-all duration-300">
             <SpectrumPlot
               data={spectrumData}
               objectLabel={
