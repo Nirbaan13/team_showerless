@@ -1,0 +1,15 @@
+{
+  "excluded_volatile_fields": [
+    "elapsed_seconds",
+    "peak_rss_mib"
+  ],
+  "files": {
+    "archive-member-manifest.json": "8b41f3efbb8f1e40b83a0f537fac686376a3c63d1057add0bec092f9d3dab508",
+    "guarded-child.json": "740f10ce99d92a6a96ac1ba352adf9afc24fa0fb2fe2f252396dd6c3d8ff1733",
+    "native-recount.json": "aeb4a36048e7b6737c88214bf1019ffdc3441e4b0177ee27b7840db16610761c",
+    "portable-proof.json": "3e00b8774cdd4cf334c4adf0fd087368f55ecf19ed6254f41289fe7045542771"
+  },
+  "scientific_projection_exact": true,
+  "scientific_projection_sha256": "7eb803c6c2fbdbdc8260d9669e6539f0264eee25da2ab42b72f9870179cefae8",
+  "status": "PASS"
+}

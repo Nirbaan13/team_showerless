@@ -1,0 +1,23 @@
+{
+  "all_denied_reads": [
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_validation/protocol.json",
+    "/tmp/spaceapps-association-validation/synthetic-repair-1/run-manifest.json",
+    "/etc/passwd"
+  ],
+  "audit_sha256": "aeb4a36048e7b6737c88214bf1019ffdc3441e4b0177ee27b7840db16610761c",
+  "audit_status": "PASS",
+  "checker_sha256": "5b6105c10bfbdca1ea5e6ba4218d8cc357e3c9d10be2fc52cb527c20bd9bb8ca",
+  "guard": "Python open/list audit hook after dependency import; not an OS sandbox",
+  "intentional_denied_reads": [
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_validation/protocol.json",
+    "/tmp/spaceapps-association-validation/synthetic-repair-1/run-manifest.json",
+    "/etc/passwd"
+  ],
+  "model_execution": false,
+  "producer_functions_imported": false,
+  "python_io_guard_enabled": true,
+  "raw_fits_opened": false,
+  "scoring_or_simulation": false,
+  "status": "PASS",
+  "wrapper_source_sha256": "f8f71b6fef270bbd439bc63e842f267e480c073f5e0c4e8778cbb78bbcbddc12"
+}
