@@ -1,0 +1,158 @@
+{
+  "status": "HEADER_VERIFIED_QUARANTINED",
+  "plan_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/transport-plan.json",
+    "sha256": "b4cc420ea93ea2416426528cfcb601971ddc1e14964a967bb99bb592651d584d"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "started_utc": "2026-11-15T15:49:36.934826+00:00",
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+      "status": "TRANSFERRED",
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-4/quarantine/association-holdout-08/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits",
+        "sha256": "0305b1b599124a396d8f74b2cfa4f62cee412368d3ee6a398913aef35ab83224",
+        "bytes": 4023360,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:49:37 GMT",
+          "Content-Type": "application/fits",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": []
+      }
+    }
+  ],
+  "product": {
+    "group_id": "association-holdout-08",
+    "obs_id": "2025W47_1A_0738_4",
+    "physical_obsid": "2025W47_1A_0738_4",
+    "detector": 2,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+    "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-4/quarantine/association-holdout-08/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits",
+    "metadata_obs_id": "2025W47_1A_0738_4",
+    "t_min_mjd": 60999.495197,
+    "t_max_mjd": 60999.49653,
+    "roi": {
+      "region_arcmin": [
+        6,
+        6
+      ],
+      "pixel_scale_arcsec": 6.15,
+      "mask_policy": "motion",
+      "recenter": false
+    },
+    "sha256": "0305b1b599124a396d8f74b2cfa4f62cee412368d3ee6a398913aef35ab83224",
+    "bytes": 4023360,
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 15:49:37 GMT",
+      "Content-Type": "application/fits",
+      "Last-Modified": null,
+      "ETag": null
+    },
+    "failures": [],
+    "header": {
+      "header_only": true,
+      "pixels_opened": false,
+      "native_orientation_preserved": true,
+      "hdu_names": [
+        "PRIMARY",
+        "IMAGE",
+        "FLAGS",
+        "VARIANCE",
+        "ZODI",
+        "EPSF",
+        "WCS-WAVE"
+      ],
+      "native_shape": [
+        70,
+        70
+      ],
+      "detector": 2,
+      "physical_obsid": "2025W47_1A_0738_4",
+      "midpoint_mjd": 60999.495863539,
+      "epsf_detcoord": "sky",
+      "epsf_oversampling": [
+        5,
+        5
+      ],
+      "header_layout": [
+        {
+          "name": "PRIMARY",
+          "header_offset": 0,
+          "header_bytes": 2880,
+          "data_bytes": 0,
+          "header_sha256": "192682806743025e0a98cbe7f745b910e609d0995313ed4c774249eb2ba79e1f"
+        },
+        {
+          "name": "IMAGE",
+          "header_offset": 2880,
+          "header_bytes": 25920,
+          "data_bytes": 19600,
+          "header_sha256": "40640ab1fe1c7d3b3876bb7e24faf75070a928628bed34ff650388c4f89f757b"
+        },
+        {
+          "name": "FLAGS",
+          "header_offset": 48960,
+          "header_bytes": 17280,
+          "data_bytes": 19600,
+          "header_sha256": "9e039371453a38aea5d99b5920fa423fd35e0708abb1b722a30ba3f7969f0402"
+        },
+        {
+          "name": "VARIANCE",
+          "header_offset": 86400,
+          "header_bytes": 11520,
+          "data_bytes": 19600,
+          "header_sha256": "f7d22328b156c9110a2087bdf428913ffc7e2a39305c1b2989e9e048e22a52ac"
+        },
+        {
+          "name": "ZODI",
+          "header_offset": 118080,
+          "header_bytes": 11520,
+          "data_bytes": 19600,
+          "header_sha256": "5cd55dabdf7fd20e52302044ba106c62501f396bcb47d0bd3713a23ef4652cad"
+        },
+        {
+          "name": "EPSF",
+          "header_offset": 149760,
+          "header_bytes": 5760,
+          "data_bytes": 3859632,
+          "header_sha256": "806d4e4f0c03ce9ccab9a0023efb8ed1b33eda4d6f952a16c024d31349da314f"
+        },
+        {
+          "name": "WCS-WAVE",
+          "header_offset": 4017600,
+          "header_bytes": 2880,
+          "data_bytes": 1056,
+          "header_sha256": "033dfa338f00b46ad47e1349d8bbe005ced846114a38cb7c63795d2874737fab"
+        }
+      ],
+      "wcs": {
+        "CTYPE1": "RA---TAN-SIP",
+        "CTYPE2": "DEC--TAN-SIP",
+        "CRVAL1": 160.086333331,
+        "CRVAL2": 28.1271581258,
+        "CRPIX1": -600.5,
+        "CRPIX2": 147.5,
+        "CD1_1": null,
+        "CD1_2": null,
+        "CD2_1": null,
+        "CD2_2": null,
+        "CDELT1": 1.0,
+        "CDELT2": 1.0
+      }
+    },
+    "midpoint_mjd": 60999.495863539,
+    "midpoint_utc": "2025-11-20T11:54:02.609770+00:00",
+    "status": "HEADER_VERIFIED_QUARANTINED"
+  },
+  "reused_verified_files": 79,
+  "metadata_requests": 0,
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "inference_authorized": false
+}

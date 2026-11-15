@@ -1,0 +1,180 @@
+{
+  "cases": [
+    {
+      "epochs": 8,
+      "rows": 4095,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 8,
+      "rows": 4096,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 8,
+      "rows": 4097,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 8,
+      "rows": 8192,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 8,
+      "rows": 8193,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 8,
+      "rows": 4095,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 8,
+      "rows": 4096,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 8,
+      "rows": 4097,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 8,
+      "rows": 8192,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 8,
+      "rows": 8193,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 8,
+      "rows": 4095,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 8,
+      "rows": 4096,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 8,
+      "rows": 4097,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 8,
+      "rows": 8192,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 8,
+      "rows": 8193,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 16,
+      "rows": 4095,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 16,
+      "rows": 4096,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 16,
+      "rows": 4097,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 16,
+      "rows": 8192,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 16,
+      "rows": 8193,
+      "scenario": "finite_noise"
+    },
+    {
+      "epochs": 16,
+      "rows": 4095,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 16,
+      "rows": 4096,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 16,
+      "rows": 4097,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 16,
+      "rows": 8192,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 16,
+      "rows": 8193,
+      "scenario": "signed_quality"
+    },
+    {
+      "epochs": 16,
+      "rows": 4095,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 16,
+      "rows": 4096,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 16,
+      "rows": 4097,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 16,
+      "rows": 8192,
+      "scenario": "finite_support"
+    },
+    {
+      "epochs": 16,
+      "rows": 8193,
+      "scenario": "finite_support"
+    }
+  ],
+  "designation": "bounded numeric engineering parity only; no scientific evaluation or promotion",
+  "empty_cases": [
+    8,
+    16
+  ],
+  "frozen_utc": "2026-11-15T15:25:08Z",
+  "limits": {
+    "cpu": 1,
+    "elapsed_minutes": 30,
+    "math_threads": 1,
+    "ram_gib": 8
+  },
+  "model_directory": "/tmp/spaceapps-v4-operating-points/models/C596",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "rule": "Report all30 F64/F32 column bits, IDs, full diagnostics, actual C596 score bits and complete stable order; preserve every error/difference. Producer source remains explicitly different.",
+  "source_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/runtime_model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/feature_performance/prototype.py": "47e3486cc94e65f520244575fc5dee8517ac5aa2e4f84c3f8a70c477df90102d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/feature_performance_boundary/Plan.AI.md": "440ada7986ddff089fe4af2d9149895cd54e932487a5ead571c9a68c9a8692f9",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/feature_performance_boundary/boundary.py": "2691be9133d167937c83a0145f432e6102b742b98cfe28bfb5a5513d0f77554f",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/feature_performance_boundary/test_feature_boundary_parity.py": "4fbcd9ef8767857ca1a12ef9a81e400c7994c2b17d64178bfd85293dae58a7b8",
+    "/tmp/spaceapps-v4-operating-points/models/C596/metadata.json": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+    "/tmp/spaceapps-v4-operating-points/models/C596/ranker.onnx": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+  }
+}

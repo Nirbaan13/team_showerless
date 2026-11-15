@@ -1,0 +1,21 @@
+{
+  "authorized_at_utc": "2026-11-15T15:17:30.827220+00:00",
+  "freeze_sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd",
+  "amendment_sha256": "35ed7394bb0ad2ee78238674030573ac5ce3c8dca3ebdf16e73fd9e29f10565b",
+  "authorized_domain": "synthetic",
+  "same_seeds": [
+    4100000,
+    4100999
+  ],
+  "same_fields": 1000,
+  "native_authorized": false,
+  "native_handoff_sha256": "49446c1e43895c8845129f24f7d482cd4c30fcad907d9314e98236fbdb6e57dd",
+  "native_planned_parents": 12,
+  "native_acquired_parents": 0,
+  "independent_review": "Fresh read-only explorer: exactly one boundary expression changes; other17sources and18snapshots/5artifacts match; regression meaningful",
+  "tests": "377passed plus11subtests;17researchguard/transporttests",
+  "original_aggregate_already_opened": true,
+  "fully_blinded_repair_claim": false,
+  "production_change": false,
+  "required_before_execution": "Commit and push R2 freeze and authorization"
+}

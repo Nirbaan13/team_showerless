@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T15:49:25.405024+00:00",
+  "deadline_utc": "2026-11-15T16:04:25.405024+00:00",
+  "wrapper": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/retry_fixed_product.py",
+    "sha256": "4c2c2eef0539b855098c5ab130602319854e1f9afb3180f79e3c6f59a6c62466"
+  },
+  "root_authorization": "Root authorized narrowly bounded15min continuation for exact failed08product and equivalent all-time05/09partitions only. Native inference unauthorized.",
+  "previous_handoff": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/guarded-handoff.json",
+    "sha256": "df5e7fb7a20eedfd38db6392eab74b803f25f1ac0583ecbd9fd8e696a8390367"
+  },
+  "previous_audit": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/byte-header-audit.json",
+    "sha256": "579e4bf952da15451a12cb6a19a542df893c06b3df7840d6677918d13f5bffc2"
+  },
+  "previous_selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/selection.json",
+    "sha256": "c927086936acae0f8c13f02cdc105b47d326cef3085df534abb9debbab862a45"
+  },
+  "previous_publication": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/publication-manifest.json",
+    "sha256": "e93ef48c84083b6be63b8e377211fef064103ee81d996cfeedfc63b7a5000369"
+  },
+  "original_plan": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/plan.json",
+    "sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107"
+  },
+  "native_seed_amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/retry-percent20/amendment.json",
+    "sha256": "15e2636fbc66ee73df2d250b4e1d5a3102cbc805b54cf6874a4d030d833c5853"
+  },
+  "scientific_amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/transport-plan.json",
+    "sha256": "e9988d03b76f66bb6ccb741e3effd0ca03345787613ba161d46c5364315d2463"
+  },
+  "sources": {
+    "holdout": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/acquire_holdout.py",
+      "sha256": "1eaf4e2256cb6d97ae72cf3693d08744cb16a50add0fd4fd7ca8d878da705b5b"
+    },
+    "acquire": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/acquire.py",
+      "sha256": "a0ad06cdad85e0d0c0004ee572d073dbfde85eb1cd4e0e96097700aa75952b18"
+    },
+    "headers": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/headers.py",
+      "sha256": "22866cd36d1ab6fa2bf0f5a38a90b7db5d88a416643fd4a39c900ee77c8eccaf"
+    }
+  },
+  "unchanged": "Reuse all79existing source paths/hash/headers without requests; same12centers,411seedmap,438exclusions,R3footprint<=4degree prefilter and unchangeddetector/temporalalgorithm; no replacement; total96x5.2MB<500MB.",
+  "product": {
+    "failed_record": {
+      "group_id": "association-holdout-08",
+      "obs_id": "2025W47_1A_0738_4",
+      "physical_obsid": "2025W47_1A_0738_4",
+      "detector": 2,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+      "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits",
+      "metadata_obs_id": "2025W47_1A_0738_4",
+      "t_min_mjd": 60999.495197,
+      "t_max_mjd": 60999.49653,
+      "roi": {
+        "region_arcmin": [
+          6,
+          6
+        ],
+        "pixel_scale_arcsec": 6.15,
+        "mask_policy": "motion",
+        "recenter": false
+      },
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+      "status": "PLANNED_MISSING_PRODUCT"
+    },
+    "group_id": "association-holdout-08",
+    "obs_id": "2025W47_1A_0738_4",
+    "detector": 2,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/2/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits?center=158.87560323%2C28.38978507&size=0.12",
+    "max_attempts": 3,
+    "timeout_seconds": 90,
+    "max_file_bytes": 5200000,
+    "minimum_retry_backoff_seconds": 10,
+    "respect_retry_after": true
+  },
+  "metadata": {
+    "status": "BLOCKED_EXACT_DOMAIN_EQUIVALENCE_UNPROVEN",
+    "network_requests_authorized_in_this_plan": 0,
+    "requested_partition_boundary_utc": "2025-10-01T00:00:00+00:00",
+    "requested_partition_boundary_mjd": 60949.0,
+    "requested_partitions": [
+      "-Inf 60949.0",
+      "60949.0 +Inf"
+    ],
+    "reason": "SIA2section2.1 excludes null-time records when TIME is constrained, whereas unconstrained queries can return them. Original acquire.select sorts supported usable rows using float(t_min) with no null-time eligibility filter; a null t_min raises and rejects the field, rather than being ignored. Recovery3 only adds footprint prefilter. Therefore equivalence even of original field-selection behavior is unproven when TIME omits null rows; root conditional direction permits only exact08retry. No partition requests.",
+    "references": [
+      "https://www.ivoa.net/documents/SIA/20151223/REC-SIA-2.0-20151223.html",
+      "https://irsa.ipac.caltech.edu/ibe/sia.html"
+    ]
+  },
+  "raw_root": "/tmp/spaceapps-association-native-recovery2/recovery-4",
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "inference_authorized": false
+}

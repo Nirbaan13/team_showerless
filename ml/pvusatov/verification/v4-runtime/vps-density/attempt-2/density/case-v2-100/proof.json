@@ -1,0 +1,52 @@
+{
+  "case": 100,
+  "engineering_sources": 100,
+  "shape": [
+    32,
+    512,
+    512
+  ],
+  "plan_sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+  "probe_sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+  "fixture_sha256": "35f17588bdbc05b9e6281c7dff974f7e1c8b3ea12dce3c9959a31fe9d8682b50",
+  "fixture_bytes": 31106260,
+  "request_sha256": "9f9c18f6f4ba8dd16813227e29f3644bd15e5f0cef2286e190c45025962a84ce",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "source_sha256": {
+    "ml/pvusatov/releases/v4/runtime/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+  },
+  "cpu_affinity": [
+    0
+  ],
+  "math_threads": 1,
+  "elapsed_seconds": 10.35738562700135,
+  "child_user_seconds": 9.922148,
+  "child_system_seconds": 0.317281,
+  "child_maxrss_mib": 417.21484375,
+  "observed_peak_rss_mib": 400.29296875,
+  "exit_code": 2,
+  "monitor_interruption": null,
+  "status": "CLI_ERROR",
+  "error": {
+    "code": "workload_limit",
+    "message": "The linking search exceeds the supported computation budget",
+    "retryable": false
+  },
+  "candidate_count": null,
+  "warnings": [],
+  "settings": null,
+  "resources": [],
+  "temporary_fixtures_deleted_after_case": true,
+  "limits": "Local child wait4 RSS and sampled monitor only; NOT hard cgroup/OOM proof; no recovery or sensitivity measurement"
+}

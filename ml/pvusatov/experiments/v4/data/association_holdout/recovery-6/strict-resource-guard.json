@@ -1,0 +1,57 @@
+{
+  "status": "PASS_READY_QUARANTINE",
+  "strict_native_ready": true,
+  "counts": {
+    "planned_parents": 12,
+    "acquired_parents": 12,
+    "physical_exposures": 96,
+    "bytes": 499412160
+  },
+  "actual_raw_file_count": 96,
+  "actual_raw_bytes": 499412160,
+  "remaining_stored_FITS_budget_bytes": 587840,
+  "initial_R6_capsule_replayed": true,
+  "all_old94_records_and_hashes_identical": true,
+  "pre05_all95_file_hashes_identical": true,
+  "known_original_selected_targets": 96,
+  "unique_physical_observations": 96,
+  "physical_exclusion_intersection": [],
+  "artifact_64MiB_exceptions": [
+    "2025W38_2C_0439_2",
+    "2026W14_1A_0529_1"
+  ],
+  "all_other_files_max_bytes": 5200000,
+  "resource_amendment_refs": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-resource-amendment.json",
+      "sha256": "e743dfe03c53167c8bd86ea3e92687ac3b6e289210320f2a0c04be9596a1b99c"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-05-resource-amendment.json",
+      "sha256": "315f7ead9c05b43bc5aa452d788a9a5aa6687f4995ddc7672b934d3427d23f65"
+    }
+  ],
+  "compressed_header_engineering_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/compressed-header-engineering-amendment.json",
+    "sha256": "24b57146d795c37920e91472bbe71d8696c74d8f37b390d7e8f55a9e3426c092"
+  },
+  "manual_headers_reverified": true,
+  "unchanged_analysis_roi": {
+    "region_arcmin": [
+      6,
+      6
+    ],
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "recenter": false
+  },
+  "full_cutout_byte_parity_claim": false,
+  "audit_source": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/audit_resource_recovery.py",
+    "sha256": "24e8cc5d1df4ebad6544bfaaa6f12c71ee889ba206fed7579a723f4e53a6b4bb"
+  },
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "inference_authorized": false
+}

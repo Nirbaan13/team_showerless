@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "audit": {
+    "status": "PASS_INCOMPLETE_METADATA_CAPSULE",
+    "planned_parents": 12,
+    "acquired_parents": 0,
+    "raw_files": 0,
+    "excluded_physical_obsids": 438,
+    "minimum_prior_or_new_center_distance_deg": 10.949135427425523,
+    "query_batches": {
+      "initial": 12,
+      "percent20": 12,
+      "time-window": 12,
+      "final-exact-retry": 12
+    },
+    "failed_query_urls": 48,
+    "no_coverage_claim": false,
+    "pixels_opened": false,
+    "scope": "Source, reservation, metadata-domain and failure-accounting audit ONLY; no data/coverage/recovery available"
+  },
+  "fresh_relocation": true,
+  "source_metadata_dependencies_copied": 5,
+  "original_tmp_roots_required": false,
+  "raw_fits_or_pixel_readers_required": false,
+  "audit_source_sha256": "0bfbcce94b1d8cee48124e30cfb7df8c47a0a5d90ee13bae3cbcb5beb3bf366b"
+}

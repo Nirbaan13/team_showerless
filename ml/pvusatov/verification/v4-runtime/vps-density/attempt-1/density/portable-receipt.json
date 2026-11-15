@@ -1,0 +1,55 @@
+{
+  "scope": "Portable fixed engineering density probe, host cgroup proof remains external",
+  "wrapper_sha256": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+  "original_probe_sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+  "plan_sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+  "runtime": "/probe/inference",
+  "model_dir": "/probe/inference/models",
+  "output": "/evidence/density",
+  "cpu_affinity": [
+    0
+  ],
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "translated_logical_source_root": "Temporary symlink aliases original plan repo-relative source paths to --runtime",
+  "unchanged_generator_options_sources": true,
+  "cases": [
+    {
+      "case": 8,
+      "status": "CLI_SUCCESS",
+      "exit_code": 0,
+      "error": null,
+      "elapsed_seconds": 34.72739157999604,
+      "child_maxrss_mib": 661.29296875,
+      "monitor_interruption": null,
+      "fixture_sha256": "69cb2197506e614edad69cfa72404d1d18a95667eddbbea086dfc12b0c5dbda7"
+    },
+    {
+      "case": 32,
+      "status": "CLI_ERROR",
+      "exit_code": 2,
+      "error": {
+        "code": "workload_limit",
+        "message": "The linking search exceeds the supported computation budget",
+        "retryable": false
+      },
+      "elapsed_seconds": 9.30403254799603,
+      "child_maxrss_mib": 416.95703125,
+      "monitor_interruption": null,
+      "fixture_sha256": "136ad9efc979f22c7ee98f52e0b363fe712fe7567c3318089e9ece8d109e460d"
+    },
+    {
+      "case": 100,
+      "status": "CLI_ERROR",
+      "exit_code": 2,
+      "error": {
+        "code": "workload_limit",
+        "message": "The linking search exceeds the supported computation budget",
+        "retryable": false
+      },
+      "elapsed_seconds": 10.819644999995944,
+      "child_maxrss_mib": 417.85546875,
+      "monitor_interruption": null,
+      "fixture_sha256": "35f17588bdbc05b9e6281c7dff974f7e1c8b3ea12dce3c9959a31fe9d8682b50"
+    }
+  ]
+}

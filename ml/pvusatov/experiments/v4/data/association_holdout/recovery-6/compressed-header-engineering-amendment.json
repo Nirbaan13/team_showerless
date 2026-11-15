@@ -1,0 +1,23 @@
+{
+  "declared_utc": "2026-11-15T16:19:10.688020+00:00",
+  "scope": "Header-engineering-only adapter for standard tiled-compressed image logical dimensions. No eligibility/scientificruntime/array/decompression/quality change.",
+  "source": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/compressed_header_audit.py",
+    "sha256": "2eadd241115fec72733140a62d715834d6b837e1e24a3338f76ea61769da2a74"
+  },
+  "original_header_source": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/headers.py",
+    "sha256": "22866cd36d1ab6fa2bf0f5a38a90b7db5d88a416643fd4a39c900ee77c8eccaf"
+  },
+  "historical_failed_header_audit": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-transfer.json",
+    "sha256": "756a830218e0ae897381b60aa2722dad472cf03bd38827c1536685df0cc8fa4d"
+  },
+  "artifact_sha256": "2f9f13a7fbc27dfba29adb22b827f8e01071bfd868cd75055cc6e9514221bae0",
+  "references": [
+    "https://fits.gsfc.nasa.gov/registry/tilecompression/tilecompression2.1.pdf"
+  ],
+  "rule": "IfXTENSION=BINTABLE andZIMAGE=T, logicalimagegeometryusesZNAXIS/ZNAXISn/ZBITPIX; validateFLAGSlogicalshapeagainstIMAGE/VARIANCE/ZODI, preservephysicalheaderlayout/hash. ApplyuniformlytobothauthorizedfullMEFs.",
+  "pixels_opened": false,
+  "inference_authorized": false
+}

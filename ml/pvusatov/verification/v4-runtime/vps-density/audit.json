@@ -1,0 +1,108 @@
+{
+  "checked_at_utc": "2026-11-15T10:50:00.173283+00:00",
+  "status": "PASS",
+  "audit_source_sha256": "3ac5a3397fa6d9aa2a7d6e1e1f8d5835196914b7d8bcfc6d5dec1944eca46c80",
+  "checked_files_sha256": {
+    "vps-density/code-manifest.json": "770a8b0c08c51947b38c111edfa61ef762ef030f6555540c6fa8eb17c55f5152",
+    "density-stress/probe.py": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+    "density-stress/portable.py": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+    "density-stress/plan-v2.json": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+    "vps-density/attempt-1/host-proof.json": "e944a5999a89ff721ae4fa4a8583ed6c3bace22b06dd0e9b9e51c186081fa3ff",
+    "density-stress/case-v2-8/proof.json": "90977965353d6f1aa804f991fc22a2978f1b08bf1f46a45a8e16371737bf4ab3",
+    "vps-density/attempt-1/density/case-v2-8/proof.json": "8fc6ff00effe2d3ace4d1e1cbed0c41a89e2c7e0c78ba4f3e08a6188f5f5d2f0",
+    "density-stress/case-v2-8/result.json": "6606d08c085bb67a965605f732ce172ee3240a3ea46e8ec89c35e74279009b4b",
+    "vps-density/attempt-1/density/case-v2-8/result.json": "6606d08c085bb67a965605f732ce172ee3240a3ea46e8ec89c35e74279009b4b",
+    "density-stress/case-v2-32/proof.json": "0e7846bb98842fe7a875561dbe1a9f9e37109a7cbf37a2b9e81448d98c39c02b",
+    "vps-density/attempt-1/density/case-v2-32/proof.json": "2b45b161f53516681492b845e006dc291b98b2d9767eb5c9a000c2c375857456",
+    "density-stress/case-v2-32/result.json": "8abcdb1f2f45b370ada38b39978f15d7d593a9e8064892c4b876516326d71717",
+    "vps-density/attempt-1/density/case-v2-32/result.json": "8abcdb1f2f45b370ada38b39978f15d7d593a9e8064892c4b876516326d71717",
+    "density-stress/case-v2-100/proof.json": "b53b594f293a596550fd2af9975bd817d6ad382c824ed782d42b8c6a5f7d9326",
+    "vps-density/attempt-1/density/case-v2-100/proof.json": "3f1befe1d9f060ac90312560df49e50bf73abb7be14df42c14c5be3b237d3e9a",
+    "density-stress/case-v2-100/result.json": "bfd84aa6dc7ce6ff090e610aa63974ad496c61857015a2f02e94dae1976a6fca",
+    "vps-density/attempt-1/density/case-v2-100/result.json": "bfd84aa6dc7ce6ff090e610aa63974ad496c61857015a2f02e94dae1976a6fca",
+    "vps-density/attempt-2/host-proof.json": "b5393856c7567a208827823d7c90416e3406a3c57a1a73ae308efbe8527b1a79",
+    "vps-density/attempt-2/density/case-v2-8/proof.json": "a006cb8fc71e45b0b42245c1a9377cf5d5073b9749c509537ed15efc522c1edd",
+    "vps-density/attempt-2/density/case-v2-8/result.json": "6606d08c085bb67a965605f732ce172ee3240a3ea46e8ec89c35e74279009b4b",
+    "vps-density/attempt-2/density/case-v2-32/proof.json": "cf591cbafafe7ac773b94a82109950c806b520ea2f435a7f21c3546ba71fe882",
+    "vps-density/attempt-2/density/case-v2-32/result.json": "8abcdb1f2f45b370ada38b39978f15d7d593a9e8064892c4b876516326d71717",
+    "vps-density/attempt-2/density/case-v2-100/proof.json": "63f07e75ea37f0386f0b30247b2415ae365b9bf7a147695b83f89bedcbab9fe5",
+    "vps-density/attempt-2/density/case-v2-100/result.json": "bfd84aa6dc7ce6ff090e610aa63974ad496c61857015a2f02e94dae1976a6fca",
+    "vps-density/attempt-2/cgroup-final.json": "bec4c7ef5708416c80d475462714b086998d08d78c85f856a366ed58cba258fd"
+  },
+  "cases": [
+    {
+      "attempt": "attempt-1",
+      "engineering_sources": 8,
+      "status": "CLI_SUCCESS",
+      "child_elapsed_seconds": 34.72739157999604,
+      "child_rss_mib": 661.29296875,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 264
+    },
+    {
+      "attempt": "attempt-1",
+      "engineering_sources": 32,
+      "status": "CLI_ERROR",
+      "child_elapsed_seconds": 9.30403254799603,
+      "child_rss_mib": 416.95703125,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 0
+    },
+    {
+      "attempt": "attempt-1",
+      "engineering_sources": 100,
+      "status": "CLI_ERROR",
+      "child_elapsed_seconds": 10.819644999995944,
+      "child_rss_mib": 417.85546875,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 0
+    },
+    {
+      "attempt": "attempt-2",
+      "engineering_sources": 8,
+      "status": "CLI_SUCCESS",
+      "child_elapsed_seconds": 34.84620879800059,
+      "child_rss_mib": 661.953125,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 264
+    },
+    {
+      "attempt": "attempt-2",
+      "engineering_sources": 32,
+      "status": "CLI_ERROR",
+      "child_elapsed_seconds": 9.71186195500195,
+      "child_rss_mib": 416.2578125,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 0
+    },
+    {
+      "attempt": "attempt-2",
+      "engineering_sources": 100,
+      "status": "CLI_ERROR",
+      "child_elapsed_seconds": 10.35738562700135,
+      "child_rss_mib": 417.21484375,
+      "identical_input_archive": true,
+      "entire_result_value_equal": true,
+      "identical_png_hashes": 0
+    }
+  ],
+  "final_whole_container_peak_mib": 679.64453125,
+  "final_memory_events": {
+    "low": "0",
+    "high": "0",
+    "max": "0",
+    "oom": "0",
+    "oom_kill": "0",
+    "oom_group_kill": "0",
+    "sock_throttled": "0"
+  },
+  "limits": "One CPU, one GiB, no swap, network none; writable output/tmpfs and inherited anonymous app-data volume",
+  "interpretation": "Fixed engineering density outcomes, not worst-case completeness, sensitivity or scientific recovery",
+  "first_attempt_limitation": "Startup cgroup sample only; separate repeat supplies final whole-cgroup accounting",
+  "second_attempt_reason": "Close missing final cgroup peak/events without changing fixture, runtime, model or policies"
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T15:27:07.997836+00:00",
+  "deadline_utc": "2026-11-15T16:12:07.997836+00:00",
+  "authorization": "Root instructed new bounded transport-only recovery after user said continue; supersedes expired acquisition wall deadline only.",
+  "original_plan": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/plan.json",
+    "sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107"
+  },
+  "native_seed_amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/retry-percent20/amendment.json",
+    "sha256": "15e2636fbc66ee73df2d250b4e1d5a3102cbc805b54cf6874a4d030d833c5853"
+  },
+  "association_freeze": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/freeze.json",
+    "sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd"
+  },
+  "original_closed_handoff": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/quarantined-handoff.json",
+    "sha256": "49446c1e43895c8845129f24f7d482cd4c30fcad907d9314e98236fbdb6e57dd"
+  },
+  "sources": {
+    "holdout": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/acquire_holdout.py",
+      "sha256": "1eaf4e2256cb6d97ae72cf3693d08744cb16a50add0fd4fd7ca8d878da705b5b"
+    },
+    "acquire": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/acquire.py",
+      "sha256": "a0ad06cdad85e0d0c0004ee572d073dbfde85eb1cd4e0e96097700aa75952b18"
+    },
+    "headers": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/headers.py",
+      "sha256": "22866cd36d1ab6fa2bf0f5a38a90b7db5d88a416643fd4a39c900ee77c8eccaf"
+    }
+  },
+  "wrapper": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-2/acquire_recovery.py",
+    "sha256": "d6c318cdc1104da5166f9c1e9001a1543701c56328c91bb384ee52690d809339"
+  },
+  "group_ids": [
+    "association-holdout-01",
+    "association-holdout-02",
+    "association-holdout-03",
+    "association-holdout-04",
+    "association-holdout-05",
+    "association-holdout-06",
+    "association-holdout-07",
+    "association-holdout-08",
+    "association-holdout-09",
+    "association-holdout-10",
+    "association-holdout-11",
+    "association-holdout-12"
+  ],
+  "native_seed_reservation": {
+    "association-holdout-01": 4110001,
+    "association-holdout-02": 4110002,
+    "association-holdout-03": 4110003,
+    "association-holdout-04": 4110004,
+    "association-holdout-05": 4110005,
+    "association-holdout-06": 4110006,
+    "association-holdout-07": 4110007,
+    "association-holdout-08": 4110008,
+    "association-holdout-09": 4110009,
+    "association-holdout-10": 4110010,
+    "association-holdout-11": 4110011,
+    "association-holdout-12": 4110012
+  },
+  "query": {
+    "endpoint": "https://irsa.ipac.caltech.edu/SIA",
+    "collection": "spherex_dr1",
+    "position": "CIRCLE original_RA original_DEC 0.001",
+    "response_format": "VOTABLE",
+    "limits": [
+      512,
+      4096
+    ],
+    "max_workers": 2,
+    "max_attempts": 2,
+    "timeout_seconds": 90,
+    "response_cap_bytes": 12582912,
+    "completeness": "Require QUERY_STATUS OK and no ERROR/OVERFLOW; upgrade512 to4096 only on overflow. Never select truncated rows. No TIME restriction, changed centers, MAXREC1 diagnostic selection, or added query domain."
+  },
+  "selection": "Exact unchanged acquire.select after original physical-OBSID exclusions; original group order/detector preference/cadence/temporal spread; exactly8 unique physical exposures and original4degree full-footprint engineering bound. Seal all selections before products.",
+  "acquisition": {
+    "max_files": 96,
+    "max_bytes": 500000000,
+    "max_file_bytes": 5200000,
+    "max_workers": 4,
+    "max_attempts": 2,
+    "timeout_seconds": 90,
+    "size_deg": 0.12
+  },
+  "roi": {
+    "region_arcmin": [
+      6,
+      6
+    ],
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "recenter": false
+  },
+  "missing_policy": "Any unavailable planned field remains planned missing with reason; no field replacement or quality/model filtering. Partial handoff cannot authorize native inference.",
+  "quarantine": {
+    "raw_root": "/tmp/spaceapps-association-native-recovery2",
+    "header_only": true,
+    "pixels_opened": false,
+    "models_called": false,
+    "injections_generated": false,
+    "inference_authorized": false
+  },
+  "handoff_schema": {
+    "groups": "Only complete8-file header-verified parents; parent_id/group_id/seed/center/split/detector/images",
+    "planned_groups": "All12original identities with status/missing reasons and actual images",
+    "image": "source_url/path/sha256/bytes/obs_id/physical_obsid/detector/midpoint_mjd/midpoint_utc/t_min_mjd/t_max_mjd/header/ROI",
+    "bindings": "original plan, seed amendment, recovery plan, sealed selection, source code, metadata provenance SHA256",
+    "counts": "planned12/acquired/physical exposures/bytes; physical exclusion and spatial distances proof"
+  }
+}

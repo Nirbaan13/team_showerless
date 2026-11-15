@@ -1,0 +1,7 @@
+{
+  "all3_fixture_byte_hashes_equal": true,
+  "all3_outcomes_errors_counts_warnings_equal": true,
+  "success_case_candidates_settings_model_equal": true,
+  "no_second_model_or_threshold": true,
+  "comparison_scope": "Portable external-output replay of same engineering cases; repeat timings distinct, not independent recovery evidence"
+}

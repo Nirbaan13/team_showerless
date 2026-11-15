@@ -1,0 +1,14 @@
+metadata association-holdout-01 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-02 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-03 219 complete
+metadata association-holdout-04 240 complete
+metadata association-holdout-05 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-06 245 complete
+metadata association-holdout-07 234 complete
+metadata association-holdout-08 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-09 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-11 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-12 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-10 262 complete
+selection_sha256 c7968678dbecc332b7fd77536efa2e91287ae1627b7e93841f907571f5105087 selected_parents 0
+{"handoff_sha256": "a928f28d327c24e78094bf53442841bf281b20fb155d7125bd111fdb07bc4ca9", "status": "INCOMPLETE_PLANNED_MISSING", "counts": {"planned_parents": 12, "acquired_parents": 0, "physical_exposures": 0, "bytes": 0}}

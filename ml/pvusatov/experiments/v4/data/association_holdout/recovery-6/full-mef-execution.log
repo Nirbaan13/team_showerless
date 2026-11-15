@@ -1,0 +1,1 @@
+{"status": "PLANNED_MISSING_PRODUCT", "obs_id": "2025W38_2C_0439_2", "bytes": 59123520, "sha256": "2f9f13a7fbc27dfba29adb22b827f8e01071bfd868cd75055cc6e9514221bae0", "shape": null, "error": "ValueError: Native image/mask/variance/ZODI shape mismatch"}

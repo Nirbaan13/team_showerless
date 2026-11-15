@@ -1,0 +1,165 @@
+{
+  "status": "HEADER_VERIFIED_QUARANTINED",
+  "amendment_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-05-resource-amendment.json",
+    "sha256": "315f7ead9c05b43bc5aa452d788a9a5aa6687f4995ddc7672b934d3427d23f65"
+  },
+  "product": {
+    "group_id": "association-holdout-05",
+    "obs_id": "2026W14_1A_0529_1",
+    "physical_obsid": "2026W14_1A_0529_1",
+    "detector": 1,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W14_1A/l2b-v27-2026-238/1/level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits",
+    "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W14_1A/l2b-v27-2026-238/1/level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits",
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/full-mef/association-holdout-05/level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits",
+    "metadata_obs_id": "2026W14_1A_0529_1",
+    "t_min_mjd": 61131.679832,
+    "t_max_mjd": 61131.681164,
+    "roi": {
+      "region_arcmin": [
+        6,
+        6
+      ],
+      "pixel_scale_arcsec": 6.15,
+      "mask_policy": "motion",
+      "recenter": false
+    },
+    "transfer_method": "ORIGINAL_FULL_MEF_GET_SECOND_ARTIFACT_64MIB_EXCEPTION",
+    "requested_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W14_1A/l2b-v27-2026-238/1/level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits?center=285.33486404%2C-12.88765097&size=0.12",
+    "sha256": "bee1e19fa6537f453191859988cfa6e1dd2445d810367e57adc0a647219b0139",
+    "bytes": 59503680,
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 16:19:26 GMT",
+      "Content-Type": "application/fits",
+      "Last-Modified": "Wed, 30 Sep 2026 19:22:23 GMT",
+      "ETag": "\"bda6a9921cffb653aa1639deff21a6f4\""
+    },
+    "failures": [],
+    "header": {
+      "header_only": true,
+      "pixels_opened": false,
+      "native_orientation_preserved": true,
+      "hdu_names": [
+        "PRIMARY",
+        "IMAGE",
+        "FLAGS",
+        "VARIANCE",
+        "ZODI",
+        "EPSF",
+        "WCS-WAVE"
+      ],
+      "native_shape": [
+        2040,
+        2040
+      ],
+      "detector": 1,
+      "physical_obsid": "2026W14_1A_0529_1",
+      "midpoint_mjd": 61131.680497752,
+      "epsf_detcoord": "sky",
+      "epsf_oversampling": [
+        5,
+        5
+      ],
+      "header_layout": [
+        {
+          "name": "PRIMARY",
+          "header_offset": 0,
+          "header_bytes": 2880,
+          "data_bytes": 0,
+          "header_sha256": "192682806743025e0a98cbe7f745b910e609d0995313ed4c774249eb2ba79e1f"
+        },
+        {
+          "name": "IMAGE",
+          "header_offset": 2880,
+          "header_bytes": 25920,
+          "data_bytes": 16646400,
+          "header_sha256": "9966e1848a508af6c90789babc637571af81cfa4c195334af0b85b0ea51ddbb5"
+        },
+        {
+          "name": "FLAGS",
+          "header_offset": 16675200,
+          "header_bytes": 17280,
+          "data_bytes": 5620132,
+          "header_sha256": "085da2029366ac11d002fe59aef2e41bf3d015742866dea684aa1e9a65df6fba"
+        },
+        {
+          "name": "VARIANCE",
+          "header_offset": 22314240,
+          "header_bytes": 11520,
+          "data_bytes": 16646400,
+          "header_sha256": "b15d8c5b059d1ebf41fa4ce890fa858dbdf9410d325beff11eb77ee167bde06d"
+        },
+        {
+          "name": "ZODI",
+          "header_offset": 38972160,
+          "header_bytes": 11520,
+          "data_bytes": 16646400,
+          "header_sha256": "babc933ead43988e22077333b3a381eabd185ad00091efa5cbc17d71b39fdaae"
+        },
+        {
+          "name": "EPSF",
+          "header_offset": 55630080,
+          "header_bytes": 5760,
+          "data_bytes": 3859632,
+          "header_sha256": "85f398b55c494f2c065084c332b1ad04d5a4e0d880f85cf085cb03a28c105ba8"
+        },
+        {
+          "name": "WCS-WAVE",
+          "header_offset": 59497920,
+          "header_bytes": 2880,
+          "data_bytes": 720,
+          "header_sha256": "145be0a9164c88f5a930ca3d7ca100e6794bce0edbf11fc8f253656543804317"
+        }
+      ],
+      "wcs": {
+        "CTYPE1": "RA---TAN-SIP",
+        "CTYPE2": "DEC--TAN-SIP",
+        "CRVAL1": 284.111326362,
+        "CRVAL2": -13.7849306217,
+        "CRPIX1": 1020.5,
+        "CRPIX2": 1020.5,
+        "CD1_1": null,
+        "CD1_2": null,
+        "CD2_1": null,
+        "CD2_2": null,
+        "CDELT1": 1.0,
+        "CDELT2": 1.0
+      },
+      "compressed_image_header_evidence": [
+        {
+          "name": "FLAGS",
+          "physical_table_dimensions": [
+            2040,
+            8
+          ],
+          "logical_image_dimensions": [
+            2040,
+            2040
+          ],
+          "ZIMAGE": true,
+          "ZBITPIX": 32,
+          "ZCMPTYPE": "RICE_1",
+          "tile_dimensions": [
+            1,
+            2040
+          ]
+        }
+      ],
+      "engineering_interpretation": "FITS ZIMAGE logical dimensions from ZNAXISn; physical BINTABLE geometry remains in original block-layout hashes; no decompression"
+    },
+    "status": "HEADER_VERIFIED_QUARANTINED",
+    "midpoint_mjd": 61131.680497752,
+    "midpoint_utc": "2026-04-01T16:19:55.005773+00:00",
+    "processing_identity_evidence": {
+      "original_frozen_SIA_artifact_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W14_1A/l2b-v27-2026-238/1/level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits",
+      "processing_version_path": "l2b-v27-2026-238",
+      "artifact_basename": "level2_2026W14_1A_0529_1D1_spx_l2b-v27-2026-238.fits",
+      "header_physical_id_and_detector_verified": true,
+      "header_midpoint_verified": true
+    },
+    "full_vs_cutout_byte_parity_claim": false
+  },
+  "preserved_preexisting_raw_files": 95,
+  "pixels_opened": false,
+  "inference_authorized": false
+}

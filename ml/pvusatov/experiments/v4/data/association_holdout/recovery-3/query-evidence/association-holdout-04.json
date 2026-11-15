@@ -1,0 +1,68 @@
+{
+  "group_id": "association-holdout-04",
+  "center": [
+    247.19620024,
+    7.44284809
+  ],
+  "created_utc": "2026-11-15T15:42:13.908060+00:00",
+  "attempts": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "limit": 512,
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-04/sia-512.xml",
+        "sha256": "bc8ae5d89652c216ab6260bad1a6144e91658e4b07eb84daf3af51858a73d650",
+        "bytes": 512388,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:27:47 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [
+          {
+            "attempt": 1,
+            "error": "HTTPError: HTTP Error 502: Proxy Error"
+          }
+        ],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-04/sia-512.xml",
+          "sha256": "bc8ae5d89652c216ab6260bad1a6144e91658e4b07eb84daf3af51858a73d650",
+          "bytes": 512388,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:27:47 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": [
+            {
+              "attempt": 1,
+              "error": "HTTPError: HTTP Error 502: Proxy Error"
+            }
+          ]
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-04/discovery.json",
+          "sha256": "a51dd4a48c5eaadcef9ea425bf1fccc996a3301946bcbbec8e530df99d4849c3"
+        },
+        "cache_reused": true
+      },
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "row_count": 240
+    }
+  ],
+  "complete": true,
+  "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+  "rows_ref": {
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-04/discovery.json",
+    "sha256": "3aa841b970b3a0e5617d6c96f0c34c2742c1399027a61766e29fb9698e09ab3d"
+  }
+}

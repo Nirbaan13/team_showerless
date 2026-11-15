@@ -1,0 +1,36 @@
+{
+  "status": "PASS_INCOMPLETE_QUARANTINE",
+  "strict_native_ready": false,
+  "counts": {
+    "planned_parents": 12,
+    "acquired_parents": 10,
+    "physical_exposures": 80,
+    "bytes": 323873280
+  },
+  "prior_guard_replayed": true,
+  "all_existing79hashes_preserved": true,
+  "physical_exclusion_intersection": [],
+  "manual_headers_reverified": true,
+  "metadata_requests": 0,
+  "null_time_behavior": {
+    "original_selector_raises": "ValueError",
+    "error": "could not convert string to float: ''",
+    "null_row_filtered_before_selection": false
+  },
+  "plan_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/transport-plan.json",
+    "sha256": "b4cc420ea93ea2416426528cfcb601971ddc1e14964a967bb99bb592651d584d"
+  },
+  "product_retry_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/fixed-product-retry.json",
+    "sha256": "1df3c1e315f6ff0e35bac94f1862a4539be7f0d1239a14c8a9ea847c78e4761d"
+  },
+  "audit_source": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/audit_merge.py",
+    "sha256": "86a68c3d4756012972f84592217505baf933ea008d53b76b536f44de84066d59"
+  },
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "inference_authorized": false
+}

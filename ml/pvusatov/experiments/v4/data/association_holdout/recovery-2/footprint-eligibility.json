@@ -1,0 +1,361 @@
+{
+  "status": "ORIGINAL_FOOTPRINT_ELIGIBILITY_FAILED",
+  "scope": "Metadata-only original s_region vertex distances; no pixels, no replacement and no relaxed bound",
+  "groups": [
+    {
+      "group_id": "association-holdout-03",
+      "center": [
+        79.04639226,
+        52.11002338
+      ],
+      "detector": 3,
+      "selected_exposures": 8,
+      "original_bound_deg": 4,
+      "maximum_vertex_distance_deg": 4.3677658953685725,
+      "minimum_vertex_maximum_deg": 2.8188498475146972,
+      "failed_exposures": 2,
+      "exposures": [
+        {
+          "metadata_obs_id": "2025W38_1A_0295_1",
+          "physical_obsid": "2025W38_1A_0295_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0295_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.56421664012814 52.023782959856014 76.9468695556621 51.75597360307684 75.9756947671764 55.19916587515644 82.12159058205954 55.498634640010415 82.56421664012814 52.023782959856014",
+          "maximum_vertex_distance_deg": 3.843674197423078
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0296_1",
+          "physical_obsid": "2025W38_1A_0296_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0296_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.58924222442613 51.82824817725281 76.99579940027046 51.563011167653904 76.0354566288926 55.006675377584614 82.15197222107233 55.30311196331639 82.58924222442613 51.82824817725281",
+          "maximum_vertex_distance_deg": 3.6835753117164347
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0297_1",
+          "physical_obsid": "2025W38_1A_0297_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0297_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.61422137708179 51.63260452777367 77.04442943899801 51.3698746138328 76.09454306919721 54.8141014380513 82.18183770373899 55.10757770337861 82.61422137708179 51.63260452777367",
+          "maximum_vertex_distance_deg": 3.5270574500640297
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0317_1",
+          "physical_obsid": "2025W38_1A_0317_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0317_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.63823689534311 51.435988110537366 77.09167900808944 51.175840694546 76.152156814766 54.62085482363621 82.21050266372812 54.91124250194009 82.63823689534311 51.435988110537366",
+          "maximum_vertex_distance_deg": 3.3737429560882104
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0340_1",
+          "physical_obsid": "2025W38_1A_0340_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0340_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.73518969571951 50.65264516325769 77.27979365671777 50.40237358566242 76.38060152377109 53.84953008984801 82.32673529334134 54.12826984113773 82.73518969571951 50.65264516325769",
+          "maximum_vertex_distance_deg": 2.8188498475146972
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0358_1",
+          "physical_obsid": "2025W38_1A_0358_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0358_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 80.58270638788147 48.726983607227055 75.34519751328605 48.4367336617899 74.43518102781974 51.879003333711914 80.11269813777187 52.198764690350295 80.58270638788147 48.726983607227055",
+          "maximum_vertex_distance_deg": 4.3677658953685725
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0412_1",
+          "physical_obsid": "2025W38_1A_0412_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0412_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.89489226866361 49.28024565598173 77.58965714013246 49.04653115098156 76.754892710961 52.49775861397978 82.51681303545875 52.756764543127005 82.89489226866361 49.28024565598173",
+          "maximum_vertex_distance_deg": 3.7339858040821823
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0437_1",
+          "physical_obsid": "2025W38_1A_0437_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/3/level2_2025W38_1A_0437_1D3_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 82.93854254269 48.88823465791827 77.67409067073757 48.659282946089654 76.85665912950071 52.11136568922835 82.56855042284809 52.36498495511875 82.93854254269 48.88823465791827",
+          "maximum_vertex_distance_deg": 4.06191449045647
+        }
+      ]
+    },
+    {
+      "group_id": "association-holdout-04",
+      "center": [
+        247.19620024,
+        7.44284809
+      ],
+      "detector": 1,
+      "selected_exposures": 8,
+      "original_bound_deg": 4,
+      "maximum_vertex_distance_deg": 4.190061919281134,
+      "minimum_vertex_maximum_deg": 3.2442516710731515,
+      "failed_exposures": 2,
+      "exposures": [
+        {
+          "metadata_obs_id": "2025W31_1A_0332_1",
+          "physical_obsid": "2025W31_1A_0332_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0332_1D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 245.02563115553787 11.044022353952178 248.532923201155 10.580773956840861 247.93192913958893 7.147647022024868 244.42690875485292 7.6044120637284705 245.02563115553787 11.044022353952178",
+          "maximum_vertex_distance_deg": 4.190061919281134
+        },
+        {
+          "metadata_obs_id": "2025W31_1A_0332_2",
+          "physical_obsid": "2025W31_1A_0332_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0332_2D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 244.995751876139 10.850408393148975 248.50068092983025 10.386593486294668 247.89984408774 6.953576963486102 244.3964336684191 7.410964978112913 244.995751876139 10.850408393148975",
+          "maximum_vertex_distance_deg": 4.040986921849268
+        },
+        {
+          "metadata_obs_id": "2025W31_1A_0332_3",
+          "physical_obsid": "2025W31_1A_0332_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0332_3D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 244.96650282316185 10.656690763362276 248.4691616820914 10.192446309235835 247.8684629384415 6.759459205205728 244.36673707810158 7.217306718115684 244.96650282316185 10.656690763362276",
+          "maximum_vertex_distance_deg": 3.8956323570581435
+        },
+        {
+          "metadata_obs_id": "2025W31_1A_0332_4",
+          "physical_obsid": "2025W31_1A_0332_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0332_4D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 244.93786766985946 10.462914568155453 248.43824628297835 9.998196732272882 247.83761102566007 6.565264961673433 244.33734718260277 7.023746411704231 244.93786766985946 10.462914568155453",
+          "maximum_vertex_distance_deg": 3.7544772065880356
+        },
+        {
+          "metadata_obs_id": "2025W31_1A_0598_2",
+          "physical_obsid": "2025W31_1A_0598_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0598_2D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 244.88560150620881 10.07503667304972 248.3817002990263 9.609419017301772 247.78129978129786 6.176450294187804 244.28394094516997 6.6361138146686836 244.88560150620881 10.07503667304972",
+          "maximum_vertex_distance_deg": 3.4846067284777797
+        },
+        {
+          "metadata_obs_id": "2025W31_1A_0598_4",
+          "physical_obsid": "2025W31_1A_0598_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/1/level2_2025W31_1A_0598_4D1_spx_l2b-v27-2026-222.fits",
+          "s_region": "POLYGON ICRS 244.82723640492318 9.687492408480587 248.31920219646142 9.220908134135138 247.71896687944047 5.787977203882101 244.22433375690002 6.248826118761929 244.82723640492318 9.687492408480587",
+          "maximum_vertex_distance_deg": 3.2442516710731515
+        },
+        {
+          "metadata_obs_id": "2025W31_2A_0048_2",
+          "physical_obsid": "2025W31_2A_0048_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_2A/l2b-v27-2026-225/1/level2_2025W31_2A_0048_2D1_spx_l2b-v27-2026-225.fits",
+          "s_region": "POLYGON ICRS 244.7743141465058 9.29954376272393 248.26226082678178 8.831866166836356 247.66211818406498 5.399006782201387 244.17012873564443 5.861300074493809 244.7743141465058 9.29954376272393",
+          "maximum_vertex_distance_deg": 3.396306723001397
+        },
+        {
+          "metadata_obs_id": "2025W31_2A_0048_4",
+          "physical_obsid": "2025W31_2A_0048_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_2A/l2b-v27-2026-225/1/level2_2025W31_2A_0048_4D1_spx_l2b-v27-2026-225.fits",
+          "s_region": "POLYGON ICRS 244.7155937581579 8.912122624389538 248.19970574505913 8.443426040110086 247.59969363383806 5.01067547503992 244.1101117483087 5.4742020844692405 244.7155937581579 8.912122624389538",
+          "maximum_vertex_distance_deg": 3.643901304672497
+        }
+      ]
+    },
+    {
+      "group_id": "association-holdout-06",
+      "center": [
+        142.32946053,
+        0.99517302
+      ],
+      "detector": 3,
+      "selected_exposures": 8,
+      "original_bound_deg": 4,
+      "maximum_vertex_distance_deg": 4.041592049283019,
+      "minimum_vertex_maximum_deg": 2.7324703461310933,
+      "failed_exposures": 1,
+      "exposures": [
+        {
+          "metadata_obs_id": "2025W47_1A_0039_1",
+          "physical_obsid": "2025W47_1A_0039_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0039_1D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 142.59939201226643 -2.4117147310863674 139.38063565259978 -1.0946163365936434 140.56300914582954 2.190399587104475 143.80698966030207 0.857162534314979 142.59939201226643 -2.4117147310863674",
+          "maximum_vertex_distance_deg": 3.614113597879698
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0039_2",
+          "physical_obsid": "2025W47_1A_0039_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0039_2D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 142.66646754728941 -2.2265588284138325 139.4476485606304 -0.910250047719449 140.6289603988991 2.3751684097720753 143.87355918099593 1.0424272682215576 142.66646754728941 -2.2265588284138325",
+          "maximum_vertex_distance_deg": 3.4546645692372095
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0039_3",
+          "physical_obsid": "2025W47_1A_0039_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0039_3D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 142.7334310688239 -2.041502032102298 139.5145414063306 -0.7260826972026272 140.69486940592802 2.559635936798507 143.94010610962567 1.2276690215765211 142.7334310688239 -2.041502032102298",
+          "maximum_vertex_distance_deg": 3.299371340617026
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0039_4",
+          "physical_obsid": "2025W47_1A_0039_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0039_4D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 142.8003862021174 -1.8565387795074482 139.58135835001625 -0.5418497435646508 140.7606309816046 2.7442892452043175 144.00643145090044 1.412868303074262 142.8003862021174 -1.8565387795074482",
+          "maximum_vertex_distance_deg": 3.148639932106102
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0178_3",
+          "physical_obsid": "2025W47_1A_0178_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0178_3D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 142.99971792530528 -1.3011608761466857 139.78028876175966 0.010907657026959151 140.95679141276807 3.298053702842109 144.20457422360585 1.9686015719354264 142.99971792530528 -1.3011608761466857",
+          "maximum_vertex_distance_deg": 2.7324703461310933
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0326_2",
+          "physical_obsid": "2025W47_1A_0326_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0326_2D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 143.19895761493868 -0.7462530122886022 139.97862189754977 0.5634807304138647 141.152664737236 3.851731817615892 144.402797867214 2.5239254085538034 143.19895761493868 -0.7462530122886022",
+          "maximum_vertex_distance_deg": 3.089014798854838
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0446_1",
+          "physical_obsid": "2025W47_1A_0446_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0446_1D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 143.39764680645467 -0.19130568780925117 140.1764796348967 1.1162843485569733 141.34818809241406 4.405697774717229 144.60085562486853 3.0794007846669187 143.39764680645467 -0.19130568780925117",
+          "maximum_vertex_distance_deg": 3.5485421912782176
+        },
+        {
+          "metadata_obs_id": "2025W47_1A_0446_4",
+          "physical_obsid": "2025W47_1A_0446_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W47_1A/l2b-v27-2026-208/3/level2_2025W47_1A_0446_4D3_spx_l2b-v27-2026-208.fits",
+          "s_region": "POLYGON ICRS 143.5974233410355 0.3642475585167323 140.37488227720436 1.6698200141710429 141.5444813557026 4.960041739165383 144.7999744853548 3.635184132907459 143.5974233410355 0.3642475585167323",
+          "maximum_vertex_distance_deg": 4.041592049283019
+        }
+      ]
+    },
+    {
+      "group_id": "association-holdout-07",
+      "center": [
+        90.22344196,
+        39.42294992
+      ],
+      "detector": 1,
+      "selected_exposures": 8,
+      "original_bound_deg": 4,
+      "maximum_vertex_distance_deg": 4.5207270482488555,
+      "minimum_vertex_maximum_deg": 3.6095951923126863,
+      "failed_exposures": 5,
+      "exposures": [
+        {
+          "metadata_obs_id": "2025W38_1A_0487_1",
+          "physical_obsid": "2025W38_1A_0487_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0487_1D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.68256645912543 36.09712776228759 86.38054858963264 36.074427877765594 86.39893693152129 39.55892437929585 90.94789515090899 39.58134085518802 90.68256645912543 36.09712776228759",
+          "maximum_vertex_distance_deg": 4.5207270482488555
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0487_2",
+          "physical_obsid": "2025W38_1A_0487_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0487_2D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.69213177369046 36.293061000565785 86.37912662717851 36.27135267229958 86.39817882913175 39.7558037760469 90.96019942384818 39.77721586507583 90.69213177369046 36.293061000565785",
+          "maximum_vertex_distance_deg": 4.374927674261058
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0487_3",
+          "physical_obsid": "2025W38_1A_0487_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0487_3D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.70048428108312 36.48900253781226 86.37655064226153 36.46817413031348 86.3961705983612 39.95271932457822 90.97130671789823 39.97314980315882 90.70048428108312 36.48900253781226",
+          "maximum_vertex_distance_deg": 4.233982370538526
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0487_4",
+          "physical_obsid": "2025W38_1A_0487_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0487_4D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.70839341284783 36.68493564308749 86.37344605071506 36.665017161004116 86.39361176251035 40.14954965036365 90.98191199368333 40.16885275359927 90.70839341284783 36.68493564308749",
+          "maximum_vertex_distance_deg": 4.097923120152854
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0568_4",
+          "physical_obsid": "2025W38_1A_0568_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0568_4D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.7363004916346 37.467872135008605 86.35622030121745 37.45129645012543 86.37796045819546 40.9358127573312 91.02050364875647 40.95143189837717 90.7363004916346 37.467872135008605",
+          "maximum_vertex_distance_deg": 3.613759838810167
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0580_3",
+          "physical_obsid": "2025W38_1A_0580_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0580_3D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.75731449492264 38.0546933954306 86.3422783806856 38.04049528323114 86.36507133381417 41.52509820310251 91.04961452518144 41.53801786132371 90.75731449492264 38.0546933954306",
+          "maximum_vertex_distance_deg": 3.6095951923126863
+        },
+        {
+          "metadata_obs_id": "2025W38_1A_0592_2",
+          "physical_obsid": "2025W38_1A_0592_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_1A/l2b-v27-2026-237/1/level2_2025W38_1A_0592_2D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.77866202476494 38.64186222019481 86.32765274138013 38.63026008281216 86.35177752518904 42.114801980029654 91.07944391919182 42.124928219627236 90.77866202476494 38.64186222019481",
+          "maximum_vertex_distance_deg": 3.9796214451569907
+        },
+        {
+          "metadata_obs_id": "2025W38_2C_0009_1",
+          "physical_obsid": "2025W38_2C_0009_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/1/level2_2025W38_2C_0009_1D1_spx_l2b-v27-2026-237.fits",
+          "s_region": "POLYGON ICRS 90.80038643902705 39.228399923855996 86.31227283644994 39.219195374848354 86.33743097905675 42.70376103371862 91.10962757580141 42.71111597375988 90.80038643902705 39.228399923855996",
+          "maximum_vertex_distance_deg": 4.397663830985465
+        }
+      ]
+    },
+    {
+      "group_id": "association-holdout-10",
+      "center": [
+        339.09981938,
+        17.06063382
+      ],
+      "detector": 1,
+      "selected_exposures": 8,
+      "original_bound_deg": 4,
+      "maximum_vertex_distance_deg": 4.275785414453891,
+      "minimum_vertex_maximum_deg": 3.224446084144154,
+      "failed_exposures": 2,
+      "exposures": [
+        {
+          "metadata_obs_id": "2025W22_1B_0477_1",
+          "physical_obsid": "2025W22_1B_0477_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/1/level2_2025W22_1B_0477_1D1_spx_l2b-v27-2026-199.fits",
+          "s_region": "POLYGON ICRS 340.2620237157271 15.761159223660687 336.93922507771754 14.42169442302027 335.6165649479253 17.666272887416056 339.01467100195475 19.042614971578278 340.2620237157271 15.761159223660687",
+          "maximum_vertex_distance_deg": 3.379176338208768
+        },
+        {
+          "metadata_obs_id": "2025W22_1B_0477_2",
+          "physical_obsid": "2025W22_1B_0477_2",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/1/level2_2025W22_1B_0477_2D1_spx_l2b-v27-2026-199.fits",
+          "s_region": "POLYGON ICRS 340.18915325821393 15.944399002513997 336.86356031781025 14.604389248630895 335.53896644168054 17.848691111679003 338.9403340023998 19.225644041406717 340.18915325821393 15.944399002513997",
+          "maximum_vertex_distance_deg": 3.48702446462396
+        },
+        {
+          "metadata_obs_id": "2025W22_1B_0477_3",
+          "physical_obsid": "2025W22_1B_0477_3",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/1/level2_2025W22_1B_0477_3D1_spx_l2b-v27-2026-199.fits",
+          "s_region": "POLYGON ICRS 340.11547164882927 16.127100604340093 336.7871696566988 14.786850795485329 335.4605810969528 18.03075215320502 338.8651217593918 19.408330914254563 340.11547164882927 16.127100604340093",
+          "maximum_vertex_distance_deg": 3.6028874108253675
+        },
+        {
+          "metadata_obs_id": "2025W22_1B_0477_4",
+          "physical_obsid": "2025W22_1B_0477_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/1/level2_2025W22_1B_0477_4D1_spx_l2b-v27-2026-199.fits",
+          "s_region": "POLYGON ICRS 340.04129070080006 16.30969828062172 336.7102204265676 14.969087135270824 335.3815819989532 18.21260466055839 338.78953724836134 19.59079513604275 340.04129070080006 16.30969828062172",
+          "maximum_vertex_distance_deg": 3.725890461056128
+        },
+        {
+          "metadata_obs_id": "2025W22_1B_0524_4",
+          "physical_obsid": "2025W22_1B_0524_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_1B/l2b-v27-2026-199/1/level2_2025W22_1B_0524_4D1_spx_l2b-v27-2026-199.fits",
+          "s_region": "POLYGON ICRS 339.7400791555318 17.03782428432025 336.3976581767451 15.69530727499859 335.05997127703904 18.937490396771093 338.4818331408593 20.31856894028383 339.7400791555318 17.03782428432025",
+          "maximum_vertex_distance_deg": 4.275785414453891
+        },
+        {
+          "metadata_obs_id": "2025W22_2B_0041_1",
+          "physical_obsid": "2025W22_2B_0041_1",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_2B/l2b-v27-2026-200/1/level2_2025W22_2B_0041_1D1_spx_l2b-v27-2026-200.fits",
+          "s_region": "POLYGON ICRS 341.18799645221907 14.376375213206867 337.885626482228 13.036691499653454 336.5751763230887 16.282584614396587 339.94788423489854 17.657202851853217 341.18799645221907 14.376375213206867",
+          "maximum_vertex_distance_deg": 4.1912171231702136
+        },
+        {
+          "metadata_obs_id": "2025W22_2B_0041_4",
+          "physical_obsid": "2025W22_2B_0041_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_2B/l2b-v27-2026-200/1/level2_2025W22_2B_0041_4D1_spx_l2b-v27-2026-200.fits",
+          "s_region": "POLYGON ICRS 340.96896827549614 14.924912274401427 337.6592180288264 13.58447081939765 336.34317793506233 16.8294819156233 339.7251765284641 18.205603879191685 340.96896827549614 14.924912274401427",
+          "maximum_vertex_distance_deg": 3.743446191793924
+        },
+        {
+          "metadata_obs_id": "2025W22_2B_0090_4",
+          "physical_obsid": "2025W22_2B_0090_4",
+          "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W22_2B/l2b-v27-2026-200/1/level2_2025W22_2B_0090_4D1_spx_l2b-v27-2026-200.fits",
+          "s_region": "POLYGON ICRS 340.66987428506604 15.653144514555258 337.3497584250749 14.311287695378688 336.02580010555823 17.55513785655361 339.42059217303836 18.933661251836412 340.66987428506604 15.653144514555258",
+          "maximum_vertex_distance_deg": 3.224446084144154
+        }
+      ]
+    }
+  ]
+}

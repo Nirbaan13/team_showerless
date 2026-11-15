@@ -1,0 +1,16 @@
+{
+  "verification": "All original/source/model hashes unchanged; frozen executable/source snapshots verified; one 59,852,160-byte GET; measured non-parity retained",
+  "files": {
+    "difference-diagnosis.json": "bef496949da02b4f51631cc18c8965c3270e987b4f531995948924197c6ad4e9",
+    "frozen-plan.json": "ee35789cf4c24d9ac650735e7c20636e5a9b06b08ac92d4af99c815ea2b4f03e",
+    "diagnose_differences.py": "67a97d1670671397feeaa5dd458a7466cdfda6b1f1ae2f168bc4465d20d2782d",
+    "Findings.AI.md": "404793025e0c7f756f0a1564b674ea49655303d933f11ec9ec60e9b6edc3472f",
+    "download-ledger.json": "00091b780a6f224236816ee24e698786ff93d01151d2663318ac1a5c9918bbb3",
+    "results.json": "f6e3ffa06f084d0707d463b2db5a5f06139f2c58c81520f6bbb61ed7378c6911",
+    "validate_transport.py": "4534ca3cc9c759c48622396471a6c6b95749ce774178d0111f1d1b7a8ebd0fa1",
+    "source_snapshot/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "source_snapshot/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "source_snapshot/ml_inference/prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec"
+  },
+  "full_raw_sha256": "a059388782bdd0961ff6281e208679e588df9ff084e71ce9888d4671007e2f89"
+}

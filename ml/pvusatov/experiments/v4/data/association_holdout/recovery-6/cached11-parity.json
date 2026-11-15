@@ -1,0 +1,51 @@
+{
+  "status": "PASS_ALL11_SAME_ORDERED8_IDENTITIES",
+  "groups": [
+    {
+      "group_id": "association-holdout-01",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-02",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-03",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-04",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-06",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-07",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-08",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-09",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-10",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-11",
+      "same_ordered8_ids": true
+    },
+    {
+      "group_id": "association-holdout-12",
+      "same_ordered8_ids": true
+    }
+  ],
+  "old_files": 86,
+  "network_requests_before_parity": 0
+}

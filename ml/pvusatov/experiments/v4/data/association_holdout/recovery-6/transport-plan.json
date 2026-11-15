@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T16:08:23.330877+00:00",
+  "deadline_utc": "2026-11-15T16:28:23.330877+00:00",
+  "wrapper": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/acquire_recovery.py",
+    "sha256": "1bd4967a2328c592c5f8b4cf27df15d5d304ce6ee8ace7465a469d23ed53fbc6"
+  },
+  "root_authorization": "Root authorized same R5 eligibility, failed05interval subdivision only, exact09artifact retries, conditional <=5.2MB same-full-artifact transport amendment; native inference unauthorized.",
+  "R5_amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/amendment-plan.json",
+    "sha256": "3dc51bae586945dc6b98e93bad5326ba98170807e0a539f4e49cbf4d540f4a25"
+  },
+  "previous_handoff": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/guarded-handoff.json",
+    "sha256": "48931995d16b9779f439e31a1ae20d53c68043849b60a6f316c7c65d9123e36a"
+  },
+  "previous_selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/selection.json",
+    "sha256": "d8dfb10f04a1fa77b6f24c228636aa014407a95375e7973d8ced70604bbb12be"
+  },
+  "previous_publication": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/publication-manifest.json",
+    "sha256": "0766bfda6661ff0102a46ea704a8a32d7eabbe72b68a4049a38f00b24db69645"
+  },
+  "same_eligibility_engine": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/acquire_recovery.py",
+    "sha256": "251b0a94ce81b9d9f98174270cfb8be8f81f859c024a99c829cc11dc27fc48c7"
+  },
+  "sources": {
+    "holdout": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/acquire_holdout.py",
+      "sha256": "1eaf4e2256cb6d97ae72cf3693d08744cb16a50add0fd4fd7ca8d878da705b5b"
+    },
+    "acquire": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/acquire.py",
+      "sha256": "a0ad06cdad85e0d0c0004ee572d073dbfde85eb1cd4e0e96097700aa75952b18"
+    },
+    "headers": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/headers.py",
+      "sha256": "22866cd36d1ab6fa2bf0f5a38a90b7db5d88a416643fd4a39c900ee77c8eccaf"
+    }
+  },
+  "cached_05_right": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-05-from-boundary.json",
+    "sha256": "df2f55cd484e6ff3e0df7a35c511e007d4207f7f41eeefda3b86a8b016485bf1"
+  },
+  "cached_09_parts": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-09-through-boundary.json",
+      "sha256": "18a02570596d336f669aeff552a2d8401d0bd2d38a7746aebee20583edbb8c08"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-09-from-boundary.json",
+      "sha256": "ecd3e26f8f48a43afbd96f26ba76cbfd51de22fb2e484436da9161065685ad45"
+    }
+  ],
+  "unchanged": "ALL12originalcoordinates,411seedmap,438exclusions,R5finite-valid-timeeligibility,4degreeprefilter,exacttemporal/detectorselection/ROI. All11sealedmetadata8IDs and86oldfilebytes retained; no replacements/qualityselection.",
+  "query": {
+    "group_id": "association-holdout-05",
+    "partitions": [
+      {
+        "name": "before-june",
+        "TIME": "-Inf 60827.0"
+      },
+      {
+        "name": "june-through-october",
+        "TIME": "60827.0 60949.0"
+      }
+    ],
+    "boundaries_utc": [
+      "2025-06-01T00:00:00+00:00",
+      "2025-10-01T00:00:00+00:00"
+    ],
+    "boundary_mjd": [
+      60827.0,
+      60949.0
+    ],
+    "equivalence": "Refines ONLY failed[-Inf,60949] into[-Inf,60827]U[60827,60949], keepscached[60949,+Inf].Inclusivefinite-valid-timeeligibledomainunchanged; no unrestrictednullcatalogclaim.",
+    "max_workers": 2,
+    "max_requests_per_partition": 2,
+    "max_total_requests": 4,
+    "timeout_seconds": 90,
+    "limits": [
+      512,
+      4096
+    ],
+    "response_cap_bytes": 12582912,
+    "complete_only": true
+  },
+  "missing_09_products": [
+    {
+      "group_id": "association-holdout-09",
+      "obs_id": "2025W38_2C_0439_2",
+      "physical_obsid": "2025W38_2C_0439_2",
+      "detector": 3,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "metadata_obs_id": "2025W38_2C_0439_2",
+      "t_min_mjd": 60938.73278,
+      "t_max_mjd": 60938.734113,
+      "roi": {
+        "region_arcmin": [
+          6,
+          6
+        ],
+        "pixel_scale_arcsec": 6.15,
+        "mask_policy": "motion",
+        "recenter": false
+      },
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+      "status": "PLANNED_MISSING_PRODUCT"
+    },
+    {
+      "group_id": "association-holdout-09",
+      "obs_id": "2025W38_2C_0439_4",
+      "physical_obsid": "2025W38_2C_0439_4",
+      "detector": 3,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits",
+      "metadata_obs_id": "2025W38_2C_0439_4",
+      "t_min_mjd": 60938.735765,
+      "t_max_mjd": 60938.737097,
+      "roi": {
+        "region_arcmin": [
+          6,
+          6
+        ],
+        "pixel_scale_arcsec": 6.15,
+        "mask_policy": "motion",
+        "recenter": false
+      },
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+      "status": "PLANNED_MISSING_PRODUCT"
+    }
+  ],
+  "diagnostic": {
+    "method": "HEAD exactfailedcutoutURLs; captureHTTPerrorheaders/textbody<=2048bytesonly; compareexistinggoodmanualHDUdimensions/processingandSIAaccess_estsize.No FITS science payload inspection.",
+    "max_head_attempts": 1
+  },
+  "fixed_product_retry": {
+    "max_attempts": 2,
+    "timeout_seconds": 90,
+    "backoff_seconds": 10,
+    "respect_retry_after": true
+  },
+  "conditional_full_MEF": {
+    "role": "TRANSPORT AMENDMENT for SAME original selected artifact URL without cutoutquery, not identity/ROI substitution or failedcutoutbyteparity.",
+    "prerequisite": "OnlyafterbothfixedcutoutGETattemptsfail, HEADorRangeheadersprovefullobjectlength<=5200000bytes. UnknownoroversizeSTOP. SamephysicalID/D3/MJD/processingmustverify; analysisROI6arcmin/6.15/motion/recenterfalseunchanged.",
+    "transfer_gate": "Writeconcretefallback-amendmentSHAwithURL/sizeproofBEFOREanyfullGET; returnproposalforrootnotificationbeforeseparateauthorizedtransfercommand. No fullGETifsize>cap/unknown.",
+    "max_file_bytes": 5200000
+  },
+  "acquisition": {
+    "max_new_files": 10,
+    "max_total_files": 96,
+    "max_total_bytes": 500000000,
+    "max_file_bytes": 5200000,
+    "max_workers": 4,
+    "max_attempts": 2,
+    "timeout_seconds": 90,
+    "size_deg": 0.12
+  },
+  "roi": {
+    "region_arcmin": [
+      6,
+      6
+    ],
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "recenter": false
+  },
+  "raw_root": "/tmp/spaceapps-association-native-recovery2/recovery-6",
+  "pixels_opened": false,
+  "models_called": false,
+  "inference_authorized": false
+}

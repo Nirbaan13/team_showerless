@@ -1,0 +1,40 @@
+{
+  "declared_at_utc": "2026-11-15T10:42:40.286730+00:00",
+  "scope": "Optional public-native download/inference integration on preselected Ceres observations; no new scientific recovery gate",
+  "source_sha256": "116c635f09c9241554852a2711c2643d9d1a723b11db51d9ee8f4184e0416dea",
+  "reference_handoff_sha256": "d04e50afecc7456dd438850c9d76643d53dc6d5e5bd5103bfc0802c408eeeeb7",
+  "reference_cli_result_sha256": "13ce38e92c9918adac442ca6cd5c5d55bdede94485dbf63db1c5c71b4c7e3bb3",
+  "expected_observations": {
+    "2025W27_1A_0591_1": {
+      "detector": 2,
+      "processing_version": "l2b-v27-2026-214"
+    },
+    "2025W27_1A_0591_2": {
+      "detector": 2,
+      "processing_version": "l2b-v27-2026-214"
+    },
+    "2025W27_1A_0591_3": {
+      "detector": 2,
+      "processing_version": "l2b-v27-2026-214"
+    },
+    "2025W27_1A_0591_4": {
+      "detector": 2,
+      "processing_version": "l2b-v27-2026-214"
+    }
+  },
+  "query": {
+    "right_ascension_deg": 15.616171426024438,
+    "declination_deg": -5.471296866590545,
+    "width_arcmin": 6.0,
+    "height_arcmin": 6.0,
+    "detector_array": 2,
+    "observed_after": "2025-07-03T02:07:44.457600+00:00",
+    "observed_before": "2025-07-03T02:16:06.355200+00:00"
+  },
+  "expected_model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "input_binding": "Physical identities, detector, processing version, output region; current archive cutout bytes hashed separately because enclosing archive geometry differs",
+  "expected_products": 4,
+  "on_catalog_or_archive_change": "Record failure/condition separately; no case substitution or claim that an optional catalog condition is a general API defect",
+  "no_motion_confirmation_claim": true,
+  "no_raw_or_final_download_to_client": true
+}

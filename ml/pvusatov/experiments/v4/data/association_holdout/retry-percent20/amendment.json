@@ -1,0 +1,24 @@
+{
+  "declared_utc": "2026-11-15T10:46:21.961229+00:00",
+  "original_plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "original_audit_sha256": "915758616fb155f0c476112b69871206763da43b098eb0d5b2ccb47fac61427b",
+  "reason": "All original SIA requests returned upstream HTTP502 ProxyError; no coverage inference or raw selection occurred",
+  "change": "Same exact URL parameters/domain, spaces encoded as literal%20 instead of+; original acquisition implementation imported read-only",
+  "preserved": "12fixed centers, metadata eligibility/order, physical exclusions, byte budget/global deadline, no replacements/no pixels",
+  "native_seed_reservation": {
+    "association-holdout-01": 4110001,
+    "association-holdout-02": 4110002,
+    "association-holdout-03": 4110003,
+    "association-holdout-04": 4110004,
+    "association-holdout-05": 4110005,
+    "association-holdout-06": 4110006,
+    "association-holdout-07": 4110007,
+    "association-holdout-08": 4110008,
+    "association-holdout-09": 4110009,
+    "association-holdout-10": 4110010,
+    "association-holdout-11": 4110011,
+    "association-holdout-12": 4110012
+  },
+  "superseded_unexecuted_seed_reservation": "3900001..3900012 overlaps prior synthetic; no injection ever drawn; ROOT assigned4110001..4110012",
+  "source_sha256": "035219f1dd0e8d03909925cdb97121f60400fbd11e6518ce72913adf4e7abc0f"
+}

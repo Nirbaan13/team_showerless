@@ -1,0 +1,40 @@
+{
+  "group_id": "association-holdout-06",
+  "center": [
+    142.32946053,
+    0.99517302
+  ],
+  "created_utc": "2026-11-15T15:27:48.454195+00:00",
+  "attempts": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "limit": 512,
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-06/sia-512.xml",
+        "sha256": "6d43cc49e2d866b7446b5b61444d3754482d049aab6407928b08d91701cf11d2",
+        "bytes": 524354,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:28:09 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": []
+      },
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "row_count": 245
+    }
+  ],
+  "complete": true,
+  "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+  "rows_ref": {
+    "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-06/discovery.json",
+    "sha256": "3bb2179c3e294c10b69e2ee0e8bf73c023d9dda185e45a977731f28450448619"
+  }
+}

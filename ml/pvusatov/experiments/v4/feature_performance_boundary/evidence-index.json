@@ -1,0 +1,33 @@
+{
+  "files": {
+    "Findings.AI.md": {
+      "bytes": 5953,
+      "sha256": "57763f1240a3273da84cca109867d546a963f0aa46933204b13b07a9d3b38adb"
+    },
+    "Plan.AI.md": {
+      "bytes": 3781,
+      "sha256": "440ada7986ddff089fe4af2d9149895cd54e932487a5ead571c9a68c9a8692f9"
+    },
+    "boundary.py": {
+      "bytes": 15674,
+      "sha256": "2691be9133d167937c83a0145f432e6102b742b98cfe28bfb5a5513d0f77554f"
+    },
+    "protocol.json": {
+      "bytes": 4918,
+      "sha256": "0350987419ab5e7a202cda7b342852c0095b0c9972aa8939a4b8ccdcae4dde55"
+    },
+    "results-v1.json": {
+      "bytes": 111754,
+      "sha256": "52e39bd7b487e46f7d5fbccb636c91ccf8e124b7a2ae7a0ee71bca951a50ff02"
+    },
+    "test_feature_boundary_parity.py": {
+      "bytes": 1875,
+      "sha256": "4fbcd9ef8767857ca1a12ef9a81e400c7994c2b17d64178bfd85293dae58a7b8"
+    },
+    "verification-v1.json": {
+      "bytes": 1488,
+      "sha256": "39a33715051049b3948d902a33a9302a9f13d470493ca2343b2d3737b9e99a4d"
+    }
+  },
+  "scope": "new directory only; bounded engineering parity; no promotion"
+}
