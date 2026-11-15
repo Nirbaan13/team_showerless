@@ -205,7 +205,7 @@ test('embed and full-app links preserve the applied archive and observation peri
 });
 
 
-test('existing era shortcuts feed the same validated Update Field query and retain multi-archive selection', async ({ page }) => {
+test('existing era shortcuts feed the same validated Update Field query and retain all-archive selection', async ({ page }) => {
   const state = await backend(page); await open(page);
   await page.getByLabel('RA (deg)', { exact: true }).fill('53.1625');
   await page.getByLabel('Dec (deg)', { exact: true }).fill('-27.7914');
@@ -216,10 +216,9 @@ test('existing era shortcuts feed the same validated Update Field query and reta
   expect(state.queries).toHaveLength(0);
   await apply(page); await expect(page.getByText('HST/server-a', { exact: true })).toBeVisible();
   expect(state.queries[0].searchParams.get('providers')).toBe('cadc');
-  await page.getByText('Combine image archives', { exact: true }).click();
-  await page.getByRole('checkbox', { name: 'Search archive eso', exact: true }).check();
+  await page.getByLabel('Archive', { exact: true }).selectOption({ label: 'All available image archives' });
   await apply(page); await expect.poll(() => state.queries.length).toBe(2);
-  expect(state.queries[1].searchParams.get('providers')?.split(',')).toEqual(['cadc', 'eso']);
+  expect(state.queries[1].searchParams.get('providers')?.split(',')).toEqual(['irsa-spherex', 'cadc', 'eso']);
   await expect(page.getByText('eso: no provider outcome returned; completeness is unknown.', { exact: true })).toBeVisible();
 });
 
