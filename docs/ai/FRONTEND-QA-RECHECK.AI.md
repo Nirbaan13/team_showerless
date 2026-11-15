@@ -5,7 +5,7 @@ VPS. WhatsApp Space Apps Challenge messages through2026-11-15T19:54+03 confirm
 frontend fixes had been claimed and ML subsequently deployed. Each finding is
 retested independently; an earlier claimed fix is not accepted as evidence.
 
-Repairs proceed in QA number order. Isolated Chromium is used because the shared
+At the user’s request, remaining repairs proceed in descending QA number order, starting at QA-019. Before each item, compare current main and team updates to avoid duplicating work. Isolated Chromium is used because the shared
 MCP Firefox profile cannot start. Browser tests exercise the real React app and
 mock only HTTP dependencies for reproducible acquisition/error states. They block
 public submission/vote/comment writes. Production verification follows deployment.
@@ -30,4 +30,4 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-016 | Pending | Distinct UTC visit labels |
 | QA-017 | Pending | Compact readable HUD/labels |
 | QA-018 | Pending | Actual model/provenance and score meaning |
-| QA-019 | Pending | Declination validation |
+| QA-019 | Fixed locally | Main already rejected Dec 91; retained that fix. Two browser checks pass. Reject malformed whole values instead of parseFloat prefixes; document RA wrapping; accessible field errors. |

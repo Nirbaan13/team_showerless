@@ -68,11 +68,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
   const handleApplyCoords = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanRa = raInput.trim().replace(/[^\d.-]/g, '');
-    const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
-    const parsedRa = parseFloat(cleanRa);
-    const parsedDec = parseFloat(cleanDec);
-    if (isNaN(parsedRa) || isNaN(parsedDec)) {
+    const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+    const parsedRa = Number(raInput.trim());
+    const parsedDec = Number(decInput.trim());
+    if (!decimal.test(raInput.trim()) || !decimal.test(decInput.trim()) || !Number.isFinite(parsedRa) || !Number.isFinite(parsedDec)) {
       setCoordError('Enter valid numerical coordinates');
       return;
     }
@@ -97,8 +96,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         <form onSubmit={handleApplyCoords} className="space-y-2">
           <div className="grid grid-cols-2 gap-1.5">
             <div>
-              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
+              <label htmlFor="field-ra" className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
               <input
+                id="field-ra"
+                aria-invalid={!!coordError}
+                aria-describedby="coordinate-hint coordinate-error"
                 type="text"
                 value={raInput}
                 onChange={(e) => {
@@ -111,8 +113,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               />
             </div>
             <div>
-              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">Dec (deg)</label>
+              <label htmlFor="field-dec" className="text-[10px] font-mono text-paper-400 block mb-0.5">Dec (deg)</label>
               <input
+                id="field-dec"
+                aria-invalid={!!coordError}
+                aria-describedby="coordinate-hint coordinate-error"
                 type="text"
                 value={decInput}
                 onChange={(e) => {
@@ -126,8 +131,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           </div>
 
+          <p id="coordinate-hint" className="text-[10px] text-paper-400">RA wraps into [0°, 360°). Dec must be −90° to +90°.</p>
           {coordError && (
-            <div className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
+            <div id="coordinate-error" role="alert" className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
               {coordError}
             </div>
           )}
