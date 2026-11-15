@@ -17,69 +17,39 @@ def main():
     ftps.login(user, pwd)
     ftps.prot_p()
 
-    print("Initial PWD:", ftps.pwd())
-    try:
-        ftps.cwd('/')
-        print("Root PWD:", ftps.pwd())
-    except Exception as e:
-        print("Could not cwd to /:", e)
+    ftps.cwd('/')
+    print("Logged in at root /")
 
-    print("\nListing root directory:")
-    ftps.dir()
-
-    # Find the target directory where the live site files reside
     target_dirs = []
-    def find_doc_roots(current_path=''):
-        try:
-            items = ftps.nlst(current_path)
-            for item in items:
-                base = item.rstrip('/').split('/')[-1]
-                if base in ('.', '..'): continue
-                if 'index-Cg5wohe9.js' in base:
-                    parent = os.path.dirname(item)
-                    grandparent = os.path.dirname(parent)
-                    print(f"🎯 FOUND LIVE FILE at: {item} -> Docroot is: {grandparent or '/'}")
-                    if grandparent not in target_dirs:
-                        target_dirs.append(grandparent or '/')
-                # Recurse into directories
-                try:
-                    # test if it's a dir
-                    ftps.cwd(item)
-                    ftps.cwd('..')
-                    find_doc_roots(item)
-                except Exception:
-                    pass
-        except Exception as e:
-            pass
+    try:
+        domain_entries = ftps.nlst('domains')
+        print("Raw domains entries:", domain_entries)
+        for entry in domain_entries:
+            entry_name = entry.rstrip('/').split('/')[-1]
+            if entry_name in ('.', '..'):
+                continue
+            target_dirs.append(f"/domains/{entry_name}/public_html")
+    except Exception as e:
+        print("Listing domains error:", e)
 
-    find_doc_roots()
-    print("Discovered target docroots:", target_dirs)
-
-    # If not found via search, fallback to PWD
-    if not target_dirs:
-        # Check domains/ directory
-        try:
-            domains = ftps.nlst('domains')
-            print("Found domains:", domains)
-            for d in domains:
-                target_dirs.append(f"{d}/public_html")
-        except Exception:
-            pass
-
-    if not target_dirs:
-        target_dirs = ['/public_html', '/']
+    target_dirs.append('/public_html')
+    print("Identified deployment targets:", target_dirs)
 
     dist_dir = os.path.abspath('frontend/dist')
 
     for docroot in target_dirs:
         print(f"\n==========================================")
-        print(f"Deploying to docroot: {docroot}")
+        print(f"Deploying to: {docroot}")
         print(f"==========================================")
         try:
             ftps.cwd(docroot)
         except Exception as e:
-            print(f"Could not cwd to {docroot}: {e}")
+            print(f"Directory {docroot} does not exist or cannot be accessed ({e}). Skipping.")
             continue
+
+        print(f"Current PWD: {ftps.pwd()}")
+        print("Files currently in directory:")
+        ftps.dir()
 
         def upload_recursive(local_base, remote_base=''):
             for item in sorted(os.listdir(local_base)):
@@ -95,7 +65,7 @@ def main():
                     size = os.path.getsize(local_path)
                     with open(local_path, 'rb') as f:
                         ftps.storbinary(f"STOR {remote_path}", f)
-                    print(f"📄 Uploaded to {docroot}/{remote_path} ({size:,} bytes)")
+                    print(f"  📄 Uploaded {remote_path} ({size:,} bytes)")
 
         upload_recursive(dist_dir)
 
