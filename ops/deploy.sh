@@ -13,6 +13,14 @@ app_dir=${APP_DIR:-/opt/spaceapps}
 project=${COMPOSE_PROJECT_NAME:-spaceapps}
 timeout=${DEPLOY_HEALTH_TIMEOUT:-60}
 
+# The constrained host pre-creates this shared lock to serialize all services.
+# Existing hosts without it retain independent deployments.
+release_lock=${RELEASE_LOCK_FILE:-/var/lock/spaceapps-release.lock}
+if [[ -f "$release_lock" ]]; then
+    exec 8>"$release_lock"
+    flock -w 600 8
+fi
+
 # Also serialize manual deployments with deployments started by GitHub Actions.
 exec 9>"$app_dir/deploy.lock"
 flock -w 600 9
@@ -88,6 +96,12 @@ docker container rm --volumes "$config_container" >/dev/null
 config_container=
 compose=(docker compose --project-name "$project" --file "$candidate_compose")
 previous_compose=(docker compose --project-name "$project" --file "$app_dir/compose.yaml")
+# Host policy survives image-shipped topology upgrades and applies to rollback.
+# Pass this file as Compose data; never source host configuration as shell code.
+if [[ -f "$app_dir/host.override.yaml" ]]; then
+    compose+=(--file "$app_dir/host.override.yaml")
+    previous_compose+=(--file "$app_dir/host.override.yaml")
+fi
 if ! "${compose[@]}" --env-file "$candidate" config --quiet; then
     restore_previous_tag
     exit 65
@@ -111,4 +125,13 @@ docker image tag "$image" spaceapps-api:latest
 mv "$candidate_compose" "$app_dir/compose.yaml"
 mv "$candidate" "$app_dir/current.env"
 deployed=true
+if [[ -f "$app_dir/prune-images.enabled" ]]; then
+    # The delta upload has been fully consumed; release the target's disk space.
+    if [[ -f "$app_dir/incoming-image.tar" && ! -L "$app_dir/incoming-image.tar" ]]; then
+        rm -f -- "$app_dir/incoming-image.tar" || echo 'Warning: could not remove completed image upload' >&2
+    fi
+    if ! "${IMAGE_PRUNE_HELPER:-/usr/local/bin/spaceapps-prune-images}" "$app_dir" "$image" "$previous_image"; then
+        echo 'Warning: image retention cleanup failed after healthy API deployment' >&2
+    fi
+fi
 printf 'Deployed %s; spaceapps-api:latest now points to this revision\n' "$revision"

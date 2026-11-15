@@ -1,0 +1,46 @@
+# Install on the constrained target only as /opt/spaceapps/host.override.yaml.
+# Resource limits overlap intentionally; swap and serialized work are required.
+services:
+  api:
+    mem_limit: 448m
+    memswap_limit: 768m
+    environment:
+      JAVA_TOOL_OPTIONS: >-
+        --enable-native-access=ALL-UNNAMED
+        -Xms32m -Xmx160m -XX:+UseSerialGC -XX:ActiveProcessorCount=1
+        -Xss512k -XX:MaxDirectMemorySize=32m -XX:ReservedCodeCacheSize=48m
+        -Djava.io.tmpdir=/app/data/tmp
+      WORKERS: "1"
+      TRANSFERS: "1"
+      ARCHIVE_PARALLELISM: "1"
+      ARCHIVE_PROVIDER_PARALLELISM: "1"
+      PROCESSING_CONCURRENCY: "1"
+      MAX_CACHE_BYTES: "268435456"
+      MIN_FREE_BYTES: "1073741824"
+      IRSA_MIRROR_MAX_INDEX_BYTES: "134217728"
+      # Keep the migrated snapshot index available without autonomous crawling.
+      IRSA_MIRROR_SCAN_ENABLED: "false"
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    tmpfs: !reset []
+    volumes:
+      - type: bind
+        source: /opt/spaceapps/runtime-tmp/api
+        target: /tmp
+        bind:
+          create_host_path: false
+  pipeline:
+    mem_limit: 512m
+    memswap_limit: 1024m
+    environment:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    tmpfs: !reset []
+    volumes:
+      - type: bind
+        source: /opt/spaceapps/runtime-tmp/pipeline
+        target: /tmp
+        bind:
+          create_host_path: false

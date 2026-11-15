@@ -29,7 +29,7 @@ jobs:
         run: docker build --file Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" ..
       - name: Deploy main to VPS
         env:
-          VPS_HOST: 144.124.238.101
+          VPS_HOST: 146.103.122.246
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
           VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}

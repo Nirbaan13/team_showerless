@@ -22,6 +22,7 @@ ASSETS = {
     'science/motion/cases/observations.csv', 'science/motion/cases/vesta-horizons.csv',
 }
 MODULES = {'ml/service.py', 'ml/detector.py', 'ml/catalogue_db.py', 'ml/smoke_deployment.py',
+           'science/archive_gateway.py', 'backend/python/irsa_cutout.py',
            'science/motion/live.py', 'science/motion/prepare_fits.py', 'science/motion/review.py',
            'science/motion/detector.py', 'science/motion/ranker.py'}
 
