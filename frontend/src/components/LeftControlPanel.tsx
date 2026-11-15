@@ -197,7 +197,8 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             onClick={() => {
               onSelectArray('all');
             }}
-            title="Combine all 6 infrared bands into a stacked composite image"
+            disabled
+            title="Unavailable: no multi-detector composite artifact has been supplied"
             className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
               selectedArray === 'all'
                 ? 'bg-emerald-400 text-gray-950 font-bold'

@@ -203,12 +203,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || currentFrame?.detectorArray || 6);
         const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
 
-        if (selectedArray === 'all') {
-          // All Bands Stack: coadded composite across all 6 detectors -> elevated SNR (~2.45x) & clarity
-          ctx.filter = isWhiteBg
-            ? 'invert(1) contrast(1.6) brightness(1.15)'
-            : 'contrast(1.55) brightness(1.18)';
-        } else if (subtractionMode === 'zodi_reference_subtracted') {
+        if (subtractionMode === 'zodi_reference_subtracted') {
           // Zodi Subtracted: remove diffuse interplanetary dust haze -> crisp black background & boosted contrast
           ctx.filter = isWhiteBg
             ? `invert(1) contrast(${1.5 * bandStyle.contrastBoost}) brightness(1.1)`
@@ -970,11 +965,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
           <span>
-            {selectedArray === 'all' ? (
-              <span className="text-emerald-300 font-bold">All Bands Stack (D1–D6 · SNR ×2.4)</span>
-            ) : (
-              <span>Band {selectedArray || activeFrame.detectorArray} ({BAND_SPECTRAL_STYLES[selectedArray || activeFrame.detectorArray]?.range || `${activeFrame.wavelengthMinUm}–${activeFrame.wavelengthMaxUm} µm`})</span>
-            )}
+            <span>Detector D{activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>
           </span>
           <span>|</span>
           <span className="text-amber-300 font-semibold">FOV {fov}</span>

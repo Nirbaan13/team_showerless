@@ -164,7 +164,13 @@ export function App() {
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
-  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(6);
+  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const detector = params.get('detector');
+    if (detector === 'all') return 'all';
+    if (detector && /^[1-6]$/.test(detector)) return Number(detector) as DetectorArrayId;
+    return NASA_TEST_PRESETS.find(preset => preset.id === params.get('preset'))?.recommendedArray ?? 6;
+  });
   const [subtractionMode, setSubtractionMode] = useState<SubtractionMode>('raw_calibrated');
   const [activeFrameIndex, setActiveFrameIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -231,10 +237,10 @@ export function App() {
   const frames = useMemo(() => {
     void motionReviewsRevision;
     if (currentPresetId) {
-      const arrayId = selectedArray === 'all' ? 6 : selectedArray;
+      const arrayId = selectedArray;
       return getMockEpochFrames(currentPresetId, arrayId);
     }
-    return customFrames ?? [];
+    return selectedArray === 'all' ? [] : (customFrames ?? []).filter(frame => frame.detectorArray === selectedArray);
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
   const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
@@ -255,41 +261,26 @@ export function App() {
     return getMockCandidates('3i-atlas', 6);
   });
 
-  // Hydrate candidates from review.json as soon as the external fetch completes
-  useEffect(() => {
-    return subscribeMotionReviews(() => {
-      setMotionReviewsRevision((r) => r + 1);
-      if (currentPresetId) {
-        const arrayId = selectedArray === 'all' ? 6 : selectedArray;
-        const updated = getMockCandidates(currentPresetId, arrayId);
-        if (updated.length > 0) {
-          setCandidatesList(updated);
-          setSelectedCandidateId((prev) => {
-            if (!prev) return updated[0].id;
-            if (updated.some((c) => c.id === prev)) return prev;
-            if (findCandidateAcrossAllPresets(prev)) return prev;
-            return updated[0].id;
-          });
-        }
-      }
-    });
-  }, [currentPresetId, selectedArray]);
+  // Change pixels and tracks together; an unsupported detector is an empty view.
+  useEffect(() => subscribeMotionReviews(() => {
+    setMotionReviewsRevision(revision => revision + 1);
+    if (!currentPresetId) return;
+    const updated = getMockCandidates(currentPresetId, selectedArray);
+    setCandidatesList(updated);
+    setSelectedCandidateId(previous => updated.some(candidate => candidate.id === previous) ? previous : updated[0]?.id ?? null);
+  }), [currentPresetId, selectedArray]);
 
   const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
     setSelectedArray(newArray);
+    setActiveFrameIndex(0);
+    setIsPlaying(false);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     if (currentPresetId) {
-      const arrayId = newArray === 'all' ? 6 : newArray;
-      const updated = getMockCandidates(currentPresetId, arrayId);
-      if (updated.length > 0) {
-        setCandidatesList(updated);
-        setSelectedCandidateId((prev) => {
-          if (!prev) return updated[0].id;
-          if (updated.some((c) => c.id === prev)) return prev;
-          if (findCandidateAcrossAllPresets(prev)) return prev;
-          return updated[0].id;
-        });
-      }
+      const updated = getMockCandidates(currentPresetId, newArray);
+      setCandidatesList(updated);
+      setSelectedCandidateId(updated[0]?.id ?? null);
+    } else {
+      void handleSearchCoordinates(ra, dec, { fov, detector: newArray, frameIndex: 0, candidateId: '' });
     }
   };
 
@@ -297,8 +288,6 @@ export function App() {
     if (selectedCandidateId) {
       const match = candidatesList.find((c) => c.id === selectedCandidateId);
       if (match) return match;
-      const globalMatch = findCandidateAcrossAllPresets(selectedCandidateId);
-      if (globalMatch) return globalMatch.candidate;
     }
     return candidatesList[0] || null;
   }, [candidatesList, selectedCandidateId]);
@@ -393,7 +382,13 @@ export function App() {
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
     const array = request?.detector ?? selectedArray;
-    const detNum = (array === 'all' ? 6 : array) as DetectorArrayId;
+    if (array === 'all') {
+      setCurrentPresetId(null); setCustomFrames([]); setCandidatesList([]); setSelectedCandidateId(null);
+      setSearchStatus({ source: 'error', message: 'Multi-detector composite unavailable. Select an individual detector.' });
+      setMlAnalysisStatus({ state: 'idle', stage: 'No composite data', progress: 0, stepIndex: 1 });
+      return;
+    }
+    const detNum = array as DetectorArrayId;
 
     setRa(newRa);
     setDec(newDec);
@@ -502,7 +497,7 @@ export function App() {
     }
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
-    const detector = setting.selectedArray === 'all' ? 6 : setting.selectedArray;
+    const detector = setting.selectedArray;
     const frames = getMockEpochFrames(preset.id, detector);
     const candidates = getMockCandidates(preset.id, detector);
     setCurrentPresetId(preset.id);
