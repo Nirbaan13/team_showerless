@@ -173,3 +173,88 @@ def discover(ra, dec, radius, *, detector=None, start=None, stop=None):
         if isinstance(exc, GatewayError):
             raise
         raise GatewayError('IRSA discovery did not return a usable observation list') from exc
+
+
+def read_cutout(url, limit, timeout=18):
+    """Read an IBE response with explicit byte and transfer-time bounds."""
+    deadline = monotonic() + timeout
+    with build_opener(NoRedirects()).open(url, timeout=timeout) as response:
+        if int(response.headers.get('Content-Length', 0)) > limit:
+            raise GatewayError('Archive response exceeds the byte limit')
+        data = bytearray()
+        while True:
+            chunk = response.read1(256 * 1024)
+            if monotonic() > deadline:
+                raise TimeoutError('Archive transfer timed out')
+            if not chunk:
+                return bytes(data)
+            data.extend(chunk)
+            if len(data) > limit:
+                raise GatewayError('Archive response exceeds the byte limit')
+
+
+def _mirror_source(url, source_url=None):
+    """Map an official IBE original to precisely the same public S3 key."""
+    parts = urlsplit(url)
+    original = parts._replace(query='', fragment='').geturl()
+    prefix = '/ibe/data/spherex/'
+    if parts.fragment or not parts.path.startswith(prefix):
+        raise GatewayError('Cutout is not an official SPHEREx original')
+    release = parts.path.removeprefix(prefix).split('/', 1)[0].upper()
+    if release not in RELEASES or canonical_url(original, release) != original:
+        raise GatewayError('Cutout is not an official SPHEREx original')
+    if source_url and canonical_url(source_url, release) != original:
+        raise GatewayError('Cutout source disagrees with the original archive object')
+    if source_url and urlsplit(source_url).netloc in MIRROR_HOSTS:
+        return source_url
+    return f'https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/{parts.path.removeprefix(prefix)}'
+
+
+def download_cutout(url, output, *, source_url=None, discovery_source='sia',
+                    max_bytes=24 * 1024 * 1024, timeout=18, mirror_timeout=90, read_ibe=None):
+    """Fetch an IBE cutout or crop the identical native S3 pixels during an outage.
+
+    Mirror discovery selects S3 immediately. Other callers preserve the IBE path
+    and can switch only after a retryable transport error for a verified object.
+    Geometry, content, permission and absent-object errors never select S3.
+    Native S3 range reads have their own bounded deadline because preserving
+    the ancillary FITS tables can take longer than one IBE response.
+    """
+    from pathlib import Path
+    output = Path(output)
+
+    def native(source):
+        from backend.python.irsa_cutout import CutoutError, cutout
+        try:
+            cutout(source, url, output, max_network_bytes=max_bytes,
+                   max_output_bytes=max_bytes, timeout_seconds=mirror_timeout)
+        except CutoutError as exc:
+            raise GatewayError(str(exc)) from exc
+
+    if discovery_source == 's3_mirror':
+        if not source_url or urlsplit(source_url).netloc not in MIRROR_HOSTS:
+            raise GatewayError('Mirror discovery is missing its original S3 URL')
+        native(_mirror_source(url, source_url))
+        return
+    try:
+        reader = read_ibe or (lambda value, limit: read_cutout(value, limit, timeout))
+        data = reader(url, max_bytes)
+    except (HTTPError, URLError, OSError) as exc:
+        if isinstance(exc, HTTPError):
+            retryable = exc.code == 429 or 500 <= exc.code <= 599
+            exc.close()
+            if not retryable:
+                raise
+        try:
+            source = _mirror_source(url, source_url)
+        except GatewayError:
+            raise exc
+        native(source)
+        return
+    # Do not replace an existing cache entry until the complete bounded read.
+    temporary = output.with_suffix(output.suffix + '.part')
+    try:
+        temporary.write_bytes(data)
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)

@@ -16,7 +16,7 @@ from bundle import Engine, normalize_image_id, validate_inventory, validate_load
 def source_revision(root):
     revision = subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
     if not re.fullmatch(r'[0-9a-f]{40}',revision):raise ValueError('A full Git revision is required')
-    owned=['frontend/src','ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py']
+    owned=['frontend/src','ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py','backend/python/irsa_cutout.py']
     dirty=subprocess.check_output(['git','status','--porcelain','--untracked-files=all','--',*owned],cwd=root,text=True)
     if dirty.strip():raise ValueError('Commit service source changes before building versioned real-only images')
     return revision
@@ -53,9 +53,9 @@ def build(inventory_path, output, executable='podman'):
                 (stage/'dist/demo-mode.json').write_text(json.dumps({'profile':'v1-real','real_only':True,'revision':revision,'parent_image_id':original['image_id']}))
                 text=common+'ENV FRONTEND_REVISION=${DEMO_REVISION}\nRUN rm -rf /usr/share/nginx/html/*\nCOPY dist/ /usr/share/nginx/html/\nRUN printf \'{"version":"%s"}\\n\' "$DEMO_REVISION" > /usr/share/nginx/html/frontend-version.json\n'
             else:
-                for rel in ['ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py']:
+                for rel in ['ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py','backend/python/irsa_cutout.py']:
                     shutil.copy2(root/rel,stage/Path(rel).name)
-                text=common+'ENV APP_REVISION=${DEMO_REVISION} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\n'
+                text=common+'ENV APP_REVISION=${DEMO_REVISION} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\nCOPY --chown=10001:10001 irsa_cutout.py /app/backend/python/irsa_cutout.py\n'
             (stage/'Dockerfile').write_text(text)
             pull='--pull=never' if executable=='podman' else '--pull=false'
             format_args=['--format','docker'] if executable=='podman' else []
