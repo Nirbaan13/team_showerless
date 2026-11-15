@@ -8,8 +8,10 @@ const png = Buffer.from(reviews[0].frames[0].residual.split(',')[1], 'base64');
 const releases = new Set<() => void>();
 test.afterEach(() => { for (const release of releases) release(); releases.clear(); });
 
-async function backend(page: Page, options: { download?: string; analysis?: string; missingDifference?: boolean; brokenBitmap?: boolean; delayBitmap?: boolean; ra?: number; withCandidate?: boolean; missingStacks?: boolean; htmlPreparation?: boolean } = {}) {
-  const state = { download: options.download ?? 'completed', analysis: options.analysis ?? 'completed', analysisStarts: 0, prepareCalls: 0, requests: [] as string[], brokenBitmap: options.brokenBitmap ?? false, queries: [] as Record<string, string>[] };
+async function backend(page: Page, options: { download?: string; analysis?: string; missingDifference?: boolean; brokenBitmap?: boolean; delayBitmap?: boolean; ra?: number; withCandidate?: boolean; missingStacks?: boolean; htmlPreparation?: boolean; totalFrames?: number; failedFrames?: number; partialMirror?: boolean } = {}) {
+  const state = { download: options.download ?? 'completed', analysis: options.analysis ?? 'completed', analysisStarts: 0, prepareCalls: 0, requests: [] as string[], brokenBitmap: options.brokenBitmap ?? false, queries: [] as Record<string, string>[], analysisRequests: [] as { download_id: string; frame_ids?: string[] }[] };
+  const count = options.totalFrames ?? 3;
+  const ready = count - (options.failedFrames ?? 0);
   let releaseBitmap!: () => void;
   const bitmapGate = new Promise<void>(resolve => { releaseBitmap = resolve; });
   releases.add(releaseBitmap);
@@ -31,9 +33,12 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
     }
     if (path === '/api/downloads/download-test') return route.fulfill({ json: {
       id: 'download-test', status: state.download, mode: 'default', query: { right_ascension_deg: 250, declination_deg: 10 },
-      observations: [], chunks: [0, 1, 2].map(i => ({ id: `chunk-${i}`, frame_id: `frame-${i}`, status: state.download === 'completed' ? 'ready' : 'pending', preview_status: 'unavailable', image_url: '', fits_cutout_url: `/api/chunks/chunk-${i}` })),
-      progress: { discovery_complete: state.download !== 'failed', total_chunks: state.download === 'failed' ? 0 : 3, ready_chunks: state.download === 'completed' ? 3 : 0, failed_chunks: 0, unavailable_chunks: 0 },
-      errors: state.download === 'failed' ? [{ code: 'archive_timeout', message: 'Archive metadata request timed out', retryable: true }] : [],
+      observations: Array.from({ length: count }, (_, i) => ({ frame_id: `frame-${i}`, observation_date: new Date(Date.UTC(2025, 11, 14) + i * 3600000).toISOString(), detector_array: 6, release: 'DR1', is_available: true })),
+      chunks: Array.from({ length: count }, (_, i) => ({ id: `chunk-${i}`, frame_id: `frame-${i}`, status: ['completed', 'completed_with_errors'].includes(state.download) ? i < ready ? 'ready' : 'failed' : 'pending', preview_status: 'unavailable', image_url: '', fits_cutout_url: `/api/chunks/chunk-${i}`,
+        ...(i >= ready ? { error: { code: 'archive_http_error', message: 'Archive returned HTTP 503', retryable: true } } : {}),
+      })),
+      progress: { discovery_complete: state.download !== 'failed', total_chunks: state.download === 'failed' ? 0 : count, ready_chunks: ['completed', 'completed_with_errors'].includes(state.download) ? ready : 0, failed_chunks: options.failedFrames ?? 0, unavailable_chunks: 0 },
+      errors: state.download === 'failed' ? [{ code: 'archive_timeout', message: 'Archive metadata request timed out', retryable: true }] : options.partialMirror ? [{ code: 'archive_mirror_partial', message: 'Local coverage index is still incomplete', retryable: true }] : [],
       status_url: '/api/downloads/download-test', events_url: '/api/downloads/download-test/events',
     } });
     const frames = [0, 1, 2].map(i => ({ frame_id: `frame-${i}`, observation_id: `observation-${i}`, midpoint_utc: `2025-12-14T1${i}:00:00Z`, width: 256, height: 144, detector: 6, release: 'QR3', image_url: `/api/analyses/analysis-test/resources/frame-${i}.png`, difference_url: options.missingDifference ? '' : `/api/analyses/analysis-test/resources/difference-${i}.png`, coverage_fraction: 1, outlier_fraction: 0 }));
@@ -45,7 +50,7 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
       ...(state.analysis === 'failed' ? { error: { code: 'processing_failed', message: 'Could not compute difference images', retryable: true } } : {}),
       ...(state.analysis === 'completed' ? { result: { schema_version: 1, analysis_id: 'analysis-test', model: { model_id: 'fixture-model', model_family: 'RankNetTreeBoost', sha256: 'a'.repeat(64), score_kind: 'sigmoid_pairwise_utility', score_description: 'Pairwise ranking utility; not a calibrated probability' }, frames, candidates, warnings: [], settings: {}, provenance: {} } } : {}),
     };
-    if (path === '/api/analyses/motion') { state.analysisStarts++; return route.fulfill({ status: 202, json: job }); }
+    if (path === '/api/analyses/motion') { state.analysisStarts++; state.analysisRequests.push(route.request().postDataJSON()); return route.fulfill({ status: 202, json: job }); }
     if (path === '/api/analyses/analysis-test') return route.fulfill({ json: job });
     if (path.startsWith('/api/analyses/analysis-test/resources/')) {
       await bitmapGate;
@@ -90,6 +95,34 @@ test('archive_timeout clears demo epochs and candidates and never starts a doome
   await expect(page.getByText(/Motion cannot be assessed/).first()).toBeVisible();
   expect(state.analysisStarts).toBe(0);
   expect(await drawn(page)).not.toContain('procedural-canvas');
+});
+
+test('36 ready images survive one failed sibling and use an explicit bounded analysis subset', async ({ page }) => {
+  const { state } = await backend(page, { download: 'completed_with_errors', totalFrames: 37, failedFrames: 1, partialMirror: true });
+  await openViewer(page); await search(page);
+  await expect.poll(() => state.analysisStarts).toBe(1);
+  expect(state.analysisRequests[0].download_id).toBe('download-test');
+  const selected = state.analysisRequests[0].frame_ids!;
+  expect(selected).toHaveLength(32);
+  expect(new Set(selected).size).toBe(32);
+  expect(selected[0]).toBe('frame-0');
+  expect(selected.at(-1)).toBe('frame-35');
+  expect(selected).not.toContain('frame-36');
+  await expect.poll(async () => (await drawn(page)).some(url => url.endsWith('/difference-0.png'))).toBe(true);
+  const warning = page.getByRole('status', { name: 'Observation warnings', exact: true });
+  await expect(warning).toContainText('1 of 37');
+  await expect(warning).toContainText('HTTP 503');
+  await expect(warning).toContainText('32 of 36');
+  await expect(warning).toContainText('coverage index');
+  await expect(page.getByText('Observation request failed', { exact: true })).toHaveCount(0);
+});
+
+test('too few ready frames show the real file failure before the mirror coverage warning', async ({ page }) => {
+  const { state } = await backend(page, { download: 'completed_with_errors', totalFrames: 3, failedFrames: 2, partialMirror: true });
+  await openViewer(page); await search(page);
+  await expect(page.getByRole('alert').filter({ hasText: 'Archive returned HTTP 503' }).first()).toBeVisible();
+  await expect(page.getByRole('alert').filter({ hasText: '1 of 3' }).first()).toBeVisible();
+  expect(state.analysisStarts).toBe(0);
 });
 
 test('running analysis remains pending beyond 18 seconds and publishes real difference images afterward', async ({ page }) => {

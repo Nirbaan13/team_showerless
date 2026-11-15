@@ -215,7 +215,7 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
   observedBefore?: string;
   signal?: AbortSignal;
   onProgress?: (progress: LiveCutoutProgress) => void;
-}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string; model: import('../../../ml/pvusatov/frontend/src/services/inferenceApi').InferenceModel }> {
+}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string; model: import('../../../ml/pvusatov/frontend/src/services/inferenceApi').InferenceModel; warnings: string[] }> {
   const prep = await prepareRegion(
     {
       right_ascension_deg: params.ra,
@@ -238,14 +238,27 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
     await waitForLiveJob(params.signal);
     download = await getDownloadJob(prep.id, params.signal);
   }
-  if (download.status === 'failed' || download.chunks.some(chunk => chunk.status !== 'ready')) {
-    const error = download.errors?.[0] ?? download.chunks.find(chunk => chunk.error)?.error;
-    throw new Error(`${error?.code ?? 'download_failed'}: ${error?.message ?? 'The archive did not publish the requested observations'}`);
+  const ready = [...new Map(download.chunks.filter(chunk => chunk.status === 'ready').map(chunk => [chunk.frame_id, chunk])).values()];
+  const unavailable = download.chunks.filter(chunk => chunk.status !== 'ready');
+  if (download.status === 'failed' || (download.chunks.length > 0 && ready.length < 3)) {
+    const error = unavailable.find(chunk => chunk.error)?.error ?? download.errors?.[0];
+    throw new Error(`${error?.code ?? 'insufficient_frames'}: ${error?.message ?? 'Motion analysis requires at least three ready observations'}. ${ready.length} of ${download.chunks.length} native frames ready; at least 3 are required.`);
   }
   if (!download.chunks.length) throw new Error('no_observations: The archive returned no usable observations for this request');
 
+  const times = new Map(download.observations.map(observation => [observation.frame_id, Date.parse(observation.observation_date)]));
+  const ordered = ready.toSorted((a, b) => (times.get(a.frame_id) ?? 0) - (times.get(b.frame_id) ?? 0));
+  const selected = ordered.length > 32 ? Array.from({ length: 32 }, (_, i) => ordered[Math.round(i * (ordered.length - 1) / 31)]) : ordered;
+  const partial = unavailable.length > 0 || ready.length > 32;
+  const warnings = (download.errors ?? []).map(error => `${error.code}: ${error.message}`);
+  if (unavailable.length) {
+    const causes = [...new Set(unavailable.flatMap(chunk => chunk.error ? [`${chunk.error.code}: ${chunk.error.message}`] : []))];
+    warnings.push(`${unavailable.length} of ${download.chunks.length} observations unavailable. ${causes.join('; ')}`);
+  }
+  if (ready.length > selected.length) warnings.push(`${selected.length} of ${ready.length} ready frames selected across the available dates for the 32-frame analysis limit.`);
+
   params.onProgress?.({ phase: 'processing', message: 'Preparing difference images', ready: 0, total: 0 });
-  let job = await startInference({ download_id: prep.id }, { min_snr: 4.0, mask_policy: 'motion' }, params.signal);
+  let job = await startInference({ download_id: prep.id, ...(partial ? { frame_ids: selected.map(chunk => chunk.frame_id) } : {}) }, { min_snr: 4.0, mask_policy: 'motion' }, params.signal);
   while (!['completed', 'failed', 'cancelled'].includes(job.status)) {
     params.onProgress?.({ phase: 'processing', message: `Preparing difference images: ${job.status}`, ready: 0, total: 0 });
     await waitForLiveJob(params.signal);
@@ -305,7 +318,7 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
     fixedStackDataUrl: inferenceResource(c.stationary_stack_url, job.id),
   }));
 
-  return { frames, candidates, modelName: res.model.model_id, model: res.model };
+  return { frames, candidates, modelName: res.model.model_id, model: res.model, warnings: [...new Set([...warnings, ...res.warnings])] };
 }
 
 /**

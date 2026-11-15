@@ -58,6 +58,70 @@ r=json.load(open(a.request));o=pathlib.Path(a.output);o.mkdir(exist_ok=True)
       val range=Query.fromParameters("range",Map("right_ascension_min_deg"->"1","right_ascension_max_deg"->"2","declination_min_deg"->"2","declination_max_deg"->"3")).toOption.get
       assertTrue(bad.forall(AnalysisRequest.parse(_).isLeft),AnalysisRegion.fromQuery(range,AnalysisOptions()).isLeft)
     },
+    test("validates explicit native frame subsets without changing legacy source validation") {
+      val valid="""{"download_id":"download","frame_ids":["f1","f2","f3"]}"""
+      val invalid=List(
+        """{"download_id":"download","frame_ids":[]}""",
+        """{"download_id":"download","frame_ids":["f1","f1","f2"]}""",
+        """{"preset":"comet-d6","frame_ids":["f1","f2","f3"]}""",
+        s"""{"download_id":"download","frame_ids":${(1 to 33).map(i=>s"f$i").toList.toJson}}"""
+      )
+      assertTrue(AnalysisRequest.parse(valid).isRight,invalid.forall(AnalysisRequest.parse(_).isLeft))
+    },
+    test("explicit ready subset renders despite a failed sibling and rejects unowned or failed frames") {
+      ZIO.scoped {for
+        dir<-temp
+        archive=new Archive:
+          def search(q:Query)=ZIO.succeed((1 to 4).toList.map(i=>ArchiveImage(Observation(s"f$i",s"2026-01-01T00:00:0${i}Z",1,"dr1"),s"https://example.test/$i")))
+          def fetch(image:ArchiveImage,path:Path)=if image.observation.frame_id=="f4" then ZIO.fail(ApiError("archive_http_error","Archive returned HTTP 503")) else write(path,"native test bytes")
+        child="""import argparse,json
+p=argparse.ArgumentParser();p.add_argument('--request');p.add_argument('--output');a=p.parse_args()
+r=json.load(open(a.request))
+assert [f['frame_id'] for f in r['source']['observations']]==['f1','f2','f3']
+"""+successfulChild
+        f<-setup(dir,child,source=Some(archive))
+        (s,_,jobs)=f
+        query=Query.fromParameters("default",Map("right_ascension_deg"->"1","declination_deg"->"2")).toOption.get
+        download<-jobs.submit(query,"default",None)
+        _<-jobs.events(download.id).runDrain
+        request<-ZIO.fromEither(AnalysisRequest.parse(s"""{"download_id":"${download.id}","frame_ids":["f1","f2","f3"]}"""))
+        selected<-s.submit(request)
+        result<-done(s,selected.id)
+        unknown<-ZIO.fromEither(AnalysisRequest.parse(s"""{"download_id":"${download.id}","frame_ids":["f1","f2","unknown"]}""")).flatMap(s.submit).either
+        failed<-ZIO.fromEither(AnalysisRequest.parse(s"""{"download_id":"${download.id}","frame_ids":["f1","f2","f4"]}""")).flatMap(s.submit).either
+        strict<-s.submit(AnalysisRequest(download_id=Some(download.id)))
+        strictResult<-done(s,strict.id)
+        proof=result.result.flatMap(_.asObject).flatMap(_.get("provenance")).flatMap(_.asObject).flatMap(_.get("input_selection")).flatMap(_.asObject)
+      yield assertTrue(result.status=="completed",unknown.isLeft,failed.isLeft,strictResult.status=="failed",strictResult.error.exists(_.code=="download_failed"),
+          proof.flatMap(_.get("selected_frame_ids")).contains(Json.Arr(Json.Str("f1"),Json.Str("f2"),Json.Str("f3"))),
+          proof.flatMap(_.get("total_frames")).contains(Json.Num(4)),proof.flatMap(_.get("ready_frames")).contains(Json.Num(3)),
+          result.result.flatMap(_.asObject).flatMap(_.get("warnings")).exists {case Json.Arr(items)=>items.nonEmpty;case _=>false})}
+    },
+    test("a bounded selected subset is admitted from a download larger than the analysis limit") {
+      ZIO.scoped {for
+        dir<-temp
+        archive=new Archive:
+          def search(q:Query)=ZIO.succeed((1 to 37).toList.map(i=>ArchiveImage(Observation(s"f$i",s"2026-01-01T00:00:${f"$i%02d"}Z",1,"dr1"),s"https://example.test/$i")))
+          def fetch(image:ArchiveImage,path:Path)=if image.observation.frame_id=="f37" then ZIO.fail(ApiError("archive_http_error","Archive returned HTTP 503")) else write(path,"native test bytes")
+        child="""import argparse,json
+p=argparse.ArgumentParser();p.add_argument('--request');p.add_argument('--output');a=p.parse_args()
+r=json.load(open(a.request))
+assert [f['frame_id'] for f in r['source']['observations']]==[f'f{i}' for i in range(1,33)]
+"""+successfulChild
+        f<-setup(dir,child,source=Some(archive))
+        (s,_,jobs)=f
+        query=Query.fromParameters("default",Map("right_ascension_deg"->"1","declination_deg"->"2")).toOption.get
+        download<-jobs.submit(query,"default",None)
+        _<-jobs.events(download.id).runDrain
+        strict<-s.submit(AnalysisRequest(download_id=Some(download.id))).either
+        request<-ZIO.fromEither(AnalysisRequest.parse(s"""{"download_id":"${download.id}","frame_ids":${(1 to 32).map(i=>s"f$i").toList.toJson}}"""))
+        selected<-s.submit(request)
+        result<-done(s,selected.id)
+        proof=result.result.flatMap(_.asObject).flatMap(_.get("provenance")).flatMap(_.asObject).flatMap(_.get("input_selection")).flatMap(_.asObject)
+      yield assertTrue(strict.left.exists {case e:ApiError=>e.code=="analysis_too_large";case _=>false},result.status=="completed",
+          proof.flatMap(_.get("total_frames")).contains(Json.Num(37)),proof.flatMap(_.get("ready_frames")).contains(Json.Num(36)),
+          proof.flatMap(_.get("selected_frame_ids")).exists {case Json.Arr(items)=>items.size==32;case _=>false})}
+    },
     test("uses projected TAN extents so wide regions contain requested pixel edges") {
       val options=AnalysisOptions(pixel_scale_arcsec=60)
       val center=Query.fromParameters("default",Map("right_ascension_deg"->"0","declination_deg"->"0","width_arcmin"->"480","height_arcmin"->"1")).toOption.get

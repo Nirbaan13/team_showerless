@@ -2430,6 +2430,8 @@ components:
     MotionAnalysisRequest:
       type: object
       additionalProperties: false
+      dependentRequired:
+        frame_ids: [download_id]
       oneOf:
         - required: [download_id]
           not: {required: [preset]}
@@ -2441,6 +2443,13 @@ components:
           minLength: 1
           maxLength: 128
           description: ID returned by a native default-mode observations preparation endpoint. Processed downloads are rejected to avoid applying zodiacal subtraction twice.
+        frame_ids:
+          type: array
+          minItems: 3
+          maxItems: 32
+          uniqueItems: true
+          items: {type: string, minLength: 1, maxLength: 256}
+          description: Optional explicit subset of ready native frame IDs belonging to download_id. Requires a completed download and cannot be used with a preset. Unselected or failed sibling frames are excluded and the input selection is recorded in result provenance. Without this property every requested native frame must be ready and the whole download must fit the 32-frame limit.
         preset:
           type: string
           enum: [comet-d6, comet-d2, vesta-d6, vesta-d3]

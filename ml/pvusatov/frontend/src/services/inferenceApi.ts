@@ -112,7 +112,7 @@ export const inferencePresets = (signal?: AbortSignal) => json<{ presets: Infere
 export const getInference = (id: string, signal?: AbortSignal) => json<InferenceJob>(`/api/analyses/${encodeURIComponent(id)}`, signal);
 export const getInferenceDownload = (id: string, signal?: AbortSignal) =>
   json<{ chunks: { frame_id: string; status: string; fits_cutout_url: string }[] }>(`/api/downloads/${encodeURIComponent(id)}`, signal);
-export const startInference = (source: { preset: string } | { download_id: string }, options: InferenceOptions, signal?: AbortSignal) =>
+export const startInference = (source: { preset: string } | { download_id: string; frame_ids?: string[] }, options: InferenceOptions, signal?: AbortSignal) =>
   json<InferenceJob>('/api/analyses/motion', signal, { ...source, options });
 export const prepareRegion = (region: ArchiveRegion, signal?: AbortSignal) => {
   const params = new URLSearchParams();
