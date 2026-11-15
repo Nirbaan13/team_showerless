@@ -66,8 +66,9 @@ test('applies source, historical dates and enclosing field radius atomically wit
   await expect(page.getByRole('region', { name: 'Archive observations', exact: true })).toBeVisible();
   await expect(page.getByText('HST/server-a', { exact: true })).toBeVisible();
   const params = state.queries[0].searchParams;
-  expect(Object.fromEntries(params)).toMatchObject({ providers: 'cadc', declination_deg: '-27.7914', observed_after: '1990-01-01T00:00:00.000Z', observed_before: '2010-01-01T00:00:00.000Z', product_kinds: 'image' });
+  expect(Object.fromEntries(params)).toMatchObject({ providers: 'cadc', observed_after: '1990-01-01T00:00:00.000Z', observed_before: '2010-01-01T00:00:00.000Z', product_kinds: 'image' });
   expect(Number(params.get('right_ascension_deg'))).toBeCloseTo(53.1625, 8);
+  expect(Number(params.get('declination_deg'))).toBeCloseTo(-27.7914, 8);
   expect(Number(params.get('radius_degrees'))).toBeGreaterThan(0.05892);
   expect(Number(params.get('radius_degrees'))).toBeLessThan(0.05893);
   expect(state.selections).toHaveLength(0); expect(state.analyses).toBe(0);
@@ -199,4 +200,22 @@ test('embed and full-app links preserve the applied archive and observation peri
   await expect(full).toHaveAttribute('href', /archive=cadc/);
   await expect(full).toHaveAttribute('href', /observed_through=2009-12-31/);
   expect(new URL((await full.getAttribute('href'))!).searchParams.has('embed')).toBe(false);
+});
+
+
+test('existing era shortcuts feed the same validated Update Field query and retain multi-archive selection', async ({ page }) => {
+  const state = await backend(page); await open(page);
+  await page.getByLabel('RA (deg)', { exact: true }).fill('53.1625');
+  await page.getByLabel('Dec (deg)', { exact: true }).fill('-27.7914');
+  await page.getByRole('button', { name: 'Canada CADC 1990–2010', exact: true }).click();
+  await expect(page.getByLabel('Archive', { exact: true })).toHaveValue('cadc');
+  await expect(page.getByLabel('Observed through', { exact: true })).toHaveValue('2009-12-31');
+  expect(state.queries).toHaveLength(0);
+  await apply(page); await expect(page.getByText('HST/server-a', { exact: true })).toBeVisible();
+  expect(state.queries[0].searchParams.get('providers')).toBe('cadc');
+  await page.getByText('Combine image archives', { exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Search archive eso', exact: true }).check();
+  await apply(page); await expect.poll(() => state.queries.length).toBe(2);
+  expect(state.queries[1].searchParams.get('providers')?.split(',')).toEqual(['cadc', 'eso']);
+  await expect(page.getByText('eso: no provider outcome returned; completeness is unknown.', { exact: true })).toBeVisible();
 });

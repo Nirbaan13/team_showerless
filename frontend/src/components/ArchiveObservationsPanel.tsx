@@ -12,6 +12,7 @@ function Preview({ url, id }: { url: string; id: string }) {
 }
 export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState }) {
   const { query, result, searching, selectedIds, downloading, job, error } = archive;
+  const missingProviders = query && result ? query.provider.split(',').filter(id => !result.outcomes.some(outcome => outcome.provider === id)) : [];
   return <section aria-label="Archive observations" className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 text-sm bg-paper-950 text-paper-200">
     <h2 className="text-lg font-bold">Archive observations</h2>
     {query ? <p className="font-mono text-xs">{query.provider} · {query.ra.toFixed(6)}°, {query.dec.toFixed(6)}° · square field {query.fovArcmin}′<br />
@@ -21,6 +22,7 @@ export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState })
     {error && <p role="alert" className="text-red-300 break-words">{error}</p>}
     {result && <>
       <div aria-label="Archive provider outcomes" className="space-y-2">
+        {missingProviders.map(id => <p key={id} role="status" className="text-amber-300">{id}: no provider outcome returned; completeness is unknown.</p>)}
         {result.outcomes.map(outcome => <div key={outcome.provider} role="status" className="p-2 border border-paper-700 rounded">
           <strong>{outcome.provider}: {outcome.status}</strong> · {outcome.record_count} records · {outcome.completeness}
           {outcome.completeness !== 'complete' && <p className="text-amber-300">Results are incomplete ({outcome.completeness}). Narrow the region or period; more observations may exist.</p>}
@@ -30,7 +32,7 @@ export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState })
         </div>)}
       </div>
       <p>{result.returned_count} observations returned. Discovery does not mean images have been downloaded.</p>
-      {!result.observations.length && <p role="status">{result.outcomes.some(o => !['success', 'empty'].includes(o.status))
+      {!result.observations.length && <p role="status">{missingProviders.length > 0 || !result.outcomes.length || result.outcomes.some(o => !['success', 'empty'].includes(o.status))
         ? 'No observations returned; inspect provider failures or unsupported filters above.' : 'No observations found for this region and period.'}</p>}
       {result.observations.length > 0 && <>
         <div className="flex gap-3 items-center flex-wrap">

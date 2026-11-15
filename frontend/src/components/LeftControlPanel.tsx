@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { OBSERVATION_ERA_PRESETS, type ObservationEraSpec } from '../services/spherexBackendApi';
 import { DEFAULT_ARCHIVE, isArchiveBrowse, observationBounds, type ArchiveSelection, type ArchiveInventory } from '../services/archiveObservationsApi';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
@@ -67,7 +68,15 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   const [archiveDraft, setArchiveDraft] = useState(archiveSelection);
   React.useEffect(() => setArchiveDraft(archiveSelection), [archiveSelection]);
   const archiveBrowse = isArchiveBrowse(archiveDraft);
-  const selectedProvider = archiveInventory.find(item => item.id === archiveDraft.provider);
+  const selectedIds = archiveDraft.provider.split(',').filter(Boolean);
+  const selectedProviders = selectedIds.map(id => archiveInventory.find(item => item.id === id));
+  const imageProviders = archiveInventory.filter(item => item.capabilities.availability === 'available' && item.capabilities.product_kinds.includes('image') && (item.capabilities.original || item.capabilities.cutout));
+  const allProviderIds = imageProviders.map(item => item.id).join(',');
+  const eraSelection = (era: ObservationEraSpec): ArchiveSelection => ({
+    provider: (era.id === 'all' ? imageProviders.map(item => item.id) : era.providers.filter(id => imageProviders.some(item => item.id === id))).join(','),
+    from: era.timeStartUtc?.slice(0, 10) || '',
+    through: era.timeEndUtc ? new Date(Date.parse(era.timeEndUtc) - 1).toISOString().slice(0, 10) : '',
+  });
 
   const detectorCoverage = React.useMemo(() => {
     return getDetectorCoverageForTarget(currentPresetId || null, frames);
@@ -97,7 +106,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
     try { observationBounds(archiveDraft); } catch (error) {
       setCoordError(error instanceof Error ? error.message : 'Invalid observation dates'); return;
     }
-    if (archiveBrowse && !selectedProvider) { setCoordError('Archive inventory is unavailable. Retry when the source can be verified.'); return; }
+    if (archiveBrowse && (!selectedIds.length || selectedProviders.some(item => !item))) { setCoordError('Archive inventory is unavailable. Retry when the source can be verified.'); return; }
     setCoordError(null);
     const normalizedRa = ((parsedRa % 360) + 360) % 360;
     onUpdateCoords(normalizedRa, parsedDec, archiveDraft);
@@ -155,7 +164,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             <select id="field-archive" value={archiveDraft.provider} onChange={e => { setArchiveDraft(value => ({ ...value, provider: e.target.value })); setCoordError(null); }}
               className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1">
               {!archiveInventory.some(item => item.id === 'irsa-spherex') && <option value="irsa-spherex">IRSA SPHEREx</option>}
-              {archiveDraft.provider !== 'irsa-spherex' && !selectedProvider && <option value={archiveDraft.provider} disabled>{archiveDraft.provider} · inventory unavailable</option>}
+              {allProviderIds.includes(',') && <option value={allProviderIds}>All available image archives</option>}
+              {archiveDraft.provider.includes(',') && archiveDraft.provider !== allProviderIds && <option value={archiveDraft.provider}>Multiple selected archives</option>}
+              {!archiveDraft.provider && <option value="">Choose archives</option>}
+              {archiveDraft.provider && !archiveDraft.provider.includes(',') && archiveDraft.provider !== 'irsa-spherex' && !selectedProviders[0] && <option value={archiveDraft.provider} disabled>{archiveDraft.provider} · inventory unavailable</option>}
               {archiveInventory.map(item => <option key={item.id} value={item.id}
                 disabled={item.capabilities.availability !== 'available' || !item.capabilities.product_kinds.includes('image') || (!item.capabilities.original && !item.capabilities.cutout)}>
                 {item.id === 'cadc' ? 'CADC' : item.id === 'irsa-spherex' ? 'IRSA SPHEREx' : item.id.toUpperCase()}
@@ -163,11 +175,30 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               </option>)}
             </select>
             {archiveInventoryError && <p role="alert" className="text-amber-300">Archive inventory unavailable: {archiveInventoryError}</p>}
-            {selectedProvider && <div className="text-paper-400 mt-1">Time filter: {selectedProvider.capabilities.time_filter}
-              {selectedProvider.capabilities.restrictions?.map((restriction, i) => <p key={i}>{restriction}</p>)}
-            </div>}
+            {selectedProviders.filter((item): item is ArchiveInventory => !!item).map(item => <div key={item.id} className="text-paper-400 mt-1">{item.id} · Time filter: {item.capabilities.time_filter}
+              {item.capabilities.restrictions?.map((restriction, i) => <p key={i}>{restriction}</p>)}
+            </div>)}
+            <details className="mt-1 text-paper-400"><summary>Combine image archives</summary>
+              {imageProviders.map(item => <label key={item.id} className="flex gap-2 items-center py-1">
+                <input type="checkbox" aria-label={`Search archive ${item.id}`} checked={selectedIds.includes(item.id)} onChange={() => {
+                  setArchiveDraft(value => ({ ...value, provider: (selectedIds.includes(item.id) ? selectedIds.filter(id => id !== item.id) : [...selectedIds, item.id]).join(',') }));
+                  setCoordError(null);
+                }} />{item.id}
+              </label>)}
+            </details>
           </div>
-          <div className="space-y-1">
+          <div id="tutorial-target-epoch" className="space-y-1">
+            <span className="block text-paper-400">Observation Era</span>
+            <div className="grid grid-cols-2 gap-1">
+              {OBSERVATION_ERA_PRESETS.map(era => <button key={era.id} type="button" disabled={era.id !== 'custom' && !eraSelection(era).provider}
+                onClick={() => {
+                  if (era.id === 'custom') document.getElementById('observed-from')?.focus();
+                  else setArchiveDraft(eraSelection(era));
+                  setCoordError(null);
+                }} title={era.description} className="rounded border border-paper-700 bg-paper-950 px-2 py-1 text-left disabled:opacity-40">
+                {era.label}<span className="block text-paper-400">{era.periodLabel}</span>
+              </button>)}
+            </div>
             <label htmlFor="observed-from" className="block text-paper-400">Observed from</label>
             <input id="observed-from" type="date" value={archiveDraft.from} onChange={e => { setArchiveDraft(value => ({ ...value, from: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
             <label htmlFor="observed-through" className="block text-paper-400">Observed through</label>

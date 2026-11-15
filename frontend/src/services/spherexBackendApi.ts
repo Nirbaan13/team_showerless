@@ -84,6 +84,82 @@ export interface ObservationSearchResult {
   totalFound: number;
 }
 
+export type ObservationEraId = 'all' | 'spherex' | 'wise' | 'cadc' | 'custom';
+
+export interface ObservationEraSpec {
+  id: ObservationEraId;
+  label: string;
+  periodLabel: string;
+  description: string;
+  providers: string[];
+  timeStartUtc?: string;
+  timeEndUtc?: string;
+}
+
+export const OBSERVATION_ERA_PRESETS: ObservationEraSpec[] = [
+  {
+    id: 'all',
+    label: 'All Eras',
+    periodLabel: 'Any observation date',
+    description: 'Query selected available image archives; actual coverage is reported separately by each provider',
+    providers: ['irsa-spherex', 'cadc', 'eso'],
+  },
+  {
+    id: 'spherex',
+    label: 'SPHEREx DR1',
+    periodLabel: '2025+',
+    description: 'SPHEREx observation window from 2025 onward; date selection does not guarantee coverage',
+    providers: ['irsa-spherex'],
+    timeStartUtc: '2025-01-01T00:00:00Z',
+  },
+  {
+    id: 'wise',
+    label: '2010–2024 window',
+    periodLabel: '2010–2024',
+    description: 'Historical date window; archive and instrument qualification determine available products. WISE ingestion is not implied.',
+    providers: ['irsa-spherex', 'cadc', 'eso'],
+    timeStartUtc: '2010-01-01T00:00:00Z',
+    timeEndUtc: '2025-01-01T00:00:00Z',
+  },
+  {
+    id: 'cadc',
+    label: 'Canada CADC',
+    periodLabel: '1990–2010',
+    description: 'Canadian Astronomy Data Centre historical optical/NIR archives (1990 to 2010)',
+    providers: ['cadc'],
+    timeStartUtc: '1990-01-01T00:00:00Z',
+    timeEndUtc: '2010-01-01T00:00:00Z',
+  },
+  {
+    id: 'custom',
+    label: 'Custom Window',
+    periodLabel: 'User-specified',
+    description: 'Custom user-specified observation time window and archive providers',
+    providers: ['irsa-spherex', 'cadc', 'eso'],
+  },
+];
+
+export function normalizeIsoUtcDate(input: string | undefined, isEnd = false): string | undefined {
+  if (!input) return undefined;
+  const trimmed = input.trim();
+  if (!trimmed) return undefined;
+  if (/^\d{4}$/.test(trimmed)) {
+    return isEnd ? `${trimmed}-12-31T23:59:59Z` : `${trimmed}-01-01T00:00:00Z`;
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    return isEnd ? `${trimmed}T23:59:59Z` : `${trimmed}T00:00:00Z`;
+  }
+  try {
+    const d = new Date(trimmed);
+    if (!isNaN(d.getTime())) {
+      return d.toISOString();
+    }
+  } catch {
+    // fall through
+  }
+  return undefined;
+}
+
 /**
  * Builds a real astronomical infrared cutout photo URL for any (RA, Dec, FOV) sky coordinate
  * from NOIRLab / NASA unWISE Multi-Epoch Infrared Survey (NEOWISE Reactivation releases neo4–neo8)
@@ -135,6 +211,8 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
   dec: number;
   fovArcmin: number;
   detector: DetectorArrayId;
+  observedAfter?: string;
+  observedBefore?: string;
   signal?: AbortSignal;
   onProgress?: (progress: LiveCutoutProgress) => void;
 }): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string; model: import('../../../ml/pvusatov/frontend/src/services/inferenceApi').InferenceModel }> {
@@ -145,6 +223,8 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
       width_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
       height_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
       detector_array: params.detector,
+      observed_after: params.observedAfter,
+      observed_before: params.observedBefore,
     },
     params.signal
   );
@@ -320,6 +400,114 @@ export function convertObservationsToEpochFrames(
     },
   }));
 }
+
+export interface FederatedSearchQuery {
+  ra: number;
+  dec: number;
+  radiusDeg?: number;
+  providers?: string[];
+  productKinds?: ('image' | 'cube' | 'spectrum')[];
+  observedAfter?: string;
+  observedBefore?: string;
+  limitPerProvider?: number;
+}
+
+export interface CommonArchiveObservation {
+  id: string;
+  frame_id: string;
+  provider: string;
+  collection: string;
+  native_id: string;
+  product_kind: string;
+  observation_date?: string;
+  is_available: boolean;
+  release?: string;
+  wavelength_min_um?: number;
+  wavelength_max_um?: number;
+  mission?: string;
+  instrument?: string;
+  time?: {
+    start_utc?: string;
+    end_utc?: string;
+    quality?: string;
+  };
+  provenance?: Record<string, string>;
+  native?: Record<string, string>;
+}
+
+export interface ArchiveProviderOutcome {
+  provider: string;
+  status: string;
+  record_count: number;
+  completeness: string;
+  warnings?: string[];
+  error?: { code: string; message: string; retryable?: boolean };
+  has_continuation?: boolean;
+}
+
+export interface FederatedSearchResponse {
+  observations: CommonArchiveObservation[];
+  outcomes: ArchiveProviderOutcome[];
+  returned_count: number;
+  query: FederatedSearchQuery;
+}
+
+/**
+ * Searches federated astronomical archives via GET /api/observations-search.
+ * Queries IRSA SPHEREx (2024+), Canada CADC (1990-2010), and ESO ObsCore without downloading FITS cutouts.
+ * Strictly complies with backend whitelist: right_ascension_deg, declination_deg, radius_degrees, providers, product_kinds, observed_after, observed_before, limit_per_provider.
+ */
+export async function searchFederatedObservations(
+  query: FederatedSearchQuery,
+  signal?: AbortSignal
+): Promise<FederatedSearchResponse> {
+  const radiusDeg = query.radiusDeg ?? 0.05;
+  const providers = query.providers && query.providers.length > 0 ? query.providers : ['irsa-spherex', 'cadc', 'eso'];
+
+  const searchParams = new URLSearchParams({
+    right_ascension_deg: query.ra.toFixed(6),
+    declination_deg: query.dec.toFixed(6),
+    radius_degrees: radiusDeg.toString(),
+    providers: providers.join(','),
+  });
+
+  if (query.productKinds && query.productKinds.length > 0) {
+    searchParams.set('product_kinds', query.productKinds.join(','));
+  }
+  if (query.observedAfter) {
+    searchParams.set('observed_after', query.observedAfter);
+  }
+  if (query.observedBefore) {
+    searchParams.set('observed_before', query.observedBefore);
+  }
+  if (query.limitPerProvider) {
+    searchParams.set('limit_per_provider', Math.max(1, Math.min(1000, query.limitPerProvider)).toString());
+  }
+
+  const response = await fetch(`${BACKEND_BASE_URL}/api/observations-search?${searchParams.toString()}`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    signal,
+  });
+
+  if (!response.headers.get('content-type')?.includes('application/json')) throw new Error(`invalid_response: Archive API returned non-JSON (HTTP ${response.status})`);
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => null);
+    throw new Error(`${errorBody?.code ?? 'archive_request_failed'}: ${errorBody?.message ?? `Federated observation search returned status ${response.status}`}`);
+  }
+
+  const data = await response.json();
+  signal?.throwIfAborted();
+  if (!Array.isArray(data.observations) || !Array.isArray(data.outcomes) || typeof data.returned_count !== 'number') throw new Error('invalid_response: Invalid archive search result');
+  return {
+    observations: (data.observations || []) as CommonArchiveObservation[],
+    outcomes: (data.outcomes || []) as ArchiveProviderOutcome[],
+    returned_count: Number(data.returned_count ?? (data.observations?.length || 0)),
+    query,
+  };
+}
+
+export const searchFederatedArchiveObservations = searchFederatedObservations;
 
 /**
  * Searches the live NASA IRSA SIA archive via POST /api/observations/search.

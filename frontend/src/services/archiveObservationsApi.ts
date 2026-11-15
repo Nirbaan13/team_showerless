@@ -1,4 +1,5 @@
 /** Federated archive metadata and explicitly selected native downloads. */
+import { searchFederatedObservations } from './spherexBackendApi';
 const API = (import.meta.env.VITE_BACKEND_URL as string) || '/backend';
 export interface ArchiveSelection { provider: string; from: string; through: string }
 export const DEFAULT_ARCHIVE: ArchiveSelection = { provider: 'irsa-spherex', from: '', through: '' };
@@ -76,11 +77,9 @@ export async function listArchives(signal?: AbortSignal): Promise<ArchiveInvento
 }
 export async function searchArchive(query: ArchiveQuery, signal?: AbortSignal): Promise<ArchiveSearchResult> {
   const bounds = observationBounds(query);
-  const params = new URLSearchParams({ right_ascension_deg: String(query.ra), declination_deg: String(query.dec),
-    radius_degrees: String(fieldRadiusDegrees(query.fovArcmin)), providers: query.provider, product_kinds: 'image', limit_per_provider: '100' });
-  if (bounds.observed_after) params.set('observed_after', bounds.observed_after);
-  if (bounds.observed_before) params.set('observed_before', bounds.observed_before);
-  const result = await json<ArchiveSearchResult>(`/api/observations-search?${params}`, signal);
+  const result = await searchFederatedObservations({ ra: query.ra, dec: query.dec, radiusDeg: fieldRadiusDegrees(query.fovArcmin),
+    providers: query.provider.split(','), productKinds: ['image'], observedAfter: bounds.observed_after, observedBefore: bounds.observed_before,
+    limitPerProvider: 100 }, signal) as unknown as ArchiveSearchResult;
   if (!Array.isArray(result.observations) || !Array.isArray(result.outcomes) || result.observations.some(o => typeof o.id !== 'string' || !o.time || typeof o.analysisEligible !== 'boolean')) throw new Error('invalid_response: Invalid archive search result');
   return result;
 }

@@ -2,7 +2,13 @@
 
 ## User workflow
 
-The existing Update Field form now applies coordinates, archive and observation
+The existing era shortcuts and multi-archive search from PR 28 are consolidated
+into this single validated Update Field form, rather than a second independent
+query with stale coordinates. The existing shared federated search client is
+reused and validates its JSON response. Era labels describe observation windows,
+not a claim that WISE images or pre-launch SPHEREx observations are supported.
+
+The Update Field form applies coordinates, archive and observation
 start/end dates together. Choices come from `/api/archives`; unavailable,
 unqualified, non-image and non-deliverable providers are identified in the menu.
 Provider time-filter capability and restrictions remain visible.
