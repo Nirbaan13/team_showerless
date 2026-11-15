@@ -40,7 +40,7 @@ export function routeCandidateDestination(candidate: CandidateRecord): Destinati
       agency: 'Smithsonian Astrophysical Observatory / NASA PDS SBN',
       reason: `Object displays clear non-sidereal sky motion (${speed.toFixed(1)}″/hr) across ${epochs} epochs (fit RMS: ${candidate.fit_rms_px.toFixed(2)} px). Eligible for spaceborne ADES astrometric reporting.`,
       eligibilityStatus: epochs >= 3 ? 'eligible' : 'requires_more_epochs',
-      portalUrl: 'https://www.minorplanetcenter.net/iau/NEO/SubmitObs.html',
+      portalUrl: 'https://www.minorplanetcenter.net/db_search',
       formatName: 'ADES XML / PSV Astrometry',
     };
   }
@@ -53,7 +53,7 @@ export function routeCandidateDestination(candidate: CandidateRecord): Destinati
       agency: 'American Association of Variable Star Observers (AAVSO)',
       reason: `Object exhibits multi-epoch photometric flux variability across infrared channels. Eligible for AAVSO Variable Star Index registry.`,
       eligibilityStatus: 'eligible',
-      portalUrl: 'https://www.aavso.org/vsx/index.php?view=submit.top',
+      portalUrl: 'https://www.aavso.org/vsx/index.php',
       formatName: 'VSX Variable Star Specification',
     };
   }
@@ -65,7 +65,7 @@ export function routeCandidateDestination(candidate: CandidateRecord): Destinati
     agency: 'International Astronomical Union (IAU) Working Group on Supernovae',
     reason: `Object displays high-significance transient optical/infrared emission with no static catalog counterpart. Eligible for IAU supernova/optical flare triage.`,
     eligibilityStatus: 'eligible',
-    portalUrl: 'https://www.wis-tns.org/submit',
+    portalUrl: 'https://www.wis-tns.org/',
     formatName: 'IAU TNS JSON Schema (v1.0)',
   };
 }
