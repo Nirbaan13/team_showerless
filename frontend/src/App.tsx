@@ -103,7 +103,7 @@ export function App() {
         return 'viewer';
       }
     }
-    return 'viewer';
+    return 'home';
   });
 
   const [selectedCatalogueCandidateId, setSelectedCatalogueCandidateId] = useState<string | null>(() => {

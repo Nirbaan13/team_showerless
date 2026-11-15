@@ -1,11 +1,15 @@
 # SPHEREx Blink: PlanetX Discovery Engine & Astronomical Candidate Catalogue
 ### NASA International Space Apps Challenge 2026
 
+[![Live Web App](https://img.shields.io/badge/Live%20Platform-spherexblink.tech-emerald.svg?style=for-the-badge&logo=google-chrome&logoColor=white)](https://spherexblink.tech/)
 [![CI/CD Status](https://github.com/Nirbaan13/team_showerless/actions/workflows/ci-deploy.yml/badge.svg)](https://github.com/Nirbaan13/team_showerless/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mission](https://img.shields.io/badge/NASA-SPHEREx%20Mission-0B3D91.svg)](https://www.jpl.nasa.gov/missions/spherex)
 [![IRSA DOI](https://img.shields.io/badge/DOI-10.26131%2FIRSA652-blue.svg)](https://doi.org/10.26131/IRSA652)
 [![Astrometric Standard](https://img.shields.io/badge/Astrometry-IAU%20ADES%20XML%2FPSV-emerald.svg)](https://www.minorplanetcenter.net/iau/info/ADES.html)
+
+> 🚀 **Live Production Platform**: [https://spherexblink.tech](https://spherexblink.tech/)  
+> 🛰️ **Full-Stack VPS Mirror**: [http://144.124.238.101:8080](http://144.124.238.101:8080/)
 
 ---
 
