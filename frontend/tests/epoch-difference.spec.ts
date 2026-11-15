@@ -395,3 +395,30 @@ test('every candidate keeps the image transform after zoom and pan', async ({ pa
   await page.mouse.down(); await page.mouse.move(canvas!.x + 430, canvas!.y + 420, { steps: 3 }); await page.mouse.up();
   await check();
 });
+
+test('unsupported detectors clear pixels and tracks while supported detectors select their own frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /^Band 1 \(/ }).click();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
+  await page.getByRole('button', { name: /^Band 2 \(/ }).click();
+  await expect(page.getByText('Frame 1 of 3', { exact: true })).toBeVisible();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/Frame: .*D2$/)).toBeVisible();
+  await page.getByRole('button', { name: /^Band 6 \(/ }).click();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'All Bands', exact: true })).toBeDisabled();
+});
+
+test('all-detector links cannot relabel a D6 bitmap as a composite', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas&detector=all');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText(/All Bands Stack|SNR ×2.4/)).toHaveCount(0);
+});

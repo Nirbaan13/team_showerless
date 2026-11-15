@@ -6,7 +6,6 @@ import type {
   MolecularLine,
 } from '../types/spherex';
 import {
-  REAL_3I_ATLAS_FRAMES,
   REAL_BARNARD_FRAMES,
   REAL_CERES_FRAMES,
   REAL_WISE_0855_FRAMES,
@@ -117,7 +116,12 @@ export const DETECTOR_ARRAY_SPECS = [
  * Generates multi-epoch frames for the celestial viewport, prioritizing Ivan's precomputed
  * real SPHEREx datasets from public/motion/review.json when available.
  */
-export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
+export function getMockEpochFrames(targetId: string, arrayId: number | 'all'): SpherexEpochFrame[] {
+  if (arrayId === 'all') return [];
+  return getStoredEpochFrames(targetId, arrayId).filter(frame => frame.detectorArray === arrayId);
+}
+
+function getStoredEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
   const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
   if (reviewId) {
     const precomputed = getPrecomputedReviewById(reviewId);
@@ -126,36 +130,7 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
     }
   }
 
-  // Fallback for 3I/ATLAS before review.json finishes async load
-  if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
-    const realObservations = [
-      { id: '2025W50_2A_0741_2D6', date: '2025-12-14T11:01:45.688Z', wave: 4.475, snr: 12.1, offset: 0.421 },
-      { id: '2025W50_2A_0755_2D6', date: '2025-12-14T12:39:42.784Z', wave: 4.608, snr: 13.4, offset: 0.263 },
-      { id: '2025W50_2A_0797_4D6', date: '2025-12-14T17:33:31.003Z', wave: 4.813, snr: 14.8, offset: 0.246 },
-      { id: '2025W50_2A_0813_1D6', date: '2025-12-14T19:06:21.122Z', wave: 4.847, snr: 14.2, offset: 0.539 },
-    ];
-    return realObservations.map((obs, idx) => ({
-      frameId: obs.id,
-      epochIndex: idx,
-      observationDate: obs.date,
-      detectorArray: (targetId === '3i-atlas-d2' ? 2 : 6) as any,
-      wavelengthMinUm: targetId === '3i-atlas-d2' ? 1.11 : 4.42,
-      wavelengthMaxUm: targetId === '3i-atlas-d2' ? 1.64 : 5.00,
-      channelIndex: 94 + idx * 2,
-      flaggedPixelPercentage: 0.12,
-      cosmicRayHits: 8,
-      isAvailable: true,
-      imageDataUrl: REAL_3I_ATLAS_FRAMES[idx]?.pngDataUrl,
-      imageWidth: 256,
-      imageHeight: 144,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.0,
-        zodiBrightnessMjySr: 12.43,
-        snrEstimated: obs.snr,
-      }
-    }));
-  }
+  if (['3i-atlas', '3i-atlas-d2', 'vesta-d6', 'vesta-d3'].includes(targetId)) return [];
 
   if (targetId === 'barnards-star') {
     return REAL_BARNARD_FRAMES.map((obs, idx) => ({
@@ -348,7 +323,12 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
  * Generates candidate objects in the field of view, prioritizing Ivan's precomputed
  * real SPHEREx datasets from public/motion/review.json when available.
  */
-export function getMockCandidates(targetId: string, arrayId: number = 6): CandidateObject[] {
+export function getMockCandidates(targetId: string, arrayId: number | 'all' = 6): CandidateObject[] {
+  if (arrayId === 'all' || !getMockEpochFrames(targetId, arrayId).length) return [];
+  return getStoredCandidates(targetId, arrayId);
+}
+
+function getStoredCandidates(targetId: string, arrayId: number): CandidateObject[] {
   const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
   if (reviewId) {
     const precomputed = getPrecomputedReviewById(reviewId);
