@@ -446,3 +446,50 @@ test('retired Ceres links show unavailable instead of another object or generate
   await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
   expect(await drawn(page)).toHaveLength(0);
 });
+
+for (const [preset, detector] of [['3i-atlas-d2', 2], ['vesta-d3', 3]] as const) {
+  test(`legacy ${preset} link defaults to its own D${detector} frames`, async ({ page }) => {
+    await backend(page);
+    await page.goto(`/?tab=viewer&preset=${preset}`);
+    await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+    await page.locator('details[aria-label="Image metadata"] summary').click();
+    await expect(page.getByText(new RegExp(`^Frame: .*D${detector}$`))).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`detector=${detector}`));
+  });
+}
+
+test('explicit detector overrides a legacy preset detector default', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas-d2&detector=6');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/^Frame: .*D6$/)).toBeVisible();
+});
+
+test('candidate-only Vesta link resolves after review hydration without borrowing Atlas', async ({ page }) => {
+  await backend(page);
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  releases.add(release);
+  await page.route('**/motion/review.json', async route => { await gate; await route.continue(); });
+  const candidate = '(4) Vesta (D3 BLOOM)';
+  await page.goto(`/?tab=viewer&candidate=${encodeURIComponent(candidate)}`);
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  release();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/^Frame: .*D3$/)).toBeVisible();
+  await expect(page.locator('details[aria-label="Image metadata"]').getByText(`Selected: ${candidate}`, { exact: true })).toBeVisible();
+  await expect.poll(() => new URL(page.url()).searchParams.get('candidate')).toBe(candidate);
+});
+
+test('candidate-only WISE link uses the detector declared by its preset', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&candidate=cand-wise-0855-01');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const metadata = page.locator('details[aria-label="Image metadata"]');
+  await expect(metadata).toBeVisible();
+  await metadata.locator('summary').click();
+  await expect(metadata.getByText(/^Detector: D5;/)).toBeVisible();
+  await expect.poll(() => new URL(page.url()).searchParams.get('candidate')).toBe('cand-wise-0855-01');
+});

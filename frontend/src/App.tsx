@@ -150,6 +150,14 @@ export function App() {
     }
   };
 
+  const [initialViewerCandidate] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const candidate = params.get('candidate');
+    return candidate && params.get('tab') === 'viewer' && !params.has('preset') && !params.has('ra') && !params.has('dec')
+      ? { id: candidate, detector: params.get('detector') } : null;
+  });
+  const initialCandidateResolved = useRef(false);
+
   const [currentPresetId, setCurrentPresetId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -158,7 +166,7 @@ export function App() {
       const candParam = params.get('candidate');
       if (candParam) {
         const found = findCandidateAcrossAllPresets(candParam);
-        if (found) return found.presetId;
+        return found?.presetId ?? null;
       }
     }
     return '3i-atlas';
@@ -171,6 +179,8 @@ export function App() {
     const detector = params.get('detector');
     if (detector === 'all') return 'all';
     if (detector && /^[1-6]$/.test(detector)) return Number(detector) as DetectorArrayId;
+    if (params.get('preset') === '3i-atlas-d2') return 2;
+    if (params.get('preset') === 'vesta-d3') return 3;
     return NASA_TEST_PRESETS.find(preset => preset.id === params.get('preset'))?.recommendedArray ?? 6;
   });
   const [subtractionMode, setSubtractionMode] = useState<SubtractionMode>('raw_calibrated');
@@ -256,6 +266,7 @@ export function App() {
         if (found) {
           return getMockCandidates(found.presetId, found.recommendedArray);
         }
+        return [];
       }
       const presetParam = params.get('preset');
       if (presetParam) {
@@ -268,13 +279,32 @@ export function App() {
   // Change pixels and tracks together; an unsupported detector is an empty view.
   useEffect(() => subscribeMotionReviews(() => {
     setMotionReviewsRevision(revision => revision + 1);
+    if (initialViewerCandidate && !initialCandidateResolved.current) {
+      initialCandidateResolved.current = true;
+      const found = findCandidateAcrossAllPresets(initialViewerCandidate.id);
+      if (found) {
+        const detector = initialViewerCandidate.detector === 'all' ? 'all'
+          : initialViewerCandidate.detector && /^[1-6]$/.test(initialViewerCandidate.detector)
+          ? Number(initialViewerCandidate.detector) as DetectorArrayId : found.recommendedArray as DetectorArrayId;
+        const updated = getMockCandidates(found.presetId, detector);
+        setCurrentPresetId(found.presetId); setSelectedArray(detector);
+        setRa(found.candidate.ra); setDec(found.candidate.dec);
+        setCandidatesList(updated);
+        setSelectedCandidateId(updated.some(candidate => candidate.id === found.candidate.id) ? found.candidate.id : updated[0]?.id ?? null);
+      } else {
+        setCandidatesList([]); setCustomFrames([]); setCurrentPresetId(null);
+        setSearchStatus({ source: 'error', message: 'The requested candidate has no verified stored sequence.' });
+      }
+      return;
+    }
     if (!currentPresetId) return;
     const updated = getMockCandidates(currentPresetId, selectedArray);
     setCandidatesList(updated);
     setSelectedCandidateId(previous => updated.some(candidate => candidate.id === previous) ? previous : updated[0]?.id ?? null);
-  }), [currentPresetId, selectedArray]);
+  }), [currentPresetId, selectedArray, initialViewerCandidate]);
 
   const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
+    initialCandidateResolved.current = true;
     setSelectedArray(newArray);
     setActiveFrameIndex(0);
     setIsPlaying(false);
@@ -382,6 +412,7 @@ export function App() {
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }) => {
+    initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
@@ -447,6 +478,7 @@ export function App() {
 
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
+    initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
 
@@ -488,6 +520,7 @@ export function App() {
 
   // Deep-link jump from a verification comment or panel directly into Sky Viewer
   const handleSelectVerificationTarget = (setting: VerificationSetting) => {
+    initialCandidateResolved.current = true;
     setFov(setting.fov);
     setSelectedArray(setting.selectedArray);
     setSubtractionMode(setting.subtractionMode);
