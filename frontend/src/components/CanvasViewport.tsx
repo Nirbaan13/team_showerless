@@ -276,7 +276,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       if (offCtx) {
         const imgData = offCtx.createImageData(256, 256);
         const data = imgData.data;
-        const seedCoord = Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) % 100000;
+        const detArray = activeFrame?.detectorArray ?? 6;
+        const seedCoord = (Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) + detArray * 7393) % 100000;
         let rng = seedCoord + activeFrameIndex * 1337;
         const lcg = () => {
           rng = (rng * 1664525 + 1013904223) >>> 0;
