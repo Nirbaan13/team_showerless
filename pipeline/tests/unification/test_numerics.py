@@ -471,3 +471,24 @@ def test_output_writer_bounds_peak_bytes_before_writing(tmp_path):
         with pytest.raises(ValueError, match='limit'):
             writer.seek(9)
     assert path.stat().st_size <= 8
+
+
+def test_selected_cube_plane_requires_celestial_axes_to_match_its_pixels(tmp_path):
+    # The selected leading axis is RA, so the remaining plane is frequency x DEC.
+    # It cannot be registered as a two-dimensional sky image.
+    w = WCS(naxis=3)
+    w.wcs.ctype = ['FREQ', 'DEC--TAN', 'RA---TAN']
+    w.wcs.crval = [1e9, 30, 20]
+    w.wcs.crpix = [16.5, 16.5, 1]
+    w.wcs.cdelt = [1e6, 1/3600, -1/3600]
+    source = tmp_path / 'non-spatial-plane.fits'
+    fits.writeto(source, np.ones((2, 32, 32)), w.to_header())
+    request = request_for(tmp_path, [source])
+    request['inputs'][0]['plane_indices'] = [0]
+    with pytest.raises(ValueError, match='WCS|celestial|sky'):
+        run_bundle(tmp_path, request)
+    # Explicit pixel mode remains usable, without inventing a sky registration.
+    request = request_for(tmp_path, [source], grid=dict(kind='pixel', width=32, height=32))
+    request['inputs'][0]['plane_indices'] = [0]
+    _, bundle = run_bundle(tmp_path, request)
+    assert bundle.metadata['frames'][0]['source_wcs'] is None

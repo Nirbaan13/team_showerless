@@ -236,9 +236,14 @@ def read_frame(path, spec, mask_policy='science'):
             try:
                 with warnings.catch_warnings():
                     warnings.simplefilter('ignore')
-                    # WCSAXES may be 2 on a selected cube. Only celestial axes define registration.
-                    w = WCS(header, relax=True).celestial
-                if not w.has_celestial or w.pixel_n_dim != 2:
+                    full_wcs = WCS(header, relax=True)
+                    # Leading NumPy planes leave FITS pixel axes 1 and 2. A
+                    # celestial sub-WCS from other axes does not describe them.
+                    spatial_pixels = (set(np.flatnonzero(full_wcs.axis_correlation_matrix[
+                        [full_wcs.wcs.lng, full_wcs.wcs.lat]].any(axis=0)))
+                        if full_wcs.has_celestial else set())
+                    w = full_wcs.celestial if spatial_pixels == {0, 1} else None
+                if w is not None and (not w.has_celestial or w.pixel_n_dim != 2):
                     w = None
             except (ValueError, TypeError):
                 w = None

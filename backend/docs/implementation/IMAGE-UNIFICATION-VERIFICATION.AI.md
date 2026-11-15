@@ -10,7 +10,7 @@ frontend and frozen ML artifacts are unchanged.
 ## Verification performed
 
 - Baseline main44cc7e3: Scala test/stage185 passed, zero failures, three ignored.
-- Python pipeline final scientific/HTTP suite:56 passed, including the full
+- Python pipeline final scientific/HTTP suite:57 passed, including the full
   advertised32×512×512 shape, bounded-output writer and14 physical-identity cases.
   The environment reports one external Starlette/httpx deprecation warning.
 - Existing inference91 passed; experiments74 passed; frozen v2 suite78 passed;
@@ -74,3 +74,7 @@ ignores only disappeared entries and propagates other I/O failures. The regressi
 and complete209-test suite pass. The exact exception from the earlier fixture
 was not captured, so this establishes a confirmed cache race rather than asserting
 certainty about that earlier single failure.
+
+A selected-cube regression additionally verifies celestial pixel-axis correspondence.
+A plane that fixes RA and retains frequency/DEC cannot be registered as a sky
+image; explicit pixel mode remains available with unknown astrometry.

@@ -36,6 +36,9 @@ evicted. A completed job with an unavailable artifact reports that explicitly.
 `image_hdu` optionally selects a FITS HDU number or name. Without it the file
 must contain one unambiguous scientific image. Cubes require explicit leading
 `plane_indices` in NumPy axis order. Spectrum tables are rejected as images.
+Sky registration additionally requires the selected plane to retain both celestial
+pixel axes. A plane containing a spectral axis remains usable in explicit pixel
+mode, with no invented sky WCS.
 FITS, multi-extension FITS, gzip FITS, tiled compression and scaled integer images
 are decoded through Astropy; original source bytes are preserved.
 

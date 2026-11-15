@@ -84,3 +84,6 @@ for ML models that explicitly accept those inputs.
 - [NumPy safe loading and size controls](https://numpy.org/doc/stable/reference/generated/numpy.load.html)
 - [Zarr arrays](https://zarr.readthedocs.io/en/stable/user-guide/arrays/)
 - [ASDF](https://www.asdf-format.org/projects/asdf/en/stable/)
+
+Cube-axis validation uses the documented world/pixel dependency matrix in
+[Astropy WCS](https://docs.astropy.org/en/stable/api/astropy.wcs.WCS.html).

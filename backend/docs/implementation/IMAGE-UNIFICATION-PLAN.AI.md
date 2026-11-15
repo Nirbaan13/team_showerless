@@ -127,7 +127,7 @@ processing client/tests, Main, OpenAPI, Docker/Compose/CI and documentation.
 - [x] Real Scala -> Python HTTP -> exported artifact -> ML loader smoke.
 - [x] Inspect complete diff for frontend/original science/frozen-model changes.
 - [x] Independent whole-branch review and fixes with regression tests.
-- [ ] Push feature branch, create PR with truthful validation and limitations;
+- [x] Push feature branch, create PR with truthful validation and limitations;
   inspect CI/container results. Do not merge or deploy without a separate request.
 
 Baseline: `./sbtw test stage` on main 44cc7e3: 185 passed, zero failures,
