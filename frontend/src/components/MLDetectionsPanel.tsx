@@ -208,6 +208,14 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
             </figure>
           </div>
           <p className="text-[10px] text-paper-400">Compare the returned stacks; unavailable images provide no evidence about motion.</p>
+          {(!activeCandidate.fixedStackDataUrl || !activeCandidate.motionStackDataUrl) && (
+            <div className="p-2 rounded-lg bg-paper-900/60 border border-paper-800/80 text-[10px] text-paper-300 leading-relaxed space-y-1">
+              <p className="font-semibold text-paper-200">Why stack is unavailable:</p>
+              <p className="text-paper-400">
+                Shift &amp; stack co-adds are generated specifically for moving Solar System bodies (asteroids/comets) along an orbital velocity track. For stationary stars, variables, or fields with &lt;3 visits, synthetic velocity tracking does not apply; verification relies on catalog astrometry (Gaia DR3/CatWISE) and epoch difference imaging.
+              </p>
+            </div>
+          )}
         </section>
       )}
 
