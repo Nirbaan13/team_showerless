@@ -42,12 +42,8 @@ test('selecting a known star performs a real request and retries without switchi
   expect(new URL(page.url()).searchParams.has('preset')).toBe(false);
 });
 
-test('keyboard name filtering searches the chosen object while preserving archive and UTC dates', async ({ page }) => {
+test('keyboard name filtering searches the chosen object through the existing SPHEREx route', async ({ page }) => {
   const requests = await setup(page);
-  await page.getByLabel('Archive', { exact: true }).selectOption('cadc');
-  await page.locator('#tutorial-target-epoch summary').click();
-  await page.getByLabel('Observed from', { exact: true }).fill('2000-01-01');
-  await page.getByLabel('Observed through', { exact: true }).fill('2009-12-31');
   await page.getByRole('button', { name: 'Find object', exact: true }).click();
   const input = page.getByRole('combobox', { name: 'Object name', exact: true });
   await expect(input).toBeFocused();
@@ -57,11 +53,11 @@ test('keyboard name filtering searches the chosen object while preserving archiv
   await input.press('Enter');
   await expect.poll(() => requests.length).toBe(1);
   expect(Object.fromEntries(requests[0].searchParams)).toMatchObject({
-    providers: 'cadc', observed_after: '2000-01-01T00:00:00.000Z', observed_before: '2010-01-01T00:00:00.000Z',
+    detector_array: '6',
   });
   expect(Number(requests[0].searchParams.get('right_ascension_deg'))).toBeCloseTo(63.8245827, 6);
   expect(Number(requests[0].searchParams.get('declination_deg'))).toBeCloseTo(-7.6821341, 6);
-  await expect(page.getByText('No observations found for this region and period.', { exact: true })).toBeVisible();
+  expect(requests[0].pathname).toMatch(/api\/observations\/default$/);
   await expect(page.getByRole('button', { name: 'Update Field', exact: true })).toBeVisible();
 });
 
@@ -86,17 +82,8 @@ test('unknown names and dismissal never submit coordinates or claim image availa
   expect(requests).toHaveLength(0);
 });
 
-test('object searches validate the period and manual coordinate entry clears the object identity', async ({ page }) => {
+test('manual coordinate entry clears the searched object identity', async ({ page }) => {
   const requests = await setup(page);
-  await page.locator('#tutorial-target-epoch summary').click();
-  await page.getByLabel('Observed from', { exact: true }).fill('2026-01-01');
-  await page.getByLabel('Observed through', { exact: true }).fill('2025-01-01');
-  await page.getByRole('button', { name: 'Find object', exact: true }).click();
-  await page.getByRole('option', { name: 'LAWD 37', exact: true }).click();
-  await expect(page.getByRole('alert').filter({ hasText: 'Observed from must be on or before' })).toBeVisible();
-  expect(requests).toHaveLength(0);
-  await page.getByLabel('Observed from', { exact: true }).fill('');
-  await page.getByLabel('Observed through', { exact: true }).fill('');
   await page.getByRole('button', { name: 'Find object', exact: true }).click();
   await page.getByRole('option', { name: 'LAWD 37', exact: true }).click();
   await expect.poll(() => requests.length).toBe(1);

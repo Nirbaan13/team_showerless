@@ -78,7 +78,7 @@ export function ObjectSearch({ onSelect }: { onSelect: (object: SkyObject) => vo
         </li>)}
       </ul>
       {!objects.length && <p role="status" className="px-2 py-3 text-paper-400">No matching objects</p>}
-      <p className="mt-1 border-t border-paper-800 pt-1 text-[10px] text-paper-400">Reference fields at epoch 2025.9. Search uses the selected archive and dates.</p>
+      <p className="mt-1 border-t border-paper-800 pt-1 text-[10px] text-paper-400">Reference fields at epoch 2025.9. Search uses the current field size and detector.</p>
     </div>}
   </div>;
 }
