@@ -32,7 +32,79 @@ tags:
   - name: Equipment
   - name: Analyses
   - name: Federated Downloads
+  - name: Image unification
 paths:
+  /api/image-unifications:
+    post:
+      tags:
+      - Image unification
+      operationId: createImageUnification
+      summary: Prepare completed downloaded images as a versioned ML bundle
+      description: 'Resolves server-issued asset or native chunk IDs and creates a durable job.
+  
+        Sky mode registers pixels on an explicit ICRS TAN grid; pixel mode produces
+  
+        an explicitly uncalibrated grid. Physical images, validity, variance,
+  
+        real exposure times and provenance are retained alongside a finite tensor.
+  
+        Registration does not establish comparable PSFs or production ML eligibility.
+  
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageUnificationRequest'
+      responses:
+        '202':
+          description: Durable job admitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUnificationJob'
+        '422':
+          description: Invalid selection, unsupported options or unknown properties
+        '503':
+          description: Job admission or shared disk capacity exhausted
+  /api/image-unifications/{id}:
+    get:
+      tags:
+      - Image unification
+      operationId: getImageUnification
+      summary: Read durable preparation status and completed artifact URL
+      parameters:
+      - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Current durable state; a completed cache artifact may expire
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUnificationJob'
+        '404':
+          description: Unknown job
+  /api/image-unifications/{id}/artifact:
+    get:
+      tags:
+      - Image unification
+      operationId: getImageUnificationArtifact
+      summary: Download a completed pickle-free NPZ with embedded JSON manifest
+      parameters:
+      - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Version 1 numeric arrays and provenance; at most 192 MiB compressed
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Unknown job
+        '409':
+          description: Preparation has not completed or the cache artifact is unavailable
   /api/observations-search:
     get:
       tags:
@@ -1303,6 +1375,177 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ImageUnificationRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - inputs
+      - grid
+      properties:
+        inputs:
+          type: array
+          minItems: 1
+          maxItems: 32
+          items:
+            $ref: '#/components/schemas/ImageUnificationInput'
+        grid:
+          oneOf:
+          - $ref: '#/components/schemas/UnifiedSkyGrid'
+          - $ref: '#/components/schemas/UnifiedPixelGrid'
+        options:
+          $ref: '#/components/schemas/ImageUnificationOptions'
+    ImageUnificationInput:
+      type: object
+      additionalProperties: false
+      required:
+      - kind
+      - id
+      properties:
+        kind:
+          type: string
+          enum:
+          - archive_asset
+          - native_chunk
+        id:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Completed archive asset ID or native chunk ID, never a path or URL
+        download_id:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Required only for native_chunk; its download must use default mode
+        image_hdu:
+          description: Select a scientific FITS HDU; omission requires an unambiguous image
+          oneOf:
+          - type: integer
+            minimum: 0
+            maximum: 1024
+          - type: string
+            minLength: 1
+            maxLength: 68
+          - type: 'null'
+        plane_indices:
+          type: array
+          maxItems: 8
+          description: Leading cube axes in NumPy order; required for a selected cube
+          items:
+            type: integer
+            minimum: 0
+            maximum: 4095
+      allOf:
+      - if:
+          properties:
+            kind:
+              const: native_chunk
+        then:
+          required:
+          - download_id
+        else:
+          not:
+            required:
+            - download_id
+    UnifiedSkyGrid:
+      type: object
+      additionalProperties: false
+      required:
+      - kind
+      - width
+      - height
+      - ra_degrees
+      - dec_degrees
+      - pixel_scale_arcsec
+      properties:
+        kind:
+          const: sky
+        width:
+          type: integer
+          minimum: 1
+          maximum: 512
+        height:
+          type: integer
+          minimum: 1
+          maximum: 512
+        ra_degrees:
+          type: number
+          minimum: 0
+          exclusiveMaximum: 360
+        dec_degrees:
+          type: number
+          minimum: -90
+          maximum: 90
+        pixel_scale_arcsec:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 3600
+    UnifiedPixelGrid:
+      type: object
+      additionalProperties: false
+      required:
+      - kind
+      - width
+      - height
+      properties:
+        kind:
+          const: pixel
+        width:
+          type: integer
+          minimum: 1
+          maximum: 512
+        height:
+          type: integer
+          minimum: 1
+          maximum: 512
+    ImageUnificationOptions:
+      type: object
+      additionalProperties: false
+      properties:
+        target_unit:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 128
+          description: Optional physically compatible FITS BUNIT conversion; unknown calibration fails
+        normalization:
+          type: string
+          enum:
+          - none
+          - robust
+          default: none
+        mask_policy:
+          type: string
+          enum:
+          - science
+          - motion
+          default: science
+          description: Motion additionally retains SPHEREx OUTLIER pixels; other bad flags remain masked
+    ImageUnificationJob:
+      type: object
+      required:
+      - id
+      - status
+      - status_url
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - completed
+          - failed
+        status_url:
+          type: string
+          format: uri-reference
+        artifact_url:
+          type: string
+          format: uri-reference
+        error:
+          $ref: '#/components/schemas/Error'
     ObservationSelection:
       type: object
       additionalProperties: false

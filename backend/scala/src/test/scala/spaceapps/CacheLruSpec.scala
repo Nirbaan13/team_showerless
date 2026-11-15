@@ -149,7 +149,11 @@ object CacheLruSpec extends ZIOSpecDefault:
         partials=List(dir.resolve("raw").resolve("a"*64+s".fits.$uuid.part"),
           dir.resolve("jobs/job").resolve("b"*40+s".png.$uuid.part"),
           dir.resolve("calibration-cache").resolve("c"*64+s".$uuid.part"),
-          dir.resolve("archive-assets/transfer-12345.part"),dir.resolve("archive-assets/decoded-67890.part"))
+          dir.resolve("archive-assets/transfer-12345.part"),dir.resolve("archive-assets/decoded-67890.part"),
+          dir.resolve(s"unifications/$uuid/inputs/000.fits"),dir.resolve(s"unifications/$uuid/output/dataset.npz"),
+          dir.resolve(s"unifications/$uuid/output/manifest.json"),dir.resolve(s"unifications/$uuid/output/dataset.npz.partial"),
+          dir.resolve(s"unifications/$uuid/output/manifest.json.partial"),dir.resolve(s"unifications/$uuid/request.json"),
+          dir.resolve(s"unifications/$uuid/dataset.npz.$uuid.part"))
         _ <- ZIO.foreachDiscard(partials)(write(_,40))
         unrelated=dir.resolve("user.part")
         _ <- write(unrelated,1)
