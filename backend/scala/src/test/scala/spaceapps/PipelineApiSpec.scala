@@ -1,7 +1,7 @@
 package spaceapps
 
-import spaceapps.controller.PipelineApi
-import spaceapps.integrations.processing.HttpPipelineClient
+import spaceapps.processing.controller.PipelineApi
+import spaceapps.processing.integrations.HttpPipelineClient
 import zio.*
 import zio.http.*
 import zio.test.*

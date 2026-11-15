@@ -1,5 +1,10 @@
 # Multi-archive backend integration
 
+Current implementation: the module is named `downloads`; legacy retrieval is in
+`irsa`. See [DOWNLOADS-REFACTOR.AI.md](DOWNLOADS-REFACTOR.AI.md) for the current
+architecture and verification. The dated compatibility sections below record
+history and are superseded where they describe the old cache or package layout.
+
 Implemented on `feat/multi-archive-integration`, based on `13d580e`. The independent
 archive integration adds discovery and native-file retrieval without
 changing legacy SPHEREx HTTP/gRPC schemas, detectors or `verices_degrees`.
@@ -19,8 +24,12 @@ The additive HTTP routes are documented in `backend/docs/openapi.yaml`:
 - `POST /api/archive-downloads`: accept server-known `record_ids` and optional
   `delivery` with `mode` and `region`; return HTTP 202.
 - `GET /api/archive-downloads/{id}`: per-asset status, typed failures, provenance
-  and local artifact URLs.
-- `GET /api/archive-assets/{id}`: serve completed native science bytes only.
+  and local artifact URLs. Pending chunks, progress and an events URL are returned
+  immediately after acceptance.
+- `GET /api/archive-downloads/{id}/events`: persistent SSE with Last-Event-ID replay
+  and terminal completion; reconnecting does not cancel work.
+- `GET /api/archive-assets/{id}`: HTTP 202 while pending, native science bytes when
+  ready, or HTTP 409 when the selected resource is unavailable. Readers hold leases.
 
 Example search:
 
@@ -57,7 +66,7 @@ versioned IDs and accumulates per-provider record counts.
 
 | Provider | Discovery | Native delivery | Scientific boundary |
 | --- | --- | --- | --- |
-| `irsa-spherex` | Existing SIA2 bridge; native frame/release/detector preserved | Original FITS | Legacy processing endpoints remain separate |
+| `irsa-spherex` | Existing SIA2 bridge; native frame/release/detector preserved | Original FITS or existing native IBE circle cutouts | Legacy processing endpoints remain separate |
 | `eso` | ObsTAP footprint intersection and time overlap | DataLink science originals; advertised synchronous SODA circles | Foreign instrument processing unqualified |
 | `cadc` | ObsTAP across collections | DataLink science originals; advertised synchronous SODA circles; scoped CANFAR redirects | Foreign instrument processing unqualified |
 | `esa-gaia` | Direct ESA DR3 source cone | No image delivery | Source positions and reference epochs only |
@@ -118,14 +127,15 @@ provider-specific artifact identity is qualified; they never overwrite one
 another under the same cache key. Unexpected provider defects become sanitized
 per-provider or per-record failures rather than stopping background execution.
 
-The native asset store retains completed artifacts without its own LRU/TTL, but
-shares the existing `FitsCache` admission coordinator and `MAX_CACHE_BYTES` /
-`MIN_FREE_BYTES` guards with legacy SPHEREx files. Archive file limits cannot
-exceed `MAX_PRODUCT_BYTES`. Native gzip reserves both encoded and decoded
-temporary capacity. Completed archive assets count toward the combined volume
-budget and cannot be evicted by the legacy FITS LRU; new work receives an explicit
-`cache_capacity` failure when the remaining space cannot admit it. Download
-admission stays responsive while the single native transfer runner is active.
+The shared `infra.service.FileCache` owns publication, persistent last-access order,
+read/processing leases and eviction for raw/prepared FITS, PNG previews, native
+archive products and equipment calibration files. All use `MAX_CACHE_BYTES` and
+`MIN_FREE_BYTES`. Native gzip reserves encoded and decoded scratch capacity.
+SQLite administrative files are excluded; unrelated user files count toward
+usage and are never evicted. Active files stay pinned. Downloads have bounded
+concurrency/retries, per-provider transfer limits, deduplication and crash recovery.
+The existing archive and IRSA HTTP/gRPC URLs remain stable for a separate client
+migration PR. New manifests expose `chunks`, `progress` and `events_url`.
 
 ## Evidence and verification
 
@@ -139,7 +149,7 @@ not astrophysical correctness. No science images or temporary grants are checked
 Optional Scala/ZIO live smoke:
 
 ```bash
-ARCHIVE_LIVE_SMOKE=1 ./sbtw 'testOnly spaceapps.archive.ArchiveLiveSpec'
+ARCHIVE_LIVE_SMOKE=1 ./sbtw 'testOnly spaceapps.downloads.ArchiveLiveSpec'
 ```
 
 On 2026-11-14 both live tests passed in 43.317 seconds:

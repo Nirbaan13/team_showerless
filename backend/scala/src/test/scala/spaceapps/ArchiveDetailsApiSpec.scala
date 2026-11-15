@@ -1,10 +1,12 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.Repository
-import spaceapps.controller.Api
-import spaceapps.integrations.grpc.GrpcServer
+import spaceapps.irsa.model.*
+import spaceapps.equipment.service.EquipmentService
+
+import spaceapps.irsa.service.*
+import spaceapps.irsa.repository.Repository
+import spaceapps.infra.controller.Api
+import spaceapps.irsa.integrations.grpc.GrpcServer
 import spaceapps.integrations.grpc.v1.{ObservationMetadataRequest,EquipmentRequest,CalibrationFileRequest}
 import spaceapps.integrations.grpc.v1.ZioRetrieval.RetrievalServiceClient
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder

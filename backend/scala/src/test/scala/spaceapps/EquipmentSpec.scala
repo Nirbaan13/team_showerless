@@ -1,9 +1,12 @@
 package spaceapps
+import spaceapps.infra.service.FileCache
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.Repository
-import spaceapps.integrations.irsa.CalibrationLimits
+import spaceapps.irsa.model.*
+import spaceapps.equipment.service.EquipmentService
+
+import spaceapps.irsa.service.*
+import spaceapps.irsa.repository.Repository
+import spaceapps.equipment.integrations.CalibrationLimits
 import zio.*
 import zio.http.Client
 import zio.json.*
@@ -68,6 +71,45 @@ object EquipmentSpec extends ZIOSpecDefault:
         bytes <- ZIO.attempt(Files.readAllBytes(file.path))
       yield assertTrue(products(result).size == 1, product.toJson.contains("base-2026-191"), file.fileName.endsWith(".yaml"), bytes.toList == yaml.toList, file.path == again.path, hits.get == 1)
       }
+    },
+    test("equipment files participate in LRU eviction and can be downloaded again") {
+      fixture(extraDetector=true) { (base,dir,hits) => for
+        repo <- Repository.open(dir.resolve("db.sqlite"))
+        client <- ZIO.service[Client]
+        equipment <- EquipmentService.make(repo,dir,client,base,CalibrationLimits(maxFileBytes=3000,cacheBytes=100,minFreeBytes=0))
+        result <- equipment.catalog("DR1",None)
+        all=products(result)
+        firstId=id(all.find(_.toJson.contains(".yaml")).get)
+        secondId=id(all.find(_.toJson.contains(".ecsv")).get)
+        first <- equipment.file(firstId)
+        second <- equipment.file(secondId)
+        evicted <- ZIO.attempt(!Files.exists(first.path))
+        again <- equipment.file(firstId)
+      yield assertTrue(evicted,Files.exists(again.path),!Files.exists(second.path),hits.get==3)
+      }
+    },
+    test("HTTP calibration responses share the global reader lease until their scope closes") {
+      fixture() { (base,dir,hits) => ZIO.scoped { for
+        repo <- Repository.open(dir.resolve("jobs.sqlite"))
+        client <- ZIO.service[Client]
+        cache <- FileCache.open(dir,dir.resolve("jobs.sqlite"),yaml.length,yaml.length,0)
+        equipment <- EquipmentService.make(repo,dir,client,base,capacity=Some(cache))
+        catalogue <- equipment.catalog("DR1",None)
+        productId=id(products(catalogue).head)
+        source=new Archive:
+          def search(q:Query)=ZIO.succeed(Nil)
+          def fetch(i:ArchiveImage,p:Path)=ZIO.unit
+        jobs <- Jobs.make(repo,source,NoProcessing,dir)
+        api <- spaceapps.infra.controller.Api.make(jobs,"test",Path.of("docs/openapi.yaml"),equipment=Some(equipment))
+        scope <- Scope.make
+        response <- scope.extend(api.routes.runZIO(zio.http.Request.get(s"http://localhost/api/equipment/calibrations/$productId")))
+        next=dir.resolve("raw").resolve("f"*64+".fits")
+        produce=(p:Path)=>ZIO.attempt {Files.write(p,yaml);()}
+        blocked <- cache.publish(next)(produce).exit
+        bytes <- response.body.asChunk
+        _ <- scope.close(Exit.unit)
+        released <- cache.publish(next)(produce).exit
+      yield assertTrue(response.status==zio.http.Status.Ok,bytes.toArray.toList==yaml.toList,blocked.isFailure,released.isSuccess,hits.get==1) } }
     },
     test("catalogue cache survives reopen and refreshes when its persisted TTL expires") {
       val directories = new AtomicInteger()
@@ -223,6 +265,20 @@ object EquipmentSpec extends ZIOSpecDefault:
         bytes <- ZIO.attempt(Files.readAllBytes(file.path))
       yield assertTrue(!Files.exists(abandoned),retained.toList == List[Byte](9,8,7),bytes.toList == yaml.toList,hits.get == 1)
       }
+    },
+    test("restart removes current UUID calibration partials before global cache admission") {
+      fixture() { (base,dir,hits)=>for
+        repo <- Repository.open(dir.resolve("jobs.sqlite"))
+        client <- ZIO.service[Client]
+        directory <- ZIO.attempt(Files.createDirectories(dir.resolve("calibration-cache")))
+        abandoned=directory.resolve("c"*64+".12345678-1234-1234-1234-123456789abc.part")
+        unrelated=directory.resolve("user.part")
+        _ <- ZIO.attempt {Files.write(abandoned,new Array[Byte](128));Files.write(unrelated,Array[Byte](1,2,3))}
+        equipment <- EquipmentService.make(repo,dir,client,base,CalibrationLimits(maxFileBytes=128,cacheBytes=yaml.length+3,minFreeBytes=0))
+        catalogue <- equipment.catalog("DR1",None)
+        file <- equipment.file(id(products(catalogue).head))
+        disk <- ZIO.attempt(!Files.exists(abandoned) && Files.exists(unrelated) && Files.size(file.path)==yaml.length)
+      yield assertTrue(disk,hits.get==1) }
     },
     test("startup rejects symlink partial files without changing their targets") {
       fixture() { (base,dir,hits) => for

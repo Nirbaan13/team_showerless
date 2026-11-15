@@ -1,7 +1,7 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.integrations.irsa.Cutouts
+import spaceapps.irsa.model.*
+import spaceapps.irsa.integrations.Cutouts
 import zio.json.ast.Json
 import zio.test.*
 import java.net.{URI,URLDecoder}

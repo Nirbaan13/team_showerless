@@ -8,6 +8,10 @@ info:
     The observation endpoints replace POST /api/downloads and select the
     processing mode through the URL. Download status, events, chunk data,
     and preview endpoints are retained.
+    The downloads module provides federated discovery and asynchronous downloads.
+    Current archive and legacy IRSA URLs remain stable during module migration.
+    All downloaded products, calibration files and generated previews share a
+    persistent LRU budget. Active transfers and streaming readers hold leases.
     URLs may be returned before their resources are ready. Clients must use
     resource status or readiness events before fetching image or FITS data.
     Optional observed_after and observed_before timestamps constrain observation
@@ -27,12 +31,210 @@ tags:
   - name: Chunks
   - name: Equipment
   - name: Analyses
-  - name: Archives
+  - name: Federated Downloads
 paths:
+  /api/observations-search:
+    get:
+      tags:
+      - Federated Downloads
+      operationId: searchArchiveObservations
+      summary: Find observations and return their stable IDs without downloading files
+      description: Metadata search only. The client chooses observation IDs from this response and submits them
+        to observations-download. No image download job is created. Provider completeness and independent failures
+        are reported in outcomes. Detector and channel filters are source-specific and are not accepted here.
+      parameters:
+      - $ref: '#/components/parameters/RightAscension'
+      - $ref: '#/components/parameters/Declination'
+      - name: radius_degrees
+        in: query
+        required: true
+        schema:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 180
+      - name: providers
+        in: query
+        required: true
+        style: form
+        explode: false
+        schema:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+        example:
+        - irsa-spherex
+      - name: product_kinds
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveProductKind'
+          default:
+          - image
+      - $ref: '#/components/parameters/ObservedAfter'
+      - $ref: '#/components/parameters/ObservedBefore'
+      - name: limit_per_provider
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        '200':
+          description: List of observations; each id and frame_id identifies the same server-known observation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationsFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '429':
+          description: Metadata search queue is full
+        '504':
+          description: Metadata search deadline exceeded
+  /api/observations-download:
+    post:
+      tags:
+      - Federated Downloads
+      operationId: downloadSelectedObservations
+      summary: Download exactly the observation IDs selected by the client
+      description: Accepts observation_ids returned by observations-search. No discovery is performed, no matching
+        observations are added automatically, and geometry cannot replace the ID selection. Optional delivery
+        controls original files or a circle cutout of each selected observation. Returns the common job/chunk/progress
+        contract immediately.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationSelection'
+            example:
+              observation_ids:
+              - ID_FROM_OBSERVATIONS_SEARCH
+              delivery:
+                mode: require_cutout
+                region:
+                  type: circle
+                  ra_degrees: 266.4
+                  dec_degrees: -29.0
+                  radius_degrees: 0.002
+      responses:
+        '202':
+          description: Accepted selection; chunks contain pending resource links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationDownload'
+        '200':
+          description: The accepted selection already reached a terminal state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationDownload'
+        '404': &id002
+          $ref: '#/components/responses/NotFound'
+        '422': &id003
+          $ref: '#/components/responses/InvalidRequest'
+        '429':
+          description: Download queue is full
+  /api/observations-download/{id}:
+    parameters: &id001
+    - $ref: '#/components/parameters/Id'
+    get:
+      tags:
+      - Federated Downloads
+      operationId: getSelectedObservationsDownload
+      summary: Get observations, chunk readiness, progress, URLs and errors
+      responses:
+        '200':
+          description: Current common download manifest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationDownload'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/observations-download/{id}/events:
+    parameters: *id001
+    get:
+      tags:
+      - Federated Downloads
+      operationId: watchSelectedObservationsDownload
+      summary: Stream common job and compact chunk events
+      description: job.updated and job.completed contain the common manifest with job_id. chunk.ready and chunk.failed
+        contain the common chunk fields, chunk_id, job_id and progress. Without Last-Event-ID, starts with the
+        current manifest; with it, replays committed updates. Disconnecting does not cancel downloading.
+      parameters:
+      - name: Last-Event-ID
+        in: header
+        schema:
+          type: integer
+          minimum: 0
+      responses:
+        '200':
+          description: SSE progress until terminal completion
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '404': *id002
+        '422': *id003
+  /api/observations-download/chunks/{id}:
+    parameters: *id001
+    get:
+      tags:
+      - Federated Downloads
+      operationId: getSelectedObservationChunk
+      summary: Retrieve the selected native FITS product when ready
+      responses:
+        '200':
+          description: Validated native FITS or native gzip FITS; the response holds a cache reader lease
+          content:
+            application/fits:
+              schema:
+                type: string
+                format: binary
+            application/gzip:
+              schema:
+                type: string
+                format: binary
+        '202':
+          $ref: '#/components/responses/PendingResource'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Selected product failed, was skipped or left the cache
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveFailure'
+  /api/observations-download/chunks/{id}/preview:
+    parameters: *id001
+    get:
+      tags:
+      - Federated Downloads
+      operationId: getSelectedObservationPreview
+      summary: Check preview availability for a known selected chunk
+      description: Native archive downloads currently expose preview_status=unavailable. This endpoint returns
+        a typed unavailable response and does not fabricate a PNG.
+      responses:
+        '409':
+          description: Native preview generation is unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveFailure'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /api/archives:
     get:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: listArchives
       summary: List independent archive capabilities and qualification restrictions
       responses:
@@ -46,8 +248,9 @@ paths:
                   $ref: '#/components/schemas/ArchiveInventory'
   /api/archive-searches:
     post:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: createArchiveSearch
       summary: Queue a durable federated metadata search
       requestBody:
@@ -72,8 +275,9 @@ paths:
     parameters:
     - $ref: '#/components/parameters/Id'
     get:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveSearch
       summary: Get job status and a bounded local snapshot page
       description: 'Local pagination is independent of upstream completeness. An opaque
@@ -113,8 +317,9 @@ paths:
     parameters:
     - $ref: '#/components/parameters/Id'
     post:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: continueArchiveSearch
       summary: Resume one genuine provider continuation
       description: 'Only providers with has_continuation=true can resume. The initial
@@ -152,8 +357,9 @@ paths:
           $ref: '#/components/responses/InvalidRequest'
   /api/archive-downloads:
     post:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: createArchiveDownload
       summary: Queue selected server-known native science products
       description: 'Submit record IDs from archive search. Arbitrary upstream URLs are
@@ -189,7 +395,7 @@ paths:
                   $ref: '#/components/schemas/ArchiveDelivery'
       responses:
         '202':
-          description: Accepted native-product download job
+          description: Accepted immediately; status_url contains pending chunks and events_url streams progress
           content:
             application/json:
               schema:
@@ -204,8 +410,9 @@ paths:
     parameters:
     - $ref: '#/components/parameters/Id'
     get:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveDownload
       summary: Get persisted per-asset state, provenance and local artifact URLs
       responses:
@@ -217,14 +424,46 @@ paths:
                 $ref: '#/components/schemas/ArchiveDownload'
         '404':
           $ref: '#/components/responses/NotFound'
+  /api/archive-downloads/{id}/events:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      deprecated: true
+      tags: [Federated Downloads]
+      operationId: watchArchiveDownload
+      summary: Stream persistent download progress and chunk readiness
+      description: |
+        Without Last-Event-ID, emits a current job.updated snapshot, followed by
+        committed updates. With Last-Event-ID, replays all later committed events.
+        Event IDs are monotonic within this download. Data is an ArchiveDownload.
+        Events: job.updated, chunk.started, chunk.ready, chunk.failed, job.completed.
+        The stream closes after job.completed. Disconnecting leaves accepted work
+        running. A completed replay with no newer events closes immediately.
+      parameters:
+      - name: Last-Event-ID
+        in: header
+        required: false
+        description: Previously received event ID; must not exceed the latest committed ID
+        schema: {type: integer, minimum: 0}
+      responses:
+        '200':
+          description: Unbuffered ordered SSE stream
+          content:
+            text/event-stream:
+              schema: {type: string}
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
   /api/archive-assets/{id}:
     parameters:
     - $ref: '#/components/parameters/Id'
     get:
+      deprecated: true
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveAsset
-      summary: Retrieve a completed server-known native science artifact
+      summary: Retrieve a server-known artifact or its pending state
       description: Native gzip products retain gzip bytes. This route does not run SPHEREx
         processing.
       responses:
@@ -239,6 +478,14 @@ paths:
               schema:
                 type: string
                 format: binary
+        '202':
+          $ref: '#/components/responses/PendingResource'
+        '409':
+          description: Selected product failed, was skipped, or has left the cache
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveFailure'
         '404':
           $ref: '#/components/responses/NotFound'
   /api/spectrum:
@@ -1056,6 +1303,175 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ObservationSelection:
+      type: object
+      additionalProperties: false
+      required:
+      - observation_ids
+      properties:
+        observation_ids:
+          type: array
+          minItems: 1
+          maxItems: 100
+          uniqueItems: true
+          items:
+            type: string
+          description: Exact stable IDs from observations-search; native source IDs and arbitrary URLs are not
+            accepted
+        delivery:
+          $ref: '#/components/schemas/ArchiveDelivery'
+    CommonArchiveObservation:
+      allOf:
+      - $ref: '#/components/schemas/ArchiveRecord'
+      - type: object
+        required:
+        - frame_id
+        - is_available
+        properties:
+          frame_id:
+            type: string
+            description: Alias of id; use this server ID in observation_ids. native_id retains the source identity.
+          is_available:
+            type: boolean
+            description: A provider-level delivery candidate; final per-record availability is determined during
+              resolution.
+          observation_date:
+            type: string
+            format: date-time
+            description: Present only for verified UTC observation time.
+          release:
+            type: string
+          wavelength_min_um:
+            type: number
+          wavelength_max_um:
+            type: number
+    ObservationsFound:
+      type: object
+      required:
+      - observations
+      - outcomes
+      - returned_count
+      properties:
+        observations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonArchiveObservation'
+        outcomes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveProviderOutcome'
+        returned_count:
+          type: integer
+          minimum: 0
+    ObservationDownloadChunk:
+      type: object
+      required:
+      - id
+      - frame_id
+      - status
+      - preview_status
+      - image_url
+      - fits_cutout_url
+      properties:
+        id:
+          type: string
+        frame_id:
+          type: string
+          description: The selected observation ID, matching search id/frame_id.
+        status:
+          type: string
+          enum:
+          - pending
+          - ready
+          - failed
+          - unavailable
+        preview_status:
+          type: string
+          enum:
+          - unavailable
+        image_url:
+          type: string
+          format: uri-reference
+        fits_cutout_url:
+          type: string
+          format: uri-reference
+        error:
+          $ref: '#/components/schemas/ArchiveFailure'
+    ObservationDownload:
+      type: object
+      required:
+      - id
+      - status
+      - mode
+      - query
+      - observations
+      - chunks
+      - progress
+      - status_url
+      - events_url
+      - errors
+      - assets
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - preparing
+          - completed
+          - completed_with_errors
+          - failed
+        mode:
+          type: string
+          const: default
+        query:
+          $ref: '#/components/schemas/ObservationSelection'
+        observations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonArchiveObservation'
+        chunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObservationDownloadChunk'
+        progress:
+          $ref: '#/components/schemas/ArchiveDownloadProgress'
+        status_url:
+          type: string
+          format: uri-reference
+        events_url:
+          type: string
+          format: uri-reference
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveFailure'
+        assets:
+          type: array
+          items:
+            type: object
+            required:
+            - record_id
+            - status
+            - provenance
+            properties:
+              record_id:
+                type: string
+              status:
+                type: string
+                enum:
+                - ready
+                - skipped
+                - failed
+              asset:
+                $ref: '#/components/schemas/ArchiveStoredAsset'
+              error:
+                $ref: '#/components/schemas/ArchiveFailure'
+              provenance:
+                type: object
+                additionalProperties:
+                  type: string
     ArchiveCircle:
       type: object
       additionalProperties: false
@@ -1183,6 +1599,10 @@ components:
         status_url:
           type: string
           format: uri-reference
+        events_url:
+          type: string
+          format: uri-reference
+          description: Present for download jobs; omitted for metadata search jobs
     ArchiveFailure:
       type: object
       required:
@@ -1403,6 +1823,9 @@ components:
       - selection
       - assets
       - status_url
+      - events_url
+      - chunks
+      - progress
       properties:
         id:
           type: string
@@ -1451,6 +1874,37 @@ components:
         status_url:
           type: string
           format: uri-reference
+        events_url:
+          type: string
+          format: uri-reference
+        chunks:
+          type: array
+          description: Stable native-product links are advertised before files are ready
+          items:
+            $ref: '#/components/schemas/ArchiveDownloadChunk'
+        progress:
+          $ref: '#/components/schemas/ArchiveDownloadProgress'
+    ArchiveDownloadProgress:
+      type: object
+      required: [discovery_complete, total_chunks, ready_chunks, failed_chunks, unavailable_chunks]
+      properties:
+        discovery_complete: {type: boolean}
+        total_chunks: {type: integer, minimum: 0}
+        ready_chunks: {type: integer, minimum: 0}
+        failed_chunks: {type: integer, minimum: 0}
+        unavailable_chunks: {type: integer, minimum: 0}
+    ArchiveDownloadChunk:
+      type: object
+      required: [id, record_id, artifact_url, status]
+      properties:
+        id: {type: string}
+        record_id: {type: string}
+        artifact_url: {type: string, format: uri-reference}
+        status:
+          type: string
+          enum: [pending, downloading, ready, skipped, failed]
+        error:
+          $ref: '#/components/schemas/ArchiveFailure'
     PipelineSpectrum:
       type: object
       description: Original team-service response; no 102-band completeness or calibrated-science guarantee is added.

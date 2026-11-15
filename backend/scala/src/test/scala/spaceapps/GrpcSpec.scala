@@ -1,9 +1,10 @@
 package spaceapps
 
-import spaceapps.domain.{ArchiveImage, Observation, ApiError, Query as DomainQuery}
-import spaceapps.service.{Archive, Jobs, NoProcessing}
-import spaceapps.repository.Repository
-import spaceapps.integrations.grpc.GrpcServer
+import spaceapps.irsa.model.{ArchiveImage, Observation, ApiError, Query as DomainQuery}
+
+import spaceapps.irsa.service.{Archive,Jobs,NoProcessing}
+import spaceapps.irsa.repository.Repository
+import spaceapps.irsa.integrations.grpc.GrpcServer
 import spaceapps.integrations.grpc.v1.*
 import spaceapps.integrations.grpc.v1.ZioRetrieval.RetrievalServiceClient
 import io.grpc.{Status, StatusException}
@@ -35,7 +36,7 @@ object GrpcSpec extends ZIOSpecDefault:
     client <- RetrievalServiceClient.scoped(ZManagedChannel(NettyChannelBuilder.forAddress("127.0.0.1", port).usePlaintext()))
   yield (jobs, repo, client)
   private def status[A](result: Either[StatusException,A], code: Status.Code) = result.left.exists(_.getStatus.getCode == code)
-  private def awaitDiscovered(jobs: Jobs, id: String): Task[spaceapps.domain.Download] =
+  private def awaitDiscovered(jobs: Jobs, id: String): Task[spaceapps.irsa.model.Download] =
     jobs.get(id).flatMap(d => if d.chunks.nonEmpty then ZIO.succeed(d) else ZIO.sleep(10.millis) *> awaitDiscovered(jobs, id))
 
   def spec = suite("Native gRPC TCP adapter")(
@@ -160,7 +161,7 @@ object GrpcSpec extends ZIOSpecDefault:
           chunkId = events.last.getDownload.chunks.head.id
           resource <- jobs.resource(chunkId, false)
           _ <- resource match
-            case spaceapps.service.Resource.Ready(path) => ZIO.attemptBlocking(Files.delete(path))
+            case spaceapps.irsa.service.Resource.Ready(path) => ZIO.attemptBlocking(Files.delete(path))
             case _ => ZIO.fail(new IllegalStateException("Expected native file"))
           missing <- client.getChunk(ChunkRequest(chunkId)).runCollect.either
           detail = missing.left.toOption.flatMap(e => Option(e.getTrailers).flatMap(t =>
