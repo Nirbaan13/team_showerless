@@ -1,0 +1,35 @@
+{
+  "association-holdout-05": {
+    "group_id": "association-holdout-05",
+    "complete": false,
+    "partition_evidence": [
+      {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-05-through-boundary.json",
+        "sha256": "6ff4bfd21763061b49ccdb22d79da2e9b734716c24cfb7fb308e961e238f9b67"
+      },
+      {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-05-from-boundary.json",
+        "sha256": "df2f55cd484e6ff3e0df7a35c511e007d4207f7f41eeefda3b86a8b016485bf1"
+      }
+    ],
+    "scope": "Finite-valid-time eligible domain only; inclusive union, no unrestricted null-time catalog claim",
+    "error": "One or both complete finite-valid-time domain partitions unavailable; planned missing, no coverage claim"
+  },
+  "association-holdout-09": {
+    "group_id": "association-holdout-09",
+    "complete": true,
+    "partition_evidence": [
+      {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-09-through-boundary.json",
+        "sha256": "18a02570596d336f669aeff552a2d8401d0bd2d38a7746aebee20583edbb8c08"
+      },
+      {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-09-from-boundary.json",
+        "sha256": "ecd3e26f8f48a43afbd96f26ba76cbfd51de22fb2e484436da9161065685ad45"
+      }
+    ],
+    "scope": "Finite-valid-time eligible domain only; inclusive union, no unrestricted null-time catalog claim",
+    "union_rows": 274,
+    "identical_boundary_duplicates": 0
+  }
+}

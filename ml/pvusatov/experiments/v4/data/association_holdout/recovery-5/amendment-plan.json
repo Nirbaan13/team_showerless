@@ -1,0 +1,463 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T15:56:02.563527+00:00",
+  "deadline_utc": "2026-11-15T16:16:02.563527+00:00",
+  "wrapper": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/acquire_recovery.py",
+    "sha256": "251b0a94ce81b9d9f98174270cfb8be8f81f859c024a99c829cc11dc27fc48c7"
+  },
+  "root_authorization": "Root explicitly authorized new uniform finite-valid-time eligibility amendment before queries, conditional on all10cached8-identity parity. Separate root review and external handoff release required before ANY native inference.",
+  "original_plan": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/plan.json",
+    "sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107"
+  },
+  "native_seed_amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/retry-percent20/amendment.json",
+    "sha256": "15e2636fbc66ee73df2d250b4e1d5a3102cbc805b54cf6874a4d030d833c5853"
+  },
+  "scientific_amendment_R3": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/transport-plan.json",
+    "sha256": "e9988d03b76f66bb6ccb741e3effd0ca03345787613ba161d46c5364315d2463"
+  },
+  "previous_handoff": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/guarded-handoff.json",
+    "sha256": "d897d84433ecd3aa8b3082075cb01cf7f272e26f8d36d2bc0f091c8cd7195ad6"
+  },
+  "previous_selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/selection.json",
+    "sha256": "c927086936acae0f8c13f02cdc105b47d326cef3085df534abb9debbab862a45"
+  },
+  "previous_publication": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/publication-manifest.json",
+    "sha256": "adc16db78dc7ed9b109b04d5f3bfaa89065c24b863bc32a69f8b3a78d5589030"
+  },
+  "sources": {
+    "holdout": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/acquire_holdout.py",
+      "sha256": "1eaf4e2256cb6d97ae72cf3693d08744cb16a50add0fd4fd7ca8d878da705b5b"
+    },
+    "acquire": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/acquire.py",
+      "sha256": "a0ad06cdad85e0d0c0004ee572d073dbfde85eb1cd4e0e96097700aa75952b18"
+    },
+    "headers": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/headers.py",
+      "sha256": "22866cd36d1ab6fa2bf0f5a38a90b7db5d88a416643fd4a39c900ee77c8eccaf"
+    }
+  },
+  "scientific_amendment": {
+    "eligibility_order": "For ALL12parents: original supported D1-D3 DR1 artifacts and physical exclusions; BOTH t_min/t_max numeric finite with t_max>=t_min; SAME4degree footprint prefilter; exact unchanged acquire.select detector/temporal rules; exactly8uniquephysicalepochs and samepostchecks.",
+    "changed_behavior": "Null/nonfinite/non-numeric/reversed-time rows explicitly ineligible. Original selector could abort entire field on null and has no finite-time validation; this is a new criteria amendment, NOT old-code/catalog equivalence.",
+    "disclosure": "Prospective before new queries and native pixels/features/scores, AFTER synthetic unblinding, cachedmetadata inspection, and80manual native header reads. No actual native pixel/quality/scorer outcome informed this amendment.",
+    "uniformity": "Replay all10cached complete fields under this rule and require SAME sealed ordered8metadata/physicalIDs before queries AND again after integrating05/09. Any changed cached identity stops acquisition; no silent cohort change.",
+    "domain_claim": "Complete union covers finite-valid-time ELIGIBLE observations only; no unrestricted/null-time catalog exhaustiveness or previous-rule equivalence claim."
+  },
+  "cached_metadata": {
+    "association-holdout-01": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-01.json",
+        "sha256": "407ceeccd0234c193033b16f41ad7324bbc3fc628fc2fe49bffc3a1f7d3e51f1"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-01/discovery.json",
+        "sha256": "4bb62c52f6aeefe04752054b78ececc7b3a5f6629e6d86c907fc130d368b123b"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+154.20377653+-47.09320195+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-01/sia-512.xml",
+        "sha256": "65bbcd50262a1bd8108152580ef5fd0d16fdf5865d0f65f6e4adfdbd287bebc1",
+        "bytes": 766896,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:42:12 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [
+          {
+            "attempt": 1,
+            "error": "HTTPError: HTTP Error 502: Proxy Error"
+          }
+        ]
+      }
+    },
+    "association-holdout-02": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-02.json",
+        "sha256": "0ee3551b8726402b4be780f302577942e3f9232ed23debead4d9eb60215030fb"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-02/discovery.json",
+        "sha256": "00b6ed4ee52cf87d9513f418c77122ed487fb16544dc20b6ee6520e9ff756e62"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.65544865+2.95400593+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-02/sia-512.xml",
+        "sha256": "b5e14a2f4d7e0a9d55c603a3d00494c4cd0d1910b89aee2273aced31df7a10fd",
+        "bytes": 472949,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:42:12 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [
+          {
+            "attempt": 1,
+            "error": "HTTPError: HTTP Error 502: Proxy Error"
+          }
+        ]
+      }
+    },
+    "association-holdout-03": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-03.json",
+        "sha256": "9105a45d0ad798644b392cc2ce9bb814d34fa3b244b474eb836da6bf1ad5d560"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-03/discovery.json",
+        "sha256": "8e6a08b53f081958aa90afef863c6605b15acb5651ef5fd9f277358fc53ccce7"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+79.04639226+52.11002338+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-03/sia-512.xml",
+        "sha256": "3f671fae23a53fef4b6dc3812b6b446945126b0631a67f7302a4569e7e48b7ef",
+        "bytes": 467845,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:27:45 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+79.04639226+52.11002338+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-03/sia-512.xml",
+          "sha256": "3f671fae23a53fef4b6dc3812b6b446945126b0631a67f7302a4569e7e48b7ef",
+          "bytes": 467845,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:27:45 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": []
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-03/discovery.json",
+          "sha256": "b361ea6712eae38471464491beb503728d215d05753252ae7408134eed76e69c"
+        },
+        "cache_reused": true
+      }
+    },
+    "association-holdout-04": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-04.json",
+        "sha256": "7ef260081599944cf0fa7133995e8d33321feb1cf9e1ea30834c56037b6f7fbb"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-04/discovery.json",
+        "sha256": "3aa841b970b3a0e5617d6c96f0c34c2742c1399027a61766e29fb9698e09ab3d"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-04/sia-512.xml",
+        "sha256": "bc8ae5d89652c216ab6260bad1a6144e91658e4b07eb84daf3af51858a73d650",
+        "bytes": 512388,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:27:47 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [
+          {
+            "attempt": 1,
+            "error": "HTTPError: HTTP Error 502: Proxy Error"
+          }
+        ],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-04/sia-512.xml",
+          "sha256": "bc8ae5d89652c216ab6260bad1a6144e91658e4b07eb84daf3af51858a73d650",
+          "bytes": 512388,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:27:47 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": [
+            {
+              "attempt": 1,
+              "error": "HTTPError: HTTP Error 502: Proxy Error"
+            }
+          ]
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-04/discovery.json",
+          "sha256": "a51dd4a48c5eaadcef9ea425bf1fccc996a3301946bcbbec8e530df99d4849c3"
+        },
+        "cache_reused": true
+      }
+    },
+    "association-holdout-06": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-06.json",
+        "sha256": "b3bd7389d29352ea6576a43855db152e43c16949786b64e5abc16ffce38bd4b2"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-06/discovery.json",
+        "sha256": "8da1008399fccbf60241616810fe47e768c98b2696eb78a8147c533827a637f7"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-06/sia-512.xml",
+        "sha256": "6d43cc49e2d866b7446b5b61444d3754482d049aab6407928b08d91701cf11d2",
+        "bytes": 524354,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:28:09 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-06/sia-512.xml",
+          "sha256": "6d43cc49e2d866b7446b5b61444d3754482d049aab6407928b08d91701cf11d2",
+          "bytes": 524354,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:28:09 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": []
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-06/discovery.json",
+          "sha256": "3bb2179c3e294c10b69e2ee0e8bf73c023d9dda185e45a977731f28450448619"
+        },
+        "cache_reused": true
+      }
+    },
+    "association-holdout-07": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-07.json",
+        "sha256": "f1fafe79c3b41c88e50e16ae4b5f7aaf02561f71d81ad14d0f1d19ffecbcf29d"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-07/discovery.json",
+        "sha256": "b2a1a3d4c1f9566c1171ea8a95ee0f8ab9033dda28d93e482b650670f7d39154"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+90.22344196+39.42294992+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-07/sia-512.xml",
+        "sha256": "79b52e1c40d2df46c553be30cd9717fff883769572f6013724df29cd0b6d3aa5",
+        "bytes": 499018,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:28:09 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+90.22344196+39.42294992+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-07/sia-512.xml",
+          "sha256": "79b52e1c40d2df46c553be30cd9717fff883769572f6013724df29cd0b6d3aa5",
+          "bytes": 499018,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:28:09 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": []
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-07/discovery.json",
+          "sha256": "fdb72440489115bce2fc95a20d8cb44a4be26f418f1b1b747ad6d2cf328593af"
+        },
+        "cache_reused": true
+      }
+    },
+    "association-holdout-08": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-08.json",
+        "sha256": "fb497a64b0b2cd3691bb4b4283c70977335c6d5287ad411119c49176aa24e914"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-08/discovery.json",
+        "sha256": "e20e505c1d5df87cf10f01f8721a9c968c31819588ba98523bfcb4ff682a2095"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+158.87560323+28.38978507+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-08/sia-512.xml",
+        "sha256": "6edbf35b4d71a21638f1bdafbc9a7000ef4cbf3dca1ddf86397c7ea3e1a8d32b",
+        "bytes": 608923,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:42:37 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [
+          {
+            "attempt": 1,
+            "error": "HTTPError: HTTP Error 502: Proxy Error"
+          }
+        ]
+      }
+    },
+    "association-holdout-10": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-10.json",
+        "sha256": "9df7f719832ef422dc55d9474a5af9d5f6c313c3e41eac21209b48498c2eaba5"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-10/discovery.json",
+        "sha256": "11c4a12944a591c80a03b83ff6786d7877338bbca0b029dd48b027c4bdc56f1a"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+339.09981938+17.06063382+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-10/sia-512.xml",
+        "sha256": "d14f642aef8a3143314fc28c3e67cd6d95def2e5785d5cf6c42ff9823981cda3",
+        "bytes": 558625,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:28:34 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": [],
+        "cached_from": {
+          "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+339.09981938+17.06063382+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-10/sia-512.xml",
+          "sha256": "d14f642aef8a3143314fc28c3e67cd6d95def2e5785d5cf6c42ff9823981cda3",
+          "bytes": 558625,
+          "response_headers": {
+            "Date": "Sun, 15 Nov 2026 15:28:34 GMT",
+            "Content-Type": "application/x-votable+xml",
+            "Last-Modified": null,
+            "ETag": null
+          },
+          "failures": []
+        },
+        "cache_discovery": {
+          "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-10/discovery.json",
+          "sha256": "b987c2d64eb33ed21e2f3f956582ddf1d85e276888556f703dbb9d3b098536c5"
+        },
+        "cache_reused": true
+      }
+    },
+    "association-holdout-11": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-11.json",
+        "sha256": "217e93e6cc96feba91ec0b2b5eb84ac4078ce60f82ac5f148d677921e8906e5f"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-11/discovery.json",
+        "sha256": "515bb1fdcdcbf5ec3289f9710a3cabc6f795b09e2c82544eaf9813903fa20ae9"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+316.58881058+59.24743149+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-11/sia-512.xml",
+        "sha256": "806aff22309244f59ee4a6be59a672ff10e162dbd35a0a4afffd4e4ccbf1a435",
+        "bytes": 601650,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:42:39 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": []
+      }
+    },
+    "association-holdout-12": {
+      "evidence": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/query-evidence/association-holdout-12.json",
+        "sha256": "cdfd8ee5ab37af917d3788ca885a3ac9d71d2d93126a12f9afa6de83643fdea3"
+      },
+      "discovery": {
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-12/discovery.json",
+        "sha256": "7fe36a526a0c0e78456e35a92267d9a950f3f5ff893b918f5544092bf7866aca"
+      },
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+132.87978105+71.52664268+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/metadata/association-holdout-12/sia-512.xml",
+        "sha256": "02711f2716120cd20a4e84ca009cb0e0e4a3ec56c7d76748f7722c496381bd8a",
+        "bytes": 522522,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 15:42:59 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": []
+      }
+    }
+  },
+  "retry_group_ids": [
+    "association-holdout-05",
+    "association-holdout-09"
+  ],
+  "boundary_utc": "2025-10-01T00:00:00+00:00",
+  "boundary_mjd": 60949.0,
+  "partitions": [
+    {
+      "name": "through-boundary",
+      "TIME": "-Inf 60949.0"
+    },
+    {
+      "name": "from-boundary",
+      "TIME": "60949.0 +Inf"
+    }
+  ],
+  "query": {
+    "endpoint": "https://irsa.ipac.caltech.edu/SIA",
+    "collection": "spherex_dr1",
+    "radius_deg": 0.001,
+    "limits": [
+      512,
+      4096
+    ],
+    "max_workers": 2,
+    "max_requests_per_partition": 2,
+    "max_total_requests": 8,
+    "timeout_seconds": 90,
+    "response_cap_bytes": 12582912,
+    "cache_control": "no-cache",
+    "attempts": "At most2HTTPrequests TOTAL perpartition including retries/overflow upgrade. Start512; upgrade4096only onOVERFLOW if secondrequest remains; if incompletefailclosed.",
+    "union": "Both inclusive partitions complete QUERY_STATUS OK, no ERROR/OVERFLOW. Check finite-valid rows overlap requested interval. Deduplicate by(access_url,physical_OBSID,detector band); conflicting duplicate metadata aborts. No window restriction or alternate positions.",
+    "sources": [
+      "https://www.ivoa.net/documents/SIA/20151223/REC-SIA-2.0-20151223.html",
+      "https://irsa.ipac.caltech.edu/ibe/sia.html"
+    ]
+  },
+  "acquisition": {
+    "max_new_files": 16,
+    "max_total_files": 96,
+    "max_total_bytes": 500000000,
+    "max_file_bytes": 5200000,
+    "max_workers": 4,
+    "max_attempts": 2,
+    "timeout_seconds": 90,
+    "size_deg": 0.12
+  },
+  "roi": {
+    "region_arcmin": [
+      6,
+      6
+    ],
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "recenter": false
+  },
+  "raw_root": "/tmp/spaceapps-association-native-recovery2/recovery-5",
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "inference_authorized": false
+}

@@ -71,6 +71,16 @@ jobs:
         run: |
           python ml/pvusatov/verification/v4-final-repair-1/portable-audit/verify.py --deny-external-inputs --probe-denial
           python -m pytest -q ml/pvusatov/verification/v4-final-repair-1/portable-audit/test_verifier.py
+      - name: Recount fixed-policy association research from published numeric caches
+        working-directory: .
+        run: |
+          python ml/pvusatov/experiments/v4/association_validation/results/unpack_cache.py --output "$RUNNER_TEMP/association-numeric-cache"
+          python ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/independent-audit/check.py \
+            --repair "$GITHUB_WORKSPACE/ml/pvusatov/experiments/v4/association_validation/engineering-repair-1" \
+            --run "$RUNNER_TEMP/association-numeric-cache/synthetic-repair-1/run-manifest.json" \
+            --report "$RUNNER_TEMP/association-numeric-cache/report-repair-1/research-report.json" \
+            --output "$RUNNER_TEMP/association-recount.json" \
+            --repo-root "$GITHUB_WORKSPACE" --cache-root "$RUNNER_TEMP/association-numeric-cache" --deny-original-inputs
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin

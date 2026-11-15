@@ -1,0 +1,21 @@
+{
+  "group_id": "association-holdout-11",
+  "center": [
+    316.58881058,
+    59.24743149
+  ],
+  "created_utc": "2026-11-15T15:28:13.403315+00:00",
+  "attempts": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+316.58881058+59.24743149+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "limit": 512,
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    }
+  ],
+  "complete": false,
+  "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]",
+  "rows_ref": {
+    "path": "/tmp/spaceapps-association-native-recovery2/metadata/association-holdout-11/discovery.json",
+    "sha256": "7af884c46144c2adfef9055fcc58d2c657075b2f4d08bbcf98244b0ade1e8853"
+  }
+}

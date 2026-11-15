@@ -1,0 +1,59 @@
+{
+  "recorded_at_utc": "2026-11-15T15:54:30.094378+00:00",
+  "synthetic_complete": true,
+  "native_inference_performed": false,
+  "native_planned_injections": 1620,
+  "combined_research_complete": false,
+  "production_promotion_authorized": false,
+  "root_inspected_original_incomplete_report": true,
+  "fully_blinded_repair_claim": false,
+  "scientific_repeat_equality_fields": 152,
+  "original_errors_without_scientific_comparison": 848,
+  "current_acquisition_checkpoint": "recovery-4:10completeparents/80verifiedexposures; no native scores; later amendments are separate",
+  "evidence": [
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/freeze.json",
+      "sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/authorization.json",
+      "sha256": "148be4110ce4f47b60b4fa7d04c3e6e6ab3265f1a33a64fe00e833f3f018ad06"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/amendment.json",
+      "sha256": "35ed7394bb0ad2ee78238674030573ac5ce3c8dca3ebdf16e73fd9e29f10565b"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/independent-audit/audit.json",
+      "sha256": "fd12bb8de941d9ff119c943cf0ae3913e5a0f454284c19d7d477caa7a19e29d5"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/independent-audit/portable-proof.json",
+      "sha256": "ad899e8cc8147cbe574f8bf3caf9f64cf8914a55defaf09956a3485d7593c9c5"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/results/research-report.json",
+      "sha256": "dd742cf0069e4e0e08370d65ebc4765b4424af5c08a1cd1cd1759eb2f99ae2f2"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/results/synthetic-run-manifest.json",
+      "sha256": "380d8079459f87fe41311c5be433b9dfaab72254d833189939e3503f4c070a86"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/results/portable-fields.jsonl.gz",
+      "sha256": "05c901b27a9bb2b290399858b5399877caf8fc475a5ae946c268bbf2ca515b66"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/association_validation/results/numeric-cache/manifest.json",
+      "sha256": "480adad21ec4a8798aa5dec6ec976c7a4e1875c393f813863b951b6e7f3de08d"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/data/association_holdout/quarantined-handoff.json",
+      "sha256": "49446c1e43895c8845129f24f7d482cd4c30fcad907d9314e98236fbdb6e57dd"
+    },
+    {
+      "path": "ml/pvusatov/experiments/v4/data/association_holdout/recovery-4/guarded-handoff.json",
+      "sha256": "d897d84433ecd3aa8b3082075cb01cf7f272e26f8d36d2bc0f091c8cd7195ad6"
+    }
+  ]
+}
