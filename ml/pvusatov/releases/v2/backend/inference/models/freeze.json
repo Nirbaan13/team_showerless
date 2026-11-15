@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "frozen_at_utc": "2026-11-14T16:39:45.783194+00:00",
+  "model_id": "spherex-track-rf-v2",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "metadata_sha256": "56d97071307044ee45740cdc8c36e2f5872cccb5b8db4977edb2ea44b0fe5cab",
+  "training_manifest_sha256": "577c492d424ed21974a8db35d2d5fb0fff2697d605ad921ace2d6057eb796b04",
+  "calibration_bank_sha256": "793e05135438c95b8eaeace21948b34fe2eb49cd581be9e81dfff2b493e08d6d",
+  "code_sha256": {
+    "backend/inference/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "backend/inference/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "backend/inference/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "backend/inference/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "backend/inference/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "backend/inference/ml_inference/model.py": "3e9cabef0b68c60c154ee91cc51a54aeccbab3339b52a2b2aa21f06c7d8881c5",
+    "backend/inference/ml_inference/pipeline.py": "7f53685b822b7c94945c6bda383e8fcb2213c231d8a68973638eced1cf0e4dc0",
+    "backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "backend/inference/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "backend/inference/training/__init__.py": "340d665d109e8752797b3d5958c533c7a7218cd866a2ede585281a28bf3ec1ad",
+    "backend/inference/training/ablate_generation.py": "6046931cc9c17733a895bc37a33801360607bdf7d708e702773a66d671df98d6",
+    "backend/inference/training/ablate_v2.py": "a9cd4ceb50938ec95bcfc3943326c173757436685ba40997d8f17df4152d2be6",
+    "backend/inference/training/diagnose_domain.py": "1f03b584309812df9de38d03e66cc0db7964d9062fc0a92ff99747c5e58259a2",
+    "backend/inference/training/evaluate_background.py": "8739e63b9770ba06b0345cb4b81137c1d18715597072c4769344fc70ea586304",
+    "backend/inference/training/evaluate_real.py": "68f99a37e6ad7fe48ff64eaf11ae7ef60d647aeeef46ae1aa13220ccdc31a63a",
+    "backend/inference/training/evaluate_synthetic.py": "2bdb67ec6ee345de97595681d6ed8157fdc15745c8d3e6a53c8e538c393410cb",
+    "backend/inference/training/prepare_calibration.py": "77b121df742099b374c273cfdd6e815285ea6dc47cfd6cf28a9cea61fa28a53f",
+    "backend/inference/training/simulate.py": "cb5abf1a185243fc3219270a731a2166ad134b5075b9f406b1ceb23d4b138426",
+    "backend/inference/training/simulate_v2.py": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28",
+    "backend/inference/training/statistics.py": "7c324716911a0585e15dc773ce30e1e68fcb43f3b3581654de58ab133fa1159c",
+    "backend/inference/training/train.py": "01ff2708feade429705ea29f766837bb9d53ca04f9bfeb334eb6ab16e6a9cb3c",
+    "backend/inference/training/train_v2.py": "04f0ab04bd9cb56d65f929d19043433052944cb1b6fbf1ea3e17bdb5de98257f",
+    "backend/inference/training/weights.py": "50121e69f253d992e3048688af15e57ae8736e76e13d5b01a9beb858ae32b6dd"
+  },
+  "combined_code_sha256": "d92a42a9b348addd7cf0deb8df31ceca2ef14cf08814bcec4665fd84e463fb9d",
+  "protocol_sha256": "794ae6330169404765ea9bb19a114ca67cadbbd58444aa21fe22cc125bb77a86",
+  "selected_parameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 12,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 4,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 150,
+    "n_jobs": 1,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "used_features": [
+    "epoch_count",
+    "fit_rms_px",
+    "median_snr",
+    "min_snr",
+    "snr_coefficient_of_variation",
+    "median_peak_ratio"
+  ],
+  "selection": "Selected by synthetic validation macro top1, then top3, then AP; retained full features after development-only feature ablation",
+  "validation": {
+    "baseline": {
+      "top1": {
+        "fields": 400,
+        "candidates": 15029,
+        "injected_tracks": 791,
+        "recovered_before_ranking": 215,
+        "recovered_in_top_k": 41,
+        "top_k_recall": 0.051833122629582805,
+        "detector_recall": 0.2718078381795196,
+        "false_tracks_in_top_k": 278,
+        "false_tracks_per_field_in_top_k": 0.695,
+        "track_average_precision": 0.05864104175960708
+      },
+      "top3": {
+        "fields": 400,
+        "candidates": 15029,
+        "injected_tracks": 791,
+        "recovered_before_ranking": 215,
+        "recovered_in_top_k": 67,
+        "top_k_recall": 0.08470290771175727,
+        "detector_recall": 0.2718078381795196,
+        "false_tracks_in_top_k": 825,
+        "false_tracks_per_field_in_top_k": 2.0625,
+        "track_average_precision": 0.05864104175960708
+      }
+    },
+    "random_forest": {
+      "top1": {
+        "fields": 400,
+        "candidates": 15029,
+        "injected_tracks": 791,
+        "recovered_before_ranking": 215,
+        "recovered_in_top_k": 76,
+        "top_k_recall": 0.09608091024020228,
+        "detector_recall": 0.2718078381795196,
+        "false_tracks_in_top_k": 243,
+        "false_tracks_per_field_in_top_k": 0.6075,
+        "track_average_precision": 0.2421854989549559
+      },
+      "top3": {
+        "fields": 400,
+        "candidates": 15029,
+        "injected_tracks": 791,
+        "recovered_before_ranking": 215,
+        "recovered_in_top_k": 132,
+        "top_k_recall": 0.16687737041719342,
+        "detector_recall": 0.2718078381795196,
+        "false_tracks_in_top_k": 760,
+        "false_tracks_per_field_in_top_k": 1.9,
+        "track_average_precision": 0.2421854989549559
+      }
+    }
+  },
+  "m101_development": {
+    "injections": 150,
+    "eligible_center_coverage_at_least_3": 135,
+    "recovered_before_ranking": 67,
+    "baseline_recovered_at_k": 67,
+    "model_recovered_at_k": 67,
+    "baseline_recovered_at_1": 65,
+    "model_recovered_at_1": 52,
+    "preexisting_control_match_trials": 0,
+    "top_k": 3,
+    "total_candidate_rows": 264,
+    "trials_with_peak_cap": 0
+  },
+  "rejected_feature_ablations": {
+    "ignore_epoch": {
+      "ignored_features": [
+        0
+      ],
+      "validation_key": [
+        0.059959369104096355,
+        0.12226035886416223,
+        0.07388092649393051
+      ],
+      "m101_development_top1": 55,
+      "native_zero_scores": 1
+    },
+    "ignore_epoch_and_shape": {
+      "ignored_features": [
+        0,
+        5
+      ],
+      "validation_key": [
+        0.05306827933485532,
+        0.11220280983298908,
+        0.06154317920731453
+      ],
+      "m101_development_top1": 60,
+      "native_zero_scores": 0
+    }
+  },
+  "note": "The M101 control remains UNKNOWN; development top1 below heuristic is acknowledged, not tuned to its exact rank.",
+  "reserved_synthetic_test_seeds": [
+    500000,
+    500399
+  ],
+  "reserved_real_field_unopened": true,
+  "predeclared_review_budgets": [
+    1,
+    3
+  ],
+  "model_changes_after_final_test_allowed": false
+}

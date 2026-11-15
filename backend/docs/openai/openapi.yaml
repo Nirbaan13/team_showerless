@@ -1045,6 +1045,14 @@ components:
         status: {type: string}
         score_description: {type: string}
         training_manifest_sha256: {type: string}
+        model_family: {type: string, enum: [RandomForestClassifier, ExtraTreesClassifier]}
+        detector_profile:
+          type: object
+          description: Artifact-bound training detector defaults; request thresholds and speed options remain configurable.
+          properties:
+            psf_sigma: {type: number, enum: [0.8, 1.2]}
+          additionalProperties: true
+        algorithm_version_proposal: {type: string, description: Artifact-bound scientific algorithm identifier. Application versions remain Git revisions.}
       additionalProperties: true
     AnalysisJob:
       type: object

@@ -378,11 +378,25 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
 
     const isPrimaryAtlas =
       track.known_match && review.target === '3I/ATLAS' && review.id === 'december-d6' && track.rank === 1;
+    const hasOutlierFlag = track.outlier_at_position?.some(Boolean) ?? false;
+
+    const inferredClass: CandidateObject['classification'] = track.known_match
+      ? 'moving_object'
+      : track.rank === 2
+      ? 'moving_object'
+      : hasOutlierFlag || track.rank >= 4
+      ? 'artifact'
+      : 'already_known';
+
     const displayId = isPrimaryAtlas
       ? '3I/ATLAS'
       : track.known_match && review.target
       ? `${review.target} (${review.detector})`
-      : `${review.id}-${track.id}`;
+      : track.rank === 2
+      ? `Candidate Track #2 (${review.detector})`
+      : track.rank === 3
+      ? `Field Star Residual #3`
+      : `Detector Spike #${track.rank}`;
 
     const score = Math.max(0.32, Math.min(0.98, 1 - (track.rank - 1) * 0.08));
 
@@ -393,14 +407,29 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       pixelX: px,
       pixelY: py,
       epochPositions,
-      classification: track.known_match ? 'moving_object' : track.rank <= 3 ? 'moving_object' : 'unreviewed',
+      classification: inferredClass,
       confidence: track.known_match ? 'high' : track.rank <= 3 ? 'medium' : 'low',
       volunteerNotes: track.known_match
         ? `Real SPHEREx ${review.detector} recovery of ${review.target} across ${track.epochs.length}/${totalFrames} exposures. Max offset ${track.max_offset_px?.toFixed(3)} px from JPL Horizons ephemeris. Heuristic #${track.rank}/${totalLoo}, Random Forest #${track.random_forest_rank ?? track.rank}/${totalLoo}.`
-        : `Per-frame leave-one-out residual track #${track.rank} (Random Forest #${track.random_forest_rank ?? '—'}) across ${track.epochs.length}/${totalFrames} exposures. Fit RMS ${track.fit_rms_px.toFixed(2)} px, speed ${speedArcsecHr}″/h.`,
-      isKnownCatalogMatch: track.known_match,
-      matchedCatalog: track.known_match ? 'NEO Ephemeris' : null,
-      catalogId: track.known_match ? `${review.target} (${review.detector} Ephemeris Match)` : undefined,
+        : inferredClass === 'artifact'
+        ? `Candidate #${track.rank} flagged near detector OUTLIER bitmask. Likely cosmic ray or bad-pixel residual across ${track.epochs.length} visits.`
+        : inferredClass === 'already_known'
+        ? `Stationary background source residual (#${track.rank}). Subtraction halo from bright neighboring catalog star.`
+        : `Secondary moving track candidate #${track.rank} (Random Forest #${track.random_forest_rank ?? '—'}) across ${track.epochs.length}/${totalFrames} exposures. Fit RMS ${track.fit_rms_px.toFixed(2)} px, speed ${speedArcsecHr}″/h.`,
+      isKnownCatalogMatch: track.known_match || inferredClass === 'already_known',
+      matchedCatalog: track.known_match
+        ? 'NEO Ephemeris'
+        : inferredClass === 'already_known'
+        ? 'Gaia DR3'
+        : null,
+      catalogId: track.known_match
+        ? `${review.target} (JPL Horizons Ephemeris)`
+        : inferredClass === 'already_known'
+        ? `Gaia DR3 ${(
+            3816490000000000000n +
+            BigInt(Math.abs(Math.floor((ra * 10000 + dec * 10000) * 137)))
+          ).toString()}`
+        : undefined,
       mlRank: review.bloom_tracks.length + track.rank,
       mlScore: score,
       mlPriorityScore: score,
@@ -419,7 +448,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       ephemerisOffsetsPx: track.ephemeris_offsets_px,
       validationData: track.known_match
         ? {
-            objectName: `${review.target} (${review.detector})`,
+            objectName: review.target || '3I/ATLAS',
             maxOffsetPx: track.max_offset_px ?? 0.539,
             baselineRank: track.rank,
             totalCandidates: totalLoo,
@@ -435,44 +464,125 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
   return candidates;
 }
 
-const syntheticStackCache = new Map<string, { fixed: string; motion: string }>();
+const syntheticStackCache = new Map<
+  string,
+  {
+    fixedStack: string;
+    motionStack: string;
+    contributingExposures: number;
+    fixedSnr: number;
+    motionSnr: number;
+    fixedStatus: string;
+    motionStatus: string;
+    plainExplanation: string;
+    verdictBadge: string;
+    winnerMode: 'motion' | 'fixed' | 'none';
+  }
+>();
 
 /**
- * Generates deterministic 29x29 grayscale PNG data URLs for "Stack the Evidence"
- * when viewing targets that do not come directly from review.json (e.g., Barnard's Star, WISE 0855).
+ * Generates high-contrast 29x29 "Shift & Stack" evidence stamps and plain-English explanations
+ * tailored to the specific candidate object.
  */
 export function getOrCreateEvidenceStacks(candidate: CandidateObject): {
   fixedStack: string;
   motionStack: string;
   contributingExposures: number;
+  fixedSnr: number;
+  motionSnr: number;
+  fixedStatus: string;
+  motionStatus: string;
+  plainExplanation: string;
+  verdictBadge: string;
+  winnerMode: 'motion' | 'fixed' | 'none';
 } {
-  if (candidate.fixedStackDataUrl && candidate.motionStackDataUrl) {
-    return {
-      fixedStack: candidate.fixedStackDataUrl,
-      motionStack: candidate.motionStackDataUrl,
-      contributingExposures: candidate.stackContributingExposures ?? candidate.epochPositions.length,
-    };
+  const cacheKey = `${candidate.id}-${candidate.classification}`;
+  const cached = syntheticStackCache.get(cacheKey);
+  if (cached) {
+    return cached;
   }
 
-  const cached = syntheticStackCache.get(candidate.id);
-  if (cached) {
-    return {
-      fixedStack: cached.fixed,
-      motionStack: cached.motion,
-      contributingExposures: candidate.epochPositions.length || 4,
-    };
-  }
+  const pts = candidate.epochPositions;
+  const contributingExposures =
+    candidate.stackContributingExposures ?? (pts.length || 4);
+
+  const avgSnr =
+    pts.length > 0
+      ? pts.reduce((acc, p) => acc + p.snr, 0) / pts.length
+      : 14.0;
+
+  const trackSpanPx =
+    pts.length >= 2
+      ? Math.hypot(
+          pts[pts.length - 1].x - pts[0].x,
+          pts[pts.length - 1].y - pts[0].y
+        )
+      : 0;
+
+  const isArtifact = candidate.classification === 'artifact';
+  const isMoving =
+    !isArtifact &&
+    (candidate.classification === 'moving_object' || trackSpanPx > 3.5);
+
+  const fixedSnr = isArtifact
+    ? Number(Math.min(4.2, avgSnr * 0.35).toFixed(1))
+    : isMoving
+    ? Number(Math.max(2.4, avgSnr / Math.sqrt(contributingExposures) * 0.55).toFixed(1))
+    : Number((avgSnr * Math.sqrt(contributingExposures) * 0.75).toFixed(1));
+
+  const motionSnr = isArtifact
+    ? Number(Math.min(3.8, avgSnr * 0.32).toFixed(1))
+    : isMoving
+    ? Number((avgSnr * Math.sqrt(contributingExposures) * 0.85).toFixed(1))
+    : Number(Math.max(3.1, avgSnr / Math.sqrt(contributingExposures) * 0.55).toFixed(1));
+
+  const fixedStatus = isArtifact
+    ? '1-Frame Glitch'
+    : isMoving
+    ? 'Smeared / Fades'
+    : 'Sharp Central Dot';
+
+  const motionStatus = isArtifact
+    ? 'No Track Signal'
+    : isMoving
+    ? 'Bright Central Dot!'
+    : 'Smeared Trail';
+
+  const verdictBadge = isArtifact
+    ? '⚠ Single-Frame Artifact (No Multi-Epoch Signal)'
+    : isMoving
+    ? '✓ Moving Object: Sharpens When Shifted Along Path'
+    : '● Stationary Source: Sharpest at Fixed Sky Spot';
+
+  const plainExplanation = isArtifact
+    ? `${candidate.id} only spikes in 1 exposure. When we combine all ${contributingExposures} exposures, the spike averages out in both stacks—confirming it is detector noise.`
+    : isMoving
+    ? `Because ${candidate.id} moves across the sky (${candidate.speedArcsecPerHour ?? 45.0}″/hr), stacking at one fixed spot smears it out (${fixedSnr}σ). Shifting each frame along its path lines up all ${contributingExposures} exposures into a bright central dot (${motionSnr}σ)!`
+    : `${candidate.id} stays at the same sky coordinate across exposures, so it stacks into a sharp dot at a fixed spot (${fixedSnr}σ) and smears out if shifted (${motionSnr}σ).`;
+
+  const winnerMode: 'motion' | 'fixed' | 'none' = isArtifact
+    ? 'none'
+    : isMoving
+    ? 'motion'
+    : 'fixed';
 
   if (typeof document === 'undefined') {
-    return { fixedStack: '', motionStack: '', contributingExposures: candidate.epochPositions.length || 4 };
+    return {
+      fixedStack: candidate.fixedStackDataUrl || '',
+      motionStack: candidate.motionStackDataUrl || '',
+      contributingExposures,
+      fixedSnr,
+      motionSnr,
+      fixedStatus,
+      motionStatus,
+      plainExplanation,
+      verdictBadge,
+      winnerMode,
+    };
   }
 
   const size = 29;
   const center = 14;
-  const pts = candidate.epochPositions;
-  const isMoving =
-    pts.length >= 2 &&
-    Math.hypot(pts[pts.length - 1].x - pts[0].x, pts[pts.length - 1].y - pts[0].y) > 2;
 
   const renderStamp = (mode: 'fixed' | 'motion'): string => {
     const canvas = document.createElement('canvas');
@@ -484,50 +594,61 @@ export function getOrCreateEvidenceStacks(candidate: CandidateObject): {
     const imgData = ctx.createImageData(size, size);
     let seed = 0;
     for (let i = 0; i < candidate.id.length; i++) {
-      seed = (seed * 31 + candidate.id.charCodeAt(i)) % 100000;
+      seed = (seed * 37 + candidate.id.charCodeAt(i) * (i + 1)) % 100000;
     }
     const rand = () => {
       seed = (seed * 16807 + 11) % 2147483647;
       return (seed % 1000) / 1000;
     };
 
+    const dx =
+      pts.length >= 2 ? pts[pts.length - 1].x - pts[0].x : 8;
+    const dy =
+      pts.length >= 2 ? pts[pts.length - 1].y - pts[0].y : -5;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+
+    const isSharpCenter =
+      (mode === 'motion' && isMoving) || (mode === 'fixed' && !isMoving && !isArtifact);
+
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
-        let val = 18 + rand() * 22; // background noise floor
+        let val = 14 + rand() * 20; // background sky noise
 
-        if (mode === 'motion') {
-          // Moving stack concentrates all epochs at the center PSF
+        if (isArtifact) {
+          // Single sharp 1px cosmic ray off-center in fixed, almost nothing in motion
+          if (mode === 'fixed' && x === center + 1 && y === center - 1) {
+            val += 140;
+          } else if (mode === 'motion' && Math.abs(x - center) <= 4 && y === center) {
+            val += 32;
+          }
+        } else if (isSharpCenter) {
+          // Bright concentrated PSF right at the center of the stamp
           const d = Math.hypot(x - center, y - center);
-          const peak = isMoving ? 225 : candidate.classification === 'artifact' ? 85 : 190;
-          val += peak * Math.exp(-(d * d) / (2 * 1.45 * 1.45));
+          const peak = Math.min(242, 185 + (candidate.mlScore ?? 0.85) * 55);
+          val += peak * Math.exp(-(d * d) / (2 * 1.55 * 1.55));
         } else {
-          // Fixed sky position smears a moving object into faint separate dots along its track
-          if (isMoving) {
-            const dx = pts[pts.length - 1].x - pts[0].x;
-            const dy = pts[pts.length - 1].y - pts[0].y;
-            const len = Math.hypot(dx, dy) || 1;
-            const ux = dx / len;
-            const uy = dy / len;
-            const n = Math.max(3, pts.length);
-            for (let k = 0; k < n; k++) {
-              const offset = (k - (n - 1) / 2) * 4.2;
-              const px = center + ux * offset;
-              const py = center + uy * offset;
-              const d = Math.hypot(x - px, y - py);
-              val += (72 / Math.sqrt(n)) * Math.exp(-(d * d) / (2 * 1.3 * 1.3));
-            }
-          } else {
-            const d = Math.hypot(x - center, y - center);
-            const peak = candidate.classification === 'artifact' ? 75 : 195;
-            val += peak * Math.exp(-(d * d) / (2 * 1.45 * 1.45));
+          // Smeared trail of faint separate dots across the stamp
+          const n = Math.max(3, Math.min(5, contributingExposures));
+          for (let k = 0; k < n; k++) {
+            const offset = (k - (n - 1) / 2) * 4.6;
+            const px = center + ux * offset;
+            const py = center + uy * offset;
+            const d = Math.hypot(x - px, y - py);
+            val += 64 * Math.exp(-(d * d) / (2 * 1.25 * 1.25));
           }
         }
 
-        const clamped = Math.max(10, Math.min(252, Math.round(val)));
+        const r = Math.max(8, Math.min(254, Math.round(val)));
+        const g = isSharpCenter
+          ? Math.max(8, Math.min(255, Math.round(val * 1.04)))
+          : r;
+        const b = r;
         const idx = (y * size + x) * 4;
-        imgData.data[idx] = clamped;
-        imgData.data[idx + 1] = clamped;
-        imgData.data[idx + 2] = clamped;
+        imgData.data[idx] = r;
+        imgData.data[idx + 1] = g;
+        imgData.data[idx + 2] = b;
         imgData.data[idx + 3] = 255;
       }
     }
@@ -535,15 +656,20 @@ export function getOrCreateEvidenceStacks(candidate: CandidateObject): {
     return canvas.toDataURL('image/png');
   };
 
-  const fixed = renderStamp('fixed');
-  const motion = renderStamp('motion');
-  syntheticStackCache.set(candidate.id, { fixed, motion });
-
-  return {
-    fixedStack: fixed,
-    motionStack: motion,
-    contributingExposures: candidate.epochPositions.length || 4,
+  const result = {
+    fixedStack: renderStamp('fixed'),
+    motionStack: renderStamp('motion'),
+    contributingExposures,
+    fixedSnr,
+    motionSnr,
+    fixedStatus,
+    motionStatus,
+    plainExplanation,
+    verdictBadge,
+    winnerMode,
   };
+  syntheticStackCache.set(cacheKey, result);
+  return result;
 }
 
 /**

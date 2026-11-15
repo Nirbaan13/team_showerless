@@ -28,13 +28,21 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
   onSelectVerificationTarget,
   isCompact = false,
 }) => {
-  const [allComments] = useState<VerificationComment[]>(getInitialVerificationComments);
+  const [allComments, setAllComments] = useState<VerificationComment[]>(getInitialVerificationComments);
   const [filterVote, setFilterVote] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [, setReviewsTick] = useState(0);
 
   useEffect(() => {
-    return subscribeMotionReviews(() => setReviewsTick((t) => t + 1));
+    const handleCommentsUpdated = () => {
+      setAllComments(getInitialVerificationComments());
+    };
+    window.addEventListener('spherex_comments_updated', handleCommentsUpdated);
+    const unsub = subscribeMotionReviews(() => setReviewsTick((t) => t + 1));
+    return () => {
+      window.removeEventListener('spherex_comments_updated', handleCommentsUpdated);
+      unsub();
+    };
   }, []);
 
   const filtered = allComments.filter((item) => {

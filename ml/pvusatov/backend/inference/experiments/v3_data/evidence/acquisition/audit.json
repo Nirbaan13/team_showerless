@@ -1,0 +1,3871 @@
+{
+  "created_utc": "2026-11-14T20:21:46.401816+00:00",
+  "plan_sha256": "50e6308863b1d7d3cb46f09157b48ced6410578674ecce15eb54ce6922211b7f",
+  "source_code_sha256": "b21d9a16f40dde9886c48589079dedb374ff4e085318d3fa97a64825e0bd12b8",
+  "minimum_group_center_separation_deg": 18.50911875693224,
+  "physical_obsids_cross_parent_or_split": 0,
+  "final_pixels_opened": false,
+  "groups": [
+    {
+      "group_id": "train01",
+      "parent_group_id": "train01",
+      "split": "train",
+      "center": [
+        15.0,
+        -30.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 3,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/1/level2_2025W24_2D_0326_1D1_spx_l2b-v27-2026-202.fits?center=15.0%2C-30.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_1D1_spx_l2b-v27-2026-202.fits",
+          "bytes": 4023360,
+          "sha256": "4a424e7b9fbbaf02686b3ff21d0293f93bc4b6345ecfd56f3c3d63ade58ff123",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W24_2D_0326_1",
+          "detector": 1,
+          "t_min_mjd": 60840.267821,
+          "t_max_mjd": 60840.269153,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.01917313057333231,
+            "physical_obsid_header": "2025W24_2D_0326_1",
+            "time_header": {
+              "MJD-OBS": 60840.267820567,
+              "MJD-END": 60840.269152946,
+              "MJD-AVG": 60840.268486756,
+              "DATE-OBS": "2025-06-14T06:25:39.697",
+              "DATE-END": "2025-06-14T06:27:34.815",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/1/level2_2025W24_2D_0326_2D1_spx_l2b-v27-2026-202.fits?center=15.0%2C-30.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_2D1_spx_l2b-v27-2026-202.fits",
+          "bytes": 4023360,
+          "sha256": "61e3a0c9fb74013ded8230cfd6450910959019824b872cd2067926d58a7b65a8",
+          "obs_id": "2025W24_2D_0326_2",
+          "detector": 1,
+          "t_min_mjd": 60840.269313,
+          "t_max_mjd": 60840.270645,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.018825119072198866,
+            "physical_obsid_header": "2025W24_2D_0326_2",
+            "time_header": {
+              "MJD-OBS": 60840.269312801,
+              "MJD-END": 60840.270645179,
+              "MJD-AVG": 60840.26997899,
+              "DATE-OBS": "2025-06-14T06:27:48.626",
+              "DATE-END": "2025-06-14T06:29:43.744",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_2D/l2b-v27-2026-202/1/level2_2025W24_2D_0326_3D1_spx_l2b-v27-2026-202.fits?center=15.0%2C-30.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_3D1_spx_l2b-v27-2026-202.fits",
+          "bytes": 4023360,
+          "sha256": "2124d0e0dfd289a1714f06aaa835cfaddfa94bd6419dd14d3f15645ac383833b",
+          "obs_id": "2025W24_2D_0326_3",
+          "detector": 1,
+          "t_min_mjd": 60840.270805,
+          "t_max_mjd": 60840.272137,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0192195357888937,
+            "physical_obsid_header": "2025W24_2D_0326_3",
+            "time_header": {
+              "MJD-OBS": 60840.270805069,
+              "MJD-END": 60840.272137448,
+              "MJD-AVG": 60840.271471259,
+              "DATE-OBS": "2025-06-14T06:29:57.558",
+              "DATE-END": "2025-06-14T06:31:52.676",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train02",
+      "parent_group_id": "train02",
+      "split": "train",
+      "center": [
+        45.0,
+        20.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0502_1D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_1D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "b4f16e2796ffcb887fd0a589c38121a6d867df211cd8d95f1b2eed0097d09097",
+          "obs_id": "2025W32_1A_0502_1",
+          "detector": 2,
+          "t_min_mjd": 60893.330023,
+          "t_max_mjd": 60893.331356,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.025515688508749006,
+            "physical_obsid_header": "2025W32_1A_0502_1",
+            "time_header": {
+              "MJD-OBS": 60893.330023414,
+              "MJD-END": 60893.331355793,
+              "MJD-AVG": 60893.330689604,
+              "DATE-OBS": "2025-08-06T07:55:14.023",
+              "DATE-END": "2025-08-06T07:57:09.141",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0502_2D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_2D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "40350009d9f10c24ce1934dd58f78038dc14cc6e5bf4efcf6bec9184af99696b",
+          "obs_id": "2025W32_1A_0502_2",
+          "detector": 2,
+          "t_min_mjd": 60893.331516,
+          "t_max_mjd": 60893.332848,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02654965989589691,
+            "physical_obsid_header": "2025W32_1A_0502_2",
+            "time_header": {
+              "MJD-OBS": 60893.33151566,
+              "MJD-END": 60893.332848038,
+              "MJD-AVG": 60893.332181849,
+              "DATE-OBS": "2025-08-06T07:57:22.953",
+              "DATE-END": "2025-08-06T07:59:18.071",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0502_3D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_3D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "88099d474138d80a78cd95a9e590248774e5c8630c9fc8475469babcc3909132",
+          "obs_id": "2025W32_1A_0502_3",
+          "detector": 2,
+          "t_min_mjd": 60893.333008,
+          "t_max_mjd": 60893.33434,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02614424113333225,
+            "physical_obsid_header": "2025W32_1A_0502_3",
+            "time_header": {
+              "MJD-OBS": 60893.333007905,
+              "MJD-END": 60893.334340284,
+              "MJD-AVG": 60893.333674094,
+              "DATE-OBS": "2025-08-06T07:59:31.883",
+              "DATE-END": "2025-08-06T08:01:27.001",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0502_4D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_4D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "ab2f8372d0d1ca0f92baa369c3297491f12c00c52408071bf0ae01a3dd532021",
+          "obs_id": "2025W32_1A_0502_4",
+          "detector": 2,
+          "t_min_mjd": 60893.3345,
+          "t_max_mjd": 60893.335833,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9995918367346939,
+            "robust_signal_sigma": 0.027703659626841542,
+            "physical_obsid_header": "2025W32_1A_0502_4",
+            "time_header": {
+              "MJD-OBS": 60893.334500174,
+              "MJD-END": 60893.335832552,
+              "MJD-AVG": 60893.335166363,
+              "DATE-OBS": "2025-08-06T08:01:40.815",
+              "DATE-END": "2025-08-06T08:03:35.933",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train03",
+      "parent_group_id": "train03",
+      "split": "train",
+      "center": [
+        75.0,
+        -15.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0489_1D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_1D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "f25678fbcf11984675f96b196870b9297b54500fe43f034886ea8997f76623a4",
+          "obs_id": "2025W36_1A_0489_1",
+          "detector": 3,
+          "t_min_mjd": 60921.173081,
+          "t_max_mjd": 60921.174414,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02818895368427038,
+            "physical_obsid_header": "2025W36_1A_0489_1",
+            "time_header": {
+              "MJD-OBS": 60921.173081262,
+              "MJD-END": 60921.17441364,
+              "MJD-AVG": 60921.173747451,
+              "DATE-OBS": "2025-09-03T04:09:14.221",
+              "DATE-END": "2025-09-03T04:11:09.338",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0489_2D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_2D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "4a9e45f1c7c8321ff079c8b2236057215f3346572f0f98f3eba061db310284a3",
+          "obs_id": "2025W36_1A_0489_2",
+          "detector": 3,
+          "t_min_mjd": 60921.174574,
+          "t_max_mjd": 60921.175906,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.026432371017336843,
+            "physical_obsid_header": "2025W36_1A_0489_2",
+            "time_header": {
+              "MJD-OBS": 60921.174573519,
+              "MJD-END": 60921.175905897,
+              "MJD-AVG": 60921.175239708,
+              "DATE-OBS": "2025-09-03T04:11:23.152",
+              "DATE-END": "2025-09-03T04:13:18.270",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0489_3D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_3D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "169347ca2f2c4217d8e9f847b97a07a00cf5d258a462c825088ebc6ce78d4968",
+          "obs_id": "2025W36_1A_0489_3",
+          "detector": 3,
+          "t_min_mjd": 60921.176066,
+          "t_max_mjd": 60921.177398,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.03070450077652931,
+            "physical_obsid_header": "2025W36_1A_0489_3",
+            "time_header": {
+              "MJD-OBS": 60921.176065775,
+              "MJD-END": 60921.177398154,
+              "MJD-AVG": 60921.176731965,
+              "DATE-OBS": "2025-09-03T04:13:32.083",
+              "DATE-END": "2025-09-03T04:15:27.201",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0489_4D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_4D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "d7392af3c5872078d530ba592600618a0f7b01a34c8b848c58227b65d5a93877",
+          "obs_id": "2025W36_1A_0489_4",
+          "detector": 3,
+          "t_min_mjd": 60921.177558,
+          "t_max_mjd": 60921.17889,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02341953366100788,
+            "physical_obsid_header": "2025W36_1A_0489_4",
+            "time_header": {
+              "MJD-OBS": 60921.177558044,
+              "MJD-END": 60921.178890422,
+              "MJD-AVG": 60921.178224233,
+              "DATE-OBS": "2025-09-03T04:15:41.015",
+              "DATE-END": "2025-09-03T04:17:36.132",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train04",
+      "parent_group_id": "train04",
+      "split": "train",
+      "center": [
+        105.0,
+        40.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/1/level2_2025W39_2A_0550_1D1_spx_l2b-v27-2026-239.fits?center=105.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_1D1_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "2a2b3e8531fd5d9ecd73dabc712a05158368ae68b81c184d7550b73a8a32657a",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W39_2A_0550_1",
+          "detector": 1,
+          "t_min_mjd": 60946.247207,
+          "t_max_mjd": 60946.24854,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02505097357928753,
+            "physical_obsid_header": "2025W39_2A_0550_1",
+            "time_header": {
+              "MJD-OBS": 60946.247207153,
+              "MJD-END": 60946.248539531,
+              "MJD-AVG": 60946.247873342,
+              "DATE-OBS": "2025-09-28T05:55:58.698",
+              "DATE-END": "2025-09-28T05:57:53.816",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/1/level2_2025W39_2A_0550_2D1_spx_l2b-v27-2026-239.fits?center=105.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_2D1_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "b25d6a241b7ade0c7227490657d5730a1133aeead30111019531983fe72f7155",
+          "obs_id": "2025W39_2A_0550_2",
+          "detector": 1,
+          "t_min_mjd": 60946.248699,
+          "t_max_mjd": 60946.250032,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02566328824460506,
+            "physical_obsid_header": "2025W39_2A_0550_2",
+            "time_header": {
+              "MJD-OBS": 60946.248699398,
+              "MJD-END": 60946.250031777,
+              "MJD-AVG": 60946.249365587,
+              "DATE-OBS": "2025-09-28T05:58:07.628",
+              "DATE-END": "2025-09-28T06:00:02.746",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/1/level2_2025W39_2A_0550_3D1_spx_l2b-v27-2026-239.fits?center=105.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_3D1_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "7ef54be81d84723eebc9bae89d7e8aef3c2a98f6471d304862fac75e479c7c05",
+          "obs_id": "2025W39_2A_0550_3",
+          "detector": 1,
+          "t_min_mjd": 60946.250192,
+          "t_max_mjd": 60946.251524,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.026486409178376195,
+            "physical_obsid_header": "2025W39_2A_0550_3",
+            "time_header": {
+              "MJD-OBS": 60946.250191655,
+              "MJD-END": 60946.251524034,
+              "MJD-AVG": 60946.250857844,
+              "DATE-OBS": "2025-09-28T06:00:16.559",
+              "DATE-END": "2025-09-28T06:02:11.677",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/1/level2_2025W39_2A_0550_4D1_spx_l2b-v27-2026-239.fits?center=105.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_4D1_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "5f500d3deedde2606a16db82685ea870a42915e4d717730fd603725a6d5c7af6",
+          "obs_id": "2025W39_2A_0550_4",
+          "detector": 1,
+          "t_min_mjd": 60946.251684,
+          "t_max_mjd": 60946.253016,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02636929703950882,
+            "physical_obsid_header": "2025W39_2A_0550_4",
+            "time_header": {
+              "MJD-OBS": 60946.2516839,
+              "MJD-END": 60946.253016279,
+              "MJD-AVG": 60946.25235009,
+              "DATE-OBS": "2025-09-28T06:02:25.489",
+              "DATE-END": "2025-09-28T06:04:20.607",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train05",
+      "parent_group_id": "train05",
+      "split": "train",
+      "center": [
+        150.0,
+        -20.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l2b-v27-2026-196/2/level2_2025W17_4B_0352_1D2_spx_l2b-v27-2026-196.fits?center=150.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_1D2_spx_l2b-v27-2026-196.fits",
+          "bytes": 4023360,
+          "sha256": "0ad32d72ed543fa9405008afc5901c6a3613afe5674ed882ae6ac99dc040e75c",
+          "obs_id": "2025W17_4B_0352_1",
+          "detector": 2,
+          "t_min_mjd": 60792.072477,
+          "t_max_mjd": 60792.07381,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              71
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.020627002331614495,
+            "physical_obsid_header": "2025W17_4B_0352_1",
+            "time_header": {
+              "MJD-OBS": 60792.072477303,
+              "MJD-END": 60792.073809682,
+              "MJD-AVG": 60792.073143492,
+              "DATE-OBS": "2025-04-27T01:44:22.039",
+              "DATE-END": "2025-04-27T01:46:17.157",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l2b-v27-2026-196/2/level2_2025W17_4B_0352_2D2_spx_l2b-v27-2026-196.fits?center=150.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_2D2_spx_l2b-v27-2026-196.fits",
+          "bytes": 4023360,
+          "sha256": "7238acb0a0d6ae68ef8491624dce0ea47e101abed4771f79be4d038e837a4c0c",
+          "obs_id": "2025W17_4B_0352_2",
+          "detector": 2,
+          "t_min_mjd": 60792.07397,
+          "t_max_mjd": 60792.075302,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.020280769273638723,
+            "physical_obsid_header": "2025W17_4B_0352_2",
+            "time_header": {
+              "MJD-OBS": 60792.073969549,
+              "MJD-END": 60792.075301927,
+              "MJD-AVG": 60792.074635738,
+              "DATE-OBS": "2025-04-27T01:46:30.969",
+              "DATE-END": "2025-04-27T01:48:26.086",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l2b-v27-2026-196/2/level2_2025W17_4B_0352_3D2_spx_l2b-v27-2026-196.fits?center=150.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_3D2_spx_l2b-v27-2026-196.fits",
+          "bytes": 4023360,
+          "sha256": "970641c01e742ec74a8aca7b9fbe8a2ab78c3a3ce61560146d0de2555e325d1f",
+          "obs_id": "2025W17_4B_0352_3",
+          "detector": 2,
+          "t_min_mjd": 60792.075462,
+          "t_max_mjd": 60792.076794,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02011052476465702,
+            "physical_obsid_header": "2025W17_4B_0352_3",
+            "time_header": {
+              "MJD-OBS": 60792.075461794,
+              "MJD-END": 60792.076794172,
+              "MJD-AVG": 60792.076127983,
+              "DATE-OBS": "2025-04-27T01:48:39.899",
+              "DATE-END": "2025-04-27T01:50:35.016",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W17_4B/l2b-v27-2026-196/2/level2_2025W17_4B_0352_4D2_spx_l2b-v27-2026-196.fits?center=150.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_4D2_spx_l2b-v27-2026-196.fits",
+          "bytes": 4023360,
+          "sha256": "b5a710fbfe335da4a41c49d6fd19ba7f9836184cadf031b03bfa2bba63b5c8b7",
+          "obs_id": "2025W17_4B_0352_4",
+          "detector": 2,
+          "t_min_mjd": 60792.076954,
+          "t_max_mjd": 60792.078286,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.01963973440825939,
+            "physical_obsid_header": "2025W17_4B_0352_4",
+            "time_header": {
+              "MJD-OBS": 60792.076954062,
+              "MJD-END": 60792.078286441,
+              "MJD-AVG": 60792.077620252,
+              "DATE-OBS": "2025-04-27T01:50:48.831",
+              "DATE-END": "2025-04-27T01:52:43.949",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train06",
+      "parent_group_id": "train06",
+      "split": "train",
+      "center": [
+        180.0,
+        25.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/3/level2_2025W19_2B_0102_1D3_spx_l2b-v27-2026-198.fits?center=180.0%2C25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_1D3_spx_l2b-v27-2026-198.fits",
+          "bytes": 4106880,
+          "sha256": "b58da3fdedfb087ce82177116d03cf4c606fd162ad127e6d17354ba3c6f938df",
+          "obs_id": "2025W19_2B_0102_1",
+          "detector": 3,
+          "t_min_mjd": 60804.155287,
+          "t_max_mjd": 60804.15662,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.01769061593860388,
+            "physical_obsid_header": "2025W19_2B_0102_1",
+            "time_header": {
+              "MJD-OBS": 60804.155287454,
+              "MJD-END": 60804.156619832,
+              "MJD-AVG": 60804.155953643,
+              "DATE-OBS": "2025-05-09T03:43:36.836",
+              "DATE-END": "2025-05-09T03:45:31.953",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/3/level2_2025W19_2B_0102_2D3_spx_l2b-v27-2026-198.fits?center=180.0%2C25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_2D3_spx_l2b-v27-2026-198.fits",
+          "bytes": 4106880,
+          "sha256": "7c878beaaf96701baa97cc8ccfddc732360f227f3857977a1f41f6f0781713aa",
+          "obs_id": "2025W19_2B_0102_2",
+          "detector": 3,
+          "t_min_mjd": 60804.15678,
+          "t_max_mjd": 60804.158112,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.01709618512094021,
+            "physical_obsid_header": "2025W19_2B_0102_2",
+            "time_header": {
+              "MJD-OBS": 60804.156779699,
+              "MJD-END": 60804.158112078,
+              "MJD-AVG": 60804.157445888,
+              "DATE-OBS": "2025-05-09T03:45:45.766",
+              "DATE-END": "2025-05-09T03:47:40.884",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/3/level2_2025W19_2B_0102_3D3_spx_l2b-v27-2026-198.fits?center=180.0%2C25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_3D3_spx_l2b-v27-2026-198.fits",
+          "bytes": 4106880,
+          "sha256": "1d7a582e8c556696247521d2e1d0bd9a8106a053a924f1b6fa134fdf81461d08",
+          "obs_id": "2025W19_2B_0102_3",
+          "detector": 3,
+          "t_min_mjd": 60804.158272,
+          "t_max_mjd": 60804.159604,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.016747798047959804,
+            "physical_obsid_header": "2025W19_2B_0102_3",
+            "time_header": {
+              "MJD-OBS": 60804.158271979,
+              "MJD-END": 60804.159604358,
+              "MJD-AVG": 60804.158938168,
+              "DATE-OBS": "2025-05-09T03:47:54.699",
+              "DATE-END": "2025-05-09T03:49:49.817",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/3/level2_2025W19_2B_0102_4D3_spx_l2b-v27-2026-198.fits?center=180.0%2C25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_4D3_spx_l2b-v27-2026-198.fits",
+          "bytes": 4106880,
+          "sha256": "34bc1ef1b16fdcfcb17942af2e826f792bf6a4899f9c137494720f87d6da7f04",
+          "obs_id": "2025W19_2B_0102_4",
+          "detector": 3,
+          "t_min_mjd": 60804.159764,
+          "t_max_mjd": 60804.161097,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.01714263452142477,
+            "physical_obsid_header": "2025W19_2B_0102_4",
+            "time_header": {
+              "MJD-OBS": 60804.159764225,
+              "MJD-END": 60804.161096603,
+              "MJD-AVG": 60804.160430414,
+              "DATE-OBS": "2025-05-09T03:50:03.629",
+              "DATE-END": "2025-05-09T03:51:58.746",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train07",
+      "parent_group_id": "train07",
+      "split": "train",
+      "center": [
+        240.0,
+        -25.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/1/level2_2025W32_1A_0649_1D1_spx_l2b-v27-2026-226.fits?center=240.0%2C-25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_1D1_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "09637ea3ec422258622bfcfcab6d223ee90a963ec34b8ac88de8b4e2150f7d67",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W32_1A_0649_1",
+          "detector": 1,
+          "t_min_mjd": 60894.179312,
+          "t_max_mjd": 60894.180644,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0351036180049181,
+            "physical_obsid_header": "2025W32_1A_0649_1",
+            "time_header": {
+              "MJD-OBS": 60894.17931184,
+              "MJD-END": 60894.180644219,
+              "MJD-AVG": 60894.17997803,
+              "DATE-OBS": "2025-08-07T04:18:12.543",
+              "DATE-END": "2025-08-07T04:20:07.661",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/1/level2_2025W32_1A_0649_2D1_spx_l2b-v27-2026-226.fits?center=240.0%2C-25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_2D1_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "6a3c54ee3f337859912949c84ec021907721817537d2e6f2069528f35199df0d",
+          "obs_id": "2025W32_1A_0649_2",
+          "detector": 1,
+          "t_min_mjd": 60894.180804,
+          "t_max_mjd": 60894.182136,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0350496461212635,
+            "physical_obsid_header": "2025W32_1A_0649_2",
+            "time_header": {
+              "MJD-OBS": 60894.180804109,
+              "MJD-END": 60894.182136487,
+              "MJD-AVG": 60894.181470298,
+              "DATE-OBS": "2025-08-07T04:20:21.475",
+              "DATE-END": "2025-08-07T04:22:16.592",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/1/level2_2025W32_1A_0649_3D1_spx_l2b-v27-2026-226.fits?center=240.0%2C-25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_3D1_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "bdba36c215d47cb0371c6b3158f9067072e8dcfcae3992da474d333ff66c4ced",
+          "obs_id": "2025W32_1A_0649_3",
+          "detector": 1,
+          "t_min_mjd": 60894.182296,
+          "t_max_mjd": 60894.183629,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0360296677172184,
+            "physical_obsid_header": "2025W32_1A_0649_3",
+            "time_header": {
+              "MJD-OBS": 60894.182296354,
+              "MJD-END": 60894.183628733,
+              "MJD-AVG": 60894.182962543,
+              "DATE-OBS": "2025-08-07T04:22:30.405",
+              "DATE-END": "2025-08-07T04:24:25.523",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/1/level2_2025W32_1A_0649_4D1_spx_l2b-v27-2026-226.fits?center=240.0%2C-25.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_4D1_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "a8ab59d63d96ae0adde7f3181182402673cd7d3f86cb49c4cdbd12b0ae01cdcf",
+          "obs_id": "2025W32_1A_0649_4",
+          "detector": 1,
+          "t_min_mjd": 60894.183789,
+          "t_max_mjd": 60894.185121,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.038527220499515534,
+            "physical_obsid_header": "2025W32_1A_0649_4",
+            "time_header": {
+              "MJD-OBS": 60894.183788611,
+              "MJD-END": 60894.18512099,
+              "MJD-AVG": 60894.1844548,
+              "DATE-OBS": "2025-08-07T04:24:39.336",
+              "DATE-END": "2025-08-07T04:26:34.454",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train08",
+      "parent_group_id": "train08",
+      "split": "train",
+      "center": [
+        270.0,
+        35.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0114_1D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_1D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "386cb8e3ad4af5474895ce25baed33a1fb60201c4afd0ed188bfc9b1efbff4a0",
+          "obs_id": "2025W34_2B_0114_1",
+          "detector": 2,
+          "t_min_mjd": 60909.110174,
+          "t_max_mjd": 60909.111506,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.022590779149532315,
+            "physical_obsid_header": "2025W34_2B_0114_1",
+            "time_header": {
+              "MJD-OBS": 60909.110173692,
+              "MJD-END": 60909.111506071,
+              "MJD-AVG": 60909.110839881,
+              "DATE-OBS": "2025-08-22T02:38:39.007",
+              "DATE-END": "2025-08-22T02:40:34.125",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0114_2D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_2D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "5599565cefe613dd0e6cd1771f275ff80ff81cc93526a4c61287b0e190efcf89",
+          "obs_id": "2025W34_2B_0114_2",
+          "detector": 2,
+          "t_min_mjd": 60909.111666,
+          "t_max_mjd": 60909.112998,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.021700596548616884,
+            "physical_obsid_header": "2025W34_2B_0114_2",
+            "time_header": {
+              "MJD-OBS": 60909.111665961,
+              "MJD-END": 60909.112998339,
+              "MJD-AVG": 60909.11233215,
+              "DATE-OBS": "2025-08-22T02:40:47.939",
+              "DATE-END": "2025-08-22T02:42:43.057",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0114_3D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_3D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "dc2d73941a06236a4fca03fa3bef29e2db62af9fdd2120aacf26b761e352f6a3",
+          "obs_id": "2025W34_2B_0114_3",
+          "detector": 2,
+          "t_min_mjd": 60909.113158,
+          "t_max_mjd": 60909.114491,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.022821391309797764,
+            "physical_obsid_header": "2025W34_2B_0114_3",
+            "time_header": {
+              "MJD-OBS": 60909.113158206,
+              "MJD-END": 60909.114490584,
+              "MJD-AVG": 60909.113824395,
+              "DATE-OBS": "2025-08-22T02:42:56.869",
+              "DATE-END": "2025-08-22T02:44:51.987",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0114_4D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_4D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "31687c767f8fcc05a03f20daceefe6cdb501cdee8895256909981feceaa725eb",
+          "obs_id": "2025W34_2B_0114_4",
+          "detector": 2,
+          "t_min_mjd": 60909.11465,
+          "t_max_mjd": 60909.115983,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0214444841645658,
+            "physical_obsid_header": "2025W34_2B_0114_4",
+            "time_header": {
+              "MJD-OBS": 60909.114650463,
+              "MJD-END": 60909.115982841,
+              "MJD-AVG": 60909.115316652,
+              "DATE-OBS": "2025-08-22T02:45:05.800",
+              "DATE-END": "2025-08-22T02:47:00.917",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation01",
+      "parent_group_id": "validation01",
+      "split": "validation",
+      "center": [
+        30.0,
+        45.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 3,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0341_1D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_1D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "804f46db87cd983798b1d403f4360617d4c2dad1068e11c7224f67838d7f8451",
+          "obs_id": "2025W32_1A_0341_1",
+          "detector": 3,
+          "t_min_mjd": 60892.521044,
+          "t_max_mjd": 60892.522376,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.023252757668495178,
+            "physical_obsid_header": "2025W32_1A_0341_1",
+            "time_header": {
+              "MJD-OBS": 60892.521043681,
+              "MJD-END": 60892.522376059,
+              "MJD-AVG": 60892.52170987,
+              "DATE-OBS": "2025-08-05T12:30:18.174",
+              "DATE-END": "2025-08-05T12:32:13.291",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0341_2D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_2D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "6e0f6e7d6017b4936ae6ed8c6906bbc6f4efb89c1b898c1c998170bf653ad33a",
+          "obs_id": "2025W32_1A_0341_2",
+          "detector": 3,
+          "t_min_mjd": 60892.522536,
+          "t_max_mjd": 60892.523868,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02317818456441164,
+            "physical_obsid_header": "2025W32_1A_0341_2",
+            "time_header": {
+              "MJD-OBS": 60892.522535938,
+              "MJD-END": 60892.523868316,
+              "MJD-AVG": 60892.523202127,
+              "DATE-OBS": "2025-08-05T12:32:27.105",
+              "DATE-END": "2025-08-05T12:34:22.223",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0341_3D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_3D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "85f1601b6682095c0c0ddc83a6c2220904f280f1a636ff900651ad8d6390bffd",
+          "obs_id": "2025W32_1A_0341_3",
+          "detector": 3,
+          "t_min_mjd": 60892.524028,
+          "t_max_mjd": 60892.525361,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.024595294466614723,
+            "physical_obsid_header": "2025W32_1A_0341_3",
+            "time_header": {
+              "MJD-OBS": 60892.524028183,
+              "MJD-END": 60892.525360561,
+              "MJD-AVG": 60892.524694372,
+              "DATE-OBS": "2025-08-05T12:34:36.035",
+              "DATE-END": "2025-08-05T12:36:31.153",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation02",
+      "parent_group_id": "validation02",
+      "split": "validation",
+      "center": [
+        165.0,
+        5.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 3,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/1/level2_2025W19_2B_0237_1D1_spx_l2b-v27-2026-198.fits?center=165.0%2C5.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_1D1_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "bf37470682715615b347c694bf468f9368521fc2adac34df987237d847102ca6",
+          "obs_id": "2025W19_2B_0237_1",
+          "detector": 1,
+          "t_min_mjd": 60805.043942,
+          "t_max_mjd": 60805.045274,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.07166471988558769,
+            "physical_obsid_header": "2025W19_2B_0237_1",
+            "time_header": {
+              "MJD-OBS": 60805.043942118,
+              "MJD-END": 60805.045274497,
+              "MJD-AVG": 60805.044608307,
+              "DATE-OBS": "2025-05-10T01:03:16.599",
+              "DATE-END": "2025-05-10T01:05:11.716",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/1/level2_2025W19_2B_0237_2D1_spx_l2b-v27-2026-198.fits?center=165.0%2C5.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_2D1_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "34aca21ea3112e92c9247151c6b02d3f648e28ce14ca66ebc83aa5cbb39e2119",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W19_2B_0237_2",
+          "detector": 1,
+          "t_min_mjd": 60805.045434,
+          "t_max_mjd": 60805.046767,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0507096665918827,
+            "physical_obsid_header": "2025W19_2B_0237_2",
+            "time_header": {
+              "MJD-OBS": 60805.045434375,
+              "MJD-END": 60805.046766753,
+              "MJD-AVG": 60805.046100564,
+              "DATE-OBS": "2025-05-10T01:05:25.530",
+              "DATE-END": "2025-05-10T01:07:20.647",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/1/level2_2025W19_2B_0237_3D1_spx_l2b-v27-2026-198.fits?center=165.0%2C5.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_3D1_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "a3c8774df004162c8f277b2f9848286d305647f7d6ded0f2e7ae65a659bd5c6f",
+          "obs_id": "2025W19_2B_0237_3",
+          "detector": 1,
+          "t_min_mjd": 60805.046927,
+          "t_max_mjd": 60805.048259,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.0227582179158926,
+            "physical_obsid_header": "2025W19_2B_0237_3",
+            "time_header": {
+              "MJD-OBS": 60805.046926632,
+              "MJD-END": 60805.04825901,
+              "MJD-AVG": 60805.047592821,
+              "DATE-OBS": "2025-05-10T01:07:34.461",
+              "DATE-END": "2025-05-10T01:09:29.579",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation03",
+      "parent_group_id": "validation03",
+      "split": "validation",
+      "center": [
+        300.0,
+        -20.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0130_1D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_1D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "18542c128c46fe227d0036d40de9e07f7ad44c80f79d723e8a5d531b54ae9867",
+          "obs_id": "2025W39_2A_0130_1",
+          "detector": 2,
+          "t_min_mjd": 60944.101274,
+          "t_max_mjd": 60944.102606,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.03197879396080971,
+            "physical_obsid_header": "2025W39_2A_0130_1",
+            "time_header": {
+              "MJD-OBS": 60944.101273588,
+              "MJD-END": 60944.102605966,
+              "MJD-AVG": 60944.101939777,
+              "DATE-OBS": "2025-09-26T02:25:50.038",
+              "DATE-END": "2025-09-26T02:27:45.156",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0130_2D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_2D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "15f3060049d984dddaead84d208f46f6ed325b97ef0865fb4e133771a513f3cb",
+          "obs_id": "2025W39_2A_0130_2",
+          "detector": 2,
+          "t_min_mjd": 60944.102766,
+          "t_max_mjd": 60944.104098,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.031679043442010876,
+            "physical_obsid_header": "2025W39_2A_0130_2",
+            "time_header": {
+              "MJD-OBS": 60944.102765833,
+              "MJD-END": 60944.104098212,
+              "MJD-AVG": 60944.103432023,
+              "DATE-OBS": "2025-09-26T02:27:58.968",
+              "DATE-END": "2025-09-26T02:29:54.086",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0130_3D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_3D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "f3d77eaa919550dc080c37e5162d8d2b2af7f8c30f36aaaddb4d4297f25aecc7",
+          "obs_id": "2025W39_2A_0130_3",
+          "detector": 2,
+          "t_min_mjd": 60944.104258,
+          "t_max_mjd": 60944.10559,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.032566475531458854,
+            "physical_obsid_header": "2025W39_2A_0130_3",
+            "time_header": {
+              "MJD-OBS": 60944.104258102,
+              "MJD-END": 60944.10559048,
+              "MJD-AVG": 60944.104924291,
+              "DATE-OBS": "2025-09-26T02:30:07.900",
+              "DATE-END": "2025-09-26T02:32:03.018",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0130_4D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_4D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "102676449fd5aabc43099c81253cb443103c462b697129d9976b684a550c1a33",
+          "obs_id": "2025W39_2A_0130_4",
+          "detector": 2,
+          "t_min_mjd": 60944.10575,
+          "t_max_mjd": 60944.107083,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.032104654714465136,
+            "physical_obsid_header": "2025W39_2A_0130_4",
+            "time_header": {
+              "MJD-OBS": 60944.105750347,
+              "MJD-END": 60944.107082726,
+              "MJD-AVG": 60944.106416536,
+              "DATE-OBS": "2025-09-26T02:32:16.830",
+              "DATE-END": "2025-09-26T02:34:11.947",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "final01",
+      "parent_group_id": "final01",
+      "split": "final",
+      "center": [
+        60.0,
+        -45.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0300_1D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_1D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "3254f7f12881bab221fce26e0a168103370c42ab586d0f324f82a22e27080668",
+          "obs_id": "2025W31_1A_0300_1",
+          "detector": 3,
+          "t_min_mjd": 60885.572733,
+          "t_max_mjd": 60885.574065
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0300_2D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_2D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "fcb28c64e421785e54766e398bc11ea3c0d3b8dadd438458c2844e30eda0e507",
+          "obs_id": "2025W31_1A_0300_2",
+          "detector": 3,
+          "t_min_mjd": 60885.574225,
+          "t_max_mjd": 60885.575557
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0300_3D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_3D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "73a3c883be8d2ed61a008f7c0b3f67e571dc27bb13ab2818dfaa03285bd7c073",
+          "obs_id": "2025W31_1A_0300_3",
+          "detector": 3,
+          "t_min_mjd": 60885.575717,
+          "t_max_mjd": 60885.57705
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0300_4D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_4D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "0eb9bd8be4c0edecd631af86af082fbdf5344e6414bc0edabdc1fee26b4e9cfd",
+          "obs_id": "2025W31_1A_0300_4",
+          "detector": 3,
+          "t_min_mjd": 60885.577209,
+          "t_max_mjd": 60885.578542
+        }
+      ]
+    },
+    {
+      "group_id": "final02",
+      "parent_group_id": "final02",
+      "split": "final",
+      "center": [
+        135.0,
+        20.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/1/level2_2025W43_2A_0697_1D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_1D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "e45b7d39e51e6566f9cfde3dc082938f3f7ea22413603836a1bc25b13dea0fcd",
+          "obs_id": "2025W43_2A_0697_1",
+          "detector": 1,
+          "t_min_mjd": 60974.633839,
+          "t_max_mjd": 60974.635171
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/1/level2_2025W43_2A_0697_2D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_2D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "a27b3cb795df92ad1674455a323d8c51a120138a54c79f7559daf02a1882eadf",
+          "obs_id": "2025W43_2A_0697_2",
+          "detector": 1,
+          "t_min_mjd": 60974.635331,
+          "t_max_mjd": 60974.636663
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/1/level2_2025W43_2A_0697_3D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_3D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "800ddb87da29588ae15f6cf0ec405bf1fc7f3524036667813c4d634fb683acaf",
+          "obs_id": "2025W43_2A_0697_3",
+          "detector": 1,
+          "t_min_mjd": 60974.636823,
+          "t_max_mjd": 60974.638156
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W43_2A/l2b-v27-2026-245/1/level2_2025W43_2A_0697_4D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_4D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "8febe7b87e6233aec723aecf9b9f7e65638215774c7027db3b22ff8fd9971e02",
+          "obs_id": "2025W43_2A_0697_4",
+          "detector": 1,
+          "t_min_mjd": 60974.638316,
+          "t_max_mjd": 60974.639648
+        }
+      ]
+    },
+    {
+      "group_id": "final03",
+      "parent_group_id": "final03",
+      "split": "final",
+      "center": [
+        225.0,
+        15.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 3,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W26_2A/l2b-v27-2026-214/2/level2_2025W26_2A_0665_2D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_2D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "586e7cfce07b6c6f82593b48f10252400546d520e39dfdd368de2799df0616d8",
+          "obs_id": "2025W26_2A_0665_2",
+          "detector": 2,
+          "t_min_mjd": 60855.923869,
+          "t_max_mjd": 60855.925202
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W26_2A/l2b-v27-2026-214/2/level2_2025W26_2A_0665_3D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_3D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "7bd3fb40fec1a7793d59ba9e5dc83dca0fc7862a8c2f18bc56a89c01157d0f57",
+          "obs_id": "2025W26_2A_0665_3",
+          "detector": 2,
+          "t_min_mjd": 60855.925361,
+          "t_max_mjd": 60855.926694
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W26_2A/l2b-v27-2026-214/2/level2_2025W26_2A_0665_4D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_4D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "d2f375d8554a4a3a8524ed9c6126ae614ada385d04fbc7ea89903ddbf77cbf13",
+          "obs_id": "2025W26_2A_0665_4",
+          "detector": 2,
+          "t_min_mjd": 60855.926854,
+          "t_max_mjd": 60855.928186
+        }
+      ]
+    },
+    {
+      "group_id": "final04",
+      "parent_group_id": "final04",
+      "split": "final",
+      "center": [
+        330.0,
+        40.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0174_1D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_1D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "2ae0fee176e65fca2a00a6d012977a08bb44f0c5d1e1080b3dc825419ec1588c",
+          "obs_id": "2025W24_1A_0174_1",
+          "detector": 3,
+          "t_min_mjd": 60835.794773,
+          "t_max_mjd": 60835.796105
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0174_2D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_2D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "4d3c236255fd6c796c97c7bbdb18b16753c79d5560171654ee4c73164fb78d39",
+          "obs_id": "2025W24_1A_0174_2",
+          "detector": 3,
+          "t_min_mjd": 60835.796265,
+          "t_max_mjd": 60835.797598
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0174_3D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_3D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "d65c6d032b09ea504b5a8d81bb700e4afc15d652bc3ccb0515d467c542cfad7e",
+          "obs_id": "2025W24_1A_0174_3",
+          "detector": 3,
+          "t_min_mjd": 60835.797758,
+          "t_max_mjd": 60835.79909
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0174_4D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_4D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "193b625be60bf4b5fc59fbbb02a7f71af55718117a911b5e4e249de785ba2324",
+          "obs_id": "2025W24_1A_0174_4",
+          "detector": 3,
+          "t_min_mjd": 60835.79925,
+          "t_max_mjd": 60835.800582
+        }
+      ]
+    },
+    {
+      "group_id": "train02-supplement",
+      "parent_group_id": "train02",
+      "split": "train",
+      "center": [
+        45.0,
+        20.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0550_1D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_1D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "e4570471984bc7acd6ba24709d803691245d119f2f006cfe2cf2b3c8e66a4f4a",
+          "obs_id": "2025W32_1A_0550_1",
+          "detector": 2,
+          "t_min_mjd": 60893.601845,
+          "t_max_mjd": 60893.603177,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.026848217421770095,
+            "physical_obsid_header": "2025W32_1A_0550_1",
+            "time_header": {
+              "MJD-OBS": 60893.601844734,
+              "MJD-END": 60893.603177112,
+              "MJD-AVG": 60893.602510923,
+              "DATE-OBS": "2025-08-06T14:26:39.385",
+              "DATE-END": "2025-08-06T14:28:34.503",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0550_2D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_2D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "91e03438eaa07c01b2fe6f1b6d00007beabaafd01413c12b200f8f98bfde93e9",
+          "obs_id": "2025W32_1A_0550_2",
+          "detector": 2,
+          "t_min_mjd": 60893.603337,
+          "t_max_mjd": 60893.604669,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.025771673861145972,
+            "physical_obsid_header": "2025W32_1A_0550_2",
+            "time_header": {
+              "MJD-OBS": 60893.603336979,
+              "MJD-END": 60893.604669358,
+              "MJD-AVG": 60893.604003168,
+              "DATE-OBS": "2025-08-06T14:28:48.315",
+              "DATE-END": "2025-08-06T14:30:43.433",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0550_3D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_3D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "a6b6a3425364da8b11c444239f232403f659f6a9314fdcf6ffda1d5ec308de2d",
+          "obs_id": "2025W32_1A_0550_3",
+          "detector": 2,
+          "t_min_mjd": 60893.604829,
+          "t_max_mjd": 60893.606162,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.025605803659558293,
+            "physical_obsid_header": "2025W32_1A_0550_3",
+            "time_header": {
+              "MJD-OBS": 60893.604829248,
+              "MJD-END": 60893.606161626,
+              "MJD-AVG": 60893.605495437,
+              "DATE-OBS": "2025-08-06T14:30:57.247",
+              "DATE-END": "2025-08-06T14:32:52.365",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/2/level2_2025W32_1A_0550_4D2_spx_l2b-v27-2026-226.fits?center=45.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_4D2_spx_l2b-v27-2026-226.fits",
+          "bytes": 4023360,
+          "sha256": "3eb9f0eb3fbdf03cdc68122dd77127b9ba42863944cc9c922c1ec9e167ca17dc",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W32_1A_0550_4",
+          "detector": 2,
+          "t_min_mjd": 60893.606321,
+          "t_max_mjd": 60893.607654,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.025299160292744635,
+            "physical_obsid_header": "2025W32_1A_0550_4",
+            "time_header": {
+              "MJD-OBS": 60893.606321481,
+              "MJD-END": 60893.60765386,
+              "MJD-AVG": 60893.606987671,
+              "DATE-OBS": "2025-08-06T14:33:06.176",
+              "DATE-END": "2025-08-06T14:35:01.294",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train03-supplement",
+      "parent_group_id": "train03",
+      "split": "train",
+      "center": [
+        75.0,
+        -15.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0504_1D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_1D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "36d81c7d570a05c3b8526052ab4efdb5d4da4c5f27429f124c38c063cf0955ed",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W36_1A_0504_1",
+          "detector": 3,
+          "t_min_mjd": 60921.242063,
+          "t_max_mjd": 60921.243395,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.027518513752520082,
+            "physical_obsid_header": "2025W36_1A_0504_1",
+            "time_header": {
+              "MJD-OBS": 60921.2420625,
+              "MJD-END": 60921.243394878,
+              "MJD-AVG": 60921.242728689,
+              "DATE-OBS": "2025-09-03T05:48:34.200",
+              "DATE-END": "2025-09-03T05:50:29.318",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0504_3D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_3D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "a39049b281265b697c65c587a91142b22d1dbce091815993e2cb0211379de91e",
+          "obs_id": "2025W36_1A_0504_3",
+          "detector": 3,
+          "t_min_mjd": 60921.245047,
+          "t_max_mjd": 60921.246379,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02992068233191967,
+            "physical_obsid_header": "2025W36_1A_0504_3",
+            "time_header": {
+              "MJD-OBS": 60921.245047014,
+              "MJD-END": 60921.246379392,
+              "MJD-AVG": 60921.245713203,
+              "DATE-OBS": "2025-09-03T05:52:52.062",
+              "DATE-END": "2025-09-03T05:54:47.179",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0504_4D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_4D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "d16ec9b0c875893d5632cb4fffd4d1aa0b690944a60b09ee808d1cf6f7394bf6",
+          "obs_id": "2025W36_1A_0504_4",
+          "detector": 3,
+          "t_min_mjd": 60921.246539,
+          "t_max_mjd": 60921.247872,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.040262771143019196,
+            "physical_obsid_header": "2025W36_1A_0504_4",
+            "time_header": {
+              "MJD-OBS": 60921.246539259,
+              "MJD-END": 60921.247871638,
+              "MJD-AVG": 60921.247205448,
+              "DATE-OBS": "2025-09-03T05:55:00.992",
+              "DATE-END": "2025-09-03T05:56:56.110",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W36_1A/l2b-v27-2026-232/3/level2_2025W36_1A_0517_2D3_spx_l2b-v27-2026-232.fits?center=75.0%2C-15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0517_2D3_spx_l2b-v27-2026-232.fits",
+          "bytes": 4106880,
+          "sha256": "2274d06cd4b795d1f6a07a2a965de9a1f188232938233978e0d44f8ff6c44588",
+          "obs_id": "2025W36_1A_0517_2",
+          "detector": 3,
+          "t_min_mjd": 60921.310919,
+          "t_max_mjd": 60921.312252,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.032982134149968624,
+            "physical_obsid_header": "2025W36_1A_0517_2",
+            "time_header": {
+              "MJD-OBS": 60921.310919387,
+              "MJD-END": 60921.312251765,
+              "MJD-AVG": 60921.311585576,
+              "DATE-OBS": "2025-09-03T07:27:43.435",
+              "DATE-END": "2025-09-03T07:29:38.553",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "train08-supplement",
+      "parent_group_id": "train08",
+      "split": "train",
+      "center": [
+        270.0,
+        35.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0210_1D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0210_1D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "c6add99d3319be272c4a1f9353c004c5571681eb2b175d04995389d3cf277acc",
+          "obs_id": "2025W34_2B_0210_1",
+          "detector": 2,
+          "t_min_mjd": 60909.655397,
+          "t_max_mjd": 60909.65673,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.021842109811306,
+            "physical_obsid_header": "2025W34_2B_0210_1",
+            "time_header": {
+              "MJD-OBS": 60909.655397431,
+              "MJD-END": 60909.656729809,
+              "MJD-AVG": 60909.65606362,
+              "DATE-OBS": "2025-08-22T15:43:46.338",
+              "DATE-END": "2025-08-22T15:45:41.456",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0210_3D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0210_3D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "bd39adc1ae9ce5ce91dfc40fb8b66d7034cec783935e4896b0139926f92e4121",
+          "obs_id": "2025W34_2B_0210_3",
+          "detector": 2,
+          "t_min_mjd": 60909.658382,
+          "t_max_mjd": 60909.659714,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.021482251227647065,
+            "physical_obsid_header": "2025W34_2B_0210_3",
+            "time_header": {
+              "MJD-OBS": 60909.658381944,
+              "MJD-END": 60909.659714323,
+              "MJD-AVG": 60909.659048134,
+              "DATE-OBS": "2025-08-22T15:48:04.200",
+              "DATE-END": "2025-08-22T15:49:59.318",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0234_1D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0234_1D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "eccc8be5912243bee4bde807d1b497043d6adcc6806f54a28c38e0b60217d3c0",
+          "obs_id": "2025W34_2B_0234_1",
+          "detector": 2,
+          "t_min_mjd": 60909.791441,
+          "t_max_mjd": 60909.792774,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.021549881775677203,
+            "physical_obsid_header": "2025W34_2B_0234_1",
+            "time_header": {
+              "MJD-OBS": 60909.791441331,
+              "MJD-END": 60909.792773709,
+              "MJD-AVG": 60909.79210752,
+              "DATE-OBS": "2025-08-22T18:59:40.531",
+              "DATE-END": "2025-08-22T19:01:35.649",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W34_2B/l2b-v27-2026-229/2/level2_2025W34_2B_0234_3D2_spx_l2b-v27-2026-229.fits?center=270.0%2C35.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0234_3D2_spx_l2b-v27-2026-229.fits",
+          "bytes": 4023360,
+          "sha256": "b83fa907136e0b65df2778eaebc386dfd4706fbc6b391da84999ed44a4370802",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W34_2B_0234_3",
+          "detector": 2,
+          "t_min_mjd": 60909.794444,
+          "t_max_mjd": 60909.795776,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02136994419917464,
+            "physical_obsid_header": "2025W34_2B_0234_3",
+            "time_header": {
+              "MJD-OBS": 60909.794443611,
+              "MJD-END": 60909.79577599,
+              "MJD-AVG": 60909.7951098,
+              "DATE-OBS": "2025-08-22T19:03:59.928",
+              "DATE-END": "2025-08-22T19:05:55.046",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation01-supplement",
+      "parent_group_id": "validation01",
+      "split": "validation",
+      "center": [
+        30.0,
+        45.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 5,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0388_1D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0388_1D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "047dcbe9ae0c64e12960ebc967d24bbfb81261ef7fb06b2a79b631dd1e5a366d",
+          "obs_id": "2025W32_1A_0388_1",
+          "detector": 3,
+          "t_min_mjd": 60892.727739,
+          "t_max_mjd": 60892.729071,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.022431569825112817,
+            "physical_obsid_header": "2025W32_1A_0388_1",
+            "time_header": {
+              "MJD-OBS": 60892.727738727,
+              "MJD-END": 60892.729071105,
+              "MJD-AVG": 60892.728404916,
+              "DATE-OBS": "2025-08-05T17:27:56.626",
+              "DATE-END": "2025-08-05T17:29:51.744",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0433_1D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0433_1D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "3f80515389ae8cf39445ae939dda677134ddb4a6819350290b28ce3b1ccfd6e7",
+          "obs_id": "2025W32_1A_0433_1",
+          "detector": 3,
+          "t_min_mjd": 60892.931893,
+          "t_max_mjd": 60892.933226,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.024342567752301692,
+            "physical_obsid_header": "2025W32_1A_0433_1",
+            "time_header": {
+              "MJD-OBS": 60892.93189338,
+              "MJD-END": 60892.933225758,
+              "MJD-AVG": 60892.932559569,
+              "DATE-OBS": "2025-08-05T22:21:55.588",
+              "DATE-END": "2025-08-05T22:23:50.706",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0470_1D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_1D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "31147074b13ddc6cc26da4fea3e7d0ec0590d6ecd63c6a89891d840a5454c655",
+          "obs_id": "2025W32_1A_0470_1",
+          "detector": 3,
+          "t_min_mjd": 60893.131802,
+          "t_max_mjd": 60893.133135,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.023240407982468604,
+            "physical_obsid_header": "2025W32_1A_0470_1",
+            "time_header": {
+              "MJD-OBS": 60893.131802211,
+              "MJD-END": 60893.133134589,
+              "MJD-AVG": 60893.1324684,
+              "DATE-OBS": "2025-08-06T03:09:47.711",
+              "DATE-END": "2025-08-06T03:11:42.828",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0470_3D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_3D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "1f6a6768d97846d0e1332f2c937b346ff64aa50a5075811005c1c59cb26684e8",
+          "obs_id": "2025W32_1A_0470_3",
+          "detector": 3,
+          "t_min_mjd": 60893.134787,
+          "t_max_mjd": 60893.136119,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.02393786147162318,
+            "physical_obsid_header": "2025W32_1A_0470_3",
+            "time_header": {
+              "MJD-OBS": 60893.134786725,
+              "MJD-END": 60893.136119103,
+              "MJD-AVG": 60893.135452914,
+              "DATE-OBS": "2025-08-06T03:14:05.573",
+              "DATE-END": "2025-08-06T03:16:00.691",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_1A/l2b-v27-2026-226/3/level2_2025W32_1A_0470_4D3_spx_l2b-v27-2026-226.fits?center=30.0%2C45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_4D3_spx_l2b-v27-2026-226.fits",
+          "bytes": 4106880,
+          "sha256": "9a4f79dbafea0123fab3ecdc4288e414af410e58ae8d31befd96f227e9e4b885",
+          "obs_id": "2025W32_1A_0470_4",
+          "detector": 3,
+          "t_min_mjd": 60893.136279,
+          "t_max_mjd": 60893.137611,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 3,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.024052339084446428,
+            "physical_obsid_header": "2025W32_1A_0470_4",
+            "time_header": {
+              "MJD-OBS": 60893.136278981,
+              "MJD-END": 60893.13761136,
+              "MJD-AVG": 60893.136945171,
+              "DATE-OBS": "2025-08-06T03:16:14.504",
+              "DATE-END": "2025-08-06T03:18:09.621",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation02-supplement",
+      "parent_group_id": "validation02",
+      "split": "validation",
+      "center": [
+        165.0,
+        5.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 2,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/1/level2_2025W19_2B_0496_3D1_spx_l2b-v27-2026-198.fits?center=165.0%2C5.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation02-supplement/level2_2025W19_2B_0496_3D1_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "15772eef308ddc1a6b8b4e46df30013a8059b65db0614d13a61016abbcb74d76",
+          "obs_id": "2025W19_2B_0496_3",
+          "detector": 1,
+          "t_min_mjd": 60806.676574,
+          "t_max_mjd": 60806.677906,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.021567058664560317,
+            "physical_obsid_header": "2025W19_2B_0496_3",
+            "time_header": {
+              "MJD-OBS": 60806.676574062,
+              "MJD-END": 60806.677906441,
+              "MJD-AVG": 60806.677240252,
+              "DATE-OBS": "2025-05-11T16:14:15.999",
+              "DATE-END": "2025-05-11T16:16:11.117",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/1/level2_2025W19_2B_0496_4D1_spx_l2b-v27-2026-198.fits?center=165.0%2C5.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation02-supplement/level2_2025W19_2B_0496_4D1_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "63c3be0eef0b8442b212d3a13523692067c1fb2e0f7edb41f341562af723b838",
+          "obs_id": "2025W19_2B_0496_4",
+          "detector": 1,
+          "t_min_mjd": 60806.678066,
+          "t_max_mjd": 60806.679399,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.022498565214872358,
+            "physical_obsid_header": "2025W19_2B_0496_4",
+            "time_header": {
+              "MJD-OBS": 60806.678066308,
+              "MJD-END": 60806.679398686,
+              "MJD-AVG": 60806.678732497,
+              "DATE-OBS": "2025-05-11T16:16:24.929",
+              "DATE-END": "2025-05-11T16:18:20.047",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation03-supplement",
+      "parent_group_id": "validation03",
+      "split": "validation",
+      "center": [
+        300.0,
+        -20.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0389_1D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_1D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "a29d11927cdbfe121bf1864556dae27a889fb57a35b34544fec38873ffc0563d",
+          "obs_id": "2025W39_2A_0389_1",
+          "detector": 2,
+          "t_min_mjd": 60945.458124,
+          "t_max_mjd": 60945.459456,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.03324751984477043,
+            "physical_obsid_header": "2025W39_2A_0389_1",
+            "time_header": {
+              "MJD-OBS": 60945.458124109,
+              "MJD-END": 60945.459456487,
+              "MJD-AVG": 60945.458790298,
+              "DATE-OBS": "2025-09-27T10:59:41.923",
+              "DATE-END": "2025-09-27T11:01:37.041",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0389_2D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_2D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "ab83a8ec9d2aa2ad64c6c8affef29233de1216aedb49e4c3a3b5ecc8a4ee76e7",
+          "obs_id": "2025W39_2A_0389_2",
+          "detector": 2,
+          "t_min_mjd": 60945.459616,
+          "t_max_mjd": 60945.460949,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.03215290465056896,
+            "physical_obsid_header": "2025W39_2A_0389_2",
+            "time_header": {
+              "MJD-OBS": 60945.459616366,
+              "MJD-END": 60945.460948744,
+              "MJD-AVG": 60945.460282555,
+              "DATE-OBS": "2025-09-27T11:01:50.854",
+              "DATE-END": "2025-09-27T11:03:45.972",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0389_3D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_3D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "e7baebb5d02866d152aef582ddd4b2cc02a0783b43a55531b46a126339c11a30",
+          "obs_id": "2025W39_2A_0389_3",
+          "detector": 2,
+          "t_min_mjd": 60945.461109,
+          "t_max_mjd": 60945.462441,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.03186161554455757,
+            "physical_obsid_header": "2025W39_2A_0389_3",
+            "time_header": {
+              "MJD-OBS": 60945.461108623,
+              "MJD-END": 60945.462441001,
+              "MJD-AVG": 60945.461774812,
+              "DATE-OBS": "2025-09-27T11:03:59.785",
+              "DATE-END": "2025-09-27T11:05:54.903",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W39_2A/l2b-v27-2026-239/2/level2_2025W39_2A_0389_4D2_spx_l2b-v27-2026-239.fits?center=300.0%2C-20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_4D2_spx_l2b-v27-2026-239.fits",
+          "bytes": 4023360,
+          "sha256": "3affa9faba2e64069a8cccdb9c72550633bde58f701f6b536945c3ae09cc29d2",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W39_2A_0389_4",
+          "detector": 2,
+          "t_min_mjd": 60945.462601,
+          "t_max_mjd": 60945.463933,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.032968271130323405,
+            "physical_obsid_header": "2025W39_2A_0389_4",
+            "time_header": {
+              "MJD-OBS": 60945.462600868,
+              "MJD-END": 60945.463933247,
+              "MJD-AVG": 60945.463267057,
+              "DATE-OBS": "2025-09-27T11:06:08.715",
+              "DATE-END": "2025-09-27T11:08:03.833",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "final01-supplement",
+      "parent_group_id": "final01",
+      "split": "final",
+      "center": [
+        60.0,
+        -45.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0392_1D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0392_1D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "8d5cda580f327548f26f2f8ddc3d6bcd8f3f72dd4fe644ffe4359178a066b915",
+          "obs_id": "2025W31_1A_0392_1",
+          "detector": 3,
+          "t_min_mjd": 60886.049934,
+          "t_max_mjd": 60886.051267
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0392_3D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0392_3D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "39fbf15398a777c6b73fbb35caec37c6812fc92122e272f34f660947b4bdfaa9",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W31_1A_0392_3",
+          "detector": 3,
+          "t_min_mjd": 60886.052919,
+          "t_max_mjd": 60886.054251
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b_retry-v27-2026-222/3/level2_2025W31_1A_0404_2D3_spx_l2b_retry-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0404_2D3_spx_l2b_retry-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "0ffc992a2433d6a7d1d0f3af90fd0b04c15b124c3794eb0468c6f36b158d9998",
+          "obs_id": "2025W31_1A_0404_2",
+          "detector": 3,
+          "t_min_mjd": 60886.118774,
+          "t_max_mjd": 60886.120106
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W31_1A/l2b-v27-2026-222/3/level2_2025W31_1A_0404_4D3_spx_l2b-v27-2026-222.fits?center=60.0%2C-45.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0404_4D3_spx_l2b-v27-2026-222.fits",
+          "bytes": 4106880,
+          "sha256": "7bcd1ec04183e3c77f73d0e72b82a3d389789478ac1c1b4b748caac9de54df46",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W31_1A_0404_4",
+          "detector": 3,
+          "t_min_mjd": 60886.121758,
+          "t_max_mjd": 60886.123091
+        }
+      ]
+    },
+    {
+      "group_id": "final02-supplement",
+      "parent_group_id": "final02",
+      "split": "final",
+      "center": [
+        135.0,
+        20.0
+      ],
+      "detector": 1,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W44_1A/l2b-v27-2026-245/1/level2_2025W44_1A_0070_1D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_1D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "d6865dbcd70bfe140db414e6533f4be8924c8b6290f6da1f0b1f44ade4c05ade",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W44_1A_0070_1",
+          "detector": 1,
+          "t_min_mjd": 60975.313223,
+          "t_max_mjd": 60975.314556
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W44_1A/l2b_retry-v27-2026-245/1/level2_2025W44_1A_0070_2D1_spx_l2b_retry-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_2D1_spx_l2b_retry-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "8aa81a0e78d4f4215d574391c1daad59eb8e5cfa7d7bb7e21fc103e48f4868e9",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W44_1A_0070_2",
+          "detector": 1,
+          "t_min_mjd": 60975.314716,
+          "t_max_mjd": 60975.316048
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W44_1A/l2b-v27-2026-245/1/level2_2025W44_1A_0070_3D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_3D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "70f1e15c1cc697228bbadddb7641a89355c6c43a1853588a4bb724cd1e85f13f",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W44_1A_0070_3",
+          "detector": 1,
+          "t_min_mjd": 60975.316208,
+          "t_max_mjd": 60975.31754
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W44_1A/l2b-v27-2026-245/1/level2_2025W44_1A_0070_4D1_spx_l2b-v27-2026-245.fits?center=135.0%2C20.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_4D1_spx_l2b-v27-2026-245.fits",
+          "bytes": 4023360,
+          "sha256": "7512cfcea5f7e38c7526768895edbe943857158332ccd8d7fd27659e2f9c19d5",
+          "obs_id": "2025W44_1A_0070_4",
+          "detector": 1,
+          "t_min_mjd": 60975.3177,
+          "t_max_mjd": 60975.319033
+        }
+      ]
+    },
+    {
+      "group_id": "final03-supplement",
+      "parent_group_id": "final03",
+      "split": "final",
+      "center": [
+        225.0,
+        15.0
+      ],
+      "detector": 2,
+      "downloaded_exposures": 5,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0151_1D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0151_1D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "c814fe6b989a0a28d2f018641341c1effc20b3c0a4caa24dac2d16a602ac4cd9",
+          "obs_id": "2025W27_1A_0151_1",
+          "detector": 2,
+          "t_min_mjd": 60856.737716,
+          "t_max_mjd": 60856.739048
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0151_3D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0151_3D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "705d2ed8ee6e8f96be46b475a355228df7a7e8264efbadb464016ddfc787e4a8",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W27_1A_0151_3",
+          "detector": 2,
+          "t_min_mjd": 60856.7407,
+          "t_max_mjd": 60856.742033
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0295_1D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_1D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "e91770d146d80e64af16c0f0d163286dcce8ba6c57a34c2d3e6baa449fcdfdff",
+          "obs_id": "2025W27_1A_0295_1",
+          "detector": 2,
+          "t_min_mjd": 60857.485317,
+          "t_max_mjd": 60857.48665
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0295_2D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_2D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "8e60d74f4a5df38c99f2c1ed564cfbaa3353b023e62babc2abfaee5513ea2e30",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W27_1A_0295_2",
+          "detector": 2,
+          "t_min_mjd": 60857.486809,
+          "t_max_mjd": 60857.488142
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W27_1A/l2b-v27-2026-214/2/level2_2025W27_1A_0295_4D2_spx_l2b-v27-2026-214.fits?center=225.0%2C15.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_4D2_spx_l2b-v27-2026-214.fits",
+          "bytes": 4023360,
+          "sha256": "a7107c1500e972cc8b79a4fc609f39638b193e5ea7ac22af446227a258b10c6d",
+          "obs_id": "2025W27_1A_0295_4",
+          "detector": 2,
+          "t_min_mjd": 60857.489794,
+          "t_max_mjd": 60857.491126
+        }
+      ]
+    },
+    {
+      "group_id": "final04-supplement",
+      "parent_group_id": "final04",
+      "split": "final",
+      "center": [
+        330.0,
+        40.0
+      ],
+      "detector": 3,
+      "downloaded_exposures": 4,
+      "pixels_opened": false,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0186_1D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_1D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "04298f3d5ef8bc1159a27084a19b58d0c78ba28d053d09736a3070bf9df3ae16",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W24_1A_0186_1",
+          "detector": 3,
+          "t_min_mjd": 60835.862635,
+          "t_max_mjd": 60835.863967
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0186_2D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_2D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "5e76529264ee779f1c642527c581205803902454abd5ffb76b0712953b9e6bcb",
+          "obs_id": "2025W24_1A_0186_2",
+          "detector": 3,
+          "t_min_mjd": 60835.864145,
+          "t_max_mjd": 60835.865477
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0186_4D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_4D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "540c49bbf2d9794f6988e8b4620286997d0d192dc7833d903e5e81d4851eb0fc",
+          "obs_id": "2025W24_1A_0186_4",
+          "detector": 3,
+          "t_min_mjd": 60835.86713,
+          "t_max_mjd": 60835.868462
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W24_1A/l2b-v27-2026-201/3/level2_2025W24_1A_0199_1D3_spx_l2b-v27-2026-201.fits?center=330.0%2C40.0&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0199_1D3_spx_l2b-v27-2026-201.fits",
+          "bytes": 4106880,
+          "sha256": "1862cfdc4680d467d1e54f07039fadbbe0721b00ade15b7f4c4872d1a6ea91a0",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W24_1A_0199_1",
+          "detector": 3,
+          "t_min_mjd": 60835.933339,
+          "t_max_mjd": 60835.934672
+        }
+      ]
+    },
+    {
+      "group_id": "validation-stress01",
+      "parent_group_id": "validation-stress01",
+      "split": "validation",
+      "center": [
+        266.4168,
+        -29.0078
+      ],
+      "detector": 1,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/1/level2_2025W35_1A_0512_1D1_spx_l2b-v27-2026-230.fits?center=266.4168%2C-29.0078&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_1D1_spx_l2b-v27-2026-230.fits",
+          "bytes": 4023360,
+          "sha256": "3401d2de219d281fd399e909fee97d4c66938805207204b22f222dc6a7840dd3",
+          "obs_id": "2025W35_1A_0512_1",
+          "detector": 1,
+          "t_min_mjd": 60914.623078,
+          "t_max_mjd": 60914.62441,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.10448139254450797,
+            "physical_obsid_header": "2025W35_1A_0512_1",
+            "time_header": {
+              "MJD-OBS": 60914.623077963,
+              "MJD-END": 60914.624410341,
+              "MJD-AVG": 60914.623744152,
+              "DATE-OBS": "2025-08-27T14:57:13.936",
+              "DATE-END": "2025-08-27T14:59:09.054",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/1/level2_2025W35_1A_0512_2D1_spx_l2b-v27-2026-230.fits?center=266.4168%2C-29.0078&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_2D1_spx_l2b-v27-2026-230.fits",
+          "bytes": 4023360,
+          "sha256": "d664a10e6b4270f904f1e06ae4f9cafd749fc9e4ffc17250ef91688211ad784b",
+          "obs_id": "2025W35_1A_0512_2",
+          "detector": 1,
+          "t_min_mjd": 60914.62457,
+          "t_max_mjd": 60914.625903,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.11187012795209884,
+            "physical_obsid_header": "2025W35_1A_0512_2",
+            "time_header": {
+              "MJD-OBS": 60914.624570231,
+              "MJD-END": 60914.62590261,
+              "MJD-AVG": 60914.625236421,
+              "DATE-OBS": "2025-08-27T14:59:22.868",
+              "DATE-END": "2025-08-27T15:01:17.986",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/1/level2_2025W35_1A_0512_3D1_spx_l2b-v27-2026-230.fits?center=266.4168%2C-29.0078&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_3D1_spx_l2b-v27-2026-230.fits",
+          "bytes": 4023360,
+          "sha256": "73b76eea80a52a3a5ca7c16abe8d9ee3466d91db8b67baf09e8891ad32ef8ee2",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W35_1A_0512_3",
+          "detector": 1,
+          "t_min_mjd": 60914.626062,
+          "t_max_mjd": 60914.627395,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 0.9997959183673469,
+            "robust_signal_sigma": 0.12530137252807616,
+            "physical_obsid_header": "2025W35_1A_0512_3",
+            "time_header": {
+              "MJD-OBS": 60914.626062477,
+              "MJD-END": 60914.627394855,
+              "MJD-AVG": 60914.626728666,
+              "DATE-OBS": "2025-08-27T15:01:31.798",
+              "DATE-END": "2025-08-27T15:03:26.916",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/1/level2_2025W35_1A_0512_4D1_spx_l2b-v27-2026-230.fits?center=266.4168%2C-29.0078&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_4D1_spx_l2b-v27-2026-230.fits",
+          "bytes": 4023360,
+          "sha256": "f3266ac814ea1ccf4582ee0e0ca10a52237752777889a1e529152e5253022204",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W35_1A_0512_4",
+          "detector": 1,
+          "t_min_mjd": 60914.627555,
+          "t_max_mjd": 60914.628887,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 1,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.13835538832247257,
+            "physical_obsid_header": "2025W35_1A_0512_4",
+            "time_header": {
+              "MJD-OBS": 60914.627554745,
+              "MJD-END": 60914.628887124,
+              "MJD-AVG": 60914.628220935,
+              "DATE-OBS": "2025-08-27T15:03:40.730",
+              "DATE-END": "2025-08-27T15:05:35.848",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "group_id": "validation-stress02",
+      "parent_group_id": "validation-stress02",
+      "split": "validation",
+      "center": [
+        305.59875,
+        41.1488889
+      ],
+      "detector": 2,
+      "downloaded_exposures": 4,
+      "pixels_opened": true,
+      "downloads": [
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0182_1D2_spx_l2b-v27-2026-198.fits?center=305.59875%2C41.1488889&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_1D2_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "8fcdcc44c9dbeddbb9982752bcb34e17b0d7ab560b345801483378409e916a09",
+          "transient_failures": [
+            "HTTPError: HTTP Error 503: Service Unavailable",
+            "HTTPError: HTTP Error 503: Service Unavailable"
+          ],
+          "obs_id": "2025W19_2B_0182_1",
+          "detector": 2,
+          "t_min_mjd": 60804.680667,
+          "t_max_mjd": 60804.682,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.17059789999723435,
+            "physical_obsid_header": "2025W19_2B_0182_1",
+            "time_header": {
+              "MJD-OBS": 60804.680667222,
+              "MJD-END": 60804.681999601,
+              "MJD-AVG": 60804.681333411,
+              "DATE-OBS": "2025-05-09T16:20:09.648",
+              "DATE-END": "2025-05-09T16:22:04.766",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0182_2D2_spx_l2b-v27-2026-198.fits?center=305.59875%2C41.1488889&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_2D2_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "7f1f2f819fb1c6b9fe2c6a1b4615f75ef5fc2049749391fdb0ed1e2f901546f8",
+          "obs_id": "2025W19_2B_0182_2",
+          "detector": 2,
+          "t_min_mjd": 60804.682159,
+          "t_max_mjd": 60804.683492,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.17134463624507187,
+            "physical_obsid_header": "2025W19_2B_0182_2",
+            "time_header": {
+              "MJD-OBS": 60804.682159479,
+              "MJD-END": 60804.683491858,
+              "MJD-AVG": 60804.682825668,
+              "DATE-OBS": "2025-05-09T16:22:18.579",
+              "DATE-END": "2025-05-09T16:24:13.697",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0182_3D2_spx_l2b-v27-2026-198.fits?center=305.59875%2C41.1488889&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_3D2_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "0516f4570667fe5c32a25a7ecd8eb0b366f2933b3211ef4b3193030ab7c0f61b",
+          "obs_id": "2025W19_2B_0182_3",
+          "detector": 2,
+          "t_min_mjd": 60804.683652,
+          "t_max_mjd": 60804.684984,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.16989818755388258,
+            "physical_obsid_header": "2025W19_2B_0182_3",
+            "time_header": {
+              "MJD-OBS": 60804.683651736,
+              "MJD-END": 60804.684984115,
+              "MJD-AVG": 60804.684317925,
+              "DATE-OBS": "2025-05-09T16:24:27.510",
+              "DATE-END": "2025-05-09T16:26:22.628",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        },
+        {
+          "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W19_2B/l2b-v27-2026-198/2/level2_2025W19_2B_0182_4D2_spx_l2b-v27-2026-198.fits?center=305.59875%2C41.1488889&size=0.12",
+          "path": "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_4D2_spx_l2b-v27-2026-198.fits",
+          "bytes": 4023360,
+          "sha256": "8337c81983412c485fc4116a6353c293a84f121c48d467bb363673717f6feeb4",
+          "obs_id": "2025W19_2B_0182_4",
+          "detector": 2,
+          "t_min_mjd": 60804.685144,
+          "t_max_mjd": 60804.686476,
+          "native_quality": {
+            "hdu_names": [
+              "PRIMARY",
+              "IMAGE",
+              "FLAGS",
+              "VARIANCE",
+              "ZODI",
+              "EPSF",
+              "WCS-WAVE"
+            ],
+            "native_shape": [
+              70,
+              70
+            ],
+            "detector": 2,
+            "epsf_coordinate_frame": "sky",
+            "epsf_oversampling": [
+              5,
+              5
+            ],
+            "finite_signal_fraction": 1.0,
+            "robust_signal_sigma": 0.19460256354957817,
+            "physical_obsid_header": "2025W19_2B_0182_4",
+            "time_header": {
+              "MJD-OBS": 60804.685143981,
+              "MJD-END": 60804.68647636,
+              "MJD-AVG": 60804.685810171,
+              "DATE-OBS": "2025-05-09T16:26:36.440",
+              "DATE-END": "2025-05-09T16:28:31.558",
+              "EXPTIME": null
+            },
+            "native_orientation_preserved": true
+          }
+        }
+      ]
+    }
+  ]
+}

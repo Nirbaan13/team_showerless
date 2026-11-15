@@ -1,0 +1,46 @@
+{
+  "designation": "v3 detector development only; not a release or independent final evaluation",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "reports": {
+    "threshold-pilot": {
+      "relative_path": "threshold-pilot.json",
+      "sha256": "34649a75c9ddac472e49d5b98318a96737b0bf7af7e084ab3a54c640c6007393",
+      "scratch_report_sha256": "65d8f6d1992b0b6c4abc2684f9a309e08e1fe4a7f2d357216deae809392e1d07"
+    },
+    "psf-pilot": {
+      "relative_path": "psf-pilot.json",
+      "sha256": "cbc53e59063003c8b0ff9f2223cd766be259a4dea01a437480e6877b609215f4",
+      "scratch_report_sha256": "cf70cef5a43d78493ba100aa1b45c957d543168921d0cdae233a170d185c1412"
+    },
+    "psf-confirmation": {
+      "relative_path": "psf-confirmation.json",
+      "sha256": "4773c874b07fb5ef17b05b5c7913b4b5327e2072ea6d1a5913f1f855ab6013bf",
+      "scratch_report_sha256": "5931e1f3ec46f6317b93fc2ba93f2105be14818140235acbf63d74d9ecc2bca9"
+    },
+    "native-common-summary": {
+      "relative_path": "native-common-summary.json",
+      "sha256": "b55665fe3cc135e0a5c2594235c5724b7ca113c64a5cdd7285b67b549ff22de5",
+      "scratch_report_sha256": "a5f0d0bd98ff08d2af3c6445d0b5b68a57b8597b55bb75d3ecbce8bb12b3bef4"
+    },
+    "slow-profile-summary": {
+      "relative_path": "slow-profile-summary.json",
+      "sha256": "338e09b57a4d075564e331b16df230d6d054be9c8007866536f673b5580d1511",
+      "scratch_report_sha256": "6915a7116aa684b15b09c9650927294c8e504792090d43b18a23bad5f8452a53"
+    },
+    "slow-resolution-summary": {
+      "relative_path": "slow-resolution-summary.json",
+      "sha256": "17c1ee53bc6f53fb6cebe0e5a15c9e641c1f4633d5f31494f6b2467d01afe189",
+      "scratch_report_sha256": "d72ad6c232572ec92340ef57e9cf5928c21b1cf96e0f36ded1e2d23b7674fbd6"
+    },
+    "joint-pilot": {
+      "relative_path": "joint-pilot.json",
+      "sha256": "e978629c3922572daa6f71099eb6c7a6363aedba1f4a1f2ac8396a02e85f0a5f",
+      "scratch_report_sha256": "5dfd378d3ee110a5f326a1a9c660703b8fccc3637c801ed2668357c73d8d072c"
+    },
+    "joint-trimmed-pilot": {
+      "relative_path": "joint-trimmed-pilot.json",
+      "sha256": "e8ec9fac4cc6f6334d7a8c1629fada365e524a400b9cb72cd89abff45812d4bd",
+      "scratch_report_sha256": "c6972052a302df7e777e0f4c63353def58565deb42ea60ab99f87f7bb3849050"
+    }
+  }
+}

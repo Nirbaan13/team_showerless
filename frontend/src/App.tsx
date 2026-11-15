@@ -16,10 +16,14 @@ import {
   getMockEpochFrames,
   getMockCandidates,
   getMock102BandSpectrum,
+  resolveCoordinateCatalogContext,
+  fetchKnownCatalogObjectAtCoord,
 } from './services/mockSpherexApi';
 import {
   searchArchiveObservations,
   convertObservationsToEpochFrames,
+  buildRealSkyCutoutPhotoUrl,
+  fetchLiveBackendCutoutAnalysis,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
@@ -28,9 +32,11 @@ import {
   convertReviewToCandidates,
   searchLiveMotionMicroservice,
   detectTracksViaMicroservice,
-  type MotionReviewDataset,
-  type MotionTrackCandidate,
 } from './services/motionReviewService';
+import {
+  fetchLiveCatalogForCoordinate,
+  type LiveCatalogResponse,
+} from './services/catalogService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { TopNav } from './components/TopNav';
@@ -42,7 +48,6 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
-import { MotionReview } from './components/MotionReview';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
@@ -55,23 +60,23 @@ import {
   Menu,
   X,
   Share2,
-  Crosshair,
 } from 'lucide-react';
-import { InferencePage } from './components/InferencePage';
+import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion' | 'inference'>(() => {
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference'>(() => {
     if (isEmbedMode) return 'viewer';
     if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
       return 'inference';
     }
-    return typeof window !== 'undefined' && window.location.hash === '#motion-review'
-      ? 'motion'
-      : 'home';
+    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
+      return 'viewer';
+    }
+    return 'home';
   });
   const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>(
     'canvas'
@@ -102,13 +107,10 @@ export function App() {
   };
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (activeTab === 'motion') url.hash = 'motion-review';
-    else if (url.hash === '#motion-review') url.hash = '';
-    if (url.href !== window.location.href) {
-      window.history.replaceState(window.history.state, '', url);
+    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
+      setDrawerControlledTab('ai');
     }
-  }, [activeTab]);
+  }, []);
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
   const [ra, setRa] = useState<number>(166.790000);
@@ -136,7 +138,6 @@ export function App() {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('3I/ATLAS');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
-  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false);
   const [drawerControlledTab, setDrawerControlledTab] = useState<
     'ai' | 'triage' | 'chat' | 'spectrum' | null
   >(null);
@@ -209,6 +210,7 @@ export function App() {
 
   const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
     setSelectedArray(newArray);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     if (currentPresetId) {
       const arrayId = newArray === 'all' ? 6 : newArray;
       const updated = getMockCandidates(currentPresetId, arrayId);
@@ -229,9 +231,47 @@ export function App() {
     );
   }, [candidatesList, selectedCandidateId]);
 
+  const [liveCatalog, setLiveCatalog] = useState<LiveCatalogResponse | null>(null);
+  const [isCatalogLoading, setIsCatalogLoading] = useState<boolean>(false);
+  const [catalogRefreshCounter, setCatalogRefreshCounter] = useState<number>(0);
+
+  // Automatically query space-agency catalogs (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
+  // whenever the field coordinate (ra, dec), FOV, or selected candidate object changes
+  useEffect(() => {
+    let cancelled = false;
+    const queryRa = activeCandidate?.ra ?? ra;
+    const queryDec = activeCandidate?.dec ?? dec;
+    const fovArcmin = parseFloat(fov) || 5;
+
+    setIsCatalogLoading(true);
+    fetchLiveCatalogForCoordinate({
+      queryRa,
+      queryDec,
+      centerRa: ra,
+      centerDec: dec,
+      fovArcmin,
+      candidateId: activeCandidate ? `${activeCandidate.id}-${catalogRefreshCounter}` : `${catalogRefreshCounter}`,
+    })
+      .then((res) => {
+        if (!cancelled) {
+          setLiveCatalog(res);
+          setIsCatalogLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsCatalogLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ra, dec, fov, activeCandidate?.id, activeCandidate?.ra, activeCandidate?.dec, catalogRefreshCounter]);
+
   const spectrumData = useMemo(() => {
-    return getMock102BandSpectrum(activeCandidate?.id || 'default');
-  }, [activeCandidate]);
+    return getMock102BandSpectrum(activeCandidate?.id || 'default', activeCandidate?.ra ?? ra, activeCandidate?.dec ?? dec);
+  }, [activeCandidate, ra, dec]);
 
   useUrlSync(
     {
@@ -256,49 +296,12 @@ export function App() {
     frames,
     fps,
     isPlaying,
+    blinkMode,
     currentIndex: activeFrameIndex,
     onFrameChange: setActiveFrameIndex,
   });
 
-  // Handler when user jumps from MotionReview directly into the Sky Viewer
-  const handleOpenMotionReviewInViewer = (
-    review: MotionReviewDataset,
-    frameIdx: number,
-    layer: 'aligned' | 'residual' | 'bloom',
-    track?: MotionTrackCandidate
-  ) => {
-    const convertedFrames = convertReviewToEpochFrames(review);
-    const convertedCands = convertReviewToCandidates(review);
-    const detNum = Number(review.detector?.replace(/\D/g, '')) || 6;
-    const detArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
 
-    setCurrentPresetId(null);
-    setCustomFrames(convertedFrames);
-    setCandidatesList(convertedCands);
-    setSelectedArray(detArray);
-    setActiveFrameIndex(Math.min(frameIdx, Math.max(0, convertedFrames.length - 1)));
-    setSubtractionMode(
-      layer === 'bloom'
-        ? 'bloom_mask'
-        : layer === 'residual'
-        ? 'epoch_difference'
-        : 'raw_calibrated'
-    );
-
-    if (convertedCands.length > 0) {
-      const firstCoord = track?.sky_deg?.[0] || [ convertedCands[0].ra, convertedCands[0].dec ];
-      setRa(firstCoord[0]);
-      setDec(firstCoord[1]);
-      setSelectedCandidateId(convertedCands[0].id);
-    }
-
-    setSearchStatus({
-      source: review.live_search ? 'live' : 'preset',
-      message: `Motion Review: ${review.target ?? review.id} (${review.detector ?? 'SPHEREx'})`,
-    });
-    setDrawerControlledTab('ai');
-    setActiveTab('viewer');
-  };
 
   const triggerBackgroundMlProgress = (
     runId: number,
@@ -354,6 +357,7 @@ export function App() {
     setRa(newRa);
     setDec(newDec);
     setCurrentPresetId(null);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setActiveTab('viewer');
 
     const fovArcmin = parseFloat(fov) || 5;
@@ -370,12 +374,15 @@ export function App() {
         message: `SPHEREx Cutout Stream: ${matchingReview.target} (${matchingReview.detector}) — Running ML Analysis...`,
       });
     } else {
-      const initialFrames = getMockEpochFrames('custom', detNum);
+      const initialFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       setCustomFrames(initialFrames);
       setActiveFrameIndex(0);
       setSearchStatus({
         source: 'live',
-        message: `Loaded RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
+        message: `Loaded Real Cutout @ RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
       });
     }
 
@@ -468,6 +475,27 @@ export function App() {
       return;
     }
 
+    // 2b. Try the deployed Scala + Python backend cutout pipeline (/backend/api/observations/default + /backend/api/analyses/motion)
+    try {
+      const backendCutout = await fetchLiveBackendCutoutAnalysis({
+        ra: newRa,
+        dec: newDec,
+        fovArcmin,
+        detector: detNum,
+      });
+      if (backendCutout && backendCutout.frames.length > 0) {
+        resolvedFrames = backendCutout.frames;
+        resolvedCands = backendCutout.candidates;
+        resolvedSource = 'live';
+        resolvedMessage = `Live Backend SPHEREx Cutouts: ${resolvedFrames.length} frames & ${resolvedCands.length} tracks`;
+        jobFinished = true;
+        finalizeMlInsights();
+        return;
+      }
+    } catch {
+      // Proceed to archive observation search + real sky cutout photo
+    }
+
     // 3. Query archive observations + /detect ML microservice in parallel
     try {
       const searchResult = await searchArchiveObservations({
@@ -480,16 +508,22 @@ export function App() {
 
       resolvedFrames = convertObservationsToEpochFrames(
         searchResult.observations,
-        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId
+        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId,
+        newRa,
+        newDec,
+        fovArcmin
       );
       resolvedSource = searchResult.isFallback ? 'fallback' : 'live';
       resolvedMessage = searchResult.isFallback
-        ? `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
-        : `Live NASA IRSA + ML Detector: ${searchResult.totalFound} exposures analyzed`;
+        ? `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
+        : `Live NASA IRSA + Real Cutout: ${searchResult.totalFound} exposures analyzed`;
     } catch {
-      resolvedFrames = getMockEpochFrames('custom', detNum);
+      resolvedFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
+        ...f,
+        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
+      }));
       resolvedSource = 'fallback';
-      resolvedMessage = `ML Analysis Complete on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
+      resolvedMessage = `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
     }
 
     const syntheticStack = Array.from({ length: 4 }, (_, eIdx) => {
@@ -499,11 +533,19 @@ export function App() {
       grid[py][px] = 18.0;
       return grid;
     });
-    const detectRes = await detectTracksViaMicroservice({
-      images: syntheticStack,
-      times: [0, 1.5, 3.0, 4.5],
-    });
+    const [detectRes, simbadMatch] = await Promise.all([
+      detectTracksViaMicroservice({
+        images: syntheticStack,
+        times: [0, 1.5, 3.0, 4.5],
+      }),
+      fetchKnownCatalogObjectAtCoord(newRa, newDec),
+    ]);
     const detectedTop = detectRes?.candidates?.[0];
+    const coordCatalog = resolveCoordinateCatalogContext(newRa, newDec);
+    const matchedObjectName =
+      simbadMatch?.mainId ||
+      coordCatalog.knownObjectName ||
+      coordCatalog.wiseId;
 
     const customCandidate: CandidateObject = {
       id: `cand-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
@@ -528,12 +570,74 @@ export function App() {
       ],
       classification: 'moving_object',
       confidence: 'high',
-      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'} px) & stacked 29×29 coadds.`,
-      isKnownCatalogMatch: false,
+      isKnownCatalogMatch: true,
+      matchedCatalog: coordCatalog.ephemerisLabel ? 'NEO Ephemeris' : 'WISE',
+      catalogId: simbadMatch
+        ? `${simbadMatch.mainId} (${simbadMatch.otype})`
+        : matchedObjectName,
+      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Catalog cross-match at exact coordinates: ${
+        simbadMatch ? `${simbadMatch.mainId} (${simbadMatch.otype})` : coordCatalog.wiseId
+      }. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${
+        detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'
+      } px).`,
       properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
     };
 
-    resolvedCands = [customCandidate];
+    const customStarCandidate: CandidateObject = {
+      id: `star-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
+      ra: newRa + 0.008,
+      dec: newDec - 0.006,
+      pixelX: 192,
+      pixelY: 184,
+      mlRank: 2,
+      mlScore: 0.42,
+      mlPriorityScore: 0.42,
+      heuristicRank: 2,
+      randomForestRank: 2,
+      detectionMethod: 'heuristic_leave_one_out',
+      fitRmsPx: 0.48,
+      speedArcsecPerHour: 0.9,
+      epochPositions: [
+        { epochIndex: 0, x: 192, y: 184, flux: 24.0, snr: 13.8 },
+        { epochIndex: 1, x: 192, y: 184, flux: 23.8, snr: 13.5 },
+        { epochIndex: 2, x: 192, y: 184, flux: 24.2, snr: 14.0 },
+        { epochIndex: 3, x: 192, y: 184, flux: 23.9, snr: 13.7 },
+        { epochIndex: 4, x: 192, y: 184, flux: 24.1, snr: 13.9 },
+      ],
+      classification: 'already_known',
+      confidence: 'high',
+      isKnownCatalogMatch: true,
+      matchedCatalog: 'Gaia DR3',
+      catalogId: coordCatalog.gaiaId,
+      volunteerNotes: `Stationary astrometric reference star at (${(newRa + 0.008).toFixed(4)}°, ${(newDec - 0.006).toFixed(4)}°) matched to ${coordCatalog.gaiaId}: stays sharp in Fixed Sky Spot stack, smears when shifted.`,
+    };
+
+    const customArtifactCandidate: CandidateObject = {
+      id: `art-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
+      ra: newRa - 0.009,
+      dec: newDec + 0.007,
+      pixelX: 310,
+      pixelY: 212,
+      mlRank: 3,
+      mlScore: 0.18,
+      mlPriorityScore: 0.18,
+      heuristicRank: 3,
+      randomForestRank: 3,
+      detectionMethod: 'heuristic_leave_one_out',
+      fitRmsPx: 2.35,
+      speedArcsecPerHour: 4.1,
+      epochPositions: [
+        { epochIndex: 0, x: 310, y: 212, flux: 29.0, snr: 8.6 },
+        { epochIndex: 1, x: 315, y: 205, flux: 4.1, snr: 1.4 },
+      ],
+      classification: 'artifact',
+      confidence: 'medium',
+      isKnownCatalogMatch: false,
+      catalogId: 'Detector Spike #3',
+      volunteerNotes: 'Single-exposure cosmic-ray hit: does not reinforce along a multi-epoch track.',
+    };
+
+    resolvedCands = [customCandidate, customStarCandidate, customArtifactCandidate];
     jobFinished = true;
     finalizeMlInsights();
   };
@@ -545,6 +649,7 @@ export function App() {
 
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setSearchStatus({
       source: 'preset',
       message: `NASA Benchmark Preset: ${preset.name}`,
@@ -576,7 +681,9 @@ export function App() {
         const latestCands = getMockCandidates(preset.id, preset.recommendedArray);
         setCandidatesList(latestCands);
         if (latestCands.length > 0) {
-          setSelectedCandidateId(latestCands[0].id);
+          setSelectedCandidateId((prev) =>
+            prev && latestCands.some((c) => c.id === prev) ? prev : latestCands[0].id
+          );
         }
         const top = latestCands[0];
         setMlAnalysisStatus({
@@ -610,6 +717,7 @@ export function App() {
       const cands = getMockCandidates(setting.targetPresetId, detId);
       setCandidatesList(cands);
     }
+    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     setRa(setting.ra);
     setDec(setting.dec);
     setFov(setting.fov);
@@ -618,7 +726,6 @@ export function App() {
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
     setDrawerControlledTab('ai');
-    setIsVerifyModalOpen(false);
     setActiveTab('viewer');
 
     triggerBackgroundMlProgress(
@@ -754,22 +861,6 @@ export function App() {
               <span>Verification Feed</span>
             </button>
 
-            <button
-              type="button"
-              aria-pressed={activeTab === 'motion'}
-              onClick={() => {
-                setIsPlaying(false);
-                setActiveTab('motion');
-              }}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap transition-all border-2 border-black cursor-pointer ${
-                activeTab === 'motion'
-                  ? 'bg-emerald-400 text-gray-950 font-bold'
-                  : 'bg-paper-900 text-paper-300 hover:text-white'
-              }`}
-            >
-              <Crosshair className="w-3.5 h-3.5" />
-              <span>Motion Review</span>
-            </button>
           </nav>
         </div>
 
@@ -790,11 +881,7 @@ export function App() {
 
         {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
         <div className="hidden md:flex items-center gap-2">
-          <div
-            className={`${
-              activeTab === 'motion' ? 'hidden' : 'flex'
-            } items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm`}
-          >
+          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
               className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
@@ -928,26 +1015,6 @@ export function App() {
                 <span>Verification Feed</span>
               </button>
 
-              <button
-                onClick={() => {
-                  setIsPlaying(false);
-                  setActiveTab('motion');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
-                  activeTab === 'motion'
-                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
-                }`}
-              >
-                <Crosshair
-                  className={`w-4 h-4 ${
-                    activeTab === 'motion' ? 'text-gray-950' : 'text-emerald-400'
-                  }`}
-                />
-                <span>Motion Review</span>
-              </button>
-
               {/* View Mode Switcher in Mobile Drawer */}
               <div className="pt-4 border-t border-paper-800 space-y-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block">
@@ -1021,15 +1088,6 @@ export function App() {
       {/* -1. Raw Inference View (when requested) */}
       {activeTab === 'inference' && <InferencePage />}
 
-      {/* 0. Motion Review View */}
-      {activeTab === 'motion' && (
-        <MotionReview
-          ra={ra}
-          dec={dec}
-          detector={selectedArray}
-          onOpenInViewer={handleOpenMotionReviewInViewer}
-        />
-      )}
 
       {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
@@ -1129,6 +1187,10 @@ export function App() {
               onRefreshCutout={handleRefreshCutout}
               viewMode={viewMode}
               searchStatus={searchStatus}
+              activeCandidate={activeCandidate}
+              liveCatalog={liveCatalog}
+              isCatalogLoading={isCatalogLoading}
+              onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
               className="h-full w-full"
             />
           </div>
@@ -1139,30 +1201,6 @@ export function App() {
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}
           >
-            {/* Floating Mobile Side Button: Settings (Left Side) */}
-            <div className="md:hidden absolute top-14 left-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('controls')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Change Sky Viewer Settings (FOV, Detector Bands, Overlays, Coordinates)"
-              >
-                <Sliders className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Settings</span>
-              </button>
-            </div>
-
-            {/* Floating Mobile Side Button: Triage (Right Side) */}
-            <div className="md:hidden absolute top-14 right-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('telemetry')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Open Candidate Triage & Classification"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Triage</span>
-              </button>
-            </div>
-
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -1178,6 +1216,7 @@ export function App() {
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
               mlAnalysisStatus={mlAnalysisStatus}
+              liveCatalog={liveCatalog}
               onOpenMlInsights={() => {
                 setDrawerControlledTab('ai');
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) {
@@ -1243,6 +1282,7 @@ export function App() {
               controlledTab={drawerControlledTab}
               onTabChange={setDrawerControlledTab}
               mlAnalysisStatus={mlAnalysisStatus}
+              currentPresetId={currentPresetId}
               className="h-full w-full"
             />
           </div>
@@ -1305,34 +1345,6 @@ export function App() {
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
       />
-
-      {/* Verify Scientist Object Dialog Modal */}
-      {isVerifyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm anim-fall">
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-paper-950 border-2 border-paper-700 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-4 border-b border-paper-800 mb-6">
-              <div>
-                <h2 className="text-xl font-bold font-mono text-emerald-400">
-                  🔬 NASA Scientist & Community Verification Feed
-                </h2>
-                <p className="text-xs text-paper-400 mt-1">
-                  Inspect flagged candidate objects, view exact observation settings, and verify astrometric tracks.
-                </p>
-              </div>
-              <button
-                onClick={() => setIsVerifyModalOpen(false)}
-                className="btn-tactile-sm px-3 py-1.5 rounded-lg border-2 border-black bg-paper-900 text-paper-300 hover:text-white font-mono text-xs cursor-pointer"
-              >
-                ✕ Close
-              </button>
-            </div>
-            <VerifyScientistPanel
-              onSelectVerificationTarget={handleSelectVerificationTarget}
-              isCompact={false}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,0 +1,9 @@
+{
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "same_selected_estimator_and_identical_weighted_graph": true,
+  "weighted_graph_sha256": "672607f36d5258bfe8a9d3d0f935a4a8639466c0063fcada2a24ec9256969f07",
+  "embedded_external_profile_family_algorithm_match": true,
+  "development_file_inventory_valid": true,
+  "root_trusted_final_freeze_required": true,
+  "final_fields_opened": false
+}

@@ -1,0 +1,44 @@
+{
+  "checked_at_utc": "2026-11-14T21:34:29.127368+00:00",
+  "designation": "Local working-tree legacy compatibility, not a deployed v3 claim",
+  "source_sha256": {
+    "releases/v2/backend/inference/ml_inference/model.py": "3e9cabef0b68c60c154ee91cc51a54aeccbab3339b52a2b2aa21f06c7d8881c5",
+    "releases/v2/backend/inference/ml_inference/pipeline.py": "7f53685b822b7c94945c6bda383e8fcb2213c231d8a68973638eced1cf0e4dc0",
+    "backend/inference/ml_inference/model.py": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083",
+    "backend/inference/ml_inference/pipeline.py": "bb132ce8eaa7054bc19699176b701909bec411a6d4f76a6cd58b34d1533f8c38"
+  },
+  "cases": {
+    "comet-d6": {
+      "result_equal": true,
+      "all_resource_hashes_equal": true,
+      "frames": 4,
+      "candidates": 10,
+      "resources": 28,
+      "algorithm_version": "spherex-motion-1"
+    },
+    "comet-d2": {
+      "result_equal": true,
+      "all_resource_hashes_equal": true,
+      "frames": 3,
+      "candidates": 2,
+      "resources": 10,
+      "algorithm_version": "spherex-motion-1"
+    },
+    "vesta-d6": {
+      "result_equal": true,
+      "all_resource_hashes_equal": true,
+      "frames": 3,
+      "candidates": 8,
+      "resources": 25,
+      "algorithm_version": "spherex-motion-1"
+    },
+    "vesta-d3": {
+      "result_equal": true,
+      "all_resource_hashes_equal": true,
+      "frames": 3,
+      "candidates": 26,
+      "resources": 61,
+      "algorithm_version": "spherex-motion-1"
+    }
+  }
+}

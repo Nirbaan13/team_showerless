@@ -20,7 +20,7 @@ object GrpcServer:
     equipment: Option[EquipmentService] = None, analyses: Option[Analyses] = None): ZIO[Scope, Throwable, Int] =
     for
       definition <- GRetrievalService.genericBindable.bind(new Retrieval(jobs, revision, channels, metadata, equipment))
-      analysisDefinition <- ZIO.foreach(analyses)(s => spaceapps.integrations.grpc.v1.ZioRetrieval.GAnalysisService.genericBindable.bind(new AnalysisGrpc(s)))
+      analysisDefinition <- ZIO.foreach(analyses)(s => spaceapps.integrations.grpc.v1.ZioAnalysis.GAnalysisService.genericBindable.bind(new AnalysisGrpc(s)))
       server <- ZIO.acquireRelease(ZIO.attempt {
         val builder = NettyServerBuilder.forAddress(new InetSocketAddress(host, port)).addService(definition)
         analysisDefinition.foreach(builder.addService)

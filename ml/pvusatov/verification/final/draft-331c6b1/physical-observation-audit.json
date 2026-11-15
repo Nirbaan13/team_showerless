@@ -1,0 +1,2620 @@
+{
+  "schema_version": 1,
+  "method": "JSON metadata and opaque byte hash/size only; no FITS reader/header/pixel access",
+  "source_commit": "331c6b170da23809123f18387236a3fac1400a82",
+  "physical_observations": 200,
+  "exposure_counts": {
+    "train": 43,
+    "final": 80,
+    "validation": 77
+  },
+  "parent_counts": {
+    "validation": 11,
+    "final": 10,
+    "train": 8
+  },
+  "cross_parent_physical_obsid_overlap": 0,
+  "final_pixels_opened": false,
+  "observations": [
+    {
+      "physical_obsid": "2025W17_4B_0352_1",
+      "parent_id": "train05",
+      "split": "train",
+      "detector": 2,
+      "sha256": "0ad32d72ed543fa9405008afc5901c6a3613afe5674ed882ae6ac99dc040e75c",
+      "bytes": 4023360,
+      "t_min_mjd": 60792.072477,
+      "t_max_mjd": 60792.07381,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_1D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W17_4B_0352_2",
+      "parent_id": "train05",
+      "split": "train",
+      "detector": 2,
+      "sha256": "7238acb0a0d6ae68ef8491624dce0ea47e101abed4771f79be4d038e837a4c0c",
+      "bytes": 4023360,
+      "t_min_mjd": 60792.07397,
+      "t_max_mjd": 60792.075302,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_2D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W17_4B_0352_3",
+      "parent_id": "train05",
+      "split": "train",
+      "detector": 2,
+      "sha256": "970641c01e742ec74a8aca7b9fbe8a2ab78c3a3ce61560146d0de2555e325d1f",
+      "bytes": 4023360,
+      "t_min_mjd": 60792.075462,
+      "t_max_mjd": 60792.076794,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_3D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W17_4B_0352_4",
+      "parent_id": "train05",
+      "split": "train",
+      "detector": 2,
+      "sha256": "b5a710fbfe335da4a41c49d6fd19ba7f9836184cadf031b03bfa2bba63b5c8b7",
+      "bytes": 4023360,
+      "t_min_mjd": 60792.076954,
+      "t_max_mjd": 60792.078286,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train05/level2_2025W17_4B_0352_4D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0313_1",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "982c305273191b7afd50431432e7956b1db81937bd1472dc227ab2255d9d2071",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.577513,
+      "t_max_mjd": 60795.578846,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0313_1D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0313_2",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "2b918f25ea40e27e0e2e60c6d1783181540c041eaf967472181d163706da4f89",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.579006,
+      "t_max_mjd": 60795.580338,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0313_2D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0313_3",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "904cba4df16c74ec36cab3332f5b9cfc8ca0a42da4d5e9a8f474812c462feb7a",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.580498,
+      "t_max_mjd": 60795.58183,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0313_3D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0313_4",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "272860566c9bb0149cdf302e527ff0f0a0c8b1a86f08b6b132e9e852955b27e6",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.582008,
+      "t_max_mjd": 60795.58334,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0313_4D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0325_1",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "8506839cd61bf15d34b8f321c5a7ff9322c83cf4d9c62714859e5ea93de941f1",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.646086,
+      "t_max_mjd": 60795.647418,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0325_1D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0345_1",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "9fc6d69fbf38a9952fc932e56b4e1dad9196cb50b305fbe2ffe09c5e236a3460",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.779128,
+      "t_max_mjd": 60795.78046,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0345_1D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_1B_0345_4",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "dc4bae1fa96bcfcd79e7c006c258349f017669604f5ac4a5718e1aa404dbae65",
+      "bytes": 4023360,
+      "t_min_mjd": 60795.783604,
+      "t_max_mjd": 60795.784937,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_1B_0345_4D2_spx_l2b-v27-2026-196.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W18_2B_0045_4",
+      "parent_id": "final06",
+      "split": "final",
+      "detector": 2,
+      "sha256": "ea7b647b2dd694bd34e8a02ef74f3fe3a019c75716e6100397b4f660359af900",
+      "bytes": 4023360,
+      "t_min_mjd": 60796.805176,
+      "t_max_mjd": 60796.806508,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final06-augmented/level2_2025W18_2B_0045_4D2_spx_l2b-v27-2026-197.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0102_1",
+      "parent_id": "train06",
+      "split": "train",
+      "detector": 3,
+      "sha256": "b58da3fdedfb087ce82177116d03cf4c606fd162ad127e6d17354ba3c6f938df",
+      "bytes": 4106880,
+      "t_min_mjd": 60804.155287,
+      "t_max_mjd": 60804.15662,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_1D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0102_2",
+      "parent_id": "train06",
+      "split": "train",
+      "detector": 3,
+      "sha256": "7c878beaaf96701baa97cc8ccfddc732360f227f3857977a1f41f6f0781713aa",
+      "bytes": 4106880,
+      "t_min_mjd": 60804.15678,
+      "t_max_mjd": 60804.158112,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_2D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0102_3",
+      "parent_id": "train06",
+      "split": "train",
+      "detector": 3,
+      "sha256": "1d7a582e8c556696247521d2e1d0bd9a8106a053a924f1b6fa134fdf81461d08",
+      "bytes": 4106880,
+      "t_min_mjd": 60804.158272,
+      "t_max_mjd": 60804.159604,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_3D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0102_4",
+      "parent_id": "train06",
+      "split": "train",
+      "detector": 3,
+      "sha256": "34bc1ef1b16fdcfcb17942af2e826f792bf6a4899f9c137494720f87d6da7f04",
+      "bytes": 4106880,
+      "t_min_mjd": 60804.159764,
+      "t_max_mjd": 60804.161097,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train06/level2_2025W19_2B_0102_4D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0182_1",
+      "parent_id": "validation-stress02",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "8fcdcc44c9dbeddbb9982752bcb34e17b0d7ab560b345801483378409e916a09",
+      "bytes": 4023360,
+      "t_min_mjd": 60804.680667,
+      "t_max_mjd": 60804.682,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_1D2_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0182_2",
+      "parent_id": "validation-stress02",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "7f1f2f819fb1c6b9fe2c6a1b4615f75ef5fc2049749391fdb0ed1e2f901546f8",
+      "bytes": 4023360,
+      "t_min_mjd": 60804.682159,
+      "t_max_mjd": 60804.683492,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_2D2_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0182_3",
+      "parent_id": "validation-stress02",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "0516f4570667fe5c32a25a7ecd8eb0b366f2933b3211ef4b3193030ab7c0f61b",
+      "bytes": 4023360,
+      "t_min_mjd": 60804.683652,
+      "t_max_mjd": 60804.684984,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_3D2_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0182_4",
+      "parent_id": "validation-stress02",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "8337c81983412c485fc4116a6353c293a84f121c48d467bb363673717f6feeb4",
+      "bytes": 4023360,
+      "t_min_mjd": 60804.685144,
+      "t_max_mjd": 60804.686476,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress02/level2_2025W19_2B_0182_4D2_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0237_1",
+      "parent_id": "validation02",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "bf37470682715615b347c694bf468f9368521fc2adac34df987237d847102ca6",
+      "bytes": 4023360,
+      "t_min_mjd": 60805.043942,
+      "t_max_mjd": 60805.045274,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_1D1_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0237_2",
+      "parent_id": "validation02",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "34aca21ea3112e92c9247151c6b02d3f648e28ce14ca66ebc83aa5cbb39e2119",
+      "bytes": 4023360,
+      "t_min_mjd": 60805.045434,
+      "t_max_mjd": 60805.046767,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_2D1_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0237_3",
+      "parent_id": "validation02",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "a3c8774df004162c8f277b2f9848286d305647f7d6ded0f2e7ae65a659bd5c6f",
+      "bytes": 4023360,
+      "t_min_mjd": 60805.046927,
+      "t_max_mjd": 60805.048259,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation02/level2_2025W19_2B_0237_3D1_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0496_3",
+      "parent_id": "validation02",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "15772eef308ddc1a6b8b4e46df30013a8059b65db0614d13a61016abbcb74d76",
+      "bytes": 4023360,
+      "t_min_mjd": 60806.676574,
+      "t_max_mjd": 60806.677906,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation02-supplement/level2_2025W19_2B_0496_3D1_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W19_2B_0496_4",
+      "parent_id": "validation02",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "63c3be0eef0b8442b212d3a13523692067c1fb2e0f7edb41f341562af723b838",
+      "bytes": 4023360,
+      "t_min_mjd": 60806.678066,
+      "t_max_mjd": 60806.679399,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation02-supplement/level2_2025W19_2B_0496_4D1_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0233_1",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "4d98de8cc3865ee29301c053cdc032d96bb6579611fa3b128520380ca57175c0",
+      "bytes": 4083840,
+      "t_min_mjd": 60808.511175,
+      "t_max_mjd": 60808.512508,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0233_1D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0233_2",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "6dcceb4f81c76b8946ba302f2523194c2a26c846edaf88c58f2e75a48a924621",
+      "bytes": 4083840,
+      "t_min_mjd": 60808.512668,
+      "t_max_mjd": 60808.514,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0233_2D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0233_3",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "92debb05aabb214958bcab6023c3cc9344a8cb637900dedcbfe9e130dbb0beac",
+      "bytes": 4072320,
+      "t_min_mjd": 60808.51416,
+      "t_max_mjd": 60808.515492,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0233_3D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0233_4",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "e49ebcf6706ee95077c00ef4d7fcd101f726a590fce59a923b6cebc874bd15da",
+      "bytes": 4072320,
+      "t_min_mjd": 60808.515652,
+      "t_max_mjd": 60808.516984,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0233_4D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0298_1",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "d4b07c6172d8c522bb0e84831040789613f996b184f3cd489ec295b55921eff2",
+      "bytes": 4083840,
+      "t_min_mjd": 60808.918578,
+      "t_max_mjd": 60808.919911,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0298_1D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0320_3",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "28dbbe35f211dfe9493d98a09c7d856840271b92178f643ae575af660a6030c6",
+      "bytes": 4072320,
+      "t_min_mjd": 60809.057251,
+      "t_max_mjd": 60809.058584,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0320_3D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0375_1",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "f6e70b8474590a47f8f087e7beb77c07721bf7e00ed5d5b190a8319b0db07088",
+      "bytes": 4083840,
+      "t_min_mjd": 60809.393666,
+      "t_max_mjd": 60809.394998,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0375_1D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W20_1C_0375_4",
+      "parent_id": "validation11",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "8218d3ff1cc0f96f271588860eaf2cadd9005ca5ec8afe64bf493325554c2cee",
+      "bytes": 4072320,
+      "t_min_mjd": 60809.39816,
+      "t_max_mjd": 60809.399492,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented/level2_2025W20_1C_0375_4D3_spx_l2b-v27-2026-198.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0255_1",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "d778bbcbdec7c175db483a84d7450ddfc8eaa90f30c092d0c787ea3ec0a76ba8",
+      "bytes": 4023360,
+      "t_min_mjd": 60825.947322,
+      "t_max_mjd": 60825.948654,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0255_1D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0255_2",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "18423b2555759cc1ccd0da034f5746a9fbdfd5a6745026cb8dffc412b4e3537d",
+      "bytes": 4023360,
+      "t_min_mjd": 60825.948814,
+      "t_max_mjd": 60825.950146,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0255_2D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0255_3",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "a4581f649d52757d107eea64cb41f735ee990be10ffa414e72fcd36947724ef6",
+      "bytes": 4023360,
+      "t_min_mjd": 60825.950306,
+      "t_max_mjd": 60825.951639,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0255_3D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0266_1",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "3abbe67266eb3de1b39f2d78c477a63b2191acc3f70904f8a65bb4f0981d2d32",
+      "bytes": 4023360,
+      "t_min_mjd": 60826.015788,
+      "t_max_mjd": 60826.01712,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0266_1D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0266_3",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "2575490e3f2e4a3ba35c788e24de79cfaf96ee66ef3c283134b0c26ec2ebb3a0",
+      "bytes": 4023360,
+      "t_min_mjd": 60826.018772,
+      "t_max_mjd": 60826.020105,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0266_3D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0415_2",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "8013b09eba9db084fbde57bb59fa4ccada926ec8e0ef4d459c918c8d13532b56",
+      "bytes": 4023360,
+      "t_min_mjd": 60826.898918,
+      "t_max_mjd": 60826.90025,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0415_2D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0440_3",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "9f04b36da2e5e66b695fb985e256bbea118cac75a5eef4813f2efbe7b5fe6474",
+      "bytes": 4023360,
+      "t_min_mjd": 60827.035565,
+      "t_max_mjd": 60827.036898,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0440_3D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W22_2B_0452_1",
+      "parent_id": "validation07",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "5e53bd5e11824107bb29bc66878792bab5d105da93ea162b42508a7fa095609e",
+      "bytes": 4023360,
+      "t_min_mjd": 60827.102894,
+      "t_max_mjd": 60827.104227,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented/level2_2025W22_2B_0452_1D2_spx_l2b-v27-2026-200.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0174_1",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "2ae0fee176e65fca2a00a6d012977a08bb44f0c5d1e1080b3dc825419ec1588c",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.794773,
+      "t_max_mjd": 60835.796105,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_1D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0174_2",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "4d3c236255fd6c796c97c7bbdb18b16753c79d5560171654ee4c73164fb78d39",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.796265,
+      "t_max_mjd": 60835.797598,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_2D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0174_3",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "d65c6d032b09ea504b5a8d81bb700e4afc15d652bc3ccb0515d467c542cfad7e",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.797758,
+      "t_max_mjd": 60835.79909,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_3D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0174_4",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "193b625be60bf4b5fc59fbbb02a7f71af55718117a911b5e4e249de785ba2324",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.79925,
+      "t_max_mjd": 60835.800582,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04/level2_2025W24_1A_0174_4D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0186_1",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "04298f3d5ef8bc1159a27084a19b58d0c78ba28d053d09736a3070bf9df3ae16",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.862635,
+      "t_max_mjd": 60835.863967,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_1D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0186_2",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "5e76529264ee779f1c642527c581205803902454abd5ffb76b0712953b9e6bcb",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.864145,
+      "t_max_mjd": 60835.865477,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_2D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0186_4",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "540c49bbf2d9794f6988e8b4620286997d0d192dc7833d903e5e81d4851eb0fc",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.86713,
+      "t_max_mjd": 60835.868462,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0186_4D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_1A_0199_1",
+      "parent_id": "final04",
+      "split": "final",
+      "detector": 3,
+      "sha256": "1862cfdc4680d467d1e54f07039fadbbe0721b00ade15b7f4c4872d1a6ea91a0",
+      "bytes": 4106880,
+      "t_min_mjd": 60835.933339,
+      "t_max_mjd": 60835.934672,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final04-supplement/level2_2025W24_1A_0199_1D3_spx_l2b-v27-2026-201.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0326_1",
+      "parent_id": "train01",
+      "split": "train",
+      "detector": 1,
+      "sha256": "4a424e7b9fbbaf02686b3ff21d0293f93bc4b6345ecfd56f3c3d63ade58ff123",
+      "bytes": 4023360,
+      "t_min_mjd": 60840.267821,
+      "t_max_mjd": 60840.269153,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_1D1_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0326_2",
+      "parent_id": "train01",
+      "split": "train",
+      "detector": 1,
+      "sha256": "61e3a0c9fb74013ded8230cfd6450910959019824b872cd2067926d58a7b65a8",
+      "bytes": 4023360,
+      "t_min_mjd": 60840.269313,
+      "t_max_mjd": 60840.270645,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_2D1_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0326_3",
+      "parent_id": "train01",
+      "split": "train",
+      "detector": 1,
+      "sha256": "2124d0e0dfd289a1714f06aaa835cfaddfa94bd6419dd14d3f15645ac383833b",
+      "bytes": 4023360,
+      "t_min_mjd": 60840.270805,
+      "t_max_mjd": 60840.272137,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train01/level2_2025W24_2D_0326_3D1_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0567_2",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "1e9667d471944a4e807b9ce6ff5cec3ef41d7c94ebe2b97c0011025d5ff56416",
+      "bytes": 4106880,
+      "t_min_mjd": 60841.619234,
+      "t_max_mjd": 60841.620566,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W24_2D_0567_2D3_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0567_3",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "cceab58c487f95ffe20b416e1329a74d470378afe4eb1c3c29b7489b17dc7f5c",
+      "bytes": 4106880,
+      "t_min_mjd": 60841.620726,
+      "t_max_mjd": 60841.622058,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W24_2D_0567_3D3_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0567_4",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "317766c4c08750b926bcd72e537e9be57cdba493e6b3d9fa7d36beedaa3df5b0",
+      "bytes": 4106880,
+      "t_min_mjd": 60841.622218,
+      "t_max_mjd": 60841.623551,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W24_2D_0567_4D3_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0581_1",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "61e1d19dfccadba84e90213ce2620378aae8fe6244bcb8aa1de3f85af87ea7c1",
+      "bytes": 4106880,
+      "t_min_mjd": 60841.686012,
+      "t_max_mjd": 60841.687344,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W24_2D_0581_1D3_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W24_2D_0581_4",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "a6ea6c6c70d976bb3e98c1e004d509f076202a70b4660467611deba12f3edbd7",
+      "bytes": 4106880,
+      "t_min_mjd": 60841.690489,
+      "t_max_mjd": 60841.691821,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W24_2D_0581_4D3_spx_l2b-v27-2026-202.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W25_1B_0052_3",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "4bbbb2c49de9c5780cb42e97bf95c4ac897821ca506dc0dff5afa0ee55cda6fb",
+      "bytes": 4106880,
+      "t_min_mjd": 60842.23255,
+      "t_max_mjd": 60842.233882,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W25_1B_0052_3D3_spx_l2b-v27-2026-213.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W25_1B_0306_1",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "d528e6de2cbd3f346bd8a30f41c0399bc2c805fd41c231625a709409207138f0",
+      "bytes": 4106880,
+      "t_min_mjd": 60843.588227,
+      "t_max_mjd": 60843.589559,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W25_1B_0306_1D3_spx_l2b-v27-2026-213.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W25_1B_0306_4",
+      "parent_id": "final10",
+      "split": "final",
+      "detector": 3,
+      "sha256": "17232204867864a1afe21b537347def631a8e488ddc24ab5459600d1ab28fce8",
+      "bytes": 4106880,
+      "t_min_mjd": 60843.592703,
+      "t_max_mjd": 60843.594036,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final10-augmented/level2_2025W25_1B_0306_4D3_spx_l2b-v27-2026-213.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W26_2A_0665_2",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "586e7cfce07b6c6f82593b48f10252400546d520e39dfdd368de2799df0616d8",
+      "bytes": 4023360,
+      "t_min_mjd": 60855.923869,
+      "t_max_mjd": 60855.925202,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_2D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W26_2A_0665_3",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "7bd3fb40fec1a7793d59ba9e5dc83dca0fc7862a8c2f18bc56a89c01157d0f57",
+      "bytes": 4023360,
+      "t_min_mjd": 60855.925361,
+      "t_max_mjd": 60855.926694,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_3D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W26_2A_0665_4",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "d2f375d8554a4a3a8524ed9c6126ae614ada385d04fbc7ea89903ddbf77cbf13",
+      "bytes": 4023360,
+      "t_min_mjd": 60855.926854,
+      "t_max_mjd": 60855.928186,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03/level2_2025W26_2A_0665_4D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W27_1A_0151_1",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "c814fe6b989a0a28d2f018641341c1effc20b3c0a4caa24dac2d16a602ac4cd9",
+      "bytes": 4023360,
+      "t_min_mjd": 60856.737716,
+      "t_max_mjd": 60856.739048,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0151_1D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W27_1A_0151_3",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "705d2ed8ee6e8f96be46b475a355228df7a7e8264efbadb464016ddfc787e4a8",
+      "bytes": 4023360,
+      "t_min_mjd": 60856.7407,
+      "t_max_mjd": 60856.742033,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0151_3D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W27_1A_0295_1",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "e91770d146d80e64af16c0f0d163286dcce8ba6c57a34c2d3e6baa449fcdfdff",
+      "bytes": 4023360,
+      "t_min_mjd": 60857.485317,
+      "t_max_mjd": 60857.48665,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_1D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W27_1A_0295_2",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "8e60d74f4a5df38c99f2c1ed564cfbaa3353b023e62babc2abfaee5513ea2e30",
+      "bytes": 4023360,
+      "t_min_mjd": 60857.486809,
+      "t_max_mjd": 60857.488142,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_2D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W27_1A_0295_4",
+      "parent_id": "final03",
+      "split": "final",
+      "detector": 2,
+      "sha256": "a7107c1500e972cc8b79a4fc609f39638b193e5ea7ac22af446227a258b10c6d",
+      "bytes": 4023360,
+      "t_min_mjd": 60857.489794,
+      "t_max_mjd": 60857.491126,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final03-supplement/level2_2025W27_1A_0295_4D2_spx_l2b-v27-2026-214.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0424_1",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "b0c926e62f4e330c3f4996cf62eccd0730a64cacc1267241d2bde4a1aecd8667",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.300397,
+      "t_max_mjd": 60865.301729,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0424_1D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0424_2",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "b0615e0202a510e68913fe86c7a53c3c6fd759ca972a6d2e72db49d85830565e",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.301889,
+      "t_max_mjd": 60865.303222,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0424_2D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0424_3",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "727bfe3d0e4cddbc5e057845c597a05327588eb4a18ec1fe79ee0dd6e88721d7",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.303382,
+      "t_max_mjd": 60865.304714,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0424_3D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0424_4",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "acd33ec45749b2c590377e04dd84d38f33939b4e6b74447f2cf975b0328b7cf9",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.304874,
+      "t_max_mjd": 60865.306206,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0424_4D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0507_1",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "92c81eb82c6cead2b662433efca157ab6d8736699a93e7b3e92470c4c1352ade",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.776622,
+      "t_max_mjd": 60865.777954,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0507_1D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0541_1",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "72dc52ff61a91bcb2d7e88e4f4bc1d257a5c099b97b063f11ba17044d3b07764",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.979497,
+      "t_max_mjd": 60865.98083,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0541_1D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_1B_0541_4",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "4ffdef085343669f5056f7c805e666e0de32737b99a3b28af046a9a197f67fa3",
+      "bytes": 4023360,
+      "t_min_mjd": 60865.983974,
+      "t_max_mjd": 60865.985307,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_1B_0541_4D1_spx_l2b-v27-2026-215.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0004_4",
+      "parent_id": "final08",
+      "split": "final",
+      "detector": 1,
+      "sha256": "ee38554b938e97ad4e76b77901641f307c4919c1815ff8947880214dac42eb2c",
+      "bytes": 4023360,
+      "t_min_mjd": 60866.527599,
+      "t_max_mjd": 60866.528931,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final08-augmented/level2_2025W28_2A_0004_4D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0150_2",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "2280e0999411a33005b6199586c29ed2a991d6521af95cfa50fa1c2e3abb711a",
+      "bytes": 4011840,
+      "t_min_mjd": 60867.333665,
+      "t_max_mjd": 60867.334998,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0150_2D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0150_3",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "0bc2b1a2e1437393875a7b751090c8c4cefa1834e407a56e89aa327aa2a724aa",
+      "bytes": 4023360,
+      "t_min_mjd": 60867.335158,
+      "t_max_mjd": 60867.33649,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0150_3D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0150_4",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "c7b63214fb4b45f777ac5340d6051147198eadae34c5aa1afd9cf28d827d20f0",
+      "bytes": 4023360,
+      "t_min_mjd": 60867.33665,
+      "t_max_mjd": 60867.337982,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0150_4D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0254_1",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "37c5a6a5dc39f305ed812a213bcf7b444bb6c613a2f4dcab7096569203632fc2",
+      "bytes": 4023360,
+      "t_min_mjd": 60867.875709,
+      "t_max_mjd": 60867.877042,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0254_1D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0347_1",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "9303110f87bde4cedad2a483f98728a0f8dccfecbc675ccda061fd724cfcc8f1",
+      "bytes": 4023360,
+      "t_min_mjd": 60868.418659,
+      "t_max_mjd": 60868.419992,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0347_1D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0347_4",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "e60803883e4b84458e491056e5d31ea6f6927065cb27d66562457a7ff56d0a5c",
+      "bytes": 4023360,
+      "t_min_mjd": 60868.423154,
+      "t_max_mjd": 60868.424486,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0347_4D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0371_3",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "de74c4d0c732aff9d031b889a10e8834df029b9e8cd9e415ba187a98511864ab",
+      "bytes": 4023360,
+      "t_min_mjd": 60868.558167,
+      "t_max_mjd": 60868.5595,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0371_3D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W28_2A_0432_4",
+      "parent_id": "validation09",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "515cd936198bbabec6a79ad49d3cddbe10719807c1af966f2a94923a62c4b9c1",
+      "bytes": 4023360,
+      "t_min_mjd": 60868.899449,
+      "t_max_mjd": 60868.900782,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented/level2_2025W28_2A_0432_4D1_spx_l2b-v27-2026-216.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0459_1",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "e4cb2f0977c257a237394c8aaab0626392dd73baa2821a688a400d6c9ccfdee0",
+      "bytes": 4023360,
+      "t_min_mjd": 60882.934995,
+      "t_max_mjd": 60882.936327,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0459_1D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0459_2",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "1704134cd07efaa83b749616a1645e7b5dab91fce052b9945125340438f16b9b",
+      "bytes": 4023360,
+      "t_min_mjd": 60882.936487,
+      "t_max_mjd": 60882.937819,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0459_2D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0459_3",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "1682e7ccfd0e81827bcca38123d435aa4daf7f8524e46c313533ec571d5f3e29",
+      "bytes": 4023360,
+      "t_min_mjd": 60882.937979,
+      "t_max_mjd": 60882.939312,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0459_3D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0459_4",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "83c7e67fb335cd403913d384e99e774e74968aaa9a60bd5090651fcc788a1836",
+      "bytes": 4023360,
+      "t_min_mjd": 60882.939471,
+      "t_max_mjd": 60882.940804,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0459_4D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0548_3",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "fd309b711f0affe3a50c52870e2975e39b1dccbf059b06fcbbdec753f15e262d",
+      "bytes": 3988800,
+      "t_min_mjd": 60883.412907,
+      "t_max_mjd": 60883.414239,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0548_3D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W30_2B_0586_2",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "ff22a4f66f45d91957b4ae29cfdec2f0a8c578b6ed9e241ea6f8d899eecde46a",
+      "bytes": 4023360,
+      "t_min_mjd": 60883.618163,
+      "t_max_mjd": 60883.619495,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W30_2B_0586_2D2_spx_l2b-v27-2026-221.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0005_4",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "fa75a45d3c6cd8bc6fbc0f4f0de830b3f6065f49d3f6f9f8297f18f62bc9667d",
+      "bytes": 4023360,
+      "t_min_mjd": 60884.025069,
+      "t_max_mjd": 60884.026401,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W31_1A_0005_4D2_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0110_3",
+      "parent_id": "validation10",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "e4284b6c91f0c13c2c32dad387c79df5f051ef47d144027286a1b807b1f85ba4",
+      "bytes": 4023360,
+      "t_min_mjd": 60884.567308,
+      "t_max_mjd": 60884.568641,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented/level2_2025W31_1A_0110_3D2_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0300_1",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "3254f7f12881bab221fce26e0a168103370c42ab586d0f324f82a22e27080668",
+      "bytes": 4106880,
+      "t_min_mjd": 60885.572733,
+      "t_max_mjd": 60885.574065,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_1D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0300_2",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "fcb28c64e421785e54766e398bc11ea3c0d3b8dadd438458c2844e30eda0e507",
+      "bytes": 4106880,
+      "t_min_mjd": 60885.574225,
+      "t_max_mjd": 60885.575557,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_2D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0300_3",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "73a3c883be8d2ed61a008f7c0b3f67e571dc27bb13ab2818dfaa03285bd7c073",
+      "bytes": 4106880,
+      "t_min_mjd": 60885.575717,
+      "t_max_mjd": 60885.57705,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_3D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0300_4",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "0eb9bd8be4c0edecd631af86af082fbdf5344e6414bc0edabdc1fee26b4e9cfd",
+      "bytes": 4106880,
+      "t_min_mjd": 60885.577209,
+      "t_max_mjd": 60885.578542,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01/level2_2025W31_1A_0300_4D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0392_1",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "8d5cda580f327548f26f2f8ddc3d6bcd8f3f72dd4fe644ffe4359178a066b915",
+      "bytes": 4106880,
+      "t_min_mjd": 60886.049934,
+      "t_max_mjd": 60886.051267,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0392_1D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0392_3",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "39fbf15398a777c6b73fbb35caec37c6812fc92122e272f34f660947b4bdfaa9",
+      "bytes": 4106880,
+      "t_min_mjd": 60886.052919,
+      "t_max_mjd": 60886.054251,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0392_3D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0404_2",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "0ffc992a2433d6a7d1d0f3af90fd0b04c15b124c3794eb0468c6f36b158d9998",
+      "bytes": 4106880,
+      "t_min_mjd": 60886.118774,
+      "t_max_mjd": 60886.120106,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0404_2D3_spx_l2b_retry-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W31_1A_0404_4",
+      "parent_id": "final01",
+      "split": "final",
+      "detector": 3,
+      "sha256": "7bcd1ec04183e3c77f73d0e72b82a3d389789478ac1c1b4b748caac9de54df46",
+      "bytes": 4106880,
+      "t_min_mjd": 60886.121758,
+      "t_max_mjd": 60886.123091,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final01-supplement/level2_2025W31_1A_0404_4D3_spx_l2b-v27-2026-222.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0341_1",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "804f46db87cd983798b1d403f4360617d4c2dad1068e11c7224f67838d7f8451",
+      "bytes": 4106880,
+      "t_min_mjd": 60892.521044,
+      "t_max_mjd": 60892.522376,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_1D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0341_2",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "6e0f6e7d6017b4936ae6ed8c6906bbc6f4efb89c1b898c1c998170bf653ad33a",
+      "bytes": 4106880,
+      "t_min_mjd": 60892.522536,
+      "t_max_mjd": 60892.523868,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_2D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0341_3",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "85f1601b6682095c0c0ddc83a6c2220904f280f1a636ff900651ad8d6390bffd",
+      "bytes": 4106880,
+      "t_min_mjd": 60892.524028,
+      "t_max_mjd": 60892.525361,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01/level2_2025W32_1A_0341_3D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0388_1",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "047dcbe9ae0c64e12960ebc967d24bbfb81261ef7fb06b2a79b631dd1e5a366d",
+      "bytes": 4106880,
+      "t_min_mjd": 60892.727739,
+      "t_max_mjd": 60892.729071,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0388_1D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0433_1",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "3f80515389ae8cf39445ae939dda677134ddb4a6819350290b28ce3b1ccfd6e7",
+      "bytes": 4106880,
+      "t_min_mjd": 60892.931893,
+      "t_max_mjd": 60892.933226,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0433_1D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0470_1",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "31147074b13ddc6cc26da4fea3e7d0ec0590d6ecd63c6a89891d840a5454c655",
+      "bytes": 4106880,
+      "t_min_mjd": 60893.131802,
+      "t_max_mjd": 60893.133135,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_1D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0470_3",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "1f6a6768d97846d0e1332f2c937b346ff64aa50a5075811005c1c59cb26684e8",
+      "bytes": 4106880,
+      "t_min_mjd": 60893.134787,
+      "t_max_mjd": 60893.136119,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_3D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0470_4",
+      "parent_id": "validation01",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "9a4f79dbafea0123fab3ecdc4288e414af410e58ae8d31befd96f227e9e4b885",
+      "bytes": 4106880,
+      "t_min_mjd": 60893.136279,
+      "t_max_mjd": 60893.137611,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation01-supplement/level2_2025W32_1A_0470_4D3_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0502_1",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "b4f16e2796ffcb887fd0a589c38121a6d867df211cd8d95f1b2eed0097d09097",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.330023,
+      "t_max_mjd": 60893.331356,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_1D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0502_2",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "40350009d9f10c24ce1934dd58f78038dc14cc6e5bf4efcf6bec9184af99696b",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.331516,
+      "t_max_mjd": 60893.332848,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_2D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0502_3",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "88099d474138d80a78cd95a9e590248774e5c8630c9fc8475469babcc3909132",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.333008,
+      "t_max_mjd": 60893.33434,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_3D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0502_4",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "ab2f8372d0d1ca0f92baa369c3297491f12c00c52408071bf0ae01a3dd532021",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.3345,
+      "t_max_mjd": 60893.335833,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02/level2_2025W32_1A_0502_4D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0550_1",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "e4570471984bc7acd6ba24709d803691245d119f2f006cfe2cf2b3c8e66a4f4a",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.601845,
+      "t_max_mjd": 60893.603177,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_1D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0550_2",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "91e03438eaa07c01b2fe6f1b6d00007beabaafd01413c12b200f8f98bfde93e9",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.603337,
+      "t_max_mjd": 60893.604669,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_2D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0550_3",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "a6b6a3425364da8b11c444239f232403f659f6a9314fdcf6ffda1d5ec308de2d",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.604829,
+      "t_max_mjd": 60893.606162,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_3D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0550_4",
+      "parent_id": "train02",
+      "split": "train",
+      "detector": 2,
+      "sha256": "3eb9f0eb3fbdf03cdc68122dd77127b9ba42863944cc9c922c1ec9e167ca17dc",
+      "bytes": 4023360,
+      "t_min_mjd": 60893.606321,
+      "t_max_mjd": 60893.607654,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train02-supplement/level2_2025W32_1A_0550_4D2_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0649_1",
+      "parent_id": "train07",
+      "split": "train",
+      "detector": 1,
+      "sha256": "09637ea3ec422258622bfcfcab6d223ee90a963ec34b8ac88de8b4e2150f7d67",
+      "bytes": 4023360,
+      "t_min_mjd": 60894.179312,
+      "t_max_mjd": 60894.180644,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_1D1_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0649_2",
+      "parent_id": "train07",
+      "split": "train",
+      "detector": 1,
+      "sha256": "6a3c54ee3f337859912949c84ec021907721817537d2e6f2069528f35199df0d",
+      "bytes": 4023360,
+      "t_min_mjd": 60894.180804,
+      "t_max_mjd": 60894.182136,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_2D1_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0649_3",
+      "parent_id": "train07",
+      "split": "train",
+      "detector": 1,
+      "sha256": "bdba36c215d47cb0371c6b3158f9067072e8dcfcae3992da474d333ff66c4ced",
+      "bytes": 4023360,
+      "t_min_mjd": 60894.182296,
+      "t_max_mjd": 60894.183629,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_3D1_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W32_1A_0649_4",
+      "parent_id": "train07",
+      "split": "train",
+      "detector": 1,
+      "sha256": "a8ab59d63d96ae0adde7f3181182402673cd7d3f86cb49c4cdbd12b0ae01cdcf",
+      "bytes": 4023360,
+      "t_min_mjd": 60894.183789,
+      "t_max_mjd": 60894.185121,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train07/level2_2025W32_1A_0649_4D1_spx_l2b-v27-2026-226.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0114_1",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "386cb8e3ad4af5474895ce25baed33a1fb60201c4afd0ed188bfc9b1efbff4a0",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.110174,
+      "t_max_mjd": 60909.111506,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_1D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0114_2",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "5599565cefe613dd0e6cd1771f275ff80ff81cc93526a4c61287b0e190efcf89",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.111666,
+      "t_max_mjd": 60909.112998,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_2D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0114_3",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "dc2d73941a06236a4fca03fa3bef29e2db62af9fdd2120aacf26b761e352f6a3",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.113158,
+      "t_max_mjd": 60909.114491,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_3D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0114_4",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "31687c767f8fcc05a03f20daceefe6cdb501cdee8895256909981feceaa725eb",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.11465,
+      "t_max_mjd": 60909.115983,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08/level2_2025W34_2B_0114_4D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0210_1",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "c6add99d3319be272c4a1f9353c004c5571681eb2b175d04995389d3cf277acc",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.655397,
+      "t_max_mjd": 60909.65673,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0210_1D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0210_3",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "bd39adc1ae9ce5ce91dfc40fb8b66d7034cec783935e4896b0139926f92e4121",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.658382,
+      "t_max_mjd": 60909.659714,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0210_3D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0234_1",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "eccc8be5912243bee4bde807d1b497043d6adcc6806f54a28c38e0b60217d3c0",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.791441,
+      "t_max_mjd": 60909.792774,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0234_1D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0234_3",
+      "parent_id": "train08",
+      "split": "train",
+      "detector": 2,
+      "sha256": "b83fa907136e0b65df2778eaebc386dfd4706fbc6b391da84999ed44a4370802",
+      "bytes": 4023360,
+      "t_min_mjd": 60909.794444,
+      "t_max_mjd": 60909.795776,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train08-supplement/level2_2025W34_2B_0234_3D2_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0432_1",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "eaae6e9ddbe9d036573641c9e7afad83bfd35fe216a3799093feb5e989b17d79",
+      "bytes": 4106880,
+      "t_min_mjd": 60910.795267,
+      "t_max_mjd": 60910.796599,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W34_2B_0432_1D3_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0432_2",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "0ceb34f3ad9ed6024a323265a39637f5d5cb06b8e4076a2005c8294a578bfda8",
+      "bytes": 4106880,
+      "t_min_mjd": 60910.796759,
+      "t_max_mjd": 60910.798092,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W34_2B_0432_2D3_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W34_2B_0432_3",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "58251181006573c1d9bcc28c33a09c2ccee57bf412f7052867977fc85cb37262",
+      "bytes": 4106880,
+      "t_min_mjd": 60910.798251,
+      "t_max_mjd": 60910.799584,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W34_2B_0432_3D3_spx_l2b-v27-2026-229.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0117_1",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "b41332738706241bdd4151d5e9b5ebdf356d7fa972bb39d27ae9da3e77438385",
+      "bytes": 4106880,
+      "t_min_mjd": 60912.560906,
+      "t_max_mjd": 60912.562239,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W35_1A_0117_1D3_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0117_3",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "5d34ec74684b135fc6eef76b3ed8f4aa9ba08a94247f87794a10ddf2f3cfe7fe",
+      "bytes": 4106880,
+      "t_min_mjd": 60912.563891,
+      "t_max_mjd": 60912.565223,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W35_1A_0117_3D3_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0117_4",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "36fd71b0cf9dcc0f70340992cbf706bccb08eba5996e671417311ec2f73c6ef8",
+      "bytes": 4106880,
+      "t_min_mjd": 60912.565383,
+      "t_max_mjd": 60912.566715,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W35_1A_0117_4D3_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0143_1",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "af053bcef16b57984f509dc96dbc488e7920e0b4ef97fa0c0169809d9b31ae23",
+      "bytes": 4106880,
+      "t_min_mjd": 60912.696399,
+      "t_max_mjd": 60912.697732,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W35_1A_0143_1D3_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0143_3",
+      "parent_id": "validation08",
+      "split": "validation",
+      "detector": 3,
+      "sha256": "06df356acd6debf237ca38f4ec672b4985b850767b33692ae30b7891612a278c",
+      "bytes": 4106880,
+      "t_min_mjd": 60912.699384,
+      "t_max_mjd": 60912.700716,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented/level2_2025W35_1A_0143_3D3_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0512_1",
+      "parent_id": "validation-stress01",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "3401d2de219d281fd399e909fee97d4c66938805207204b22f222dc6a7840dd3",
+      "bytes": 4023360,
+      "t_min_mjd": 60914.623078,
+      "t_max_mjd": 60914.62441,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_1D1_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0512_2",
+      "parent_id": "validation-stress01",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "d664a10e6b4270f904f1e06ae4f9cafd749fc9e4ffc17250ef91688211ad784b",
+      "bytes": 4023360,
+      "t_min_mjd": 60914.62457,
+      "t_max_mjd": 60914.625903,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_2D1_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0512_3",
+      "parent_id": "validation-stress01",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "73b76eea80a52a3a5ca7c16abe8d9ee3466d91db8b67baf09e8891ad32ef8ee2",
+      "bytes": 4023360,
+      "t_min_mjd": 60914.626062,
+      "t_max_mjd": 60914.627395,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_3D1_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W35_1A_0512_4",
+      "parent_id": "validation-stress01",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "f3266ac814ea1ccf4582ee0e0ca10a52237752777889a1e529152e5253022204",
+      "bytes": 4023360,
+      "t_min_mjd": 60914.627555,
+      "t_max_mjd": 60914.628887,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/crowded-development/development/validation-stress01/level2_2025W35_1A_0512_4D1_spx_l2b-v27-2026-230.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0489_1",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "f25678fbcf11984675f96b196870b9297b54500fe43f034886ea8997f76623a4",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.173081,
+      "t_max_mjd": 60921.174414,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_1D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0489_2",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "4a9e45f1c7c8321ff079c8b2236057215f3346572f0f98f3eba061db310284a3",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.174574,
+      "t_max_mjd": 60921.175906,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_2D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0489_3",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "169347ca2f2c4217d8e9f847b97a07a00cf5d258a462c825088ebc6ce78d4968",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.176066,
+      "t_max_mjd": 60921.177398,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_3D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0489_4",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "d7392af3c5872078d530ba592600618a0f7b01a34c8b848c58227b65d5a93877",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.177558,
+      "t_max_mjd": 60921.17889,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03/level2_2025W36_1A_0489_4D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0504_1",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "36d81c7d570a05c3b8526052ab4efdb5d4da4c5f27429f124c38c063cf0955ed",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.242063,
+      "t_max_mjd": 60921.243395,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_1D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0504_3",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "a39049b281265b697c65c587a91142b22d1dbce091815993e2cb0211379de91e",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.245047,
+      "t_max_mjd": 60921.246379,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_3D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0504_4",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "d16ec9b0c875893d5632cb4fffd4d1aa0b690944a60b09ee808d1cf6f7394bf6",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.246539,
+      "t_max_mjd": 60921.247872,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0504_4D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W36_1A_0517_2",
+      "parent_id": "train03",
+      "split": "train",
+      "detector": 3,
+      "sha256": "2274d06cd4b795d1f6a07a2a965de9a1f188232938233978e0d44f8ff6c44588",
+      "bytes": 4106880,
+      "t_min_mjd": 60921.310919,
+      "t_max_mjd": 60921.312252,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train03-supplement/level2_2025W36_1A_0517_2D3_spx_l2b-v27-2026-232.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0116_1",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "6a577499b30c933f45b2c971b5f10b6e9c1445d239212b6658fc38c54844fb7c",
+      "bytes": 4023360,
+      "t_min_mjd": 60926.510326,
+      "t_max_mjd": 60926.511658,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0116_1D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0116_2",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "897f5906639546b945b4a992d447a4854679760d442b5d57ec03efcd1295addb",
+      "bytes": 4023360,
+      "t_min_mjd": 60926.511818,
+      "t_max_mjd": 60926.51315,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0116_2D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0116_3",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "eac8e527662b5d410b4bf6e0573fa1bd540b7a60e9fc6acaf7a13d39b15490ed",
+      "bytes": 4023360,
+      "t_min_mjd": 60926.51331,
+      "t_max_mjd": 60926.514643,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0116_3D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0116_4",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "f3cc63fbe0d8b26b4806cd604bab4737954c4e5da4ad5aa29e97a403679d48da",
+      "bytes": 4023360,
+      "t_min_mjd": 60926.514802,
+      "t_max_mjd": 60926.516135,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0116_4D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0318_1",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "37fab31d5d5fa6ffbd1cf389c213c9e038f246450a2a706b3984d893639d418f",
+      "bytes": 4023360,
+      "t_min_mjd": 60927.59452,
+      "t_max_mjd": 60927.595852,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0318_1D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0318_2",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "5dea2a11fb3ef0325cc09d0251a28a46782c05a1bea5809f90ddd8b3e8250fde",
+      "bytes": 4023360,
+      "t_min_mjd": 60927.596012,
+      "t_max_mjd": 60927.597344,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0318_2D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0318_3",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "ec6844c2f90a1ec7d7c1b2ec7427d2e42b49b0f48a20c43a2b7764f8345662dc",
+      "bytes": 4023360,
+      "t_min_mjd": 60927.597504,
+      "t_max_mjd": 60927.598837,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0318_3D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W37_1A_0318_4",
+      "parent_id": "final05",
+      "split": "final",
+      "detector": 1,
+      "sha256": "cce598d4c6df4b53bfbeb2658e81e9bdc539051b8d37c10a49d726db4356d7c0",
+      "bytes": 4023360,
+      "t_min_mjd": 60927.598997,
+      "t_max_mjd": 60927.600329,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final05-augmented/level2_2025W37_1A_0318_4D1_spx_l2b-v27-2026-235.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_1A_0598_1",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "21d4f19f8db1d52997ec5e5677e19b74330adec431db1b86fb3507ad3dc2e7d1",
+      "bytes": 4023360,
+      "t_min_mjd": 60943.143157,
+      "t_max_mjd": 60943.14449,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_1A_0598_1D1_spx_l2b-v27-2026-238.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_1A_0598_2",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "8e7c2dd8e727486e4379fde904d42d8c6eb9ae4b29869c82956176cfabd604a6",
+      "bytes": 4023360,
+      "t_min_mjd": 60943.144649,
+      "t_max_mjd": 60943.145982,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_1A_0598_2D1_spx_l2b_retry-v27-2026-238.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_1A_0598_3",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "4a30d6c1872db3dfb003a54d774c94ae6c26f2501e3aa1a7a571480f9704a9a0",
+      "bytes": 4023360,
+      "t_min_mjd": 60943.146142,
+      "t_max_mjd": 60943.147474,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_1A_0598_3D1_spx_l2b-v27-2026-238.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_1A_0598_4",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "011270c5657c3b955500f97d16642082c9815476b64b0111ea03d386c8c4ee38",
+      "bytes": 4023360,
+      "t_min_mjd": 60943.147634,
+      "t_max_mjd": 60943.148966,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_1A_0598_4D1_spx_l2b-v27-2026-238.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0130_1",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "18542c128c46fe227d0036d40de9e07f7ad44c80f79d723e8a5d531b54ae9867",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.101274,
+      "t_max_mjd": 60944.102606,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_1D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0130_2",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "15f3060049d984dddaead84d208f46f6ed325b97ef0865fb4e133771a513f3cb",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.102766,
+      "t_max_mjd": 60944.104098,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_2D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0130_3",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "f3d77eaa919550dc080c37e5162d8d2b2af7f8c30f36aaaddb4d4297f25aecc7",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.104258,
+      "t_max_mjd": 60944.10559,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_3D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0130_4",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "102676449fd5aabc43099c81253cb443103c462b697129d9976b684a550c1a33",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.10575,
+      "t_max_mjd": 60944.107083,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03/level2_2025W39_2A_0130_4D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0138_1",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "28a2f7cc7444f24aa15218ff448c97547f3d6cd788bd5325c25a60b8f41227fe",
+      "bytes": 4106880,
+      "t_min_mjd": 60944.136164,
+      "t_max_mjd": 60944.137496,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0138_1D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0138_2",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "c511e6aa8cdf3fe131b777ec2ea7c2510e094676a0cc2eb7a95fdb3d8b20047e",
+      "bytes": 4106880,
+      "t_min_mjd": 60944.137656,
+      "t_max_mjd": 60944.138989,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0138_2D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0138_3",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "d7bf9d6d450c31aa18a480b15ff3c508257022e51e90f315d2d3c6633f153bf2",
+      "bytes": 4106880,
+      "t_min_mjd": 60944.139148,
+      "t_max_mjd": 60944.140481,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0138_3D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0232_1",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "9991617808d4ee3e2d450f0a991229fe755e57ab7e9492a4be0aac7e35684be6",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.56858,
+      "t_max_mjd": 60944.569913,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_2A_0232_1D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0232_2",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "a0b9c1311f524560ebc0bd37badb1d79c28d49c1d80919060682b8a2070b5a89",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.570073,
+      "t_max_mjd": 60944.571405,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_2A_0232_2D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0232_4",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "0a3eea3b76cd1d3ba8bb3d46437be0fd184b001cb03451bc25d7334c8f045f9e",
+      "bytes": 4023360,
+      "t_min_mjd": 60944.573057,
+      "t_max_mjd": 60944.574389,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_2A_0232_4D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0326_1",
+      "parent_id": "validation06",
+      "split": "validation",
+      "detector": 1,
+      "sha256": "b758eb55ec17bda0eaafc5c56bd27d5c9698e4628c8b4af24e34c7fc0d9952c0",
+      "bytes": 4023360,
+      "t_min_mjd": 60945.113555,
+      "t_max_mjd": 60945.114888,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented/level2_2025W39_2A_0326_1D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0347_1",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "d9113569b4cf2ab7007331beba6a2597419d47c2cd90b063430c980263849f4c",
+      "bytes": 4106880,
+      "t_min_mjd": 60945.223432,
+      "t_max_mjd": 60945.224764,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0347_1D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0347_2",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "ac2973bc02850056e0fcfd2d4c4819025a93ce2b82cfb47506ad54846125de5c",
+      "bytes": 4106880,
+      "t_min_mjd": 60945.224924,
+      "t_max_mjd": 60945.226256,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0347_2D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0347_3",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "a3188f0e4cd1d745f5e50d2a283174a4d8a5cc5306752d5be9ff707b6e2c270b",
+      "bytes": 4106880,
+      "t_min_mjd": 60945.226416,
+      "t_max_mjd": 60945.227748,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0347_3D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0389_1",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "a29d11927cdbfe121bf1864556dae27a889fb57a35b34544fec38873ffc0563d",
+      "bytes": 4023360,
+      "t_min_mjd": 60945.458124,
+      "t_max_mjd": 60945.459456,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_1D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0389_2",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "ab83a8ec9d2aa2ad64c6c8affef29233de1216aedb49e4c3a3b5ecc8a4ee76e7",
+      "bytes": 4023360,
+      "t_min_mjd": 60945.459616,
+      "t_max_mjd": 60945.460949,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_2D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0389_3",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "e7baebb5d02866d152aef582ddd4b2cc02a0783b43a55531b46a126339c11a30",
+      "bytes": 4023360,
+      "t_min_mjd": 60945.461109,
+      "t_max_mjd": 60945.462441,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_3D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0389_4",
+      "parent_id": "validation03",
+      "split": "validation",
+      "detector": 2,
+      "sha256": "3affa9faba2e64069a8cccdb9c72550633bde58f701f6b536945c3ae09cc29d2",
+      "bytes": 4023360,
+      "t_min_mjd": 60945.462601,
+      "t_max_mjd": 60945.463933,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/validation03-supplement/level2_2025W39_2A_0389_4D2_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0434_1",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "449e0c0c7fbe793846afffadf432b8ecd859808a4ac61d20554913e8b1d69739",
+      "bytes": 4106880,
+      "t_min_mjd": 60945.699319,
+      "t_max_mjd": 60945.700651,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0434_1D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0478_1",
+      "parent_id": "final07",
+      "split": "final",
+      "detector": 3,
+      "sha256": "0fff6ed6b9f2ba19052ce5814ad329b05c948f4af4b05e64fcca8b1b4676bfe3",
+      "bytes": 4106880,
+      "t_min_mjd": 60945.908803,
+      "t_max_mjd": 60945.910135,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final07-augmented/level2_2025W39_2A_0478_1D3_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0550_1",
+      "parent_id": "train04",
+      "split": "train",
+      "detector": 1,
+      "sha256": "2a2b3e8531fd5d9ecd73dabc712a05158368ae68b81c184d7550b73a8a32657a",
+      "bytes": 4023360,
+      "t_min_mjd": 60946.247207,
+      "t_max_mjd": 60946.24854,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_1D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0550_2",
+      "parent_id": "train04",
+      "split": "train",
+      "detector": 1,
+      "sha256": "b25d6a241b7ade0c7227490657d5730a1133aeead30111019531983fe72f7155",
+      "bytes": 4023360,
+      "t_min_mjd": 60946.248699,
+      "t_max_mjd": 60946.250032,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_2D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0550_3",
+      "parent_id": "train04",
+      "split": "train",
+      "detector": 1,
+      "sha256": "7ef54be81d84723eebc9bae89d7e8aef3c2a98f6471d304862fac75e479c7c05",
+      "bytes": 4023360,
+      "t_min_mjd": 60946.250192,
+      "t_max_mjd": 60946.251524,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_3D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W39_2A_0550_4",
+      "parent_id": "train04",
+      "split": "train",
+      "detector": 1,
+      "sha256": "5f500d3deedde2606a16db82685ea870a42915e4d717730fd603725a6d5c7af6",
+      "bytes": 4023360,
+      "t_min_mjd": 60946.251684,
+      "t_max_mjd": 60946.253016,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/development/train04/level2_2025W39_2A_0550_4D1_spx_l2b-v27-2026-239.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W43_2A_0697_1",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "e45b7d39e51e6566f9cfde3dc082938f3f7ea22413603836a1bc25b13dea0fcd",
+      "bytes": 4023360,
+      "t_min_mjd": 60974.633839,
+      "t_max_mjd": 60974.635171,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_1D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W43_2A_0697_2",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "a27b3cb795df92ad1674455a323d8c51a120138a54c79f7559daf02a1882eadf",
+      "bytes": 4023360,
+      "t_min_mjd": 60974.635331,
+      "t_max_mjd": 60974.636663,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_2D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W43_2A_0697_3",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "800ddb87da29588ae15f6cf0ec405bf1fc7f3524036667813c4d634fb683acaf",
+      "bytes": 4023360,
+      "t_min_mjd": 60974.636823,
+      "t_max_mjd": 60974.638156,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_3D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W43_2A_0697_4",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "8febe7b87e6233aec723aecf9b9f7e65638215774c7027db3b22ff8fd9971e02",
+      "bytes": 4023360,
+      "t_min_mjd": 60974.638316,
+      "t_max_mjd": 60974.639648,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02/level2_2025W43_2A_0697_4D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W44_1A_0070_1",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "d6865dbcd70bfe140db414e6533f4be8924c8b6290f6da1f0b1f44ade4c05ade",
+      "bytes": 4023360,
+      "t_min_mjd": 60975.313223,
+      "t_max_mjd": 60975.314556,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_1D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W44_1A_0070_2",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "8aa81a0e78d4f4215d574391c1daad59eb8e5cfa7d7bb7e21fc103e48f4868e9",
+      "bytes": 4023360,
+      "t_min_mjd": 60975.314716,
+      "t_max_mjd": 60975.316048,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_2D1_spx_l2b_retry-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W44_1A_0070_3",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "70f1e15c1cc697228bbadddb7641a89355c6c43a1853588a4bb724cd1e85f13f",
+      "bytes": 4023360,
+      "t_min_mjd": 60975.316208,
+      "t_max_mjd": 60975.31754,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_3D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W44_1A_0070_4",
+      "parent_id": "final02",
+      "split": "final",
+      "detector": 1,
+      "sha256": "7512cfcea5f7e38c7526768895edbe943857158332ccd8d7fd27659e2f9c19d5",
+      "bytes": 4023360,
+      "t_min_mjd": 60975.3177,
+      "t_max_mjd": 60975.319033,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/quarantine_final/final02-supplement/level2_2025W44_1A_0070_4D1_spx_l2b-v27-2026-245.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0035_1",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "ab5d14e772d1e21a2186bec3f826ee790720fbc3e15c1a92f328d2961ed0084c",
+      "bytes": 4023360,
+      "t_min_mjd": 60985.644744,
+      "t_max_mjd": 60985.646077,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0035_1D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0035_2",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "ae835d3f569128e39be6344b6b2dc35e1a0d443a5663e584e826c37498e419d7",
+      "bytes": 4023360,
+      "t_min_mjd": 60985.646237,
+      "t_max_mjd": 60985.647569,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0035_2D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0035_3",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "4c079b4e09e9fb4a62bc71349c576bd275310704787944a5aaaeb3d3877bcc9d",
+      "bytes": 4023360,
+      "t_min_mjd": 60985.647729,
+      "t_max_mjd": 60985.649061,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0035_3D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0035_4",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "417827e15168b667ece2d7e6c30e7f3249dbb9a715bbbbd4104532c3bf34ecf9",
+      "bytes": 4023360,
+      "t_min_mjd": 60985.649239,
+      "t_max_mjd": 60985.650571,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0035_4D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0097_1",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "d61342a8dcec53922d35ea0e66745c7b337455b9b9c1ea2861b5ca97d2bafaea",
+      "bytes": 4023360,
+      "t_min_mjd": 60985.91701,
+      "t_max_mjd": 60985.918342,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0097_1D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0154_3",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "2a7c58da81ae9105d2f67b0e6131f0b8b1c6aafc475d1917805be59d498ccf1c",
+      "bytes": 4023360,
+      "t_min_mjd": 60986.191407,
+      "t_max_mjd": 60986.19274,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0154_3D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0223_2",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "e074c5f67d3b37105cc6cf90ddd593300ad0687f94fa93830da4fa6a7ca5f98e",
+      "bytes": 4023360,
+      "t_min_mjd": 60986.528728,
+      "t_max_mjd": 60986.53006,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0223_2D2_spx_l2b-v27-2026-247.fits"
+      ]
+    },
+    {
+      "physical_obsid": "2025W45_2A_0295_4",
+      "parent_id": "final09",
+      "split": "final",
+      "detector": 2,
+      "sha256": "5e5de1750238ef13c1e252cf6adaf80aef3fb80e9036e095545b8f2f117945b3",
+      "bytes": 4023360,
+      "t_min_mjd": 60986.872142,
+      "t_max_mjd": 60986.873474,
+      "paths": [
+        "/tmp/spaceapps-v3-native-data/expansion-v2/quarantine_final/final09-augmented/level2_2025W45_2A_0295_4D2_spx_l2b-v27-2026-247.fits"
+      ]
+    }
+  ]
+}

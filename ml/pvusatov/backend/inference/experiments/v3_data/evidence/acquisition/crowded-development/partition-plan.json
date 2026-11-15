@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-14T20:18:37.578816+00:00",
+  "unit": "sky field containing all physical exposure OBSIDs and all detector/crop/version derivatives",
+  "final_policy": "Bytes and hash metadata only until coordinator freezes model/code; no final pixel access, injection, detection or scoring.",
+  "detectors": [
+    1,
+    2,
+    3
+  ],
+  "cutout_size_deg": 0.12,
+  "target_exposures_per_group": 5,
+  "minimum_exposures_per_group": 3,
+  "selection": "Metadata only: one SWIR detector; earliest metadata cadence window with >=3 unique OBSIDs in <=1.5 hours; prefer five exposures and temporal span, alternate preferred detector by group index. Fallback earliest five unique exposures within <=48 hours, flagged long-cadence.",
+  "groups": [
+    {
+      "group_id": "validation-stress01",
+      "split": "validation",
+      "center": [
+        266.4168,
+        -29.0078
+      ],
+      "astronomical_target": "Galactic center crowded development stress"
+    },
+    {
+      "group_id": "validation-stress02",
+      "split": "validation",
+      "center": [
+        305.59875,
+        41.1488889
+      ],
+      "astronomical_target": "Cygnus crowded development stress"
+    }
+  ],
+  "excluded_development_fields": [
+    [
+      210.80227,
+      54.34895
+    ],
+    [
+      127.69444,
+      -39.1776
+    ]
+  ],
+  "notes": [
+    "M101, v2 final, comet and Vesta are v3 development only.",
+    "Unknown unmodified real controls stay unlabeled.",
+    "Field feasibility failures remain recorded; no model-outcome-based replacement."
+  ],
+  "purpose": "Additional development validation parent fields, chosen from astronomical locations for crowding before querying metadata or opening pixels. The original four quarantined final fields remain fixed."
+}

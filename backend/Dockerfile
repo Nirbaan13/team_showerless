@@ -1,10 +1,11 @@
 FROM eclipse-temurin:25.0.5_8-jdk-noble@sha256:80f67fb3d6f76e2d817d98a4cc2a9cf05f054d4e6adc5e2144bde671d722e63f AS build
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /build
-COPY sbtw build.sbt ./
-COPY project ./project
-COPY src ./src
+WORKDIR /build/backend
+COPY backend/sbtw backend/build.sbt ./
+COPY backend/project ./project
+COPY backend/src ./src
+COPY ml/pvusatov/backend/src ../ml/pvusatov/backend/src
 RUN ./sbtw stage
 
 FROM eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
@@ -13,16 +14,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl python3-ve
     && useradd --uid 10001 --user-group --create-home app \
     && mkdir -p /app/data/tmp && chown -R app:app /app/data
 WORKDIR /app
-COPY inference/requirements-inference.txt /tmp/inference-requirements.txt
+COPY ml/pvusatov/backend/inference/requirements-inference.txt /tmp/inference-requirements.txt
 RUN python3 -m venv /opt/inference-venv \
     && /opt/inference-venv/bin/pip install --no-cache-dir --require-hashes -r /tmp/inference-requirements.txt \
     && rm /tmp/inference-requirements.txt
-COPY --from=build --chown=app:app /build/target/stage ./
-COPY --chown=app:app docs/openai/openapi.yaml ./docs/openai/openapi.yaml
-COPY --chown=app:app inference/ml_inference ./inference/ml_inference
-COPY --chown=app:app inference/models/ranker.onnx inference/models/metadata.json ./inference/models/
-COPY --chown=app:app inference/fixtures ./inference/fixtures
-COPY --chown=app:app inference/smoke.py ./inference/smoke.py
+COPY --from=build --chown=app:app /build/backend/target/stage ./
+COPY --chown=app:app backend/docs/openai/openapi.yaml ./docs/openai/openapi.yaml
+COPY --chown=app:app ml/pvusatov/backend/inference/ml_inference ./inference/ml_inference
+COPY --chown=app:app ml/pvusatov/releases/v3/model/ranker.onnx ml/pvusatov/releases/v3/model/metadata.json ./inference/models/
+COPY --chown=app:app ml/pvusatov/backend/inference/fixtures ./inference/fixtures
+COPY --chown=app:app ml/pvusatov/backend/inference/smoke.py ./inference/smoke.py
+COPY --chown=app:app ml/pvusatov/releases/v3/smoke.py ./inference/release-smoke.py
 ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \

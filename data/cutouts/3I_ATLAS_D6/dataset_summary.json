@@ -1,0 +1,50 @@
+{
+  "id": "december-d6",
+  "target": "3I/ATLAS",
+  "detector": "D6",
+  "pixel_scale_arcsec": 6.15,
+  "width": 256,
+  "height": 144,
+  "total_frames": 4,
+  "tracks_count": 10,
+  "bloom_tracks_count": 0,
+  "source": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html",
+  "frames": [
+    {
+      "frame_id": "2025W50_2A_0741_2D6",
+      "time": "2025-12-14T11:01:45.688Z",
+      "coverage": 0.9691,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_00_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D6/frame_00_residual.png"
+    },
+    {
+      "frame_id": "2025W50_2A_0755_2D6",
+      "time": "2025-12-14T12:39:42.784Z",
+      "coverage": 0.9724,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_01_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D6/frame_01_residual.png"
+    },
+    {
+      "frame_id": "2025W50_2A_0797_4D6",
+      "time": "2025-12-14T17:33:31.003Z",
+      "coverage": 0.9735,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_02_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D6/frame_02_residual.png"
+    },
+    {
+      "frame_id": "2025W50_2A_0813_1D6",
+      "time": "2025-12-14T19:06:21.122Z",
+      "coverage": 0.9723,
+      "release": "DR1",
+      "archive_url": null,
+      "aligned_png": "data/cutouts/3I_ATLAS_D6/frame_03_aligned.png",
+      "residual_png": "data/cutouts/3I_ATLAS_D6/frame_03_residual.png"
+    }
+  ]
+}

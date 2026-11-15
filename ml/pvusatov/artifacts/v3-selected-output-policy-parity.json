@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "designation": "Pre-final numerical/output-policy scope supplement; no final data",
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "export_validation_sha256": "5f2cd9ad22a62e16aa0a81bb70d382de13080701813728b70baf2b70f495a573",
+  "pipeline_sha256": "15763e01808f1680926ae39974c9179b94ccd8f9a5e157872585817c81b44a6c",
+  "exact_ordered_top1_top3": true,
+  "exact_unreserved_residual_top100_membership": true,
+  "exact_variable_quota_published_membership_claimed": false,
+  "score_tolerance": {
+    "rtol": 2e-06,
+    "atol": 2e-06
+  },
+  "cases": [
+    {
+      "cohort": "native",
+      "identity": {
+        "seed": 1610007,
+        "parent_id": "validation07",
+        "trajectory_id": "0.03-4",
+        "brightness": 3.0
+      },
+      "residual_quotas_with_changed_membership": [
+        99
+      ],
+      "meaning": "Lower nearly-tied residual membership can differ at these reduced quotas after reserving unscored BLOOM evidence."
+    }
+  ],
+  "interpretation": "Final scientific K1/K3 recovery is measured using the actual deployed ONNX. No exact full-order or arbitrary BLOOM-reduced-prefix parity is claimed. Original export/failure evidence remains unchanged."
+}

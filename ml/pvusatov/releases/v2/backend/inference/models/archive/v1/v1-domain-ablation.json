@@ -1,0 +1,123 @@
+{
+  "model_sha256": "030c1edf972b76b3cb8fadcb4adadcc386a36eab9f2cdbcb65527c277c581ab9",
+  "designation": "development-only diagnostic feature counterfactuals, never model correction",
+  "note": "Unknown real candidates remain unlabeled. Stable score ties inherit heuristic order.",
+  "reference_positive_rows": 182,
+  "training_positive_feature_median": [
+    4.0,
+    0.3534641362374356,
+    6.864876776146032,
+    5.170146252584077,
+    0.21619308339287854,
+    1.8556844062318432
+  ],
+  "training_positive_feature_min": [
+    3.0,
+    0.0,
+    4.202572322898297,
+    4.008325002389934,
+    0.014281360665144458,
+    1.2102007660894198
+  ],
+  "training_positive_feature_max": [
+    6.0,
+    0.6740322890093753,
+    17.764977109412577,
+    11.742551546117646,
+    0.7749756921245589,
+    3.2001485702735097
+  ],
+  "injected_match_feature_median": [
+    3.0,
+    0.23570317405043892,
+    48.33882920464793,
+    24.01952991123148,
+    0.38832110575033035,
+    3.7795181050055278
+  ],
+  "injected_match_feature_min": [
+    3.0,
+    1.827296862561092e-06,
+    7.373611162637221,
+    4.494342124214581,
+    0.25382444561509915,
+    1.8189310341890697
+  ],
+  "injected_match_feature_max": [
+    4.0,
+    0.5688916524593398,
+    236.4776386828979,
+    135.13940721580383,
+    0.59368158134362,
+    8.677052483976592
+  ],
+  "source_code_sha256": "1f03b584309812df9de38d03e66cc0db7964d9062fc0a92ff99747c5e58259a2",
+  "cases": {
+    "original": {
+      "known_detected": 67,
+      "known_in_top1": 0,
+      "known_in_top3": 67,
+      "matched_score_median": 0.0,
+      "matched_score_max": 0.05148909613490105,
+      "unmodified_control_scores": [
+        0.06550553441047668
+      ],
+      "trials_with_tied_top_score": 1
+    },
+    "peak_ratio_to_training_positive_median": {
+      "known_detected": 67,
+      "known_in_top1": 0,
+      "known_in_top3": 67,
+      "matched_score_median": 0.0,
+      "matched_score_max": 0.10521361976861954,
+      "unmodified_control_scores": [
+        0.08527316898107529
+      ],
+      "trials_with_tied_top_score": 1
+    },
+    "snr_cap_at_training_positive_max": {
+      "known_detected": 67,
+      "known_in_top1": 0,
+      "known_in_top3": 67,
+      "matched_score_median": 0.019480906426906586,
+      "matched_score_max": 0.057987697422504425,
+      "unmodified_control_scores": [
+        0.06550553441047668
+      ],
+      "trials_with_tied_top_score": 1
+    },
+    "epoch_count_to_six": {
+      "known_detected": 67,
+      "known_in_top1": 0,
+      "known_in_top3": 67,
+      "matched_score_median": 0.15299835801124573,
+      "matched_score_max": 0.5056356191635132,
+      "unmodified_control_scores": [
+        0.5125532150268555
+      ],
+      "trials_with_tied_top_score": 0
+    },
+    "snr_cv_to_training_positive_median": {
+      "known_detected": 67,
+      "known_in_top1": 0,
+      "known_in_top3": 67,
+      "matched_score_median": 0.0,
+      "matched_score_max": 0.05148909613490105,
+      "unmodified_control_scores": [
+        0.3593824505805969
+      ],
+      "trials_with_tied_top_score": 1
+    },
+    "shape_median_and_snr_cap": {
+      "known_detected": 67,
+      "known_in_top1": 2,
+      "known_in_top3": 67,
+      "matched_score_median": 0.038891322910785675,
+      "matched_score_max": 0.11818958818912506,
+      "unmodified_control_scores": [
+        0.08527316898107529
+      ],
+      "trials_with_tied_top_score": 1
+    }
+  }
+}

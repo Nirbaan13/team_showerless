@@ -1,0 +1,318 @@
+{
+  "candidate": {
+    "directory": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/models/experiments/v3-selected-candidate-profile-bound",
+    "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+    "model_id": "spherex-track-extra-v3",
+    "model_family": "ExtraTreesClassifier",
+    "detector_profile": {
+      "min_snr": 4.0,
+      "max_peaks": 100,
+      "psf_sigma": 0.8,
+      "min_speed": 0.5,
+      "max_speed": 60.0,
+      "match_radius": 1.4,
+      "min_epochs": 3,
+      "min_support": 0.8,
+      "leave_one_out": true
+    },
+    "metadata_sha256": "983c49f568a2a18f57bfedc5ecda3e11233bb37a3cd52a7277ec8c5095b8ee04",
+    "development_freeze_sha256": "9f94d2ca715184b4dbc7e72147bfa9b505233b42277706154df65bba59156bff"
+  },
+  "baseline": {
+    "directory": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/models",
+    "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+    "model_id": "spherex-track-rf-v2"
+  },
+  "independent_known_objects": 2,
+  "fitting_or_reselection_performed": false,
+  "final_data_opened": false,
+  "schema_version": 1,
+  "designation": "Post-policy DEVELOPMENT compatibility; same selected model, no refit/reselection/final access",
+  "derived_from": {
+    "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility-post-policy.json",
+    "sha256": "06ffe5003f627e2842c55d43ee59e701551593cfc063265ee21763b68eb6bd88"
+  },
+  "previous_report": {
+    "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/results/preset-compatibility.json",
+    "sha256": "6f98ce350160be88aa783aabf334a08f60020d1836d7e44c0dc25ffb0b9d48dd"
+  },
+  "policy": "Bound profiles protect first three ordered residuals, reserve unscored BLOOM capacity, then fill residual slots; unbound v2 retains legacy slice.",
+  "all_residual_records_identical_to_previous_report": true,
+  "cases": [
+    {
+      "case": "comet-d2",
+      "detector": 2,
+      "object_group": "3I/ATLAS",
+      "exposures": 3,
+      "span_hours": 3.2198591666528955,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 2,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 2,
+          "published_residual_count": 2,
+          "published_bloom_count": 0,
+          "target_published_entries": [
+            {
+              "review_rank": 1,
+              "candidate_index": 0,
+              "method": "residual_track",
+              "score": 0.5622791647911072,
+              "model_rank": 1,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": true,
+          "published_model_at_3": true,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.007005557999946177,
+            "scoring": 0.0002929520014731679,
+            "bloom": 7.660000846954063e-07,
+            "peak_diagnostic": 0.005802472998766461
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 1,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 1,
+          "published_residual_count": 1,
+          "published_bloom_count": 0,
+          "target_published_entries": [
+            {
+              "review_rank": 1,
+              "candidate_index": 0,
+              "method": "residual_track",
+              "score": 0.7204204797744751,
+              "model_rank": 1,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": true,
+          "published_model_at_3": true,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.006474428000728949,
+            "scoring": 0.00025892799931170885,
+            "bloom": 8.180013537639752e-07,
+            "peak_diagnostic": 0.005789969998659217
+          }
+        }
+      },
+      "regression_flags": []
+    },
+    {
+      "case": "comet-d6",
+      "detector": 6,
+      "object_group": "3I/ATLAS",
+      "exposures": 4,
+      "span_hours": 8.076509444508702,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 10,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 10,
+          "published_residual_count": 10,
+          "published_bloom_count": 0,
+          "target_published_entries": [
+            {
+              "review_rank": 3,
+              "candidate_index": 0,
+              "method": "residual_track",
+              "score": 0.6414848566055298,
+              "model_rank": 3,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": true,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.04086752799958049,
+            "scoring": 0.0007945739998831414,
+            "bloom": 5.130004865350202e-07,
+            "peak_diagnostic": 0.035066657001152635
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 36,
+          "bloom_candidate_count": 0,
+          "published_candidate_count": 36,
+          "published_residual_count": 36,
+          "published_bloom_count": 0,
+          "target_published_entries": [
+            {
+              "review_rank": 4,
+              "candidate_index": 0,
+              "method": "residual_track",
+              "score": 0.8180041313171387,
+              "model_rank": 4,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": false,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.04895942700022715,
+            "scoring": 0.0012591270005941624,
+            "bloom": 4.7100002120714635e-07,
+            "peak_diagnostic": 0.035839411000779364
+          }
+        }
+      },
+      "regression_flags": [
+        "residual_model_at_3",
+        "published_model_at_3"
+      ]
+    },
+    {
+      "case": "vesta-d3",
+      "detector": 3,
+      "object_group": "Vesta",
+      "exposures": 3,
+      "span_hours": 26.064145000011194,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 25,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 26,
+          "published_residual_count": 25,
+          "published_bloom_count": 1,
+          "target_published_entries": [
+            {
+              "review_rank": 26,
+              "candidate_index": 0,
+              "method": "bloom_track",
+              "score": null,
+              "model_rank": null,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": false,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.0330682980002166,
+            "scoring": 0.0009501780004939064,
+            "bloom": 0.00447855699894717,
+            "peak_diagnostic": 0.023747556000671466
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 112,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 100,
+          "published_residual_count": 99,
+          "published_bloom_count": 1,
+          "target_published_entries": [
+            {
+              "review_rank": 100,
+              "candidate_index": 0,
+              "method": "bloom_track",
+              "score": null,
+              "model_rank": null,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": false,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": true,
+          "candidate_cap_reached": true,
+          "stage_wall_seconds": {
+            "detection": 0.049103921999630984,
+            "scoring": 0.0018932240000140155,
+            "bloom": 0.004457408000234864,
+            "peak_diagnostic": 0.024835569000060786
+          }
+        }
+      },
+      "regression_flags": []
+    },
+    {
+      "case": "vesta-d6",
+      "detector": 6,
+      "object_group": "Vesta",
+      "exposures": 3,
+      "span_hours": 26.064145000011194,
+      "systems": {
+        "baseline": {
+          "residual_candidate_count": 7,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 8,
+          "published_residual_count": 7,
+          "published_bloom_count": 1,
+          "target_published_entries": [
+            {
+              "review_rank": 8,
+              "candidate_index": 0,
+              "method": "bloom_track",
+              "score": null,
+              "model_rank": null,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": false,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.027165170999069232,
+            "scoring": 0.000675642999340198,
+            "bloom": 0.0042434919996594545,
+            "peak_diagnostic": 0.024255100999653223
+          }
+        },
+        "candidate": {
+          "residual_candidate_count": 17,
+          "bloom_candidate_count": 1,
+          "published_candidate_count": 18,
+          "published_residual_count": 17,
+          "published_bloom_count": 1,
+          "target_published_entries": [
+            {
+              "review_rank": 18,
+              "candidate_index": 0,
+              "method": "bloom_track",
+              "score": null,
+              "model_rank": null,
+              "known_target_match": true
+            }
+          ],
+          "known_target_present": true,
+          "published_model_at_1": false,
+          "published_model_at_3": false,
+          "flagged_bloom_omitted": false,
+          "peak_cap_reached": false,
+          "candidate_cap_reached": false,
+          "stage_wall_seconds": {
+            "detection": 0.02999568300037936,
+            "scoring": 0.0006383879990607966,
+            "bloom": 0.004351485000370303,
+            "peak_diagnostic": 0.024596696999651613
+          }
+        }
+      },
+      "regression_flags": []
+    }
+  ]
+}

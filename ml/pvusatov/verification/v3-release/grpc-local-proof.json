@@ -1,0 +1,11 @@
+{
+  "http_base": "http://127.0.0.1:18089",
+  "grpc_target": "127.0.0.1:15059",
+  "checked_at_utc": "2026-11-14T23:07:03.740683+00:00",
+  "job_id": "9eb931f2-9a7e-4aeb-8817-a18fb7484301",
+  "frames": 3,
+  "candidates": 1,
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "http_grpc_result_equal": true,
+  "completed_watch_replays": true
+}

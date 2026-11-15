@@ -1,0 +1,8 @@
+{
+  "job_id": "dc295412-a195-42bf-82b8-7fb3dafc3b2f",
+  "frames": 3,
+  "candidates": 2,
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "http_grpc_result_equal": true,
+  "completed_watch_replays": true
+}

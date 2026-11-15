@@ -36,7 +36,7 @@ object Main extends ZIOAppDefault:
       metadata <- MetadataService.make(repository,jobs.cachedImage,client,env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync"))
       equipment <- EquipmentService.make(repository,data,client,env("IRSA_CALIBRATION_URL","https://nasa-irsa-spherex.s3.amazonaws.com/"))
       analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
-      analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","inference")),env("ML_PYTHON","python3")))
+      analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
       api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openai/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       archiveRuntime <- ArchiveRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(
         global_parallelism=env("ARCHIVE_PARALLELISM","3").toInt,

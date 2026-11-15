@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "designation": "additional_validation_DEVELOPMENT_only",
+  "groups": [
+    {
+      "parent_group_id": "validation06",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation06-augmented",
+      "center": [
+        288.4275759,
+        10.7237033
+      ],
+      "detector": 1,
+      "stratum": "crowded_low_galactic_latitude",
+      "native_epochs": 8,
+      "span_hours": 47.32154399994761
+    },
+    {
+      "parent_group_id": "validation07",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation07-augmented",
+      "center": [
+        318.0043815,
+        48.3296372
+      ],
+      "detector": 2,
+      "stratum": "crowded_low_galactic_latitude",
+      "native_epochs": 8,
+      "span_hours": 27.765720000083093
+    },
+    {
+      "parent_group_id": "validation08",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation08-augmented",
+      "center": [
+        46.8132814,
+        58.2977051
+      ],
+      "detector": 3,
+      "stratum": "crowded_low_galactic_latitude",
+      "native_epochs": 8,
+      "span_hours": 45.73077599995304
+    },
+    {
+      "parent_group_id": "validation09",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation09-augmented",
+      "center": [
+        238.7463378,
+        31.1454092
+      ],
+      "detector": 1,
+      "stratum": "off_plane",
+      "native_epochs": 8,
+      "span_hours": 37.61080799996853
+    },
+    {
+      "parent_group_id": "validation10",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation10-augmented",
+      "center": [
+        35.7948783,
+        6.1519051
+      ],
+      "detector": 2,
+      "stratum": "off_plane",
+      "native_epochs": 8,
+      "span_hours": 39.20750399987446
+    },
+    {
+      "parent_group_id": "validation11",
+      "directory": "/tmp/spaceapps-v3-native-data/expansion-v2/development/validation11-augmented",
+      "center": [
+        178.1156476,
+        -10.2275287
+      ],
+      "detector": 3,
+      "stratum": "off_plane",
+      "native_epochs": 8,
+      "span_hours": 21.319607999932487
+    }
+  ]
+}

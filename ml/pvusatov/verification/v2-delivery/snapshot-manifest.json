@@ -1,0 +1,77 @@
+{
+  "designation": "Historical v2 live-delivery and viewport diagnostics; not v3 evidence",
+  "files": [
+    {
+      "source": "/tmp/spaceapps-ml-http-prod-proof.json",
+      "file": "spaceapps-ml-http-prod-proof.json",
+      "sha256": "9818fb4685d117f916301b3f60ada9a8a62a56112a08e7feea53e08bf934f84b",
+      "size_bytes": 31160
+    },
+    {
+      "source": "/tmp/spaceapps-ml-grpc-prod-proof.json",
+      "file": "spaceapps-ml-grpc-prod-proof.json",
+      "sha256": "69694b4ed97c0aea555bcabfd804b18e661b75aba0d510c4d880ff22265ccc95",
+      "size_bytes": 243
+    },
+    {
+      "source": "/tmp/spaceapps-ml-browser-prod-proof.json",
+      "file": "spaceapps-ml-browser-prod-proof.json",
+      "sha256": "0bb675ed5b84ecd09d088ab7e74eddfcf93bf77640f1c5152a889f5566c012ea",
+      "size_bytes": 321
+    },
+    {
+      "source": "/tmp/spaceapps-ml-swagger-prod-proof.json",
+      "file": "spaceapps-ml-swagger-prod-proof.json",
+      "sha256": "0220637db1ce0eed4d19d4c9d7cd502102191d76c4da6878357bd50fc0537b3e",
+      "size_bytes": 154
+    },
+    {
+      "source": "/tmp/spaceapps-ml-viewport-prod-proof.json",
+      "file": "spaceapps-ml-viewport-prod-proof.json",
+      "sha256": "c4054ffc8580122210cc1cb453a6ae15f04ad1151b60aad6a14f3e839d78d09c",
+      "size_bytes": 432
+    },
+    {
+      "source": "/tmp/spaceapps-ml-http-prod-smoke.py",
+      "file": "spaceapps-ml-http-prod-smoke.py",
+      "sha256": "bf2496c05d31230b241c191b3355ba5cf2aa5352da17524690fdbb9f3816e690",
+      "size_bytes": 4056
+    },
+    {
+      "source": "/tmp/spaceapps-ml-grpc-prod-smoke.py",
+      "file": "spaceapps-ml-grpc-prod-smoke.py",
+      "sha256": "2f9f3d819caf044685e1ab71d1190e60615c0bf2ae067e86ca757e92243e78d1",
+      "size_bytes": 1998
+    },
+    {
+      "source": "/tmp/spaceapps-ml-browser-prod-smoke.cjs",
+      "file": "spaceapps-ml-browser-prod-smoke.cjs",
+      "sha256": "327a1ddad9b2e16e54b3492a8d3249c9efd8fdbcb33a85b7b41c77272fc210ca",
+      "size_bytes": 4202
+    },
+    {
+      "source": "/tmp/spaceapps-ml-swagger-prod-smoke.cjs",
+      "file": "spaceapps-ml-swagger-prod-smoke.cjs",
+      "sha256": "f7e84b8e06bfc7d2e0e29facdf9c11dfb6a04cb8dda018af72c2c184c7ec7763",
+      "size_bytes": 1853
+    },
+    {
+      "source": "/tmp/spaceapps-ml-viewport-regression.cjs",
+      "file": "spaceapps-ml-viewport-regression.cjs",
+      "sha256": "e4f2eebfaf52d64d64a283ca1fdeaa434c8c0ed1cd4783a4b96dcd5cbcd24f5f",
+      "size_bytes": 1861
+    },
+    {
+      "source": "/tmp/spaceapps-ml-server-audit-current.json",
+      "file": "spaceapps-ml-server-audit-current.json",
+      "sha256": "2bc6d8cc4245eeffb1110398b90683d66a01a6b11e369f8652b72ce9265f9da4",
+      "size_bytes": 729
+    },
+    {
+      "source": "/tmp/spaceapps-ml-server-audit.py",
+      "file": "spaceapps-ml-server-audit.py",
+      "sha256": "c7bbb3bdffa976af6745be02ac5918c80ce0eeba26f2b47250bf59d3cd0167d4",
+      "size_bytes": 1849
+    }
+  ]
+}

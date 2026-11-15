@@ -1,0 +1,55 @@
+{
+  "frontend_base": "http://144.124.238.101:8080",
+  "checked_at_utc": "2026-11-14T23:23:27.632Z",
+  "frontend_proxy_spec_loaded": true,
+  "openapi_paths": 20,
+  "swagger_try_it_out": true,
+  "model": "spherex-track-extra-v3",
+  "javascript_errors": [],
+  "production_frontend_version": {
+    "version": "a7493463eaace9af4357dcdeb0c8fa939c016ed5"
+  },
+  "post_probe_model_inventory": {
+    "models": [
+      {
+        "positive_class": 1,
+        "score_description": "Arithmetic mean of class-1 weighted leaf fractions across the named randomized decision-tree ensemble; an uncalibrated ranking value, not a planet probability",
+        "schema_version": 1,
+        "model_family": "ExtraTreesClassifier",
+        "feature_names": [
+          "epoch_count",
+          "fit_rms_px",
+          "median_snr",
+          "min_snr",
+          "snr_coefficient_of_variation",
+          "median_peak_ratio"
+        ],
+        "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+        "model_id": "spherex-track-extra-v3",
+        "score_kind": "random_forest_vote_fraction",
+        "status": "experimental",
+        "algorithm_version_proposal": "motion-extra-v3-sigma08",
+        "training_manifest_sha256": "8e3d795ae63d886bb64ed8fd1e22ebc120d470752297d81543554486bc11ada5",
+        "detector_profile": {
+          "min_snr": 4.0,
+          "max_peaks": 100,
+          "psf_sigma": 0.8,
+          "min_speed": 0.5,
+          "max_speed": 60.0,
+          "match_radius": 1.4,
+          "min_epochs": 3,
+          "min_support": 0.8,
+          "leave_one_out": true
+        },
+        "class_labels": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "post_probe_identity_checked_at_utc": "2026-11-14T23:24:14.988037+00:00",
+  "probe_source_sha256": "674040b29d23c55c927d23cbf475e90159ffaa8c3ef6e04f3bc8b26557a8789e",
+  "probe_source_modified": false,
+  "probe_command": "PROBE_FRONTEND=http://144.124.238.101:8080 PROBE_HTTP=http://144.124.238.101 PROBE_OUTPUT=ml/pvusatov/verification/v3-release/swagger-prod-proof.json node ml/pvusatov/verification/v3-release/swagger-smoke.cjs"
+}
