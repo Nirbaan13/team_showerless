@@ -58,9 +58,36 @@ jobs:
           import json
           import os
           import urllib.request
+          import urllib.error
           url = f"http://{os.environ['VPS_HOST']}/version"
           with urllib.request.urlopen(url, timeout=15) as response:
               version = json.load(response)['version']
           assert version == os.environ['GITHUB_SHA'], (version, os.environ['GITHUB_SHA'])
-          print(f"Public endpoint verified: {version}")
+          with urllib.request.urlopen(f"http://{os.environ['VPS_HOST']}/api/capabilities", timeout=15) as response:
+              capabilities = json.load(response)
+          assert capabilities['revision'] == version
+          assert capabilities['pipeline']['available'], 'Processing worker is unavailable'
+          assert capabilities['motion_models']['models'], 'No installed inference model'
+          assert capabilities['native_epoch_difference']['status'] == 'unsupported'
+          # Validate the actual UI route without depending on external TAP availability.
+          try:
+              urllib.request.urlopen(f"http://{os.environ['VPS_HOST']}/api/motion/catalog?ra=NaN&dec=0", timeout=15)
+              raise AssertionError('Invalid catalogue coordinates were accepted')
+          except urllib.error.HTTPError as error:
+              assert error.code == 422
+              assert json.load(error)['code'] == 'invalid_request'
+          # Whichever independent deployment finishes last checks nginx too.
+          frontend = f"http://{os.environ['VPS_HOST']}:8080"
+          with urllib.request.urlopen(frontend + '/frontend-version.json', timeout=15) as response:
+              frontend_revision = json.load(response)['version']
+          if frontend_revision == version:
+              try:
+                  urllib.request.urlopen(frontend + '/api/motion/catalog?ra=NaN&dec=0', timeout=15)
+                  raise AssertionError('Frontend catalogue route accepted invalid coordinates')
+              except urllib.error.HTTPError as error:
+                  assert error.code == 422
+                  assert json.load(error)['code'] == 'invalid_request'
+          else:
+              print('Frontend still deploying; frontend deployment will check the joint route')
+          print(f"Public endpoint, processing worker, model and catalogue route verified: {version}")
           PY

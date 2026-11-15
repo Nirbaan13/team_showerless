@@ -34,6 +34,61 @@ tags:
   - name: Federated Downloads
   - name: Image unification
 paths:
+  /api/capabilities:
+    get:
+      tags: [Analyses]
+      summary: Inspect supported operations and current processing worker availability
+      description: |
+        Reports actual installed motion model metadata, including score semantics,
+        and probes the processing worker with a bounded deadline. A healthy API
+        process does not imply archive availability or a completed image product.
+        Native epoch difference and zodi processing remain unsupported. Catalog
+        upstream status is reported separately for every catalogue request.
+      responses:
+        '200':
+          description: Capability and dependency snapshot; unavailable operations are explicit
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+  /api/motion/catalog:
+    get:
+      tags: [Observations]
+      summary: Query real Gaia DR3, AllWISE and SIMBAD catalogue rows
+      description: |
+        Queries TAP providers independently with bounded responses and deadlines.
+        Empty successful results remain empty. Failed providers contribute no
+        sources. No simulated IDs, brightness values, or ephemerides are generated.
+        Partial success returns 200 with status partial_agency and per-provider
+        errors; all failures return 503 with status unavailable. Nullable unknown
+        photometry and proper motion are preserved. This is a cone search with
+        diameter fov_arcmin; it does not establish a moving-object detection.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: fov_arcmin, in: query, schema: {type: number, minimum: 0.01, maximum: 30, default: 5}}
+        - {name: candidate_id, in: query, schema: {type: string, maxLength: 256}}
+      responses:
+        '200':
+          description: Live or partial catalogue result; inspect providers for each source's availability
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid or duplicated query parameters}
+        '503': {description: Every provider failed or catalogue queries are not configured}
+  /api/motion/search:
+    post:
+      tags: [Analyses]
+      summary: Retired synchronous legacy motion endpoint
+      description: Use POST /api/analyses/motion with a native download ID, then follow its durable status and events.
+      responses:
+        '501': {description: Legacy motion service is unsupported; no benchmark fallback is returned}
+  /api/catalogue/auto-submit:
+    post:
+      tags: [Analyses]
+      summary: Reject publication based on client-asserted vote counts
+      description: No record, publication request, or external submission is created.
+      responses:
+        '403': {description: Automatic external submission is disabled}
   /api/image-unifications:
     post:
       tags:
