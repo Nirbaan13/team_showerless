@@ -539,7 +539,7 @@ export function App() {
       const selected = result.candidates.find(candidate => candidate.id === request?.candidateId) ?? result.candidates[0];
       setSelectedCandidateId(selected?.id ?? null);
       setActiveFrameIndex(Math.max(0, Math.min(request?.frameIndex ?? 0, result.frames.length - 1)));
-      setSearchStatus({ source: 'live', message: `${result.frames.length} downloaded observations; analysis completed` });
+      setSearchStatus({ source: 'live', message: `${result.frames.length} downloaded observations; analysis completed`, warnings: result.warnings });
       setMlAnalysisStatus({ state: 'completed', stage: 'Difference-image analysis completed', progress: 100, stepIndex: 3,
         tracksDetected: result.candidates.length, modelName: result.modelName,
         resultSource: 'live', modelFamily: result.model.model_family, modelSha256: result.model.sha256,

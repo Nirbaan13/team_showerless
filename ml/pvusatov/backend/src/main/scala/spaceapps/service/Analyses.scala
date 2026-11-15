@@ -39,7 +39,7 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
     validated<-ZIO.fromEither(request.validate)
     _<-ZIO.foreachDiscard(validated.download_id)(id=>jobs.get(id).flatMap { d=>
       requireNativeDownload(d) *> ZIO.fromEither(AnalysisRegion.fromQuery(Query(d.query,""),validated.options)) *>
-        ZIO.fail(fail("analysis_too_large","Motion analysis supports at most 32 input frames")).when(d.chunks.size>32)
+        selectedChunks(d,validated).flatMap(chunks=>ZIO.fail(fail("analysis_too_large","Motion analysis supports at most 32 input frames")).when(chunks.size>32))
     })
     metadata<-readJson(root.resolve("models/metadata.json"),65536)
     hash<-ZIO.attempt(objectFields(metadata).get("sha256").collect{case Json.Str(s)=>s}.getOrElse(throw fail("model_unavailable","Installed model manifest is invalid")))
@@ -87,6 +87,14 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
   }
   private def requireNativeDownload(download:Download):Task[Unit]=
     ZIO.fail(fail("unsupported_analysis_input","Motion analysis requires an unprocessed default download; processed FITS products are unsupported")).unless(download.mode=="default").unit
+  private def selectedChunks(download:Download,request:AnalysisRequest):Task[List[Chunk]]=request.frame_ids match
+    case None=>ZIO.succeed(download.chunks)
+    case Some(ids)=>
+      for
+        _<-ZIO.fail(fail("download_failed","Explicit frame selection requires a completed native download",true)).unless(Set("completed","completed_with_errors").contains(download.status))
+        chunks<-ZIO.foreach(ids)(id=>ZIO.fromOption(download.chunks.find(_.frame_id==id)).orElseFail(fail("invalid_request","Selected frame does not belong to this download")))
+        _<-ZIO.fail(fail("download_failed","Every explicitly selected native frame must be ready",true)).when(chunks.exists(_.status!="ready"))
+      yield chunks
   private def sourceEvidence(download:Download,frameId:String):List[(String,Json)]=
     val observation=download.observations.find(_.frame_id==frameId).getOrElse(throw fail("invalid_input","Native frame metadata is missing"))
     val release=observation.release
@@ -107,16 +115,17 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
       for
         d<-jobs.get(r.request.download_id.get)
         _<-requireNativeDownload(d)
+        selected<-selectedChunks(d,r.request)
         result<-if !d.terminal then (if r.analysis.status=="waiting_for_download" then ZIO.unit else repo.update(r.analysis.id)(_.copy(status="waiting_for_download")).unit).as(None)
-          else if !Set("completed","completed_with_errors").contains(d.status) || d.chunks.exists(_.status!="ready") then ZIO.fail(fail("download_failed","The download did not publish every requested native frame; inspect the download errors",true))
-          else if d.chunks.size<3 then ZIO.fail(fail("insufficient_frames","Motion analysis requires at least three independent frames"))
-          else if d.chunks.size>32 then ZIO.fail(fail("analysis_too_large","Motion analysis supports at most 32 input frames"))
+          else if !Set("completed","completed_with_errors").contains(d.status) || selected.exists(_.status!="ready") then ZIO.fail(fail("download_failed","The download did not publish every requested native frame; inspect the download errors",true))
+          else if selected.size<3 then ZIO.fail(fail("insufficient_frames","Motion analysis requires at least three independent frames"))
+          else if selected.size>32 then ZIO.fail(fail("analysis_too_large","Motion analysis supports at most 32 input frames"))
           else for
             region<-ZIO.fromEither(AnalysisRegion.fromQuery(Query(d.query,""),r.request.options))
             _<-repo.update(r.analysis.id)(_.copy(status="preparing"))
             input=folder(r.analysis.id).resolve("inputs")
             _<-ZIO.attemptBlocking(Files.createDirectories(input))
-            frames<-ZIO.foreach(d.chunks.zipWithIndex) { (c,i)=>ZIO.scoped {
+            frames<-ZIO.foreach(selected.zipWithIndex) { (c,i)=>ZIO.scoped {
               // Pin the cache entry until this input owns an independent hardlink or copy.
               jobs.leasedResource(c.id,false).flatMap {
                 case Resource.Ready(source)=>ZIO.attemptBlocking {
@@ -278,6 +287,17 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
       rewrite(j)
     }
   yield result
+  private def recordSelection(r:AnalysisRecord,result:Json):Task[Json]=r.request.frame_ids match
+    case None=>ZIO.succeed(result)
+    case Some(ids)=>jobs.get(r.request.download_id.get).map { download=>
+      val fields=objectFields(result)
+      val provenance=fields.get("provenance").collect{case value:Json.Obj=>value.fields.toMap}.getOrElse(Map.empty[String,Json])
+      val selection=Json.Obj("selected_frame_ids"->Json.Arr(zio.Chunk.fromIterable(ids.map(Json.Str(_)))),
+        "total_frames"->Json.Num(download.chunks.size),"ready_frames"->Json.Num(download.chunks.count(_.status=="ready")))
+      val warnings=fields.get("warnings").collect{case Json.Arr(items)=>items}.getOrElse(zio.Chunk.empty)
+      val notice=if ids.size<download.chunks.size then zio.Chunk(Json.Str(s"Explicit input subset: ${ids.size} of ${download.chunks.size} native frames; excluded frames were not analyzed")) else zio.Chunk.empty
+      Json.Obj(zio.Chunk.fromIterable(fields ++ Map("provenance"->Json.Obj(zio.Chunk.fromIterable(provenance.updated("input_selection",selection))),"warnings"->Json.Arr(warnings ++ notice))))
+    }
   private def run(r:AnalysisRecord):Task[Unit]=
     val id=r.analysis.id
     (for
@@ -292,7 +312,8 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
         _<-ZIO.attemptBlocking(Files.writeString(request,body.toJson))
         _<-repo.update(id)(_.copy(status="inferencing"))
         exit<-supervise(request,output)
-        result<-validateOutput(id,output,exit,r.request.options,r.model_hash,r.model_id)
+        validated<-validateOutput(id,output,exit,r.request.options,r.model_hash,r.model_id)
+        result<-recordSelection(r,validated)
         _<-repo.update(id)(_.copy(status="completed",result=Some(result),error=None))
       yield () }
     yield ()).catchAll { e=>

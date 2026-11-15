@@ -14,10 +14,12 @@ final case class AnalysisOptions(min_snr:Double=4, min_speed_arcsec_per_hour:Dou
       pixel_scale_arcsec<0.1 || pixel_scale_arcsec>60 || min_epochs<3 || min_epochs>32 then
       Left(ApiError("invalid_request","Analysis options exceed supported limits"))
     else Right(this)
-final case class AnalysisRequest(download_id:Option[String]=None,preset:Option[String]=None,options:AnalysisOptions=AnalysisOptions()) derives JsonCodec:
+final case class AnalysisRequest(download_id:Option[String]=None,preset:Option[String]=None,options:AnalysisOptions=AnalysisOptions(),frame_ids:Option[List[String]]=None) derives JsonCodec:
   def validate:Either[ApiError,AnalysisRequest]=
     if download_id.isDefined==preset.isDefined || download_id.exists(s=>s.isEmpty || s.length>128) || preset.exists(s=> !AnalysisPreset.ids.contains(s)) then
       Left(ApiError("invalid_request","Supply exactly one existing download_id or a registered preset"))
+    else if frame_ids.exists(ids=>download_id.isEmpty || ids.size<3 || ids.size>32 || ids.distinct.size!=ids.size || ids.exists(id=>id.isEmpty || id.length>256)) then
+      Left(ApiError("invalid_request","frame_ids requires a download and 3 to 32 distinct native frame IDs"))
     else options.validate.map(_=>this)
 object AnalysisRequest:
   def parse(body:String):Either[ApiError,AnalysisRequest]=
@@ -26,7 +28,7 @@ object AnalysisRequest:
       case _=>false
     for
       ast<-body.fromJson[Json].left.map(_=>ApiError("invalid_request","Expected a JSON analysis request"))
-      _<-Either.cond(validObject(ast,Set("download_id","preset","options")) && (ast match
+      _<-Either.cond(validObject(ast,Set("download_id","preset","options","frame_ids")) && (ast match
         case Json.Obj(fs)=>fs.find(_._1=="options").forall((_,v)=>validObject(v,Set("min_snr","min_speed_arcsec_per_hour","max_speed_arcsec_per_hour","mask_policy","max_candidates","max_peaks","pixel_scale_arcsec","min_epochs")))
         case _=>false),(),ApiError("invalid_request","Unknown or duplicate analysis request properties"))
       req<-body.fromJson[AnalysisRequest].left.map(_=>ApiError("invalid_request","Analysis request properties have invalid types"))
