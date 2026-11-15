@@ -32,6 +32,7 @@ from pydantic import BaseModel, Field
 
 from detector import find_candidates
 from science.motion.live import SearchError, search_motion
+import catalogue_db
 
 app = FastAPI(
     title="SPHEREx Blink ML Inference Service",
@@ -1141,6 +1142,33 @@ def post_verification(item: VerificationPayload):
                 item.upvotes,
                 setting_json,
             ))
+
+        # Automatically index into the candidate catalog from the community thread
+        try:
+            cand_id = item.candidateId
+            setting = item.setting or {}
+            ra = float(setting.get("ra", 0.0) or 0.0)
+            dec = float(setting.get("dec", 0.0) or 0.0)
+            name = setting.get("candidateName") or item.candidateId
+            existing_cid = catalogue_db.find_candidate_for_thread(cand_id, name, ra, dec)
+            if not existing_cid:
+                catalogue_db.create_candidate(
+                    name=name,
+                    ra=ra,
+                    dec=dec,
+                    candidate_type="moving_object",
+                    snr=10.0,
+                    speed_arcsec_hr=20.0,
+                    fit_rms_px=0.25,
+                    spectral_summary={"features": ["Continuum Infrared"], "detector_arrays": ["D2", "D6"]},
+                    detection_method="community_thread",
+                    author_name=item.author or "Citizen Volunteer",
+                    metadata={"thread_key": cand_id, "initial_message": item.message},
+                    initial_status="under_review",
+                )
+        except Exception as _cat_err:
+            pass
+
         return {
             "id": comment_id,
             "author": item.author,

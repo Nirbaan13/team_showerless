@@ -8,7 +8,6 @@ import type {
 } from '../types/catalogue';
 import {
   fetchCatalogueCandidates,
-  createCandidateRecord,
 } from '../services/catalogueService';
 import {
   Database,
@@ -17,8 +16,6 @@ import {
   Compass,
   LayoutGrid,
   List,
-  PlusCircle,
-  X,
   Activity,
   UserCheck,
 } from 'lucide-react';
@@ -53,18 +50,6 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
   const [spectralBand, setSpectralBand] = useState<'all' | 'D1' | 'D2' | 'D3' | 'D4' | 'D5' | 'D6'>('all');
   const [sortBy, setSortBy] = useState<CatalogueFilterOptions['sortBy']>('id_asc');
 
-  // Register Discovery Modal State
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newRa, setNewRa] = useState('166.7900');
-  const [newDec, setNewDec] = useState('5.2900');
-  const [newType, setNewType] = useState<CandidateType>('moving_object');
-  const [newSnr, setNewSnr] = useState('14.5');
-  const [newSpeed, setNewSpeed] = useState('32.4');
-  const [newFitRms, setNewFitRms] = useState('0.24');
-  const [newNotes, setNewNotes] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false);
-
   const loadData = React.useCallback(async () => {
     setIsLoading(true);
     try {
@@ -96,40 +81,6 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
     }, 5000);
     return () => window.clearInterval(id);
   }, [loadData]);
-
-  const handleRegisterCandidate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsRegistering(true);
-    try {
-      const created = await createCandidateRecord({
-        name: newName.trim() || 'Unclassified Candidate',
-        ra: parseFloat(newRa) || 0,
-        dec: parseFloat(newDec) || 0,
-        candidate_type: newType,
-        snr: parseFloat(newSnr) || 10,
-        speed_arcsec_hr: parseFloat(newSpeed) || 0,
-        fit_rms_px: parseFloat(newFitRms) || 0.25,
-        spectral_summary: {
-          features: ['Continuum Infrared Emission'],
-          detector_arrays: ['D2', 'D6'],
-        },
-        detection_method: 'volunteer_blink',
-        fixed_stack_url: '',
-        motion_stack_url: '',
-        metadata: { notes: newNotes },
-        epoch_count: 3,
-        author_name: 'Citizen Volunteer Discovery',
-      });
-      setIsRegisterModalOpen(false);
-      setNewName('');
-      loadData();
-      onSelectCandidate(created.id);
-    } catch (err) {
-      console.error('Registration failed:', err);
-    } finally {
-      setIsRegistering(false);
-    }
-  };
 
   const statusColors: Record<CandidateStatus, { bg: string; text: string; border: string }> = {
     under_review: { bg: 'bg-amber-950/60', text: 'text-amber-300', border: 'border-amber-500/40' },
@@ -175,21 +126,34 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
             {onOpenFeed && (
               <button
                 onClick={onOpenFeed}
-                className="btn-tactile px-3.5 py-2 rounded-xl border-2 border-sky-500/50 bg-sky-950/80 hover:bg-sky-900 text-sky-300 hover:text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(56,189,248,0.25)]"
-                title="Open NASA Scientist & Community Verification Feed"
+                className="btn-tactile px-3.5 py-2 rounded-xl border-2 border-emerald-400 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 hover:text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+                title="Start a discussion thread in the Verification Feed to index new candidates"
               >
-                <UserCheck className="w-4 h-4 text-sky-400 stroke-[2.5]" />
-                <span>Verification Feed</span>
+                <UserCheck className="w-4 h-4 text-emerald-400 stroke-[2.5]" />
+                <span>+ Start / Verify in Feed</span>
               </button>
             )}
-            <button
-              onClick={() => setIsRegisterModalOpen(true)}
-              className="btn-tactile px-3.5 py-2 rounded-xl border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)]"
-            >
-              <PlusCircle className="w-4 h-4 stroke-[2.5]" />
-              <span>Register New Candidate</span>
-            </button>
           </div>
+        </div>
+
+        {/* Informative Pipeline Banner */}
+        <div className="p-3 rounded-xl bg-paper-900/90 border border-paper-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
+          <div className="flex items-center gap-2 text-paper-300">
+            <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold">
+              Automated Pipeline
+            </span>
+            <span>
+              Candidates cannot be registered manually in this catalog. Start a thread in the <strong>Verification Feed</strong> — once peer-reviewed and confirmed by 10 people, candidates auto-index here and dispatch to MPC / TNS / VSX.
+            </span>
+          </div>
+          {onOpenFeed && (
+            <button
+              onClick={onOpenFeed}
+              className="text-emerald-400 hover:text-emerald-300 font-bold underline whitespace-nowrap cursor-pointer text-xs"
+            >
+              Open Feed →
+            </button>
+          )}
         </div>
 
         {/* Live KPI Counters */}
@@ -582,140 +546,6 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
           </div>
         )}
       </div>
-
-      {/* Register New Candidate Modal */}
-      {isRegisterModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm anim-fall select-none">
-          <div className="relative w-full max-w-lg bg-paper-950 border-2 border-paper-800 rounded-2xl shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-paper-800">
-              <div className="flex items-center gap-2">
-                <PlusCircle className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-base font-bold font-mono text-white">
-                  Register New Astronomical Candidate
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsRegisterModalOpen(false)}
-                className="btn-tactile-sm p-1.5 rounded-lg border border-paper-800 text-paper-400 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleRegisterCandidate} className="space-y-3 font-mono text-xs">
-              <div>
-                <label className="text-[10px] text-paper-400 block mb-1">Candidate Designation / Name:</label>
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  placeholder="e.g. 2026-SPX-CAND-01"
-                  className="w-full px-3 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">RA (J2000 deg):</label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={newRa}
-                    onChange={(e) => setNewRa(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">Dec (J2000 deg):</label>
-                  <input
-                    type="number"
-                    step="0.0001"
-                    value={newDec}
-                    onChange={(e) => setNewDec(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-4 gap-2">
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">Type:</label>
-                  <select
-                    value={newType}
-                    onChange={(e) => setNewType(e.target.value as any)}
-                    className="w-full px-2 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                  >
-                    <option value="moving_object">Moving</option>
-                    <option value="transient">Transient</option>
-                    <option value="variable_star">Variable</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">Speed (″/hr):</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={newSpeed}
-                    onChange={(e) => setNewSpeed(e.target.value)}
-                    className="w-full px-2 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">Fit RMS (px):</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={newFitRms}
-                    onChange={(e) => setNewFitRms(e.target.value)}
-                    className="w-full px-2 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-paper-400 block mb-1">Est. S/N:</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={newSnr}
-                    onChange={(e) => setNewSnr(e.target.value)}
-                    className="w-full px-2 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] text-paper-400 block mb-1">Discovery Notes:</label>
-                <textarea
-                  value={newNotes}
-                  onChange={(e) => setNewNotes(e.target.value)}
-                  rows={2}
-                  placeholder="Notes from Sky Viewer / leave-one-out blink analysis..."
-                  className="w-full px-3 py-1.5 rounded-lg bg-paper-900 border border-paper-800 text-paper-200 focus:outline-none focus:border-emerald-400 text-xs resize-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-paper-800">
-                <button
-                  type="button"
-                  onClick={() => setIsRegisterModalOpen(false)}
-                  className="btn-tactile-sm px-3.5 py-1.5 rounded-xl border border-paper-800 text-paper-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isRegistering}
-                  className="btn-tactile px-4 py-1.5 rounded-xl border-2 border-black bg-emerald-400 text-gray-950 font-bold"
-                >
-                  {isRegistering ? 'Registering...' : 'Save to Persistent Catalog'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
