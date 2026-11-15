@@ -789,6 +789,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             <p className="text-xs text-paper-300">{loadStatus?.source === 'error' ? loadStatus.message
               : loadStatus?.source === 'loading' ? loadStatus.message
               : bitmapFailed ? 'The image could not be loaded.' : 'No image data is available for this layer.'}</p>
+            {loadStatus?.source === 'error' && (loadStatus.message.includes('502') || loadStatus.message.includes('timeout')) && (
+              <p className="text-[11px] text-amber-300/90 bg-amber-950/40 p-2 rounded border border-amber-800/60 text-left">
+                <strong>NASA IRSA Server Notice:</strong> NASA IPAC IRSA TAP gateway is currently returning 502 / timing out on custom coordinate queries. For instant offline evaluation with real data, select any of the 6 Benchmark Presets on the Home page (e.g. 3I/ATLAS, (4) Vesta).
+              </p>
+            )}
             <p className="text-xs text-paper-400">Motion cannot be assessed from unavailable image data.</p>
           </div>
         </div>
