@@ -336,7 +336,7 @@ def native_cutout(monkeypatch):
         assert selection.startswith(IBE + '?center=359.9,1.0&size=')
         assert limits['max_output_bytes'] == 24 * 1024 * 1024
         assert limits['max_network_bytes'] == 24 * 1024 * 1024
-        assert limits['timeout_seconds'] == 18
+        assert limits['timeout_seconds'] == 90
         calls.append(selection)
         header = live.grid_coordinates(359.9, 1, 12, 12, live.PIXEL_SCALE)[0].to_header()
         header.update({'MJD-AVG': 60789.75, 'DATE-AVG': '2025-04-24T18:00:00'})
@@ -491,3 +491,31 @@ def test_ibe_reader_enforces_byte_budget_on_real_http_response(declare_length):
         server.shutdown()
         server.server_close()
         worker.join()
+
+
+
+def test_ibe_reader_keeps_its_short_timeout(monkeypatch, tmp_path):
+    from science import archive_gateway
+    def read(url, limit, timeout):
+        assert timeout == 18
+        assert limit == 24 * 1024 * 1024
+        return b'bounded IBE response'
+    monkeypatch.setattr(archive_gateway, 'read_cutout', read)
+    out = tmp_path / 'primary.fits'
+    archive_gateway.download_cutout(IBE + '?center=359.9,1.0&size=0.05', out)
+    assert out.read_bytes() == b'bounded IBE response'
+
+
+def test_mirror_timeout_can_be_lowered_without_changing_ibe_timeout(monkeypatch, tmp_path):
+    from science import archive_gateway
+    from backend.python import irsa_cutout
+    def crop(source, url, output, **limits):
+        assert limits['timeout_seconds'] == 3
+        assert limits['max_network_bytes'] == 24 * 1024 * 1024
+        assert limits['max_output_bytes'] == 24 * 1024 * 1024
+        Path(output).write_bytes(b'bounded native crop')
+    monkeypatch.setattr(irsa_cutout, 'cutout', crop)
+    out = tmp_path / 'mirror.fits'
+    archive_gateway.download_cutout(IBE + '?center=359.9,1.0&size=0.05', out,
+        source_url=MIRROR, discovery_source='s3_mirror', mirror_timeout=3)
+    assert out.read_bytes() == b'bounded native crop'

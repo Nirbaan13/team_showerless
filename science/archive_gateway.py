@@ -211,12 +211,14 @@ def _mirror_source(url, source_url=None):
 
 
 def download_cutout(url, output, *, source_url=None, discovery_source='sia',
-                    max_bytes=24 * 1024 * 1024, timeout=18, read_ibe=None):
+                    max_bytes=24 * 1024 * 1024, timeout=18, mirror_timeout=90, read_ibe=None):
     """Fetch an IBE cutout or crop the identical native S3 pixels during an outage.
 
     Mirror discovery selects S3 immediately. Other callers preserve the IBE path
     and can switch only after a retryable transport error for a verified object.
     Geometry, content, permission and absent-object errors never select S3.
+    Native S3 range reads have their own bounded deadline because preserving
+    the ancillary FITS tables can take longer than one IBE response.
     """
     from pathlib import Path
     output = Path(output)
@@ -225,7 +227,7 @@ def download_cutout(url, output, *, source_url=None, discovery_source='sia',
         from backend.python.irsa_cutout import CutoutError, cutout
         try:
             cutout(source, url, output, max_network_bytes=max_bytes,
-                   max_output_bytes=max_bytes, timeout_seconds=timeout)
+                   max_output_bytes=max_bytes, timeout_seconds=mirror_timeout)
         except CutoutError as exc:
             raise GatewayError(str(exc)) from exc
 

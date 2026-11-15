@@ -24,11 +24,11 @@ Verification must cover the Scala transport routing, the subprocess boundary, st
 Verified before opening the draft PR:
 
 - Full Scala backend: 287 passed, four opt-in live tests ignored.
-- Python backend: 70 passed, one optional smoke skipped; shared gateway and processing callers: 115 passed.
+- Python backend: 70 passed, one optional smoke skipped; shared gateway and processing callers: 117 passed.
 - A real 36×36 cutout matches every original IMAGE, FLAGS, VARIANCE and ZODI pixel. Celestial SIP WCS matches within 1e-10 degrees; alternate reference pixels shift correctly. EPSF and WCS-WAVE tables remain byte-identical. The optimized result SHA-256 is `05723b99700a942ba055e244c8267a6abf7de96fb62d47d8e7267e45ef6f411e`.
 - An isolated container on the VPS fetched a real WISE-field cutout directly from S3: 9,380,512 network bytes from a 65,710,080-byte parent, 44 ranges, 73.35 seconds. No production service was restarted for this test.
 - Backend and ML Docker-specific context smoke builds include the helper and import the complete caller chain successfully.
 
-The VPS measurement means an 18-second mirror deadline is insufficient. A separate bounded mirror deadline is required before declaring the Python live-search path ready. Production rollout and cold API checks remain pending review.
+The VPS measurement means an 18-second mirror deadline is insufficient. Python callers now use a separate 90-second mirror deadline, while IBE retains its existing 18-second bound. Both native network and output budgets remain 24 MiB. This is a slow fallback rather than an immediate response; metadata completeness and the number of usable observations can still limit an analysis. Production rollout and cold API checks remain pending review.
 
 Geometry remains an enclosing native-axis subset. Python callers retain the previous IBE-compatible size semantics; this is not a guarantee that every corner of a north-aligned sky box is present on a rotated detector grid. Supporting a distinct sky-box contract is separate from transporting the same original data during an outage.
