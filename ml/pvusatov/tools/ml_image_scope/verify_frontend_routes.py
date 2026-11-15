@@ -20,12 +20,13 @@ def probe(base):
     assert status == 200, ('capabilities', status)
     assert capabilities['revision']
     assert capabilities['pipeline']['available'] is True
-    assert capabilities['motion_models']['models']
+    discovery = capabilities['motion_models']
+    assert isinstance(discovery, dict) and discovery.get('models'), 'Motion models are not ready'
     motion = capabilities['motion_analysis']
     assert motion['status'] == 'supported'
     assert motion['endpoint'] == '/api/analyses/motion'
     status, models = request(base, '/api/analyses/models')
-    assert status == 200 and models['models'], ('models', status)
+    assert status == 200 and isinstance(models, dict) and models.get('models'), ('models', status)
     checked = []
     for path, feature in [
         ('/api/motion/verifications', 'legacy_motion_service'),
