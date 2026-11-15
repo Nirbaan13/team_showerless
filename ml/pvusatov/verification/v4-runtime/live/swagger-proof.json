@@ -1,6 +1,6 @@
 {
   "checked_at_utc": "2026-11-15T11:13:07.105Z",
-  "frontend_base": "http://144.124.238.101:8080",
+  "frontend_base": "http://146.103.122.246:8080",
   "frontend_proxy_spec_loaded": true,
   "openapi_paths": 38,
   "swagger_try_it_out": true,

@@ -193,7 +193,7 @@ capability boundaries, rather than implementation claims.
 On 2026-11-14 the branch merged current `origin/main`
 `0a2da5aa13e64c1a8167d94f9f1801ccb49e915a`. The refresh preserves the merged
 ML analysis HTTP/gRPC services, teammates' frontend work, and deployment to
-`144.124.238.101` including CI image delta transfer. No unmerged cutout branch
+`146.103.122.246` including CI image delta transfer. No unmerged cutout branch
 was imported, and no deployment was performed as part of this refresh.
 
 The only integration resolutions combine the existing analysis dependency

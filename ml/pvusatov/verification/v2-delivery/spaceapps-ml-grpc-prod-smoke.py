@@ -22,7 +22,7 @@ while job['status'] not in ('COMPLETED','FAILED'):
     time.sleep(.25)
     job=rpc('GetAnalysis',{'analysisId':job['id']})
 assert job['status']=='COMPLETED',job
-with urllib.request.urlopen('http://144.124.238.101/api/analyses/'+job['id'],timeout=15) as response:
+with urllib.request.urlopen('http://146.103.122.246/api/analyses/'+job['id'],timeout=15) as response:
     http=json.load(response)
 assert http['result']==job['result']
 assert len(job['result']['frames'])==3 and job['result']['candidates']

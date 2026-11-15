@@ -30,7 +30,7 @@
 
   * `.github/workflows`: CI/CD automation pipelines for continuous deployment.
 
-* **Live Deployment:** Hosted on cloud infrastructure (`144.124.238.101` / `35.159.162.202`), with the frontend available on port `8080` and backend Swagger documentation at `/docs`.
+* **Live Deployment:** Hosted on cloud infrastructure (`146.103.122.246`), with the frontend available on port `8080` and backend Swagger documentation at `/docs`.
 
 ## 3. Data Processing & Pipeline Implementation
 

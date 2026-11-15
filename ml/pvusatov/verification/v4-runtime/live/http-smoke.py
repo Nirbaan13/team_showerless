@@ -8,7 +8,7 @@ import time
 import urllib.error
 import urllib.request
 
-BASE = os.environ.get('PROBE_HTTP', 'http://144.124.238.101')
+BASE = os.environ.get('PROBE_HTTP', 'http://146.103.122.246')
 SHA = 'c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35'
 
 

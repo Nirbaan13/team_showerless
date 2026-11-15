@@ -48,4 +48,4 @@ Separately report a resolved-motion diagnostic: truth position span of at least 
 
 Promotion requires no mean regression in either K=1 or K=3 on both final synthetic and native primary comparisons, a positive improvement in at least one budget, bounded runtime/resources and passing implementation/integration checks. Publish confidence intervals without claiming significance when intervals include zero. If these conditions fail, retain v2 in production and archive the candidate's negative final evidence. Do not lower this gate after observing final outcomes.
 
-V2 delivery remains a separate completed milestone: PR9 merged, native HTTP/gRPC/PNG/Swagger live proofs passed on 144.124.238.101. PR11 merged the 48px inference viewport fix; root is checking its actual public rollout while the three v3 workers run. Never redeploy to obsolete 35.159.162.202.
+V2 delivery remains a separate completed milestone: PR9 merged, native HTTP/gRPC/PNG/Swagger live proofs passed on 146.103.122.246. PR11 merged the 48px inference viewport fix; root is checking its actual public rollout while the three v3 workers run. Never redeploy to obsolete 35.159.162.202.

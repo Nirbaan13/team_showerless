@@ -14,8 +14,8 @@
     },
     {
       "path": "run_ssh.py",
-      "sha256": "9c60194f5c0b5c8d442103d4ec2dba16c87aa8d09b91fed03ca1d50ade39633f",
-      "bytes": 2351
+      "sha256": "c8aa8e1b29fc8aa3f98779d9303297f4abed0890bee12183af6361f1cc37dcfe",
+      "bytes": 2347
     },
     {
       "path": "v2-vps-benchmark.json",
@@ -33,5 +33,10 @@
   "production_container_unchanged_at_checks": true,
   "leftover_containers": 0,
   "credentials_included": false,
-  "candidate_or_final_data_uploaded": false
+  "candidate_or_final_data_uploaded": false,
+  "endpoint_reference_migration": {
+    "source_revision": "47224cb853adcd42a54b09b09b85333f961d2f40",
+    "results_rerun": false,
+    "scope": "Endpoint references and current-file integrity hashes updated; captured results remain historical."
+  }
 }

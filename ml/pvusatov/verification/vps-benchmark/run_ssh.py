@@ -12,8 +12,8 @@ import subprocess
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--key', default='/home/usatovpavel/.ssh/spaceapps-netherlands-admin-20261114')
-    parser.add_argument('--known-hosts', default='/home/usatovpavel/.local/state/spaceapps-migration-20261114/known_hosts')
+    parser.add_argument('--key', default='/home/usatovpavel/.ssh/spaceapps-1gb-admin-20261115')
+    parser.add_argument('--known-hosts', default='/home/usatovpavel/.local/state/spaceapps-migration-20261115-1gb/known_hosts')
     args = parser.parse_args()
     directory = Path(__file__).resolve().parent
     source = (directory / 'container_probe.py').read_text()
@@ -23,7 +23,7 @@ def main():
     command = ['ssh', '-T', '-i', args.key, '-o', 'IdentitiesOnly=yes', '-o', 'BatchMode=yes',
                '-o', 'StrictHostKeyChecking=yes', '-o', 'UserKnownHostsFile=' + args.known_hosts,
                '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=4',
-               'root@144.124.238.101', 'python3 -c ' + shlex.quote(remote)]
+               'root@146.103.122.246', 'python3 -c ' + shlex.quote(remote)]
     completed = subprocess.run(command, input=json.dumps(config), text=True, capture_output=True, timeout=600)
     if completed.returncode:
         raise SystemExit('SSH benchmark failed: ' + completed.stderr[:4096])

@@ -8,7 +8,7 @@ const { firefox } = require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_m
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
     page.on('pageerror', error => errors.push(String(error)));
-    await page.goto('http://144.124.238.101:8080/', { waitUntil: 'networkidle' });
+    await page.goto('http://146.103.122.246:8080/', { waitUntil: 'networkidle' });
     await page.getByRole('link', { name: 'ML analysis', exact: true }).click();
     await page.getByRole('heading', { name: 'Motion analysis', exact: true }).waitFor();
     await page.getByText('spherex-track-rf-v2', { exact: true }).waitFor();
@@ -18,7 +18,7 @@ const { firefox } = require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_m
     await page.getByRole('button', { name: 'Run analysis', exact: true }).click();
     const acceptance = await (await accepted).json();
     await page.getByRole('heading', { name: /candidate tracks · 4 exposures/ }).waitFor({ timeout: 120000 });
-    const job = await (await page.request.get('http://144.124.238.101/api/analyses/' + acceptance.id)).json();
+    const job = await (await page.request.get('http://146.103.122.246/api/analyses/' + acceptance.id)).json();
     assert.equal(job.status, 'completed');
     assert.equal(job.result.model.sha256, 'dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9');
     assert.equal(await page.locator('.inference-candidate').count(), job.result.candidates.length);
@@ -38,7 +38,7 @@ const { firefox } = require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_m
     assert.match(await page.getByRole('alert').innerText(), /not found/i);
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
     mobile.on('pageerror', error => errors.push(String(error)));
-    await mobile.goto('http://144.124.238.101:8080/', { waitUntil: 'networkidle' });
+    await mobile.goto('http://146.103.122.246:8080/', { waitUntil: 'networkidle' });
     await mobile.getByRole('button', { name: 'Open mobile navigation menu', exact: true }).click();
     await mobile.getByRole('link', { name: 'ML analysis', exact: true }).click();
     await mobile.getByRole('heading', { name: 'Motion analysis', exact: true }).waitFor();

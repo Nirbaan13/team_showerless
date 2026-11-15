@@ -63,7 +63,7 @@ Among them were real HST NICMOS/NIC2 observations dated 2002-10-10, including:
   `2002-10-10T17:42:27.110000134Z`, `analysisEligible=false`.
 
 The built frontend was then exercised in a real browser through its normal
-`/backend` proxy to `http://144.124.238.101`, without stubbing the archive search,
+`/backend` proxy to `http://146.103.122.246`, without stubbing the archive search,
 selection or download manifest. A 1-arcmin field with UI dates 1990-01-01 through
 2002-12-31 sent an enclosing radius of 0.011785112936675083 degrees and exclusive
 upper bound 2003-01-01T00:00:00Z. It returned 100 truncated observations including

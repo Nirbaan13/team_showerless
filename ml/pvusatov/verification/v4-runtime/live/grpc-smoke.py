@@ -13,7 +13,7 @@ command=[os.environ.get('GRPCURL', '/tmp/spaceapps-grpc-v2/grpcurl'), '-plaintex
          '-import-path',str(root/'backend/target/protobuf_external'),
          '-proto','spaceapps/retrieval/v1/analysis.proto']
 target=os.environ.get('PROBE_GRPC', '127.0.0.1:15058')
-http=os.environ.get('PROBE_HTTP', 'http://144.124.238.101')
+http=os.environ.get('PROBE_HTTP', 'http://146.103.122.246')
 
 def rpc(method,data):
     completed=subprocess.run(command+['-d',json.dumps(data),target,
