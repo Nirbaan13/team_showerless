@@ -1,0 +1,584 @@
+{
+  "status": "PASS",
+  "method": "rehash actual managed original files against completed download response",
+  "files": 64,
+  "total_bytes": 394851812,
+  "assets": [
+    {
+      "case": "wise0855",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "asset_id": "344994a4be4d3f3121f69ec70d456450efc1027532853c97b5e14d7b898dcb2a",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "0543fe41d1b6687838ec5ed0626564037ca1ea96c3b9cf99a0136a95a4543234",
+      "native_id": "1342m076:w2:e004"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "asset_id": "b9c50afd35f247ef09121b9993780b4ce32ebbe3cf9f6ec9095c337a8b5e9fad",
+      "role": "#inverse-variance",
+      "bytes": 7578577,
+      "sha256": "44bf138af102a4b4e99315e0c2bef6c0c9270f9bdfc295739301484029a96fc2",
+      "native_id": "1342m076:w2:e004"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "asset_id": "3012be7c823fa584cd082f3f6368679ec2f8d89dd86b555ec5b2838be99541d8",
+      "role": "#coverage",
+      "bytes": 1615473,
+      "sha256": "801379a34121ec698d648c0168541b29f74746c88a94eb1449a3b2a44d1621a7",
+      "native_id": "1342m076:w2:e004"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "asset_id": "9c2959f397454dc672e66b4ab01c86b709ff02c3a7fc163db1939294b4dc506d",
+      "role": "#contributors",
+      "bytes": 155520,
+      "sha256": "38197ae2b118ab51eb5401861e4e8d83ffcdcec2facdd87d76e27b4cd4d1bd16",
+      "native_id": "1342m076:w2:e004"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "asset_id": "e18d440e5a31bb954c2a8c776e42b7aa2853c9c1e7f97f5146da5abf7224011e",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "4a189a2f372ad6209c19dda8ce57bb1abe24b0e3903059daef0b42d6af3a300c",
+      "native_id": "1342m076:w2:e015"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "asset_id": "b5d97e02aa774ee48576ecf78770a3231756c90249a388f933e6116e0920139f",
+      "role": "#inverse-variance",
+      "bytes": 6425112,
+      "sha256": "032b02c8e8591c471d09d8a27ee775abea29d2a661c395c6d9452ba69db90448",
+      "native_id": "1342m076:w2:e015"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "asset_id": "19d2386087baacb005dedcfd98426ab83fedc3c0fb09ac00228457993867f35d",
+      "role": "#coverage",
+      "bytes": 1559967,
+      "sha256": "4d01b5ac42a1a70daaa960ba0141916657ed360b7c6702e68f8ea825573de18f",
+      "native_id": "1342m076:w2:e015"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "asset_id": "9de574d20c4393759491ed589f3de966dc59759fb390c9d5dabd3babdc50aa20",
+      "role": "#contributors",
+      "bytes": 155520,
+      "sha256": "d884bea818286c283964f7c552b7818a2f9b0ed54ef8b3a42f36989f05dd2b5c",
+      "native_id": "1342m076:w2:e015"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "asset_id": "b3b96f57c4002bd48323996cae3e93bd385e49b07aa8af24843e6c904a26be2f",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "dc06f574e28c8af1941d6a92b730cdc4c85290e7c94386af6fecd9cb13c56248",
+      "native_id": "1342m076:w2:e012"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "asset_id": "85da4902909fc637efa60c6f6c418e4013e4e550d28e7f38d85ba8e367fe84fd",
+      "role": "#inverse-variance",
+      "bytes": 7278924,
+      "sha256": "0b4b9c80382845e716e693b825d28a2cf551a54ab8b43ce8e9ecb8b15e17553f",
+      "native_id": "1342m076:w2:e012"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "asset_id": "6ef236d32a8b2557861b0c0da976fe7b7e65bb15f808c52c14b150255a60089a",
+      "role": "#coverage",
+      "bytes": 1617457,
+      "sha256": "d5287b0a7f9ee6560c01efb5d294413cb5c8fe2a99a5ee3b52ac4c221a6b7c20",
+      "native_id": "1342m076:w2:e012"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "asset_id": "91d185614b2e4356805539f0bc792c395b9319e747e43256895ee85a7e4473dd",
+      "role": "#contributors",
+      "bytes": 149760,
+      "sha256": "1bb0c221e8ba599089a569caa772a09f80b7e598d93b4be9a984deea1db2b3a7",
+      "native_id": "1342m076:w2:e012"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "asset_id": "5c5d63513cd1e59ddc5e38f432aead993397e04ac75065b9c5733926e0aed2d9",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "17da06891d1a26b5552cf04daf57ebae416773660e60be9ccf15eabb378756b2",
+      "native_id": "1342m076:w2:e001"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "asset_id": "9f9468e77edf7dcdb4d221df06149cc8c3454e0d8a59575f3f40451d7cd5bd9e",
+      "role": "#inverse-variance",
+      "bytes": 4387143,
+      "sha256": "981d23c9db5eb1ba0cdbca38b473060738b5e7f06c671d7a596b53f88acb78a0",
+      "native_id": "1342m076:w2:e001"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "asset_id": "b0f47f035c79c2cea68d6451472d596517d194625d88cdd428e6d3112329b818",
+      "role": "#coverage",
+      "bytes": 1279021,
+      "sha256": "ab1d9aae9575fbc2a957abbcd72938d8a45113b424fc5390ed912b626f777ce2",
+      "native_id": "1342m076:w2:e001"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "asset_id": "0bb957dee7f9df1bc12f8ad107371af78b905140748948166a3b7a50460cd296",
+      "role": "#contributors",
+      "bytes": 152640,
+      "sha256": "a9824d2e1b32cb939284e4308588602458c184538bc8a8abed9f050eeb06cb1e",
+      "native_id": "1342m076:w2:e001"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "asset_id": "851c163a59db66642239dfc4295fc463fe09d025d465a32adbc3d8dc7dfcde4f",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "288cb84cb221cb356adb9b3b13cbca6a331c615c648d03ea16baa9d956e89a15",
+      "native_id": "1342m076:w2:e000"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "asset_id": "336a740f40065b5c496fc9cf10e4ef23f1a8a4dae01bfdd3fb0b199947abb068",
+      "role": "#inverse-variance",
+      "bytes": 2624516,
+      "sha256": "75abcfccbdf07721b7e86e738cf46303b8a109d2e6baa159684614cda305685c",
+      "native_id": "1342m076:w2:e000"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "asset_id": "692b4c46acc0a8298aed25c51c24f19cf9bb57b235f0b0c53e429c4ec3b5f844",
+      "role": "#coverage",
+      "bytes": 948448,
+      "sha256": "382361e83e674e5834a3515a6a003b09ab12b4ad0e54c78ea63537e6ba394a2f",
+      "native_id": "1342m076:w2:e000"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "asset_id": "571f5c0829d16a7fb4665a07eedd46df50444652ea2a978220d61bcaecd167fb",
+      "role": "#contributors",
+      "bytes": 158400,
+      "sha256": "37c2936616817d2faac023fae63d2c805023d663888db3c5bff7f862c0e24fea",
+      "native_id": "1342m076:w2:e000"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "asset_id": "39e6e9899096d1a8407f139facbfb2e69cb474b06cd6025b62fc9d3b3fc13495",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "8675e2ee9ad1a7d8092c4ebec8f19514de786f79f6e30ee1434618b30e86ca9e",
+      "native_id": "1342m076:w2:e021"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "asset_id": "f373f664fc6538adaec9768d5697db0627a2e5cd994f4007f7e2fb401779ddaa",
+      "role": "#inverse-variance",
+      "bytes": 6796013,
+      "sha256": "83b8ceb096dc63d0cabdb62b7d90f3b77e147823440bb49694d8d295132d5333",
+      "native_id": "1342m076:w2:e021"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "asset_id": "d8d32bf7fc8368ca057e0441d2084ef6b9a4d7e0a9e15d1c6c5b0d89ad2e5c18",
+      "role": "#coverage",
+      "bytes": 1624040,
+      "sha256": "0c2762d2ea6f15fee7625471654c92af5077be8f1919b1ff4cd31cc8eade8ab7",
+      "native_id": "1342m076:w2:e021"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "asset_id": "c514121dbf4497583cadf3bd3afe5a736dec51ddf1b139f1acf8aaa774ae8e80",
+      "role": "#contributors",
+      "bytes": 155520,
+      "sha256": "8b902d6a7f2ace0b0ba0bd233ed31590a5d0a433737e6d360759afe3694e342d",
+      "native_id": "1342m076:w2:e021"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "asset_id": "e62d418bbfa7aa0ad71c506e5857f60b6ce36808da69c851c1a3d17699b3aa19",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "c3276b543f3dffb06d8dc1ca475bb87b0cc417497a45a46c9216ef7f9b1567b2",
+      "native_id": "1342m076:w2:e008"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "asset_id": "8c900aa5756baf8da76050f4204f6faaa1cff3aaebcbc22af0c9d0b64cacf915",
+      "role": "#inverse-variance",
+      "bytes": 7499197,
+      "sha256": "d4b0c12f53f82bd8b3905347c6d70ea91f50c8f1785a72c14f4ffbec3eb05af4",
+      "native_id": "1342m076:w2:e008"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "asset_id": "4e31848ec2a6092ad7aabd8aca897417c6b6d5bc35b41ad028dc50070761aada",
+      "role": "#coverage",
+      "bytes": 1656597,
+      "sha256": "aa277d716d71d1774693450378e8400ed4052fc0c70bfb3a67db115b0375da47",
+      "native_id": "1342m076:w2:e008"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "asset_id": "3b9e4243691258108eb354d90c848da333cddca42f853eaa495910dd2f873ad7",
+      "role": "#contributors",
+      "bytes": 161280,
+      "sha256": "75944791c784e741b5e40b150364f773499c9be5bc18f414d4115767aae3f821",
+      "native_id": "1342m076:w2:e008"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "asset_id": "c2756d15bf1f01015178d9c32abe6d779c04d20378888fd8fce620a5472e5cf3",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "426135f7d2ea70efbfe09be18eb5cf53fc15840db6f4b8a03b901453391ebaf2",
+      "native_id": "1342m076:w2:e022"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "asset_id": "0ff9d0f781227c4779c9ede6b4b0186262d5e2a5c5b4e7d4033b20ac10b6fb40",
+      "role": "#inverse-variance",
+      "bytes": 11675229,
+      "sha256": "2109981807ac2b4dd101297cca9ec4559fabb22cf4bd0fa03df2aec61f534aa6",
+      "native_id": "1342m076:w2:e022"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "asset_id": "c84e748fe93f1b4f9ef90f21a1634b4527c8ee95f908a28b7a14a5a45e677764",
+      "role": "#coverage",
+      "bytes": 2037603,
+      "sha256": "56af65681fcab6cdf342ec5a336d760de9bb721be54c6e91364970d81317dac0",
+      "native_id": "1342m076:w2:e022"
+    },
+    {
+      "case": "wise0855",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "asset_id": "51a03e8256b16815f7ad3c82d40f8bad507ba00e8a464a4af177eef4c090e573",
+      "role": "#contributors",
+      "bytes": 253440,
+      "sha256": "4b8372e85e3380fee81ac59b39dbb5f3d0e7cf3279a49f1b2d02858d38b53e74",
+      "native_id": "1342m076:w2:e022"
+    },
+    {
+      "case": "accident",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "asset_id": "416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "ad3955b8e0968c36c29bf5165ba792fa1165303fca88c5a1781998f4d85907e2",
+      "native_id": "2338m107:w2:e008"
+    },
+    {
+      "case": "accident",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "asset_id": "54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8",
+      "role": "#inverse-variance",
+      "bytes": 5993107,
+      "sha256": "e062c135255ed8ce34476ed36e2ea41113cbc7806cff5dde91184ec00fb95fdd",
+      "native_id": "2338m107:w2:e008"
+    },
+    {
+      "case": "accident",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "asset_id": "c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964",
+      "role": "#coverage",
+      "bytes": 1519662,
+      "sha256": "d25a280990e4e142c3814bc9c45fffa05383662b30652e6103a282a35ec1654e",
+      "native_id": "2338m107:w2:e008"
+    },
+    {
+      "case": "accident",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "asset_id": "6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093",
+      "role": "#contributors",
+      "bytes": 152640,
+      "sha256": "156888525851c501ef7fb00b02ece6f5931dc867edfd8512819eba14aed67531",
+      "native_id": "2338m107:w2:e008"
+    },
+    {
+      "case": "accident",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "asset_id": "485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "04d8d214b0cf6f1fc7b7d6a5b0b5368489c93742588560c42dcd5865216e7394",
+      "native_id": "2338m107:w2:e001"
+    },
+    {
+      "case": "accident",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "asset_id": "fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c",
+      "role": "#inverse-variance",
+      "bytes": 3356276,
+      "sha256": "bde075768d01f7553b51527fd94be79736e073aa3a702a6105cef93d45dc414b",
+      "native_id": "2338m107:w2:e001"
+    },
+    {
+      "case": "accident",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "asset_id": "674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4",
+      "role": "#coverage",
+      "bytes": 1127127,
+      "sha256": "ad3da58643d0cbe333e03ed1f26caa09d2aac8f57a5907f0637b623a01863e72",
+      "native_id": "2338m107:w2:e001"
+    },
+    {
+      "case": "accident",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "asset_id": "b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78",
+      "role": "#contributors",
+      "bytes": 155520,
+      "sha256": "564cea62c6c99d1d26675a7b82db5a701cd8b7c384f840c492eebdc20b74bfcc",
+      "native_id": "2338m107:w2:e001"
+    },
+    {
+      "case": "accident",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "asset_id": "8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "16fa55b91d235421cfb10061a53228ae5b37345a6b57f6574c8b8a21c5d8863e",
+      "native_id": "2338m107:w2:e000"
+    },
+    {
+      "case": "accident",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "asset_id": "e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a",
+      "role": "#inverse-variance",
+      "bytes": 2027349,
+      "sha256": "872987d364c129d00fc2719c4d7ab4f3faf1fd8630fd608be69709e98ea78149",
+      "native_id": "2338m107:w2:e000"
+    },
+    {
+      "case": "accident",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "asset_id": "f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83",
+      "role": "#coverage",
+      "bytes": 803586,
+      "sha256": "bac61cb5c4f7bc5b1362ced9227640dc9cd94a67238846248d735217d0391543",
+      "native_id": "2338m107:w2:e000"
+    },
+    {
+      "case": "accident",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "asset_id": "97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd",
+      "role": "#contributors",
+      "bytes": 141120,
+      "sha256": "6978c5178157c0abae8998d28750f2501f5e4d10f01856a2fe9c3e43d0f1e846",
+      "native_id": "2338m107:w2:e000"
+    },
+    {
+      "case": "accident",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "asset_id": "07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "77610c3b3d15c7127470d2a739505443a75cda1aaa22ba923bf7200fc5752b75",
+      "native_id": "2338m107:w2:e015"
+    },
+    {
+      "case": "accident",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "asset_id": "c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d",
+      "role": "#inverse-variance",
+      "bytes": 7226216,
+      "sha256": "0e35d538247110f04e02191abc96dda1b68bcb125a661925a964600f95a32acb",
+      "native_id": "2338m107:w2:e015"
+    },
+    {
+      "case": "accident",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "asset_id": "d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599",
+      "role": "#coverage",
+      "bytes": 1657963,
+      "sha256": "74e0f18343427f0a2d703df1ddf7e4aca32537f97986c70a3c8c8a11c2cca129",
+      "native_id": "2338m107:w2:e015"
+    },
+    {
+      "case": "accident",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "asset_id": "6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c",
+      "role": "#contributors",
+      "bytes": 155520,
+      "sha256": "e710c0f239c4c4e6271c3b25fcee7f8316d24872df311e7bcd389d0b63b77be3",
+      "native_id": "2338m107:w2:e015"
+    },
+    {
+      "case": "accident",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "asset_id": "7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "b3a754aac585d5216bba2f60c91ebef2e199127cf947b74708dec8b8fac6600d",
+      "native_id": "2338m107:w2:e012"
+    },
+    {
+      "case": "accident",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "asset_id": "7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004",
+      "role": "#inverse-variance",
+      "bytes": 5898529,
+      "sha256": "0de0ccd370e7a1ef114ee9aca4c0eea70cff45369285d5b8e226f3229acf2b83",
+      "native_id": "2338m107:w2:e012"
+    },
+    {
+      "case": "accident",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "asset_id": "6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2",
+      "role": "#coverage",
+      "bytes": 1520980,
+      "sha256": "71333cf885efa7f291a2dbb97d5dc300dc2b8d2230ce3096d66f34a530c006f9",
+      "native_id": "2338m107:w2:e012"
+    },
+    {
+      "case": "accident",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "asset_id": "1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116",
+      "role": "#contributors",
+      "bytes": 138240,
+      "sha256": "39544ea452306036e509bb93653f9f08272b69ebff3ff66e5a7335c84e552cea",
+      "native_id": "2338m107:w2:e012"
+    },
+    {
+      "case": "accident",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "asset_id": "01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "c4be38fdb17a8d4b9f95cd5a4806516d837b5b21dda726ed3b08a1a272d5a329",
+      "native_id": "2338m107:w2:e022"
+    },
+    {
+      "case": "accident",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "asset_id": "6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea",
+      "role": "#inverse-variance",
+      "bytes": 6497201,
+      "sha256": "613352785cd2897254359d1df151106831edb12a8ea645de5418d1ac22df292b",
+      "native_id": "2338m107:w2:e022"
+    },
+    {
+      "case": "accident",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "asset_id": "aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb",
+      "role": "#coverage",
+      "bytes": 1611137,
+      "sha256": "72eed79ed66457db7cd4ecbf58589d13dfc1ef9e47ca836bd8656f0a441a4894",
+      "native_id": "2338m107:w2:e022"
+    },
+    {
+      "case": "accident",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "asset_id": "a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab",
+      "role": "#contributors",
+      "bytes": 144000,
+      "sha256": "b9f3f9458f93bbd2152011d8be99a444a336ac48810483264ac8efd9c5645a74",
+      "native_id": "2338m107:w2:e022"
+    },
+    {
+      "case": "accident",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "asset_id": "ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "fc2f61627ba6dc424ad103a1fa9acc91377566c79f773f8d847c855f6d42281a",
+      "native_id": "2338m107:w2:e021"
+    },
+    {
+      "case": "accident",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "asset_id": "4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a",
+      "role": "#inverse-variance",
+      "bytes": 7978213,
+      "sha256": "300a2a88ab37daf48c73c3a847312c795bfe7b94c79ddcc07a8574e8e3e00ddb",
+      "native_id": "2338m107:w2:e021"
+    },
+    {
+      "case": "accident",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "asset_id": "e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2",
+      "role": "#coverage",
+      "bytes": 1676649,
+      "sha256": "08e6cce0af368fe2f1ca84fdb00a505e846c60a21f78bec8ce72aca33986f815",
+      "native_id": "2338m107:w2:e021"
+    },
+    {
+      "case": "accident",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "asset_id": "31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb",
+      "role": "#contributors",
+      "bytes": 175680,
+      "sha256": "209116c53d62465617745df15d5da866ca01d5a4a3685c05b8e2c4d8998d7bfa",
+      "native_id": "2338m107:w2:e021"
+    },
+    {
+      "case": "accident",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "asset_id": "f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc",
+      "role": "#this",
+      "bytes": 16784640,
+      "sha256": "8a98f8376daf1abbc0bf08e85ff1228f0d32a8d53fad99542cdc85873ec68223",
+      "native_id": "2338m107:w2:e004"
+    },
+    {
+      "case": "accident",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "asset_id": "fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb",
+      "role": "#inverse-variance",
+      "bytes": 6664612,
+      "sha256": "56c9df74cd914a16923d2d6be503d9ca4eee581a1d80e3915d655e516f94a29c",
+      "native_id": "2338m107:w2:e004"
+    },
+    {
+      "case": "accident",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "asset_id": "60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b",
+      "role": "#coverage",
+      "bytes": 1555168,
+      "sha256": "786968d4f446f432c0c9183612ec94e2a32275aef5f4a38ac2cf712170c9c983",
+      "native_id": "2338m107:w2:e004"
+    },
+    {
+      "case": "accident",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "asset_id": "788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2",
+      "role": "#contributors",
+      "bytes": 175680,
+      "sha256": "eb6ecaeb51b31ae1af8cac9efc0bbb5cb11367ded44a4315dc42dc908c39851b",
+      "native_id": "2338m107:w2:e004"
+    }
+  ]
+}

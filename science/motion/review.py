@@ -1,4 +1,4 @@
-"""Generate a candidate review from an aligned SPHEREx stack."""
+"""Generate a candidate review from an aligned, qualified image stack."""
 
 import argparse
 import base64
@@ -6,6 +6,7 @@ import json
 import struct
 import zlib
 from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -84,6 +85,22 @@ def projected_coordinates(xy, width, height, ra_center, dec_center, pixel_scale)
     return np.column_stack((np.rad2deg(ra) % 360, np.rad2deg(dec)))
 
 
+def sky_wcs_from_header(header):
+    """Read the actual registered grid WCS without assuming its orientation."""
+    from astropy.io.fits import Header
+    from astropy.wcs import WCS
+
+    if not isinstance(header, str) or not header:
+        raise ValueError('A registered celestial target WCS header is required')
+    try:
+        wcs = WCS(Header.fromstring(header, sep='\n'))
+        if not wcs.has_celestial or wcs.pixel_n_dim != 2 or wcs.world_n_dim != 2:
+            raise ValueError('A two-dimensional celestial target WCS is required')
+        return wcs
+    except (ValueError, TypeError) as exc:
+        raise ValueError('Invalid registered celestial target WCS') from exc
+
+
 def ephemeris_match(track, expected):
     if expected is None:
         return None
@@ -93,7 +110,7 @@ def ephemeris_match(track, expected):
     return None
 
 
-def bloom_candidates(masks, times, max_speed):
+def bloom_candidates(masks, times, max_speed, min_speed=0.5):
     peaks = []
     for mask in masks:
         components, count = label(mask, structure=np.ones((3, 3)))
@@ -101,10 +118,11 @@ def bloom_candidates(masks, times, max_speed):
         ids = np.flatnonzero(areas[1:] >= 6) + 1
         positions = center_of_mass(mask, components, ids)
         peaks.append(np.array([(x, y, areas[index], 0) for (y, x), index in zip(positions, ids)]).reshape(-1, 4))
-    return link_detections(peaks, times, .5, max_speed, 1.4, 3, subpixel=True)
+    return link_detections(peaks, times, min_speed, max_speed, 1.4, 3, subpixel=True)
 
 
-def candidate_record(track, rank, images, times, significance, supports, outlier, expected, grid, *, bloom=None):
+def candidate_record(track, rank, images, times, significance, supports, outlier, expected, grid, *,
+                     bloom=None, sky_wcs=None):
     fitted = fitted_positions(track, times)
     epochs = list(track.epochs)
     is_bloom = bloom is not None
@@ -118,7 +136,11 @@ def candidate_record(track, rank, images, times, significance, supports, outlier
                     (2, max(6.0, float(np.percentile(display_values, 99.8))) if display_values.size else 6.0))
     offsets = ephemeris_match(track, expected)
     height, width = images.shape[1:]
-    sky = projected_coordinates(track.positions_xy, width, height, *grid)
+    if sky_wcs is None:
+        sky = projected_coordinates(track.positions_xy, width, height, *grid)
+    else:
+        coordinates = sky_wcs.pixel_to_world(*np.asarray(track.positions_xy).T).icrs
+        sky = np.column_stack((coordinates.ra.deg, coordinates.dec.deg))
     record = asdict(track)
     if is_bloom:
         record.update(snr=None, median_peak_ratio=None, bloom_area_px=list(map(int, track.snr)))
@@ -131,10 +153,13 @@ def candidate_record(track, rank, images, times, significance, supports, outlier
         'max_offset_px': None if offsets is None else round(float(max(offsets)), 3),
         'ephemeris_offsets_px': None if offsets is None else offsets.round(3).tolist(),
         'sky_deg': sky.round(7).tolist(),
+        'proper_motion_arcsec_per_year': float(track.speed_px_per_time * grid[2] * 8766.0),
+        'proper_motion_unit': 'arcsec/year',
         'filter_support': None if is_bloom else [round(float(supports[index, y, x]), 3)
                                                for index, (x, y) in zip(epochs, pixels)],
-        'outlier_at_position': [bool(outlier[index, y, x])
-                                for index, (x, y) in zip(epochs, pixels)],
+        'outlier_at_position': (None if outlier is None else
+                                [bool(outlier[index, y, x])
+                                 for index, (x, y) in zip(epochs, pixels)]),
         'fixed_stack': png_url(stretch(stationary, floor, scale)),
         'motion_stack': png_url(stretch(aligned, floor, scale)),
         'stack_contributing_exposures': int(coverage[PIXEL_RADIUS, PIXEL_RADIUS]),
@@ -150,29 +175,41 @@ def best_match(tracks, expected):
     return None
 
 
-def make_review(path, max_speed=60, forest=None):
+def make_review(path, max_speed=60, forest=None, *, min_speed=0.5, search_profile=None):
     with np.load(path) as data:
         target, detector, source = SERIES.get(path.stem, (None, None, None))
-        return build_review(data, path.stem, target, detector, source, max_speed=max_speed, forest=forest)
+        return build_review(data, path.stem, target, detector, source, min_speed=min_speed,
+                            max_speed=max_speed, forest=forest, search_profile=search_profile)
 
 
-def build_review(data, series_id, target, detector, source, *, max_speed=60, forest=None, track_limit=None):
+def build_review(data, series_id, target, detector, source, *, min_speed=0.5, max_speed=60,
+                 forest=None, track_limit=None, search_profile=None):
+    """Review a qualified stack whose ``times`` are actual elapsed hours.
+
+    ``outlier=None`` means instrument-specific outlier evidence is unavailable;
+    masks already applied during preparation remain represented by NaN pixels.
+    """
     images = data['images'].astype(float)
     times, dates, ids = data['times'], data['dates'], data['observation_ids']
     outlier = data['outlier']
     expected = data.get('expected_xy')
     bloom = data.get('bloom')
     grid = (*map(float, data['center_deg']), float(data['pixel_scale_arcsec']))
+    sky_header = data.get('sky_wcs_header')
+    sky_wcs = sky_wcs_from_header(sky_header) if sky_header is not None else None
     retains_outliers = bool(data['retain_outliers'])
     if expected is not None and (expected.shape != (len(images), 2) or not np.isfinite(expected).all()):
         raise ValueError(f'{series_id} needs one finite ephemeris position per exposure')
-    settings = {'max_speed': max_speed, 'min_support': MIN_SUPPORT, 'psf_sigma': PSF_SIGMA}
+    settings = {'min_speed': min_speed, 'max_speed': max_speed,
+                'min_support': MIN_SUPPORT, 'psf_sigma': PSF_SIGMA}
     tracks = find_candidates(images, times, leave_one_out=True, **settings)
     forest_order = random_forest_order(forest, tracks) if forest is not None else []
     forest_ranks = {index: rank for rank, index in enumerate(forest_order, 1)}
     baseline = find_candidates(images, times, **settings)
-    strict = find_candidates(np.where(outlier, np.nan, images), times, leave_one_out=True, **settings)
-    bloom_tracks = bloom_candidates(bloom, times, max_speed) if bloom is not None else []
+    strict = (None if outlier is None else
+              find_candidates(np.where(outlier, np.nan, images), times, leave_one_out=True, **settings))
+    bloom_tracks = (bloom_candidates(bloom, times, max_speed, min_speed=min_speed)
+                    if bloom is not None else [])
     residuals = difference_frames(images, leave_one_out=True)
     evidence = [filtered_evidence(diff, np.isfinite(diff), PSF_SIGMA, MIN_SUPPORT) for diff in residuals]
     _, significance, supports, _ = (np.stack(column) for column in zip(*evidence))
@@ -188,7 +225,7 @@ def build_review(data, series_id, target, detector, source, *, max_speed=60, for
             omitted_frame_checks.append({'omitted_observation_id': str(ids[index]),
                                          'match': best_match(reduced, expected[keep])})
     frames = [
-        {'id': str(identifier), 'time': str(date) + 'Z',
+        {'id': str(identifier), 'time': utc_timestamp(date),
          'coverage': round(float(mask.mean()), 4),
          'aligned': png_url(stretch(image, raw_ceiling * .025, raw_ceiling)),
          'residual': png_url(stretch(signal, 2, detection_ceiling))}
@@ -205,6 +242,8 @@ def build_review(data, series_id, target, detector, source, *, max_speed=60, for
         'width': images.shape[2],
         'height': images.shape[1],
         'pixel_scale_arcsec': grid[2],
+        'detector_settings': {**settings, 'time_unit': 'hours', 'speed_unit': 'pixels/hour'},
+        'search_profile': search_profile,
         'retains_outliers': retains_outliers,
         'has_ephemeris': expected is not None,
         'ephemeris_match_tolerance_px': MATCH_TOLERANCE if expected is not None else None,
@@ -212,11 +251,11 @@ def build_review(data, series_id, target, detector, source, *, max_speed=60, for
         'omitted_frame_checks': omitted_frame_checks,
         'frames': frames,
         'tracks': [{**candidate_record(track, index + 1, images, times, significance, supports,
-                                       outlier, expected, grid),
+                                       outlier, expected, grid, sky_wcs=sky_wcs),
                     'random_forest_rank': forest_ranks.get(index)}
                    for index, track in enumerate(tracks[:track_limit])],
         'bloom_tracks': [candidate_record(track, index + 1, images, times, significance, supports,
-                                          outlier, expected, grid, bloom=bloom)
+                                          outlier, expected, grid, bloom=bloom, sky_wcs=sky_wcs)
                          for index, track in enumerate(bloom_tracks[:track_limit])],
         'comparison': {
             'shared_median': {'candidates': len(baseline), 'match': best_match(baseline, expected)},
@@ -224,22 +263,32 @@ def build_review(data, series_id, target, detector, source, *, max_speed=60, for
             'random_forest': (None if forest is None else
                               {'candidates': len(tracks),
                                'match': best_match([tracks[i] for i in forest_order], expected)}),
-            'outliers_masked': {'candidates': len(strict), 'match': best_match(strict, expected)},
+            'outliers_masked': (None if strict is None else
+                                {'candidates': len(strict), 'match': best_match(strict, expected)}),
             'bloom': None if bloom is None else {'candidates': len(bloom_tracks),
                                                   'match': best_match(bloom_tracks, expected)},
         },
     }
 
 
+def utc_timestamp(value):
+    """Normalize archive dates; legacy timezone-naive SPHEREx dates are UTC."""
+    timestamp = datetime.fromisoformat(str(value))
+    if timestamp.tzinfo is None:
+        timestamp = timestamp.replace(tzinfo=timezone.utc)
+    return timestamp.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('stacks', type=Path, nargs='+')
+    parser.add_argument('--min-speed', type=float, default=0.5, help='Minimum track speed in pixels per hour')
     parser.add_argument('--max-speed', type=float, default=60, help='Maximum track speed in pixels per hour')
     parser.add_argument('--compare-random-forest', action='store_true', help='Train on simulated fields and rerank the same candidates (requires scikit-learn)')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     forest = train_random_forest() if args.compare_random_forest else None
-    reports = [make_review(path, args.max_speed, forest) for path in args.stacks]
+    reports = [make_review(path, args.max_speed, forest, min_speed=args.min_speed) for path in args.stacks]
     args.output.write_text(json.dumps(reports, allow_nan=False, separators=(',', ':')) + '\n')
     for data in reports:
         print(data['id'], json.dumps(data['comparison']))

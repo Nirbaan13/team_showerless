@@ -22,7 +22,7 @@ object DownloadsRuntime:
         new IrsaProvider(irsa,repository),
         new ObsTapProvider("eso","https://archive.eso.org/tap_obs/sync",OriginPolicy.eso,transport),
         new ObsTapProvider("cadc","https://ws.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/argus/sync",OriginPolicy.cadc,transport),
-        new GaiaProvider(transport),new NadcBassProvider(transport),new ArtXcProvider(transport),new LamostProvider(transport),new ArtXcCatalogProvider(transport)
+        new GaiaProvider(transport),new NadcBassProvider(transport),new ArtXcProvider(transport),new LamostProvider(transport),new ArtXcCatalogProvider(transport),new UnwiseProvider(transport)
       )++PendingProvider.inventory.map(new PendingProvider(_)))
       discovery <- FederatedDiscovery.make(registry,repository,limits)
       sharedCapacity <- ZIO.fromOption(capacity).orElse(FileCache.open(data,database,20L*1024*1024*1024,limits.file_bytes,512L*1024*1024).mapError(ArchiveFailure.from))

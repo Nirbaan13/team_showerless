@@ -22,6 +22,7 @@ object OriginPolicy:
   val artxc=OriginPolicy(Set("heaiki.ru"))
   val lamost=OriginPolicy(Set("www.lamost.org","dr11.lamost.org"))
   val irsa=OriginPolicy(Set("irsa.ipac.caltech.edu","nasa-irsa-spherex.s3.amazonaws.com","nasa-irsa-spherex.s3.us-east-1.amazonaws.com"))
+  val unwise=OriginPolicy(Set("portal.nersc.gov"))
   def forProvider(id: String): OriginPolicy = id match
     case "eso"=>eso
     case "cadc"=>cadc
@@ -30,22 +31,24 @@ object OriginPolicy:
     case "iki-artxc" | "iki-artxc-catalog"=>artxc
     case "lamost"=>lamost
     case "irsa-spherex"=>irsa
+    case "unwise-neo11"=>unwise
     case _=>OriginPolicy(Set.empty)
 
 final class ArchiveTransport(client: Client,val metadataBytes: Long = 8L*1024*1024,val requestTimeout: Duration = 30.seconds):
-  def response[A](url: String,policy: OriginPolicy,method: String = "GET",body: String = "",contentType: String = "",redirects: Int = 0)(use: Response=>Task[A]): IO[ArchiveFailure,A] =
+  def response[A](url: String,policy: OriginPolicy,method: String = "GET",body: String = "",contentType: String = "",redirects: Int = 0,requestHeaders: List[(String,String)] = Nil)(use: Response=>Task[A]): IO[ArchiveFailure,A] =
     ZIO.scoped {
       for
         _ <- ZIO.attempt(policy.validate(url))
-        request=if method=="POST" then Request.post(url,Body.fromString(body)).addHeader(Header.Custom("Content-Type",contentType)) else Request.get(url)
+        initial=if method=="POST" then Request.post(url,Body.fromString(body)).addHeader(Header.Custom("Content-Type",contentType)) else Request.get(url)
+        request=requestHeaders.foldLeft(initial)((r,h)=>r.addHeader(Header.Custom(h._1,h._2)))
         response <- client.request(request)
         result <- if Set(301,302,303,307,308)(response.status.code) then
           if redirects>=5 then ZIO.fail(ArchiveFailure("redirect_limit","Too many archive redirects"))
           else
             val location=response.headers.get("Location").getOrElse("")
             val target=URI.create(url).resolve(location).toString
-            if Set(307,308)(response.status.code) then this.response(target,policy,method,body,contentType,redirects+1)(use)
-            else this.response(target,policy,redirects=redirects+1)(use)
+            if Set(307,308)(response.status.code) then this.response(target,policy,method,body,contentType,redirects+1,requestHeaders)(use)
+            else this.response(target,policy,redirects=redirects+1,requestHeaders=requestHeaders)(use)
         else if response.status.code==204 then ZIO.fail(ArchiveFailure("no_content","Requested subset contains no product"))
         else if response.status.code==401 || response.status.code==403 then ZIO.fail(ArchiveFailure("requires_auth","Archive product requires authorization"))
         else if response.status.code<200 || response.status.code>=300 then
@@ -59,6 +62,24 @@ final class ArchiveTransport(client: Client,val metadataBytes: Long = 8L*1024*10
   def metadata(url: String,policy: OriginPolicy,method: String = "GET",body: String = "",contentType: String = ""): IO[ArchiveFailure,Array[Byte]] =
     response(url,policy,method,body,contentType)(r=>bounded(r,metadataBytes).runCollect.map(_.toArray))
       .timeoutFail(ArchiveFailure("timeout","Archive metadata request timed out",true))(requestTimeout)
+  /** Read only a bounded prefix. A server ignoring Range must never stream a full image. */
+  def metadataRange(url: String,policy: OriginPolicy,bytes: Int): IO[ArchiveFailure,Array[Byte]] =
+    if bytes<=0 || bytes>metadataBytes then ZIO.fail(ArchiveFailure("byte_limit","Invalid metadata range budget"))
+    else response(url,policy,requestHeaders=List("Range"->s"bytes=0-${bytes-1}","Accept-Encoding"->"identity")) { r=>
+      val length=r.headers.get("Content-Length").flatMap(_.toLongOption)
+      val range=r.headers.get("Content-Range").flatMap { value=>
+        "bytes 0-([0-9]+)/([0-9]+)".r.findFirstMatchIn(value).filter(_.matched==value).flatMap { m=>
+          for end <- m.group(1).toLongOption; total <- m.group(2).toLongOption if end>=0 && end<bytes && total>end yield end+1
+        }
+      }
+      for
+        _ <- ZIO.fail(ArchiveFailure("byte_limit","Archive metadata range exceeds byte budget")).when(length.exists(_>bytes))
+        _ <- ZIO.fail(ArchiveFailure("invalid_range","Archive returned an invalid metadata byte range")).when(r.status.code==206 && range.isEmpty)
+        _ <- ZIO.fail(ArchiveFailure("range_ignored","Archive ignored bounded metadata range")).when(r.status.code!=206 && !length.exists(_<=bytes))
+        data <- bounded(r,bytes).runCollect.map(_.toArray)
+        _ <- ZIO.fail(ArchiveFailure("invalid_range","Archive metadata range length does not match its body")).when(range.exists(_!=data.length))
+      yield data
+    }.timeoutFail(ArchiveFailure("timeout","Archive metadata range request timed out",true))(requestTimeout)
 object ArchiveTransport:
   def retryAfter(value: String,now: java.time.Instant = java.time.Instant.now()): Option[Long] =
     value.toLongOption.filter(_>=0).orElse(scala.util.Try(java.time.ZonedDateTime.parse(value,java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME).toInstant).toOption.map(t=>math.max(0L,java.time.Duration.between(now,t).getSeconds)))

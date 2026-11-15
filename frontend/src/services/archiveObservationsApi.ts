@@ -15,6 +15,8 @@ export interface ArchiveObservation {
   analysisEligible: boolean; is_available: boolean; observation_date?: string;
   time: { start_utc?: string; end_utc?: string; quality: string; reference_epoch?: string };
   provenance: Record<string, string>;
+  native?: Record<string, string>;
+  version?: string;
 }
 export interface ProviderOutcome {
   provider: string; status: string; record_count: number; completeness: string;
@@ -27,7 +29,7 @@ export interface ArchiveDownload {
   chunks: { id: string; frame_id: string; status: string; preview_status: string; image_url: string; fits_cutout_url: string; error?: ArchiveFailure }[];
   progress: { discovery_complete: boolean; total_chunks: number; ready_chunks: number; failed_chunks: number; unavailable_chunks: number };
   errors: ArchiveFailure[];
-  assets: { record_id: string; status: string; asset?: { id: string; artifact_url: string; analysisEligible: boolean }; error?: ArchiveFailure }[];
+  assets: { record_id: string; status: string; provenance?: Record<string, string>; asset?: { id: string; artifact_url: string; analysisEligible: boolean }; error?: ArchiveFailure }[];
 }
 
 export function observationBounds(selection: Pick<ArchiveSelection, 'from' | 'through'>) {

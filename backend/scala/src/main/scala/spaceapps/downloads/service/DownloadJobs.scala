@@ -46,17 +46,18 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
       _ <- downloader.protect(downloader.directory.resolve(key))
       _ <- downloader.serialized(downloader.directory.resolve(key)) {
         val work=for
-          existing <- cached(key)
-          assets <- existing match
-            case Some(stored)=>ZIO.succeed(List(AssetOutcome(id,"ready",Some(stored),provenance=product.provenance)))
-            case None=>perProvider(product.provider).withPermit(transfers.withPermit {
+          assets <- perProvider(product.provider).withPermit(transfers.withPermit {
               retry(provider.resolve(product,job.selection.delivery).timeoutFail(ArchiveFailure("timeout","Archive product resolution timed out",true))(Duration.fromMillis(limits.request_timeout_ms))).flatMap { resolved=>
                 if resolved.isEmpty then ZIO.fail(ArchiveFailure("missing_product","Provider returned no selected science product"))
                 else ZIO.foreach(resolved) { asset=>
+                  val provenance=product.provenance+("asset_role"->asset.semantic)
                   downloader.protect(downloader.directory.resolve(asset.id)) *>
-                    retry(downloader.fetch(asset,provider.origins)).either.map {
-                      case Right(stored)=>AssetOutcome(id,"ready",Some(stored),provenance=product.provenance)
-                      case Left(error)=>AssetOutcome(id,if error.code=="no_content" then "skipped" else "failed",error=Some(error),provenance=product.provenance)
+                    cached(asset.id).flatMap {
+                      case Some(stored)=>ZIO.succeed(stored)
+                      case None=>retry(downloader.fetch(asset,provider.origins))
+                    }.either.map {
+                      case Right(stored)=>AssetOutcome(id,"ready",Some(stored),provenance=provenance)
+                      case Left(error)=>AssetOutcome(id,if error.code=="no_content" then "skipped" else "failed",error=Some(error),provenance=provenance)
                     }
                 }
               }

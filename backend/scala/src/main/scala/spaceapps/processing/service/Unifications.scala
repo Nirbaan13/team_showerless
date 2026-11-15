@@ -34,18 +34,34 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
         downloads <- archives.allDownloads
         outcome <- ZIO.fromOption(downloads.flatMap(_.assets).find(a=>a.status=="ready" && a.asset.exists(_.id==input.id))).orElseFail(ApiError("not_found","Completed archive asset metadata not found"))
         record <- archives.record(outcome.record_id)
-        profile=if record.provider=="irsa-spherex" then "spherex" else "generic"
+        profile=record.provider match
+          case "irsa-spherex"=>"spherex"
+          case "unwise-neo11"=>"unwise"
+          case _=>"generic"
+        _ <- ZIO.fail(ApiError("invalid_input","Select the science asset of a qualified neo11 W2 observation")).when(profile=="unwise" && (record.collection!="neo11" || !record.analysisEligible || outcome.provenance.get("asset_role")!=Some("#this")))
+        companions <- if profile!="unwise" then ZIO.succeed(Map.empty[String,Source]) else
+          ZIO.foreach(List("inverse_variance"->"#inverse-variance","coverage"->"#coverage","contributors"->"#contributors")) { (name,role)=>
+            val candidates=downloads.flatMap(_.assets).filter(a=>a.record_id==record.id && a.status=="ready" && a.asset.isDefined && a.provenance.get("asset_role").contains(role)).groupBy(_.asset.get.id).values.map(_.head).toList
+            for
+              companion <- ZIO.fromOption(candidates match {case a::Nil=>Some(a);case _=>None}).orElseFail(ApiError("invalid_input",s"A unique completed $name asset is required for the same observation"))
+              resource <- archive.resource(companion.asset.get.id).mapError(e=>ApiError(e.code,e.message,e.retryable))
+              source <- resource match
+                case AssetResource.Ready(p,a)=>inspect(input.copy(id=a.id),p,Some(a.sha256),Some(a.bytes),"unwise",Json.Obj())
+                case _=>ZIO.fail(ApiError("invalid_input",s"The $name asset is unavailable"))
+            yield name->source
+          }.map(_.toMap)
         physical=physicalIdentity(record.provider,record.collection,record.native)
+        _ <- ZIO.fail(ApiError("invalid_input","Historical observation physical identity is unavailable")).when(profile=="unwise" && physical.isEmpty)
         metadata=Json.Obj("provider"->Json.Str(record.provider),"observation_id"->physical.fold[Json](Json.Null)(Json.Str(_)),"product_id"->Json.Str(record.native_id),
           "collection"->Json.Str(record.collection),"mission"->record.mission.fold[Json](Json.Null)(Json.Str(_)),
           "instrument"->record.instrument.fold[Json](Json.Null)(Json.Str(_)),"brightness_unit"->record.brightness_unit.fold[Json](Json.Null)(Json.Str(_)),
           "wavelength_min_m"->record.wavelength_min_m.fold[Json](Json.Null)(n=>Json.Num(n)),"wavelength_max_m"->record.wavelength_max_m.fold[Json](Json.Null)(n=>Json.Num(n)),
           "analysisEligible"->Json.Bool(record.analysisEligible),
           "time_start_utc"->record.time.start_utc.fold[Json](Json.Null)(Json.Str(_)),"time_end_utc"->record.time.end_utc.fold[Json](Json.Null)(Json.Str(_)),
-          "time_quality"->Json.Str(record.time.quality.toString),"band"->record.native.get("FILTER").orElse(record.native.get("filter")).fold[Json](Json.Null)(Json.Str(_)),
-          "native"->Json.Obj(zio.Chunk.fromIterable(record.native.toList.filter((k,v)=> !k.toLowerCase.contains("url") && !v.contains("://") && k.length<=80 && v.length<=512).sortBy(_._1).take(12).map((k,v)=>k->Json.Str(v)))))
+          "time_quality"->Json.Str(record.time.quality.toString),"band"->record.native.get("FILTER").orElse(record.native.get("filter")).orElse(record.native.get("band")).fold[Json](Json.Null)(Json.Str(_)),
+          "native"->safeMetadata(record.native),"archive_provenance"->safeMetadata(record.provenance),"native_time"->safeMetadata(record.time.native))
         source <- inspect(input,path,Some(stored.sha256),Some(stored.bytes),profile,metadata)
-      yield source
+      yield source.copy(auxiliaries=companions)
     else
       for
         download <- jobs.get(input.downloadId.get)
@@ -73,7 +89,7 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
   }
   def submit(json:Json):Task[UnificationJob]=for
     request <- ZIO.fromEither(UnificationRequest.parse(json))
-    _ <- ZIO.scoped(ZIO.foreach(request.inputs)(resolve).flatMap(s=>ZIO.fail(ApiError("input_limit","Selected input bytes exceed 256 MiB")).when(s.map(_.bytes).sum>MaxInput)))
+    _ <- ZIO.scoped(ZIO.foreach(request.inputs)(resolve).flatMap(s=>ZIO.fail(ApiError("input_limit","Selected input bytes exceed 256 MiB")).when(s.map(_.totalBytes).sum>MaxInput)))
     accepted <- repository.accept(json)
   yield accepted
   def get(id:String):Task[UnificationJob]=
@@ -97,9 +113,9 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
   private def snapshots(id:String,sources:List[Source]):Task[List[Json]]=ZIO.attemptBlocking {
     val inputs=directory(id).resolve("inputs")
     safeDirectory(data,inputs)
-    sources.zipWithIndex.map { (source,index)=>
+    def snapshot(source:Source,filename:String):Json=
       secureFile(data,source.path)
-      val destination=inputs.resolve(f"$index%03d.fits")
+      val destination=inputs.resolve(filename)
       // Hardlinks retain the selected inode across same-ID atomic source replacement.
       try Files.createLink(destination,source.path)
       catch case _:UnsupportedOperationException | _:java.nio.file.FileSystemException=>
@@ -114,8 +130,13 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
         finally {in.close();out.close()}
       secureFile(data,destination)
       if Files.size(destination)!=source.bytes || checksum(destination)!=source.sha then throw ApiError("source_changed","Source changed while taking snapshot")
-      Json.Obj("id"->Json.Str(source.input.id),"path"->Json.Str(data.relativize(destination).toString),"sha256"->Json.Str(source.sha),
+      Json.Obj("id"->Json.Str(source.input.id),"path"->Json.Str(data.relativize(destination).toString),"sha256"->Json.Str(source.sha),"bytes"->Json.Num(source.bytes))
+    sources.zipWithIndex.map { (source,index)=>
+      val primary=snapshot(source,f"$index%03d.fits").asInstanceOf[Json.Obj]
+      val fields=primary.fields.filterNot(_._1=="bytes") ++ zio.Chunk(
         "profile"->Json.Str(source.profile),"image_hdu"->source.input.imageHdu,"plane_indices"->source.input.planeIndices,"metadata"->source.metadata)
+      val auxiliary=source.auxiliaries.toList.sortBy(_._1).map { (name,s)=>name->snapshot(s,f"$index%03d-$name.fits") }
+      Json.Obj(if auxiliary.isEmpty then fields else fields :+ ("auxiliaries"->Json.Obj(zio.Chunk.fromIterable(auxiliary))))
     }
   }
   private def validateOutput(id:String,request:UnificationRequest,sources:List[Source],result:Json):Task[Path]=ZIO.attemptBlocking {
@@ -161,6 +182,17 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
       val f=fields(frame);val source=expected(string(f("frame_id")))
       if f.get("source_sha256")!=Some(Json.Str(source.sha)) || f.get("profile")!=Some(Json.Str(source.profile)) ||
         f.get("provenance")!=Some(source.metadata) || f.get("analysis_eligible")!=Some(Json.Bool(false)) then invalid()
+      if source.profile=="unwise" then
+        val assets=Json.Obj(zio.Chunk.fromIterable(source.auxiliaries.toList.sortBy(_._1).map { (name,asset)=>
+          name->Json.Obj("id"->Json.Str(asset.input.id),"sha256"->Json.Str(asset.sha),"bytes"->Json.Num(asset.bytes))
+        }))
+        // Compare decoded maps: JSON object key order is not part of the contract.
+        def sameAssets(actual:Option[Json]):Boolean=actual.exists { value=>
+          val observed=fields(value)
+          val wanted=fields(assets)
+          observed.keySet==wanted.keySet && wanted.forall { (name,descriptor)=>fields(observed(name))==fields(descriptor) }
+        }
+        if !sameAssets(f.get("auxiliary_assets")) || !sameAssets(fields(f.getOrElse("historical_motion_qualification",Json.Null)).get("auxiliary_sources")) then invalid()
     }
     if metadata.get("options")!=Some(request.options) then invalid()
     BundleValidation.validate(bundle,request.inputs.size,request.height,request.width,Some(Files.readString(manifest)))
@@ -176,7 +208,7 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
     val work=ZIO.scoped {for
       request <- ZIO.fromEither(UnificationRequest.parse(record.request))
       sources <- ZIO.foreach(request.inputs)(resolve)
-      bytes=sources.map(_.bytes).sum
+      bytes=sources.map(_.totalBytes).sum
       _ <- ZIO.fail(ApiError("input_limit","Selected input bytes exceed 256 MiB")).when(bytes>MaxInput)
       _ <- cache.protect(target(id))
       _ <- cache.withReservation(directory(id),bytes+MaxBundle+2*1024*1024) {
@@ -207,12 +239,21 @@ final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:Dow
 object Unifications:
   private val MaxInput=256L*1024*1024
   private val MaxBundle=192L*1024*1024
-  private final case class Source(input:UnificationInput,path:Path,bytes:Long,sha:String,profile:String,metadata:Json)
+  private final case class Source(input:UnificationInput,path:Path,bytes:Long,sha:String,profile:String,metadata:Json,auxiliaries:Map[String,Source]=Map.empty):
+    def totalBytes:Long=bytes+auxiliaries.values.map(_.bytes).sum
+  private def safeMetadata(values:Map[String,String]):Json=Json.Obj(zio.Chunk.fromIterable(values.toList.filter((k,v)=> !k.toLowerCase.contains("url") && !v.contains("://") && k.length<=80 && v.length<=512).sortBy(_._1).take(64).map((k,v)=>k->Json.Str(v))))
   /** Product/reduction identifiers are provenance, never evidence of a distinct exposure. */
   private[processing] def physicalIdentity(provider:String,collection:String,native:Map[String,String]):Option[String]=
     val fields=native.map((key,value)=>key.toUpperCase(java.util.Locale.ROOT)->value.trim)
     val identity=provider match
       case "eso" | "cadc"=>fields.get("OBS_ID").filter(_.nonEmpty).map(id=>Json.Arr(Json.Str(collection),Json.Str(id)).toJson)
+      case "unwise-neo11"=>
+        for
+          tile <- fields.get("COADD_ID").filter(_.matches("[0-9]{4}[pm][0-9]{3}"))
+          band <- fields.get("FILTER").orElse(fields.get("BAND").map(b=>if b=="2" then "W2" else b)).filter(_=="W2")
+          epoch <- fields.get("EPOCH").map(_.stripPrefix("e")).filter(_.matches("[0-9]{1,3}")).flatMap(_.toIntOption)
+          _ <- Option.when(collection=="neo11")(())
+        yield f"unwise:neo11:$tile:$band:e$epoch%03d"
       case "irsa-spherex"=>
         for
           id <- fields.get("OBSID").orElse(fields.get("OBS_ID")).filter(_.nonEmpty)

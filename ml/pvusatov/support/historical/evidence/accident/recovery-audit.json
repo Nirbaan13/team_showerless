@@ -1,0 +1,2034 @@
+{
+  "case": "accident",
+  "status": "NOT_RECOVERED_AMONG_RETURNED_CANDIDATES",
+  "audit_scope": {
+    "returned_candidates": 20,
+    "comparison": {
+      "shared_median": {
+        "candidates": 21,
+        "match": null
+      },
+      "leave_one_out": {
+        "candidates": 24,
+        "match": null
+      },
+      "random_forest": null,
+      "outliers_masked": null,
+      "bloom": null
+    },
+    "full_candidate_pool_audited": false,
+    "scope": "Only candidates actually present in the unchanged HTTP response are audited; omitted candidates are not classified."
+  },
+  "criterion": {
+    "minimum_candidate_frames": 3,
+    "all_candidate_frames_within_threshold": true,
+    "threshold_pixels": 1.5,
+    "threshold_arcsec": 4.125
+  },
+  "response_sha256": "a5e2d096e016a5a8e443df5a7678f60471f26f48ce6e8f8611e46d43ffc1980e",
+  "response_bytes": 110044,
+  "external_truth": {
+    "path": "/home/usatovpavel/playground/hackaton/docs/ai/benchmarks/real-discoveries-20261115/accident/truth.json",
+    "sha256": "84ac70de2413ff49176c7bd8f146e18227ba72197b3f0586da6385cbccb0a211",
+    "paper": "https://arxiv.org/html/2106.13408",
+    "reference": {
+      "mjd": 57645.36,
+      "ra_degrees": 233.621873,
+      "dec_degrees": -10.721775,
+      "pm_ra_cosdec_arcsec_per_year": -1.2531,
+      "pm_dec_arcsec_per_year": -2.377
+    },
+    "parallax_not_fitted_arcsec": 0.0614,
+    "propagation": "Frozen published linear mu_alpha*cos(delta), mu_delta; Julian years of 365.25 days from real UTC MJD. No fitting or parallax correction; old predicted_xy ignored.",
+    "published_total_proper_motion_arcsec_per_year": 2.6870780803690835
+  },
+  "source_snapshot": {
+    "git_head": "3f5a3e7c704d1446ab080b5cf4901cab61f27908",
+    "files_sha256": {
+      "ml/service.py": "225467996412df5c04a0a58314903707adafc437e5dc9d87d919ea7fa3612937",
+      "science/motion/prepared.py": "e871d46f4e55ac019c0a7737b33915afc9dacfd888839b5f122b55add229f803",
+      "science/motion/profiles.py": "3b370cea71fa74175cd771d82be7fbd04d8817b8d866061ad0ab6ce7e8e02b1e",
+      "science/motion/detector.py": "4467d53ff4728c29e05b0dcd7261b990016f09261eb35061a3e3cfbc59e6c9f1",
+      "science/motion/review.py": "4dcc5548c2fa92f6407de49e42320a37d3830120b84e41902e9aaa17aea8d847",
+      "science/motion/ranker.py": "b0a07abf26479a65abff98ed88a23422fa641ba29651530afb160f61a5c637c8",
+      "pipeline/unification/unwise.py": "8b15d189e55b05c68efe8b2ef1470523ebb463d0ceebb9bcf5601f6605702931",
+      "pipeline/unification/resampling.py": "bfe595224b13b18ebb18ae5ede0f0d931e3f69072000e73e98491106d9507cac",
+      "pipeline/unification/worker.py": "cfb26eba49ace8928f7d49edb779aaba30845d9d215b9293056cca069a9f7f9d",
+      "pipeline/unification/ml.py": "c03e82d8b811cc9aa6d71b096a51c399c9544a055b38fa5cef1df2ebb23bdf77",
+      "ml/pvusatov/support/historical/verify_real_http.py": "27f6e68e34c1b36b8401da1979f17f0c96fe31ecd8a25f86228f8640c6e77f0c",
+      "ml/pvusatov/support/historical/audit_real_recovery.py": "74040a3400d61393d0badb725605304e2b562ffa1e2fd23c985d99197612abf0"
+    },
+    "status": "Observed local development source; unfrozen local QA, not an executed-image attestation",
+    "astropy_version": "8.0.2",
+    "numpy_version": "2.5.3"
+  },
+  "runtime_evidence_sha256": {
+    "discovery.json": "08e0a78ca16c97ede4c91fa809972f71a15f10411864c14b58bd23f2518f52e2",
+    "download-accepted.json": "c6a15cbcccd3cf76684bdfe46aa37c593ea299f60170f918ee23ea6320dff9e4",
+    "download-completed.json": "7238806e6f88f12e8dd4b80309175c68a2ae7c0c28af0bb007893134cc58a0fe",
+    "http-calls.json": "2fef1ad5b0d53309a451dcba2db030da881847d9eda4351735dc2983e46d01b7",
+    "ivan-review.json": "a5e2d096e016a5a8e443df5a7678f60471f26f48ce6e8f8611e46d43ffc1980e",
+    "runtime-proof.json": "a3a72f23fae9496c658d3ea26a741cc50d2f805a52fd4b0bbb309adec01a76f6",
+    "selection.json": "c0ff119dd5644d1b6bcafef616eb5a24ffd5456d66bdb3681631339dbe89d06e",
+    "unification-accepted.json": "df445bf1a5238ec097ec1172f50e0fb03b3ee35196c06637d9c9412fb7414e4b",
+    "unification-completed.json": "1fb8ccbd8840eeb3f5a03a1b121818519e49c4e5c4aab2dee201a1b723d9b47e"
+  },
+  "blind_checks": {
+    "has_ephemeris": false,
+    "target": null,
+    "detector": null,
+    "simulated_training_fields": null,
+    "random_forest": null,
+    "known_trajectory_in_request": false,
+    "synthetic_source_acceptance": false,
+    "search_profile": {
+      "name": "historical-proper-motion",
+      "min_speed": 4.148258768381972e-06,
+      "max_speed": 0.0012444776305145914,
+      "speed_unit": "pixels/hour",
+      "time_unit": "hours",
+      "proper_motion_arcsec_per_year": {
+        "min": 0.1,
+        "max": 30.0
+      },
+      "pixel_scale_arcsec": 2.75,
+      "hours_per_year": 8766.0
+    }
+  },
+  "frames": [
+    {
+      "index": 0,
+      "native_epoch": 0,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e000",
+      "date_utc": "2010-02-13T16:52:36.440687Z",
+      "mjd_utc": 55240.70319954499,
+      "elapsed_hours": 0.0,
+      "published_prediction_sky_deg": [
+        233.62420535637494,
+        -10.717428000825398
+      ],
+      "published_prediction_target_xy": [
+        63.181836505136985,
+        63.702907882703
+      ],
+      "source_science_sha256": "16fa55b91d235421cfb10061a53228ae5b37345a6b57f6574c8b8a21c5d8863e",
+      "native_time": {
+        "MJDMIN": 55239.2805158,
+        "MJDMAX": 55242.12588329
+      }
+    },
+    {
+      "index": 1,
+      "native_epoch": 1,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+      "date_utc": "2010-08-13T13:41:50.791199Z",
+      "mjd_utc": 55421.57072674999,
+      "elapsed_hours": 4340.820652920054,
+      "published_prediction_sky_deg": [
+        233.6240299269623,
+        -10.717754962656844
+      ],
+      "published_prediction_target_xy": [
+        63.40748364989814,
+        63.2748852384012
+      ],
+      "source_science_sha256": "04d8d214b0cf6f1fc7b7d6a5b0b5368489c93742588560c42dcd5865216e7394",
+      "native_time": {
+        "MJDMIN": 55417.93261756,
+        "MJDMAX": 55425.20883594
+      }
+    },
+    {
+      "index": 2,
+      "native_epoch": 4,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+      "date_utc": "2015-02-13T06:50:26.055887Z",
+      "mjd_utc": 57066.28502379499,
+      "elapsed_hours": 43813.963782000064,
+      "published_prediction_sky_deg": [
+        233.62243466402293,
+        -10.7207281818249
+      ],
+      "published_prediction_target_xy": [
+        65.45937790052793,
+        59.382666216081724
+      ],
+      "source_science_sha256": "8a98f8376daf1abbc0bf08e85ff1228f0d32a8d53fad99542cdc85873ec68223",
+      "native_time": {
+        "MJDMIN": 57063.55903313,
+        "MJDMAX": 57069.01101446
+      }
+    },
+    {
+      "index": 3,
+      "native_epoch": 8,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+      "date_utc": "2017-02-11T21:41:36.156479Z",
+      "mjd_utc": 57795.903890699985,
+      "elapsed_hours": 61324.81658771995,
+      "published_prediction_sky_deg": [
+        233.621726982488,
+        -10.722047144519122
+      ],
+      "published_prediction_target_xy": [
+        66.36961473307744,
+        57.65601858712073
+      ],
+      "source_science_sha256": "ad3955b8e0968c36c29bf5165ba792fa1165303fca88c5a1781998f4d85907e2",
+      "native_time": {
+        "MJDMIN": 57794.56123355,
+        "MJDMAX": 57797.24654785
+      }
+    },
+    {
+      "index": 4,
+      "native_epoch": 12,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+      "date_utc": "2019-02-13T06:44:31.854335Z",
+      "mjd_utc": 58527.28092423999,
+      "elapsed_hours": 78877.86539268005,
+      "published_prediction_sky_deg": [
+        233.62101759564896,
+        -10.723369285525072
+      ],
+      "published_prediction_target_xy": [
+        67.2820370084693,
+        55.92520813876226
+      ],
+      "source_science_sha256": "b3a754aac585d5216bba2f60c91ebef2e199127cf947b74708dec8b8fac6600d",
+      "native_time": {
+        "MJDMIN": 58525.93979811,
+        "MJDMAX": 58528.62205037
+      }
+    },
+    {
+      "index": 5,
+      "native_epoch": 15,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e015",
+      "date_utc": "2020-07-23T22:15:27.567360Z",
+      "mjd_utc": 59053.9274024,
+      "elapsed_hours": 91517.38086852024,
+      "published_prediction_sky_deg": [
+        233.62050678376494,
+        -10.724321326500498
+      ],
+      "published_prediction_target_xy": [
+        67.93904474363735,
+        54.678893116926105
+      ],
+      "source_science_sha256": "77610c3b3d15c7127470d2a739505443a75cda1aaa22ba923bf7200fc5752b75",
+      "native_time": {
+        "MJDMIN": 59052.52127551,
+        "MJDMAX": 59055.33352929
+      }
+    },
+    {
+      "index": 6,
+      "native_epoch": 21,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e021",
+      "date_utc": "2023-07-24T09:37:11.987615Z",
+      "mjd_utc": 60149.40083318999,
+      "elapsed_hours": 117808.74320748006,
+      "published_prediction_sky_deg": [
+        233.6194442477559,
+        -10.726301659868044
+      ],
+      "published_prediction_target_xy": [
+        69.30566842111736,
+        52.08643897691548
+      ],
+      "source_science_sha256": "fc2f61627ba6dc424ad103a1fa9acc91377566c79f773f8d847c855f6d42281a",
+      "native_time": {
+        "MJDMIN": 60148.00692983,
+        "MJDMAX": 60150.79473655
+      }
+    },
+    {
+      "index": 7,
+      "native_epoch": 22,
+      "observation_id": "unwise-neo11:unwise:neo11:2338m107:W2:e022",
+      "date_utc": "2024-02-14T00:00:30.324672Z",
+      "mjd_utc": 60354.00035098,
+      "elapsed_hours": 122719.13163444033,
+      "published_prediction_sky_deg": [
+        233.61924579989858,
+        -10.72667152301641
+      ],
+      "published_prediction_target_xy": [
+        69.5609081805653,
+        51.60225065377347
+      ],
+      "source_science_sha256": "c4be38fdb17a8d4b9f95cd5a4806516d837b5b21dda726ed3b08a1a272d5a329",
+      "native_time": {
+        "MJDMIN": 60352.6794085,
+        "MJDMAX": 60355.32129346
+      }
+    }
+  ],
+  "span_julian_years": 13.999444630896685,
+  "candidates_in_original_rank_order": [
+    {
+      "id": "candidate-01",
+      "rank": 1,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e000",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004"
+      ],
+      "dates_utc": [
+        "2010-02-13T16:52:36.440687Z",
+        "2010-08-13T13:41:50.791199Z",
+        "2015-02-13T06:50:26.055887Z"
+      ],
+      "positions_xy": [
+        [
+          20.0,
+          92.0
+        ],
+        [
+          20.0,
+          92.0
+        ],
+        [
+          20.0,
+          93.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6577747,
+          -10.6958103
+        ],
+        [
+          233.6577747,
+          -10.6958103
+        ],
+        [
+          233.6577746,
+          -10.6950465
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        141.97569620067728,
+        143.14131499611167,
+        155.482683083109
+      ],
+      "angular_equivalent_residuals_px": [
+        51.62752589115537,
+        52.05138727131334,
+        56.53915748476691
+      ],
+      "max_angular_residual_arcsec": 155.482683083109,
+      "median_angular_residual_arcsec": 143.14131499611167,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.5741979157824783,
+      "reported_speed_px_per_hour": 2.381921538931318e-05,
+      "reported_fit_rms_px": 0.0423824493279592,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00018716830529829013
+    },
+    {
+      "id": "candidate-02",
+      "rank": 2,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e000",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004"
+      ],
+      "dates_utc": [
+        "2010-02-13T16:52:36.440687Z",
+        "2010-08-13T13:41:50.791199Z",
+        "2015-02-13T06:50:26.055887Z"
+      ],
+      "positions_xy": [
+        [
+          57.0,
+          94.0
+        ],
+        [
+          57.0,
+          94.0
+        ],
+        [
+          58.0,
+          94.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.629011,
+          -10.6942843
+        ],
+        [
+          233.629011,
+          -10.6942843
+        ],
+        [
+          233.6282337,
+          -10.6942844
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        85.03380843671515,
+        86.3119690741128,
+        97.38259855545623
+      ],
+      "angular_equivalent_residuals_px": [
+        30.921384886078236,
+        31.38617057240465,
+        35.4118540201659
+      ],
+      "max_angular_residual_arcsec": 97.38259855545623,
+      "median_angular_residual_arcsec": 86.3119690741128,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.5741979157824783,
+      "reported_speed_px_per_hour": 2.381921538931318e-05,
+      "reported_fit_rms_px": 0.04238244932796194,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00023226648830610005
+    },
+    {
+      "id": "candidate-03",
+      "rank": 3,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "native_epochs": [
+        1,
+        4,
+        8,
+        12
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2015-02-13T06:50:26.055887Z",
+        "2017-02-11T21:41:36.156479Z",
+        "2019-02-13T06:44:31.854335Z"
+      ],
+      "positions_xy": [
+        [
+          20.0,
+          92.0
+        ],
+        [
+          22.0,
+          92.0
+        ],
+        [
+          22.0,
+          92.0
+        ],
+        [
+          23.0,
+          92.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6577747,
+          -10.6958103
+        ],
+        [
+          233.6562199,
+          -10.6958105
+        ],
+        [
+          233.6562199,
+          -10.6958105
+        ],
+        [
+          233.6554425,
+          -10.6958106
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        143.14131499611167,
+        149.42927360168488,
+        154.29860418936673,
+        157.07022265640967
+      ],
+      "angular_equivalent_residuals_px": [
+        52.05138727131334,
+        54.33791767333996,
+        56.1085833415879,
+        57.11644460233079
+      ],
+      "max_angular_residual_arcsec": 157.07022265640967,
+      "median_angular_residual_arcsec": 151.8639388955258,
+      "matched_frames": 0,
+      "candidate_frames": 4,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.9265964069795061,
+      "reported_speed_px_per_hour": 3.843761670003966e-05,
+      "reported_fit_rms_px": 0.24587668142688365,
+      "stack_contributing_visit_coadds": 4,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00018716830529829013
+    },
+    {
+      "id": "candidate-04",
+      "rank": 4,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        4,
+        5
+      ],
+      "native_epochs": [
+        0,
+        12,
+        15
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e000",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015"
+      ],
+      "dates_utc": [
+        "2010-02-13T16:52:36.440687Z",
+        "2019-02-13T06:44:31.854335Z",
+        "2020-07-23T22:15:27.567360Z"
+      ],
+      "positions_xy": [
+        [
+          57.0,
+          94.0
+        ],
+        [
+          23.0,
+          92.0
+        ],
+        [
+          18.0,
+          91.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.629011,
+          -10.6942843
+        ],
+        [
+          233.6554425,
+          -10.6958106
+        ],
+        [
+          233.6593296,
+          -10.6965741
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        85.03380843671515,
+        157.07022265640967,
+        169.81404761900924
+      ],
+      "angular_equivalent_residuals_px": [
+        30.921384886078236,
+        57.11644460233079,
+        61.75056277054882
+      ],
+      "max_angular_residual_arcsec": 169.81404761900924,
+      "median_angular_residual_arcsec": 157.07022265640967,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 10.340329148440436,
+      "reported_speed_px_per_hour": 0.0004289436105797372,
+      "reported_fit_rms_px": 0.30516550243108886,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00023226648830610005
+    },
+    {
+      "id": "candidate-05",
+      "rank": 5,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        5,
+        6
+      ],
+      "native_epochs": [
+        1,
+        15,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2020-07-23T22:15:27.567360Z",
+        "2023-07-24T09:37:11.987615Z"
+      ],
+      "positions_xy": [
+        [
+          57.0,
+          94.0
+        ],
+        [
+          55.0,
+          93.0
+        ],
+        [
+          55.0,
+          93.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.629011,
+          -10.6942843
+        ],
+        [
+          233.6305658,
+          -10.6950482
+        ],
+        [
+          233.6305658,
+          -10.6950482
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        86.3119690741128,
+        111.2280855513701,
+        119.1918327041507
+      ],
+      "angular_equivalent_residuals_px": [
+        31.38617057240465,
+        40.44657656413458,
+        43.34248461969116
+      ],
+      "max_angular_residual_arcsec": 119.1918327041507,
+      "median_angular_residual_arcsec": 111.2280855513701,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.5109853566140249,
+      "reported_speed_px_per_hour": 2.1196994860889174e-05,
+      "reported_fit_rms_px": 0.23330201974875509,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00023226648830610005
+    },
+    {
+      "id": "candidate-06",
+      "rank": 6,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        2,
+        3,
+        4,
+        7
+      ],
+      "native_epochs": [
+        4,
+        8,
+        12,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2015-02-13T06:50:26.055887Z",
+        "2017-02-11T21:41:36.156479Z",
+        "2019-02-13T06:44:31.854335Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          19.0,
+          88.0
+        ],
+        [
+          19.0,
+          88.0
+        ],
+        [
+          20.0,
+          88.0
+        ],
+        [
+          20.0,
+          88.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6585524,
+          -10.6988658
+        ],
+        [
+          233.6585524,
+          -10.6988658
+        ],
+        [
+          233.657775,
+          -10.6988659
+        ],
+        [
+          233.657775,
+          -10.6988659
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        150.05586922730595,
+        154.7015022034624,
+        157.120574888474,
+        169.09876080157798
+      ],
+      "angular_equivalent_residuals_px": [
+        54.56577062811125,
+        56.255091710349966,
+        57.13475450489964,
+        61.49045847330108
+      ],
+      "max_angular_residual_arcsec": 169.09876080157798,
+      "median_angular_residual_arcsec": 155.9110385459682,
+      "matched_frames": 0,
+      "candidate_frames": 4,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.33793695814107,
+      "reported_speed_px_per_hour": 1.4018499497690251e-05,
+      "reported_fit_rms_px": 0.2845611820092694,
+      "stack_contributing_visit_coadds": 4,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00010327915909887231
+    },
+    {
+      "id": "candidate-07",
+      "rank": 7,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        4,
+        6,
+        7
+      ],
+      "native_epochs": [
+        12,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2019-02-13T06:44:31.854335Z",
+        "2023-07-24T09:37:11.987615Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          23.0,
+          92.0
+        ],
+        [
+          55.0,
+          93.0
+        ],
+        [
+          60.0,
+          94.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6554425,
+          -10.6958106
+        ],
+        [
+          233.6305658,
+          -10.6950482
+        ],
+        [
+          233.6266789,
+          -10.6942844
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        157.07022265640967,
+        119.1918327041507,
+        119.52154016172291
+      ],
+      "angular_equivalent_residuals_px": [
+        57.11644460233079,
+        43.34248461969116,
+        43.462378240626514
+      ],
+      "max_angular_residual_arcsec": 157.07022265640967,
+      "median_angular_residual_arcsec": 119.52154016172291,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 20.162825072266195,
+      "reported_speed_px_per_hour": 0.0008364061590138011,
+      "reported_fit_rms_px": 0.4970016820142391,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00014860884047606973
+    },
+    {
+      "id": "candidate-08",
+      "rank": 8,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        2,
+        4,
+        7
+      ],
+      "native_epochs": [
+        4,
+        12,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2015-02-13T06:50:26.055887Z",
+        "2019-02-13T06:44:31.854335Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          58.0,
+          94.0
+        ],
+        [
+          59.0,
+          94.0
+        ],
+        [
+          60.0,
+          94.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6282337,
+          -10.6942844
+        ],
+        [
+          233.6274563,
+          -10.6942844
+        ],
+        [
+          233.6266789,
+          -10.6942844
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        97.38259855545623,
+        107.15404934260448,
+        119.52154016172291
+      ],
+      "angular_equivalent_residuals_px": [
+        35.4118540201659,
+        38.96510885185617,
+        43.462378240626514
+      ],
+      "max_angular_residual_arcsec": 119.52154016172291,
+      "median_angular_residual_arcsec": 107.15404934260448,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.608514651346554,
+      "reported_speed_px_per_hour": 2.524276238137241e-05,
+      "reported_fit_rms_px": 0.0523309443663014,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00022293973766957935
+    },
+    {
+      "id": "candidate-09",
+      "rank": 9,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        3,
+        6
+      ],
+      "native_epochs": [
+        1,
+        8,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2017-02-11T21:41:36.156479Z",
+        "2023-07-24T09:37:11.987615Z"
+      ],
+      "positions_xy": [
+        [
+          23.0,
+          88.0
+        ],
+        [
+          22.0,
+          92.0
+        ],
+        [
+          21.0,
+          95.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6554428,
+          -10.6988661
+        ],
+        [
+          233.6562199,
+          -10.6958105
+        ],
+        [
+          233.656997,
+          -10.6935188
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        130.27272868571308,
+        154.29860418936673,
+        177.68920095147723
+      ],
+      "angular_equivalent_residuals_px": [
+        47.3719013402593,
+        56.1085833415879,
+        64.61425489144627
+      ],
+      "max_angular_residual_arcsec": 177.68920095147723,
+      "median_angular_residual_arcsec": 154.29860418936673,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 1.5469648047343911,
+      "reported_speed_px_per_hour": 6.417210315617743e-05,
+      "reported_fit_rms_px": 0.22843954186827917,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00017591776639739015
+    },
+    {
+      "id": "candidate-10",
+      "rank": 10,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        4,
+        5,
+        7
+      ],
+      "native_epochs": [
+        12,
+        15,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2019-02-13T06:44:31.854335Z",
+        "2020-07-23T22:15:27.567360Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          17.0,
+          94.0
+        ],
+        [
+          18.0,
+          91.0
+        ],
+        [
+          20.0,
+          88.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6601067,
+          -10.6942823
+        ],
+        [
+          233.6593296,
+          -10.6965741
+        ],
+        [
+          233.657775,
+          -10.6988659
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        173.44577872157564,
+        169.81404761900924,
+        169.09876080157798
+      ],
+      "angular_equivalent_residuals_px": [
+        63.07119226239114,
+        61.75056277054882,
+        61.49045847330108
+      ],
+      "max_angular_residual_arcsec": 173.44577872157564,
+      "median_angular_residual_arcsec": 169.81404761900924,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 3.5139409645804935,
+      "reported_speed_px_per_hour": 0.00014576736417897635,
+      "reported_fit_rms_px": 0.5849275227496347,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00019500353574326723
+    },
+    {
+      "id": "candidate-11",
+      "rank": 11,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        2,
+        5,
+        6
+      ],
+      "native_epochs": [
+        4,
+        15,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021"
+      ],
+      "dates_utc": [
+        "2015-02-13T06:50:26.055887Z",
+        "2020-07-23T22:15:27.567360Z",
+        "2023-07-24T09:37:11.987615Z"
+      ],
+      "positions_xy": [
+        [
+          20.0,
+          93.0
+        ],
+        [
+          21.0,
+          95.0
+        ],
+        [
+          21.0,
+          95.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6577746,
+          -10.6950465
+        ],
+        [
+          233.656997,
+          -10.6935188
+        ],
+        [
+          233.656997,
+          -10.6935188
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        155.482683083109,
+        170.16827154199376,
+        177.68920095147723
+      ],
+      "angular_equivalent_residuals_px": [
+        56.53915748476691,
+        61.879371469815915,
+        64.61425489144627
+      ],
+      "max_angular_residual_arcsec": 177.68920095147723,
+      "median_angular_residual_arcsec": 170.16827154199376,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.7770588010578007,
+      "reported_speed_px_per_hour": 3.223440985036404e-05,
+      "reported_fit_rms_px": 0.36941349186256517,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00017591776639739015
+    },
+    {
+      "id": "candidate-12",
+      "rank": 12,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        3,
+        4,
+        6
+      ],
+      "native_epochs": [
+        8,
+        12,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021"
+      ],
+      "dates_utc": [
+        "2017-02-11T21:41:36.156479Z",
+        "2019-02-13T06:44:31.854335Z",
+        "2023-07-24T09:37:11.987615Z"
+      ],
+      "positions_xy": [
+        [
+          60.0,
+          93.0
+        ],
+        [
+          59.0,
+          94.0
+        ],
+        [
+          58.0,
+          97.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6266789,
+          -10.6950483
+        ],
+        [
+          233.6274563,
+          -10.6942844
+        ],
+        [
+          233.6282336,
+          -10.6919927
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        98.76161879706841,
+        107.15404934260448,
+        127.3652258450109
+      ],
+      "angular_equivalent_residuals_px": [
+        35.91331592620669,
+        38.96510885185617,
+        46.314627580003965
+      ],
+      "max_angular_residual_arcsec": 127.3652258450109,
+      "median_angular_residual_arcsec": 107.15404934260448,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 1.9141396007304872,
+      "reported_speed_px_per_hour": 7.940346382637409e-05,
+      "reported_fit_rms_px": 0.20714801833124968,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0001767942086968779
+    },
+    {
+      "id": "candidate-13",
+      "rank": 13,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "native_epochs": [
+        1,
+        4,
+        8,
+        12
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2015-02-13T06:50:26.055887Z",
+        "2017-02-11T21:41:36.156479Z",
+        "2019-02-13T06:44:31.854335Z"
+      ],
+      "positions_xy": [
+        [
+          57.0,
+          94.0
+        ],
+        [
+          57.0,
+          91.0
+        ],
+        [
+          56.0,
+          90.0
+        ],
+        [
+          56.0,
+          90.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.629011,
+          -10.6942843
+        ],
+        [
+          233.6290111,
+          -10.696576
+        ],
+        [
+          233.6297885,
+          -10.6973399
+        ],
+        [
+          233.6297885,
+          -10.6973399
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        86.3119690741128,
+        90.00605581368207,
+        93.4053773875969,
+        98.70834360915975
+      ],
+      "angular_equivalent_residuals_px": [
+        31.38617057240465,
+        32.729474841338934,
+        33.965591777307964,
+        35.893943130603546
+      ],
+      "max_angular_residual_arcsec": 98.70834360915975,
+      "median_angular_residual_arcsec": 91.70571660063948,
+      "matched_frames": 0,
+      "candidate_frames": 4,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 1.4239936762398937,
+      "reported_speed_px_per_hour": 5.907094253582617e-05,
+      "reported_fit_rms_px": 0.5250679123568464,
+      "stack_contributing_visit_coadds": 4,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00023226648830610005
+    },
+    {
+      "id": "candidate-14",
+      "rank": 14,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        2,
+        5,
+        6
+      ],
+      "native_epochs": [
+        4,
+        15,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021"
+      ],
+      "dates_utc": [
+        "2015-02-13T06:50:26.055887Z",
+        "2020-07-23T22:15:27.567360Z",
+        "2023-07-24T09:37:11.987615Z"
+      ],
+      "positions_xy": [
+        [
+          58.0,
+          94.0
+        ],
+        [
+          58.0,
+          97.0
+        ],
+        [
+          58.0,
+          97.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6282337,
+          -10.6942844
+        ],
+        [
+          233.6282336,
+          -10.6919927
+        ],
+        [
+          233.6282336,
+          -10.6919927
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        97.38259855545623,
+        119.54941256976409,
+        127.3652258450109
+      ],
+      "angular_equivalent_residuals_px": [
+        35.4118540201659,
+        43.47251366173239,
+        46.314627580003965
+      ],
+      "max_angular_residual_arcsec": 127.3652258450109,
+      "median_angular_residual_arcsec": 119.54941256976409,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 1.0425337810078341,
+      "reported_speed_px_per_hour": 4.324699898400158e-05,
+      "reported_fit_rms_px": 0.4956202077661575,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00022293973766957935
+    },
+    {
+      "id": "candidate-15",
+      "rank": 15,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        2,
+        3,
+        5
+      ],
+      "native_epochs": [
+        4,
+        8,
+        15
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015"
+      ],
+      "dates_utc": [
+        "2015-02-13T06:50:26.055887Z",
+        "2017-02-11T21:41:36.156479Z",
+        "2020-07-23T22:15:27.567360Z"
+      ],
+      "positions_xy": [
+        [
+          20.0,
+          93.0
+        ],
+        [
+          22.0,
+          92.0
+        ],
+        [
+          23.0,
+          88.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6577746,
+          -10.6950465
+        ],
+        [
+          233.6562199,
+          -10.6958105
+        ],
+        [
+          233.6554428,
+          -10.6988661
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        155.482683083109,
+        154.29860418936673,
+        153.84807734937908
+      ],
+      "angular_equivalent_residuals_px": [
+        56.53915748476691,
+        56.1085833415879,
+        55.94475539977421
+      ],
+      "max_angular_residual_arcsec": 155.482683083109,
+      "median_angular_residual_arcsec": 154.29860418936673,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 2.9706963637040977,
+      "reported_speed_px_per_hour": 0.00012323217238935963,
+      "reported_fit_rms_px": 0.5717423271334108,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0001674045470218712
+    },
+    {
+      "id": "candidate-16",
+      "rank": 16,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        3,
+        6,
+        7
+      ],
+      "native_epochs": [
+        8,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2017-02-11T21:41:36.156479Z",
+        "2023-07-24T09:37:11.987615Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          27.0,
+          127.0
+        ],
+        [
+          55.0,
+          93.0
+        ],
+        [
+          57.0,
+          90.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6523304,
+          -10.6690748
+        ],
+        [
+          233.6305658,
+          -10.6950482
+        ],
+        [
+          233.6290111,
+          -10.6973399
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        219.28637974904353,
+        119.1918327041507,
+        111.10014130231043
+      ],
+      "angular_equivalent_residuals_px": [
+        79.74050172692492,
+        43.34248461969116,
+        40.40005138265834
+      ],
+      "max_angular_residual_arcsec": 219.28637974904353,
+      "median_angular_residual_arcsec": 119.1918327041507,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 18.742767173502408,
+      "reported_speed_px_per_hour": 0.0007774984827122315,
+      "reported_fit_rms_px": 0.17029810043694535,
+      "stack_contributing_visit_coadds": 2,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00014860884047606973
+    },
+    {
+      "id": "candidate-17",
+      "rank": 17,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e000",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e004"
+      ],
+      "dates_utc": [
+        "2010-02-13T16:52:36.440687Z",
+        "2010-08-13T13:41:50.791199Z",
+        "2015-02-13T06:50:26.055887Z"
+      ],
+      "positions_xy": [
+        [
+          26.0,
+          17.0
+        ],
+        [
+          26.0,
+          17.0
+        ],
+        [
+          28.0,
+          18.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6531158,
+          -10.7531025
+        ],
+        [
+          233.6531158,
+          -10.7531025
+        ],
+        [
+          233.6515607,
+          -10.7523387
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        164.16486949354407,
+        163.6350380047108,
+        153.5014649191602
+      ],
+      "angular_equivalent_residuals_px": [
+        59.69631617947057,
+        59.5036501835312,
+        55.81871451605826
+      ],
+      "max_angular_residual_arcsec": 164.16486949354407,
+      "median_angular_residual_arcsec": 163.6350380047108,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 1.2839455722283195,
+      "reported_speed_px_per_hour": 5.3261384781213345e-05,
+      "reported_fit_rms_px": 0.09477003775026188,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0001503778177815833
+    },
+    {
+      "id": "candidate-18",
+      "rank": 18,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        3,
+        6,
+        7
+      ],
+      "native_epochs": [
+        8,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e008",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2017-02-11T21:41:36.156479Z",
+        "2023-07-24T09:37:11.987615Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          27.0,
+          127.0
+        ],
+        [
+          58.0,
+          97.0
+        ],
+        [
+          60.0,
+          94.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6523304,
+          -10.6690748
+        ],
+        [
+          233.6282336,
+          -10.6919927
+        ],
+        [
+          233.6266789,
+          -10.6942844
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        219.28637974904353,
+        127.3652258450109,
+        119.52154016172291
+      ],
+      "angular_equivalent_residuals_px": [
+        79.74050172692492,
+        46.314627580003965,
+        43.462378240626514
+      ],
+      "max_angular_residual_arcsec": 219.28637974904353,
+      "median_angular_residual_arcsec": 127.3652258450109,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 18.360139547547625,
+      "reported_speed_px_per_hour": 0.0007616260986683103,
+      "reported_fit_rms_px": 0.311355379706508,
+      "stack_contributing_visit_coadds": 2,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00013500704585749665
+    },
+    {
+      "id": "candidate-19",
+      "rank": 19,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        6,
+        7
+      ],
+      "native_epochs": [
+        1,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e021",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e022"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2023-07-24T09:37:11.987615Z",
+        "2024-02-14T00:00:30.324672Z"
+      ],
+      "positions_xy": [
+        [
+          107.0,
+          68.0
+        ],
+        [
+          60.0,
+          90.0
+        ],
+        [
+          57.0,
+          90.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.5901393,
+          -10.7141437
+        ],
+        [
+          233.6266789,
+          -10.6973399
+        ],
+        [
+          233.6290111,
+          -10.6973399
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        120.58147735034838,
+        107.35701648907973,
+        111.10014130231043
+      ],
+      "angular_equivalent_residuals_px": [
+        43.847809945581226,
+        39.03891508693808,
+        40.40005138265834
+      ],
+      "max_angular_residual_arcsec": 120.58147735034838,
+      "median_angular_residual_arcsec": 111.10014130231043,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 11.077956610621554,
+      "reported_speed_px_per_hour": 0.00045954230645765885,
+      "reported_fit_rms_px": 0.5416336843582847,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00012688992581758176
+    },
+    {
+      "id": "candidate-20",
+      "rank": 20,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        4,
+        5
+      ],
+      "native_epochs": [
+        1,
+        12,
+        15
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:2338m107:W2:e001",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e012",
+        "unwise-neo11:unwise:neo11:2338m107:W2:e015"
+      ],
+      "dates_utc": [
+        "2010-08-13T13:41:50.791199Z",
+        "2019-02-13T06:44:31.854335Z",
+        "2020-07-23T22:15:27.567360Z"
+      ],
+      "positions_xy": [
+        [
+          23.0,
+          88.0
+        ],
+        [
+          56.0,
+          90.0
+        ],
+        [
+          60.0,
+          90.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          233.6554428,
+          -10.6988661
+        ],
+        [
+          233.6297885,
+          -10.6973399
+        ],
+        [
+          233.6266789,
+          -10.6973399
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        130.27272868571308,
+        98.70834360915975,
+        99.55653716239907
+      ],
+      "angular_equivalent_residuals_px": [
+        47.3719013402593,
+        35.893943130603546,
+        36.2023771499633
+      ],
+      "max_angular_residual_arcsec": 130.27272868571308,
+      "median_angular_residual_arcsec": 99.55653716239907,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 10.400833728769888,
+      "reported_speed_px_per_hour": 0.0004314534971385264,
+      "reported_fit_rms_px": 0.6084728675077503,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0001674045470218712
+    }
+  ],
+  "raw_assets": {
+    "checksums_source": "Managed download completed HTTP response; this audit does not reread raw FITS bytes",
+    "count": 32,
+    "total_bytes": 192629295,
+    "assets": [
+      {
+        "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+        "id": "416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "ad3955b8e0968c36c29bf5165ba792fa1165303fca88c5a1781998f4d85907e2"
+      },
+      {
+        "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+        "id": "54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8",
+        "role": "#inverse-variance",
+        "bytes": 5993107,
+        "sha256": "e062c135255ed8ce34476ed36e2ea41113cbc7806cff5dde91184ec00fb95fdd"
+      },
+      {
+        "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+        "id": "c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964",
+        "role": "#coverage",
+        "bytes": 1519662,
+        "sha256": "d25a280990e4e142c3814bc9c45fffa05383662b30652e6103a282a35ec1654e"
+      },
+      {
+        "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+        "id": "6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093",
+        "role": "#contributors",
+        "bytes": 152640,
+        "sha256": "156888525851c501ef7fb00b02ece6f5931dc867edfd8512819eba14aed67531"
+      },
+      {
+        "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+        "id": "485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "04d8d214b0cf6f1fc7b7d6a5b0b5368489c93742588560c42dcd5865216e7394"
+      },
+      {
+        "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+        "id": "fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c",
+        "role": "#inverse-variance",
+        "bytes": 3356276,
+        "sha256": "bde075768d01f7553b51527fd94be79736e073aa3a702a6105cef93d45dc414b"
+      },
+      {
+        "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+        "id": "674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4",
+        "role": "#coverage",
+        "bytes": 1127127,
+        "sha256": "ad3da58643d0cbe333e03ed1f26caa09d2aac8f57a5907f0637b623a01863e72"
+      },
+      {
+        "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+        "id": "b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78",
+        "role": "#contributors",
+        "bytes": 155520,
+        "sha256": "564cea62c6c99d1d26675a7b82db5a701cd8b7c384f840c492eebdc20b74bfcc"
+      },
+      {
+        "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+        "id": "8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "16fa55b91d235421cfb10061a53228ae5b37345a6b57f6574c8b8a21c5d8863e"
+      },
+      {
+        "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+        "id": "e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a",
+        "role": "#inverse-variance",
+        "bytes": 2027349,
+        "sha256": "872987d364c129d00fc2719c4d7ab4f3faf1fd8630fd608be69709e98ea78149"
+      },
+      {
+        "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+        "id": "f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83",
+        "role": "#coverage",
+        "bytes": 803586,
+        "sha256": "bac61cb5c4f7bc5b1362ced9227640dc9cd94a67238846248d735217d0391543"
+      },
+      {
+        "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+        "id": "97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd",
+        "role": "#contributors",
+        "bytes": 141120,
+        "sha256": "6978c5178157c0abae8998d28750f2501f5e4d10f01856a2fe9c3e43d0f1e846"
+      },
+      {
+        "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+        "id": "07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "77610c3b3d15c7127470d2a739505443a75cda1aaa22ba923bf7200fc5752b75"
+      },
+      {
+        "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+        "id": "c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d",
+        "role": "#inverse-variance",
+        "bytes": 7226216,
+        "sha256": "0e35d538247110f04e02191abc96dda1b68bcb125a661925a964600f95a32acb"
+      },
+      {
+        "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+        "id": "d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599",
+        "role": "#coverage",
+        "bytes": 1657963,
+        "sha256": "74e0f18343427f0a2d703df1ddf7e4aca32537f97986c70a3c8c8a11c2cca129"
+      },
+      {
+        "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+        "id": "6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c",
+        "role": "#contributors",
+        "bytes": 155520,
+        "sha256": "e710c0f239c4c4e6271c3b25fcee7f8316d24872df311e7bcd389d0b63b77be3"
+      },
+      {
+        "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+        "id": "7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "b3a754aac585d5216bba2f60c91ebef2e199127cf947b74708dec8b8fac6600d"
+      },
+      {
+        "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+        "id": "7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004",
+        "role": "#inverse-variance",
+        "bytes": 5898529,
+        "sha256": "0de0ccd370e7a1ef114ee9aca4c0eea70cff45369285d5b8e226f3229acf2b83"
+      },
+      {
+        "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+        "id": "6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2",
+        "role": "#coverage",
+        "bytes": 1520980,
+        "sha256": "71333cf885efa7f291a2dbb97d5dc300dc2b8d2230ce3096d66f34a530c006f9"
+      },
+      {
+        "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+        "id": "1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116",
+        "role": "#contributors",
+        "bytes": 138240,
+        "sha256": "39544ea452306036e509bb93653f9f08272b69ebff3ff66e5a7335c84e552cea"
+      },
+      {
+        "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+        "id": "01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "c4be38fdb17a8d4b9f95cd5a4806516d837b5b21dda726ed3b08a1a272d5a329"
+      },
+      {
+        "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+        "id": "6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea",
+        "role": "#inverse-variance",
+        "bytes": 6497201,
+        "sha256": "613352785cd2897254359d1df151106831edb12a8ea645de5418d1ac22df292b"
+      },
+      {
+        "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+        "id": "aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb",
+        "role": "#coverage",
+        "bytes": 1611137,
+        "sha256": "72eed79ed66457db7cd4ecbf58589d13dfc1ef9e47ca836bd8656f0a441a4894"
+      },
+      {
+        "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+        "id": "a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab",
+        "role": "#contributors",
+        "bytes": 144000,
+        "sha256": "b9f3f9458f93bbd2152011d8be99a444a336ac48810483264ac8efd9c5645a74"
+      },
+      {
+        "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+        "id": "ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "fc2f61627ba6dc424ad103a1fa9acc91377566c79f773f8d847c855f6d42281a"
+      },
+      {
+        "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+        "id": "4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a",
+        "role": "#inverse-variance",
+        "bytes": 7978213,
+        "sha256": "300a2a88ab37daf48c73c3a847312c795bfe7b94c79ddcc07a8574e8e3e00ddb"
+      },
+      {
+        "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+        "id": "e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2",
+        "role": "#coverage",
+        "bytes": 1676649,
+        "sha256": "08e6cce0af368fe2f1ca84fdb00a505e846c60a21f78bec8ce72aca33986f815"
+      },
+      {
+        "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+        "id": "31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb",
+        "role": "#contributors",
+        "bytes": 175680,
+        "sha256": "209116c53d62465617745df15d5da866ca01d5a4a3685c05b8e2c4d8998d7bfa"
+      },
+      {
+        "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+        "id": "f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "8a98f8376daf1abbc0bf08e85ff1228f0d32a8d53fad99542cdc85873ec68223"
+      },
+      {
+        "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+        "id": "fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb",
+        "role": "#inverse-variance",
+        "bytes": 6664612,
+        "sha256": "56c9df74cd914a16923d2d6be503d9ca4eee581a1d80e3915d655e516f94a29c"
+      },
+      {
+        "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+        "id": "60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b",
+        "role": "#coverage",
+        "bytes": 1555168,
+        "sha256": "786968d4f446f432c0c9183612ec94e2a32275aef5f4a38ac2cf712170c9c983"
+      },
+      {
+        "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+        "id": "788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2",
+        "role": "#contributors",
+        "bytes": 175680,
+        "sha256": "eb6ecaeb51b31ae1af8cac9efc0bbb5cb11367ded44a4315dc42dc908c39851b"
+      }
+    ]
+  },
+  "limitations": [
+    "Known historical objects and fixed preselected fields/epochs; not an unbiased search or population completeness estimate.",
+    "The matching threshold is fixed at 1.5 pixels (4.125 arcsec), with at least three points and every returned point required to pass.",
+    "Native W2 visit coadds are not individual exposures; actual mission gaps and visit time intervals remain.",
+    "Artifact/outlier/bloom masks unavailable; inverse variance and coverage do not establish absence of artifacts.",
+    "No per-epoch PSF homogenization or independent stellar centroid refinement; resampling covariance not represented.",
+    "Published linear motion used without fitted parallax, perspective acceleration, or new astrometric fitting.",
+    "Reported proper motion is the existing Ivan inference value converted with 8766 hours/year; no audit fit is performed.",
+    "This is a targeted known-object recovery check, not a new discovery or proof that every returned candidate is astrophysical."
+  ]
+}

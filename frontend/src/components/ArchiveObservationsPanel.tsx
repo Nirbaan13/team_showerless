@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { useArchiveObservations } from '../hooks/useArchiveObservations';
 import { archiveResourceUrl, type ArchiveObservation } from '../services/archiveObservationsApi';
+import { historicalGrid, historicalSelection, runHistoricalMotion, type HistoricalGrid } from '../services/historicalMotionApi';
+import type { MotionReviewDataset } from '../services/motionReviewService';
+import { MotionField } from './MotionReview';
 
 type ArchiveState = ReturnType<typeof useArchiveObservations>;
 const timestamp = (record: ArchiveObservation) => record.observation_date ?? record.time.start_utc;
@@ -9,6 +12,54 @@ function Preview({ url, id }: { url: string; id: string }) {
   const [failed, setFailed] = useState(false);
   return failed ? <p role="alert">Image preview could not be loaded. FITS availability does not establish preview availability.</p>
     : <img src={url} alt={`Archive preview ${id}`} onError={() => setFailed(true)} className="max-h-96 max-w-full object-contain" />;
+}
+
+function HistoricalMotion({ archive }: { archive: ArchiveState }) {
+  const [review, setReview] = useState<MotionReviewDataset | null>(null);
+  const [progress, setProgress] = useState('');
+  const [error, setError] = useState('');
+  const [running, setRunning] = useState(false);
+  const request = useRef<AbortController | null>(null);
+  useEffect(() => () => request.current?.abort(), []);
+  const selection = historicalSelection(archive.result?.observations ?? [], archive.selectedIds, archive.job);
+  let grid: HistoricalGrid | undefined;
+  try { if (archive.query) grid = historicalGrid(archive.query); } catch { /* Invalid fields cannot start preparation. */ }
+  async function run() {
+    if (!grid || selection.reason) return;
+    request.current?.abort();
+    const controller = new AbortController(); request.current = controller;
+    setReview(null); setError(''); setRunning(true);
+    const timeout = window.setTimeout(() => controller.abort('timeout'), 600000);
+    try {
+      const actual = await runHistoricalMotion(selection.assetIds, grid, controller.signal, setProgress);
+      controller.signal.throwIfAborted(); setReview(actual);
+    } catch (e) {
+      if (controller.signal.reason === 'timeout') setError('Historical preparation or inference timed out. Retry with a smaller field.');
+      else if (!controller.signal.aborted) setError(e instanceof Error ? e.message : 'Historical motion failed');
+    } finally {
+      window.clearTimeout(timeout);
+      if (!controller.signal.aborted || controller.signal.reason === 'timeout') { setRunning(false); setProgress(''); }
+    }
+  }
+  function cancel() { request.current?.abort(); request.current = null; setRunning(false); setProgress(''); }
+  return <section aria-label="Historical motion" className="border border-paper-700 rounded p-3 space-y-3">
+    <h3 className="font-bold">Historical stellar proper motion · unWISE neo11 W2</h3>
+    <p>At least three distinct epochs of one tile. Actual observation intervals and mission gaps are preserved. Associated variance, coverage and provenance are resolved by the server. Downloaded files still require preparation to check pixel, calibration and coverage qualification.</p>
+    {grid && <p>Requested square field: {archive.query?.fovArcmin}′ wide. Result grid: {grid.width} × {grid.height} pixels · native 2.75″/pixel · {(grid.width * 2.75 / 60).toFixed(3)}′ wide.
+      {archive.query!.fovArcmin * 60 / 2.75 > 512 && ' The central field is limited to 512 pixels; it does not cover the full requested field.'}</p>}
+    <p>Profile: 0.1–30 arcsec/year. Artifact/outlier/bloom masks are unavailable; PSF homogenization and astrometric refinement are unavailable.</p>
+    <button type="button" onClick={() => void run()} disabled={running || !!selection.reason || !grid}
+      className="bg-emerald-400 text-gray-950 rounded px-3 py-2 font-bold disabled:opacity-40 disabled:cursor-not-allowed">Find historical motion</button>
+    {selection.reason && <p>{selection.reason}</p>}
+    {running && <><p role="status">{progress}</p><button type="button" onClick={cancel}>Cancel historical motion</button></>}
+    {error && <p role="alert" className="text-red-300 break-words">{error}</p>}
+    {review && <section aria-label="Historical motion result" className="space-y-3">
+      <p>{review.source} · {review.frames.length} actual observation epochs · {review.frames[0].time} through {review.frames.at(-1)?.time}</p>
+      {review.historical_preparation?.limitations?.map((limitation, index) => <p key={index}>{limitation}</p>)}
+      {review.historical_preparation?.warnings?.map((warning, index) => <p key={index} className="text-amber-300">{warning}</p>)}
+      <MotionField key={review.id} review={review} />
+    </section>}
+  </section>;
 }
 export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState }) {
   const { query, result, searching, selectedIds, downloading, job, error } = archive;
@@ -20,6 +71,7 @@ export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState })
       : <p>Choose an archive and observation dates, then press Update Field.</p>}
     {searching && <p role="status">Searching archive metadata. No image files are being downloaded.</p>}
     {error && <p role="alert" className="text-red-300 break-words">{error}</p>}
+    {query && result && <HistoricalMotion key={JSON.stringify([query, selectedIds, job?.id, job?.status])} archive={archive} />}
     {result && <>
       <div aria-label="Archive provider outcomes" className="space-y-2">
         {missingProviders.map(id => <p key={id} role="status" className="text-amber-300">{id}: no provider outcome returned; completeness is unknown.</p>)}
@@ -75,8 +127,10 @@ export function ArchiveObservationsPanel({ archive }: { archive: ArchiveState })
           {chunk.error && <p role="alert">{chunk.error.code}: {chunk.error.message}</p>}
           {preview ? <Preview key={`${job.id}:${preview}`} url={preview} id={record?.native_id ?? chunk.frame_id} />
             : <p>Preview {chunk.preview_status === 'pending' ? 'pending' : 'unavailable'}: a native FITS file requires a supported image-rendering/preparation endpoint.</p>}
-          <p>{asset?.analysisEligible === true && record?.analysisEligible === true
-            ? 'Analysis eligible · no analysis has been requested' : 'ML unavailable for this product; no analysis was started.'}</p>
+          <p>{record?.provider === 'unwise-neo11' && record.analysisEligible
+            ? 'Downloaded native product · preparation must still check historical motion qualification; use the historical action above.'
+            : asset?.analysisEligible === true && record?.analysisEligible === true
+              ? 'Analysis eligible · no analysis has been requested' : 'ML unavailable for this product; no analysis was started.'}</p>
         </article>;
       })}
     </section>}

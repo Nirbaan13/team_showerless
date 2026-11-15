@@ -1,0 +1,1096 @@
+{
+  "case": "wise0855",
+  "status": "RECOVERED",
+  "audit_scope": {
+    "returned_candidates": 6,
+    "comparison": {
+      "shared_median": {
+        "candidates": 6,
+        "match": null
+      },
+      "leave_one_out": {
+        "candidates": 6,
+        "match": null
+      },
+      "random_forest": null,
+      "outliers_masked": null,
+      "bloom": null
+    },
+    "full_candidate_pool_audited": true,
+    "scope": "Only candidates actually present in the unchanged HTTP response are audited; omitted candidates are not classified."
+  },
+  "criterion": {
+    "minimum_candidate_frames": 3,
+    "all_candidate_frames_within_threshold": true,
+    "threshold_pixels": 1.5,
+    "threshold_arcsec": 4.125
+  },
+  "response_sha256": "5f4b099d3968b1f76dc680bb84e0f6febd4dc0bb0554aba419dfd290c7ed4034",
+  "response_bytes": 125701,
+  "external_truth": {
+    "path": "/home/usatovpavel/playground/hackaton/docs/ai/benchmarks/real-discoveries-20261115/wise0855/truth.json",
+    "sha256": "d79d6f0ff1395af128764a1caca2f22bac4e52a8f73d0777edd1499522eec1be",
+    "paper": "https://arxiv.org/html/1404.6501v1",
+    "reference": {
+      "mjd": 56677.3,
+      "ra_degrees": 133.787085,
+      "dec_degrees": -7.244451,
+      "pm_ra_cosdec_arcsec_per_year": -8.06,
+      "pm_dec_arcsec_per_year": 0.7
+    },
+    "parallax_not_fitted_arcsec": 0.454,
+    "propagation": "Frozen published linear mu_alpha*cos(delta), mu_delta; Julian years of 365.25 days from real UTC MJD. No fitting or parallax correction; old predicted_xy ignored.",
+    "published_total_proper_motion_arcsec_per_year": 8.090339918693157
+  },
+  "source_snapshot": {
+    "git_head": "3f5a3e7c704d1446ab080b5cf4901cab61f27908",
+    "files_sha256": {
+      "ml/service.py": "225467996412df5c04a0a58314903707adafc437e5dc9d87d919ea7fa3612937",
+      "science/motion/prepared.py": "e871d46f4e55ac019c0a7737b33915afc9dacfd888839b5f122b55add229f803",
+      "science/motion/profiles.py": "3b370cea71fa74175cd771d82be7fbd04d8817b8d866061ad0ab6ce7e8e02b1e",
+      "science/motion/detector.py": "4467d53ff4728c29e05b0dcd7261b990016f09261eb35061a3e3cfbc59e6c9f1",
+      "science/motion/review.py": "4dcc5548c2fa92f6407de49e42320a37d3830120b84e41902e9aaa17aea8d847",
+      "science/motion/ranker.py": "b0a07abf26479a65abff98ed88a23422fa641ba29651530afb160f61a5c637c8",
+      "pipeline/unification/unwise.py": "8b15d189e55b05c68efe8b2ef1470523ebb463d0ceebb9bcf5601f6605702931",
+      "pipeline/unification/resampling.py": "bfe595224b13b18ebb18ae5ede0f0d931e3f69072000e73e98491106d9507cac",
+      "pipeline/unification/worker.py": "cfb26eba49ace8928f7d49edb779aaba30845d9d215b9293056cca069a9f7f9d",
+      "pipeline/unification/ml.py": "c03e82d8b811cc9aa6d71b096a51c399c9544a055b38fa5cef1df2ebb23bdf77",
+      "ml/pvusatov/support/historical/verify_real_http.py": "27f6e68e34c1b36b8401da1979f17f0c96fe31ecd8a25f86228f8640c6e77f0c",
+      "ml/pvusatov/support/historical/audit_real_recovery.py": "74040a3400d61393d0badb725605304e2b562ffa1e2fd23c985d99197612abf0"
+    },
+    "status": "Observed local development source; unfrozen local QA, not an executed-image attestation",
+    "astropy_version": "8.0.2",
+    "numpy_version": "2.5.3"
+  },
+  "runtime_evidence_sha256": {
+    "discovery.json": "66b2d73c6e885bcbc6d5e8272274875ecdb088f1c79692750aacd167a19e8070",
+    "download-accepted.json": "0d873b21b7bc12fc97cb4daa3165cc2fa231aaf4012a697c5b7f33a787aac777",
+    "download-completed.json": "d7d97f003702735abcaf424c332135dea3b32070e0a5c694f952766376d0424a",
+    "http-calls.json": "c5cf29c6954559b4421b17ffeca854820c1722b3e8e989a4df0f57502951ea2a",
+    "ivan-review.json": "5f4b099d3968b1f76dc680bb84e0f6febd4dc0bb0554aba419dfd290c7ed4034",
+    "runtime-proof.json": "0dca01871751e2fbc0f0aa1ef033a309e35b7b84e67ff5a07dafb77c52914ef5",
+    "selection.json": "42f9b5a0d0185a0d1e035aea19030b388162dd596480522afb016cd9fb849e89",
+    "unification-accepted.json": "73a07ddea3e58db4f1692a0eae466a245f95e067acc0c29b4d054d86b082366c",
+    "unification-completed.json": "702d807c6b8b59c4c2d741a01ed083393ca93db8d433db450d5e541cac82153f"
+  },
+  "blind_checks": {
+    "has_ephemeris": false,
+    "target": null,
+    "detector": null,
+    "simulated_training_fields": null,
+    "random_forest": null,
+    "known_trajectory_in_request": false,
+    "synthetic_source_acceptance": false,
+    "search_profile": {
+      "name": "historical-proper-motion",
+      "min_speed": 4.148258768381972e-06,
+      "max_speed": 0.0012444776305145914,
+      "speed_unit": "pixels/hour",
+      "time_unit": "hours",
+      "proper_motion_arcsec_per_year": {
+        "min": 0.1,
+        "max": 30.0
+      },
+      "pixel_scale_arcsec": 2.75,
+      "hours_per_year": 8766.0
+    }
+  },
+  "frames": [
+    {
+      "index": 0,
+      "native_epoch": 0,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+      "date_utc": "2010-05-04T22:03:56.931551Z",
+      "mjd_utc": 55320.919408929985,
+      "elapsed_hours": 0.0,
+      "published_prediction_sky_deg": [
+        133.79546617087797,
+        -7.245173082602288
+      ],
+      "published_prediction_target_xy": [
+        63.05694233733098,
+        63.45538260881432
+      ],
+      "source_science_sha256": "288cb84cb221cb356adb9b3b13cbca6a331c615c648d03ea16baa9d956e89a15",
+      "native_time": {
+        "MJDMIN": 55319.36486639,
+        "MJDMAX": 55322.47395147
+      }
+    },
+    {
+      "index": 1,
+      "native_epoch": 1,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+      "date_utc": "2010-11-11T22:00:25.433855Z",
+      "mjd_utc": 55511.91696103999,
+      "elapsed_hours": 4583.941250640142,
+      "published_prediction_sky_deg": [
+        133.79428598359715,
+        -7.245071403169269
+      ],
+      "published_prediction_target_xy": [
+        64.58957931142594,
+        63.5884893904898
+      ],
+      "source_science_sha256": "17da06891d1a26b5552cf04daf57ebae416773660e60be9ccf15eabb378756b2",
+      "native_time": {
+        "MJDMIN": 55510.36273534,
+        "MJDMAX": 55513.47118674
+      }
+    },
+    {
+      "index": 2,
+      "native_epoch": 4,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e004",
+      "date_utc": "2015-05-02T20:16:37.168031Z",
+      "mjd_utc": 57144.84487462999,
+      "elapsed_hours": 43774.211176800134,
+      "published_prediction_sky_deg": [
+        133.7841960074022,
+        -7.244202097868856
+      ],
+      "published_prediction_target_xy": [
+        77.69284211554654,
+        64.72631937308168
+      ],
+      "source_science_sha256": "0543fe41d1b6687838ec5ed0626564037ca1ea96c3b9cf99a0136a95a4543234",
+      "native_time": {
+        "MJDMIN": 57143.30249081,
+        "MJDMAX": 57146.38725845
+      }
+    },
+    {
+      "index": 3,
+      "native_epoch": 8,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e008",
+      "date_utc": "2017-04-21T05:36:46.652688Z",
+      "mjd_utc": 57864.233873295,
+      "elapsed_hours": 61039.54714476038,
+      "published_prediction_sky_deg": [
+        133.7797508522848,
+        -7.243819124031252
+      ],
+      "published_prediction_target_xy": [
+        83.46552172375107,
+        65.22749987347558
+      ],
+      "source_science_sha256": "c3276b543f3dffb06d8dc1ca475bb87b0cc417497a45a46c9216ef7f9b1567b2",
+      "native_time": {
+        "MJDMIN": 57862.69518306,
+        "MJDMAX": 57865.77256353
+      }
+    },
+    {
+      "index": 4,
+      "native_epoch": 12,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e012",
+      "date_utc": "2019-04-18T19:36:57.928896Z",
+      "mjd_utc": 58591.81733714,
+      "elapsed_hours": 78501.55027704028,
+      "published_prediction_sky_deg": [
+        133.77525506299185,
+        -7.243431787789187
+      ],
+      "published_prediction_target_xy": [
+        89.30396738170337,
+        65.73433183567388
+      ],
+      "source_science_sha256": "dc06f574e28c8af1941d6a92b730cdc4c85290e7c94386af6fecd9cb13c56248",
+      "native_time": {
+        "MJDMIN": 58590.34550089,
+        "MJDMAX": 58593.28917339
+      }
+    },
+    {
+      "index": 5,
+      "native_epoch": 15,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e015",
+      "date_utc": "2020-11-11T00:28:49.498607Z",
+      "mjd_utc": 59164.020017344985,
+      "elapsed_hours": 92234.41460195999,
+      "published_prediction_sky_deg": [
+        133.77171938246738,
+        -7.243127170041721
+      ],
+      "published_prediction_target_xy": [
+        93.89557742351336,
+        66.13288555844912
+      ],
+      "source_science_sha256": "4a189a2f372ad6209c19dda8ce57bb1abe24b0e3903059daef0b42d6af3a300c",
+      "native_time": {
+        "MJDMIN": 59161.17516159,
+        "MJDMAX": 59166.8648731
+      }
+    },
+    {
+      "index": 6,
+      "native_epoch": 21,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e021",
+      "date_utc": "2023-11-12T22:30:58.248288Z",
+      "mjd_utc": 60260.93817417,
+      "elapsed_hours": 118560.4503657603,
+      "published_prediction_sky_deg": [
+        133.76494144818255,
+        -7.242543214828565
+      ],
+      "published_prediction_target_xy": [
+        102.69775697712012,
+        66.8968171341817
+      ],
+      "source_science_sha256": "8675e2ee9ad1a7d8092c4ebec8f19514de786f79f6e30ee1434618b30e86ca9e",
+      "native_time": {
+        "MJDMIN": 60259.48320758,
+        "MJDMAX": 60262.39314076
+      }
+    },
+    {
+      "index": 7,
+      "native_epoch": 22,
+      "observation_id": "unwise-neo11:unwise:neo11:1342m076:W2:e022",
+      "date_utc": "2024-04-17T00:21:12.868559Z",
+      "mjd_utc": 60417.01473227499,
+      "elapsed_hours": 122306.28776028013,
+      "published_prediction_sky_deg": [
+        133.76397704017484,
+        -7.242460125931559
+      ],
+      "published_prediction_target_xy": [
+        103.95018953344868,
+        67.00550356242687
+      ],
+      "source_science_sha256": "426135f7d2ea70efbfe09be18eb5cf53fc15840db6f4b8a03b901453391ebaf2",
+      "native_time": {
+        "MJDMIN": 60414.09174998,
+        "MJDMAX": 60419.93771457
+      }
+    }
+  ],
+  "span_julian_years": 13.952348592320343,
+  "candidates_in_original_rank_order": [
+    {
+      "id": "candidate-01",
+      "rank": 1,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4,
+        8,
+        12,
+        15,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e004",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e008",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e012",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e015",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e021",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e022"
+      ],
+      "dates_utc": [
+        "2010-05-04T22:03:56.931551Z",
+        "2010-11-11T22:00:25.433855Z",
+        "2015-05-02T20:16:37.168031Z",
+        "2017-04-21T05:36:46.652688Z",
+        "2019-04-18T19:36:57.928896Z",
+        "2020-11-11T00:28:49.498607Z",
+        "2023-11-12T22:30:58.248288Z",
+        "2024-04-17T00:21:12.868559Z"
+      ],
+      "positions_xy": [
+        [
+          63.0,
+          64.0
+        ],
+        [
+          65.0,
+          64.0
+        ],
+        [
+          78.0,
+          65.0
+        ],
+        [
+          84.0,
+          65.0
+        ],
+        [
+          90.0,
+          66.0
+        ],
+        [
+          94.0,
+          66.0
+        ],
+        [
+          103.0,
+          67.0
+        ],
+        [
+          105.0,
+          67.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.79551,
+          -7.2447571
+        ],
+        [
+          133.7939699,
+          -7.2447571
+        ],
+        [
+          133.7839595,
+          -7.243993
+        ],
+        [
+          133.7793393,
+          -7.2439929
+        ],
+        [
+          133.7747191,
+          -7.2432288
+        ],
+        [
+          133.771639,
+          -7.2432287
+        ],
+        [
+          133.7647087,
+          -7.2424644
+        ],
+        [
+          133.7631687,
+          -7.2424643
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        1.5056952790476754,
+        1.59827989859756,
+        1.1313871006875504,
+        1.597363358034664,
+        2.0488202013582026,
+        0.46476211300255504,
+        0.8783005432456759,
+        2.8868462338871197
+      ],
+      "angular_equivalent_residuals_px": [
+        0.5475255560173365,
+        0.5811926903991127,
+        0.41141349115910925,
+        0.580859402921696,
+        0.7450255277666191,
+        0.16900440472820183,
+        0.3193820157257003,
+        1.0497622668680435
+      ],
+      "max_angular_residual_arcsec": 2.8868462338871197,
+      "median_angular_residual_arcsec": 1.5515293185411698,
+      "matched_frames": 8,
+      "candidate_frames": 8,
+      "passes_recovery": true,
+      "reported_proper_motion_arcsec_per_year": 8.173881143705868,
+      "reported_speed_px_per_hour": 0.0003390737412608993,
+      "reported_fit_rms_px": 0.3325809917038552,
+      "stack_contributing_visit_coadds": 8,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0002312023297066656
+    },
+    {
+      "id": "candidate-02",
+      "rank": 2,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4,
+        12,
+        15,
+        21,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e004",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e012",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e015",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e021",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e022"
+      ],
+      "dates_utc": [
+        "2010-05-04T22:03:56.931551Z",
+        "2010-11-11T22:00:25.433855Z",
+        "2015-05-02T20:16:37.168031Z",
+        "2019-04-18T19:36:57.928896Z",
+        "2020-11-11T00:28:49.498607Z",
+        "2023-11-12T22:30:58.248288Z",
+        "2024-04-17T00:21:12.868559Z"
+      ],
+      "positions_xy": [
+        [
+          108.0,
+          118.0
+        ],
+        [
+          108.0,
+          118.0
+        ],
+        [
+          108.0,
+          117.0
+        ],
+        [
+          110.0,
+          116.0
+        ],
+        [
+          111.0,
+          117.0
+        ],
+        [
+          111.0,
+          117.0
+        ],
+        [
+          111.0,
+          116.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.7608615,
+          -7.2035058
+        ],
+        [
+          133.7608615,
+          -7.2035058
+        ],
+        [
+          133.7608615,
+          -7.2042697
+        ],
+        [
+          133.7593215,
+          -7.2050334
+        ],
+        [
+          133.7585516,
+          -7.2042695
+        ],
+        [
+          133.7585516,
+          -7.2042695
+        ],
+        [
+          133.7585515,
+          -7.2050334
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        194.3569400756465,
+        191.41806516957732,
+        166.1658383124296,
+        149.48888179308744,
+        147.58100898605713,
+        139.6624569250853,
+        136.12241526702653
+      ],
+      "angular_equivalent_residuals_px": [
+        70.67525093659873,
+        69.60656915257357,
+        60.423941204519856,
+        54.35959337930453,
+        53.66582144947532,
+        50.78634797275829,
+        49.49906009710055
+      ],
+      "max_angular_residual_arcsec": 194.3569400756465,
+      "median_angular_residual_arcsec": 149.48888179308744,
+      "matched_frames": 0,
+      "candidate_frames": 7,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.744934336283582,
+      "reported_speed_px_per_hour": 3.0901803923571736e-05,
+      "reported_fit_rms_px": 0.6556988474525632,
+      "stack_contributing_visit_coadds": 7,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0002152860602753182
+    },
+    {
+      "id": "candidate-03",
+      "rank": 3,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        2,
+        7
+      ],
+      "native_epochs": [
+        0,
+        1,
+        4,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e004",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e022"
+      ],
+      "dates_utc": [
+        "2010-05-04T22:03:56.931551Z",
+        "2010-11-11T22:00:25.433855Z",
+        "2015-05-02T20:16:37.168031Z",
+        "2024-04-17T00:21:12.868559Z"
+      ],
+      "positions_xy": [
+        [
+          117.0,
+          33.0
+        ],
+        [
+          118.0,
+          33.0
+        ],
+        [
+          117.0,
+          33.0
+        ],
+        [
+          116.0,
+          31.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.7539259,
+          -7.2684358
+        ],
+        [
+          133.7531558,
+          -7.2684357
+        ],
+        [
+          133.7539259,
+          -7.2684358
+        ],
+        [
+          133.7546958,
+          -7.2699636
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        170.35322649918155,
+        169.26089045774668,
+        138.91212684750823,
+        104.41292569735583
+      ],
+      "angular_equivalent_residuals_px": [
+        61.9466278178842,
+        61.549414711907886,
+        50.51350067182118,
+        37.9683366172203
+      ],
+      "max_angular_residual_arcsec": 170.35322649918155,
+      "median_angular_residual_arcsec": 154.08650865262746,
+      "matched_frames": 0,
+      "candidate_frames": 4,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.49660699773849953,
+      "reported_speed_px_per_hour": 2.0600543328085765e-05,
+      "reported_fit_rms_px": 0.47953189983382494,
+      "stack_contributing_visit_coadds": 4,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.0001800099215752145
+    },
+    {
+      "id": "candidate-04",
+      "rank": 4,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        7
+      ],
+      "native_epochs": [
+        0,
+        1,
+        22
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e022"
+      ],
+      "dates_utc": [
+        "2010-05-04T22:03:56.931551Z",
+        "2010-11-11T22:00:25.433855Z",
+        "2024-04-17T00:21:12.868559Z"
+      ],
+      "positions_xy": [
+        [
+          61.0,
+          47.0
+        ],
+        [
+          61.0,
+          48.0
+        ],
+        [
+          49.0,
+          56.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.7970501,
+          -7.2577432
+        ],
+        [
+          133.7970501,
+          -7.2569793
+        ],
+        [
+          133.8062907,
+          -7.250868
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        45.60458498227533,
+        43.99026635877179,
+        154.11403149723742
+      ],
+      "angular_equivalent_residuals_px": [
+        16.58348544810012,
+        15.996460494098834,
+        56.04146599899543
+      ],
+      "max_angular_residual_arcsec": 154.11403149723742,
+      "median_angular_residual_arcsec": 45.60458498227533,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 2.953884540010116,
+      "reported_speed_px_per_hour": 0.0001225347744388491,
+      "reported_fit_rms_px": 0.3330252720229957,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00021468749190255536
+    },
+    {
+      "id": "candidate-05",
+      "rank": 5,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        0,
+        1,
+        6
+      ],
+      "native_epochs": [
+        0,
+        1,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e000",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e021"
+      ],
+      "dates_utc": [
+        "2010-05-04T22:03:56.931551Z",
+        "2010-11-11T22:00:25.433855Z",
+        "2023-11-12T22:30:58.248288Z"
+      ],
+      "positions_xy": [
+        [
+          71.0,
+          5.0
+        ],
+        [
+          70.0,
+          6.0
+        ],
+        [
+          61.0,
+          44.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.7893491,
+          -7.2898265
+        ],
+        [
+          133.7901193,
+          -7.2890626
+        ],
+        [
+          133.7970502,
+          -7.2600348
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        162.22973470131728,
+        159.06578124457187,
+        130.8193752941561
+      ],
+      "angular_equivalent_residuals_px": [
+        58.99263080047901,
+        57.84210227075341,
+        47.57068192514767
+      ],
+      "max_angular_residual_arcsec": 162.22973470131728,
+      "median_angular_residual_arcsec": 159.06578124457187,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 8.219650860183295,
+      "reported_speed_px_per_hour": 0.0003409723875379377,
+      "reported_fit_rms_px": 0.3313182435821032,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00023972529468156738
+    },
+    {
+      "id": "candidate-06",
+      "rank": 6,
+      "method": "heuristic_leave_one_out",
+      "frame_indices": [
+        1,
+        4,
+        6
+      ],
+      "native_epochs": [
+        1,
+        12,
+        21
+      ],
+      "observation_ids": [
+        "unwise-neo11:unwise:neo11:1342m076:W2:e001",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e012",
+        "unwise-neo11:unwise:neo11:1342m076:W2:e021"
+      ],
+      "dates_utc": [
+        "2010-11-11T22:00:25.433855Z",
+        "2019-04-18T19:36:57.928896Z",
+        "2023-11-12T22:30:58.248288Z"
+      ],
+      "positions_xy": [
+        [
+          61.0,
+          48.0
+        ],
+        [
+          60.0,
+          45.0
+        ],
+        [
+          61.0,
+          44.0
+        ]
+      ],
+      "sky_deg": [
+        [
+          133.7970501,
+          -7.2569793
+        ],
+        [
+          133.7978202,
+          -7.2592709
+        ],
+        [
+          133.7970502,
+          -7.2600348
+        ]
+      ],
+      "angular_residuals_arcsec": [
+        43.99026635877179,
+        98.71817671041777,
+        130.8193752941561
+      ],
+      "angular_equivalent_residuals_px": [
+        15.996460494098834,
+        35.89751880378828,
+        47.57068192514767
+      ],
+      "max_angular_residual_arcsec": 130.8193752941561,
+      "median_angular_residual_arcsec": 98.71817671041777,
+      "matched_frames": 0,
+      "candidate_frames": 3,
+      "passes_recovery": false,
+      "reported_proper_motion_arcsec_per_year": 0.8634904886878725,
+      "reported_speed_px_per_hour": 3.581981991113901e-05,
+      "reported_fit_rms_px": 0.5014298566156951,
+      "stack_contributing_visit_coadds": 3,
+      "random_forest_rank": null,
+      "max_sky_vs_target_wcs_error_arcsec": 0.00018717121491796296
+    }
+  ],
+  "raw_assets": {
+    "checksums_source": "Managed download completed HTTP response; this audit does not reread raw FITS bytes",
+    "count": 32,
+    "total_bytes": 202222517,
+    "assets": [
+      {
+        "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+        "id": "344994a4be4d3f3121f69ec70d456450efc1027532853c97b5e14d7b898dcb2a",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "0543fe41d1b6687838ec5ed0626564037ca1ea96c3b9cf99a0136a95a4543234"
+      },
+      {
+        "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+        "id": "b9c50afd35f247ef09121b9993780b4ce32ebbe3cf9f6ec9095c337a8b5e9fad",
+        "role": "#inverse-variance",
+        "bytes": 7578577,
+        "sha256": "44bf138af102a4b4e99315e0c2bef6c0c9270f9bdfc295739301484029a96fc2"
+      },
+      {
+        "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+        "id": "3012be7c823fa584cd082f3f6368679ec2f8d89dd86b555ec5b2838be99541d8",
+        "role": "#coverage",
+        "bytes": 1615473,
+        "sha256": "801379a34121ec698d648c0168541b29f74746c88a94eb1449a3b2a44d1621a7"
+      },
+      {
+        "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+        "id": "9c2959f397454dc672e66b4ab01c86b709ff02c3a7fc163db1939294b4dc506d",
+        "role": "#contributors",
+        "bytes": 155520,
+        "sha256": "38197ae2b118ab51eb5401861e4e8d83ffcdcec2facdd87d76e27b4cd4d1bd16"
+      },
+      {
+        "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+        "id": "e18d440e5a31bb954c2a8c776e42b7aa2853c9c1e7f97f5146da5abf7224011e",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "4a189a2f372ad6209c19dda8ce57bb1abe24b0e3903059daef0b42d6af3a300c"
+      },
+      {
+        "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+        "id": "b5d97e02aa774ee48576ecf78770a3231756c90249a388f933e6116e0920139f",
+        "role": "#inverse-variance",
+        "bytes": 6425112,
+        "sha256": "032b02c8e8591c471d09d8a27ee775abea29d2a661c395c6d9452ba69db90448"
+      },
+      {
+        "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+        "id": "19d2386087baacb005dedcfd98426ab83fedc3c0fb09ac00228457993867f35d",
+        "role": "#coverage",
+        "bytes": 1559967,
+        "sha256": "4d01b5ac42a1a70daaa960ba0141916657ed360b7c6702e68f8ea825573de18f"
+      },
+      {
+        "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+        "id": "9de574d20c4393759491ed589f3de966dc59759fb390c9d5dabd3babdc50aa20",
+        "role": "#contributors",
+        "bytes": 155520,
+        "sha256": "d884bea818286c283964f7c552b7818a2f9b0ed54ef8b3a42f36989f05dd2b5c"
+      },
+      {
+        "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+        "id": "b3b96f57c4002bd48323996cae3e93bd385e49b07aa8af24843e6c904a26be2f",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "dc06f574e28c8af1941d6a92b730cdc4c85290e7c94386af6fecd9cb13c56248"
+      },
+      {
+        "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+        "id": "85da4902909fc637efa60c6f6c418e4013e4e550d28e7f38d85ba8e367fe84fd",
+        "role": "#inverse-variance",
+        "bytes": 7278924,
+        "sha256": "0b4b9c80382845e716e693b825d28a2cf551a54ab8b43ce8e9ecb8b15e17553f"
+      },
+      {
+        "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+        "id": "6ef236d32a8b2557861b0c0da976fe7b7e65bb15f808c52c14b150255a60089a",
+        "role": "#coverage",
+        "bytes": 1617457,
+        "sha256": "d5287b0a7f9ee6560c01efb5d294413cb5c8fe2a99a5ee3b52ac4c221a6b7c20"
+      },
+      {
+        "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+        "id": "91d185614b2e4356805539f0bc792c395b9319e747e43256895ee85a7e4473dd",
+        "role": "#contributors",
+        "bytes": 149760,
+        "sha256": "1bb0c221e8ba599089a569caa772a09f80b7e598d93b4be9a984deea1db2b3a7"
+      },
+      {
+        "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+        "id": "5c5d63513cd1e59ddc5e38f432aead993397e04ac75065b9c5733926e0aed2d9",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "17da06891d1a26b5552cf04daf57ebae416773660e60be9ccf15eabb378756b2"
+      },
+      {
+        "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+        "id": "9f9468e77edf7dcdb4d221df06149cc8c3454e0d8a59575f3f40451d7cd5bd9e",
+        "role": "#inverse-variance",
+        "bytes": 4387143,
+        "sha256": "981d23c9db5eb1ba0cdbca38b473060738b5e7f06c671d7a596b53f88acb78a0"
+      },
+      {
+        "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+        "id": "b0f47f035c79c2cea68d6451472d596517d194625d88cdd428e6d3112329b818",
+        "role": "#coverage",
+        "bytes": 1279021,
+        "sha256": "ab1d9aae9575fbc2a957abbcd72938d8a45113b424fc5390ed912b626f777ce2"
+      },
+      {
+        "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+        "id": "0bb957dee7f9df1bc12f8ad107371af78b905140748948166a3b7a50460cd296",
+        "role": "#contributors",
+        "bytes": 152640,
+        "sha256": "a9824d2e1b32cb939284e4308588602458c184538bc8a8abed9f050eeb06cb1e"
+      },
+      {
+        "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+        "id": "851c163a59db66642239dfc4295fc463fe09d025d465a32adbc3d8dc7dfcde4f",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "288cb84cb221cb356adb9b3b13cbca6a331c615c648d03ea16baa9d956e89a15"
+      },
+      {
+        "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+        "id": "336a740f40065b5c496fc9cf10e4ef23f1a8a4dae01bfdd3fb0b199947abb068",
+        "role": "#inverse-variance",
+        "bytes": 2624516,
+        "sha256": "75abcfccbdf07721b7e86e738cf46303b8a109d2e6baa159684614cda305685c"
+      },
+      {
+        "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+        "id": "692b4c46acc0a8298aed25c51c24f19cf9bb57b235f0b0c53e429c4ec3b5f844",
+        "role": "#coverage",
+        "bytes": 948448,
+        "sha256": "382361e83e674e5834a3515a6a003b09ab12b4ad0e54c78ea63537e6ba394a2f"
+      },
+      {
+        "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+        "id": "571f5c0829d16a7fb4665a07eedd46df50444652ea2a978220d61bcaecd167fb",
+        "role": "#contributors",
+        "bytes": 158400,
+        "sha256": "37c2936616817d2faac023fae63d2c805023d663888db3c5bff7f862c0e24fea"
+      },
+      {
+        "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+        "id": "39e6e9899096d1a8407f139facbfb2e69cb474b06cd6025b62fc9d3b3fc13495",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "8675e2ee9ad1a7d8092c4ebec8f19514de786f79f6e30ee1434618b30e86ca9e"
+      },
+      {
+        "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+        "id": "f373f664fc6538adaec9768d5697db0627a2e5cd994f4007f7e2fb401779ddaa",
+        "role": "#inverse-variance",
+        "bytes": 6796013,
+        "sha256": "83b8ceb096dc63d0cabdb62b7d90f3b77e147823440bb49694d8d295132d5333"
+      },
+      {
+        "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+        "id": "d8d32bf7fc8368ca057e0441d2084ef6b9a4d7e0a9e15d1c6c5b0d89ad2e5c18",
+        "role": "#coverage",
+        "bytes": 1624040,
+        "sha256": "0c2762d2ea6f15fee7625471654c92af5077be8f1919b1ff4cd31cc8eade8ab7"
+      },
+      {
+        "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+        "id": "c514121dbf4497583cadf3bd3afe5a736dec51ddf1b139f1acf8aaa774ae8e80",
+        "role": "#contributors",
+        "bytes": 155520,
+        "sha256": "8b902d6a7f2ace0b0ba0bd233ed31590a5d0a433737e6d360759afe3694e342d"
+      },
+      {
+        "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+        "id": "e62d418bbfa7aa0ad71c506e5857f60b6ce36808da69c851c1a3d17699b3aa19",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "c3276b543f3dffb06d8dc1ca475bb87b0cc417497a45a46c9216ef7f9b1567b2"
+      },
+      {
+        "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+        "id": "8c900aa5756baf8da76050f4204f6faaa1cff3aaebcbc22af0c9d0b64cacf915",
+        "role": "#inverse-variance",
+        "bytes": 7499197,
+        "sha256": "d4b0c12f53f82bd8b3905347c6d70ea91f50c8f1785a72c14f4ffbec3eb05af4"
+      },
+      {
+        "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+        "id": "4e31848ec2a6092ad7aabd8aca897417c6b6d5bc35b41ad028dc50070761aada",
+        "role": "#coverage",
+        "bytes": 1656597,
+        "sha256": "aa277d716d71d1774693450378e8400ed4052fc0c70bfb3a67db115b0375da47"
+      },
+      {
+        "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+        "id": "3b9e4243691258108eb354d90c848da333cddca42f853eaa495910dd2f873ad7",
+        "role": "#contributors",
+        "bytes": 161280,
+        "sha256": "75944791c784e741b5e40b150364f773499c9be5bc18f414d4115767aae3f821"
+      },
+      {
+        "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+        "id": "c2756d15bf1f01015178d9c32abe6d779c04d20378888fd8fce620a5472e5cf3",
+        "role": "#this",
+        "bytes": 16784640,
+        "sha256": "426135f7d2ea70efbfe09be18eb5cf53fc15840db6f4b8a03b901453391ebaf2"
+      },
+      {
+        "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+        "id": "0ff9d0f781227c4779c9ede6b4b0186262d5e2a5c5b4e7d4033b20ac10b6fb40",
+        "role": "#inverse-variance",
+        "bytes": 11675229,
+        "sha256": "2109981807ac2b4dd101297cca9ec4559fabb22cf4bd0fa03df2aec61f534aa6"
+      },
+      {
+        "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+        "id": "c84e748fe93f1b4f9ef90f21a1634b4527c8ee95f908a28b7a14a5a45e677764",
+        "role": "#coverage",
+        "bytes": 2037603,
+        "sha256": "56af65681fcab6cdf342ec5a336d760de9bb721be54c6e91364970d81317dac0"
+      },
+      {
+        "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+        "id": "51a03e8256b16815f7ad3c82d40f8bad507ba00e8a464a4af177eef4c090e573",
+        "role": "#contributors",
+        "bytes": 253440,
+        "sha256": "4b8372e85e3380fee81ac59b39dbb5f3d0e7cf3279a49f1b2d02858d38b53e74"
+      }
+    ]
+  },
+  "limitations": [
+    "Known historical objects and fixed preselected fields/epochs; not an unbiased search or population completeness estimate.",
+    "The matching threshold is fixed at 1.5 pixels (4.125 arcsec), with at least three points and every returned point required to pass.",
+    "Native W2 visit coadds are not individual exposures; actual mission gaps and visit time intervals remain.",
+    "Artifact/outlier/bloom masks unavailable; inverse variance and coverage do not establish absence of artifacts.",
+    "No per-epoch PSF homogenization or independent stellar centroid refinement; resampling covariance not represented.",
+    "Published linear motion used without fitted parallax, perspective acceleration, or new astrometric fitting.",
+    "Reported proper motion is the existing Ivan inference value converted with 8766 hours/year; no audit fit is performed.",
+    "This is a targeted known-object recovery check, not a new discovery or proof that every returned candidate is astrophysical."
+  ]
+}

@@ -9,6 +9,9 @@ services:
     environment:
       DATA_DIR: /app/data
       PROCESSING_URL: http://pipeline:8002
+      IVAN_ML_BASE_URL: ${IVAN_ML_BASE_URL:-http://host.docker.internal:8001}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       pipeline:
         condition: service_healthy

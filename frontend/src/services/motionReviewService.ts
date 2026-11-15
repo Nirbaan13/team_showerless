@@ -26,7 +26,9 @@ export type MotionTrackCandidate = {
   max_offset_px: number | null;
   ephemeris_offsets_px: number[] | null;
   filter_support: number[] | null;
-  outlier_at_position: boolean[];
+  outlier_at_position: boolean[] | null;
+  proper_motion_arcsec_per_year?: number;
+  proper_motion_unit?: 'arcsec/year';
   fixed_stack: string;
   motion_stack: string;
   stack_contributing_exposures: number;
@@ -53,6 +55,9 @@ export type MotionReviewDataset = {
   target: string | null;
   detector: string | null;
   source: string | null;
+  profile?: 'stellar_proper_motion';
+  unification_id?: string;
+  historical_preparation?: { limitations?: string[]; warnings?: string[] };
   width: number;
   height: number;
   pixel_scale_arcsec: number;
@@ -67,7 +72,7 @@ export type MotionReviewDataset = {
   comparison: {
     shared_median: MotionComparisonResult;
     leave_one_out: MotionComparisonResult;
-    outliers_masked: MotionComparisonResult;
+    outliers_masked: MotionComparisonResult | null;
     random_forest: MotionComparisonResult | null;
     bloom: MotionComparisonResult | null;
   };
@@ -215,6 +220,7 @@ export function findMatchingPrecomputedReview(
  * into SpherexEpochFrame[] for the main Sky Viewer.
  */
 export function convertReviewToEpochFrames(review: MotionReviewDataset): SpherexEpochFrame[] {
+  if (review.profile === 'stellar_proper_motion') throw new Error('Use the historical review panel for unWISE W2; SPHEREx detector mapping is unsupported.');
   const detNum = Number(review.detector?.replace(/\D/g, '')) || 6;
   const detectorArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
   const [wMin, wMax, chIdx] = ARRAY_WAVELENGTH_RANGES[detectorArray] || [4.42, 5.0, 96];
@@ -287,6 +293,7 @@ function buildEpochPositionsForTrack(
  * Converts a MotionReviewDataset's tracks and bloom_tracks into CandidateObject[] for the Sky Viewer & RightDrawer.
  */
 export function convertReviewToCandidates(review: MotionReviewDataset): CandidateObject[] {
+  if (review.profile === 'stellar_proper_motion') throw new Error('Use the historical review panel for unWISE W2 candidate evidence.');
   const candidates: CandidateObject[] = [];
   const totalFrames = review.frames.length;
   const totalLoo = review.comparison.leave_one_out?.candidates ?? review.tracks.length;
@@ -335,7 +342,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       speedArcsecPerHour: speedArcsecHr,
       bloomAreaPx: bTrack.bloom_area_px,
       filterSupport: bTrack.filter_support,
-      outlierAtPosition: bTrack.outlier_at_position,
+      outlierAtPosition: bTrack.outlier_at_position ?? undefined,
       ephemerisOffsetsPx: bTrack.ephemeris_offsets_px,
       validationData: bTrack.known_match
         ? {
@@ -416,7 +423,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       speedArcsecPerHour: speedArcsecHr,
       bloomAreaPx: track.bloom_area_px,
       filterSupport: track.filter_support,
-      outlierAtPosition: track.outlier_at_position,
+      outlierAtPosition: track.outlier_at_position ?? undefined,
       ephemerisOffsetsPx: track.ephemeris_offsets_px,
       validationData: track.known_match
         ? {
