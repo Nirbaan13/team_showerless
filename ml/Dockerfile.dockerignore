@@ -9,3 +9,9 @@
 !science/
 !science/motion/
 !science/motion/*.py
+!science/motion/cases/
+!science/motion/cases/*.npz
+!science/motion/cases/*.csv
+!ops/
+!ops/ml/
+!ops/ml/compose.yaml

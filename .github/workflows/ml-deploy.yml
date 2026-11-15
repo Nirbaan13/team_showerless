@@ -1,0 +1,62 @@
+name: ML deploy (agents wait)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ml-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+# Release gate only. Scientific tests remain independent from deployment.
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build exact ML revision
+        run: docker build --file ml/Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-ml:$GITHUB_SHA" .
+      - name: Deploy ML service to VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          key="$RUNNER_TEMP/ml_vps_key"
+          hosts="$RUNNER_TEMP/ml_known_hosts"
+          trap 'rm -f "$key" "$hosts"' EXIT
+          printf '%s\n' "$VPS_SSH_KEY" > "$key"
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > "$hosts"
+          docker image save "spaceapps-ml:$GITHUB_SHA" | gzip -1 | \
+            ssh -i "$key" -o IdentitiesOnly=yes -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$hosts" \
+              -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
+              "$VPS_USER@144.124.238.101" "deploy-ml $GITHUB_SHA"
+      - name: Verify frontend motion and catalogue proxies
+        run: |
+          python3 - <<'PY'
+          import json, time, urllib.request
+          paths = ['/api/motion/verifications', '/api/catalogue/kpis', '/api/catalogue/candidates']
+          for path in paths:
+              for attempt in range(30):
+                  try:
+                      with urllib.request.urlopen('http://144.124.238.101:8080' + path, timeout=10) as response:
+                          json.load(response)
+                      print('Frontend proxy verified:', path)
+                      break
+                  except Exception:
+                      if attempt == 29:
+                          raise
+                      time.sleep(2)
+          PY
