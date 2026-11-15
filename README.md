@@ -9,7 +9,9 @@
 [![Astrometric Standard](https://img.shields.io/badge/Astrometry-IAU%20ADES%20XML%2FPSV-emerald.svg)](https://www.minorplanetcenter.net/iau/info/ADES.html)
 
 > 🚀 **Live Production Platform**: [https://spherexblink.tech](https://spherexblink.tech/)  
-> 🛰️ **Full-Stack VPS Mirror**: [http://144.124.238.101:8080](http://144.124.238.101:8080/)
+> 🛰️ **Full-Stack VPS Mirror**: [http://146.103.122.246:8080](http://146.103.122.246:8080/)
+>
+> 🐳 **Docker image for local deploy**: [GitHub Packages (v1)](https://github.com/Nirbaan13/team_showerless/pkgs/container/team-showerless-demo) · [Download v1 archive (1.67 GB)](https://github.com/Nirbaan13/team_showerless/releases/download/demo-v1-main-5301faa3a0ae392b0b4e2c120150849757b8546c/spaceapps-demo-v1.tar.gz)
 
 ---
 
