@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, ObservationLoadStatus } from '../types/spherex';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
@@ -20,7 +20,10 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
-  searchStatus?: ObservationLoadStatus;
+  searchStatus?: {
+    source: 'live' | 'fallback' | 'preset';
+    message: string;
+  };
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
   isCatalogLoading?: boolean;
@@ -53,12 +56,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
+  const [coordError, setCoordError] = useState<string | null>(null);
 
   React.useEffect(() => {
     const displayRa = activeCandidate?.ra ?? ra;
     const displayDec = activeCandidate?.dec ?? dec;
     setRaInput(displayRa.toFixed(6));
     setDecInput(displayDec.toFixed(6));
+    setCoordError(null);
   }, [ra, dec, activeCandidate?.ra, activeCandidate?.dec]);
 
   const handleApplyCoords = (e: React.FormEvent) => {
@@ -67,11 +72,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
     const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
     const parsedRa = parseFloat(cleanRa);
     const parsedDec = parseFloat(cleanDec);
-    if (!isNaN(parsedRa) && !isNaN(parsedDec)) {
-      const normalizedRa = ((parsedRa % 360) + 360) % 360;
-      const clampedDec = Math.max(-90, Math.min(90, parsedDec));
-      onUpdateCoords(normalizedRa, clampedDec);
+    if (isNaN(parsedRa) || isNaN(parsedDec)) {
+      setCoordError('Enter valid numerical coordinates');
+      return;
     }
+    if (parsedDec < -90 || parsedDec > 90) {
+      setCoordError('Declination must be between -90° and +90°');
+      return;
+    }
+    setCoordError(null);
+    const normalizedRa = ((parsedRa % 360) + 360) % 360;
+    onUpdateCoords(normalizedRa, parsedDec);
   };
 
   return (
@@ -90,8 +101,13 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <input
                 type="text"
                 value={raInput}
-                onChange={(e) => setRaInput(e.target.value)}
-                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
+                onChange={(e) => {
+                  setRaInput(e.target.value);
+                  if (coordError) setCoordError(null);
+                }}
+                className={`w-full bg-paper-950 border rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none ${
+                  coordError ? 'border-red-500/80 focus:border-red-400' : 'border-paper-800 focus:border-ochre-400'
+                }`}
               />
             </div>
             <div>
@@ -99,11 +115,22 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <input
                 type="text"
                 value={decInput}
-                onChange={(e) => setDecInput(e.target.value)}
-                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
+                onChange={(e) => {
+                  setDecInput(e.target.value);
+                  if (coordError) setCoordError(null);
+                }}
+                className={`w-full bg-paper-950 border rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none ${
+                  coordError ? 'border-red-500/80 focus:border-red-400' : 'border-paper-800 focus:border-ochre-400'
+                }`}
               />
             </div>
           </div>
+
+          {coordError && (
+            <div className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
+              {coordError}
+            </div>
+          )}
 
           <div className="flex gap-1.5 mt-1">
             <button
@@ -125,14 +152,23 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </form>
 
         {searchStatus && (
-          <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
-              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
-                : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
-                : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
-            </div>
-            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
+            <span
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                searchStatus.source === 'live'
+                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+                  : searchStatus.source === 'preset'
+                  ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8]'
+                  : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+              }`}
+            />
+            <span className="truncate text-paper-300" title={searchStatus.message}>
+              {searchStatus.source === 'live'
+                ? 'NASA IRSA / SPHEREx Stream'
+                : searchStatus.source === 'preset'
+                ? 'Benchmark Preset'
+                : 'SPHEREx Survey Stream'}
+            </span>
           </div>
         )}
 

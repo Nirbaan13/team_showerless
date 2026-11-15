@@ -23,7 +23,7 @@ export interface AgencyReferenceLink {
 }
 
 export interface LiveCatalogResponse {
-  status: 'loading' | 'live_agency' | 'backend_computed';
+  status: 'loading' | 'live_agency' | 'backend_computed' | 'offline_demonstration';
   queriedCoordinate: {
     ra: number;
     dec: number;
@@ -481,8 +481,22 @@ export async function fetchLiveCatalogForCoordinate(params: {
   const liveHit =
     browserGaia.length > 0 ||
     browserWise.length > 0 ||
-    browserSimbad.length > 0 ||
-    backendData?.status === 'live_agency';
+    browserSimbad.length > 0;
+
+  const backendHit =
+    !liveHit &&
+    Boolean(
+      backendData &&
+        (Array.isArray(backendData?.gaiaSources) ||
+          Array.isArray(backendData?.wiseSources) ||
+          backendData?.status === 'live_agency')
+    );
+
+  const finalStatus: LiveCatalogResponse['status'] = liveHit
+    ? 'live_agency'
+    : backendHit
+    ? 'backend_computed'
+    : 'offline_demonstration';
 
   const agenciesQueried: string[] = [];
   if (browserGaia.length > 0) agenciesQueried.push('ESA Gaia DR3 TAP');
@@ -498,7 +512,7 @@ export async function fetchLiveCatalogForCoordinate(params: {
   }
 
   const result: LiveCatalogResponse = {
-    status: liveHit ? 'live_agency' : 'backend_computed',
+    status: finalStatus,
     queriedCoordinate: {
       ra: Number(queryRa.toFixed(6)),
       dec: Number(queryDec.toFixed(6)),

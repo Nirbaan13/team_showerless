@@ -70,7 +70,7 @@ export function useUrlSync(
 
       if (params.has('tab')) {
         const requestedTab = params.get('tab') as UrlParamsState['tab'];
-        if (['home', 'viewer', 'feed', 'report', 'inference'].includes(requestedTab!)) {
+        if (['home', 'viewer', 'feed', 'report', 'inference', 'catalogue'].includes(requestedTab!)) {
           partial.tab = requestedTab;
         }
       } else if (hasRa && hasDec) {

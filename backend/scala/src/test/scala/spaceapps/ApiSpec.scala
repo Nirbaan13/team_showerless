@@ -27,6 +27,25 @@ object ApiSpec extends ZIOSpecDefault:
       result <- use(api)
     yield result
   def spec=suite("HTTP contract")(
+    test("capabilities distinguish native processing from installed motion inference") {
+      ZIO.scoped(withApi { api=>
+        for
+          response<-api.routes.runZIO(Request.get("http://localhost/api/capabilities"))
+          text<-response.body.asString
+        yield assertTrue(response.status==Status.Ok,text.contains("native_epoch_difference"),text.contains("unsupported"),text.contains("test-revision"))
+      })
+    },
+    test("unsupported legacy calls return explicit JSON and reject client asserted auto submission") {
+      ZIO.scoped(withApi { api=>
+        for
+          search<-api.routes.runZIO(Request.post("http://localhost/api/motion/search",Body.fromString("{}")))
+          catalog<-api.routes.runZIO(Request.get("http://localhost/api/motion/catalog?ra=250&dec=10"))
+          submit<-api.routes.runZIO(Request.post("http://localhost/api/catalogue/auto-submit",Body.fromString("""{"confirmations":12}""")))
+          message<-search.body.asString
+        yield assertTrue(search.status==Status.NotImplemented,catalog.status==Status.ServiceUnavailable,
+          submit.status==Status.Forbidden,message.contains("/api/analyses/motion"))
+      })
+    },
     test("deep observations reuse durable jobs and retain the requested date interval") {
       ZIO.scoped(withApi {api=>
         for

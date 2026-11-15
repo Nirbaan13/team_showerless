@@ -19,6 +19,9 @@ rejects() {
 }
 
 rejects ''
+rejects 'deploy-ml invalid'
+rejects "deploy-ml $sha; true"
+rejects $'deploy-ml aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ntrue'
 rejects "deploy invalid; touch $APP_DIR/injected"
 rejects "deploy-cached $sha; touch $APP_DIR/injected"
 rejects $'deploy aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ntrue'

@@ -29,15 +29,13 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
   onStepForward,
   onStepBackward,
 }) => {
-  const hasFrames = frames.some(frame => frame.isAvailable);
   return (
     <div className="h-16 bg-paper-900 border-t border-paper-800 px-2 sm:px-4 flex items-center justify-between text-xs select-none z-20 overflow-x-auto gap-2">
       {/* 1. Playback Engine Controls */}
       <div className="flex items-center space-x-1.5 shrink-0">
         <button
           onClick={onStepBackward}
-          disabled={!hasFrames}
-          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
+          className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Previous Epoch Frame"
         >
           <SkipBack className="w-3.5 h-3.5" />
@@ -45,8 +43,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
 
         <button
           onClick={onTogglePlay}
-          disabled={!hasFrames}
-          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile px-3.5 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-[11px] font-bold cursor-pointer flex items-center gap-1.5"
+          className="btn-tactile px-3.5 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-[11px] font-bold cursor-pointer flex items-center gap-1.5"
         >
           {isPlaying ? (
             <>
@@ -63,8 +60,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
 
         <button
           onClick={onStepForward}
-          disabled={!hasFrames}
-          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
+          className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Next Epoch Frame"
         >
           <SkipForward className="w-3.5 h-3.5" />
@@ -73,8 +69,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         {/* Clyde Tombaugh Blink Comparator Mode */}
         <button
           onClick={onToggleBlinkMode}
-          disabled={!hasFrames}
-          className={`disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
+          className={`btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
             blinkMode
               ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]'
               : 'bg-paper-950 text-paper-300 hover:text-white'
@@ -94,52 +89,63 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
             <span>{blinkMode ? 'Blink Comparator (A ↔ B)' : 'Epoch Timeline'}</span>
           </div>
           <span className="text-paper-200 font-medium">
-            {frames.length ? `Frame ${activeFrameIndex + 1} of ${frames.length}` : 'No observations loaded'}
+            Frame {activeFrameIndex + 1} of {frames.length}
           </span>
         </div>
 
         {/* Multi-Epoch Frame Buttons */}
         <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5">
-          {frames.map((frame, idx) => {
-            const isActive = idx === activeFrameIndex;
-            const isMissing = !frame.isAvailable;
-            const availIndices = frames
-              .map((f, i) => (f.isAvailable ? i : -1))
-              .filter((i) => i >= 0);
-            const isBlinkA = blinkMode && availIndices[0] === idx;
-            const isBlinkB =
-              blinkMode &&
-              availIndices.length >= 2 &&
-              availIndices[availIndices.length - 1] === idx;
+          {(() => {
+            const allDays = frames.map((f) => (f.observationDate?.includes('T') ? f.observationDate.split('T')[0] : f.observationDate?.split(' ')[0] || ''));
+            const hasSharedDates = allDays.some((day, i) => day && allDays.indexOf(day) !== i);
 
-            return (
-              <button
-                key={frame.frameId}
-                disabled={isMissing}
-                onClick={() => onSelectFrame(idx)}
-                className={`btn-tactile-sm flex-1 min-w-[70px] py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
-                  isMissing
-                    ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
-                    : isActive
-                    ? 'bg-emerald-400 text-gray-950 font-bold'
-                    : isBlinkA || isBlinkB
-                    ? 'bg-paper-800 text-emerald-300 border-emerald-500/50'
-                    : 'bg-paper-950 text-paper-400 hover:text-paper-200'
-                }`}
-                title={
-                  isMissing
-                    ? `Missing: ${frame.skipReason}`
-                    : `Epoch ${idx + 1} (${frame.observationDate.split('T')[0]})`
-                }
-              >
-                {isMissing
-                  ? 'Offline'
-                  : `${isBlinkA ? '[A] ' : isBlinkB ? '[B] ' : ''}${
-                      frame.observationDate.split('T')[0]
-                    }`}
-              </button>
-            );
-          })}
+            return frames.map((frame, idx) => {
+              const isActive = idx === activeFrameIndex;
+              const isMissing = !frame.isAvailable;
+              const availIndices = frames
+                .map((f, i) => (f.isAvailable ? i : -1))
+                .filter((i) => i >= 0);
+              const isBlinkA = blinkMode && availIndices[0] === idx;
+              const isBlinkB =
+                blinkMode &&
+                availIndices.length >= 2 &&
+                availIndices[availIndices.length - 1] === idx;
+
+              const dateStr = frame.observationDate || '';
+              const day = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr.split(' ')[0];
+              const timeMatch = dateStr.match(/[T\s](\d{2}:\d{2})/);
+              const time = timeMatch ? timeMatch[1] : null;
+              const label = isMissing
+                ? 'Offline'
+                : `${isBlinkA ? '[A] ' : isBlinkB ? '[B] ' : ''}${
+                    hasSharedDates && time ? `${day.slice(5)} ${time}z` : day
+                  }`;
+
+              return (
+                <button
+                  key={frame.frameId}
+                  disabled={isMissing}
+                  onClick={() => onSelectFrame(idx)}
+                  className={`btn-tactile-sm flex-1 min-w-[70px] py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
+                    isMissing
+                      ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
+                      : isActive
+                      ? 'bg-emerald-400 text-gray-950 font-bold'
+                      : isBlinkA || isBlinkB
+                      ? 'bg-paper-800 text-emerald-300 border-emerald-500/50'
+                      : 'bg-paper-950 text-paper-400 hover:text-paper-200'
+                  }`}
+                  title={
+                    isMissing
+                      ? `Missing: ${frame.skipReason}`
+                      : `Epoch ${idx + 1} (${frame.frameId}) · UTC: ${frame.observationDate}`
+                  }
+                >
+                  {label}
+                </button>
+              );
+            });
+          })()}
         </div>
       </div>
 

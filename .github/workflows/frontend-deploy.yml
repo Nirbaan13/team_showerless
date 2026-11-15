@@ -61,6 +61,7 @@ jobs:
           import os
           import re
           import urllib.request
+          import urllib.error
           base = f"http://{os.environ['VPS_HOST']}:8080"
           with urllib.request.urlopen(base + '/frontend-version.json', timeout=15) as response:
               version = json.load(response)['version']
@@ -74,5 +75,16 @@ jobs:
               assert response.status == 200
           with urllib.request.urlopen(base + '/backend/health', timeout=15) as response:
               assert response.status == 200
+          with urllib.request.urlopen(base + '/backend/version', timeout=15) as response:
+              backend_revision = json.load(response)['version']
+          if backend_revision == version:
+              try:
+                  urllib.request.urlopen(base + '/api/motion/catalog?ra=NaN&dec=0', timeout=15)
+                  raise AssertionError('Frontend catalogue route accepted invalid coordinates')
+              except urllib.error.HTTPError as error:
+                  assert error.code == 422
+                  assert json.load(error)['code'] == 'invalid_request'
+          else:
+              print('Backend still deploying; backend deployment will check the joint route')
           print(f'Public frontend, asset and API proxy verified: {version}')
           PY
