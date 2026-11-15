@@ -34,6 +34,13 @@ jobs:
             cp public/.htaccess dist/.htaccess
           fi
 
+      - name: Inspect FTP Server Structure
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+        run: python3 test_ftp.py
+
       - name: Deploy to Hostinger via FTP
         if: ${{ env.HOSTINGER_FTP_SERVER != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
