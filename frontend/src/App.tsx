@@ -143,7 +143,6 @@ export function App() {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('3I/ATLAS');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
-  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false);
   const [drawerControlledTab, setDrawerControlledTab] = useState<
     'ai' | 'triage' | 'chat' | 'spectrum' | null
   >(null);
@@ -770,7 +769,6 @@ export function App() {
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
     setDrawerControlledTab('ai');
-    setIsVerifyModalOpen(false);
     setActiveTab('viewer');
 
     triggerBackgroundMlProgress(
@@ -904,6 +902,20 @@ export function App() {
             >
               <UserCheck className="w-3.5 h-3.5" />
               <span>Verification Feed</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('motion')}
+              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+                activeTab === 'motion'
+                  ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                  : 'bg-paper-900 text-paper-300 hover:text-white'
+              }`}
+              title="Astrometric Motion Review & Machine Learning Ranking"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Motion Review</span>
             </button>
           </nav>
         </div>
@@ -1061,6 +1073,23 @@ export function App() {
                   className={`w-4 h-4 ${activeTab === 'feed' ? 'text-gray-950' : 'text-sky-400'}`}
                 />
                 <span>Verification Feed</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab('motion');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'motion'
+                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
+                }`}
+              >
+                <Sparkles
+                  className={`w-4 h-4 ${activeTab === 'motion' ? 'text-gray-950' : 'text-emerald-400'}`}
+                />
+                <span>Motion Review</span>
               </button>
 
               {/* View Mode Switcher in Mobile Drawer */}
@@ -1258,30 +1287,6 @@ export function App() {
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}
           >
-            {/* Floating Mobile Side Button: Settings (Left Side) */}
-            <div className="md:hidden absolute top-14 left-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('controls')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Change Sky Viewer Settings (FOV, Detector Bands, Overlays, Coordinates)"
-              >
-                <Sliders className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Settings</span>
-              </button>
-            </div>
-
-            {/* Floating Mobile Side Button: Triage (Right Side) */}
-            <div className="md:hidden absolute top-14 right-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('telemetry')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Open Candidate Triage & Classification"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Triage</span>
-              </button>
-            </div>
-
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -1426,34 +1431,6 @@ export function App() {
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
       />
-
-      {/* Verify Scientist Object Dialog Modal */}
-      {isVerifyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm anim-fall">
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-paper-950 border-2 border-paper-700 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-4 border-b border-paper-800 mb-6">
-              <div>
-                <h2 className="text-xl font-bold font-mono text-emerald-400">
-                  🔬 NASA Scientist & Community Verification Feed
-                </h2>
-                <p className="text-xs text-paper-400 mt-1">
-                  Inspect flagged candidate objects, view exact observation settings, and verify astrometric tracks.
-                </p>
-              </div>
-              <button
-                onClick={() => setIsVerifyModalOpen(false)}
-                className="btn-tactile-sm px-3 py-1.5 rounded-lg border-2 border-black bg-paper-900 text-paper-300 hover:text-white font-mono text-xs cursor-pointer"
-              >
-                ✕ Close
-              </button>
-            </div>
-            <VerifyScientistPanel
-              onSelectVerificationTarget={handleSelectVerificationTarget}
-              isCompact={false}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

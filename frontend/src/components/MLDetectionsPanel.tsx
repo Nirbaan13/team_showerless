@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import type { CandidateObject, MLAnalysisStatus } from '../types/spherex';
 import { rankCandidates } from '../services/mlRanking';
-import { Cpu, Award, Sparkles, CheckCircle2 } from 'lucide-react';
+import { getOrCreateEvidenceStacks } from '../services/motionReviewService';
+import { Cpu, Award, Sparkles, CheckCircle2, Layers } from 'lucide-react';
 
 interface MLDetectionsPanelProps {
   candidates: CandidateObject[];
@@ -94,6 +95,11 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
       null
     );
   }, [candidates, selectedCandidateId, ranked]);
+
+  const evidenceStacks = useMemo(
+    () => (activeCandidate ? getOrCreateEvidenceStacks(activeCandidate) : null),
+    [activeCandidate]
+  );
 
   return (
     <div className="p-3.5 space-y-3">
@@ -200,62 +206,169 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
             Random Forest
           </button>
         </div>
-
-        <p className="text-[10px] text-paper-400 leading-snug">
-          {rankingMode === 'forest'
-            ? 'Reranks detected tracks using a Random Forest trained on 400 simulated SPHEREx fields.'
-            : 'Per-frame leave-one-out difference ranker prioritizing multi-epoch linear tracks and high S/N.'}
-        </p>
       </div>
 
-      {/* Selected Object Compact Summary Card */}
-      {activeCandidate && (
-        <div className="p-2.5 rounded-xl bg-emerald-950/30 border-2 border-emerald-500/50 space-y-2 anim-fall">
-          <div className="flex items-center justify-between gap-2">
+      {/* Shift & Stack Motion Proof (Comparing Fixed Sky vs Following Fitted Track) */}
+      {activeCandidate && evidenceStacks && (
+        <section
+          className="p-3 rounded-xl bg-paper-950 border-2 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.12)] space-y-2.5 anim-fall"
+          aria-labelledby="drawer-stack-evidence-label"
+        >
+          {/* Active Selected Candidate Header */}
+          <div className="flex items-center justify-between gap-2 pb-2 border-b border-paper-800">
             <div className="min-w-0">
               <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
-                ★ Selected Object Telemetry
+                ★ Selected Object Motion Proof
               </span>
               <span className="font-mono text-xs font-bold text-white truncate block">
+                #{activeCandidate.mlRank} ·{' '}
                 {activeCandidate.validationData?.objectName ||
                   activeCandidate.catalogId ||
                   activeCandidate.id}
               </span>
             </div>
-            {validated && (
-              <a
-                href={validated.sourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40 hover:text-white shrink-0 flex items-center gap-1"
+            <div className="flex items-center gap-1.5 shrink-0">
+              {validated && (
+                <a
+                  href={validated.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40 hover:text-white flex items-center gap-1"
+                  title="Verified with NASA/IPAC IRSA ephemeris observations"
+                >
+                  <Award className="w-3 h-3 text-emerald-400" />
+                  <span>IRSA</span>
+                </a>
+              )}
+              <span
+                className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border shrink-0 ${
+                  evidenceStacks.winnerMode === 'motion'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/60'
+                    : evidenceStacks.winnerMode === 'fixed'
+                    ? 'bg-sky-500/20 text-sky-300 border-sky-400/60'
+                    : 'bg-rose-500/20 text-rose-300 border-rose-400/60'
+                }`}
               >
-                <Award className="w-3 h-3 text-emerald-400" />
-                <span>IRSA Verified</span>
-              </a>
-            )}
+                {evidenceStacks.verdictBadge}
+              </span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-1.5 text-[10px] font-mono">
-            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+          <div className="flex items-center justify-between gap-2">
+            <h3
+              id="drawer-stack-evidence-label"
+              className="font-mono text-[11px] font-bold text-paper-100 uppercase tracking-wider flex items-center gap-1.5"
+            >
+              <Layers className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Shift &amp; Stack Coadd</span>
+            </h3>
+            <span className="text-[10px] font-mono text-paper-300 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
+              {evidenceStacks.contributingExposures} epochs co-added
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2.5">
+            {/* Box 1: Fixed Sky Position */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'fixed'
+                  ? 'bg-sky-950/25 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-paper-300 font-bold">1. Fixed Sky Spot</span>
+                <span className="text-paper-400">{evidenceStacks.fixedSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.fixedStack ? (
+                  <img
+                    src={evidenceStacks.fixedStack}
+                    width={29}
+                    height={29}
+                    alt="Fixed sky position stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full border border-dashed border-white/45" />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-paper-200 mt-1.5 text-center font-bold">
+                {evidenceStacks.fixedStatus}
+              </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Stationary RA/Dec
+              </span>
+            </figure>
+
+            {/* Box 2: Following Fitted Track */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'motion'
+                  ? 'bg-emerald-950/30 border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-emerald-300 font-bold">2. Follow Track</span>
+                <span className="text-emerald-300 font-bold">{evidenceStacks.motionSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.motionStack ? (
+                  <img
+                    src={evidenceStacks.motionStack}
+                    width={29}
+                    height={29}
+                    alt="Following the fitted track stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div
+                    className={`w-5 h-5 rounded-full border ${
+                      evidenceStacks.winnerMode === 'motion'
+                        ? 'border-emerald-400/90'
+                        : 'border-dashed border-white/45'
+                    }`}
+                  />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-emerald-300 mt-1.5 text-center font-bold">
+                {evidenceStacks.motionStatus}
+              </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Shifts along path
+              </span>
+            </figure>
+          </div>
+
+          {/* Kinematics Telemetry */}
+          <div className="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px] font-mono">
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
               <span className="text-paper-500 block text-[8px] uppercase">Velocity</span>
               <span className="text-emerald-300 font-bold">
                 {(activeCandidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/hr
               </span>
             </div>
-            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
               <span className="text-paper-500 block text-[8px] uppercase">Fit RMS</span>
               <span className="text-paper-100 font-bold">
                 {(activeCandidate.fitRmsPx ?? 0.22).toFixed(2)} px
               </span>
             </div>
-            <div className="bg-paper-950/90 px-2 py-1 rounded border border-paper-800">
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
               <span className="text-paper-500 block text-[8px] uppercase">Catalog</span>
               <span className="text-sky-300 font-bold truncate block">
                 {activeCandidate.matchedCatalog || 'Uncatalogued'}
               </span>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Ranked Candidates List Header */}
