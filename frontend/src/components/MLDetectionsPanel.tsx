@@ -148,6 +148,19 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
             )}
           </div>
 
+          {isStored && (
+            <p className="text-[10px] text-paper-400 mt-1">Scores order candidates; they are not discovery probabilities.</p>
+          )}
+
+          {!isStored && mlAnalysisStatus.modelName && (
+            <div className="mt-1 text-[10px] text-paper-400 font-mono space-y-0.5">
+              <p>{mlAnalysisStatus.modelName}</p>
+              <p>{mlAnalysisStatus.modelFamily}</p>
+              <p>{mlAnalysisStatus.scoreKind}</p>
+              <p>{mlAnalysisStatus.scoreDescription}</p>
+            </div>
+          )}
+
           {mlAnalysisStatus.state === 'failed' && <p className="mt-2 text-xs text-red-300">{mlAnalysisStatus.stage}. Motion cannot be assessed until analysis completes.</p>}
           {mlAnalysisStatus.state === 'running' && (
             <div className="space-y-1.5">
