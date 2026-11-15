@@ -18,6 +18,7 @@ interface LeftControlPanelProps {
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
   subtractionMode: SubtractionMode;
+  availableModes: SubtractionMode[];
   onChangeSubtractionMode: (mode: SubtractionMode) => void;
   overlays: CatalogOverlayState;
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
@@ -48,6 +49,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   selectedArray,
   onSelectArray,
   subtractionMode,
+  availableModes,
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
@@ -275,7 +277,8 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             onClick={() => {
               onSelectArray('all');
             }}
-            title="Combine all 6 infrared bands into a stacked composite image"
+            disabled
+            title="Unavailable: no multi-detector composite artifact has been supplied"
             className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
               selectedArray === 'all'
                 ? 'bg-emerald-400 text-gray-950 font-bold'
@@ -320,7 +323,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 <div className="flex items-center gap-1.5 shrink-0">
                   {cov?.status === 'stacked' && (
                     <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 font-bold">
-                      ✓ {cov.exposureCount} exp · Stack
+                      ✓ {cov.exposureCount} exp · Stack eligible
                     </span>
                   )}
                   {cov?.status === 'insufficient' && (
@@ -347,10 +350,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           <div className="mt-2 p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-[10px] font-mono text-amber-200">
             <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-              <span>Band {selectedArray} Not Photographed</span>
+              <span>Band {selectedArray} Data Unavailable</span>
             </div>
             <p className="text-paper-400 leading-tight mb-2">
-              SPHEREx only photographed this target on specific detectors. At least 3 exposures are required to stack.
+              No image artifacts are loaded for this detector. Archive coverage may be broader. Stacking eligibility requires at least 3 exposures.
             </p>
             {(() => {
               const bestBand = Object.values(detectorCoverage).find((c) => c.canStack);
@@ -358,7 +361,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 return (
                   <button
                     type="button"
-                    onClick={() => onSelectArray(bestBand.detectorId as any)}
+                    onClick={() => onSelectArray(bestBand.detectorId as DetectorArrayId)}
                     className="w-full py-1 px-2 rounded bg-amber-500 text-gray-950 font-bold text-[10px] hover:bg-amber-400 transition-colors cursor-pointer"
                   >
                     Switch to {bestBand.name} ({bestBand.exposureCount} exp · Stackable)
@@ -408,13 +411,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             return (
               <button
                 key={mode.id}
+                disabled={!availableModes.includes(mode.id as SubtractionMode)}
                 onClick={() => onChangeSubtractionMode(mode.id as SubtractionMode)}
                 className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-emerald-300 font-semibold'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
-                title={mode.desc}
+                title={availableModes.includes(mode.id as SubtractionMode) ? mode.desc : 'Unavailable: the processing artifact has not been supplied'}
               >
                 <span className="font-mono text-[11px]">{mode.label}</span>
                 {isSelected && (

@@ -395,3 +395,101 @@ test('every candidate keeps the image transform after zoom and pan', async ({ pa
   await page.mouse.down(); await page.mouse.move(canvas!.x + 430, canvas!.y + 420, { steps: 3 }); await page.mouse.up();
   await check();
 });
+
+test('unsupported detectors clear pixels and tracks while supported detectors select their own frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /^Band 1 \(/ }).click();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
+  await page.getByRole('button', { name: /^Band 2 \(/ }).click();
+  await expect(page.getByText('Frame 1 of 3', { exact: true })).toBeVisible();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/Frame: .*D2$/)).toBeVisible();
+  await page.getByRole('button', { name: /^Band 6 \(/ }).click();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'All Bands', exact: true })).toBeDisabled();
+});
+
+test('all-detector links cannot relabel a D6 bitmap as a composite', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas&detector=all');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText(/All Bands Stack|SNR ×2.4/)).toHaveCount(0);
+});
+
+test('processing modes require their own artifacts and unsupported Zodi links stay unavailable', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas&subtraction=zodi_reference_subtracted');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Zodi image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Zodi Clean', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Zodi Reference Subtracted', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Aligned', exact: true }).click();
+  await expect(page.getByText('Zodi image unavailable', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'BLOOM Bitmask Core Overlay', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: 'Diff', exact: true }).click();
+  await expect.poll(async () => (await drawn(page)).includes(reviews[0].frames[0].residual)).toBe(true);
+});
+
+test('retired Ceres links show unavailable instead of another object or generated frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=1-ceres&detector=2');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  await expect(page.getByText('Observation image unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
+  expect(await drawn(page)).toHaveLength(0);
+});
+
+for (const [preset, detector] of [['3i-atlas-d2', 2], ['vesta-d3', 3]] as const) {
+  test(`legacy ${preset} link defaults to its own D${detector} frames`, async ({ page }) => {
+    await backend(page);
+    await page.goto(`/?tab=viewer&preset=${preset}`);
+    await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+    await page.locator('details[aria-label="Image metadata"] summary').click();
+    await expect(page.getByText(new RegExp(`^Frame: .*D${detector}$`))).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`detector=${detector}`));
+  });
+}
+
+test('explicit detector overrides a legacy preset detector default', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas-d2&detector=6');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/^Frame: .*D6$/)).toBeVisible();
+});
+
+test('candidate-only Vesta link resolves after review hydration without borrowing Atlas', async ({ page }) => {
+  await backend(page);
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  releases.add(release);
+  await page.route('**/motion/review.json', async route => { await gate; await route.continue(); });
+  const candidate = '(4) Vesta (D3 BLOOM)';
+  await page.goto(`/?tab=viewer&candidate=${encodeURIComponent(candidate)}`);
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
+  release();
+  await page.locator('details[aria-label="Image metadata"] summary').click();
+  await expect(page.getByText(/^Frame: .*D3$/)).toBeVisible();
+  await expect(page.locator('details[aria-label="Image metadata"]').getByText(`Selected: ${candidate}`, { exact: true })).toBeVisible();
+  await expect.poll(() => new URL(page.url()).searchParams.get('candidate')).toBe(candidate);
+});
+
+test('candidate-only WISE link uses the detector declared by its preset', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&candidate=cand-wise-0855-01');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const metadata = page.locator('details[aria-label="Image metadata"]');
+  await expect(metadata).toBeVisible();
+  await metadata.locator('summary').click();
+  await expect(metadata.getByText(/^Detector: D5;/)).toBeVisible();
+  await expect.poll(() => new URL(page.url()).searchParams.get('candidate')).toBe('cand-wise-0855-01');
+});

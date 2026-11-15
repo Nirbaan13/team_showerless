@@ -160,18 +160,11 @@ export function resolveMotionReviewIdForPreset(
   presetId: string | null,
   selectedArray: DetectorArrayId | 'all'
 ): string | null {
-  if (!presetId) return null;
-  if (presetId === '3i-atlas-d2') return 'december-d2';
-  if (presetId === '3i-atlas') {
-    if (selectedArray === 2) return 'december-d2';
-    if (selectedArray === 6 || selectedArray === 'all') return 'december-d6';
-    return null;
+  if (presetId === '3i-atlas' || presetId === '3i-atlas-d2') {
+    return selectedArray === 2 ? 'december-d2' : selectedArray === 6 ? 'december-d6' : null;
   }
-  if (presetId === 'vesta-d3') return 'vesta-d3';
-  if (presetId === 'vesta-d6' || presetId.startsWith('vesta')) {
-    if (selectedArray === 3) return 'vesta-d3';
-    if (selectedArray === 6 || selectedArray === 'all') return 'vesta-d6';
-    return null;
+  if (presetId === 'vesta-d6' || presetId === 'vesta-d3') {
+    return selectedArray === 3 ? 'vesta-d3' : selectedArray === 6 ? 'vesta-d6' : null;
   }
   return null;
 }

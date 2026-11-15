@@ -86,5 +86,9 @@ jobs:
                   assert json.load(error)['code'] == 'invalid_request'
           else:
               print('Backend still deploying; backend deployment will check the joint route')
-          print(f'Public frontend, asset and API proxy verified: {version}')
+          for path in ('/api/catalogue/kpis', '/api/motion/verifications'):
+              with urllib.request.urlopen(base + path, timeout=15) as response:
+                  assert response.status == 200
+                  json.load(response)
+          print(f'Public frontend, asset, registry/discussion and API proxy verified: {version}')
           PY

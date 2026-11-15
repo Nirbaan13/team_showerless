@@ -19,6 +19,7 @@ import {
   findCandidateAcrossAllPresets,
   getMock102BandSpectrum,
   NASA_TEST_PRESETS,
+  STORED_PRESET_IDS,
 } from './services/mockSpherexApi';
 import {
   fetchLiveBackendCutoutAnalysis,
@@ -30,6 +31,7 @@ import {
   fetchLiveCatalogForCoordinate,
   type LiveCatalogResponse,
 } from './services/catalogService';
+import { availableImageModes } from './services/imageArtifacts';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useArchiveObservations } from './hooks/useArchiveObservations';
 import { ArchiveObservationsPanel } from './components/ArchiveObservationsPanel';
@@ -161,6 +163,15 @@ export function App() {
     }
   };
 
+  const [initialViewerCandidate] = useState(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return null;
+    const params = new URLSearchParams(window.location.search);
+    const candidate = params.get('candidate');
+    return candidate && params.get('tab') === 'viewer' && !params.has('preset') && !params.has('ra') && !params.has('dec')
+      ? { id: candidate, detector: params.get('detector') } : null;
+  });
+  const initialCandidateResolved = useRef(false);
+
   const [currentPresetId, setCurrentPresetId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -170,7 +181,7 @@ export function App() {
       const candParam = params.get('candidate');
       if (candParam) {
         const found = findCandidateAcrossAllPresets(candParam);
-        if (found) return found.presetId;
+        return found?.presetId ?? null;
       }
     }
     return '3i-atlas';
@@ -181,7 +192,15 @@ export function App() {
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
-  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(6);
+  const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const detector = params.get('detector');
+    if (detector === 'all') return 'all';
+    if (detector && /^[1-6]$/.test(detector)) return Number(detector) as DetectorArrayId;
+    if (params.get('preset') === '3i-atlas-d2') return 2;
+    if (params.get('preset') === 'vesta-d3') return 3;
+    return NASA_TEST_PRESETS.find(preset => preset.id === params.get('preset'))?.recommendedArray ?? 6;
+  });
   const [subtractionMode, setSubtractionMode] = useState<SubtractionMode>('raw_calibrated');
   const [activeFrameIndex, setActiveFrameIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -230,9 +249,13 @@ export function App() {
   }, []);
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
-  const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => isArchiveBrowse(initialArchiveSelection())
-    ? { source: 'idle', message: 'Choose the source and observation period, then Update Field.' }
-    : { source: 'preset', message: 'NASA Benchmark: 3I/ATLAS (D6)' });
+  const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return { source: 'idle', message: 'Choose the source and observation period, then Update Field.' };
+    const preset = new URLSearchParams(window.location.search).get('preset');
+    return preset && !STORED_PRESET_IDS.has(preset)
+      ? { source: 'error', message: 'No verified stored image sequence is available for this preset.' }
+      : { source: 'preset', message: 'Stored benchmark sequence' };
+  });
 
   const [mlAnalysisStatus, setMlAnalysisStatus] = useState<MLAnalysisStatus>({
     state: 'completed',
@@ -248,12 +271,10 @@ export function App() {
   const frames = useMemo(() => {
     void motionReviewsRevision;
     if (currentPresetId) {
-      const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
-      const defaultBand = preset?.recommendedArray ?? 6;
-      const arrayId = selectedArray === 'all' ? defaultBand : selectedArray;
+      const arrayId = selectedArray;
       return getMockEpochFrames(currentPresetId, arrayId);
     }
-    return customFrames ?? [];
+    return selectedArray === 'all' ? [] : (customFrames ?? []).filter(frame => frame.detectorArray === selectedArray);
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
   const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
@@ -266,51 +287,55 @@ export function App() {
         if (found) {
           return getMockCandidates(found.presetId, found.recommendedArray);
         }
+        return [];
       }
       const presetParam = params.get('preset');
       if (presetParam) {
-        const matched = NASA_TEST_PRESETS.find((p) => p.id === presetParam);
-        return getMockCandidates(presetParam, matched?.recommendedArray ?? 6);
+        return getMockCandidates(presetParam, 6);
       }
     }
     return getMockCandidates('3i-atlas', 6);
   });
 
-  // Hydrate candidates from review.json as soon as the external fetch completes
-  useEffect(() => {
-    return subscribeMotionReviews(() => {
-      setMotionReviewsRevision((r) => r + 1);
-      if (currentPresetId) {
-        const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
-        const defaultBand = preset?.recommendedArray ?? 6;
-        const arrayId = selectedArray === 'all' ? defaultBand : selectedArray;
-        const updated = getMockCandidates(currentPresetId, arrayId);
+  // Change pixels and tracks together; an unsupported detector is an empty view.
+  useEffect(() => subscribeMotionReviews(() => {
+    setMotionReviewsRevision(revision => revision + 1);
+    if (initialViewerCandidate && !initialCandidateResolved.current) {
+      initialCandidateResolved.current = true;
+      const found = findCandidateAcrossAllPresets(initialViewerCandidate.id);
+      if (found) {
+        const detector = initialViewerCandidate.detector === 'all' ? 'all'
+          : initialViewerCandidate.detector && /^[1-6]$/.test(initialViewerCandidate.detector)
+          ? Number(initialViewerCandidate.detector) as DetectorArrayId : found.recommendedArray as DetectorArrayId;
+        const updated = getMockCandidates(found.presetId, detector);
+        setCurrentPresetId(found.presetId); setSelectedArray(detector);
+        setRa(found.candidate.ra); setDec(found.candidate.dec);
         setCandidatesList(updated);
-        setSelectedCandidateId((prev) => {
-          if (!prev) return updated[0]?.id ?? null;
-          if (updated.some((c) => c.id === prev)) return prev;
-          if (findCandidateAcrossAllPresets(prev)) return prev;
-          return updated[0]?.id ?? null;
-        });
+        setSelectedCandidateId(updated.some(candidate => candidate.id === found.candidate.id) ? found.candidate.id : updated[0]?.id ?? null);
+      } else {
+        setCandidatesList([]); setCustomFrames([]); setCurrentPresetId(null);
+        setSearchStatus({ source: 'error', message: 'The requested candidate has no verified stored sequence.' });
       }
-    });
-  }, [currentPresetId, selectedArray]);
+      return;
+    }
+    if (!currentPresetId) return;
+    const updated = getMockCandidates(currentPresetId, selectedArray);
+    setCandidatesList(updated);
+    setSelectedCandidateId(previous => updated.some(candidate => candidate.id === previous) ? previous : updated[0]?.id ?? null);
+  }), [currentPresetId, selectedArray, initialViewerCandidate]);
 
   const handleSelectDetectorArray = (newArray: DetectorArrayId | 'all') => {
+    initialCandidateResolved.current = true;
     setSelectedArray(newArray);
+    setActiveFrameIndex(0);
+    setIsPlaying(false);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     if (currentPresetId) {
-      const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
-      const defaultBand = preset?.recommendedArray ?? 6;
-      const arrayId = newArray === 'all' ? defaultBand : newArray;
-      const updated = getMockCandidates(currentPresetId, arrayId);
+      const updated = getMockCandidates(currentPresetId, newArray);
       setCandidatesList(updated);
-      setSelectedCandidateId((prev) => {
-        if (!prev) return updated[0]?.id ?? null;
-        if (updated.some((c) => c.id === prev)) return prev;
-        if (findCandidateAcrossAllPresets(prev)) return prev;
-        return updated[0]?.id ?? null;
-      });
+      setSelectedCandidateId(updated[0]?.id ?? null);
+    } else {
+      void handleSearchCoordinates(ra, dec, { fov, detector: newArray, frameIndex: 0, candidateId: '' });
     }
   };
 
@@ -318,8 +343,6 @@ export function App() {
     if (selectedCandidateId) {
       const match = candidatesList.find((c) => c.id === selectedCandidateId);
       if (match) return match;
-      const globalMatch = findCandidateAcrossAllPresets(selectedCandidateId);
-      if (globalMatch) return globalMatch.candidate;
     }
     return candidatesList[0] || null;
   }, [candidatesList, selectedCandidateId]);
@@ -414,6 +437,7 @@ export function App() {
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }, selectionOverride?: ArchiveSelection) => {
+    initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
@@ -422,7 +446,13 @@ export function App() {
     setArchiveSelection(selection);
     archive.reset();
     const array = request?.detector ?? selectedArray;
-    const detNum = (array === 'all' ? 6 : array) as DetectorArrayId;
+    if (array === 'all') {
+      setCurrentPresetId(null); setCustomFrames([]); setCandidatesList([]); setSelectedCandidateId(null);
+      setSearchStatus({ source: 'error', message: 'Multi-detector composite unavailable. Select an individual detector.' });
+      setMlAnalysisStatus({ state: 'idle', stage: 'No composite data', progress: 0, stepIndex: 1 });
+      return;
+    }
+    const detNum = array as DetectorArrayId;
 
     setRa(newRa);
     setDec(newDec);
@@ -484,6 +514,7 @@ export function App() {
 
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
+    initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
 
@@ -527,6 +558,7 @@ export function App() {
 
   // Deep-link jump from a verification comment or panel directly into Sky Viewer
   const handleSelectVerificationTarget = (setting: VerificationSetting) => {
+    initialCandidateResolved.current = true;
     setFov(setting.fov);
     setSelectedArray(setting.selectedArray);
     setSubtractionMode(setting.subtractionMode);
@@ -540,7 +572,7 @@ export function App() {
     }
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
-    const detector = setting.selectedArray === 'all' ? 6 : setting.selectedArray;
+    const detector = setting.selectedArray;
     const frames = getMockEpochFrames(preset.id, detector);
     const candidates = getMockCandidates(preset.id, detector);
     archive.reset();
@@ -1077,6 +1109,7 @@ export function App() {
               onSelectArray={handleSelectDetectorArray}
               subtractionMode={subtractionMode}
               onChangeSubtractionMode={setSubtractionMode}
+              availableModes={availableImageModes(frames[activeFrameIndex])}
               overlays={overlays}
               onToggleOverlay={handleToggleOverlay}
               onRefreshCutout={handleRefreshCutout}
