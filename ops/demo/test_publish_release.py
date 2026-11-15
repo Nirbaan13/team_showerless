@@ -42,7 +42,7 @@ class PublishTests(unittest.TestCase):
         self.immutable_exists = False
         self.make_archive()
 
-    def make_archive(self, profile='v1-real', extra=None):
+    def make_archive(self, profile='v1-real', extra=None, overlay=False):
         payloads = {name: b'public data' for name in self.publisher.bundle.PAYLOADS}
         images = io.BytesIO()
         config = json.dumps({'architecture': 'amd64', 'os': 'linux', 'config': {'Labels': {'org.opencontainers.image.revision': self.revision}}}).encode()
@@ -52,7 +52,19 @@ class PublishTests(unittest.TestCase):
             add(archive, 'manifest.json', json.dumps([{'Config': image_id + '.json', 'RepoTags': ['source:real'], 'Layers': []}]).encode())
         payloads['images.tar'] = images.getvalue()
         record = dict(image='source:real', image_id='sha256:' + image_id, revision=self.revision, os='linux', architecture='amd64')
-        manifest = {'schema_version': 1, 'profile': profile, 'inventory': {'services': {name: dict(record) for name in ('frontend', 'api', 'pipeline', 'ml-inference')}}, 'files': {name: {'sha256': hashlib.sha256(data).hexdigest(), 'size': len(data)} for name, data in payloads.items()}}
+        inventory = {'services': {name: dict(record) for name in ('frontend', 'api', 'pipeline', 'ml-inference')}}
+        if overlay:
+            inventory['source_images'] = [dict(record)]
+            derived = json.dumps(dict(json.loads(config), comment='derived-real-only')).encode()
+            derived_id = hashlib.sha256(derived).hexdigest()
+            overlay_archive = io.BytesIO()
+            with tarfile.open(fileobj=overlay_archive, mode='w') as archive:
+                add(archive, derived_id + '.json', derived)
+                add(archive, 'manifest.json', json.dumps([{'Config': derived_id + '.json', 'RepoTags': ['demo:real-only'], 'Layers': []}]).encode())
+            payloads['overlay-images.tar'] = overlay_archive.getvalue()
+            inventory['services'] = {name: dict(record, image='demo:real-only', image_id='sha256:' + derived_id)
+                                     for name in ('frontend', 'api', 'pipeline', 'ml-inference')}
+        manifest = {'schema_version': 1, 'profile': profile, 'inventory': inventory, 'files': {name: {'sha256': hashlib.sha256(data).hexdigest(), 'size': len(data)} for name, data in payloads.items()}}
         with tarfile.open(self.archive, 'w:gz') as archive:
             for name, data in payloads.items():
                 add(archive, name, data)
@@ -102,6 +114,15 @@ class PublishTests(unittest.TestCase):
         self.assertIn('org.opencontainers.image.source=https://github.com/Nirbaan13/team_showerless', build)
         self.assertIn('org.opencontainers.image.revision=' + self.revision, build)
         self.assertEqual([argv[-1] for argv, _ in self.calls if argv[:2] == ['docker', 'push']], result['tags'])
+
+    def test_publishes_source_and_derived_images_from_separate_verified_archives(self):
+        self.make_archive(overlay=True)
+        result = self.publish()
+        self.assertEqual(result['profile'], 'v1-real')
+        self.assertEqual(self.context_bytes, self.archive.read_bytes())
+        self.assertEqual([argv[-1] for argv, _ in self.calls if argv[:2] == ['docker', 'push']],
+                         ['ghcr.io/nirbaan13/team-showerless-demo:v1-' + self.revision,
+                          'ghcr.io/nirbaan13/team-showerless-demo:v1'])
 
     def test_token_is_only_used_for_authenticated_download_and_login_stdin(self):
         self.publish()

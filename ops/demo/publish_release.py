@@ -55,7 +55,8 @@ def verify_download(request, download, destination):
     manifest = bundle.unpack_bundle(archive, destination)
     if manifest['profile'] != PROFILES[request['version']]:
         raise ValueError(request['version'] + ' requires bundle profile ' + PROFILES[request['version']])
-    bundle.validate_images(destination / 'images.tar', manifest['inventory'])
+    overlay = destination / 'overlay-images.tar' if 'overlay-images.tar' in manifest['files'] else None
+    bundle.validate_images(destination / 'images.tar', manifest['inventory'], overlay)
     return manifest
 
 
