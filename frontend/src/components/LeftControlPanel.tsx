@@ -189,8 +189,12 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               </label>)}
             </details>
           </div>
-          <div id="tutorial-target-epoch" className="space-y-1">
-            <span className="block text-paper-400">Observation Era</span>
+          <details id="tutorial-target-epoch" className="group">
+            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-paper-400 [&::-webkit-details-marker]:hidden">
+              <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90">&gt;</span>
+              <span>Observation Era</span>
+            </summary>
+            <div className="space-y-1 pt-1">
             <div className="grid grid-cols-2 gap-1">
               {OBSERVATION_ERA_PRESETS.map(era => <button key={era.id} type="button" disabled={era.id !== 'custom' && !eraSelection(era).provider}
                 onClick={() => {
@@ -206,7 +210,8 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             <label htmlFor="observed-through" className="block text-paper-400">Observed through</label>
             <input id="observed-through" type="date" value={archiveDraft.through} onChange={e => { setArchiveDraft(value => ({ ...value, through: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
             <p className="text-paper-400">Observation dates in UTC; end date includes the whole day. Apply source and period with Update Field.</p>
-          </div>
+            </div>
+          </details>
           <p id="coordinate-hint" className="text-[10px] text-paper-400">RA wraps into [0°, 360°). Dec must be −90° to +90°.</p>
           {coordError && (
             <div id="coordinate-error" role="alert" className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">

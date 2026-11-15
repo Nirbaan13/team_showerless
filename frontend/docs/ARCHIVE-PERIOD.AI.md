@@ -9,7 +9,8 @@ reused and validates its JSON response. Era labels describe observation windows,
 not a claim that WISE images or pre-launch SPHEREx observations are supported.
 
 The Update Field form applies coordinates, archive and observation
-start/end dates together. Choices come from `/api/archives`; unavailable,
+start/end dates together. Observation Era is collapsed by default; its `>`
+summary toggles the presets and date controls while retaining entered values. Choices come from `/api/archives`; unavailable,
 unqualified, non-image and non-deliverable providers are identified in the menu.
 Provider time-filter capability and restrictions remain visible.
 

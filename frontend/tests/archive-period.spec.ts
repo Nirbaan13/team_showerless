@@ -56,6 +56,8 @@ async function fields(page: Page) {
   await page.getByLabel('RA (deg)', { exact: true }).fill('53.1625');
   await page.getByLabel('Dec (deg)', { exact: true }).fill('-27.7914');
   await page.getByLabel('Archive', { exact: true }).selectOption('cadc');
+  const period = page.locator('#tutorial-target-epoch');
+  if (await period.getAttribute('open') === null) await period.locator('summary').click();
   await page.getByLabel('Observed from', { exact: true }).fill('1990-01-01');
   await page.getByLabel('Observed through', { exact: true }).fill('2009-12-31');
 }
@@ -207,6 +209,7 @@ test('existing era shortcuts feed the same validated Update Field query and reta
   const state = await backend(page); await open(page);
   await page.getByLabel('RA (deg)', { exact: true }).fill('53.1625');
   await page.getByLabel('Dec (deg)', { exact: true }).fill('-27.7914');
+  await page.locator('#tutorial-target-epoch > summary').click();
   await page.getByRole('button', { name: 'Canada CADC 1990–2010', exact: true }).click();
   await expect(page.getByLabel('Archive', { exact: true })).toHaveValue('cadc');
   await expect(page.getByLabel('Observed through', { exact: true })).toHaveValue('2009-12-31');
