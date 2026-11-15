@@ -166,6 +166,62 @@ class BundleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'tag|conflict'):
             bundle.build_bundle(self.inventory, self.images, self.seed, self.output, overlay_images=self.overlay)
 
+    def test_import_manifest_id_matches_docker29_zero_and_one_layer_probes(self):
+        zero = bundle.docker_import_manifest_id(
+            'sha256:1654803b503293436c6ae66c03e55f2f7e5705df225dd3f7ed35095ee842a09b', 141, [])
+        self.assertEqual(zero, 'sha256:8638b28d9f745f19970a6716d82062cff80e2d8a68ff744b83c237c0b5482e22')
+        layer = {'mediaType': 'application/vnd.docker.image.rootfs.diff.tar',
+                 'digest': 'sha256:cbc70f26249a4af77d84ae7f67882f4e0a0f3becb6ca8961efe0170a8ff46a1e', 'size': 10240}
+        one = bundle.docker_import_manifest_id(
+            'sha256:c8bff5019aea8b04dc0483491a8a3ccbae50efaab1489197bcc82977562a426f', 214, [layer])
+        self.assertEqual(one, 'sha256:8b0f9d092553e3a9dc6ec3017523856945999d778addeaad95e6627b581edb9d')
+        layer['size'] += 1
+        self.assertNotEqual(one, bundle.docker_import_manifest_id(
+            'sha256:c8bff5019aea8b04dc0483491a8a3ccbae50efaab1489197bcc82977562a426f', 214, [layer]))
+
+    def test_saved_import_id_acceptance_keeps_revision_and_rootfs_checks(self):
+        self.build()
+        expected = self.inventory['services']['api']
+        identity = expected['archive_import_manifest_ids'][0]
+        actual = {'Id': identity, 'Architecture': 'amd64', 'Os': 'linux',
+                  'Config': {'Labels': {'org.opencontainers.image.revision': 'a' * 40}}, 'RootFS': {'Layers': []}}
+        self.assertEqual(bundle.validate_loaded_image(expected, actual), identity)
+        actual['RootFS']['Layers'] = ['sha256:' + 'e' * 64]
+        with self.assertRaisesRegex(ValueError, 'root|layer'):
+            bundle.validate_loaded_image(expected, actual)
+        actual['RootFS']['Layers'] = []
+        actual['Id'] = 'sha256:' + 'f' * 64
+        with self.assertRaisesRegex(ValueError, 'ID|digest'):
+            bundle.validate_loaded_image(expected, actual)
+
+    def test_published_bundle_missing_import_metadata_is_enriched_without_rewriting(self):
+        self.build()
+        directory = self.root / 'old-release'
+        manifest = bundle.unpack_bundle(self.output, directory)
+        for record in manifest['inventory']['services'].values():
+            record.pop('archive_import_manifest_ids', None)
+        original = (directory / 'manifest.json').read_bytes()
+        bundle.enrich_runtime_inventory(directory, manifest)
+        self.assertTrue(manifest['inventory']['services']['api']['archive_import_manifest_ids'])
+        self.assertEqual((directory / 'manifest.json').read_bytes(), original)
+
+    def test_unknown_engine_manifest_needs_exported_hash_chain_to_exact_saved_config(self):
+        self.build()
+        expected = dict(self.inventory['services']['api'])
+        self.add_oci_index()
+        actual_id = self.inventory['services']['api']['image_id']
+        actual = {'Id': actual_id, 'Architecture': 'amd64', 'Os': 'linux',
+                  'Config': {'Labels': {'org.opencontainers.image.revision': 'a' * 40}}, 'RootFS': {'Layers': []}}
+        source = self.images
+        class ExportEngine:
+            def call(inner, *args):
+                self.assertEqual(args[:3], ('image', 'save', '--output'))
+                Path(args[3]).write_bytes(source.read_bytes())
+        self.assertEqual(bundle.verify_loaded_image(ExportEngine(), expected, actual), actual_id)
+        expected['archive_config_id'] = self.inventory['services']['frontend']['archive_config_id']
+        with self.assertRaisesRegex(ValueError, 'config|digest'):
+            bundle.verify_loaded_image(ExportEngine(), expected, actual)
+
     def test_changed_payload_is_rejected_before_extraction(self):
         self.build()
         corrupt = self.root / 'corrupt.tar'
