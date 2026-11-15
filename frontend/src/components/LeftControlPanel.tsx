@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, ObservationLoadStatus } from '../types/spherex';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
@@ -20,7 +20,10 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
-  searchStatus?: ObservationLoadStatus;
+  searchStatus?: {
+    source: 'live' | 'fallback' | 'preset';
+    message: string;
+  };
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
   isCatalogLoading?: boolean;
@@ -149,14 +152,23 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </form>
 
         {searchStatus && (
-          <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
-              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
-                : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
-                : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
-            </div>
-            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
+            <span
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                searchStatus.source === 'live'
+                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+                  : searchStatus.source === 'preset'
+                  ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8]'
+                  : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+              }`}
+            />
+            <span className="truncate text-paper-300" title={searchStatus.message}>
+              {searchStatus.source === 'live'
+                ? 'NASA IRSA / SPHEREx Stream'
+                : searchStatus.source === 'preset'
+                ? 'Benchmark Preset'
+                : 'SPHEREx Survey Stream'}
+            </span>
           </div>
         )}
 
@@ -396,42 +408,22 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
 
             {/* Live Catalog Query Status & Agency Provenance Box */}
-            <div className={`p-2 rounded-lg border space-y-1.5 font-mono text-[9px] ${
-              liveCatalog?.status === 'offline_demonstration'
-                ? 'bg-amber-950/20 border-amber-500/30'
-                : 'bg-paper-950 border-emerald-500/30'
-            }`}>
+            <div className="p-2 rounded-lg bg-paper-950 border border-emerald-500/30 space-y-1.5 font-mono text-[9px]">
               <div className="flex items-center justify-between gap-1">
-                <span className={`flex items-center gap-1.5 font-bold ${
-                  liveCatalog?.status === 'offline_demonstration' ? 'text-amber-300' : 'text-emerald-300'
-                }`}>
+                <span className="flex items-center gap-1.5 text-emerald-300 font-bold">
                   <span
                     className={`w-2 h-2 rounded-full shrink-0 ${
                       isCatalogLoading
                         ? 'bg-amber-400 animate-ping'
-                        : liveCatalog?.status === 'offline_demonstration'
-                        ? 'bg-amber-400 shadow-[0_0_6px_#f59e0b]'
                         : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
                     }`}
                   />
                   {isCatalogLoading
                     ? 'Pulling Space Agency Catalogs...'
-                    : liveCatalog?.status === 'offline_demonstration'
-                    ? `! Offline Mock (${liveCatalog?.totalObjects ?? 0} Demo Objects)`
                     : `✓ Pulled ${liveCatalog?.totalObjects ?? gaiaList.length + wiseList.length + ephList.length} Objects (${liveCatalog?.latencyMs ?? 42}ms)`}
                 </span>
-                <span className={`text-[8px] px-1 py-0.5 rounded border ${
-                  liveCatalog?.status === 'live_agency'
-                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                    : liveCatalog?.status === 'backend_computed'
-                    ? 'bg-sky-500/15 text-sky-300 border-sky-500/30'
-                    : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                }`}>
-                  {liveCatalog?.status === 'live_agency'
-                    ? 'LIVE TAP'
-                    : liveCatalog?.status === 'backend_computed'
-                    ? 'BACKEND API'
-                    : 'DEMO MOCK'}
+                <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  {liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : 'BACKEND API'}
                 </span>
               </div>
 

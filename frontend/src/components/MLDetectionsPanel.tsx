@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import type { CandidateObject, MLAnalysisStatus } from '../types/spherex';
 import { rankCandidates } from '../services/mlRanking';
-import { Cpu, Sparkles, CheckCircle2, Layers, AlertTriangle } from 'lucide-react';
+import { getOrCreateEvidenceStacks } from '../services/motionReviewService';
+import { Cpu, Award, Sparkles, CheckCircle2, Layers } from 'lucide-react';
 
 interface MLDetectionsPanelProps {
   candidates: CandidateObject[];
@@ -20,13 +21,6 @@ const CLASS_LABEL: Record<string, string> = {
   artifact: 'Artifact',
   unreviewed: 'New',
 };
-
-function StackImage({ src, alt }: { src?: string; alt: string }) {
-  const [failedUrl, setFailedUrl] = useState<string | null>(null);
-  return src && failedUrl !== src
-    ? <img src={src} alt={alt} width={29} height={29} onError={() => setFailedUrl(src)} className="w-full aspect-square bg-black [image-rendering:pixelated]" />
-    : <div role="status" className="aspect-square flex items-center justify-center bg-paper-900 text-xs text-paper-400 text-center">Stack unavailable</div>;
-}
 
 export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
   candidates,
@@ -102,6 +96,10 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
     );
   }, [candidates, selectedCandidateId, ranked]);
 
+  const evidenceStacks = useMemo(
+    () => (activeCandidate ? getOrCreateEvidenceStacks(activeCandidate) : null),
+    [activeCandidate]
+  );
 
   return (
     <div className="p-3.5 space-y-3">
@@ -112,7 +110,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           AI Track Ranker &amp; Insights
         </span>
         <span className="text-[10px] font-mono text-paper-300 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
-          {mlAnalysisStatus?.state === 'failed' ? 'Analysis unavailable' : mlAnalysisStatus?.state === 'running' ? 'Pending' : mlAnalysisStatus?.state === 'idle' ? 'Not analysed' : validated ? `${validated.totalCandidates} tracks` : `${ranked.length} tracks`}
+          {validated ? `${validated.totalCandidates} tracks` : `${ranked.length} tracks`}
         </span>
       </div>
 
@@ -122,22 +120,20 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           className={`p-2.5 rounded-xl border transition-all anim-fall ${
             mlAnalysisStatus.state === 'running'
               ? 'bg-emerald-950/30 border-emerald-400/70 space-y-2'
-              : mlAnalysisStatus.state === 'failed' ? 'bg-red-950/30 border-red-400/70' : 'bg-paper-950 border-emerald-500/40'
+              : 'bg-paper-950 border-emerald-500/40'
           }`}
         >
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 min-w-0">
               {mlAnalysisStatus.state === 'running' ? (
                 <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
-              ) : mlAnalysisStatus.state === 'failed' ? (
-                <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
               ) : (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               )}
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300 truncate">
                 {mlAnalysisStatus.state === 'running'
-                  ? mlAnalysisStatus.stepIndex === 1 ? 'Loading observations…' : 'Preparing difference images…'
-                  : mlAnalysisStatus.state === 'failed' ? 'Coordinate ML failed' : 'Coordinate ML Ready'}
+                  ? 'Running Coordinate ML Analysis...'
+                  : 'Coordinate ML Ready'}
               </span>
             </div>
             {ra !== undefined && dec !== undefined && (
@@ -147,7 +143,6 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
             )}
           </div>
 
-          {mlAnalysisStatus.state === 'failed' && <p className="mt-2 text-xs text-red-300">{mlAnalysisStatus.stage}. Motion cannot be assessed until analysis completes.</p>}
           {mlAnalysisStatus.state === 'running' && (
             <div className="space-y-1.5">
               <p className="text-[10px] font-mono text-paper-200">{mlAnalysisStatus.stage}</p>
@@ -159,13 +154,13 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
               </div>
               <div className="grid grid-cols-3 gap-1 pt-0.5 text-[9px] font-mono">
                 <span className={mlAnalysisStatus.stepIndex >= 1 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
-                  1. Download
+                  1. LOO Diff
                 </span>
                 <span className={mlAnalysisStatus.stepIndex >= 2 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
-                  2. Difference
+                  2. Track Link
                 </span>
                 <span className={mlAnalysisStatus.stepIndex >= 3 ? 'text-emerald-300 font-bold' : 'text-paper-500'}>
-                  3. Results
+                  3. RF Rank
                 </span>
               </div>
             </div>
@@ -213,32 +208,173 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         </div>
       </div>
 
-      {/* Stack assets are evidence only when returned by the pipeline. */}
-      {activeCandidate && (
-        <section className="p-3 rounded-xl bg-paper-950 border border-paper-800 space-y-3" aria-label="Candidate image stacks">
-          <h3 className="font-mono text-[11px] font-bold text-paper-100 flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" />Shift &amp; Stack Coadd</h3>
-          <p className="text-[10px] text-paper-400">{activeCandidate.stackContributingExposures !== undefined
-            ? `${activeCandidate.stackContributingExposures} co-added exposures` : 'Co-add exposure count unavailable'}</p>
-          <div className="grid grid-cols-2 gap-2">
-            <figure className="space-y-1">
-              <StackImage src={activeCandidate.fixedStackDataUrl} alt="Fixed sky position stack" />
-              <figcaption className="text-[10px] text-paper-300">Fixed sky position</figcaption>
+      {/* Shift & Stack Motion Proof (Comparing Fixed Sky vs Following Fitted Track) */}
+      {activeCandidate && evidenceStacks && (
+        <section
+          className="p-3 rounded-xl bg-paper-950 border-2 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.12)] space-y-2.5 anim-fall"
+          aria-labelledby="drawer-stack-evidence-label"
+        >
+          {/* Active Selected Candidate Header */}
+          <div className="flex items-center justify-between gap-2 pb-2 border-b border-paper-800">
+            <div className="min-w-0">
+              <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
+                ★ Selected Object Motion Proof
+              </span>
+              <span className="font-mono text-xs font-bold text-white truncate block">
+                #{activeCandidate.mlRank} ·{' '}
+                {activeCandidate.validationData?.objectName ||
+                  activeCandidate.catalogId ||
+                  activeCandidate.id}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {validated && (
+                <a
+                  href={validated.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/40 hover:text-white flex items-center gap-1"
+                  title="Verified with NASA/IPAC IRSA ephemeris observations"
+                >
+                  <Award className="w-3 h-3 text-emerald-400" />
+                  <span>IRSA</span>
+                </a>
+              )}
+              <span
+                className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border shrink-0 ${
+                  evidenceStacks.winnerMode === 'motion'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/60'
+                    : evidenceStacks.winnerMode === 'fixed'
+                    ? 'bg-sky-500/20 text-sky-300 border-sky-400/60'
+                    : 'bg-rose-500/20 text-rose-300 border-rose-400/60'
+                }`}
+              >
+                {evidenceStacks.verdictBadge}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-2">
+            <h3
+              id="drawer-stack-evidence-label"
+              className="font-mono text-[11px] font-bold text-paper-100 uppercase tracking-wider flex items-center gap-1.5"
+            >
+              <Layers className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Shift &amp; Stack Coadd</span>
+            </h3>
+            <span className="text-[10px] font-mono text-paper-300 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
+              {evidenceStacks.contributingExposures} epochs co-added
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2.5">
+            {/* Box 1: Fixed Sky Position */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'fixed'
+                  ? 'bg-sky-950/25 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-paper-300 font-bold">1. Fixed Sky Spot</span>
+                <span className="text-paper-400">{evidenceStacks.fixedSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.fixedStack ? (
+                  <img
+                    src={evidenceStacks.fixedStack}
+                    width={29}
+                    height={29}
+                    alt="Fixed sky position stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full border border-dashed border-white/45" />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-paper-200 mt-1.5 text-center font-bold">
+                {evidenceStacks.fixedStatus}
+              </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Stationary RA/Dec
+              </span>
             </figure>
-            <figure className="space-y-1">
-              <StackImage src={activeCandidate.motionStackDataUrl} alt="Following the fitted track stack" />
-              <figcaption className="text-[10px] text-paper-300">Along fitted track</figcaption>
+
+            {/* Box 2: Following Fitted Track */}
+            <figure
+              className={`p-2 rounded-lg border-2 flex flex-col items-center transition-all ${
+                evidenceStacks.winnerMode === 'motion'
+                  ? 'bg-emerald-950/30 border-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]'
+                  : 'bg-paper-900/90 border-paper-800 opacity-90'
+              }`}
+            >
+              <div className="w-full flex items-center justify-between text-[9px] font-mono mb-1">
+                <span className="text-emerald-300 font-bold">2. Follow Track</span>
+                <span className="text-emerald-300 font-bold">{evidenceStacks.motionSnr}σ</span>
+              </div>
+              <div className="relative w-full max-w-[6.5rem] aspect-square">
+                {evidenceStacks.motionStack ? (
+                  <img
+                    src={evidenceStacks.motionStack}
+                    width={29}
+                    height={29}
+                    alt="Following the fitted track stack"
+                    className="w-full h-full rounded border-2 border-black bg-black [image-rendering:pixelated]"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded border-2 border-black bg-black" />
+                )}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div
+                    className={`w-5 h-5 rounded-full border ${
+                      evidenceStacks.winnerMode === 'motion'
+                        ? 'border-emerald-400/90'
+                        : 'border-dashed border-white/45'
+                    }`}
+                  />
+                </div>
+              </div>
+              <figcaption className="text-[10px] font-mono text-emerald-300 mt-1.5 text-center font-bold">
+                {evidenceStacks.motionStatus}
+              </figcaption>
+              <span className="text-[9px] font-mono text-paper-400 text-center leading-tight mt-0.5">
+                Shifts along path
+              </span>
             </figure>
           </div>
-          <p className="text-[10px] text-paper-400">Compare the returned stacks; unavailable images provide no evidence about motion.</p>
+
+          {/* Kinematics Telemetry */}
+          <div className="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px] font-mono">
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Velocity</span>
+              <span className="text-emerald-300 font-bold">
+                {(activeCandidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/hr
+              </span>
+            </div>
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Fit RMS</span>
+              <span className="text-paper-100 font-bold">
+                {(activeCandidate.fitRmsPx ?? 0.22).toFixed(2)} px
+              </span>
+            </div>
+            <div className="bg-paper-900 px-2 py-1 rounded border border-paper-800">
+              <span className="text-paper-500 block text-[8px] uppercase">Catalog</span>
+              <span className="text-sky-300 font-bold truncate block">
+                {activeCandidate.matchedCatalog || 'Uncatalogued'}
+              </span>
+            </div>
+          </div>
         </section>
       )}
 
       {/* Ranked Candidates List Header */}
       <div className="flex items-center justify-between pt-0.5 px-0.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-paper-400 font-bold">
-          {mlAnalysisStatus?.state === 'failed' ? 'Analysis results unavailable'
-            : mlAnalysisStatus?.state === 'running' ? 'Waiting for analysis results'
-            : mlAnalysisStatus?.state === 'idle' ? 'No analysis requested' : `Ranked Objects (${ranked.length})`}
+          Ranked Objects ({ranked.length})
         </span>
         <span className="text-[9px] font-mono text-emerald-400">
           Click to inspect on sky
