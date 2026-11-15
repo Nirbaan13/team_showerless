@@ -17,7 +17,7 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-003 | Pending | Cross-target frame identity; Ceres homepage removal already landed |
 | QA-004 | Pending | Passive discussion must not submit |
 | QA-005 | Previously fixed, verify | PR26 deployed the missing ML HTTP service |
-| QA-006 | Pending | Acquisition availability and explicit errors |
+| QA-006 | External incident persists; UI handling fixed | Fresh bounded IRSA acquisition cb555dfe-6bff-410c-ac13-ccfad2229df5 failed with archive_http_error / HTTP 502 / retryable=true and no fabricated chunks. Retrying identical parameters created a new job 73d36d2b-4456-437b-85b2-01cc9507b8a9, confirming errors are not permanently deduplicated. UI error/retry regression is covered by QA-001/002. Successful fresh IRSA acquisition remains unverified while upstream fails. |
 | QA-007 | Fixed locally | Two browser regressions pass: missing difference stays unavailable and Zodi deep links cannot reuse aligned pixels. Layer controls require the corresponding published artifact; removed CSS-only zodiacal subtraction. |
 | QA-008 | Fixed locally | Two browser regressions pass: unsupported detectors clear pixels and tracks, D2/D6 select distinct actual review frames, and all-detector links cannot relabel D6. Removed asynchronous D6 fallback for D2, stale cross-detector candidates and fake composite contrast; All Bands disabled without a composite artifact. |
 | QA-009 | Already fixed in main, verified | Browser records actual canvas transforms for every candidate before/after zoom and pan. All markers retain identical image transforms; main already balanced per-candidate save/restore. |
