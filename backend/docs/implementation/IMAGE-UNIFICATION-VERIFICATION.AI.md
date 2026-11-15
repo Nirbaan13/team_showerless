@@ -62,11 +62,15 @@ pressure experiments were outside the requested PR scope. PSF equivalence and
 frozen-ranker qualification are not established by format registration and remain
 explicit scientific limitations, with foreign analysis eligibility unchanged.
 
-Final Scala test/stage:208 passed, zero failures, three ignored, with real Python
+Final Scala test/stage:209 passed, zero failures, three ignored, with real Python
 HTTP integration enabled. Staged Main health, Swagger and the three additive
 public paths passed. Exact PR container/CI outcomes are recorded in the PR.
 
-A pre-fix focused run also saw one native-fixture readiness failure before the
-shutdown test callback. Test teardown is now unconditional and fixture readiness
-is checked explicitly; the final complete suite passed. No production cause was
-established from that isolated fixture failure.
+Repeated native-fixture setup exposed an intermittent cache admission failure.
+A real-cache regression reproduced423/1000 failed admissions while a WAL sidecar
+was created/deleted: Files.walk could throw NoSuchFileException before the
+per-file size check. Usage scanning now uses walkFileTree and captured attributes,
+ignores only disappeared entries and propagates other I/O failures. The regression
+and complete209-test suite pass. The exact exception from the earlier fixture
+was not captured, so this establishes a confirmed cache race rather than asserting
+certainty about that earlier single failure.

@@ -74,14 +74,14 @@ ML loader `unification.ml.load_bundle(path)` returns a validated bundle with
 Owner: Python numerical worker, only `pipeline/unification` excluding
 `app.py`/`http.py`, and `pipeline/tests/unification/test_numerics.py` plus helpers.
 
-- [ ] Write failing FITS, grid, variance/mask, metadata and safe-bundle tests.
-- [ ] Implement worker/readers/resampling/bundle/ML loader using existing scientific
+- [x] Write failing FITS, grid, variance/mask, metadata and safe-bundle tests.
+- [x] Implement worker/readers/resampling/bundle/ML loader using existing scientific
   dependencies, with separate physical images and finite normalized ML tensor.
-- [ ] Test primary/extension/scaled/gzip/tile-compressed/cube inputs, explicit
+- [x] Test primary/extension/scaled/gzip/tile-compressed/cube inputs, explicit
   raster pixel mode, rotated/translated sky grids and real source times.
-- [ ] Export/reload an injected moving source and recover it with the actual
+- [x] Export/reload an injected moving source and recover it with the actual
   `ml_inference.detector.find_candidates` consumer without model/source edits.
-- [ ] Verify both current real ESO/CADC downloaded files can be normalized.
+- [x] Verify both current real ESO/CADC downloaded files can be normalized.
 
 ## Task 2: durable Scala jobs and artifact lifecycle
 
@@ -89,44 +89,44 @@ Owner: Scala worker, new `spaceapps.unification` production/tests and narrow
 `FitsCache` ownership extension with tests. Constructor accepts
 `invoke: Json => Task[Json]` so transport is independently testable.
 
-- [ ] Write failing ID-resolution, completed-artifact, snapshot, restart and
+- [x] Write failing ID-resolution, completed-artifact, snapshot, restart and
   rejection tests using real SQLite, files and a controlled pipeline callback.
-- [ ] Implement `Unifications.make(jobs, archiveService, archiveRepository, cache,
+- [x] Implement `Unifications.make(jobs, archiveService, archiveRepository, cache,
   data, database, invoke)` returning a service; `UnificationApi(service).routes`.
-- [ ] Public POST `/api/image-unifications` takes `inputs` of
+- [x] Public POST `/api/image-unifications` takes `inputs` of
   `{kind:archive_asset|native_chunk,id,image_hdu?,plane_indices?}` plus grid/options.
   Native chunks additionally take `download_id`. Reject unknown nested properties.
-- [ ] GET `/api/image-unifications/{id}` reports durable queued/running/completed/
+- [x] GET `/api/image-unifications/{id}` reports durable queued/running/completed/
   failed state and public `artifact_url`; GET `.../{id}/artifact` streams only a
   registered complete NPZ. Missing or evicted output is explicitly unavailable.
-- [ ] Snapshot under capacity admission, verify source SHA, keep leases through
+- [x] Snapshot under capacity admission, verify source SHA, keep leases through
   bounded remote completion, atomically publish validated output, recover and
   clean inputs/staging. Count and evict final NPZ within existing cache limits.
-- [ ] Run new Scala tests and existing cache tests; no bootstrap/OpenAPI edits.
+- [x] Run new Scala tests and existing cache tests; no bootstrap/OpenAPI edits.
 
 ## Task 3: private HTTP, composition, wiring and packaging
 
 Owner: root; `pipeline/unification/http.py`, `app.py`, HTTP tests, existing Scala
 processing client/tests, Main, OpenAPI, Docker/Compose/CI and documentation.
 
-- [ ] Write failing private API tests for real worker execution, limits,
+- [x] Write failing private API tests for real worker execution, limits,
   concurrency, deadline, disconnect and child cleanup.
-- [ ] Supervise one child at a time, 120-second numerical deadline; paths derive
+- [x] Supervise one child at a time, 120-second numerical deadline; paths derive
   solely from validated UUID and shared root. Await cleanup even during cancellation.
-- [ ] Add `HttpPipelineClient.unify(Json): Task[Json]` through the bounded existing
+- [x] Add `HttpPipelineClient.unify(Json): Task[Json]` through the bounded existing
   transport; wire the durable service and additive public routes in Main.
-- [ ] Copy package into current image and compose `unification.app:app` without
+- [x] Copy package into current image and compose `unification.app:app` without
   modifying the original Python service; add unification tests to CI.
-- [ ] Document actual public/private schemas, scientific limits, artifact loader
+- [x] Document actual public/private schemas, scientific limits, artifact loader
   usage, runtime mounts and pipeline compatibility.
 
 ## Task 4: integration, independent review and PR
 
-- [ ] Full Scala test/stage; original Python pipeline tests and unification tests;
+- [x] Full Scala test/stage; original Python pipeline tests and unification tests;
   frozen inference suite; YAML/OpenAPI validation and shell/deployment checks.
-- [ ] Real Scala -> Python HTTP -> exported artifact -> ML loader smoke.
-- [ ] Inspect complete diff for frontend/original science/frozen-model changes.
-- [ ] Independent whole-branch review and fixes with regression tests.
+- [x] Real Scala -> Python HTTP -> exported artifact -> ML loader smoke.
+- [x] Inspect complete diff for frontend/original science/frozen-model changes.
+- [x] Independent whole-branch review and fixes with regression tests.
 - [ ] Push feature branch, create PR with truthful validation and limitations;
   inspect CI/container results. Do not merge or deploy without a separate request.
 

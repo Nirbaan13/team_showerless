@@ -3,7 +3,9 @@ package spaceapps.infra.service
 import spaceapps.infra.model.ApiError
 import spaceapps.infra.repository.FileCacheRepository
 import zio.*
-import java.nio.file.{Files,Path,StandardCopyOption}
+import java.nio.file.{Files,Path,StandardCopyOption,SimpleFileVisitor,FileVisitResult,NoSuchFileException}
+import java.nio.file.attribute.BasicFileAttributes
+import java.io.IOException
 import java.util.UUID
 import scala.jdk.CollectionConverters.*
 
@@ -49,19 +51,25 @@ final class FileCache private(root:Path, store:FileCacheRepository,maxCacheBytes
       case false=>ZIO.none
     })
   private def usage(active:Set[Path]):Task[Usage]=ZIO.attemptBlocking {
-    val stream=Files.walk(root)
     var completed=0L
     var partial=0L
     val database=store.databasePath.toAbsolutePath.normalize().toString
-    try stream.iterator().asScala.filter(Files.isRegularFile(_)).foreach { p=>
-      val path=normalized(p)
-      // Administrative SQLite pages are not cached products and grow independently of eviction.
-      val administrative=path.getParent==root && path.getFileName.toString.matches(".*[.](?:sqlite|sqlite3|db)(?:-wal|-shm|-journal)?")
-      if !administrative && !Set(database,database+"-wal",database+"-shm",database+"-journal").contains(path.toString) then
-        val bytes=try Files.size(path) catch case _:java.nio.file.NoSuchFileException=>0L
-        if active.exists(path.startsWith(_)) then partial+=bytes else completed+=bytes
-    }
-    finally stream.close()
+    val databases=Set(database,database+"-wal",database+"-shm",database+"-journal")
+    // SQLite sidecars and atomic-publication scratch files may disappear while
+    // directory entries are being visited. A missing entry is no longer usage;
+    // other I/O failures must still reject admission.
+    Files.walkFileTree(root,new SimpleFileVisitor[Path]:
+      override def visitFile(file:Path,attributes:BasicFileAttributes):FileVisitResult=
+        val path=normalized(file)
+        val administrative=databases(path.toString) || (path.getParent==root && path.getFileName.toString.matches(".*[.](?:sqlite|sqlite3|db)(?:-wal|-shm|-journal)?"))
+        if attributes.isRegularFile && !administrative then
+          if active.exists(path.startsWith(_)) then partial+=attributes.size() else completed+=attributes.size()
+        FileVisitResult.CONTINUE
+      override def visitFileFailed(file:Path,error:IOException):FileVisitResult=
+        if error.isInstanceOf[NoSuchFileException] then FileVisitResult.CONTINUE else throw error
+      override def postVisitDirectory(directory:Path,error:IOException):FileVisitResult=
+        if error==null || error.isInstanceOf[NoSuchFileException] then FileVisitResult.CONTINUE else throw error
+    )
     Usage(completed,Files.getFileStore(root).getUsableSpace,partial)
   }
   private def reserve(path:Path,bytes:Long,product:Boolean=true):Task[Unit]=
