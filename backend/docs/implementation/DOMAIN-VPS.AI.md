@@ -44,7 +44,14 @@ Current migration backup: /opt/spaceapps-domain-backup.1zvXGq.
 Caddyfile: /etc/caddy/Caddyfile. Deployment entry point:
 /usr/local/bin/spaceapps-deploy. The proxy is enabled for startup.
 
-## DNS handoff
+## Current rollout decision
+
+The public site stays on Hostinger. Merging this PR does not change DNS, run the
+one-time bootstrap again, or move public website traffic. Hostinger deployment
+remains enabled. The optional future DNS instructions below require a separate
+cutover decision; they are not an outstanding instruction to change DNS now.
+
+## Optional future DNS handoff
 
 Nirbaan controls DNS at apollo.dns-parking.com and athena.dns-parking.com. No
 DNS-management credential is available in this environment. Existing FTPS GitHub
@@ -82,9 +89,9 @@ and POST body preservation, actual JSON error statuses, legacy health, canonical
 HTTPS redirects and SSE delivered before the upstream completes. It does not
 install a CA into system trust or share production certificate storage.
 
-The CI workflow executes that test with Caddy2.11.9 from the official image and
+The independent backend test workflow executes that test with Caddy2.11.9 from the official image and
 runs the host binding rejection checks and real container update/rollback suite.
-Public HTTPS and DNS checks remain pending until Nirbaan updates the zone.
+Public VPS HTTPS remains unverified while DNS intentionally stays on Hostinger.
 
 After installation, a second isolated HTTPS proxy using the same config and a
 private CA was connected to the real live upstreams. It served the actual
@@ -102,9 +109,9 @@ and rechecked before installation; no blocking findings remain.
 The first full container test on the shared VPS Docker daemon collided with a
 concurrent production CI deployment changing the global latest tag. Initial
 binding, update and rollback scenarios passed, but that run as a whole failed.
-The repeat holds the production deployment lock and restores the actual live
-latest tag afterward; production containers/data are distinct from its fixture
-Compose project.
+The serialized repeat completed successfully while holding the production
+deployment lock and restoring the actual live latest tag afterward. Production
+containers/data are distinct from its fixture Compose project.
 
 The WhatsApp DNS handoff failed with the connector's device-list/LID error. No
 notification was delivered. DNS instructions must be forwarded to Nirbaan by the
