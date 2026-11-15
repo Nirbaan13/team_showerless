@@ -149,8 +149,10 @@ export function App() {
     setActiveTab('viewer');
     setIsTutorialActive(true);
     setTutorialStep(0);
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setMobileViewerPane('controls');
+    } else {
+      setMobileViewerPane('canvas');
     }
   };
 
@@ -1446,9 +1448,9 @@ export function App() {
           {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
           {!isEmbedMode && (
           <div
-            className={`${
+            className={`h-full ${
               mobileViewerPane === 'telemetry'
-                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall lg:static lg:inset-auto lg:top-auto lg:bottom-auto lg:z-20 lg:flex'
                 : 'hidden lg:flex'
             }`}
           >

@@ -210,7 +210,8 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
   useEffect(() => {
     if (!isOpen || !currentStepConfig) return;
 
-    if (onChangeMobilePane) {
+    // ONLY change mobile pane on mobile screens (< 1024px)
+    if (onChangeMobilePane && typeof window !== 'undefined' && window.innerWidth < 1024) {
       onChangeMobilePane(currentStepConfig.mobilePane);
     }
 
@@ -224,7 +225,11 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
         node.classList.remove('tutorial-active-target-glow', 'tutorial-coords-extra-bright');
       });
 
-      const el = document.getElementById(currentStepConfig.targetId);
+      let el = document.getElementById(currentStepConfig.targetId);
+      if (!el && (currentStepConfig.targetId === 'tutorial-target-ai' || currentStepConfig.targetId === 'tutorial-target-spectrum')) {
+        el = document.getElementById('tutorial-target-right-panel');
+      }
+
       if (el) {
         setTargetRect(el.getBoundingClientRect());
 
@@ -273,6 +278,9 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
 
   const isFirstStep = step === 0;
   const isLastStep = step === TUTORIAL_STEPS.length - 1;
+  const isRightPanelTarget =
+    currentStepConfig.targetId === 'tutorial-target-ai' ||
+    currentStepConfig.targetId === 'tutorial-target-spectrum';
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-auto select-none overflow-hidden anim-fall">
@@ -305,9 +313,13 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
         </div>
       )}
 
-      {/* Floating Tutorial Callout Card - Stably centered between left & right sidebars */}
+      {/* Floating Tutorial Callout Card - Moves to right beside right panel on steps 6 & 7 */}
       <div
-        className="absolute inset-x-3 bottom-3 sm:inset-x-auto sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-auto sm:right-auto w-auto sm:w-[500px] max-w-[95vw] max-h-[82vh] overflow-y-auto bg-paper-950/95 border-2 border-emerald-400/80 rounded-2xl shadow-2xl p-4 sm:p-5 text-xs font-mono text-paper-200 z-50 space-y-3.5 backdrop-blur-md"
+        className={`absolute inset-x-3 bottom-3 sm:inset-x-auto ${
+          isRightPanelTarget
+            ? 'sm:bottom-6 sm:right-[380px] sm:left-auto sm:translate-x-0'
+            : 'sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto'
+        } w-auto sm:w-[480px] max-w-[95vw] max-h-[82vh] overflow-y-auto bg-paper-950/95 border-2 border-emerald-400/80 rounded-2xl shadow-2xl p-4 sm:p-5 text-xs font-mono text-paper-200 z-50 space-y-3.5 backdrop-blur-md`}
       >
         {/* Header with Step Badge and Close */}
         <div className="flex items-center justify-between pb-2 border-b border-paper-800">

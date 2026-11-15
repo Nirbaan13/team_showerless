@@ -323,6 +323,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   return (
     <aside
+      id="tutorial-target-right-panel"
       style={typeof window !== 'undefined' && window.innerWidth < 1024 ? undefined : { width: `${width}px` }}
       className={`relative bg-paper-900 border-l border-paper-800 flex flex-col h-full lg:h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75 ${className}`}
     >
