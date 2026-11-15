@@ -29,12 +29,14 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
   onStepForward,
   onStepBackward,
 }) => {
+  const hasFrames = frames.some(frame => frame.isAvailable);
   return (
     <div className="h-16 bg-paper-900 border-t border-paper-800 px-2 sm:px-4 flex items-center justify-between text-xs select-none z-20 overflow-x-auto gap-2">
       {/* 1. Playback Engine Controls */}
       <div className="flex items-center space-x-1.5 shrink-0">
         <button
           onClick={onStepBackward}
+          disabled={!hasFrames}
           className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Previous Epoch Frame"
         >
@@ -43,6 +45,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
 
         <button
           onClick={onTogglePlay}
+          disabled={!hasFrames}
           className="btn-tactile px-3.5 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-[11px] font-bold cursor-pointer flex items-center gap-1.5"
         >
           {isPlaying ? (
@@ -60,6 +63,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
 
         <button
           onClick={onStepForward}
+          disabled={!hasFrames}
           className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Next Epoch Frame"
         >
@@ -69,6 +73,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         {/* Clyde Tombaugh Blink Comparator Mode */}
         <button
           onClick={onToggleBlinkMode}
+          disabled={!hasFrames}
           className={`btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
             blinkMode
               ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]'
@@ -89,7 +94,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
             <span>{blinkMode ? 'Blink Comparator (A ↔ B)' : 'Epoch Timeline'}</span>
           </div>
           <span className="text-paper-200 font-medium">
-            Frame {activeFrameIndex + 1} of {frames.length}
+            {hasFrames ? `Frame ${activeFrameIndex + 1} of ${frames.length}` : 'No observations loaded'}
           </span>
         </div>
 

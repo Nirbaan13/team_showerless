@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
-import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
+import { DETECTOR_ARRAY_SPECS } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
 
@@ -12,8 +12,6 @@ interface LeftControlPanelProps {
   onUpdateFov: (fov: FOVOption) => void;
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
-  selectedChannel: number | null;
-  onSelectChannel: (ch: number | null) => void;
   subtractionMode: SubtractionMode;
   onChangeSubtractionMode: (mode: SubtractionMode) => void;
   overlays: CatalogOverlayState;
@@ -21,7 +19,7 @@ interface LeftControlPanelProps {
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
   searchStatus?: {
-    source: 'live' | 'fallback' | 'preset';
+    source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle';
     message: string;
   };
   activeCandidate?: CandidateObject | null;
@@ -39,8 +37,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onUpdateFov,
   selectedArray,
   onSelectArray,
-  selectedChannel,
-  onSelectChannel,
   subtractionMode,
   onChangeSubtractionMode,
   overlays,
@@ -68,11 +64,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
   const handleApplyCoords = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanRa = raInput.trim().replace(/[^\d.-]/g, '');
-    const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
-    const parsedRa = parseFloat(cleanRa);
-    const parsedDec = parseFloat(cleanDec);
-    if (isNaN(parsedRa) || isNaN(parsedDec)) {
+    const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+    const parsedRa = Number(raInput.trim());
+    const parsedDec = Number(decInput.trim());
+    if (!decimal.test(raInput.trim()) || !decimal.test(decInput.trim()) || !Number.isFinite(parsedRa) || !Number.isFinite(parsedDec)) {
       setCoordError('Enter valid numerical coordinates');
       return;
     }
@@ -97,8 +92,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         <form onSubmit={handleApplyCoords} className="space-y-2">
           <div className="grid grid-cols-2 gap-1.5">
             <div>
-              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
+              <label htmlFor="field-ra" className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
               <input
+                id="field-ra"
+                aria-invalid={!!coordError}
+                aria-describedby="coordinate-hint coordinate-error"
                 type="text"
                 value={raInput}
                 onChange={(e) => {
@@ -111,8 +109,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               />
             </div>
             <div>
-              <label className="text-[10px] font-mono text-paper-400 block mb-0.5">Dec (deg)</label>
+              <label htmlFor="field-dec" className="text-[10px] font-mono text-paper-400 block mb-0.5">Dec (deg)</label>
               <input
+                id="field-dec"
+                aria-invalid={!!coordError}
+                aria-describedby="coordinate-hint coordinate-error"
                 type="text"
                 value={decInput}
                 onChange={(e) => {
@@ -126,8 +127,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           </div>
 
+          <p id="coordinate-hint" className="text-[10px] text-paper-400">RA wraps into [0°, 360°). Dec must be −90° to +90°.</p>
           {coordError && (
-            <div className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
+            <div id="coordinate-error" role="alert" className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
               {coordError}
             </div>
           )}
@@ -152,23 +154,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </form>
 
         {searchStatus && (
-          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
-            <span
-              className={`w-2 h-2 rounded-full shrink-0 ${
-                searchStatus.source === 'live'
-                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-                  : searchStatus.source === 'preset'
-                  ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8]'
-                  : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-              }`}
-            />
-            <span className="truncate text-paper-300" title={searchStatus.message}>
-              {searchStatus.source === 'live'
-                ? 'NASA IRSA / SPHEREx Stream'
-                : searchStatus.source === 'preset'
-                ? 'Benchmark Preset'
-                : 'SPHEREx Survey Stream'}
-            </span>
+          <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
+              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
+                : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
+                : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
+            </div>
+            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
           </div>
         )}
 
@@ -203,7 +196,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           <button
             onClick={() => {
               onSelectArray('all');
-              onSelectChannel(null);
             }}
             title="Combine all 6 infrared bands into a stacked composite image"
             className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
@@ -224,8 +216,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 key={spec.id}
                 onClick={() => {
                   onSelectArray(spec.id as DetectorArrayId);
-                  onSelectChannel(null);
-                }}
+                    }}
                 className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-paper-100 font-medium'
@@ -253,70 +244,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           })}
         </div>
 
-        {/* 102-Band Spectrophotometric Fine-Tuning Slider */}
-        <div className="mt-2.5 pt-2 border-t border-paper-800">
-          <div className="flex items-center justify-between text-[10px] font-mono mb-1">
-            <span className="text-paper-400 font-semibold">102-Band Channel:</span>
-            <span className="text-emerald-300 font-bold">
-              {selectedChannel ? `Ch #${selectedChannel} (${(0.75 + (selectedChannel - 1) * (4.25 / 101)).toFixed(2)} µm)` : 'Broad Band (Stacked)'}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min="1"
-              max="102"
-              value={selectedChannel ?? (selectedArray === 'all' ? 51 : (Number(selectedArray) - 1) * 17 + 9)}
-              onChange={(e) => {
-                const ch = parseInt(e.target.value, 10);
-                onSelectChannel(ch);
-                const arrId = Math.min(6, Math.max(1, Math.floor((ch - 1) / 17) + 1)) as DetectorArrayId;
-                if (selectedArray !== arrId && selectedArray !== 'all') {
-                  onSelectArray(arrId);
-                }
-              }}
-              className="w-full accent-emerald-400 cursor-pointer h-1.5 bg-paper-950 rounded-lg"
-            />
-            {selectedChannel !== null && (
-              <button
-                type="button"
-                onClick={() => onSelectChannel(null)}
-                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-paper-800 text-paper-400 hover:text-white cursor-pointer"
-                title="Reset to full detector array"
-              >
-                Reset
-              </button>
-            )}
-          </div>
-
-          {/* Key Molecular Line Fast-Picks */}
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            {[
-              { ch: 26, label: 'H₂O 1.5µm', arr: 2 },
-              { ch: 42, label: 'H₂O 2.0µm', arr: 3 },
-              { ch: 59, label: 'H₂O 3.0µm', arr: 4 },
-              { ch: 81, label: 'CO₂ 4.27µm', arr: 5 },
-              { ch: 93, label: 'CO 4.67µm', arr: 6 },
-            ].map((p) => (
-              <button
-                key={p.ch}
-                type="button"
-                onClick={() => {
-                  onSelectArray(p.arr as DetectorArrayId);
-                  onSelectChannel(p.ch);
-                }}
-                className={`px-1.5 py-0.5 rounded text-[8px] font-mono border transition-all cursor-pointer ${
-                  selectedChannel === p.ch
-                    ? 'bg-emerald-400 text-gray-950 font-bold border-black shadow-[0_0_6px_rgba(16,185,129,0.5)]'
-                    : 'bg-paper-950 text-paper-400 hover:text-emerald-300 border-paper-800'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <p className="mt-2 text-[10px] text-paper-400">Images are selected by detector. Channel-resolved images are unavailable.</p>
       </div>
 
       {/* 3. Image Filtering & Movement Isolation */}
@@ -375,7 +303,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       {(() => {
         const queryRa = liveCatalog?.queriedCoordinate.ra ?? activeCandidate?.ra ?? ra;
         const queryDec = liveCatalog?.queriedCoordinate.dec ?? activeCandidate?.dec ?? dec;
-        const coordCat = resolveCoordinateCatalogContext(queryRa, queryDec);
         const gaiaList = liveCatalog?.gaiaSources ?? [];
         const wiseList = liveCatalog?.wiseSources ?? [];
         const ephList = liveCatalog?.ephemerisSources ?? [];
@@ -420,10 +347,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   />
                   {isCatalogLoading
                     ? 'Pulling Space Agency Catalogs...'
-                    : `✓ Pulled ${liveCatalog?.totalObjects ?? gaiaList.length + wiseList.length + ephList.length} Objects (${liveCatalog?.latencyMs ?? 42}ms)`}
+                    : !liveCatalog || liveCatalog.status === 'unavailable' ? 'Catalogue query unavailable'
+                    : `Catalogue query ${liveCatalog.status === 'partial' ? 'partial' : 'complete'}: ${liveCatalog.totalObjects} objects`}
                 </span>
                 <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  {liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : 'BACKEND API'}
+                  {isCatalogLoading ? 'QUERYING' : liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : liveCatalog?.status === 'partial' ? 'PARTIAL' : 'UNAVAILABLE'}
                 </span>
               </div>
 
@@ -431,7 +359,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 <span>
                   Query: <strong className="text-paper-200">α {queryRa.toFixed(4)}°, δ {queryDec >= 0 ? `+${queryDec.toFixed(4)}` : queryDec.toFixed(4)}°</strong>
                 </span>
-                <span className="text-emerald-400/90 truncate ml-1">{coordCat.constellation}</span>
+                <span>{liveCatalog?.providers.filter(provider => provider.status === 'failed').map(provider => provider.catalog).join(', ')} unavailable</span>
               </div>
 
               {/* Space Agency Reference Links */}

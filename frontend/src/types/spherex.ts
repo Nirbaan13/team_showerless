@@ -57,15 +57,16 @@ export interface SpherexEpochFrame {
   release?: string; // DR1 or QR2/QR3
   coverage?: number; // Fraction of valid finite pixels (0-1)
   headerMetadata: {
-    exposureTimeSec: number;
-    airmass: number;
-    zodiBrightnessMjySr: number;
-    snrEstimated: number;
+    exposureTimeSec?: number;
+    airmass?: number;
+    zodiBrightnessMjySr?: number;
+    snrEstimated?: number;
   };
 }
 
 export interface CandidateObject {
   id: string;
+  catalogueId?: string;
   ra: number;
   dec: number;
   pixelX: number;
@@ -95,7 +96,7 @@ export interface CandidateObject {
     sourceUrl: string;
     exposuresCount: number;
   };
-  /** Detector score 0–1 (higher = more likely a real moving object). Supplied by the ML pipeline when available. */
+  /** Ranking utility; its meaning is declared by the producing model. Supplied by the ML pipeline when available. */
   mlScore?: number;
   mlRank?: number; // 1 = highest priority
   mlPriorityScore?: number; // 0.0 - 1.0
@@ -193,12 +194,17 @@ export interface ViewerState {
 }
 
 export interface MLAnalysisStatus {
-  state: 'idle' | 'running' | 'completed';
+  state: 'idle' | 'running' | 'completed' | 'failed';
   stage: string;
   progress: number;
   stepIndex: 1 | 2 | 3;
   tracksDetected?: number;
   modelName?: string;
+  resultSource?: 'stored' | 'live';
+  modelFamily?: string;
+  modelSha256?: string;
+  scoreKind?: string;
+  scoreDescription?: string;
   latencyMs?: number;
   topScore?: number;
   topSpeedArcsecHr?: number;
@@ -206,3 +212,8 @@ export interface MLAnalysisStatus {
   targetLabel?: string;
 }
 
+
+export interface ObservationLoadStatus {
+  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback';
+  message: string;
+}

@@ -33,13 +33,14 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
 }) => {
   const [candidates, setCandidates] = useState<CandidateRecord[]>([]);
   const [kpis, setKpis] = useState<CatalogueKPIs>({
-    total_candidates: 4,
-    under_review: 1,
-    community_verified: 3,
-    passed_validation: 4,
-    submitted_external: 1,
+    total_candidates: 0,
+    under_review: 0,
+    community_verified: 0,
+    passed_validation: 0,
+    submitted_external: 0,
     externally_confirmed: 0,
   });
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
@@ -60,10 +61,13 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
         spectralBand,
         sortBy,
       });
+      setLoadError(null);
       setCandidates(data.candidates);
       setKpis(data.kpis);
     } catch (err) {
-      console.error('Error fetching catalogue candidates:', err);
+      setCandidates([]);
+      setKpis({ total_candidates: 0, under_review: 0, community_verified: 0, passed_validation: 0, submitted_external: 0, externally_confirmed: 0 });
+      setLoadError(err instanceof Error ? err.message : 'Registry unavailable');
     } finally {
       setIsLoading(false);
     }
@@ -71,14 +75,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
 
   useEffect(() => {
     loadData();
-    const id = window.setInterval(() => {
-      fetchCatalogueCandidates({ searchQuery, candidateType, status: statusFilter, spectralBand, sortBy })
-        .then((data) => {
-          setCandidates(data.candidates);
-          setKpis(data.kpis);
-        })
-        .catch(() => {});
-    }, 5000);
+    const id = window.setInterval(() => { void loadData(); }, 5000);
     return () => window.clearInterval(id);
   }, [loadData]);
 
@@ -113,7 +110,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                   PlanetX Persistent Candidate Catalogue
                 </h1>
                 <span className="hidden md:inline-flex px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/40">
-                  WAL SQLite Persisted
+                  {loadError ? 'Registry unavailable' : isLoading ? 'Loading registry' : 'Registry API'}
                 </span>
               </div>
               <p className="text-[11px] sm:text-xs text-paper-400 mt-0.5 font-mono">
@@ -136,6 +133,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
           </div>
         </div>
 
+        {loadError && <div role="alert" className="p-3 text-red-300 border border-red-500 rounded">{loadError}. No registry records or votes are available. <button onClick={() => void loadData()} className="underline">Retry registry</button></div>}
         {/* Informative Pipeline Banner */}
         <div className="p-3 rounded-xl bg-paper-900/90 border border-paper-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono">
           <div className="flex items-center gap-2 text-paper-300">
@@ -377,8 +375,8 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {candidates.map((cand) => {
               const statusCfg = statusColors[cand.status] || statusColors.under_review;
-              const positivePct = cand.consensus_summary?.positive_percentage ?? 80;
-              const totalVotes = cand.consensus_summary?.total_votes ?? 1;
+              const positivePct = cand.consensus_summary?.positive_percentage ?? 0;
+              const totalVotes = cand.consensus_summary?.total_votes ?? 0;
 
               return (
                 <div
@@ -518,7 +516,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                       </td>
                       <td className="py-3 px-4 text-sky-300 font-bold">{cand.snr.toFixed(1)}σ</td>
                       <td className="py-3 px-4 text-emerald-400 font-bold">
-                        {cand.consensus_summary?.positive_percentage ?? 100}%
+                        {cand.consensus_summary?.positive_percentage ?? 0}%
                       </td>
                       <td className="py-3 px-4">
                         <span

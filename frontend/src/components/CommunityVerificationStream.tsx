@@ -6,6 +6,8 @@ import type {
   SubtractionMode,
   VerificationComment,
 } from '../types/spherex';
+import { fetchCandidateById, resolveCatalogueCandidateId } from '../services/catalogueService';
+import type { CandidateRecord } from '../types/catalogue';
 import { getPriorityColors } from '../services/mlRanking';
 import { SEEDED_VERIFICATION_DISCUSSIONS } from '../services/mockVerificationData';
 import {
@@ -25,7 +27,6 @@ import {
   ThumbsUp,
   ShieldCheck,
   Activity,
-  Zap,
   Database,
 } from 'lucide-react';
 
@@ -110,31 +111,11 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
     (c) => targetId !== null && (c.candidateId === targetId || c.setting?.candidateId === targetId)
   );
 
-  // Map to canonical catalogue candidate ID and base seed votes
-  const normalizedId = (targetId || '').toLowerCase();
-  let defaultBenchmarkVotes = 1;
-  let canonicalId = targetId || 'PX-000001';
-  if (normalizedId.startsWith('px-')) {
-    canonicalId = (targetId || '').toUpperCase();
-  } else if (normalizedId.includes('atlas') || normalizedId.includes('3i')) {
-    defaultBenchmarkVotes = 12;
-    canonicalId = 'PX-000001';
-  } else if (normalizedId.includes('vesta')) {
-    defaultBenchmarkVotes = 11;
-    canonicalId = 'PX-000002';
-  } else if (normalizedId.includes('barnard')) {
-    defaultBenchmarkVotes = 10;
-    canonicalId = 'PX-000003';
-  } else if (normalizedId.includes('wise') || normalizedId.includes('0855')) {
-    defaultBenchmarkVotes = 4;
-    canonicalId = 'PX-000004';
-  }
-
-  const explicitConfirmations = objectComments.filter(
-    (c) => c.vote === 'confirm_motion'
-  ).length;
-  const currentConsensusCount = Math.max(defaultBenchmarkVotes, explicitConfirmations);
-  const isLevel2Verified = currentConsensusCount >= 10;
+  const canonicalId = resolveCatalogueCandidateId(candidate);
+  const [registryRecord, setRegistryRecord] = useState<CandidateRecord | null>(null);
+  const persisted = registryRecord?.id === canonicalId ? registryRecord : null;
+  const currentConsensusCount = persisted?.consensus?.likely_real ?? 0;
+  const isLevel2Verified = persisted?.consensus?.level2_qualified === true;
 
   // Automatic clearinghouse pipeline: 10 confirmations -> catalogue + dispatch -> reply recorded
   const [autoSub, setAutoSub] = useState<{
@@ -148,15 +129,17 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
 
   // Poll existing submission status (read-only, does not trigger a POST)
   useEffect(() => {
-    if (!targetId || !candidate) return;
+    setRegistryRecord(null);
+    setAutoSub(null);
+    if (!targetId || !candidate || !canonicalId) return;
     let cancelled = false;
     let timer: number | undefined;
 
     const poll = async (cid: string) => {
       try {
-        const res = await fetch(`/api/catalogue/candidates/${encodeURIComponent(cid)}`);
-        if (!res.ok) return;
-        const data = await res.json();
+        const data = await fetchCandidateById(cid);
+        if (cancelled || !data) return;
+        setRegistryRecord(data);
         const subs: any[] = data.external_submissions || [];
         const latest = subs[0];
         if (cancelled || !latest) return;
@@ -184,7 +167,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
 
   // Explicit user-initiated clearinghouse dispatch
   const handleManualDispatch = async () => {
-    if (!candidate || isDispatching) return;
+    if (!candidate || !canonicalId || !isLevel2Verified || isDispatching) return;
     setIsDispatching(true);
     setAutoSub({ candidateId: canonicalId, status: 'dispatching' });
     try {
@@ -264,93 +247,6 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
 
   const handleUpvote = (commentId: string) => {
     void upvoteVerification(commentId);
-  };
-
-  const handleQuickConfirm = () => {
-    if (!targetId || !candidate) return;
-    const exactCandidateId = candidate.id;
-    const candidateTitle =
-      candidate.validationData?.objectName ||
-      candidate.catalogId ||
-      candidate.id;
-
-    const entry: VerificationComment = {
-      id: `comment-${exactCandidateId}-${Date.now()}`,
-      author: authorName.trim() || 'Citizen Volunteer',
-      role: authorRole,
-      timestamp: 'Just now',
-      candidateId: exactCandidateId,
-      message: 'Verified non-sidereal motion track across SPHEREx multi-epoch frames. Optical PSF matches telescope beam profile.',
-      vote: 'confirm_motion',
-      upvotes: 2,
-      setting: {
-        targetPresetId: currentPresetId ?? null,
-        candidateId: exactCandidateId,
-        candidateName: `#${candidate.mlRank || 1} · ${candidateTitle}`,
-        ra: candidate.ra,
-        dec: candidate.dec,
-        fov: fov,
-        selectedArray: selectedArray,
-        activeFrameIndex: activeFrameIndex,
-        subtractionMode: subtractionMode,
-      },
-    };
-
-    const updated = [entry, ...comments];
-    setComments(updated);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      window.dispatchEvent(new Event('spherex_comments_updated'));
-    } catch {}
-    if (onAddComment) onAddComment(entry);
-  };
-
-  const handleFastTrackConsensus = () => {
-    if (!targetId || !candidate) return;
-    const exactCandidateId = candidate.id;
-    const candidateTitle =
-      candidate.validationData?.objectName ||
-      candidate.catalogId ||
-      candidate.id;
-
-    const simulatedPeers: { author: string; role: 'Volunteer' | 'Researcher' | 'Science Team'; message: string }[] = [
-      { author: 'Dr. Arthur Dent', role: 'Researcher', message: 'Linear motion trajectory verified in Band D6. Shift & Stack coadd confirms point-source profile without elongation.' },
-      { author: 'Dr. Sarah Chen', role: 'Science Team', message: 'Residual astrometric fit RMS is 0.22 px, well below the 0.50 px threshold. No Gaia DR3 stationary source at coordinates.' },
-      { author: 'Observatory Volunteer 4', role: 'Volunteer', message: 'Blink inspection across 4 epochs confirms steady velocity vector. Clearly not an artifact.' },
-      { author: 'Prof. T. Vance', role: 'Researcher', message: 'Signal-to-noise ratio > 12σ across exposures. Ready for Minor Planet Center / TNS dispatch.' },
-      { author: 'AstroCitizen_99', role: 'Volunteer', message: 'Cross-checked against JPL Horizons ephemerides. Candidate motion confirmed.' },
-      { author: 'Dr. Elena Rostova', role: 'Science Team', message: 'Spectral absorption profile consistent with cold non-sidereal body. Consensus threshold verified.' },
-      { author: 'K. Patel', role: 'Volunteer', message: 'Confirmed point-source leave-one-out subtraction track.' },
-    ];
-
-    const newEntries: VerificationComment[] = simulatedPeers.map((peer, idx) => ({
-      id: `comment-${exactCandidateId}-fasttrack-${Date.now()}-${idx}`,
-      author: peer.author,
-      role: peer.role,
-      timestamp: `${idx + 1}m ago`,
-      candidateId: exactCandidateId,
-      message: peer.message,
-      vote: 'confirm_motion',
-      upvotes: 4 + idx,
-      setting: {
-        targetPresetId: currentPresetId ?? null,
-        candidateId: exactCandidateId,
-        candidateName: `#${candidate.mlRank || 1} · ${candidateTitle}`,
-        ra: candidate.ra,
-        dec: candidate.dec,
-        fov: fov,
-        selectedArray: selectedArray,
-        activeFrameIndex: activeFrameIndex,
-        subtractionMode: subtractionMode,
-      },
-    }));
-
-    const updated = [...newEntries, ...comments];
-    setComments(updated);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      window.dispatchEvent(new Event('spherex_comments_updated'));
-    } catch {}
   };
 
   const getVoteBadge = (vote: VerificationComment['vote']) => {
@@ -444,7 +340,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 font-mono text-[11px] font-bold text-amber-300">
                 <Activity className="w-3.5 h-3.5 text-amber-400" />
-                <span>Community Consensus: {currentConsensusCount} / 10 Confirmations</span>
+                <span>{persisted ? `Registry consensus: ${currentConsensusCount} persisted confirmations` : 'Registry consensus unavailable'}</span>
               </div>
               <span className="text-[10px] font-mono text-amber-400/90 font-semibold bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800">
                 Level 1 Under Review
@@ -460,26 +356,10 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-paper-400 pt-0.5">
-              <span>{Math.max(0, 10 - currentConsensusCount)} more needed for MPC/TNS submission</span>
+              <span>Discussion comments do not count as registry votes.</span>
               <div className="flex items-center gap-1.5 self-end">
-                <button
-                  type="button"
-                  onClick={handleQuickConfirm}
-                  className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold border border-black cursor-pointer shadow-sm flex items-center gap-1"
-                  title="Add your confirmation vote to this candidate thread"
-                >
-                  <UserCheck className="w-3 h-3 stroke-[2.5]" />
-                  <span>+1 Confirm</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleFastTrackConsensus}
-                  className="btn-tactile-sm px-2 py-1 rounded-lg bg-paper-850 hover:bg-paper-800 text-emerald-300 border border-emerald-500/40 cursor-pointer flex items-center gap-1"
-                  title="Fast-track consensus with simulated independent peer reviews"
-                >
-                  <Zap className="w-3 h-3 text-amber-400" />
-                  <span>⚡ Reach 10</span>
-                </button>
+                {canonicalId && <button type="button" onClick={() => onOpenCatalogue?.(canonicalId)} className="px-2 py-1 border rounded">Vote in registry</button>}
+
               </div>
             </div>
           </div>
@@ -541,7 +421,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
               {onOpenCatalogue && (
                 <button
                   type="button"
-                  onClick={() => onOpenCatalogue(autoSub?.candidateId || canonicalId)}
+                  onClick={() => { const id = autoSub?.candidateId ?? canonicalId; if (id) onOpenCatalogue(id); }}
                   className="btn-tactile flex-1 py-1.5 px-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-1.5 cursor-pointer"
                   title="View this candidate in the Candidate Catalog"
                 >
@@ -552,7 +432,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
               {onOpenExternalSubmission && (
                 <button
                   type="button"
-                  onClick={() => onOpenExternalSubmission(autoSub?.candidateId || canonicalId)}
+                  onClick={() => { const id = autoSub?.candidateId ?? canonicalId; if (id) onOpenExternalSubmission(id); }}
                   className="btn-tactile py-1.5 px-3 rounded-xl bg-paper-900 hover:bg-paper-850 text-emerald-300 font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                   title="View the machine-readable submission payload (ADES / TNS JSON)"
                 >

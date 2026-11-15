@@ -14,7 +14,7 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
   const bitmapGate = new Promise<void>(resolve => { releaseBitmap = resolve; });
   releases.add(releaseBitmap);
   if (!options.delayBitmap) releaseBitmap();
-  await page.route('https://**', route => route.abort());
+  await page.route(/^https:\/\//, route => route.abort());
   await page.route('**/api/catalogue/**', route => route.fulfill({ status: 503, json: { message: 'Unavailable' } }));
   await page.route('**/detect', route => route.fulfill({ status: 503, json: { message: 'Unavailable' } }));
   await page.route('**/api/motion/**', route => route.fulfill({ status: 503, json: { detail: 'Motion service unavailable' } }));
@@ -43,7 +43,7 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
     }] : [];
     const job = { id: 'analysis-test' , status: state.analysis, download_id: 'download-test', status_url: '/api/analyses/analysis-test', events_url: '/api/analyses/analysis-test/events',
       ...(state.analysis === 'failed' ? { error: { code: 'processing_failed', message: 'Could not compute difference images', retryable: true } } : {}),
-      ...(state.analysis === 'completed' ? { result: { schema_version: 1, analysis_id: 'analysis-test', model: { model_id: 'fixture-model', sha256: 'a'.repeat(64), score_kind: 'ranking' }, frames, candidates, warnings: [], settings: {}, provenance: {} } } : {}),
+      ...(state.analysis === 'completed' ? { result: { schema_version: 1, analysis_id: 'analysis-test', model: { model_id: 'fixture-model', model_family: 'RankNetTreeBoost', sha256: 'a'.repeat(64), score_kind: 'sigmoid_pairwise_utility', score_description: 'Pairwise ranking utility; not a calibrated probability' }, frames, candidates, warnings: [], settings: {}, provenance: {} } } : {}),
     };
     if (path === '/api/analyses/motion') { state.analysisStarts++; return route.fulfill({ status: 202, json: job }); }
     if (path === '/api/analyses/analysis-test') return route.fulfill({ json: job });
@@ -85,7 +85,7 @@ test('archive_timeout clears demo epochs and candidates and never starts a doome
   await expect(page.getByText('NASA IRSA / SPHEREx Stream', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Coordinate ML Ready', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Play Movie', exact: true })).toBeDisabled();
-  await expect(page.getByText('Ranked Objects (0)', { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/^Ranked Objects \([1-9]\d*\)$/)).toHaveCount(0);
   await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
   await expect(page.getByText(/Motion cannot be assessed/).first()).toBeVisible();
   expect(state.analysisStarts).toBe(0);
@@ -216,4 +216,182 @@ test('an explicit preset verification cancels a pending custom analysis and rest
   await expect.poll(async () => (await drawn(page)).includes(reviews[0].frames[0].residual)).toBe(true);
   state.analysis = 'failed';
   await expect(page.getByText('Coordinate ML failed', { exact: true })).toHaveCount(0);
+});
+
+
+test('stored benchmarks disclose provenance without pretending to run a new model', async ({ page }) => {
+  const { state } = await backend(page);
+  await page.goto('/?tab=home');
+  await page.getByRole('button', { name: /3I\/ATLAS/ }).first().click();
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Stored benchmark · no new inference', { exact: true })).toBeVisible();
+  await expect(page.getByText(/Scoring candidates with Random Forest/)).toHaveCount(0);
+  await expect(page.getByText(/(?:Active|Inspect) \(\d+%\)/)).toHaveCount(0);
+  await expect(page.getByText('Scores order candidates; they are not discovery probabilities.', { exact: true })).toBeVisible();
+  expect(state.analysisStarts).toBe(0);
+});
+
+test('live analysis displays the returned model family, ID, score meaning and server ranking', async ({ page }) => {
+  await backend(page, { withCandidate: true });
+  await openViewer(page); await search(page);
+  await expect(page.getByText('fixture-model', { exact: true })).toBeVisible();
+  await expect(page.getByText('RankNetTreeBoost', { exact: true })).toBeVisible();
+  await expect(page.getByText('sigmoid_pairwise_utility', { exact: true })).toBeVisible();
+  await expect(page.getByText('Pairwise ranking utility; not a calibrated probability', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Random Forest', exact: true })).toHaveCount(0);
+  await expect(page.getByText('Score 0.700', { exact: true })).toBeVisible();
+});
+
+
+for (const width of [1500, 390]) {
+  test(`image metadata stays compact and expandable at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    await backend(page);
+    await page.goto('/?tab=viewer&preset=3i-atlas');
+    await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+    const details = page.locator('details[aria-label="Image metadata"]');
+    await expect(details).toBeVisible();
+    await expect(details).not.toHaveAttribute('open', '');
+    const compact = await details.boundingBox();
+    expect(compact!.height).toBeLessThan(80);
+    expect(compact!.width).toBeLessThan(width - 20);
+    await details.locator('summary').click();
+    await expect(details).toHaveAttribute('open', '');
+    await expect(details.getByRole('checkbox', { name: 'Show source labels' })).not.toBeChecked();
+    await details.locator('summary').click();
+    await page.getByRole('button', { name: 'Zoom In', exact: true }).click();
+  });
+}
+
+
+test('same-day visits retain distinct UTC labels and select their actual frames', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  for (const [index, time] of ['11:01', '12:39', '17:33', '19:06'].entries()) {
+    const visit = page.getByRole('button', { name: `12-14 ${time}z`, exact: true });
+    await expect(visit).toHaveAttribute('title', new RegExp(`UTC: 2025-12-14T${time}`));
+    await visit.click();
+    await expect(page.getByText(`Frame ${index + 1} of 4`, { exact: true })).toBeVisible();
+  }
+});
+
+
+test('detector controls do not advertise an unsupported channel image or molecular slice', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('102-Band Channel:', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'H₂O 1.5µm', exact: true })).toHaveCount(0);
+  await expect(page.locator('input[type=range][max="102"]')).toHaveCount(0);
+  await expect(page.getByText('Images are selected by detector. Channel-resolved images are unavailable.', { exact: true })).toBeVisible();
+});
+
+
+test('mobile playback remains above navigation and receives actual taps', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const play = page.getByRole('button', { name: 'Play Movie', exact: true });
+  const rect = await play.boundingBox();
+  expect(rect!.y + rect!.height).toBeLessThanOrEqual(796);
+  await play.click();
+  await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).not.toBeVisible();
+  await page.getByRole('button', { name: 'Pause', exact: true }).click();
+  await page.getByRole('button', { name: 'Next Epoch Frame', exact: true }).click();
+});
+
+test('catalogue outage clears previous matches instead of inventing a live field', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('LIVE TAP', { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/✓ Pulled \d+ Objects/)).toHaveCount(0);
+  await expect(page.getByText(/^Gaia DR3 \d{10,}/)).toHaveCount(0);
+});
+
+test('successful empty catalogues stay empty and a changed field drops old sources immediately', async ({ page }) => {
+  await backend(page, { download: 'failed' });
+  let fail = false;
+  await page.route(/^https:\/\//, route => fail ? route.abort() : route.fulfill({ json: { data: [] } }));
+  await page.route('**/api/motion/catalog?**', route => fail ? route.fulfill({ status: 503, json: { message: 'Offline' } }) : route.fulfill({ json: { providers: ['Gaia DR3', 'WISE', 'SIMBAD'].map(catalog => ({ catalog, status: 'ok' })), gaiaSources: [], wiseSources: [], simbadSources: [], ephemerisSources: [] } }));
+  await openViewer(page);
+  await expect(page.getByText('Catalogue query complete: 0 objects', { exact: true })).toBeVisible();
+  fail = true;
+  await search(page);
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('Catalogue query complete: 0 objects', { exact: true })).toHaveCount(0);
+});
+
+test('real Gaia and SIMBAD records stay separate and missing magnitudes are not invented', async ({ page }) => {
+  await backend(page);
+  let offline = false;
+  await page.route(/^https:\/\//, route => {
+    if (offline) return route.abort();
+    const url = route.request().url();
+    if (url.includes('gaiadr3')) return route.fulfill({ json: { data: [['1234567890123456789', 166.79, 5.29, null, null, null]] } });
+    if (url.includes('sim-tap')) return route.fulfill({ json: { data: [['Different SIMBAD object', 'Star', 166.81, 5.31]] } });
+    return route.fulfill({ json: { data: [] } });
+  });
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).toHaveAttribute('title', /G=unavailable/);
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).not.toHaveAttribute('title', /SIMBAD/);
+  offline = true;
+  await page.getByRole('button', { name: 'Pull Live', exact: true }).click();
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).toHaveCount(0);
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
+});
+
+test('HUD reports frame evidence and requested coordinates without invented WCS or photometry', async ({ page }) => {
+  await backend(page, { withCandidate: true });
+  await openViewer(page); await search(page);
+  const metadata = page.locator('details[aria-label="Image metadata"]');
+  await metadata.locator('summary').click();
+  await expect(metadata.getByText('Requested field: RA 250.000000°, Dec 10.000000°', { exact: true })).toBeVisible();
+  await expect(metadata.getByText('Frame: frame-0', { exact: true })).toBeVisible();
+  await expect(metadata.getByText('Sky coordinates unavailable: frame WCS was not supplied.', { exact: true })).toBeVisible();
+  for (const fake of ['12.43 MJy/sr', '18.4 σ', 'DIRBE v4.1', 'CD1_1: -1.72e-3', 'Photometric cal: ±1.8%', '~1.42 px (8.8″)']) {
+    await expect(page.getByText(fake, { exact: true })).toHaveCount(0);
+  }
+  const canvas = page.locator('#tutorial-target-skyview canvas');
+  await canvas.hover({ position: { x: 400, y: 350 } });
+  await expect(metadata.getByText('Requested field: RA 250.000000°, Dec 10.000000°', { exact: true })).toBeVisible();
+});
+
+test('every candidate keeps the image transform after zoom and pan', async ({ page }) => {
+  await backend(page);
+  await page.addInitScript(() => {
+    const fillRect = CanvasRenderingContext2D.prototype.fillRect;
+    const fillText = CanvasRenderingContext2D.prototype.fillText;
+    (window as any).markerTransforms = [];
+    CanvasRenderingContext2D.prototype.fillRect = function (...args) {
+      if (args[0] === 0 && args[1] === 0 && args[2] === this.canvas.clientWidth) (window as any).markerTransforms = [];
+      return Reflect.apply(fillRect, this, args);
+    };
+    CanvasRenderingContext2D.prototype.fillText = function (...args) {
+      if (/^(?:★ )?#\d+(?: SELECTED)?$/.test(args[0])) {
+        const { a, d, e, f } = this.getTransform();
+        (window as any).markerTransforms.push([a, d, e, f]);
+      }
+      return Reflect.apply(fillText, this, args);
+    };
+  });
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const check = async () => {
+    await expect.poll(() => page.evaluate(() => (window as any).markerTransforms.length)).toBeGreaterThan(2);
+    const matrices = await page.evaluate(() => (window as any).markerTransforms);
+    expect(new Set(matrices.map((matrix: number[]) => JSON.stringify(matrix))).size).toBe(1);
+  };
+  await check();
+  await page.getByRole('button', { name: 'Zoom Out', exact: true }).click();
+  await check();
+  const canvas = await page.locator('#tutorial-target-skyview canvas').boundingBox();
+  await page.mouse.move(canvas!.x + 400, canvas!.y + 400);
+  await page.mouse.down(); await page.mouse.move(canvas!.x + 430, canvas!.y + 420, { steps: 3 }); await page.mouse.up();
+  await check();
 });

@@ -1,14 +1,14 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type {
   SpherexEpochFrame,
   CandidateObject,
   CatalogOverlayState,
   SubtractionMode,
   MLAnalysisStatus,
+  ObservationLoadStatus,
   DetectorArrayId,
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
-import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
 
@@ -44,6 +44,7 @@ interface CanvasViewportProps {
   onClearSkippedNotice: () => void;
   isScientistMode?: boolean;
   mlAnalysisStatus?: MLAnalysisStatus;
+  loadStatus?: ObservationLoadStatus;
   onOpenMlInsights?: () => void;
   liveCatalog?: LiveCatalogResponse | null;
   fov?: string;
@@ -66,6 +67,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   onClearSkippedNotice,
   isScientistMode = false,
   mlAnalysisStatus,
+  loadStatus,
   onOpenMlInsights: _onOpenMlInsights,
   liveCatalog,
   selectedArray = 'all',
@@ -73,15 +75,15 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const [showSourceLabels, setShowSourceLabels] = useState(false);
   const [zoom, setZoom] = useState(1.4);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
+  const [cursorCoords, setCursorCoords] = useState<{ x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
   const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
-  const proceduralDetectorCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [, setRepaintCount] = useState(0);
+  const [bitmapStates, setBitmapStates] = useState<Record<string, 'ready' | 'failed'>>({});
 
   // Smooth Zoom-in transition state when target changes
   const prevRaRef = useRef(centerRa);
@@ -128,48 +130,26 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     setPan({ x: 0, y: 0 });
   }, [fov]);
 
+  useEffect(() => {
+    if (loadStatus?.source === 'loading') {
+      // A retry may resolve to the same deduplicated job and resource URLs.
+      imgCacheRef.current.clear();
+      setBitmapStates({});
+    }
+  }, [loadStatus?.source]);
+
   const activeFrame = frames[activeFrameIndex] || null;
+  const targetBitmapUrl = subtractionMode === 'epoch_difference' ? activeFrame?.residualDataUrl
+    : subtractionMode === 'bloom_mask' ? activeFrame?.bloomDataUrl : activeFrame?.imageDataUrl;
+  const bitmapReady = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'ready');
+  const bitmapFailed = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'failed');
+  const layerLabel = subtractionMode === 'epoch_difference' ? 'Difference image'
+    : subtractionMode === 'bloom_mask' ? 'BLOOM image' : 'Observation image';
 
   const handleResetView = () => {
     setZoom(1.4);
     setPan({ x: 0, y: 0 });
   };
-
-  const calculateRaDecFromPixel = useCallback(
-    (canvasX: number, canvasY: number, width: number, height: number) => {
-      const centerX = width / 2 + pan.x;
-      const centerY = height / 2 + pan.y;
-      const scaleArcsecPerPx = 6.2 / zoom;
-
-      const dxArcsec = (canvasX - centerX) * scaleArcsecPerPx;
-      const dyArcsec = (centerY - canvasY) * scaleArcsecPerPx;
-
-      const cosDec = Math.cos((centerDec * Math.PI) / 180);
-      const safeCosDec = Math.abs(cosDec) < 1e-5 ? (cosDec < 0 ? -1e-5 : 1e-5) : cosDec;
-      const raOffsetDeg = dxArcsec / 3600 / safeCosDec;
-      const decOffsetDeg = dyArcsec / 3600;
-
-      const computedRa = (centerRa - raOffsetDeg + 360) % 360;
-      const computedDec = Math.max(-90, Math.min(90, centerDec + decOffsetDeg));
-
-      const raHours = computedRa / 15;
-      const rh = Math.floor(raHours);
-      const rm = Math.floor((raHours - rh) * 60);
-      const rs = ((raHours - rh - rm / 60) * 3600).toFixed(2);
-
-      const sign = computedDec >= 0 ? '+' : '-';
-      const absDec = Math.abs(computedDec);
-      const dd = Math.floor(absDec);
-      const dm = Math.floor((absDec - dd) * 60);
-      const ds = ((absDec - dd - dm / 60) * 3600).toFixed(1);
-
-      return {
-        ra: `${rh.toString().padStart(2, '0')}h ${rm.toString().padStart(2, '0')}m ${rs.padStart(5, '0')}s`,
-        dec: `${sign}${dd.toString().padStart(2, '0')}° ${dm.toString().padStart(2, '0')}' ${ds.padStart(4, '0')}"`,
-      };
-    },
-    [pan, zoom, centerRa, centerDec]
-  );
 
   // Minimalist Astronomical Rendering Engine
   useEffect(() => {
@@ -194,59 +174,22 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.translate(width / 2 + pan.x, height / 2 + pan.y);
     ctx.scale(zoom, zoom);
 
-    const isDifferenceMode = subtractionMode === 'epoch_difference';
-    const isBloomMode = subtractionMode === 'bloom_mask';
-
-    // In Scientist Mode: Draw astronomical coordinate grid lines (RA/Dec J2000 ICRS)
-    if (isScientistMode) {
-      ctx.save();
-      ctx.strokeStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.12)' : 'rgba(52, 211, 153, 0.2)';
-      ctx.lineWidth = 1 / zoom;
-      ctx.setLineDash([4 / zoom, 4 / zoom]);
-
-      for (let offset = -250; offset <= 250; offset += 100) {
-        // Vertical grid line (RA)
-        ctx.beginPath();
-        ctx.moveTo(offset, -250);
-        ctx.lineTo(offset, 250);
-        ctx.stroke();
-
-        // Horizontal grid line (Dec)
-        ctx.beginPath();
-        ctx.moveTo(-250, offset);
-        ctx.lineTo(250, offset);
-        ctx.stroke();
-      }
-
-      // Draw faint coordinate tick labels on the grid in scientist mode
-      ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.35)' : 'rgba(52, 211, 153, 0.45)';
-      ctx.setLineDash([]);
-      ctx.fillText('α: 17h 57m 40s', -245, -5);
-      ctx.fillText('α: 17h 57m 55s', 55, -5);
-      ctx.fillText('δ: +04° 41\' 00"', -5, -95);
-      ctx.fillText('δ: +04° 42\' 00"', -5, 105);
-      ctx.restore();
-    }
-
     const currentFrame = frames[activeFrameIndex];
     let hasDrawnRealImage = false;
 
-    const targetBitmapUrl = isBloomMode
-      ? currentFrame?.bloomDataUrl || currentFrame?.residualDataUrl || currentFrame?.imageDataUrl
-      : isDifferenceMode
-      ? currentFrame?.residualDataUrl
-      : currentFrame?.imageDataUrl;
 
     if (targetBitmapUrl) {
       let cachedImg = imgCacheRef.current.get(targetBitmapUrl);
       if (!cachedImg) {
         cachedImg = new Image();
-        cachedImg.src = targetBitmapUrl;
-        cachedImg.onload = () => {
-          setRepaintCount((c) => c + 1);
+        const image = cachedImg;
+        const mark = (status: 'ready' | 'failed') => {
+          if (imgCacheRef.current.get(targetBitmapUrl) === image) setBitmapStates(states => ({ ...states, [targetBitmapUrl]: status }));
         };
-        imgCacheRef.current.set(targetBitmapUrl, cachedImg);
+        image.onload = () => mark('ready');
+        image.onerror = () => mark('failed');
+        imgCacheRef.current.set(targetBitmapUrl, image);
+        image.src = targetBitmapUrl;
       }
 
       if (cachedImg.complete && cachedImg.naturalWidth > 0) {
@@ -286,147 +229,10 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
     }
 
+    // Missing, pending or failed bitmaps are data states, never synthetic skies.
     if (!hasDrawnRealImage) {
-      // Authentic raw FITS CCD/CMOS pixel array with detector readout noise,
-      // discrete square pixel PSFs, cosmic rays and ZScale contrast stretching.
-      // Never draw cartoon radial circles or fake yellow dots!
-      if (!proceduralDetectorCanvasRef.current) {
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = 256;
-        offCanvas.height = 256;
-        proceduralDetectorCanvasRef.current = offCanvas;
-      }
-      const off = proceduralDetectorCanvasRef.current;
-      const offCtx = off.getContext('2d');
-      if (offCtx) {
-        const imgData = offCtx.createImageData(256, 256);
-        const data = imgData.data;
-        const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || activeFrame?.detectorArray || 6);
-        const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
-        const detArray = typeof activeBandKey === 'number' ? activeBandKey : 6;
-        const seedCoord = (Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) + detArray * 7393) % 100000;
-        let rng = seedCoord + activeFrameIndex * 1337;
-        const lcg = () => {
-          rng = (rng * 1664525 + 1013904223) >>> 0;
-          return rng / 4294967296;
-        };
-
-        // 1. Fill detector readout noise floor with zodiacal background level
-        const basePedestal = selectedArray === 'all' ? 10 : subtractionMode === 'raw_calibrated' ? 36 : subtractionMode === 'zodi_reference_subtracted' ? 14 : 4;
-        const noiseSpread = selectedArray === 'all' ? 8 : subtractionMode === 'raw_calibrated' ? 18 : 10;
-        for (let i = 0; i < 256 * 256; i++) {
-          const noise = basePedestal + Math.floor(lcg() * noiseSpread);
-          const idx = i * 4;
-          data[idx] = noise;
-          data[idx + 1] = noise;
-          data[idx + 2] = noise;
-          data[idx + 3] = 255;
-        }
-
-        // 2. Add discrete pixelated stellar PSFs (field stars)
-        // In near-IR (Band 1/2), hot stars shine brightest; in mid-IR (Band 5/6), cold dust/gas dominates
-        if (subtractionMode !== 'epoch_difference') {
-          let starRng = seedCoord;
-          const starLcg = () => {
-            starRng = (starRng * 1664525 + 1013904223) >>> 0;
-            return starRng / 4294967296;
-          };
-          for (let s = 0; s < 28; s++) {
-            const sx = Math.floor(10 + starLcg() * 236);
-            const sy = Math.floor(10 + starLcg() * 236);
-            const baseFlux = (subtractionMode === 'zodi_reference_subtracted' ? 110 : 70) + starLcg() * 160;
-            const flux = Math.floor(baseFlux * bandStyle.starFluxScale);
-            for (let dy = -3; dy <= 3; dy++) {
-              for (let dx = -3; dx <= 3; dx++) {
-                const px = sx + dx;
-                const py = sy + dy;
-                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                  const r2 = dx * dx + dy * dy;
-                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(flux * Math.exp(-r2 / 2.2)));
-                  const idx = (py * 256 + px) * 4;
-                  data[idx] = pVal;
-                  data[idx + 1] = pVal;
-                  data[idx + 2] = pVal;
-                }
-              }
-            }
-          }
-        }
-
-        // 3. Add cosmic ray single-pixel hits
-        for (let c = 0; c < 12; c++) {
-          const cx = Math.floor(lcg() * 256);
-          const cy = Math.floor(lcg() * 256);
-          const idx = (cy * 256 + cx) * 4;
-          data[idx] = 250;
-          data[idx + 1] = 250;
-          data[idx + 2] = 250;
-          data[idx + 3] = 255;
-        }
-
-        // 4. Render candidate moving source so it visibly drifts across epochs when blinking!
-        candidates.forEach((cand) => {
-          const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-          if (pos) {
-            const cx = Math.round(pos.x);
-            const cy = Math.round(pos.y);
-            const candFlux = Math.max(160, Math.min(255, pos.flux * 4));
-            for (let dy = -3; dy <= 3; dy++) {
-              for (let dx = -3; dx <= 3; dx++) {
-                const px = cx + dx;
-                const py = cy + dy;
-                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                  const r2 = dx * dx + dy * dy;
-                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(candFlux * Math.exp(-r2 / 1.8)));
-                  const idx = (py * 256 + px) * 4;
-                  data[idx] = pVal;
-                  data[idx + 1] = pVal;
-                  data[idx + 2] = pVal;
-                  data[idx + 3] = 255;
-                }
-              }
-            }
-          }
-        });
-
-        // 5. In difference mode: stationary stars are removed; show the moving motion dipole
-        if (subtractionMode === 'epoch_difference') {
-          candidates.forEach((cand) => {
-            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-            const prevPos = cand.epochPositions[Math.max(0, activeFrameIndex - 1)];
-            if (pos && prevPos) {
-              const cx = Math.round(pos.x);
-              const cy = Math.round(pos.y);
-              for (let dy = -3; dy <= 3; dy++) {
-                for (let dx = -3; dx <= 3; dx++) {
-                  const px = cx + dx;
-                  const py = cy + dy;
-                  if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                    const r2 = dx * dx + dy * dy;
-                    const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(220 * Math.exp(-r2 / 1.5)));
-                    const idx = (py * 256 + px) * 4;
-                    data[idx] = pVal;
-                    data[idx + 1] = pVal;
-                    data[idx + 2] = pVal;
-                    data[idx + 3] = 255;
-                  }
-                }
-              }
-            }
-          });
-        }
-
-        offCtx.putImageData(imgData, 0, 0);
-
-        ctx.save();
-        ctx.imageSmoothingEnabled = false;
-        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
-        if (isWhiteBg) {
-          ctx.filter = 'invert(1)';
-        }
-        ctx.drawImage(off, -256, -256, 512, 512);
-        ctx.restore();
-      }
+      ctx.restore();
+      return;
     }
 
     // Helper to draw clean astronomical targeting brackets [ ] framing candidate pixel cluster
@@ -552,12 +358,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
       // 4. Object Name Label (for known / confirmed objects or selected candidate)
       const objectLabel =
-        cand.validationData?.objectName ||
-        cand.catalogId ||
-        cand.matchedCatalog ||
-        (cand.isKnownCatalogMatch ? 'Known Object' : `Candidate #${rank}`);
+        (cand.validationData?.objectName || cand.catalogId || cand.matchedCatalog || `Candidate #${rank}`).slice(0, 35);
 
-      if (objectLabel && (isSelected || cand.isKnownCatalogMatch || rank <= 4)) {
+      if (objectLabel && (isSelected || showSourceLabels)) {
         ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
         const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
         const labelHeight = 13 / zoom;
@@ -598,8 +401,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
         ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = '#34d399';
-        ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 18 / zoom);
-        ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 28 / zoom);
+        ctx.fillText(`Priority: #${rank}`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 18 / zoom);
       }
 
       ctx.restore();
@@ -608,20 +410,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     // Per-Target & Per-Object Live Space Agency Catalog Overlays (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
     const selectedCand =
       candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
-    const coordCatalog = resolveCoordinateCatalogContext(
-      selectedCand?.ra ?? centerRa,
-      selectedCand?.dec ?? centerDec
-    );
-
-    const gaiaOverlaySources =
-      liveCatalog && liveCatalog.gaiaSources.length > 0
-        ? liveCatalog.gaiaSources
-        : coordCatalog.gaiaSources;
-
-    const wiseOverlaySources =
-      liveCatalog && liveCatalog.wiseSources.length > 0
-        ? liveCatalog.wiseSources
-        : coordCatalog.wiseSources;
+    const gaiaOverlaySources = liveCatalog?.gaiaSources ?? [];
+    const wiseOverlaySources = liveCatalog?.wiseSources ?? [];
 
     if (overlays.gaiaDr3) {
       // 1. Draw live-pulled ESA Gaia DR3 stars in this field
@@ -650,6 +440,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const boxHalf = (isSelectedGaia ? 8.5 : 6.5) / zoom;
         ctx.strokeRect(gx - boxHalf, gy - boxHalf, boxHalf * 2, boxHalf * 2);
 
+        if (!showSourceLabels && !isSelectedGaia) return;
         // Label pill
         const tag = `${isSelectedGaia ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
@@ -711,6 +502,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.arc(wx, wy, rad, 0, Math.PI * 2);
         ctx.stroke();
 
+        if (!showSourceLabels && !isSelectedWise) return;
         const tag = `${isSelectedWise ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(69, 26, 3, 0.85)';
@@ -727,7 +519,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
 
     if (overlays.solarSystemEphemeris) {
-      if (neoCandidate || coordCatalog.ephemerisLabel || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
+      if (neoCandidate || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
         let ex = liveCatalog?.ephemerisSources[0]?.dx ?? 0;
         let ey = liveCatalog?.ephemerisSources[0]?.dy ?? 0;
         if (neoCandidate) {
@@ -746,7 +538,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           liveCatalog?.ephemerisSources[0]?.label ||
           neoCandidate?.validationData?.objectName ||
           neoCandidate?.catalogId ||
-          coordCatalog.ephemerisLabel ||
           'JPL Horizons'
         } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
         ctx.strokeStyle = '#38bdf8';
@@ -757,12 +548,14 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.moveTo(ex, ey - 10 / zoom);
         ctx.lineTo(ex, ey + 10 / zoom);
         ctx.stroke();
+        if (showSourceLabels || neoCandidate?.id === selectedCandidateId) {
         ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
         const tw = ctx.measureText(ephLabel).width + 6 / zoom;
         ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
         ctx.fillStyle = '#7dd3fc';
         ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
+        }
       }
 
       // Also draw live-pulled CDS SIMBAD objects
@@ -777,6 +570,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.moveTo(sx, sy - 7 / zoom);
         ctx.lineTo(sx, sy + 7 / zoom);
         ctx.stroke();
+        if (!showSourceLabels) return;
         const sTag = `SIMBAD: ${simSrc.label}`;
         ctx.font = `bold ${7.5 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(8, 47, 73, 0.85)';
@@ -798,7 +592,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         selectedCand.epochPositions[activeFrameIndex] ||
         selectedCand.epochPositions[0];
       const { cx: ux, cy: uy } = getCanvasCoords(pos.x, pos.y);
-      const uncatTag = `★ Selected Object: No Gaia/WISE/Horizons Match (${selectedCand.classification.replace('_', ' ')})`;
+      const uncatTag = 'Catalogue match unverified';
       ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
       const tw = ctx.measureText(uncatTag).width + 8 / zoom;
       ctx.fillStyle = 'rgba(88, 28, 135, 0.88)';
@@ -825,7 +619,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.stroke();
 
     // Scale bar
-    const scaleBarPixels = (30 / 6.2) * zoom;
+    const scaleBarPixels = 10 * (512 / (activeFrame?.imageWidth || 256)) * zoom;
     const sbX = width - 80;
     const sbY = height - 20;
     ctx.strokeStyle = isWhiteBg ? '#57534e' : '#a8a29e';
@@ -836,8 +630,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.stroke();
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
-    ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
+    ctx.fillText('10 px', sbX + scaleBarPixels / 2 - 6, sbY - 4);
+  }, [bitmapReady, targetBitmapUrl, showSourceLabels, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -856,8 +650,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const rect = canvasRef.current.getBoundingClientRect();
       const clientX = e.clientX - rect.left;
       const clientY = e.clientY - rect.top;
-      const { ra, dec } = calculateRaDecFromPixel(clientX, clientY, rect.width, rect.height);
-      setCursorCoords({ ra, dec, x: clientX, y: clientY });
+      const nativeWidth = activeFrame?.imageWidth ?? 256;
+      const nativeHeight = activeFrame?.imageHeight ?? 256;
+      const displayScale = 512 / nativeWidth;
+      const x = ((clientX - rect.width / 2 - pan.x) / zoom + 256) / displayScale;
+      const y = ((clientY - rect.height / 2 - pan.y) / zoom + nativeHeight * displayScale / 2) / displayScale;
+      setCursorCoords(x >= 0 && x < nativeWidth && y >= 0 && y < nativeHeight ? { x, y } : null);
     }
 
     if (!isDragging) return;
@@ -996,75 +794,43 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     >
       <canvas ref={canvasRef} className="w-full h-full block" />
 
-      {/* Coordinate HUD / Scientist Telemetry HUD */}
-      {isScientistMode ? (
-        <div className="absolute top-2.5 left-2.5 bg-paper-950/95 border-2 border-emerald-500/60 shadow-xl rounded-lg p-3 text-[11px] font-mono text-paper-200 pointer-events-none backdrop-blur-sm z-20 max-w-sm space-y-2">
-          <div className="flex items-center justify-between border-b border-paper-800 pb-1.5">
-            <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              SPHEREx Astrophysics HUD (L2/L3)
-            </span>
-            <span className="text-[10px] text-paper-400 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-700">
-              ICRS J2000
-            </span>
+      {!bitmapReady && (
+        <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+          <div role={loadStatus?.source === 'error' || bitmapFailed ? 'alert' : 'status'} className="max-w-md rounded-xl border border-paper-700 bg-paper-950/95 p-5 text-center space-y-2">
+            <p className="font-semibold text-paper-100">{loadStatus?.source === 'loading' ? 'Loading observations'
+              : targetBitmapUrl && !bitmapFailed ? `Loading ${layerLabel.toLowerCase()}…` : `${layerLabel} unavailable`}</p>
+            <p className="text-xs text-paper-300">{loadStatus?.source === 'error' ? loadStatus.message
+              : loadStatus?.source === 'loading' ? loadStatus.message
+              : bitmapFailed ? 'The image could not be loaded.' : 'No image data is available for this layer.'}</p>
+            <p className="text-xs text-paper-400">Motion cannot be assessed from unavailable image data.</p>
           </div>
-
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px]">
-            <div>
-              <span className="text-paper-500">RA (J2000): </span>
-              <span className="text-emerald-300 font-semibold">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Dec (J2000): </span>
-              <span className="text-emerald-300 font-semibold">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Plate Scale: </span>
-              <span className="text-paper-200">{(6.2 / zoom).toFixed(2)}″/px</span>
-            </div>
-            <div>
-              <span className="text-paper-500">PSF FWHM: </span>
-              <span className="text-paper-200">~1.42 px (8.8″)</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Surface Flux: </span>
-              <span className="text-emerald-400 font-medium">12.43 MJy/sr</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Est. SNR: </span>
-              <span className="text-emerald-400 font-medium">18.4 σ</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Zodi IPD Model: </span>
-              <span className="text-paper-300">DIRBE v4.1</span>
-            </div>
-            <div>
-              <span className="text-paper-500">WCS Matrix: </span>
-              <span className="text-paper-400">CD1_1: -1.72e-3</span>
-            </div>
-          </div>
-          <div className="text-[9px] text-paper-500 border-t border-paper-800/80 pt-1 flex items-center justify-between">
-            <span>Grid: Equat. RA/Dec lines</span>
-            <span className="text-emerald-500/80">Photometric cal: ±1.8%</span>
-          </div>
-        </div>
-      ) : (
-        <div className="absolute top-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[11px] font-mono text-paper-200 pointer-events-none flex items-center gap-3">
-          <div>
-            <span className="text-paper-500 mr-1">RA:</span>
-            <span className="text-paper-100 font-medium">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
-          </div>
-          <div className="w-[1px] h-3 bg-paper-800" />
-          <div>
-            <span className="text-paper-500 mr-1">Dec:</span>
-            <span className="text-paper-100 font-medium">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
-          </div>
-          <div className="w-[1px] h-3 bg-paper-800" />
-          <span className="text-[10px] text-paper-400">
-            {(6.2 / zoom).toFixed(2)}″/px
-          </span>
         </div>
       )}
+
+      {/* Coordinate HUD / Scientist Telemetry HUD */}
+      {bitmapReady && (isScientistMode ? (
+        <details aria-label="Image metadata" className="absolute top-14 left-2.5 bg-paper-950/95 border border-paper-700 shadow-xl rounded-lg p-2 text-[11px] font-mono text-paper-200 backdrop-blur-sm z-20 max-w-[min(20rem,calc(100%-1.25rem))] max-h-[45%] overflow-y-auto"
+          onPointerDown={e => e.stopPropagation()} onMouseDown={e => e.stopPropagation()} onClick={e => e.stopPropagation()} onTouchStart={e => e.stopPropagation()}>
+          <summary className="cursor-pointer text-emerald-300">Image metadata</summary>
+          <label className="flex gap-2 items-center my-2"><input type="checkbox" checked={showSourceLabels} onChange={e => setShowSourceLabels(e.target.checked)} />Show source labels</label>
+          {candidates.find(c => c.id === selectedCandidateId) && <p className="break-words py-1">Selected: {candidates.find(c => c.id === selectedCandidateId)?.validationData?.objectName || candidates.find(c => c.id === selectedCandidateId)?.catalogId || selectedCandidateId}</p>}
+
+          <div className="space-y-1 break-words mt-2">
+            <p>Requested field: RA {centerRa.toFixed(6)}°, Dec {centerDec.toFixed(6)}°</p>
+            <p>Frame: {activeFrame?.frameId}</p>
+            <p>Observed UTC: {activeFrame?.observationDate ?? 'Unavailable'}</p>
+            <p>Detector: D{activeFrame?.detectorArray}; pixels: {activeFrame?.imageWidth ?? '?'} × {activeFrame?.imageHeight ?? '?'}</p>
+            <p>Coverage: {activeFrame?.coverage !== undefined ? `${(activeFrame.coverage * 100).toFixed(1)}%` : 'Unavailable'}</p>
+            <p>Sky coordinates unavailable: frame WCS was not supplied.</p>
+            <p>Photometry, PSF and calibration: unavailable in this frame response.</p>
+            {cursorCoords && <p>Image pixel (zero-based): x {cursorCoords.x.toFixed(1)}, y {cursorCoords.y.toFixed(1)}</p>}
+          </div>
+        </details>
+      ) : (
+        <div className="absolute top-14 left-2.5 max-w-[calc(100%-1.25rem)] bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[10px] font-mono text-paper-200 pointer-events-none">
+          Requested field: RA {centerRa.toFixed(4)}°, Dec {centerDec.toFixed(4)}° · cursor sky position unavailable
+        </div>
+      ))}
 
       {/* Skipped Frame Notification */}
       {skippedNotice && (
@@ -1090,7 +856,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               <div className="flex items-center gap-2">
                 <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
                 <span className="text-[10px] font-mono font-bold text-emerald-300">
-                  ML Analysis Running Simultaneously...
+                  {mlAnalysisStatus.stepIndex === 1 ? 'Loading observations…' : 'Preparing difference images…'}
                 </span>
               </div>
               <span className="text-[9px] font-mono font-bold text-paper-200 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
@@ -1199,7 +965,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       </div>
 
       {/* Frame Status Pill */}
-      {activeFrame && (
+      {activeFrame && bitmapReady && (
         <div className="absolute bottom-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2 py-0.5 rounded text-[10px] font-mono text-paper-400 flex items-center gap-2 pointer-events-none">
           <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
