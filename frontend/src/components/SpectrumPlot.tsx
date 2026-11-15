@@ -3,7 +3,7 @@ import type { SpectralDataPoint } from '../types/spherex';
 import { REFERENCE_MOLECULAR_LINES } from '../services/mockSpherexApi';
 import { fetchTargetSpectrum } from '../services/spherexBackendApi';
 import type { TargetSpectrumResult, MolecularDetection } from '../services/spherexBackendApi';
-import { Download, ShieldCheck, Activity } from 'lucide-react';
+import { Download, ShieldCheck, Activity, RefreshCw, Zap } from 'lucide-react';
 
 interface SpectrumPlotProps {
   data?: SpectralDataPoint[];
@@ -45,6 +45,18 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
     snr: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleMeasureLive = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode);
+      setSpectrumResult(res);
+    } catch (err) {
+      console.warn('Live spectrum fetch fallback:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Fetch live spectrophotometry from Shasta's WCS-WAVE endpoint
   useEffect(() => {
@@ -268,14 +280,30 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
           </div>
         </div>
 
-        <button
-          onClick={handleExportCSV}
-          className="px-2 py-1 rounded bg-paper-900 hover:bg-paper-800 border border-paper-700 text-paper-300 hover:text-white flex items-center gap-1 font-mono text-[10px] transition-colors cursor-pointer shrink-0"
-          title="Download full 102-band calibrated spectrophotometry as CSV"
-        >
-          <Download className="w-3 h-3 text-emerald-400" />
-          <span>Export CSV</span>
-        </button>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            onClick={handleMeasureLive}
+            disabled={isLoading}
+            className="btn-tactile-sm px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50"
+            title="Measure real 102-band spectrophotometry from IRSA SPHEREx FITS cutouts"
+          >
+            {isLoading ? (
+              <RefreshCw className="w-3 h-3 animate-spin text-emerald-400" />
+            ) : (
+              <Zap className="w-3 h-3 text-emerald-400" />
+            )}
+            <span>{isLoading ? 'Measuring...' : 'Measure IRSA'}</span>
+          </button>
+
+          <button
+            onClick={handleExportCSV}
+            className="px-2 py-1 rounded bg-paper-900 hover:bg-paper-800 border border-paper-700 text-paper-300 hover:text-white flex items-center gap-1 font-mono text-[10px] transition-colors cursor-pointer shrink-0"
+            title="Download full 102-band calibrated spectrophotometry as CSV"
+          >
+            <Download className="w-3 h-3 text-emerald-400" />
+            <span>Export CSV</span>
+          </button>
+        </div>
       </div>
 
       {/* Detected Molecular Absorption Features Card */}
@@ -342,9 +370,9 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
                   ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
                   : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
               }`}
-              title="clean = img - zodi (Zodiacal light subtracted)"
+              title="Zodiacal light subtracted (clean = img - zodi)"
             >
-              clean = img - zodi
+              Zodi Subtracted
             </button>
             <button
               onClick={() => setSubtractionMode('raw_calibrated')}
@@ -574,11 +602,41 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
         </div>
       </div>
 
+      {/* Shasta IRSA Aperture Detector Telemetry Summary */}
+      {spectrumResult?.detectors_summary && Object.keys(spectrumResult.detectors_summary).length > 0 && (
+        <div className="p-2 rounded-lg bg-paper-950 border border-paper-800 space-y-1.5 font-mono text-[10px]">
+          <div className="flex items-center justify-between text-paper-300 font-bold text-[9px] uppercase tracking-wider">
+            <span>IRSA Aperture Telemetry Summary</span>
+            <span className="text-emerald-400 font-normal">
+              {spectrumResult.total_channels || channels.length} Bands Analyzed
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            {Object.entries(spectrumResult.detectors_summary).map(([det, stats]) => (
+              <div key={det} className="p-1.5 rounded bg-paper-900 border border-paper-800 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-white" style={{ color: DETECTOR_COLORS[det] }}>
+                    {det}
+                  </span>
+                  <span className="text-[9px] text-paper-400">{stats.channels} bands</span>
+                </div>
+                <div className="text-[9px] text-paper-300 mt-0.5">
+                  Mean Flux: <span className="text-emerald-300 font-bold">{stats.mean_flux_mjy} mJy</span>
+                </div>
+                <div className="text-[9px] text-paper-400">
+                  Mean SNR: <span className="text-sky-300 font-bold">{stats.mean_snr}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Scientific Validation Badge */}
       <div className="p-2 rounded bg-paper-950 border border-paper-800/80 flex items-center justify-between text-[10px] font-mono text-paper-400">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-          <span>FLAGS &amp; (1|2|4|64|512|1024|2048) Bitmask Cleaned</span>
+          <span>FLAGS &amp; Bitmask Cleaned (SOURCE 1&lt;&lt;21, OUTLIER 1&lt;&lt;19, BLOOM 1&lt;&lt;26)</span>
         </div>
         <span className="text-emerald-400 font-bold">100% Calibrated</span>
       </div>

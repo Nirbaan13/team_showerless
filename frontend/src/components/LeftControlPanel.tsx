@@ -45,6 +45,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onChangeSubtractionMode,
   overlays,
   onToggleOverlay,
+  onRefreshCutout,
   viewMode = 'volunteer',
   searchStatus,
   activeCandidate,
@@ -103,12 +104,23 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn-tactile w-full py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer mt-1"
-          >
-            Update Field
-          </button>
+          <div className="flex gap-1.5 mt-1">
+            <button
+              type="submit"
+              className="btn-tactile flex-1 py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer"
+            >
+              Update Field
+            </button>
+            <button
+              type="button"
+              onClick={onRefreshCutout}
+              className="btn-tactile px-3 py-2 bg-paper-800 hover:bg-paper-700 text-paper-200 hover:text-white rounded-lg font-mono text-[11px] font-bold border-2 border-paper-700 hover:border-paper-600 cursor-pointer flex items-center justify-center gap-1"
+              title="Refresh FITS Cutout & Exposure Data from IRSA"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Refresh</span>
+            </button>
+          </div>
         </form>
 
         {searchStatus && (
