@@ -1,0 +1,4 @@
+{"case": 8, "status": "CLI_SUCCESS", "elapsed_seconds": 34.72739157999604, "child_maxrss_mib": 661.29296875, "exit_code": 0, "error": null, "candidate_count": 100}
+{"case": 32, "status": "CLI_ERROR", "elapsed_seconds": 9.30403254799603, "child_maxrss_mib": 416.95703125, "exit_code": 2, "error": {"code": "workload_limit", "message": "The linking search exceeds the supported computation budget", "retryable": false}, "candidate_count": null}
+{"case": 100, "status": "CLI_ERROR", "elapsed_seconds": 10.819644999995944, "child_maxrss_mib": 417.85546875, "exit_code": 2, "error": {"code": "workload_limit", "message": "The linking search exceeds the supported computation budget", "retryable": false}, "candidate_count": null}
+{"receipt": "/evidence/density/portable-receipt.json", "sha256": "e3caca5334bd6924cd18a960adbae6acd6d4db5417c7bdc5f54bd6c6719b5786"}

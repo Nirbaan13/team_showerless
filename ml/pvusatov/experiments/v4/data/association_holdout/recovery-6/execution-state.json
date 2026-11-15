@@ -1,0 +1,10 @@
+{
+  "status": "FINISHED_QUARANTINED",
+  "metadata_requests": 4,
+  "new_product_tasks": 10,
+  "new_verified_products": 8,
+  "pending_full_MEF_proposals": [],
+  "pixels_opened": false,
+  "models_called": false,
+  "inference_authorized": false
+}

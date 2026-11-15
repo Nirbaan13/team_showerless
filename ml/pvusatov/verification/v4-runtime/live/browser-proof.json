@@ -1,0 +1,41 @@
+{
+  "checked_at_utc": "2026-11-15T11:12:26.084Z",
+  "frontend_base": "http://144.124.238.101:8080",
+  "api_base": "http://144.124.238.101",
+  "analysis_id": "41f7ac88-14ac-407d-8978-91ec35607157",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "frames": 4,
+  "candidates": 27,
+  "real_png_loaded": true,
+  "trajectory_overlay": true,
+  "heuristic_comparison": true,
+  "empty": true,
+  "missing_download_error": true,
+  "viewports": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "bounds": {
+        "top": 48,
+        "bottom": 1000,
+        "viewport": 1000
+      },
+      "provenance_bottom": 976
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bounds": {
+        "top": 48,
+        "bottom": 844,
+        "viewport": 844
+      },
+      "provenance_bottom": 830
+    }
+  ],
+  "javascript_errors": []
+}

@@ -1,0 +1,637 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T16:13:14.701409+00:00",
+  "original_transport_plan": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/transport-plan.json",
+    "sha256": "82ca8ff70b4a4326d92abc865c9382ceb641b5111b7af2705317f7c63854cc4c"
+  },
+  "source": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full_mef_resource.py",
+    "sha256": "092a41c4d2605efe85fcd16cc2e47a851debb0d39e567c0ae93217e4355c6499"
+  },
+  "previous_byte_audit": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/byte-header-audit.json",
+    "sha256": "d9f6d465aa851663a03a1200bb9a7c68426b98c83da6101812b48f574d6359ee"
+  },
+  "fixed_cutout_retry": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/fixed09-retry.json",
+    "sha256": "59131d611d34157108b1d404154dc517a02968eccdf0e5a09cb65b7d37cf6cd1"
+  },
+  "selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/selection.json",
+    "sha256": "6dcae592febaefbf7051a68dc445c3cbb6ee8471a12417b720d99bee4779ed52"
+  },
+  "root_authorization": "Root explicitly authorized append-only resource exception ONLY for same09physicalOBSID2025W38_2C_0439_2/D3 originalfullartifact after concreteHEADproof. Otherfiles<=5.2MB/global<=500MB. No inference/pixels/quality authorized.",
+  "obs_id": "2025W38_2C_0439_2",
+  "group_id": "association-holdout-09",
+  "detector": 3,
+  "original_full_artifact_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+  "failed_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+  "head_size_proof": {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "method": "HEAD",
+    "started_utc": "2026-11-15T16:08:57.681474+00:00",
+    "status": 200,
+    "response_headers": {
+      "Server": "nginx",
+      "Date": "Sun, 15 Nov 2026 16:08:58 GMT",
+      "Content-Type": "application/fits",
+      "Content-Length": "59123520",
+      "Connection": "close",
+      "last-modified": "Sat, 26 Sep 2026 08:00:44 GMT",
+      "accept-ranges": "bytes",
+      "x-request-id": "9616981266b53f499d900aca4beef295"
+    },
+    "body_read": false
+  },
+  "expected_full_bytes": 59123520,
+  "max_full_file_bytes": 67108864,
+  "max_other_file_bytes": 5200000,
+  "max_total_bytes": 500000000,
+  "max_full_GET_attempts": 1,
+  "timeout_seconds": 90,
+  "deadline_utc": "2026-11-15T16:28:23.330877+00:00",
+  "old_verified_files": 94,
+  "old_verified_bytes": 380784960,
+  "projected_total_raw_bytes": 439908480,
+  "all_old_file_refs": [
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0197_1D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "767b08776ff80d0cfa6de3eb74aef749ffdaa368b8e818b85ed2705e506b5399",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0197_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0197_2D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "0ec90ce044eb66b8690bd83e70750003987380ffd3f9636f60cef6ff119cff93",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0197_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0197_3D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "4a8876bee7e27c3c2d352c287dfc392a686f77a02d652e6d6031973735c62df7",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0197_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0346_1D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "0f8f66a5489bdff5ebcda31f23e0ea37f56b5af77d4b8d24b38c900cbf03e9fb",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0346_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0346_3D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "4150bf60517ed61af69d2a2e5239147497ee84aafb1ee47609469cb058e1fc10",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0346_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0512_1D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "3884899fc6712ae6376f5b408de17a8111f1fab58615b447d5e2256e6e673701",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0512_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0512_2D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "75dfc431c863e3b08509e8c87e7cfdfec0c4bacbd0257444d2387e889cf97aee",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0512_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-01/level2_2025W24_2D_0512_4D1_spx_l2b-v27-2026-202.fits",
+      "sha256": "4900e51c36afc2b0447c0dab1e6ff86f1aa6c81950aa71412ae8401fe91a5ed8",
+      "bytes": 4023360,
+      "obs_id": "2025W24_2D_0512_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0060_1D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "047186c4ad00a2fe76acba366397edeb2a442080c4deefe18f5ed905ae5d70c6",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0060_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0060_2D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "9e0d709ef919eeda1f53dd04ec88a425892d5f04226a72ad7b4ac551a12636d5",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0060_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0060_3D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "609df4ab3985851fa5a6bbef15a6b5ebb09dd8934405c8bbee325a1326a8f666",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0060_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0060_4D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "733784a4fdd6e6c8507f70216ea53f38a036b6629121f9ecd53ffe0c92931692",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0060_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0074_2D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "c7fe5018068dc5a8dc798ad412baa4943d6590013e31667629ee954bfe5c942a",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0074_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0237_2D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "ce3cc9c160fb7e0d983ef44bb0b739a60ecd4d22cf904c2a0f85999fd94dba8f",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0237_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0237_3D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "4134e4df1ec6f1ad6c10748854a26d4704ab3ed413c9ed4ed1ab0ba2675ae413",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0237_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-02/level2_2025W34_1B_0251_1D2_spx_l2b-v27-2026-228.fits",
+      "sha256": "1d39af326bc753e310f16dd9e40f32caad74794c6f283b1cd224c446b324c051",
+      "bytes": 4023360,
+      "obs_id": "2025W34_1B_0251_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0295_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "2363415b61fce84efc63f58f6c9dd208b56e18033d20b2e3ac6a1efd29effcf1",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0295_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0296_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "2c3b37d1c335d4dbe87581f3d58133755a3952ef047dc87ae55168f39362d221",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0296_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0297_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "938bf488739d377e71f05df4ac33c93c958ac7ee222908e4c84170beaebf4909",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0297_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0317_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "b2aa7ca043715717991f8cb8c1a71b7a15b98f720fa68e28330159d8c8bb7ca7",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0317_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0339_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "9dd632774147038f0fbb737f1b6d78bc11f6eb96e33bbd7e16ebccfea43a9c67",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0339_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0357_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "3c3c597e4aeb92f2c988ae2fdfc8bfda8893873e45879177a79080fe864631f1",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0357_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0412_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "91b597711839925d60c1296280bc8cca4eebf3c418461ac43d989572ea071e34",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0412_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-03/level2_2025W38_1A_0412_4D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "20f302ab67e3838d225ecf8225cee0340fb0ba35dbd829e237354953fd11f168",
+      "bytes": 4106880,
+      "obs_id": "2025W38_1A_0412_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_1A_0598_1D1_spx_l2b-v27-2026-222.fits",
+      "sha256": "78cf54d790c6b5fa4b08b46c0ac2172bce1a12966afe01dc6b59a3ef2260638e",
+      "bytes": 4023360,
+      "obs_id": "2025W31_1A_0598_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_1A_0598_2D1_spx_l2b-v27-2026-222.fits",
+      "sha256": "66f8ab8d63618d86c6a2b6551b009f3158a2a0adbb427580a71a79e296c06f1c",
+      "bytes": 4023360,
+      "obs_id": "2025W31_1A_0598_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_1A_0598_3D1_spx_l2b-v27-2026-222.fits",
+      "sha256": "2715815de81fb20d83fc321c5dcde97007d8ac38d0b061ec9949cadc5ea13de6",
+      "bytes": 4023360,
+      "obs_id": "2025W31_1A_0598_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_1A_0598_4D1_spx_l2b-v27-2026-222.fits",
+      "sha256": "d75fa0eb3f1c1dcbbca123d8b2969132297f6d6c563481f237e62f2d62824d13",
+      "bytes": 4023360,
+      "obs_id": "2025W31_1A_0598_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_2A_0048_2D1_spx_l2b-v27-2026-225.fits",
+      "sha256": "ad9e3ed163fda900e737d55a2203193f7c04a1e34f1cea08f372e46db2438aea",
+      "bytes": 4023360,
+      "obs_id": "2025W31_2A_0048_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_2A_0048_3D1_spx_l2b-v27-2026-225.fits",
+      "sha256": "cbd1ecf359b5599298d8f52e03d555d8dfe2b7ea53a0d54dc1b6b9856edc0f55",
+      "bytes": 4023360,
+      "obs_id": "2025W31_2A_0048_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_2A_0048_4D1_spx_l2b-v27-2026-225.fits",
+      "sha256": "fcb7d3dcf2dc452e3cabc5e6cce6af4d04b925ce74efebb9c7be4116dc38a2ce",
+      "bytes": 4023360,
+      "obs_id": "2025W31_2A_0048_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-04/level2_2025W31_2A_0230_2D1_spx_l2b-v27-2026-225.fits",
+      "sha256": "98923df6bde3006604dd94534028031ce14bab9f9db86c9a7594d3f40f31cb66",
+      "bytes": 4023360,
+      "obs_id": "2025W31_2A_0230_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0529_2D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "923acc89d99535a0640838193f4b14f9833dfe7b77cf43a9a57150cb03fcb638",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0529_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0529_3D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "9bca452a416d1acdf82b7dc971b42a680ba4d04883ec6baa35a68a2a7f217197",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0529_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0529_4D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "b463801e2a982f30776d7c481192967a8586eeab4c901bc56dd4eb7e7d28926e",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0529_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0632_1D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "a381fe14e4f3898d6ffdc00a0b08cf64b52654de513f3349b845391028a36b8c",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0632_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0632_2D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "75a72d26b17262d933da00647338fcb22fef84611813a1137859a067f87f91e8",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0632_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0632_3D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "ff21a74158cd8c3393abaaf14447f9580f8b8e7d1d66c6f280e6455c907da8bf",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0632_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-05/level2_2026W14_1A_0632_4D1_spx_l2b-v27-2026-238.fits",
+      "sha256": "40c07e29a32daa4530470b8efc3ab9b95ddf8fcc2ad73ac1136759b80d51fcca",
+      "bytes": 4023360,
+      "obs_id": "2026W14_1A_0632_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0039_1D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "c753239ddc3fe30b4b067a7b0040ea679cf9eae9f82b5d34f99d43aef371fe25",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0039_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0039_2D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "a2922f810ce0d592c54fb7a92bcb4de987424ab079ebe11a05d114b49205c81d",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0039_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0039_3D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "2445b2fa84642d3f366a48ea66a694e9900b42a163ed211f812b3e95e4470c32",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0039_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0039_4D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "d4c01b8fa02c37d781fe46c1a2d690ca7377a56dc693b97eb2a4a7e1d6fd872d",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0039_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0178_3D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "217d986315fd32357ab85a80303c997542c4798df89f49fe7be946dddcd851a3",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0178_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0326_2D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "443e62ec468abd1d7c3338116c1a711e8d22bd1206772064ef2acb8b8eb2c874",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0326_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0326_4D3_spx_l2b_retry-v27-2026-208.fits",
+      "sha256": "d494799c39b3f992b1872d1afc55933494cdaa6123f6e85f7b6f7023b8263a20",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0326_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-06/level2_2025W47_1A_0446_3D3_spx_l2b-v27-2026-208.fits",
+      "sha256": "064f496a5c36b1f3537def266b5e61af2958e99ae4d57fe6b0667336e488489c",
+      "bytes": 4106880,
+      "obs_id": "2025W47_1A_0446_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0568_1D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "1ffc8b7cb6ee8ff015f047557dafb272a879160304d8420b92dfdc4debd55f5e",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0568_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0568_2D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "1b4d98b6715df0d2fe6f10a680f124489d58d1e60e3341d4da326b0463e902f5",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0568_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0568_3D1_spx_l2b_retry-v27-2026-237.fits",
+      "sha256": "8a0f82f8c319c5933783f600918ce27c7cb9908513dad9e88824f9245e4f1af5",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0568_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0568_4D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "04c70355719ad142d4ead9972c0a824fd7632b0e0a01157c588bf3de96819dec",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0568_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0580_2D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "b092e96696e12eab7e60b18e5ea83f0c2402ec2299d80f37c64ad2b2b155866a",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0580_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0580_4D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "f3192b1a714d7695373c349f57e2539c8a7c1794141cc07e5366dd1c555e0abb",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0580_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0592_1D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "e975b16c56575cf671ed16dab0734f7d422482109776cab90b9be70808cba691",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0592_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-07/level2_2025W38_1A_0763_1D1_spx_l2b-v27-2026-237.fits",
+      "sha256": "eda1be52585b888ca83d5822dda039b2619d366e04cdde6f08f0d2d99adf01fc",
+      "bytes": 4023360,
+      "obs_id": "2025W38_1A_0763_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_1A_0738_1D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "9a6855281eb9d5391dc2184790b97611cb2068da1c0724c7e5b6ce4e61bcbf41",
+      "bytes": 4023360,
+      "obs_id": "2025W47_1A_0738_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_1A_0738_2D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "db4ad33ab1a807c81a6aaa09f2b7c69c03da6cd99c69b0ada6b11849e615306e",
+      "bytes": 4023360,
+      "obs_id": "2025W47_1A_0738_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_1A_0738_3D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "cc5dd79f9c6cf068dd22f7f3157b7dc5d6e1945df4d8b32c80f94e8043d96ee9",
+      "bytes": 4023360,
+      "obs_id": "2025W47_1A_0738_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-4/quarantine/association-holdout-08/level2_2025W47_1A_0738_4D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "0305b1b599124a396d8f74b2cfa4f62cee412368d3ee6a398913aef35ab83224",
+      "bytes": 4023360,
+      "obs_id": "2025W47_1A_0738_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_2A_0420_1D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "6a63b2b2f2e3a462eabb96613fe55b60dc794ff8b7961fcf53dce25313b119f9",
+      "bytes": 4023360,
+      "obs_id": "2025W47_2A_0420_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_2A_0420_2D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "6a6024958cdd3149fd1effa2a3a57240766250dcf080f28defbe4de7a038002f",
+      "bytes": 4023360,
+      "obs_id": "2025W47_2A_0420_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_2A_0420_3D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "6d54bbd6dba5410a401311ecb1a03461149290025b87c4a1cf1d12d6901fb211",
+      "bytes": 4023360,
+      "obs_id": "2025W47_2A_0420_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-08/level2_2025W47_2A_0420_4D2_spx_l2b-v27-2026-208.fits",
+      "sha256": "0dbc05b065fec7a3404fac0482a466ec93915f354415c03a807617c28073936d",
+      "bytes": 4023360,
+      "obs_id": "2025W47_2A_0420_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W38_2C_0439_1D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "fc443f872f7fdb16c7072a440fef48d136a09a010825d8f2a36e2a5f7cb9bf9d",
+      "bytes": 4106880,
+      "obs_id": "2025W38_2C_0439_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W38_2C_0439_3D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "756ad09eb2c471ccaf5ab8dcba520108771f6739c444c1f2d7e836d21b4926ba",
+      "bytes": 4106880,
+      "obs_id": "2025W38_2C_0439_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-09/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits",
+      "sha256": "b2e3e6e1eabf00442b0437a8208d4a8004cb5504fdb0b848c6a5df049a8af920",
+      "bytes": 4106880,
+      "obs_id": "2025W38_2C_0439_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W39_1A_0045_1D3_spx_l2b-v27-2026-238.fits",
+      "sha256": "0039a54716e9bd3b1f0559ba6c37adee6ed8078de3a1cd32a865dcc181db16ad",
+      "bytes": 4106880,
+      "obs_id": "2025W39_1A_0045_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W39_1A_0045_2D3_spx_l2b-v27-2026-238.fits",
+      "sha256": "3c66f65fdd898929988e7a417e7f46ded4e672b3223865f0a9e388adc3f865d0",
+      "bytes": 4106880,
+      "obs_id": "2025W39_1A_0045_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W39_1A_0045_3D3_spx_l2b-v27-2026-238.fits",
+      "sha256": "b0483df1eabfc6dadf8776ad9166062d93da0ed0a2a4eebd9211241dde651dc2",
+      "bytes": 4106880,
+      "obs_id": "2025W39_1A_0045_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W39_1A_0045_4D3_spx_l2b-v27-2026-238.fits",
+      "sha256": "b48fb6f3decb3c176e57c4e2ed8acc12e525cc8100f2ef00a115cb22a5b18b8d",
+      "bytes": 4106880,
+      "obs_id": "2025W39_1A_0045_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_1B_0477_1D1_spx_l2b-v27-2026-199.fits",
+      "sha256": "559331ac8dd9641b95448a850347531a9448013c9c1e1ebbf3dd9c1a2e213cb5",
+      "bytes": 4023360,
+      "obs_id": "2025W22_1B_0477_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_1B_0477_2D1_spx_l2b-v27-2026-199.fits",
+      "sha256": "f82fdf70e20b699212ed3599cb26d01c3194c94c3d1bb3dba9d625065e5da650",
+      "bytes": 4023360,
+      "obs_id": "2025W22_1B_0477_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_1B_0477_3D1_spx_l2b-v27-2026-199.fits",
+      "sha256": "698bb6170dc67ed803a1370f92f32d5e6a8600ea45f8f50119329f53fdde37c6",
+      "bytes": 4023360,
+      "obs_id": "2025W22_1B_0477_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_1B_0477_4D1_spx_l2b-v27-2026-199.fits",
+      "sha256": "7595a5b91cc4cfd6f0c49b436efca9f59ab274646b73ab93ef7def219128dfaa",
+      "bytes": 4023360,
+      "obs_id": "2025W22_1B_0477_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_1B_0524_2D1_spx_l2b-v27-2026-199.fits",
+      "sha256": "230188a68d2c77819474ecff65a6ac3f5aa88ef5db40f320cd1f2cd2fa08befe",
+      "bytes": 4023360,
+      "obs_id": "2025W22_1B_0524_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_2B_0041_4D1_spx_l2b-v27-2026-200.fits",
+      "sha256": "8154a52335654914806dc96ff5b76f77df51396ebe8ecd057d3b337531f37847",
+      "bytes": 4023360,
+      "obs_id": "2025W22_2B_0041_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_2B_0090_2D1_spx_l2b-v27-2026-200.fits",
+      "sha256": "733e27b3475c987f9b3b63a98f44ab12814d2695ac0d6b14bb191d3fa8e909e2",
+      "bytes": 4023360,
+      "obs_id": "2025W22_2B_0090_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-10/level2_2025W22_2B_0090_4D1_spx_l2b-v27-2026-200.fits",
+      "sha256": "2080a9536b0e941068913cd11984a12e1ee609acc00991939ba42a0ed44dbe7a",
+      "bytes": 4023360,
+      "obs_id": "2025W22_2B_0090_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0385_1D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "1db707af47250db49fa1093f2997da4de5332a51e55cdc17fe1fa38cc13488f5",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0385_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0385_2D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "4eae0d3ee2d115c32494155ebf634ed19c8844b05cf1f4f7a7685791ebedebfc",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0385_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0385_3D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "203c3b88b8d7aea289725ef1a178abd72ad857e44aa7aa9353b4f4aee5e16b61",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0385_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0385_4D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "d6f077c3e6e1131deff27dde8737dade83473cba9e0b6042fb2b525455c7ebab",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0385_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0432_1D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "c8e1aa790148eefcb116e5950507f167314356d0451ccc0ebb763aec6334654c",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0432_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0432_2D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "ed226a85df9d693e3e0324c52e924fb094949edcc3ad4a7e7b3d1e1d0f7c2cee",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0432_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0432_4D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "4fb6627de28fd98a8e041f381066a5bd131d53d5457bb10a33e4ae3892f76f9c",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0432_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-11/level2_2025W24_1A_0656_1D2_spx_l2b-v27-2026-201.fits",
+      "sha256": "7dbe5d980aff3de46ea9e8d08f6684ca20fba7cdfc4084d4d9a32d2858091c01",
+      "bytes": 4023360,
+      "obs_id": "2025W24_1A_0656_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0470_1D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "28d0ae24f0f639e1e1cff87e3a6cd52c3c136e43f3f4ad9b023dc151f809da16",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0470_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0470_2D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "7420bbf6f0f32b85b5b49c7654bac6cac83e384a3aa573ae7b25bfbe1e59a4f9",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0470_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0470_3D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "8084bf1c0180f7351c8a20884b5beef87f9164790fd4a387eb6a3e3c20989275",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0470_3"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0470_4D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "280e6633bbd8a1d680f0e836930ec5f33839d2a69c3c45db05a8e877a9931838",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0470_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0483_2D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "e11387e80dacbc5c1743a437053d71c92e345b2bf3d5bcba90f90bb2b84198dc",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0483_2"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0527_1D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "2048e951a3ef58c9d59b54e46db2e37cdac52da8d21fccb813be0f8f5584e0b1",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0527_1"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0527_4D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "ac94f0d4522257b0013106d985746e87b28c7ac9ebec4bb31be852b5c5a821cc",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0527_4"
+    },
+    {
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-3/quarantine/association-holdout-12/level2_2025W41_2B_0556_2D3_spx_l2b-v27-2026-242.fits",
+      "sha256": "c68fedc6dc5bbcd7a85e5beaa2123ba050644a20ca677042133fcbbf1c394a02",
+      "bytes": 4106880,
+      "obs_id": "2025W41_2B_0556_2"
+    }
+  ],
+  "roi": {
+    "region_arcmin": [
+      6,
+      6
+    ],
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "recenter": false
+  },
+  "identity_constraints": "SAMEselectedphysicalID,D3,originalSIAartifactprocessingversionpath/filename,headerMJDwithinsealedinterval,celestialRA/DECaxes; analysisROI6arcmin/6.15arcsec/motion/recenterfalseunchanged.",
+  "changed_transport": "OriginalfullMEFwithoutcutoutquery; nativefullshapeandbytesdifferfromcutoutstrategy. NO byteparityclaimtofailedcutout. Failedcutoutandoriginal5.2MBdeclinepreservedhistorically.",
+  "pixels_opened": false,
+  "models_called": false,
+  "inference_authorized": false
+}

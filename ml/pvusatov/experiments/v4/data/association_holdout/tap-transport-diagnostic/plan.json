@@ -1,0 +1,11 @@
+{
+  "declared_utc": "2026-11-15T10:48:49.676073+00:00",
+  "role": "Only service transport diagnostic, TOP1 CANNOT be selected or establish no-coverage",
+  "query": "SELECT TOP 1 a.uri FROM spherex.artifact a JOIN spherex.plane p ON a.planeid=p.planeid WHERE 1=CONTAINS(POINT('ICRS',154.20377653,-47.09320195),p.poly) AND a.uri LIKE 'ibe/data/spherex/dr1/level2/%'",
+  "url": "https://irsa.ipac.caltech.edu/TAP/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+TOP+1+a.uri+FROM+spherex.artifact+a+JOIN+spherex.plane+p+ON+a.planeid%3Dp.planeid+WHERE+1%3DCONTAINS%28POINT%28%27ICRS%27%2C154.20377653%2C-47.09320195%29%2Cp.poly%29+AND+a.uri+LIKE+%27ibe%2Fdata%2Fspherex%2Fdr1%2Flevel2%2F%25%27",
+  "official_example": "https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/",
+  "plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "timeout_seconds": 30,
+  "response_cap_bytes": 4194304,
+  "no_raw_download_or_selection": true
+}

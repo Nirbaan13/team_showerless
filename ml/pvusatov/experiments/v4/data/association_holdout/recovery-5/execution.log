@@ -1,0 +1,13 @@
+partition association-holdout-05 through-boundary 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+partition association-holdout-05 from-boundary 141 complete
+partition association-holdout-09 through-boundary 102 complete
+partition association-holdout-09 from-boundary 172 complete
+selection_sha256 d8dfb10f04a1fa77b6f24c228636aa014407a95375e7973d8ced70604bbb12be eligibleparents 11
+newproduct 1 8 association-holdout-09 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 503: Service Unavailable"}, {"attempt": 2, "error": "HTTPError: HTTP Error 503: Service Unavailable"}]
+newproduct 2 8 association-holdout-09 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 503: Service Unavailable"}, {"attempt": 2, "error": "HTTPError: HTTP Error 503: Service Unavailable"}]
+newproduct 3 8 association-holdout-09 header verified
+newproduct 4 8 association-holdout-09 header verified
+newproduct 5 8 association-holdout-09 header verified
+newproduct 6 8 association-holdout-09 header verified
+newproduct 7 8 association-holdout-09 header verified
+newproduct 8 8 association-holdout-09 header verified

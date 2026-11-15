@@ -1,0 +1,24 @@
+{
+  "declared_utc": "2026-11-15T11:11:18.636329+00:00",
+  "original_plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "role": "ROOT-authorized ONE final all-time exact-domain retry after fixedTIME also failed; no field/eligibility replacement",
+  "not_before_utc": "2026-11-15T11:15:00+00:00",
+  "deadline_utc": "2026-11-15T11:24:16.539145+00:00",
+  "native_seed_reservation": {
+    "association-holdout-01": 4110001,
+    "association-holdout-02": 4110002,
+    "association-holdout-03": 4110003,
+    "association-holdout-04": 4110004,
+    "association-holdout-05": 4110005,
+    "association-holdout-06": 4110006,
+    "association-holdout-07": 4110007,
+    "association-holdout-08": 4110008,
+    "association-holdout-09": 4110009,
+    "association-holdout-10": 4110010,
+    "association-holdout-11": 4110011,
+    "association-holdout-12": 4110012
+  },
+  "pixels_opened": false,
+  "inference_authorized": false,
+  "source_sha256": "35a30adae2cfc513e662eca06ef5e0a4141f880ac99a746e743f3dbd3399d6e9"
+}

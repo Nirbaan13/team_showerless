@@ -1,0 +1,17 @@
+# V4 release verification
+
+V4 was merged through [PR17](https://github.com/Nirbaan13/team_showerless/pull/17) and deployed by the existing revision-based CI. The installed graph is `c596f66f…`, metadata `472a3db4…`, and all eleven installed runtime modules match the checked release sources. API and Python-processing containers share the same healthy image. Backend/frontend `latest` tags match their respective running revision images; separate workflows can finish at different times.
+
+The fixed scorer improves independent native injection recovery from 553 to 685 at K1 and 673 to 729 at K3, over 12 backgrounds and 3,240 trials. Synthetic recovery improves 716→1,114 and 1,220→1,738 over 3,000 fields. Paired clustered intervals are positive. See [canonical results](../v4-final-repair-1/RESULTS.AI.md) for denominators, the blinded engineering amendment, geometric limitations and confidence intervals. The scientific freeze and report remain unchanged; the earlier readiness checkpoint records its historical pending state.
+
+Actual deployed verification passed HTTP/SSE, result schema, deduplication, 80 decoded PNGs, empty/error cases, private gRPC equality and terminal replay. Browser checks exercised loaded images, trajectories, heuristic sorting, empty/error paths and desktop/mobile bounds. Swagger loaded 38 paths through the frontend proxy and successfully executed the installed-model endpoint. Receipts are in [live](../v4-runtime/live/).
+
+The isolated one-CPU/one-GiB/no-swap density probe reached 679.64 MiB whole-container peak with zero memory-limit or OOM events. Eight injected engineering sources produced a bounded 100-candidate publication with an incompleteness warning. The denser 32/100-source cases returned explicit linking `workload_limit` errors. All three input archives, complete results and 264 successful-case PNG hashes match the local runs. This is a measured workload bound, not a guarantee that every accepted image shape completes. See [density audit](../v4-runtime/vps-density/audit.json).
+
+New archive retrieval remains **unverified**: the optional fixed Ceres public-download check failed because IRSA returned HTTP502 before image inference. Direct acquisition attempts from laptop and VPS also received502. The offline Ceres diagnostic and cached presets do not turn that failure into a successful live-download claim. Processing-worker health likewise does not establish successful end-to-end processing through an unavailable archive.
+
+The installed VPS deployment entrypoint was stale and retained an API-only Compose topology. It was backed up and atomically replaced under the deployment lock with the repository script already covered by CI's legacy-topology upgrade tests. Subsequent CI deployments started the Python worker; its image/revision and direct health were verified. [Upgrade receipt](../v4-runtime/host-deploy-upgrade/receipt.json).
+
+The later learned-association pilot is separate research. Its gains are mostly unresolved spatial recoveries on native TRAIN examples and require substantially more CPU. It changes no V4 model, runtime, threshold or release gate. A fresh native validation acquisition is incomplete because of upstream errors; no replacement or fabricated data are used.
+
+[release-decision.json](release-decision.json) binds the underlying receipts. Experimental utility is not probability, injection recovery is not survey precision, and position-compatible subpixel evidence does not confirm motion.

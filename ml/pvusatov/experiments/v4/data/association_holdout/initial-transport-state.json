@@ -1,0 +1,203 @@
+{
+  "status": "INCOMPLETE_METADATA_TRANSPORT",
+  "created_utc": "2026-11-15T10:51:51.998120+00:00",
+  "plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "groups_planned": 12,
+  "groups_selected": 0,
+  "files_downloaded": 0,
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false,
+  "physical_exclusion_count": 438,
+  "minimum_prior_or_new_center_distance_deg": 10.949135427425523,
+  "native_seed_reservation": {
+    "association-holdout-01": 4110001,
+    "association-holdout-02": 4110002,
+    "association-holdout-03": 4110003,
+    "association-holdout-04": 4110004,
+    "association-holdout-05": 4110005,
+    "association-holdout-06": 4110006,
+    "association-holdout-07": 4110007,
+    "association-holdout-08": 4110008,
+    "association-holdout-09": 4110009,
+    "association-holdout-10": 4110010,
+    "association-holdout-11": 4110011,
+    "association-holdout-12": 4110012
+  },
+  "query_evidence": [
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-01",
+      "path": "query-evidence/initial/association-holdout-01.json",
+      "sha256": "fa240856ab5ab4f6a42482b65b8e1b14024f410e08b3a58c1734162380539014",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-02",
+      "path": "query-evidence/initial/association-holdout-02.json",
+      "sha256": "e887827ed5d918f857425d573221a0b3035e25a5cdec322e660242b76690cd01",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-03",
+      "path": "query-evidence/initial/association-holdout-03.json",
+      "sha256": "2b8c5b96b255a93ed078dffc329ceac5a6b9ca52485d25b35028e4a272280e9a",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-04",
+      "path": "query-evidence/initial/association-holdout-04.json",
+      "sha256": "a680106758a62696bab8f78f3766e5d47228f836de3611841ecef64cbfe2b9a5",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-05",
+      "path": "query-evidence/initial/association-holdout-05.json",
+      "sha256": "7373efcbffa3c9732cf59615f9fe65587a356b9aec4f9eb7ab95e9428b27f773",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-06",
+      "path": "query-evidence/initial/association-holdout-06.json",
+      "sha256": "98425f3c6af85e773cdd4c5a8b6ed0e8c51c8bfc67be78d88e0296536e8d3e50",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-07",
+      "path": "query-evidence/initial/association-holdout-07.json",
+      "sha256": "cf2ee8aba69c3694ab70bd61318149ed58fee751cd3c4f30d5d77fd4d6771eb2",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-08",
+      "path": "query-evidence/initial/association-holdout-08.json",
+      "sha256": "deabb4ae39d0d90426182d5084ce267429078ef7650503e17ffb4b3ae3e182c6",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-09",
+      "path": "query-evidence/initial/association-holdout-09.json",
+      "sha256": "e7b98cd168b5f99199bfd9a3b06d2672bffd2b8850dfe61bab3f6d8a194df02f",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-10",
+      "path": "query-evidence/initial/association-holdout-10.json",
+      "sha256": "b996b0c45427c9e233c2877f79734de5c281503e6d9eda96a45846bb54404f99",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-11",
+      "path": "query-evidence/initial/association-holdout-11.json",
+      "sha256": "748f4a0731f734b81a4a0c15cf4488b73bcd6fba639fda008aa5ae8d16edc39f",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-12",
+      "path": "query-evidence/initial/association-holdout-12.json",
+      "sha256": "cb72bd0a66975beb1e3a1d41d52700f5b63c18ed128ed6a966df5c73c016f744",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-01",
+      "path": "query-evidence/percent20/association-holdout-01.json",
+      "sha256": "fa240856ab5ab4f6a42482b65b8e1b14024f410e08b3a58c1734162380539014",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-02",
+      "path": "query-evidence/percent20/association-holdout-02.json",
+      "sha256": "e887827ed5d918f857425d573221a0b3035e25a5cdec322e660242b76690cd01",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-03",
+      "path": "query-evidence/percent20/association-holdout-03.json",
+      "sha256": "2b8c5b96b255a93ed078dffc329ceac5a6b9ca52485d25b35028e4a272280e9a",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-04",
+      "path": "query-evidence/percent20/association-holdout-04.json",
+      "sha256": "a680106758a62696bab8f78f3766e5d47228f836de3611841ecef64cbfe2b9a5",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-05",
+      "path": "query-evidence/percent20/association-holdout-05.json",
+      "sha256": "7373efcbffa3c9732cf59615f9fe65587a356b9aec4f9eb7ab95e9428b27f773",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-06",
+      "path": "query-evidence/percent20/association-holdout-06.json",
+      "sha256": "98425f3c6af85e773cdd4c5a8b6ed0e8c51c8bfc67be78d88e0296536e8d3e50",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-07",
+      "path": "query-evidence/percent20/association-holdout-07.json",
+      "sha256": "cf2ee8aba69c3694ab70bd61318149ed58fee751cd3c4f30d5d77fd4d6771eb2",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-08",
+      "path": "query-evidence/percent20/association-holdout-08.json",
+      "sha256": "deabb4ae39d0d90426182d5084ce267429078ef7650503e17ffb4b3ae3e182c6",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-09",
+      "path": "query-evidence/percent20/association-holdout-09.json",
+      "sha256": "e7b98cd168b5f99199bfd9a3b06d2672bffd2b8850dfe61bab3f6d8a194df02f",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-10",
+      "path": "query-evidence/percent20/association-holdout-10.json",
+      "sha256": "b996b0c45427c9e233c2877f79734de5c281503e6d9eda96a45846bb54404f99",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-11",
+      "path": "query-evidence/percent20/association-holdout-11.json",
+      "sha256": "748f4a0731f734b81a4a0c15cf4488b73bcd6fba639fda008aa5ae8d16edc39f",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-12",
+      "path": "query-evidence/percent20/association-holdout-12.json",
+      "sha256": "cb72bd0a66975beb1e3a1d41d52700f5b63c18ed128ed6a966df5c73c016f744",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    }
+  ],
+  "failure_interpretation": "Allmetadataqueries HTTP502, not evidence of no archive coverage",
+  "historical_label_correction": "byte-header-audit.json status literal ACQUIRED_QUARANTINED is generic originalscript stage label despite zero counts; thisexplicitstate corrects its interpretation withoutrewritinghistory",
+  "quarantine": "Policyagent mustnotread newselection/raw untilroot freezesonepolicy; onlycounts shared",
+  "science_roi_footprint_disjoint": true,
+  "full_native_parent_footprint_overlap_verified": false,
+  "full_native_parent_limit": "No newparentmetadata rows exist yet; full-native-footprint crosscheck pending, ROI centers are10.949deg apart minimum"
+}

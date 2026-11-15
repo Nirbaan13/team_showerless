@@ -1,0 +1,29 @@
+{
+  "first_test_attempt": "Collection failed before harness existed; after implementation the three new tests passed in4.67 seconds.",
+  "protocol_sha256": "0350987419ab5e7a202cda7b342852c0095b0c9972aa8939a4b8ccdcae4dde55",
+  "results_sha256": "52e39bd7b487e46f7d5fbccb636c91ccf8e124b7a2ae7a0ee71bca951a50ff02",
+  "summary": {
+    "all_cases_pass": true,
+    "checks": "full declared coverage, immutable hashes, homogeneous groups, support controls, per-column bits, full IDs/diagnostics, actual C596 scores/order, fixed per-scenario image hashes",
+    "cpu_affinity": [
+      21
+    ],
+    "elapsed_seconds": 391.52412318100687,
+    "empty_cases": 2,
+    "f64_column_values": 5164740,
+    "main_cases": 30,
+    "maximum_rss_mib": 203.40625,
+    "rows": 172158,
+    "source_model_metadata_bindings": 9,
+    "tied_nonempty_cases": 30
+  },
+  "tests": {
+    "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTHONPATH=.:ml/pvusatov/backend/inference /home/usatovpavel/edu/UtilsAI/.venv/bin/python -m pytest ml/pvusatov/experiments/v4/feature_performance/test_feature_performance.py ml/pvusatov/experiments/v4/detection/test_features.py ml/pvusatov/experiments/v4/feature_performance_boundary/test_feature_boundary_parity.py -q",
+    "result": "13 passed in9.82 seconds; completed while bounded run was in progress; no source changes since freeze"
+  },
+  "versions": {
+    "onnx": "1.23.2",
+    "onnxruntime": "1.30.0",
+    "scipy": "1.18.1"
+  }
+}

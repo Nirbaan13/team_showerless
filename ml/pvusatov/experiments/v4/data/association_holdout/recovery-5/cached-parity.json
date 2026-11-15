@@ -1,0 +1,246 @@
+{
+  "status": "PASS_ALL10_SAME_ORDERED8_IDENTITIES",
+  "amendment_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/amendment-plan.json",
+    "sha256": "3dc51bae586945dc6b98e93bad5326ba98170807e0a539f4e49cbf4d540f4a25"
+  },
+  "previous_selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-3/selection.json",
+    "sha256": "c927086936acae0f8c13f02cdc105b47d326cef3085df534abb9debbab862a45"
+  },
+  "groups": [
+    {
+      "group_id": "association-holdout-01",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W24_2D_0197_1",
+        "2025W24_2D_0197_2",
+        "2025W24_2D_0197_3",
+        "2025W24_2D_0346_1",
+        "2025W24_2D_0346_3",
+        "2025W24_2D_0512_1",
+        "2025W24_2D_0512_2",
+        "2025W24_2D_0512_4"
+      ],
+      "detector": 1,
+      "eligibility_counts": {
+        "input_rows": 361,
+        "unsupported": 179,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 56,
+        "eligible": 126
+      }
+    },
+    {
+      "group_id": "association-holdout-02",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W34_1B_0060_1",
+        "2025W34_1B_0060_2",
+        "2025W34_1B_0060_3",
+        "2025W34_1B_0060_4",
+        "2025W34_1B_0074_2",
+        "2025W34_1B_0237_2",
+        "2025W34_1B_0237_3",
+        "2025W34_1B_0251_1"
+      ],
+      "detector": 2,
+      "eligibility_counts": {
+        "input_rows": 221,
+        "unsupported": 110,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 35,
+        "eligible": 76
+      }
+    },
+    {
+      "group_id": "association-holdout-03",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W38_1A_0295_1",
+        "2025W38_1A_0296_1",
+        "2025W38_1A_0297_1",
+        "2025W38_1A_0317_1",
+        "2025W38_1A_0339_1",
+        "2025W38_1A_0357_1",
+        "2025W38_1A_0412_1",
+        "2025W38_1A_0412_4"
+      ],
+      "detector": 3,
+      "eligibility_counts": {
+        "input_rows": 219,
+        "unsupported": 108,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 36,
+        "eligible": 75
+      }
+    },
+    {
+      "group_id": "association-holdout-04",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W31_1A_0598_1",
+        "2025W31_1A_0598_2",
+        "2025W31_1A_0598_3",
+        "2025W31_1A_0598_4",
+        "2025W31_2A_0048_2",
+        "2025W31_2A_0048_3",
+        "2025W31_2A_0048_4",
+        "2025W31_2A_0230_2"
+      ],
+      "detector": 1,
+      "eligibility_counts": {
+        "input_rows": 240,
+        "unsupported": 120,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 22,
+        "eligible": 98
+      }
+    },
+    {
+      "group_id": "association-holdout-06",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W47_1A_0039_1",
+        "2025W47_1A_0039_2",
+        "2025W47_1A_0039_3",
+        "2025W47_1A_0039_4",
+        "2025W47_1A_0178_3",
+        "2025W47_1A_0326_2",
+        "2025W47_1A_0326_4",
+        "2025W47_1A_0446_3"
+      ],
+      "detector": 3,
+      "eligibility_counts": {
+        "input_rows": 245,
+        "unsupported": 123,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 33,
+        "eligible": 89
+      }
+    },
+    {
+      "group_id": "association-holdout-07",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W38_1A_0568_1",
+        "2025W38_1A_0568_2",
+        "2025W38_1A_0568_3",
+        "2025W38_1A_0568_4",
+        "2025W38_1A_0580_2",
+        "2025W38_1A_0580_4",
+        "2025W38_1A_0592_1",
+        "2025W38_1A_0763_1"
+      ],
+      "detector": 1,
+      "eligibility_counts": {
+        "input_rows": 234,
+        "unsupported": 117,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 52,
+        "eligible": 65
+      }
+    },
+    {
+      "group_id": "association-holdout-08",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W47_1A_0738_1",
+        "2025W47_1A_0738_2",
+        "2025W47_1A_0738_3",
+        "2025W47_1A_0738_4",
+        "2025W47_2A_0420_1",
+        "2025W47_2A_0420_2",
+        "2025W47_2A_0420_3",
+        "2025W47_2A_0420_4"
+      ],
+      "detector": 2,
+      "eligibility_counts": {
+        "input_rows": 286,
+        "unsupported": 144,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 41,
+        "eligible": 101
+      }
+    },
+    {
+      "group_id": "association-holdout-10",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W22_1B_0477_1",
+        "2025W22_1B_0477_2",
+        "2025W22_1B_0477_3",
+        "2025W22_1B_0477_4",
+        "2025W22_1B_0524_2",
+        "2025W22_2B_0041_4",
+        "2025W22_2B_0090_2",
+        "2025W22_2B_0090_4"
+      ],
+      "detector": 1,
+      "eligibility_counts": {
+        "input_rows": 262,
+        "unsupported": 131,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 62,
+        "eligible": 69
+      }
+    },
+    {
+      "group_id": "association-holdout-11",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W24_1A_0385_1",
+        "2025W24_1A_0385_2",
+        "2025W24_1A_0385_3",
+        "2025W24_1A_0385_4",
+        "2025W24_1A_0432_1",
+        "2025W24_1A_0432_2",
+        "2025W24_1A_0432_4",
+        "2025W24_1A_0656_1"
+      ],
+      "detector": 2,
+      "eligibility_counts": {
+        "input_rows": 283,
+        "unsupported": 141,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 37,
+        "eligible": 105
+      }
+    },
+    {
+      "group_id": "association-holdout-12",
+      "same_ordered8_metadata_ids": true,
+      "obs_ids": [
+        "2025W41_2B_0470_1",
+        "2025W41_2B_0470_2",
+        "2025W41_2B_0470_3",
+        "2025W41_2B_0470_4",
+        "2025W41_2B_0483_2",
+        "2025W41_2B_0527_1",
+        "2025W41_2B_0527_4",
+        "2025W41_2B_0556_2"
+      ],
+      "detector": 3,
+      "eligibility_counts": {
+        "input_rows": 245,
+        "unsupported": 122,
+        "excluded": 0,
+        "invalid_time": 0,
+        "footprint": 32,
+        "eligible": 91
+      }
+    }
+  ],
+  "network_queries_before_parity": 0,
+  "pixels_opened": false,
+  "models_called": false
+}

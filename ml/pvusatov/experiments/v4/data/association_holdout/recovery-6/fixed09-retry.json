@@ -1,0 +1,256 @@
+[
+  {
+    "obs_id": "2025W38_2C_0439_2",
+    "diagnostic": {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "method": "HEAD",
+      "started_utc": "2026-11-15T16:08:35.662375+00:00",
+      "status": 405,
+      "response_headers": {
+        "Server": "nginx",
+        "Date": "Sun, 15 Nov 2026 16:08:36 GMT",
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "18",
+        "Connection": "close",
+        "allow": "GET",
+        "x-request-id": "24b7ee6947f874a29791b57d6fc2e9fa"
+      },
+      "error_body_text": "",
+      "error_body_limit_bytes": 2048
+    },
+    "cutout_attempts": [
+      {
+        "number": 1,
+        "backoff_seconds": 10.0,
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+        "started_utc": "2026-11-15T16:08:46.363578+00:00",
+        "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+        "response_headers": {
+          "Server": "nginx",
+          "Date": "Sun, 15 Nov 2026 16:08:46 GMT",
+          "Content-Length": "25",
+          "Connection": "close",
+          "retry-after": "5",
+          "x-request-id": "65a66df3e11706ee44bd7a3800761fa1"
+        }
+      },
+      {
+        "number": 2,
+        "backoff_seconds": 10.0,
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+        "started_utc": "2026-11-15T16:08:57.033427+00:00",
+        "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+        "response_headers": {
+          "Server": "nginx",
+          "Date": "Sun, 15 Nov 2026 16:08:57 GMT",
+          "Content-Length": "25",
+          "Connection": "close",
+          "retry-after": "5",
+          "x-request-id": "2a7e6a93a2821d521675cccfe2cffb30"
+        }
+      }
+    ],
+    "product": {
+      "group_id": "association-holdout-09",
+      "obs_id": "2025W38_2C_0439_2",
+      "physical_obsid": "2025W38_2C_0439_2",
+      "detector": 3,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-09/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "metadata_obs_id": "2025W38_2C_0439_2",
+      "t_min_mjd": 60938.73278,
+      "t_max_mjd": 60938.734113,
+      "roi": {
+        "region_arcmin": [
+          6,
+          6
+        ],
+        "pixel_scale_arcsec": 6.15,
+        "mask_policy": "motion",
+        "recenter": false
+      },
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 503: Service Unavailable\"}]",
+      "status": "PLANNED_MISSING_PRODUCT"
+    },
+    "full_MEF_fallback": {
+      "full_source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "size_proof": {
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+        "method": "HEAD",
+        "started_utc": "2026-11-15T16:08:57.681474+00:00",
+        "status": 200,
+        "response_headers": {
+          "Server": "nginx",
+          "Date": "Sun, 15 Nov 2026 16:08:58 GMT",
+          "Content-Type": "application/fits",
+          "Content-Length": "59123520",
+          "Connection": "close",
+          "last-modified": "Sat, 26 Sep 2026 08:00:44 GMT",
+          "accept-ranges": "bytes",
+          "x-request-id": "9616981266b53f499d900aca4beef295"
+        },
+        "body_read": false
+      },
+      "proven_full_bytes": 59123520,
+      "byte_cap": 5200000,
+      "eligible": false,
+      "status": "STOP_OVERSIZE_OR_UNKNOWN_NO_FULL_TRANSFER"
+    }
+  },
+  {
+    "obs_id": "2025W38_2C_0439_4",
+    "diagnostic": {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "method": "HEAD",
+      "started_utc": "2026-11-15T16:08:35.663624+00:00",
+      "status": 405,
+      "response_headers": {
+        "Server": "nginx",
+        "Date": "Sun, 15 Nov 2026 16:08:36 GMT",
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "18",
+        "Connection": "close",
+        "allow": "GET",
+        "x-request-id": "df383d16363e1b028167542e042f7ff9"
+      },
+      "error_body_text": "",
+      "error_body_limit_bytes": 2048
+    },
+    "cutout_attempts": [
+      {
+        "number": 1,
+        "backoff_seconds": 10.0,
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+        "started_utc": "2026-11-15T16:08:46.406268+00:00",
+        "status": "HEADER_VERIFIED"
+      }
+    ],
+    "product": {
+      "group_id": "association-holdout-09",
+      "obs_id": "2025W38_2C_0439_4",
+      "physical_obsid": "2025W38_2C_0439_4",
+      "detector": 3,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+      "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/quarantine/association-holdout-09/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits",
+      "metadata_obs_id": "2025W38_2C_0439_4",
+      "t_min_mjd": 60938.735765,
+      "t_max_mjd": 60938.737097,
+      "roi": {
+        "region_arcmin": [
+          6,
+          6
+        ],
+        "pixel_scale_arcsec": 6.15,
+        "mask_policy": "motion",
+        "recenter": false
+      },
+      "sha256": "b2e3e6e1eabf00442b0437a8208d4a8004cb5504fdb0b848c6a5df049a8af920",
+      "bytes": 4106880,
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 16:08:47 GMT",
+        "Content-Type": "application/fits",
+        "Last-Modified": null,
+        "ETag": null
+      },
+      "failures": [],
+      "header": {
+        "header_only": true,
+        "pixels_opened": false,
+        "native_orientation_preserved": true,
+        "hdu_names": [
+          "PRIMARY",
+          "IMAGE",
+          "FLAGS",
+          "VARIANCE",
+          "ZODI",
+          "EPSF",
+          "WCS-WAVE"
+        ],
+        "native_shape": [
+          70,
+          70
+        ],
+        "detector": 3,
+        "physical_obsid": "2025W38_2C_0439_4",
+        "midpoint_mjd": 60938.736431062,
+        "epsf_detcoord": "sky",
+        "epsf_oversampling": [
+          5,
+          5
+        ],
+        "header_layout": [
+          {
+            "name": "PRIMARY",
+            "header_offset": 0,
+            "header_bytes": 2880,
+            "data_bytes": 0,
+            "header_sha256": "192682806743025e0a98cbe7f745b910e609d0995313ed4c774249eb2ba79e1f"
+          },
+          {
+            "name": "IMAGE",
+            "header_offset": 2880,
+            "header_bytes": 23040,
+            "data_bytes": 19600,
+            "header_sha256": "1302c1d6982ee800d5913dd8dbc6eeed7c85c9ab96537c1ea5d356be03e1cccc"
+          },
+          {
+            "name": "FLAGS",
+            "header_offset": 46080,
+            "header_bytes": 17280,
+            "data_bytes": 19600,
+            "header_sha256": "8da383b284d591723985346f918e83fabaf50fe771545c609d1aec022568ee9b"
+          },
+          {
+            "name": "VARIANCE",
+            "header_offset": 83520,
+            "header_bytes": 11520,
+            "data_bytes": 19600,
+            "header_sha256": "6ca051574d7ca1aabb03b459a6579053533ad811e9cd55d4ef3371b0024d66f5"
+          },
+          {
+            "name": "ZODI",
+            "header_offset": 115200,
+            "header_bytes": 11520,
+            "data_bytes": 19600,
+            "header_sha256": "8a693f18ad396ac84d9401aeb974626a9a3a4ea369097c166db74616a1d60ca0"
+          },
+          {
+            "name": "EPSF",
+            "header_offset": 146880,
+            "header_bytes": 5760,
+            "data_bytes": 3947152,
+            "header_sha256": "3c1438846dc6025d7fe96834ffb19de0026ae956d2bcfebf3ac61fcd6618c870"
+          },
+          {
+            "name": "WCS-WAVE",
+            "header_offset": 4101120,
+            "header_bytes": 2880,
+            "data_bytes": 1100,
+            "header_sha256": "1859785f183d973cd5dee447e95cce70e6a68fb068e642261e1bd85fb0b99e66"
+          }
+        ],
+        "wcs": {
+          "CTYPE1": "RA---TAN-SIP",
+          "CTYPE2": "DEC--TAN-SIP",
+          "CRVAL1": 292.419747213,
+          "CRVAL2": 0.498433082259,
+          "CRPIX1": 254.5,
+          "CRPIX2": -11.5,
+          "CD1_1": null,
+          "CD1_2": null,
+          "CD2_1": null,
+          "CD2_2": null,
+          "CDELT1": 1.0,
+          "CDELT2": 1.0
+        }
+      },
+      "midpoint_mjd": 60938.736431062,
+      "midpoint_utc": "2025-09-20T17:40:27.643757+00:00",
+      "status": "HEADER_VERIFIED_QUARANTINED",
+      "transfer_method": "EXACT_FIXED_CUTOUT_GET"
+    },
+    "full_MEF_fallback": null
+  }
+]

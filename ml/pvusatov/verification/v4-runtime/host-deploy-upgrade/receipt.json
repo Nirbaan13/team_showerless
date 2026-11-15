@@ -1,0 +1,9 @@
+{
+  "checked_at_utc": "2026-11-15T10:32:45.595627+00:00",
+  "reason": "Installed deploy script retained API-only topology despite newer repository release topology",
+  "before_sha256": "6946bbb62bcd2ee3e19490488e42643116d812c3e8303619c5eaa6e8fe3b4f84",
+  "after_sha256": "a6f1de9a6cfc68c252f4e6509d75a63e8d9edcf177169aa49d384bb88ef0db1f",
+  "compose_before_sha256": "c1d100c3bee847d8aa14be2cb3f77f9c8c18322e0f2d51dd173975c386bdd96f",
+  "action": "Atomic root-owned script update under deployment lock; service topology changes deferred to next successful authorized CI deployment",
+  "backup_directory": "/opt/spaceapps/ml-pvusatov-v4-probe/deploy-upgrade-20261115"
+}

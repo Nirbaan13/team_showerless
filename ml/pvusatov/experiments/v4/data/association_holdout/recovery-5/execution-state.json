@@ -1,0 +1,22 @@
+{
+  "status": "ACQUISITION_FINISHED_QUARANTINED",
+  "amendment_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/amendment-plan.json",
+    "sha256": "3dc51bae586945dc6b98e93bad5326ba98170807e0a539f4e49cbf4d540f4a25"
+  },
+  "parity_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/cached-parity.json",
+    "sha256": "f33e8191fa64b3c79381d17fd010f652609f80c860ec6fe50ca546b95ceee93c"
+  },
+  "selection_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/selection.json",
+    "sha256": "d8dfb10f04a1fa77b6f24c228636aa014407a95375e7973d8ced70604bbb12be"
+  },
+  "metadata_requests": 5,
+  "new_product_tasks": 8,
+  "new_verified_products": 6,
+  "existing_verified_products": 80,
+  "pixels_opened": false,
+  "models_called": false,
+  "inference_authorized": false
+}

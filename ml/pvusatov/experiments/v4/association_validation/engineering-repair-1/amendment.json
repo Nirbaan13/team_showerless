@@ -1,0 +1,32 @@
+{
+  "recorded_at_utc": "2026-11-15T13:42:13.679467+00:00",
+  "original_freeze_sha256": "de2ab671569c46e7129cfe9954855cbd4ff83e78565866e9acf38bde006a47fb",
+  "original_commit": "9f4ff9c",
+  "original_first_report_opened": true,
+  "fully_blinded_repair_claim": false,
+  "first_attempt": {
+    "planned": 1000,
+    "completed_zero_hypothesis_fields": 152,
+    "error_fields": 848,
+    "primary_result_available": false,
+    "error": "NumPy int64 link identifiers are not JSON serializable"
+  },
+  "change": "Only convert measured integer link identifiers to Python int at JSON publication boundary",
+  "old_runner_sha256": "ee971369e18b3fdafee961fcf16729cccad035c858635ce6583b7a8897bc3f27",
+  "new_runner_sha256": "6ffbb66b2c4353619eae865d9927e54d768c69a4ec04bcc420043e51577734a1",
+  "unchanged": [
+    "policy",
+    "models",
+    "feature extraction",
+    "scoring",
+    "thresholds",
+    "seeds",
+    "cohorts",
+    "caps",
+    "accounting"
+  ],
+  "repeat": "Same1000 reserved synthetic seeds; native1620 remain missing and unauthorized",
+  "equality_scope": "152 previously completed zero-hypothesis fields only;848originalerrors have no completed nonempty scientific outputs",
+  "regression": "Actual measured middle-epoch NumPy integer links publish full and compact results; RED then GREEN",
+  "first_attempt_manifest_sha256": "f82afbeb4c91e84ca682890c4d99a8436269a38657720ed358c69213a471347f"
+}

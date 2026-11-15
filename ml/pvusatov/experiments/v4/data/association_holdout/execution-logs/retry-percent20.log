@@ -1,0 +1,14 @@
+metadata association-holdout-02 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-01 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-04 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-03 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-06 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-05 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-07 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-08 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-09 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-10 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-11 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-12 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+selection_sha256 7e57bf518cce8ae10578da95e364150e0d31b1552891c940d30a85299f9f0571
+{"groups_planned": 12, "selected_metadata_groups": 0, "downloaded_files": 0, "bytes": 0}

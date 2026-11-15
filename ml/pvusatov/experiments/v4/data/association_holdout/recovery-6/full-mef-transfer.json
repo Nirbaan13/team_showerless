@@ -1,0 +1,45 @@
+{
+  "status": "PLANNED_MISSING_PRODUCT",
+  "amendment_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-resource-amendment.json",
+    "sha256": "e743dfe03c53167c8bd86ea3e92687ac3b6e289210320f2a0c04be9596a1b99c"
+  },
+  "product": {
+    "group_id": "association-holdout-09",
+    "obs_id": "2025W38_2C_0439_2",
+    "physical_obsid": "2025W38_2C_0439_2",
+    "detector": 3,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/full-mef/association-holdout-09/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "metadata_obs_id": "2025W38_2C_0439_2",
+    "t_min_mjd": 60938.73278,
+    "t_max_mjd": 60938.734113,
+    "roi": {
+      "region_arcmin": [
+        6,
+        6
+      ],
+      "pixel_scale_arcsec": 6.15,
+      "mask_policy": "motion",
+      "recenter": false
+    },
+    "requested_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+    "transfer_method": "ORIGINAL_FULL_MEF_GET_ONE_ARTIFACT_64MIB_EXCEPTION",
+    "sha256": "2f9f13a7fbc27dfba29adb22b827f8e01071bfd868cd75055cc6e9514221bae0",
+    "bytes": 59123520,
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 16:13:26 GMT",
+      "Content-Type": "application/fits",
+      "Last-Modified": "Sat, 26 Sep 2026 08:00:44 GMT",
+      "ETag": "\"b0b95fd8f35b1a8ada47429f27c43ed0\""
+    },
+    "failures": [],
+    "error": "ValueError: Native image/mask/variance/ZODI shape mismatch",
+    "status": "PLANNED_MISSING_PRODUCT"
+  },
+  "preserved_old_files": 94,
+  "pixels_opened": false,
+  "models_called": false,
+  "inference_authorized": false
+}

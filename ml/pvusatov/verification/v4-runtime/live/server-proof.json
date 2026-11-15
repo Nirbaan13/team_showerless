@@ -1,0 +1,29 @@
+{
+  "checked_at_utc": "2026-11-15T11:10:01.688270+00:00",
+  "services": {
+    "backend": {
+      "revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+      "image_id": "sha256:b6f024346c50f89c6a6abcb1fc168b1bed8ccc52e66182bb550aad786f2a5841",
+      "latest_matches_running": true,
+      "health": "healthy"
+    },
+    "frontend": {
+      "revision": "a674c8d33642731e60117ec46c5c88b7d9f7db1c",
+      "image_id": "sha256:8b214fdb3c437b379bcf53a690e8aaac2205ab2c184738210fe7ee23850fbbaf",
+      "latest_matches_running": true,
+      "health": "healthy"
+    },
+    "pipeline": {
+      "revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+      "image_id": "sha256:b6f024346c50f89c6a6abcb1fc168b1bed8ccc52e66182bb550aad786f2a5841",
+      "same_image_as_backend": true,
+      "health": "healthy",
+      "direct_health_verified": true
+    }
+  },
+  "python": "3.12.3",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "private_grpc_binding": [
+    "127.0.0.1:50051"
+  ]
+}

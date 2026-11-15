@@ -1,0 +1,102 @@
+{
+  "good_reference": {
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/quarantine/association-holdout-09/level2_2025W38_2C_0439_1D3_spx_l2b-v27-2026-237.fits",
+    "sha256": "fc443f872f7fdb16c7072a440fef48d136a09a010825d8f2a36e2a5f7cb9bf9d",
+    "obs_id": "2025W38_2C_0439_1",
+    "detector": 3,
+    "bytes": 4106880
+  },
+  "manual_hdus": [
+    {
+      "name": "PRIMARY",
+      "dimensions": [
+        null,
+        null
+      ],
+      "data_bytes": 0,
+      "engineering": {
+        "VERSION": "7.0.5"
+      }
+    },
+    {
+      "name": "IMAGE",
+      "dimensions": [
+        70,
+        70
+      ],
+      "data_bytes": 19600,
+      "engineering": {
+        "DETECTOR": 3,
+        "OBSID": "2025W38_2C_0439_1",
+        "MJD-AVG": 60938.731954314
+      }
+    },
+    {
+      "name": "FLAGS",
+      "dimensions": [
+        70,
+        70
+      ],
+      "data_bytes": 19600,
+      "engineering": {
+        "MJD-AVG": 60938.731954314
+      }
+    },
+    {
+      "name": "VARIANCE",
+      "dimensions": [
+        70,
+        70
+      ],
+      "data_bytes": 19600,
+      "engineering": {
+        "MJD-AVG": 60938.731954314
+      }
+    },
+    {
+      "name": "ZODI",
+      "dimensions": [
+        70,
+        70
+      ],
+      "data_bytes": 19600,
+      "engineering": {
+        "MJD-AVG": 60938.731954314
+      }
+    },
+    {
+      "name": "EPSF",
+      "dimensions": [
+        8752,
+        451
+      ],
+      "data_bytes": 3947152,
+      "engineering": {
+        "DETECTOR": "3"
+      }
+    },
+    {
+      "name": "WCS-WAVE",
+      "dimensions": [
+        1100,
+        1
+      ],
+      "data_bytes": 1100,
+      "engineering": {
+        "DETECTOR": "3"
+      }
+    }
+  ],
+  "fixed_targets": [
+    {
+      "obs_id": "2025W38_2C_0439_2",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "access_estsize_kbyte": "59124"
+    },
+    {
+      "obs_id": "2025W38_2C_0439_4",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_4D3_spx_l2b-v27-2026-237.fits",
+      "access_estsize_kbyte": "63634"
+    }
+  ]
+}

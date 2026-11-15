@@ -1,0 +1,29 @@
+{
+  "archive_sha256": "928f1f8824fa8575c11087d74aa3b3901b9f5f5a1bb1d1172f89f0f873b8131c",
+  "archive_bytes": 107970560,
+  "file_members": 3156,
+  "parts": [
+    {
+      "path": "cache.tar.part000",
+      "bytes": 33554432,
+      "sha256": "50de253634322eadaa9c2e7d565853921f431b9df5589b805f17d522e22a6a65"
+    },
+    {
+      "path": "cache.tar.part001",
+      "bytes": 33554432,
+      "sha256": "657699f9ad76bba852b7d870e36ef08ab4954e003f0cef82682316bda4661810"
+    },
+    {
+      "path": "cache.tar.part002",
+      "bytes": 33554432,
+      "sha256": "2d889d15fcce6436699898d532fa81876dddc801d867d52905179c7d07f7bf71"
+    },
+    {
+      "path": "cache.tar.part003",
+      "bytes": 7307264,
+      "sha256": "d7464e0c6736bc08a186c7e9668966ba3140a706d6595eeb419c447cdf0fcca0"
+    }
+  ],
+  "content": "Exact first/repeated full+compact numeric JSON caches and synthetic report; no raw image pixels or model binaries",
+  "provenance_paths": "Original absolute paths remain historical strings; independent checker supports --repo-root and --cache-root"
+}

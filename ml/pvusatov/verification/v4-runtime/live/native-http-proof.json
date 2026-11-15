@@ -1,0 +1,37 @@
+{
+  "checked_at_utc": "2026-11-15T11:11:21.803013+00:00",
+  "http_base": "http://144.124.238.101",
+  "query": {
+    "right_ascension_deg": 15.616171426024438,
+    "declination_deg": -5.471296866590545,
+    "width_arcmin": 6.0,
+    "height_arcmin": 6.0,
+    "detector_array": 2,
+    "observed_after": "2025-07-03T02:07:44.457600+00:00",
+    "observed_before": "2025-07-03T02:16:06.355200+00:00"
+  },
+  "selected_case_request_sha256": "53fba3886e14bb222918426cd2088c7890838774498206e5b9299ab66cbe6e67",
+  "reference_cutout_sha256": [
+    "44c880fc6d89ae4f613376e5b9f570e751cd52350e79cfc924a090ef45b69d60",
+    "65227dd79b487f902787d64bd7b3b35e95fecda1c5dfd6c261121434d4b0b45d",
+    "b28996edf3818c4f4ef21e7edda7f4b39e1eb44425576cbcb90e7d70ad073462",
+    "f6e318782303fdeaa28ac4bb3eb52ae840e48d1f0a67cbb9db52c84aaa6f1855"
+  ],
+  "expected_processing_versions": {
+    "2025W27_1A_0591_1": "l2b-v27-2026-214",
+    "2025W27_1A_0591_2": "l2b-v27-2026-214",
+    "2025W27_1A_0591_3": "l2b-v27-2026-214",
+    "2025W27_1A_0591_4": "l2b-v27-2026-214"
+  },
+  "time_binding": "Original exposure MJD bounds, not the acquisition group name",
+  "byte_identity_required": false,
+  "cutout_transport": "Current API enclosing TAN rectangle plus archive padding; original diagnostic used size=.12deg",
+  "status": "FAIL",
+  "scope": "Public native download and fixed-model inference integration; no scientific promotion criterion",
+  "revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+  "download_id": "92a7486d-5743-4e37-a12a-1787ecda7708",
+  "download_status": "failed",
+  "error_type": "AssertionError",
+  "message": "[{'code': 'archive_http_error', 'message': 'Archive returned HTTP 502', 'retryable': True}]",
+  "finished_at_utc": "2026-11-15T11:11:25.465554+00:00"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "PASS_INCOMPLETE_METADATA_CAPSULE",
+  "planned_parents": 12,
+  "acquired_parents": 0,
+  "raw_files": 0,
+  "excluded_physical_obsids": 438,
+  "minimum_prior_or_new_center_distance_deg": 10.949135427425523,
+  "query_batches": {
+    "initial": 12,
+    "percent20": 12,
+    "time-window": 12,
+    "final-exact-retry": 12
+  },
+  "failed_query_urls": 48,
+  "no_coverage_claim": false,
+  "pixels_opened": false,
+  "scope": "Source, reservation, metadata-domain and failure-accounting audit ONLY; no data/coverage/recovery available"
+}

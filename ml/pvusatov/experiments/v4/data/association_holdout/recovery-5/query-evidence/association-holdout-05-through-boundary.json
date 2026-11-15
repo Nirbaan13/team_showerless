@@ -1,0 +1,33 @@
+{
+  "group_id": "association-holdout-05",
+  "center": [
+    285.33486404,
+    -12.88765097
+  ],
+  "partition": {
+    "name": "through-boundary",
+    "TIME": "-Inf 60949.0"
+  },
+  "complete": false,
+  "attempts": [
+    {
+      "number": 1,
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512&TIME=-Inf+60949.0",
+      "limit": 512,
+      "started_utc": "2026-11-15T15:56:21.999096+00:00",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "number": 2,
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512&TIME=-Inf+60949.0",
+      "limit": 512,
+      "started_utc": "2026-11-15T15:56:22.670020+00:00",
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    }
+  ],
+  "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]",
+  "raw_record_ref": {
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-5/metadata/association-holdout-05/through-boundary.json",
+    "sha256": "d2b59c547a8dd7b3953f0fdbf78430e80e14dd8d33e43d85a92a5c752722856b"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "center": [
+    158.87560323,
+    28.38978507
+  ],
+  "galactic_lon_lat_deg": [
+    202.5,
+    60.0
+  ],
+  "stratum": "off_plane",
+  "group_id": "association-holdout-08",
+  "parent_id": "association-holdout-08",
+  "split": "quarantined_association_holdout",
+  "preferred_detector": 2,
+  "seed": 3900008,
+  "minimum_center_distance_deg": 19.148543936019838,
+  "attempts": [],
+  "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}, {\"attempt\": 2, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+}

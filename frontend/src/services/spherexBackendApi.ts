@@ -86,8 +86,8 @@ export interface ObservationSearchResult {
 
 /**
  * Builds a real astronomical infrared cutout photo URL for any (RA, Dec, FOV) sky coordinate
- * from CDS/NASA HiPS2FITS (2MASS / AllWISE Infrared Survey) so every coordinate immediately
- * displays a real astronomical photograph of that exact sky patch.
+ * from NOIRLab / NASA unWISE Multi-Epoch Infrared Survey (NEOWISE Reactivation releases neo4–neo8)
+ * so every coordinate immediately displays a real multi-epoch infrared photograph of that exact sky patch.
  */
 export function buildRealSkyCutoutPhotoUrl(
   raDeg: number,
@@ -95,13 +95,17 @@ export function buildRealSkyCutoutPhotoUrl(
   fovArcmin = 5,
   epochIdx = 0
 ): string {
+  const layers = ['unwise-neo4', 'unwise-neo5', 'unwise-neo6', 'unwise-neo7', 'unwise-neo8'];
+  const layer = layers[epochIdx % layers.length] || 'unwise-neo7';
+  const pixscale = Math.max(0.4, Math.min(4.0, (fovArcmin * 60) / 256));
   const params = new URLSearchParams({
     ra: raDeg.toFixed(6),
     dec: decDeg.toFixed(6),
-    size_arcmin: fovArcmin.toFixed(2),
-    epoch: String(epochIdx),
+    layer,
+    pixscale: pixscale.toFixed(2),
+    size: '256',
   });
-  return `/api/motion/cutout/render?${params.toString()}`;
+  return `https://www.legacysurvey.org/viewer/cutout.jpg?${params.toString()}`;
 }
 
 /**

@@ -1,0 +1,63 @@
+{
+  "status": "ACQUIRED_QUARANTINED",
+  "plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "selection_sha256": "7e57bf518cce8ae10578da95e364150e0d31b1552891c940d30a85299f9f0571",
+  "groups_planned": 12,
+  "selected_metadata_groups": 0,
+  "downloaded_files": 0,
+  "bytes": 0,
+  "downloads": [],
+  "missing_groups": [
+    {
+      "group_id": "association-holdout-01",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-02",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-03",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-04",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-05",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-06",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-07",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-08",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-09",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-10",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-11",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    },
+    {
+      "group_id": "association-holdout-12",
+      "error": "Exactly8eligible physical exposures not available in declared metadata domain"
+    }
+  ],
+  "pixels_opened": false,
+  "models_called": false,
+  "injections_generated": false
+}

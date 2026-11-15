@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "designation": "Independent RESEARCH evaluation after explicit DEV-informed association selection; not a V4 release or promotion gate",
+  "selected_policy": "learned_pair",
+  "comparison": "Same measured pre-dedup hypotheses and frozen C596 scores; baseline-order pair-exclusive versus learned-utility-order pair-exclusive; both retained pools reviewed by C596",
+  "threshold": 4.0,
+  "detector": {"psf_sigma": 0.8, "max_peaks": 100, "min_speed": 0.5, "max_speed": 60.0, "match_radius": 1.4, "min_epochs": 3, "min_support": 0.8, "leave_one_out": true},
+  "synthetic": {"seed_first": 4100000, "fields": 1000, "extended_every_nth": 3, "varying_psf": true, "instrument_masks": false},
+  "native": {"parents": 12, "epochs": 8, "seed_first": 4110001, "speeds": [0.01, 0.03, 0.1, 0.3, 1.0, 4.0, 10.0, 25.0, 50.0], "direction_ids": [0, 2, 4], "draw_all_six_directions_before_filter": true, "brightness": [3.0, 6.0, 12.0, 24.0, 48.0], "trials_per_parent": 135, "planned_injections": 1620, "controls_per_parent": 1, "width_arcmin": 6.0, "height_arcmin": 6.0, "pixel_scale_arcsec": 6.15, "mask_policy": "motion", "recenter": false},
+  "reporting": {"cohorts": ["all_planned", "common_attributable"], "review_budgets": [1, 3], "attribution": "intersection of absence of spatial control matches in BOTH policy-retained pools", "resolved": "actual candidate-matched-epoch truth span >=3px, descriptive only; not primary denominator filtering or confirmed motion", "strata": ["parent", "speed", "brightness", "cadence_family", "mode"], "bootstrap_samples": 10000, "bootstrap_seed": 2026111502, "bootstrap_unit": "whole native parent or synthetic field", "macro_denominator": "truth-positive groups; retain all empty fields in workload accounting", "errors": "retain every planned identity; any error or unknown truth makes primary report incomplete"},
+  "resources": {"workers": 4, "math_threads": 1, "scratch_root": "/tmp/spaceapps-association-validation", "max_disk_bytes": 8589934592, "max_worker_address_space_bytes": 1879048192, "max_link_checks": 2000000, "max_hypotheses": 50000, "max_pair_operations": 10000000},
+  "prohibitions": ["No fitting, threshold tuning, policy reselection, recentering, replacement or capped-trial dropping", "No V4 FINAL pixels, caches, gates or runtime changes", "No native inference before a root-authorized hash-bound handoff", "No survey precision, calibrated utility or confirmed-motion claim"],
+  "production_promotion_authorized": false
+}

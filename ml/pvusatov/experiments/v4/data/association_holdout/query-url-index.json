@@ -1,0 +1,343 @@
+{
+  "purpose": "Exact query provenance for failed urllib requests, whose original exception log retains error strings rather than response bodies",
+  "queries": [
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-01",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+154.20377653+-47.09320195+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-02",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.65544865+2.95400593+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-03",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+79.04639226+52.11002338+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-04",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-05",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-06",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-07",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+90.22344196+39.42294992+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-08",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+158.87560323+28.38978507+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-09",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+292.05643392+0.3856764+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-10",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+339.09981938+17.06063382+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-11",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+316.58881058+59.24743149+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "initial",
+      "group_id": "association-holdout-12",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+132.87978105+71.52664268+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-01",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20154.20377653%20-47.09320195%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-02",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%2060.65544865%202.95400593%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-03",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%2079.04639226%2052.11002338%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-04",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20247.19620024%207.44284809%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-05",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20285.33486404%20-12.88765097%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-06",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20142.32946053%200.99517302%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-07",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%2090.22344196%2039.42294992%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-08",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20158.87560323%2028.38978507%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-09",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20292.05643392%200.3856764%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-10",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20339.09981938%2017.06063382%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-11",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20316.58881058%2059.24743149%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "percent20",
+      "group_id": "association-holdout-12",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE%20132.87978105%2071.52664268%200.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-01",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+154.20377653+-47.09320195+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-02",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.65544865+2.95400593+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-03",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+79.04639226+52.11002338+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-04",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-05",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-06",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-07",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+90.22344196+39.42294992+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-08",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+158.87560323+28.38978507+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-09",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+292.05643392+0.3856764+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-10",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+339.09981938+17.06063382+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-11",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+316.58881058+59.24743149+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "time-window",
+      "group_id": "association-holdout-12",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+132.87978105+71.52664268+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=4096&TIME=60857+60902",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-01",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+154.20377653+-47.09320195+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-02",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.65544865+2.95400593+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-03",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+79.04639226+52.11002338+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-04",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+247.19620024+7.44284809+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-05",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-06",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+142.32946053+0.99517302+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-07",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+90.22344196+39.42294992+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-08",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+158.87560323+28.38978507+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-09",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+292.05643392+0.3856764+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-10",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+339.09981938+17.06063382+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-11",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+316.58881058+59.24743149+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    },
+    {
+      "attempt": "final-exact-retry",
+      "group_id": "association-holdout-12",
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+132.87978105+71.52664268+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "max_attempts": 2,
+      "constructed_from_frozen_plan_and_prospective_amendments": true
+    }
+  ],
+  "no_failed_response_rows_invented": true,
+  "final_exact_status": "Prospectively scheduled at11:15; consult finalstate for execution completion"
+}

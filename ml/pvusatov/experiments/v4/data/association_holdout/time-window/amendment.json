@@ -1,0 +1,41 @@
+{
+  "declared_utc": "2026-11-15T11:10:35.382072+00:00",
+  "root_authorization": "2026-11-15 root approved same12centers fixed2025-07-01..2025-08-15 TIME amendment before anymetadata rows/pixels",
+  "original_plan_sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107",
+  "prior_incomplete_state_sha256": "68dfd04b02e3293288a89caa25ff17473e9114a250bd0aa67726d10f3b61e3f9",
+  "role": "Explicitly narrower NONEXHAUSTIVE acquisition domain, not globally equivalent to failed all-time search",
+  "time_utc": [
+    "2025-07-01T00:00:00",
+    "2025-08-15T00:00:00"
+  ],
+  "time_mjd": [
+    60857,
+    60902
+  ],
+  "changed_parameters": {
+    "TIME": "60857 60902",
+    "MAXREC": 4096
+  },
+  "max_query_urls": 12,
+  "max_workers": 2,
+  "max_attempts_per_url": 2,
+  "overflow_policy": "A truncated4096row response is incomplete; no extra query or selection",
+  "unchanged": "Exact12parentcoordinates, ordering,8physicalepochs,detector/cadence rules,exclusions,budgets/deadline; no replacements",
+  "native_seed_reservation": {
+    "association-holdout-01": 4110001,
+    "association-holdout-02": 4110002,
+    "association-holdout-03": 4110003,
+    "association-holdout-04": 4110004,
+    "association-holdout-05": 4110005,
+    "association-holdout-06": 4110006,
+    "association-holdout-07": 4110007,
+    "association-holdout-08": 4110008,
+    "association-holdout-09": 4110009,
+    "association-holdout-10": 4110010,
+    "association-holdout-11": 4110011,
+    "association-holdout-12": 4110012
+  },
+  "pixels_opened": false,
+  "inference_authorized": false,
+  "source_sha256": "895edfc32066c6172654418871de7384231cb25fe7b31ae6ec6531103cabe587"
+}

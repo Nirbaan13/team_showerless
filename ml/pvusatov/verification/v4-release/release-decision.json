@@ -1,0 +1,121 @@
+{
+  "schema_version": 4,
+  "recorded_at_utc": "2026-11-15T11:19:12.665081+00:00",
+  "decision": "V4 fixed scorer deployed and verified for cached real FITS presets and bounded native engineering inputs",
+  "production_deployment_verified": true,
+  "graph_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "installed_runtime_sha256": {
+    "contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+  },
+  "release_pr": "https://github.com/Nirbaan13/team_showerless/pull/17",
+  "release_merge_revision": "61bf8b7a5cb6fd1e8678016ed522a0cecd9fd0d8",
+  "verified_backend_revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+  "verified_frontend_revision": "a674c8d33642731e60117ec46c5c88b7d9f7db1c",
+  "same_api_pipeline_image": true,
+  "latest_means": "Latest successful deployment independently for each CI workflow",
+  "gates": {
+    "independent_recovery": true,
+    "blinded_amendment_equality": true,
+    "portable_all6240_recount": true,
+    "locked_dependencies_and_packaged_inference": true,
+    "ci_deploy_and_rollback": true,
+    "hard_cgroup_runtime": true,
+    "deployed_http_sse_png_schema": true,
+    "private_grpc_http_equality": true,
+    "browser_desktop_mobile": true,
+    "swagger_try_it_out": true,
+    "installed_graph_metadata_and11_sources": true
+  },
+  "new_archive_download": {
+    "verified": false,
+    "optional_integration_probe": "FAIL",
+    "observed_error": "archive_http_error: IRSA returned HTTP502",
+    "download_id": "92a7486d-5743-4e37-a12a-1787ecda7708",
+    "no_native_success_claim": true
+  },
+  "frozen_scientific_report_unchanged": true,
+  "refit_or_reselection_after_final": false,
+  "research_association_policy_promoted": false,
+  "evidence": [
+    {
+      "path": "ml/pvusatov/verification/v4-final-repair-1/freeze.json",
+      "sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-final-repair-1/report.json",
+      "sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-final-repair-1/scientific-equality-proof.json",
+      "sha256": "c4f24c6cd6ee14b80148a6e5e97757205b6d63f864ca574ceb6b4af6fbab2af6"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-final-repair-1/independent-accounting/audit.json",
+      "sha256": "f16a95e7401a558316565fd50b2f82085fdd08205d2a10e1a6520ca97b00d2b8"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-final-repair-1/portable-audit/manifest.json",
+      "sha256": "019e6cd9a34d4411923fc50f2ea5fe54937bee8b7dabe83181abecb8a656709b"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/audit-v3-data.json",
+      "sha256": "f58838a8382e530632150df06a2a87020be0a585521355472015aec8208e3168"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/vps-density/audit.json",
+      "sha256": "b2072a63b1de70aaeba0f62eafc8cc15ec6087674177a09cac28e34650d1c739"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/http-proof.json",
+      "sha256": "92c954467197c2fd2326df46e447681f999e9e6ae450b9f8df482866a90dba07"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/grpc-proof.json",
+      "sha256": "e3fd5740962aeb6d9d2f33bec12650994e962c7c6df0129e05f7fbd99cc9938a"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/browser-proof.json",
+      "sha256": "91fa35775674518067a73bb8683c0fb103939812676e031bdee82397911b0313"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/swagger-proof.json",
+      "sha256": "e806ac8653027cd47f5a79b555213f0d27a6c267fb7a220c17f6c6e3a32aa8da"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/server-source-proof.json",
+      "sha256": "56ed31037a0af283edfa34eb79aa9bdd0ce2c0ed1099747841dcb15856e24141"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/live/native-http-proof.json",
+      "sha256": "ecc73a1be0baeb05cb0e228686a5ce3d39d744df212b362b7d753a0653f771ea"
+    },
+    {
+      "path": "ml/pvusatov/verification/v4-runtime/host-deploy-upgrade/receipt.json",
+      "sha256": "3a8b6ce96588a4dd3e60b1269c8124802810e4ffa2b90cb45e8900864e9dc78d"
+    }
+  ],
+  "limitations": [
+    "Injection recovery and controlled real presets do not establish survey precision or confirmed motion",
+    "Scores are uncalibrated pairwise ranking utility",
+    "Native gate has12independent parent backgrounds; derivatives are not independent observations",
+    "Coverage repair was informed by coverage diagnostics while original scientific outputs stayed blinded",
+    "Maximum32x512x512 shape does not guarantee dense linking completes;32/100-source engineering cases return workload_limit",
+    "Public new-native-download integration is blocked by observed upstream502; pipeline health is not processing-throughput proof"
+  ],
+  "rollback": {
+    "frozen_prior_model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+    "immutable_source": "ml/pvusatov/releases/v3",
+    "deployment_path": "Existing revision-based tested deployment/rollback procedure"
+  }
+}

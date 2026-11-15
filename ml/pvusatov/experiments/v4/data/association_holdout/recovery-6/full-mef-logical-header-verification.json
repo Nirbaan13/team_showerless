@@ -1,0 +1,168 @@
+{
+  "status": "HEADER_VERIFIED_QUARANTINED",
+  "engineering_amendment_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/compressed-header-engineering-amendment.json",
+    "sha256": "24b57146d795c37920e91472bbe71d8696c74d8f37b390d7e8f55a9e3426c092"
+  },
+  "historical_transfer_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/full-mef-transfer.json",
+    "sha256": "756a830218e0ae897381b60aa2722dad472cf03bd38827c1536685df0cc8fa4d"
+  },
+  "product": {
+    "group_id": "association-holdout-09",
+    "obs_id": "2025W38_2C_0439_2",
+    "physical_obsid": "2025W38_2C_0439_2",
+    "detector": 3,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "source_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/full-mef/association-holdout-09/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+    "metadata_obs_id": "2025W38_2C_0439_2",
+    "t_min_mjd": 60938.73278,
+    "t_max_mjd": 60938.734113,
+    "roi": {
+      "region_arcmin": [
+        6,
+        6
+      ],
+      "pixel_scale_arcsec": 6.15,
+      "mask_policy": "motion",
+      "recenter": false
+    },
+    "requested_cutout_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits?center=292.05643392%2C0.3856764&size=0.12",
+    "transfer_method": "ORIGINAL_FULL_MEF_GET_ONE_ARTIFACT_64MIB_EXCEPTION",
+    "sha256": "2f9f13a7fbc27dfba29adb22b827f8e01071bfd868cd75055cc6e9514221bae0",
+    "bytes": 59123520,
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 16:13:26 GMT",
+      "Content-Type": "application/fits",
+      "Last-Modified": "Sat, 26 Sep 2026 08:00:44 GMT",
+      "ETag": "\"b0b95fd8f35b1a8ada47429f27c43ed0\""
+    },
+    "failures": [],
+    "status": "HEADER_VERIFIED_QUARANTINED",
+    "header": {
+      "header_only": true,
+      "pixels_opened": false,
+      "native_orientation_preserved": true,
+      "hdu_names": [
+        "PRIMARY",
+        "IMAGE",
+        "FLAGS",
+        "VARIANCE",
+        "ZODI",
+        "EPSF",
+        "WCS-WAVE"
+      ],
+      "native_shape": [
+        2040,
+        2040
+      ],
+      "detector": 3,
+      "physical_obsid": "2025W38_2C_0439_2",
+      "midpoint_mjd": 60938.73344656,
+      "epsf_detcoord": "sky",
+      "epsf_oversampling": [
+        5,
+        5
+      ],
+      "header_layout": [
+        {
+          "name": "PRIMARY",
+          "header_offset": 0,
+          "header_bytes": 2880,
+          "data_bytes": 0,
+          "header_sha256": "192682806743025e0a98cbe7f745b910e609d0995313ed4c774249eb2ba79e1f"
+        },
+        {
+          "name": "IMAGE",
+          "header_offset": 2880,
+          "header_bytes": 23040,
+          "data_bytes": 16646400,
+          "header_sha256": "98a8b28633398330c186a6d580654a934db810f2e3b6f360a01dd848a4c43e11"
+        },
+        {
+          "name": "FLAGS",
+          "header_offset": 16672320,
+          "header_bytes": 17280,
+          "data_bytes": 5155254,
+          "header_sha256": "e5b0d1cc94097c7ea43f2c11883da518015c8ee61cc101f5f1c7d916eccd4bc0"
+        },
+        {
+          "name": "VARIANCE",
+          "header_offset": 21847680,
+          "header_bytes": 11520,
+          "data_bytes": 16646400,
+          "header_sha256": "f2bba0bad451fcdfc77e56a933c605fb8bb1460b5fb9e6c1d0db250b0fd566f3"
+        },
+        {
+          "name": "ZODI",
+          "header_offset": 38505600,
+          "header_bytes": 11520,
+          "data_bytes": 16646400,
+          "header_sha256": "2e0708ab078a23c12854b751b5a9ef4807232ff4d2c2de44c8e16348a0a86215"
+        },
+        {
+          "name": "EPSF",
+          "header_offset": 55163520,
+          "header_bytes": 5760,
+          "data_bytes": 3947152,
+          "header_sha256": "3c1438846dc6025d7fe96834ffb19de0026ae956d2bcfebf3ac61fcd6618c870"
+        },
+        {
+          "name": "WCS-WAVE",
+          "header_offset": 59117760,
+          "header_bytes": 2880,
+          "data_bytes": 1100,
+          "header_sha256": "1859785f183d973cd5dee447e95cce70e6a68fb068e642261e1bd85fb0b99e66"
+        }
+      ],
+      "wcs": {
+        "CTYPE1": "RA---TAN-SIP",
+        "CTYPE2": "DEC--TAN-SIP",
+        "CRVAL1": 292.368622357,
+        "CRVAL2": 0.88816499149,
+        "CRPIX1": 1020.5,
+        "CRPIX2": 1020.5,
+        "CD1_1": null,
+        "CD1_2": null,
+        "CD2_1": null,
+        "CD2_2": null,
+        "CDELT1": 1.0,
+        "CDELT2": 1.0
+      },
+      "compressed_image_header_evidence": [
+        {
+          "name": "FLAGS",
+          "physical_table_dimensions": [
+            2040,
+            8
+          ],
+          "logical_image_dimensions": [
+            2040,
+            2040
+          ],
+          "ZIMAGE": true,
+          "ZBITPIX": 32,
+          "ZCMPTYPE": "RICE_1",
+          "tile_dimensions": [
+            1,
+            2040
+          ]
+        }
+      ],
+      "engineering_interpretation": "FITS ZIMAGE logical dimensions from ZNAXISn; physical BINTABLE geometry remains in original block-layout hashes; no decompression"
+    },
+    "midpoint_mjd": 60938.73344656,
+    "midpoint_utc": "2025-09-20T17:36:09.782784+00:00",
+    "processing_identity_evidence": {
+      "original_frozen_SIA_artifact_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W38_2C/l2b-v27-2026-237/3/level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "processing_version_path": "l2b-v27-2026-237",
+      "artifact_basename": "level2_2025W38_2C_0439_2D3_spx_l2b-v27-2026-237.fits",
+      "header_physical_id_and_detector_verified": true,
+      "header_midpoint_verified": true
+    },
+    "full_vs_cutout_byte_parity_claim": false
+  },
+  "pixels_opened": false,
+  "inference_authorized": false
+}

@@ -1,0 +1,64 @@
+{
+  "protocol_sha256": "b892b5772b014450565513cba2a9df6472531e31d3f45b8ca416ee93be72992b",
+  "reference_feature_sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+  "prototype_sha256": "47e3486cc94e65f520244575fc5dee8517ac5aa2e4f84c3f8a70c477df90102d",
+  "model_directory": "/tmp/spaceapps-v4-operating-points/models/C596",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "cases": [
+    {
+      "kind": "native_packet",
+      "case_id": "v4-train01-control",
+      "path": "/tmp/spaceapps-v4-association-pilot/packets/v4-train01-control.npz",
+      "sha256": "7650d26694b1ff66baf0872e409d094e22427c4bf0f139c543ba75758ba3a65b",
+      "image_sha256": "c5730b45730ad92cc2c869d84fe94a802cab42d6fad90444de972788ab6ffa34"
+    },
+    {
+      "kind": "native_packet",
+      "case_id": "v4-train03-control",
+      "path": "/tmp/spaceapps-v4-association-pilot/packets/v4-train03-control.npz",
+      "sha256": "67b1a4451fc636b9b0e80a12dd1597cd6aa98b0b5d3a36adb5a0121fe1aaf244",
+      "image_sha256": "b6136c278d79513aba0dfde5ccca2c43e52cc6c4167f71bf444829973b0ccdb3"
+    },
+    {
+      "kind": "native_packet",
+      "case_id": "v4-train01-1-0-3",
+      "path": "/tmp/spaceapps-v4-association-pilot/packets/v4-train01-1-0-3.npz",
+      "sha256": "e4c1bfd41557bf8954abbef33eb1a2a88974a53f1c61959da53884e7c56827bb",
+      "image_sha256": "84212b1e205a89b90f2d40795fa56ed2a170bd71c56b0aa31073fc71e5d2891b"
+    },
+    {
+      "kind": "synthetic_replay",
+      "seed": 3806000,
+      "case_id": "3806000",
+      "image_sha256": "3393017f17d2aae55eccb7becf6548c2abe3abc9e7b3860c09e4fd0de26b7149"
+    },
+    {
+      "kind": "synthetic_replay",
+      "seed": 3806001,
+      "case_id": "3806001",
+      "image_sha256": "deb6665ec154cf8d8000cefb9feb5bc239515a5068b0d47f7667981b8f4c918d"
+    },
+    {
+      "kind": "synthetic_replay",
+      "seed": 3806002,
+      "case_id": "3806002",
+      "image_sha256": "d9bb10418193a735491ee0cbf3fc328f8e94fad279171d9b551d254af415467d"
+    }
+  ],
+  "source_sha256": {
+    "ml/pvusatov/experiments/v4/feature_performance/prototype.py": "47e3486cc94e65f520244575fc5dee8517ac5aa2e4f84c3f8a70c477df90102d",
+    "ml/pvusatov/experiments/v4/feature_performance/benchmark.py": "f0fe102c752f1194b4f9188acaaf86adbd42c4b229fcb981ddbb7fb33c39aa28",
+    "ml/pvusatov/experiments/v4/detection/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "ml/pvusatov/experiments/v4/detection/runtime_model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "ml/pvusatov/experiments/v4/association_pilot/policies.py": "854c2abf696dfa5094dfb79c0a39eeecdc796f5ac723bbe6f8727eceaccf271d",
+    "ml/pvusatov/experiments/v4/feature_performance/test_feature_performance.py": "809b8daca07964507e7cee8ccf24abf13505c67a59028609e7647faa47fa32bb"
+  },
+  "grouping": "valid matched epoch count; blocks<=4096; 7 photometric reductions grouped, weighted astrometry/coherent dot products unchanged; original Candidate.features validated once and reused",
+  "producer": "experimental distinct source hash; never claims843producerbinding",
+  "test_path_relocation_only": {
+    "old_path": "ml/pvusatov/experiments/v4/feature_performance/test_prototype.py",
+    "new_path": "ml/pvusatov/experiments/v4/feature_performance/test_feature_performance.py",
+    "unchanged_test_bytes_sha256": "809b8daca07964507e7cee8ccf24abf13505c67a59028609e7647faa47fa32bb",
+    "original_measured_plan_sha256": "524e587493581686ccd1a9285c0e3c413d2bd4fb485c8cc489ac7a01971ea0f4"
+  }
+}

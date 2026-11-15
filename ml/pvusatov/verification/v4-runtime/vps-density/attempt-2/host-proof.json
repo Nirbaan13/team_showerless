@@ -1,0 +1,111 @@
+{
+  "checked_at_utc": "2026-11-15T10:43:08.306433+00:00",
+  "container": "spaceapps-v4-probe-density-complete-20261115",
+  "coordinator_sha256": "d97fa751d14574d9ff0d1c984b005e32591f5615ceac7bb9d8640ba02bd7b1d3",
+  "runner_sha256": "58dc146dc02ce148a1d0a658d6387bc34a94818c15065386911bae846599f8e1",
+  "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+  "docker_start_exit": 0,
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T10:42:07.049663845Z",
+    "FinishedAt": "2026-11-15T10:43:08.198601716Z"
+  },
+  "limits": {
+    "Memory": 1073741824,
+    "MemorySwap": 1073741824,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 64,
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true
+  },
+  "production_services_modified": false,
+  "cgroup-final.json": {
+    "sha256": "bec4c7ef5708416c80d475462714b086998d08d78c85f856a366ed58cba258fd",
+    "value": {
+      "before": {
+        "memory.max": "1073741824",
+        "memory.swap.max": "0",
+        "cpu.max": "100000 100000",
+        "memory.peak": "6221824",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "cpu.stat": "usage_usec 74640\nuser_usec 56063\nsystem_usec 18576\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 1\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+      },
+      "after": {
+        "memory.max": "1073741824",
+        "memory.swap.max": "0",
+        "cpu.max": "100000 100000",
+        "memory.peak": "712658944",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "cpu.stat": "usage_usec 60937713\nuser_usec 58048536\nsystem_usec 2889177\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 611\nnr_throttled 13\nthrottled_usec 2579\nnr_bursts 0\nburst_usec 0"
+      },
+      "peak_mib": 679.64453125,
+      "scope": "Whole container including generator, child, tmpfs, output and file cache"
+    }
+  },
+  "density/portable-receipt.json": {
+    "sha256": "63d729afbac8191647112b39d771215fc4f030442cbd27551f0c2ddd7b966be6",
+    "value": {
+      "scope": "Portable fixed engineering density probe, host cgroup proof remains external",
+      "wrapper_sha256": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+      "original_probe_sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+      "plan_sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+      "runtime": "/probe/inference",
+      "model_dir": "/probe/inference/models",
+      "output": "/evidence/density",
+      "cpu_affinity": [
+        0
+      ],
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "translated_logical_source_root": "Temporary symlink aliases original plan repo-relative source paths to --runtime",
+      "unchanged_generator_options_sources": true,
+      "cases": [
+        {
+          "case": 8,
+          "status": "CLI_SUCCESS",
+          "exit_code": 0,
+          "error": null,
+          "elapsed_seconds": 34.84620879800059,
+          "child_maxrss_mib": 661.953125,
+          "monitor_interruption": null,
+          "fixture_sha256": "69cb2197506e614edad69cfa72404d1d18a95667eddbbea086dfc12b0c5dbda7"
+        },
+        {
+          "case": 32,
+          "status": "CLI_ERROR",
+          "exit_code": 2,
+          "error": {
+            "code": "workload_limit",
+            "message": "The linking search exceeds the supported computation budget",
+            "retryable": false
+          },
+          "elapsed_seconds": 9.71186195500195,
+          "child_maxrss_mib": 416.2578125,
+          "monitor_interruption": null,
+          "fixture_sha256": "136ad9efc979f22c7ee98f52e0b363fe712fe7567c3318089e9ece8d109e460d"
+        },
+        {
+          "case": 100,
+          "status": "CLI_ERROR",
+          "exit_code": 2,
+          "error": {
+            "code": "workload_limit",
+            "message": "The linking search exceeds the supported computation budget",
+            "retryable": false
+          },
+          "elapsed_seconds": 10.35738562700135,
+          "child_maxrss_mib": 417.21484375,
+          "monitor_interruption": null,
+          "fixture_sha256": "35f17588bdbc05b9e6281c7dff974f7e1c8b3ea12dce3c9959a31fe9d8682b50"
+        }
+      ]
+    }
+  }
+}

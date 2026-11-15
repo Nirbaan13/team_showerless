@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "analysis_id": "ENGINEERING-density-100",
+  "model_dir": "/probe/inference/models",
+  "source": {
+    "kind": "preset",
+    "preset_id": "comet-d2",
+    "path": "/tmp/spaceapps-v4-density-cmc5m6v0/engineering.npz"
+  },
+  "options": {
+    "min_snr": 4.0,
+    "max_candidates": 100,
+    "max_peaks": 100
+  }
+}

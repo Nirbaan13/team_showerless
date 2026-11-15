@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-11-15T16:41:35.400250+00:00",
+  "source_sha256": "ad28016a1fd2a7701ef139e96ea70009325e4ffc42e151c2c0a4b49587df7b40",
+  "acquisition_receipt_sha256": "d79f08a5d56216a111ccfd549beb67c48b7d71f326f42d13e8a425145bc8da37",
+  "handoff_sha256": "6005fd136cdab828cac9c786c18fce2c4977289924f7ff94df3a3ddf92671abb",
+  "freeze_sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd",
+  "independently_rehashed_reference_paths": 112,
+  "parents": 12,
+  "exposures": 96,
+  "bytes": 499412160,
+  "frozen_released_groups_preflight_passed": true,
+  "native_prepare_or_model_executed": false
+}

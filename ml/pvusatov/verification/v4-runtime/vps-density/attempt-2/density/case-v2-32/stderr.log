@@ -1,0 +1,4 @@
+[0;93m2026-11-15 10:42:46.869876980 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier[m
+{"schema_version": 1, "stage": "preparing"}
+{"schema_version": 1, "stage": "inferencing"}
+{"schema_version": 1, "stage": "failed", "code": "workload_limit"}

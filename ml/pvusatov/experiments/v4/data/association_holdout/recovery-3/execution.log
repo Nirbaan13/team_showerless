@@ -1,0 +1,94 @@
+metadata association-holdout-02 221 complete
+metadata association-holdout-03 219 complete
+metadata association-holdout-04 240 complete
+metadata association-holdout-01 361 complete
+metadata association-holdout-06 245 complete
+metadata association-holdout-07 234 complete
+metadata association-holdout-05 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-09 0 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 502: Proxy Error"}, {"attempt": 2, "error": "HTTPError: HTTP Error 502: Proxy Error"}]
+metadata association-holdout-10 262 complete
+metadata association-holdout-08 286 complete
+metadata association-holdout-11 283 complete
+metadata association-holdout-12 245 complete
+selection_sha256 c927086936acae0f8c13f02cdc105b47d326cef3085df534abb9debbab862a45 selected_parents 10
+download 1 80 association-holdout-01 header verified
+download 2 80 association-holdout-01 header verified
+download 3 80 association-holdout-01 header verified
+download 4 80 association-holdout-01 header verified
+download 5 80 association-holdout-01 header verified
+download 6 80 association-holdout-01 header verified
+download 7 80 association-holdout-02 header verified
+download 8 80 association-holdout-01 header verified
+download 9 80 association-holdout-01 header verified
+download 10 80 association-holdout-02 header verified
+download 11 80 association-holdout-02 header verified
+download 12 80 association-holdout-02 header verified
+download 13 80 association-holdout-02 header verified
+download 14 80 association-holdout-02 header verified
+download 15 80 association-holdout-02 header verified
+download 16 80 association-holdout-02 header verified
+download 17 80 association-holdout-03 header verified
+download 18 80 association-holdout-03 header verified
+download 19 80 association-holdout-03 header verified
+download 20 80 association-holdout-03 header verified
+download 21 80 association-holdout-03 header verified
+download 22 80 association-holdout-04 header verified
+download 23 80 association-holdout-03 header verified
+download 24 80 association-holdout-03 header verified
+download 25 80 association-holdout-03 header verified
+download 26 80 association-holdout-04 header verified
+download 27 80 association-holdout-04 header verified
+download 28 80 association-holdout-04 header verified
+download 29 80 association-holdout-04 header verified
+download 30 80 association-holdout-04 header verified
+download 31 80 association-holdout-04 header verified
+download 32 80 association-holdout-06 header verified
+download 33 80 association-holdout-06 header verified
+download 34 80 association-holdout-04 header verified
+download 35 80 association-holdout-06 header verified
+download 36 80 association-holdout-06 header verified
+download 37 80 association-holdout-06 header verified
+download 38 80 association-holdout-06 header verified
+download 39 80 association-holdout-07 header verified
+download 40 80 association-holdout-06 header verified
+download 41 80 association-holdout-07 header verified
+download 42 80 association-holdout-07 header verified
+download 43 80 association-holdout-06 header verified
+download 44 80 association-holdout-07 header verified
+download 45 80 association-holdout-07 header verified
+download 46 80 association-holdout-07 header verified
+download 47 80 association-holdout-07 header verified
+download 48 80 association-holdout-07 header verified
+download 49 80 association-holdout-08 header verified
+download 50 80 association-holdout-08 header verified
+download 51 80 association-holdout-08 RuntimeError: [{"attempt": 1, "error": "HTTPError: HTTP Error 503: Service Unavailable"}, {"attempt": 2, "error": "HTTPError: HTTP Error 503: Service Unavailable"}]
+download 52 80 association-holdout-08 header verified
+download 53 80 association-holdout-08 header verified
+download 54 80 association-holdout-08 header verified
+download 55 80 association-holdout-08 header verified
+download 56 80 association-holdout-10 header verified
+download 57 80 association-holdout-08 header verified
+download 58 80 association-holdout-10 header verified
+download 59 80 association-holdout-10 header verified
+download 60 80 association-holdout-10 header verified
+download 61 80 association-holdout-10 header verified
+download 62 80 association-holdout-10 header verified
+download 63 80 association-holdout-10 header verified
+download 64 80 association-holdout-10 header verified
+download 65 80 association-holdout-11 header verified
+download 66 80 association-holdout-11 header verified
+download 67 80 association-holdout-11 header verified
+download 68 80 association-holdout-11 header verified
+download 69 80 association-holdout-11 header verified
+download 70 80 association-holdout-11 header verified
+download 71 80 association-holdout-12 header verified
+download 72 80 association-holdout-11 header verified
+download 73 80 association-holdout-12 header verified
+download 74 80 association-holdout-12 header verified
+download 75 80 association-holdout-12 header verified
+download 76 80 association-holdout-11 header verified
+download 77 80 association-holdout-12 header verified
+download 78 80 association-holdout-12 header verified
+download 79 80 association-holdout-12 header verified
+download 80 80 association-holdout-12 header verified
+{"handoff_sha256": "8dec3fc110f47fc194ffd4b3732d8307f74808da5c5ee91e40d28544792a0c31", "status": "INCOMPLETE_PLANNED_MISSING", "counts": {"planned_parents": 12, "acquired_parents": 9, "physical_exposures": 79, "bytes": 319849920}}

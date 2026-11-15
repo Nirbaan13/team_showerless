@@ -1,0 +1,89 @@
+{
+  "scope": "Local fixed engineering density outcomes, NOT hard cgroup proof or scientific recovery",
+  "plan_sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+  "probe_sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+  "portable_wrapper_sha256": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+  "cases": [
+    {
+      "case": 8,
+      "status": "CLI_SUCCESS",
+      "exit_code": 0,
+      "error": null,
+      "monitor_interruption": null,
+      "elapsed_seconds": 21.97060273399984,
+      "child_user_seconds": 19.422612,
+      "child_system_seconds": 1.936369,
+      "child_maxrss_mib": 661.234375,
+      "observed_peak_rss_mib": 657.8125,
+      "candidate_count": 100,
+      "warnings": [
+        "selected_development_case",
+        "legacy_decreasing_declination_grid",
+        "experimental_uncalibrated_ranking",
+        "short_linear_arc_model",
+        "uncalibrated_residual_snr",
+        "passband_variation_not_corrected",
+        "psf_matching_not_applied",
+        "candidate_cap_reached_search_incomplete"
+      ],
+      "fixture_sha256": "69cb2197506e614edad69cfa72404d1d18a95667eddbbea086dfc12b0c5dbda7",
+      "fixture_bytes": 31084724,
+      "proof_sha256": "90977965353d6f1aa804f991fc22a2978f1b08bf1f46a45a8e16371737bf4ab3",
+      "result_sha256": "6606d08c085bb67a965605f732ce172ee3240a3ea46e8ec89c35e74279009b4b"
+    },
+    {
+      "case": 32,
+      "status": "CLI_ERROR",
+      "exit_code": 2,
+      "error": {
+        "code": "workload_limit",
+        "message": "The linking search exceeds the supported computation budget",
+        "retryable": false
+      },
+      "monitor_interruption": null,
+      "elapsed_seconds": 3.8218813220009906,
+      "child_user_seconds": 3.617908,
+      "child_system_seconds": 0.156996,
+      "child_maxrss_mib": 417.73046875,
+      "observed_peak_rss_mib": 387.58984375,
+      "candidate_count": null,
+      "warnings": [],
+      "fixture_sha256": "136ad9efc979f22c7ee98f52e0b363fe712fe7567c3318089e9ece8d109e460d",
+      "fixture_bytes": 31090889,
+      "proof_sha256": "0e7846bb98842fe7a875561dbe1a9f9e37109a7cbf37a2b9e81448d98c39c02b",
+      "result_sha256": "8abcdb1f2f45b370ada38b39978f15d7d593a9e8064892c4b876516326d71717"
+    },
+    {
+      "case": 100,
+      "status": "CLI_ERROR",
+      "exit_code": 2,
+      "error": {
+        "code": "workload_limit",
+        "message": "The linking search exceeds the supported computation budget",
+        "retryable": false
+      },
+      "monitor_interruption": null,
+      "elapsed_seconds": 4.072875375000876,
+      "child_user_seconds": 3.874424,
+      "child_system_seconds": 0.155936,
+      "child_maxrss_mib": 417.73828125,
+      "observed_peak_rss_mib": 400.88671875,
+      "candidate_count": null,
+      "warnings": [],
+      "fixture_sha256": "35f17588bdbc05b9e6281c7dff974f7e1c8b3ea12dce3c9959a31fe9d8682b50",
+      "fixture_bytes": 31106260,
+      "proof_sha256": "b53b594f293a596550fd2af9975bd817d6ad382c824ed782d42b8c6a5f7d9326",
+      "result_sha256": "bfd84aa6dc7ce6ff090e610aa63974ad496c61857015a2f02e94dae1976a6fca"
+    }
+  ],
+  "no_runtime_or_model_changes": true,
+  "no_monitor_interruption": true,
+  "test_result": "34 runtime/coverage/generator tests passed with required existing PYTHONPATH",
+  "initial_fixture_failure_retained": "case-8: invalid_input ISO timestamp hours serialization, before detection",
+  "limits": [
+    "Input/output caps and guarded workload errors are not guaranteed completion",
+    "Generated sources are distinct from measured review proposals",
+    "Local child RSS excludes parent,tmpfs and whole cgroup",
+    "No scientific sensitivity, selection, FINAL or Ceres access"
+  ]
+}
