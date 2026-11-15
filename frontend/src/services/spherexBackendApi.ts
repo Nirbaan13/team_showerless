@@ -194,12 +194,7 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
     archiveUrl: f.access_url,
     release: (f.release as 'DR1' | 'QR2' | 'QR3') || 'DR1',
     coverage: f.coverage_fraction,
-    headerMetadata: {
-      exposureTimeSec: 142.5,
-      airmass: 1.0,
-      zodiBrightnessMjySr: 12.4,
-      snrEstimated: 18.5,
-    },
+    headerMetadata: {},
   }));
 
   const candidates: CandidateObject[] = res.candidates.slice(0, 8).map((c, idx) => ({

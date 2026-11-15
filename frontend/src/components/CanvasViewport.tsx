@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type {
   SpherexEpochFrame,
   CandidateObject,
@@ -80,7 +80,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
+  const [cursorCoords, setCursorCoords] = useState<{ x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
   const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
   const [bitmapStates, setBitmapStates] = useState<Record<string, 'ready' | 'failed'>>({});
@@ -151,42 +151,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     setPan({ x: 0, y: 0 });
   };
 
-  const calculateRaDecFromPixel = useCallback(
-    (canvasX: number, canvasY: number, width: number, height: number) => {
-      const centerX = width / 2 + pan.x;
-      const centerY = height / 2 + pan.y;
-      const scaleArcsecPerPx = 6.2 / zoom;
-
-      const dxArcsec = (canvasX - centerX) * scaleArcsecPerPx;
-      const dyArcsec = (centerY - canvasY) * scaleArcsecPerPx;
-
-      const cosDec = Math.cos((centerDec * Math.PI) / 180);
-      const safeCosDec = Math.abs(cosDec) < 1e-5 ? (cosDec < 0 ? -1e-5 : 1e-5) : cosDec;
-      const raOffsetDeg = dxArcsec / 3600 / safeCosDec;
-      const decOffsetDeg = dyArcsec / 3600;
-
-      const computedRa = (centerRa - raOffsetDeg + 360) % 360;
-      const computedDec = Math.max(-90, Math.min(90, centerDec + decOffsetDeg));
-
-      const raHours = computedRa / 15;
-      const rh = Math.floor(raHours);
-      const rm = Math.floor((raHours - rh) * 60);
-      const rs = ((raHours - rh - rm / 60) * 3600).toFixed(2);
-
-      const sign = computedDec >= 0 ? '+' : '-';
-      const absDec = Math.abs(computedDec);
-      const dd = Math.floor(absDec);
-      const dm = Math.floor((absDec - dd) * 60);
-      const ds = ((absDec - dd - dm / 60) * 3600).toFixed(1);
-
-      return {
-        ra: `${rh.toString().padStart(2, '0')}h ${rm.toString().padStart(2, '0')}m ${rs.padStart(5, '0')}s`,
-        dec: `${sign}${dd.toString().padStart(2, '0')}° ${dm.toString().padStart(2, '0')}' ${ds.padStart(4, '0')}"`,
-      };
-    },
-    [pan, zoom, centerRa, centerDec]
-  );
-
   // Minimalist Astronomical Rendering Engine
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -209,39 +173,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.save();
     ctx.translate(width / 2 + pan.x, height / 2 + pan.y);
     ctx.scale(zoom, zoom);
-
-
-    // In Scientist Mode: Draw astronomical coordinate grid lines (RA/Dec J2000 ICRS)
-    if (isScientistMode && bitmapReady) {
-      ctx.save();
-      ctx.strokeStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.12)' : 'rgba(52, 211, 153, 0.2)';
-      ctx.lineWidth = 1 / zoom;
-      ctx.setLineDash([4 / zoom, 4 / zoom]);
-
-      for (let offset = -250; offset <= 250; offset += 100) {
-        // Vertical grid line (RA)
-        ctx.beginPath();
-        ctx.moveTo(offset, -250);
-        ctx.lineTo(offset, 250);
-        ctx.stroke();
-
-        // Horizontal grid line (Dec)
-        ctx.beginPath();
-        ctx.moveTo(-250, offset);
-        ctx.lineTo(250, offset);
-        ctx.stroke();
-      }
-
-      // Draw faint coordinate tick labels on the grid in scientist mode
-      ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.35)' : 'rgba(52, 211, 153, 0.45)';
-      ctx.setLineDash([]);
-      ctx.fillText('α: 17h 57m 40s', -245, -5);
-      ctx.fillText('α: 17h 57m 55s', 55, -5);
-      ctx.fillText('δ: +04° 41\' 00"', -5, -95);
-      ctx.fillText('δ: +04° 42\' 00"', -5, 105);
-      ctx.restore();
-    }
 
     const currentFrame = frames[activeFrameIndex];
     let hasDrawnRealImage = false;
@@ -470,8 +401,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.setLineDash([]);
         ctx.font = `${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = '#34d399';
-        ctx.fillText(`Priority: #${rank} | FWHM: 1.42px (8.8″)`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 18 / zoom);
-        ctx.fillText(`Flux: ${(currentPos.flux || 18).toFixed(1)} mJy | SNR: ${(currentPos.snr || 12).toFixed(1)}`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 28 / zoom);
+        ctx.fillText(`Priority: #${rank}`, offsetX + reticleSize / 2 + 4 / zoom, offsetY + 18 / zoom);
       }
 
       ctx.restore();
@@ -689,7 +619,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.stroke();
 
     // Scale bar
-    const scaleBarPixels = (30 / 6.2) * zoom;
+    const scaleBarPixels = 10 * (512 / (activeFrame?.imageWidth || 256)) * zoom;
     const sbX = width - 80;
     const sbY = height - 20;
     ctx.strokeStyle = isWhiteBg ? '#57534e' : '#a8a29e';
@@ -700,7 +630,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.stroke();
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
-    ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
+    ctx.fillText('10 px', sbX + scaleBarPixels / 2 - 6, sbY - 4);
   }, [bitmapReady, targetBitmapUrl, showSourceLabels, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -720,8 +650,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       const rect = canvasRef.current.getBoundingClientRect();
       const clientX = e.clientX - rect.left;
       const clientY = e.clientY - rect.top;
-      const { ra, dec } = calculateRaDecFromPixel(clientX, clientY, rect.width, rect.height);
-      setCursorCoords({ ra, dec, x: clientX, y: clientY });
+      const nativeWidth = activeFrame?.imageWidth ?? 256;
+      const nativeHeight = activeFrame?.imageHeight ?? 256;
+      const displayScale = 512 / nativeWidth;
+      const x = ((clientX - rect.width / 2 - pan.x) / zoom + 256) / displayScale;
+      const y = ((clientY - rect.height / 2 - pan.y) / zoom + nativeHeight * displayScale / 2) / displayScale;
+      setCursorCoords(x >= 0 && x < nativeWidth && y >= 0 && y < nativeHeight ? { x, y } : null);
     }
 
     if (!isDragging) return;
@@ -881,70 +815,20 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <label className="flex gap-2 items-center my-2"><input type="checkbox" checked={showSourceLabels} onChange={e => setShowSourceLabels(e.target.checked)} />Show source labels</label>
           {candidates.find(c => c.id === selectedCandidateId) && <p className="break-words py-1">Selected: {candidates.find(c => c.id === selectedCandidateId)?.validationData?.objectName || candidates.find(c => c.id === selectedCandidateId)?.catalogId || selectedCandidateId}</p>}
 
-          <div className="flex items-center justify-between border-b border-paper-800 pb-1.5">
-            <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              SPHEREx Astrophysics HUD (L2/L3)
-            </span>
-            <span className="text-[10px] text-paper-400 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-700">
-              ICRS J2000
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[10px]">
-            <div>
-              <span className="text-paper-500">RA (J2000): </span>
-              <span className="text-emerald-300 font-semibold">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Dec (J2000): </span>
-              <span className="text-emerald-300 font-semibold">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Plate Scale: </span>
-              <span className="text-paper-200">{(6.2 / zoom).toFixed(2)}″/px</span>
-            </div>
-            <div>
-              <span className="text-paper-500">PSF FWHM: </span>
-              <span className="text-paper-200">~1.42 px (8.8″)</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Surface Flux: </span>
-              <span className="text-emerald-400 font-medium">12.43 MJy/sr</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Est. SNR: </span>
-              <span className="text-emerald-400 font-medium">18.4 σ</span>
-            </div>
-            <div>
-              <span className="text-paper-500">Zodi IPD Model: </span>
-              <span className="text-paper-300">DIRBE v4.1</span>
-            </div>
-            <div>
-              <span className="text-paper-500">WCS Matrix: </span>
-              <span className="text-paper-400">CD1_1: -1.72e-3</span>
-            </div>
-          </div>
-          <div className="text-[9px] text-paper-500 border-t border-paper-800/80 pt-1 flex items-center justify-between">
-            <span>Grid: Equat. RA/Dec lines</span>
-            <span className="text-emerald-500/80">Photometric cal: ±1.8%</span>
+          <div className="space-y-1 break-words mt-2">
+            <p>Requested field: RA {centerRa.toFixed(6)}°, Dec {centerDec.toFixed(6)}°</p>
+            <p>Frame: {activeFrame?.frameId}</p>
+            <p>Observed UTC: {activeFrame?.observationDate ?? 'Unavailable'}</p>
+            <p>Detector: D{activeFrame?.detectorArray}; pixels: {activeFrame?.imageWidth ?? '?'} × {activeFrame?.imageHeight ?? '?'}</p>
+            <p>Coverage: {activeFrame?.coverage !== undefined ? `${(activeFrame.coverage * 100).toFixed(1)}%` : 'Unavailable'}</p>
+            <p>Sky coordinates unavailable: frame WCS was not supplied.</p>
+            <p>Photometry, PSF and calibration: unavailable in this frame response.</p>
+            {cursorCoords && <p>Image pixel (zero-based): x {cursorCoords.x.toFixed(1)}, y {cursorCoords.y.toFixed(1)}</p>}
           </div>
         </details>
       ) : (
-        <div className="absolute top-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[11px] font-mono text-paper-200 pointer-events-none flex items-center gap-3">
-          <div>
-            <span className="text-paper-500 mr-1">RA:</span>
-            <span className="text-paper-100 font-medium">{cursorCoords?.ra || '17h 57m 48.5s'}</span>
-          </div>
-          <div className="w-[1px] h-3 bg-paper-800" />
-          <div>
-            <span className="text-paper-500 mr-1">Dec:</span>
-            <span className="text-paper-100 font-medium">{cursorCoords?.dec || '+04° 41\' 36.1"'}</span>
-          </div>
-          <div className="w-[1px] h-3 bg-paper-800" />
-          <span className="text-[10px] text-paper-400">
-            {(6.2 / zoom).toFixed(2)}″/px
-          </span>
+        <div className="absolute top-14 left-2.5 max-w-[calc(100%-1.25rem)] bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[10px] font-mono text-paper-200 pointer-events-none">
+          Requested field: RA {centerRa.toFixed(4)}°, Dec {centerDec.toFixed(4)}° · cursor sky position unavailable
         </div>
       ))}
 

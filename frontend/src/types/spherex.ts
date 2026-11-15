@@ -57,10 +57,10 @@ export interface SpherexEpochFrame {
   release?: string; // DR1 or QR2/QR3
   coverage?: number; // Fraction of valid finite pixels (0-1)
   headerMetadata: {
-    exposureTimeSec: number;
-    airmass: number;
-    zodiBrightnessMjySr: number;
-    snrEstimated: number;
+    exposureTimeSec?: number;
+    airmass?: number;
+    zodiBrightnessMjySr?: number;
+    snrEstimated?: number;
   };
 }
 

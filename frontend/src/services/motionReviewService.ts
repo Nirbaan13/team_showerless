@@ -222,16 +222,7 @@ export function convertReviewToEpochFrames(review: MotionReviewDataset): Spherex
   const detectorArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
   const [wMin, wMax, chIdx] = ARRAY_WAVELENGTH_RANGES[detectorArray] || [4.42, 5.0, 96];
 
-  // Estimate per-frame SNR from top candidate track
-  const topTrack = review.tracks[0] || review.bloom_tracks[0];
-
   return review.frames.map((frame, idx) => {
-    const epochDetectIdx = topTrack ? topTrack.epochs.indexOf(idx) : -1;
-    const snrVal =
-      epochDetectIdx >= 0 && topTrack?.snr?.[epochDetectIdx]
-        ? Number(topTrack.snr[epochDetectIdx].toFixed(1))
-        : 16.5;
-
     return {
       frameId: frame.id,
       epochIndex: idx,
@@ -251,12 +242,7 @@ export function convertReviewToEpochFrames(review: MotionReviewDataset): Spherex
       archiveUrl: frame.archive_url,
       release: frame.release || (review.id.startsWith('vesta') ? 'DR1' : 'QR2'),
       coverage: frame.coverage,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.0,
-        zodiBrightnessMjySr: detectorArray >= 5 ? 14.8 : 9.6,
-        snrEstimated: snrVal,
-      },
+      headerMetadata: {},
     };
   });
 }

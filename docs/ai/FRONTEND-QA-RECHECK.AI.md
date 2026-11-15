@@ -21,7 +21,7 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-007 | Pending | Processing artifact/mode availability |
 | QA-008 | Pending | Detector/artifact agreement |
 | QA-009 | Pending | Canvas overlay transforms |
-| QA-010 | Pending | Scientific HUD and cursor metadata |
+| QA-010 | Fixed locally | Browser regression verifies actual frame ID/time/dimensions/coverage and requested field coordinates, with WCS and photometry explicitly unavailable. Removed invented fixed celestial grid/PSF/flux/calibration, cursor sky projection and angular ruler; native pixel ruler/cursor account for rendering scale. Existing compact metadata checks also pass. |
 | QA-011 | Fixed locally | Three browser checks pass for outage, true empty results, separate Gaia/SIMBAD identities, missing magnitudes and clearing matches on refresh/field change. Removed coordinate-generated sources, invented Gaia IDs, fake cross-identification and indefinite cached fallback; expose per-provider failure/partial status. |
 | QA-012 | Already fixed in main, verified | Browser opens PX-000004 directly, reloads without changing identity, and copies a permalink retaining candidate=PX-000004. Existing URL state fix retained. |
 | QA-013 | Already fixed in main, verified | Real Chromium taps at 390×844: Play lies above fixed navigation, changes to Pause, advances the visit, and Next remains clickable. No competing layout fix. |

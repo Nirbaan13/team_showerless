@@ -345,3 +345,19 @@ test('real Gaia and SIMBAD records stay separate and missing magnitudes are not 
   await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).toHaveCount(0);
   await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
 });
+
+test('HUD reports frame evidence and requested coordinates without invented WCS or photometry', async ({ page }) => {
+  await backend(page, { withCandidate: true });
+  await openViewer(page); await search(page);
+  const metadata = page.locator('details[aria-label="Image metadata"]');
+  await metadata.locator('summary').click();
+  await expect(metadata.getByText('Requested field: RA 250.000000°, Dec 10.000000°', { exact: true })).toBeVisible();
+  await expect(metadata.getByText('Frame: frame-0', { exact: true })).toBeVisible();
+  await expect(metadata.getByText('Sky coordinates unavailable: frame WCS was not supplied.', { exact: true })).toBeVisible();
+  for (const fake of ['12.43 MJy/sr', '18.4 σ', 'DIRBE v4.1', 'CD1_1: -1.72e-3', 'Photometric cal: ±1.8%', '~1.42 px (8.8″)']) {
+    await expect(page.getByText(fake, { exact: true })).toHaveCount(0);
+  }
+  const canvas = page.locator('#tutorial-target-skyview canvas');
+  await canvas.hover({ position: { x: 400, y: 350 } });
+  await expect(metadata.getByText('Requested field: RA 250.000000°, Dec 10.000000°', { exact: true })).toBeVisible();
+});
