@@ -5,6 +5,7 @@ import type {
   CandidateClassification,
   ConfidenceLevel,
   SpectralDataPoint,
+  VerificationComment,
 } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
 import { MLDetectionsPanel } from './MLDetectionsPanel';
@@ -22,6 +23,7 @@ import {
   ShieldAlert,
   Compass,
   Info,
+  Edit3,
 } from 'lucide-react';
 
 interface ClassificationGuideItem {
@@ -156,6 +158,11 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       setSelectedClass(candidate.classification);
       setSelectedConfidence(candidate.confidence);
       setIsSaved(false);
+      if (activeTab === 'triage' && candidate.classification !== 'unreviewed') {
+        setActiveTab('chat');
+      } else if (activeTab === 'chat' && candidate.classification === 'unreviewed') {
+        setActiveTab('triage');
+      }
     }
   }, [candidate]);
 
@@ -192,11 +199,63 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     setWidth((prev) => (prev > 420 ? 340 : 540));
   };
 
+  const isClassified = Boolean(
+    candidate && candidate.classification && candidate.classification !== 'unreviewed'
+  );
+
   const handleSaveTriage = () => {
     if (!candidate) return;
+
+    const exactCandidateId = candidate.id;
+    const candidateTitle =
+      candidate.validationData?.objectName ||
+      candidate.catalogId ||
+      candidate.id;
+
+    const vote: VerificationComment['vote'] =
+      selectedClass === 'moving_object'
+        ? 'confirm_motion'
+        : selectedClass === 'artifact'
+        ? 'artifact'
+        : selectedClass === 'transient'
+        ? 'investigate'
+        : 'known';
+
+    const newCommentEntry: VerificationComment = {
+      id: `verify-${exactCandidateId}-${Date.now()}`,
+      author: 'Citizen Volunteer (You)',
+      role: isScientistMode ? 'Science Team' : 'Volunteer',
+      timestamp: 'Just now',
+      candidateId: exactCandidateId,
+      message: notes.trim()
+        ? `Classified as ${selectedClass.replace('_', ' ').toUpperCase()} (${selectedConfidence} confidence): "${notes.trim()}"`
+        : `Classified as ${selectedClass.replace('_', ' ').toUpperCase()} with ${selectedConfidence} confidence in SPHEREx Band D${selectedArray}.`,
+      vote,
+      upvotes: 1,
+      setting: {
+        targetPresetId: currentPresetId ?? null,
+        candidateId: exactCandidateId,
+        candidateName: candidateTitle,
+        ra: candidate.ra ?? ra ?? 166.79,
+        dec: candidate.dec ?? dec ?? 5.29,
+        fov: fov || "3'",
+        selectedArray: typeof selectedArray === 'number' ? selectedArray : 6,
+        activeFrameIndex,
+        subtractionMode: subtractionMode || 'epoch_difference',
+      },
+    };
+
+    try {
+      const existingRaw = localStorage.getItem('spherex_community_comments');
+      const existing: VerificationComment[] = existingRaw ? JSON.parse(existingRaw) : [];
+      const updated = [newCommentEntry, ...existing.filter((c) => c.id !== newCommentEntry.id)];
+      localStorage.setItem('spherex_community_comments', JSON.stringify(updated));
+      window.dispatchEvent(new Event('spherex_comments_updated'));
+    } catch {}
+
     onUpdateCandidateClassification(candidate.id, selectedClass, selectedConfidence, notes);
     setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 2000);
+    setActiveTab('chat');
   };
 
   return (
@@ -234,29 +293,43 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             <span>AI</span>
           </button>
 
-          <button
-            onClick={() => setActiveTab('triage')}
-            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === 'triage'
-                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                : 'border-transparent text-paper-400 hover:text-paper-200'
-            }`}
-          >
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Triage</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('chat')}
-            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === 'chat'
-                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                : 'border-transparent text-paper-400 hover:text-paper-200'
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Chat</span>
-          </button>
+          {/* Unified Triage or Chat Tab (never cluttered at the same time) */}
+          {activeTab === 'chat' || isClassified ? (
+            <button
+              onClick={() => setActiveTab('chat')}
+              className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+                activeTab === 'chat'
+                  ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                  : 'border-transparent text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Chat & Confirm</span>
+              {candidate && candidate.classification !== 'unreviewed' && (
+                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-600/50">
+                  {candidate.classification === 'moving_object'
+                    ? 'Moving'
+                    : candidate.classification === 'transient'
+                    ? 'Flash'
+                    : candidate.classification === 'artifact'
+                    ? 'Artifact'
+                    : 'Known'}
+                </span>
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={() => setActiveTab('triage')}
+              className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+                activeTab === 'triage'
+                  ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                  : 'border-transparent text-paper-400 hover:text-paper-200'
+              }`}
+            >
+              <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Triage</span>
+            </button>
+          )}
 
           <button
             onClick={() => setActiveTab('spectrum')}
@@ -269,7 +342,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             <Radio className="w-3.5 h-3.5 text-emerald-400" />
             <span>Spectral Analysis</span>
           </button>
-
         </div>
 
         {/* Quick Expand/Shrink Button + Drag hint */}
@@ -451,10 +523,10 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 {/* Save Confirmation */}
                 <button
                   onClick={handleSaveTriage}
-                  className="btn-tactile w-full py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-2 cursor-pointer"
+                  className="btn-tactile w-full py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)]"
                 >
                   <CheckCircle className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>{isSaved ? 'Classification Recorded ✓' : 'Save Classification'}</span>
+                  <span>{isSaved ? 'Recorded & Opening Chat ✓' : 'Save Classification & Open Discussion →'}</span>
                 </button>
 
                 {/* View Full Candidate Discovery Report */}
@@ -483,18 +555,41 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
         {/* TAB 2: CANDIDATE VERIFICATION DISCUSSION & NOTES THREAD */}
         {activeTab === 'chat' && (
-          <CommunityVerificationStream
-            key={candidate?.id || selectedCandidateId || 'none'}
-            candidate={candidate}
-            activeCandidateId={candidate?.id || selectedCandidateId || null}
-            currentPresetId={currentPresetId}
-            ra={ra}
-            dec={dec}
-            fov={fov}
-            selectedArray={selectedArray}
-            activeFrameIndex={activeFrameIndex}
-            subtractionMode={subtractionMode}
-          />
+          <div className="flex flex-col h-full">
+            {candidate && (
+              <div className="p-3 bg-paper-950 border-b border-paper-800 flex items-center justify-between gap-2 shrink-0">
+                <div className="min-w-0">
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
+                    ★ Classified Object Thread
+                  </span>
+                  <span className="font-mono text-xs font-bold text-white truncate block">
+                    #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('triage')}
+                  className="btn-tactile-sm px-2.5 py-1 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-paper-200 hover:text-white font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                  title="Modify volunteer classification"
+                >
+                  <Edit3 className="w-3 h-3 text-emerald-400" />
+                  <span>Edit Triage</span>
+                </button>
+              </div>
+            )}
+            <CommunityVerificationStream
+              key={candidate?.id || selectedCandidateId || 'none'}
+              candidate={candidate}
+              activeCandidateId={candidate?.id || selectedCandidateId || null}
+              currentPresetId={currentPresetId}
+              ra={ra}
+              dec={dec}
+              fov={fov}
+              selectedArray={selectedArray}
+              activeFrameIndex={activeFrameIndex}
+              subtractionMode={subtractionMode}
+            />
+          </div>
         )}
 
         {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}

@@ -356,8 +356,10 @@ export function App() {
 
     setRa(newRa);
     setDec(newDec);
+    setSelectedCandidateId(null);
     setCurrentPresetId(null);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
+    setCatalogRefreshCounter((c) => c + 1);
     setActiveTab('viewer');
 
     const fovArcmin = parseFloat(fov) || 5;
@@ -725,7 +727,7 @@ export function App() {
     setActiveFrameIndex(setting.activeFrameIndex);
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
-    setDrawerControlledTab('ai');
+    setDrawerControlledTab('chat');
     setActiveTab('viewer');
 
     triggerBackgroundMlProgress(
