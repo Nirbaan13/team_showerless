@@ -68,5 +68,23 @@ object ResilientArchiveSpec extends ZIOSpecDefault:
       yield assertTrue(selected.sourceUrl.contains(image.accessUrl),
         selected.accessUrl.startsWith("https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/level2/2025W17_4B/version/1/native.fits?center="),
         selected.observation.release=="QR2") }
+    },
+    test("mirror pixel transfers use the mirror transport without contacting primary IBE") {
+      ZIO.scoped { for
+        primaryCalls<-Ref.make(0)
+        mirrorCalls<-Ref.make(0)
+        services<-ExternalServices.make(Map("irsa_sia"->ZIO.never))
+        primary=new Archive:
+          def search(q:Query)=ZIO.succeed(Nil)
+          def fetch(i:ArchiveImage,p:Path)=primaryCalls.update(_+1)*>ZIO.fail(ApiError("archive_http_error","IBE offline",true))
+        mirror=new Archive:
+          def search(q:Query)=ZIO.succeed(List(image))
+          def fetch(i:ArchiveImage,p:Path)=mirrorCalls.update(_+1)
+        source=ResilientArchive(primary,mirror,services)
+        selected<-source.select(image,query)
+        result<-source.fetch(selected,Path.of("unused-cutout.fits")).either
+        primaries<-primaryCalls.get
+        mirrors<-mirrorCalls.get
+      yield assertTrue(result.isRight,primaries==0,mirrors==1) }
     }
   )

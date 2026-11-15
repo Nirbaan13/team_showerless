@@ -35,5 +35,9 @@ final class IrsaProvider(source: Archive,repository: DownloadsRepository) extend
           case Some(c)=>source.select(image,Query(Json.Obj(),s"CIRCLE ${c.ra_degrees} ${c.dec_degrees} ${c.radius_degrees}"))
           case None if d.mode==DeliveryMode.require_cutout=>ZIO.fail(ArchiveFailure("invalid_selection","require_cutout needs a spatial region"))
           case None=>ZIO.succeed(image)
-      selected.map(result=>List(ArchiveAsset(ArchiveAssetKey.key(r,d),id,result.accessUrl))).mapError(ArchiveFailure.from)
+      selected.map { result=>
+        val nativeCutout=Option.when(d.mode!=DeliveryMode.original && d.region.nonEmpty &&
+          result.observation.header_metadata.get("discovery_source").contains(Json.Str("s3_mirror")))(result.sourceUrl).flatten
+        List(ArchiveAsset(ArchiveAssetKey.key(r,d),id,result.accessUrl,cutout_source_url=nativeCutout))
+      }.mapError(ArchiveFailure.from)
     }
