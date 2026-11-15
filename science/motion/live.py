@@ -15,12 +15,14 @@ from xml.etree import ElementTree
 
 import numpy as np
 
+from science import archive_gateway
+
 from .prepare_fits import align_exposure, grid_coordinates, stack_payload
 from .review import build_review
 
 ARCHIVE_HOST = 'irsa.ipac.caltech.edu'
 COLLECTIONS = tuple(
-    c.strip() for c in os.getenv('SPHEREX_COLLECTIONS', 'spherex_dr1,spherex_qr3,spherex_dr2,spherex_qr4').split(',') if c.strip()
+    c.strip() for c in os.getenv('SPHEREX_COLLECTIONS', 'spherex_dr1,spherex_qr3,spherex_qr2,spherex_dr2,spherex_qr4').split(',') if c.strip()
 )
 PIXEL_SCALE = 6.15
 MAX_VISITS = 8
@@ -49,6 +51,8 @@ class Exposure:
     mjd: float
     url: str
     release: str
+    source_url: str | None = None
+    discovery_source: str = 'sia'
 
 
 def read_archive(url, limit):
@@ -119,6 +123,25 @@ def parse_exposures(content, detector, start, stop):
 
 
 def discover(ra, dec, detector, start, stop):
+    if archive_gateway.configured():
+        try:
+            # The shared cone search requires a positive radius, matching the existing SIA retry.
+            found = archive_gateway.discover(ra, dec, 0.001, detector=detector, start=start, stop=stop)
+            if len(found) > MAX_RECORDS:
+                raise SearchError(422, 'Too many archive records. Try a shorter date range.')
+            exposures = {}
+            for image in found:
+                match = OBSERVATION_NAME.fullmatch(urlsplit(image.url).path.rsplit('/', 1)[-1])
+                if (image.detector != detector or not start <= image.mjd < stop or not match
+                        or not match[1].endswith(f'D{detector}')):
+                    continue
+                exposure = Exposure(match[1], image.mjd, image.url, image.release, image.source_url, image.discovery_source)
+                if exposure.id not in exposures or exposure.release.startswith('DR'):
+                    exposures[exposure.id] = exposure
+            return archive_gateway.Discovery(sorted(exposures.values(), key=lambda e: (e.mjd, e.id)),
+                    complete=found.discovery_complete, sources=found.discovery_source)
+        except archive_gateway.GatewayError as exc:
+            raise SearchError(exc.status, str(exc)) from exc
     params = [
         ('TIME', f'{start} {stop}'),
         ('CALIB', '2'), ('DPTYPE', 'image'), ('MAXREC', str(MAX_RECORDS)), ('RESPONSEFORMAT', 'VOTABLE'),
@@ -188,6 +211,9 @@ def search_motion(ra, dec, detector, start_date, end_date, size_arcmin, retain_o
     discovered = discover(ra, dec, detector, start, stop)
     groups, visit_count = sample_visits(discovered)
     if len(groups) < 3:
+        if not getattr(discovered, 'discovery_complete', True):
+            raise SearchError(503, f'Archive discovery is incomplete and currently contains {visit_count} visits. '
+                                   'At least 3 visits are needed. Try again as the index grows.')
         raise SearchError(404, f'IRSA found {visit_count} visits for D{detector}. '
                                'Choose another detector or date range. At least 3 visits are needed.')
     center = (ra, dec)
@@ -204,7 +230,9 @@ def search_motion(ra, dec, detector, start_date, end_date, size_arcmin, retain_o
                 continue
             if row[0] not in rows:
                 rows[row[0]] = row
-                provenance[exposure.id] = {'archive_url': exposure.url, 'release': exposure.release}
+                provenance[exposure.id] = {'archive_url': exposure.url, 'release': exposure.release,
+                                           'source_url': exposure.source_url or exposure.url,
+                                           'discovery_source': exposure.discovery_source}
             else:
                 skipped.append({'observation_id': exposure.id, 'reason': 'duplicate exposure midpoint'})
     if len(rows) < 3:
@@ -222,6 +250,8 @@ def search_motion(ra, dec, detector, start_date, end_date, size_arcmin, retain_o
         'ra_deg': ra, 'dec_deg': dec, 'detector': detector, 'size_arcmin': size_arcmin,
         'start_date': start_date.isoformat(), 'end_date': end_date.isoformat(),
         'archive_exposures': len(discovered), 'archive_visits': visit_count,
+        'discovery_complete': getattr(discovered, 'discovery_complete', True),
+        'discovery_source': getattr(discovered, 'discovery_source', ['sia']),
         'attempted_exposures': len(rows) + len(skipped),
         'skipped': skipped, 'result_limit_per_method': MAX_TRACKS,
         'generated_at': datetime.now(timezone.utc).isoformat(),

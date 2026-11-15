@@ -111,11 +111,13 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
           val previewStatus = if processor.supportsPreview then status else "unavailable"
           Chunk(cid, image.observation.frame_id, status, previewStatus, s"/api/chunks/$cid/preview", s"/api/chunks/$cid")
         }
-        current.copy(images = images, download = current.download.copy(status = "preparing", observations = images.map(_.observation), chunks = chunks, progress = progress(chunks)))
+        val incomplete=images.exists(_.observation.header_metadata.get("discovery_complete").contains(zio.json.ast.Json.Str("false")))
+        val warnings=if incomplete then List(ApiError("archive_mirror_partial","Real mirror observations are available, but the local coverage index is still incomplete",true)) else Nil
+        current.copy(images = images, download = current.download.copy(status = "preparing", observations = images.map(_.observation), chunks = chunks, progress = progress(chunks),errors=warnings))
       }
       _ <- ZIO.foreachParDiscard(images.zip(record.download.chunks))((image, chunk) => processChunk(record, image, chunk)).withParallelism(4)
       _ <- repository.update(id, "job.completed") { current =>
-        val failed = current.download.chunks.exists(c => c.status == "failed" || c.preview_status == "failed")
+        val failed = current.download.errors.nonEmpty || current.download.chunks.exists(c => c.status == "failed" || c.preview_status == "failed")
         current.copy(download = current.download.copy(status = if failed then "completed_with_errors" else "completed"))
       }
     yield ()

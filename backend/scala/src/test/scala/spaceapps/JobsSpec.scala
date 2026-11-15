@@ -32,6 +32,19 @@ object JobsSpec extends ZIOSpecDefault:
     jobs.get(id).flatMap(d => if d.terminal then ZIO.succeed(d) else Live.live(ZIO.sleep(20.millis)) *> awaitDone(jobs, id))
 
   def spec = suite("Durable jobs")(
+    test("partial mirror discovery preserves usable chunks and reports incomplete coverage") {
+      ZIO.scoped { for
+        dir <- temp
+        repo <- Repository.open(dir.resolve("jobs.db"))
+        partial=image.copy(observation=image.observation.copy(header_metadata=Map("discovery_source"->zio.json.ast.Json.Str("s3_mirror"),"discovery_complete"->zio.json.ast.Json.Str("false"))))
+        source=new Archive:
+          def search(q:Query)=ZIO.succeed(List(partial))
+          def fetch(i:ArchiveImage,out:Path)=write(out,"real indexed source bytes")
+        jobs <- Jobs.make(repo,source,NoProcessing,dir)
+        accepted <- jobs.submit(query,"default",None)
+        done <- awaitDone(jobs,accepted.id)
+      yield assertTrue(done.chunks.head.status=="ready",done.status=="completed_with_errors",done.errors.exists(_.code=="archive_mirror_partial")) }
+    },
     test("an interrupted full-frame job keeps its already promised chunk URL when recovering as a cutout") {
       ZIO.scoped { for
         dir <- temp

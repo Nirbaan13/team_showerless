@@ -21,6 +21,8 @@ RUN python3 -m venv /opt/inference-venv \
     && rm /tmp/inference-requirements.txt /tmp/pipeline-requirements.txt
 COPY --from=build --chown=app:app /build/backend/target/stage ./
 COPY --chown=app:app backend/docs/openapi.yaml ./docs/openapi.yaml
+COPY --chown=app:app backend/python/irsa_mirror.py ./integrations/irsa_mirror.py
+COPY --chown=app:app science/archive_gateway.py ./science/archive_gateway.py
 COPY --chown=app:app pipeline/service.py ./pipeline/service.py
 COPY --chown=app:app pipeline/spherex ./pipeline/spherex
 COPY --chown=app:app pipeline/scripts ./pipeline/scripts
@@ -35,6 +37,7 @@ COPY --chown=app:app ml/pvusatov/releases/v4/smoke.py ./inference/release-smoke.
 ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \
+    IRSA_MIRROR_SCRIPT=/app/integrations/irsa_mirror.py \
     PROCESSING_URL=http://pipeline:8002 \
     ML_ROOT=/app/inference \
     ML_PYTHON=/opt/inference-venv/bin/python \

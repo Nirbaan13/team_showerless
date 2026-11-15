@@ -88,10 +88,10 @@ final class MetadataService private (
 
 object MetadataService:
   def make(repository: Repository, cachedFile: ArchiveImage => ZIO[Scope, Throwable, Option[Path]], client: Client,
-    tapEndpoint: String = "https://irsa.ipac.caltech.edu/TAP/sync"): ZIO[Scope, Throwable, MetadataService] =
+    tapEndpoint: String = "https://irsa.ipac.caltech.edu/TAP/sync", availability: Option[spaceapps.infra.service.ExternalServices] = None): ZIO[Scope, Throwable, MetadataService] =
     for
       applicationScope <- ZIO.scope
       pending <- Ref.Synchronized.make(Map.empty[String, Promise[Throwable, Json]])
       network <- Semaphore.make(4)
       _ <- ZIO.addFinalizer(pending.getAndSet(Map.empty).flatMap(remaining => ZIO.foreachDiscard(remaining.values)(_.interrupt)))
-    yield new MetadataService(repository, cachedFile, new TapMetadata(client, tapEndpoint), tapEndpoint, pending, network, applicationScope)
+    yield new MetadataService(repository, cachedFile, new TapMetadata(client, tapEndpoint, availability), tapEndpoint, pending, network, applicationScope)

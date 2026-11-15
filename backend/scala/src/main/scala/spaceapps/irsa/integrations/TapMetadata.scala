@@ -13,7 +13,7 @@ import org.w3c.dom.Element
 import org.xml.sax.{ErrorHandler, SAXParseException}
 
 /** Bounded, exact-product TAP lookup. Native science products are never requested here. */
-final class TapMetadata(client: Client, endpoint: String):
+final class TapMetadata(client: Client, endpoint: String, availability: Option[spaceapps.infra.service.ExternalServices] = None):
   private val byteLimit = 2L * 1024 * 1024
   private def invalid(message: String): Nothing = throw ApiError("metadata_invalid_response", message)
   private def obj(fields: (String, Json)*): Json = Json.Obj(Chunk.fromIterable(fields))
@@ -30,7 +30,9 @@ final class TapMetadata(client: Client, endpoint: String):
     yield
       val artifacts = List(path.stripPrefix("/"), path, access).distinct.map(value => s"a.uri = ${quote(value)}").mkString("(", " OR ", ")")
       s"SELECT TOP 2 o.collection AS obs_collection, p.obs_publisher_did, p.productid, a.uri, a.contentchecksum, a.contentlength, p.quality_flag, p.provenance_version, p.metrics_background, p.metrics_backgroundstddev, p.metrics_fluxdensitylimit, p.time_bounds_lower, p.time_bounds_upper, p.energy_bandpassname FROM spherex.artifact a JOIN spherex.plane p ON a.planeid = p.planeid JOIN spherex.observation o ON p.obsid = o.obsid WHERE p.obs_publisher_did = ${quote(did)} AND o.collection = ${quote(collection)} AND $artifacts"
-  def fetch(image: ArchiveImage): Task[Json] = identity(image) match
+  def fetch(image: ArchiveImage): Task[Json] =
+    availability.fold(fetchDirect(image))(_.call("irsa_tap")(fetchDirect(image)))
+  private def fetchDirect(image: ArchiveImage): Task[Json] = identity(image) match
     case None => ZIO.succeed(obj("status" -> Json.Str("unavailable"), "reason" -> Json.Str("Persisted publisher, collection or exact artifact identity is missing")))
     case Some(query) =>
       val parameters = List("REQUEST" -> "doQuery", "LANG" -> "ADQL", "FORMAT" -> "votable", "MAXREC" -> "2", "QUERY" -> query)

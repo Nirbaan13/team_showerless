@@ -10,7 +10,31 @@ DEFAULT = os.getenv("SPHEREX_COLLECTION", "spherex_dr1") # Configurable default 
 def list_collections():
     tbl = Irsa.list_collections(servicetype = "SIA", filter ="spherex")
     tbl.pprint(max_lines = -1, max_width = -1)
-def image_search(coordinates, deg, collection):
+def image_search(coordinates, deg, collection, *, allow_release_fallback=False):
+    if os.getenv("IRSA_DISCOVERY_URL", "").strip():
+        # Repository scripts can run with only pipeline/ on sys.path. A production
+        # image must package science/archive_gateway.py alongside pipeline/.
+        try:
+            from science import archive_gateway
+        except ModuleNotFoundError as exc:
+            if exc.name != "science":
+                raise
+            import sys
+            from pathlib import Path
+            sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+            from science import archive_gateway
+        coord = coordinates.icrs
+        found = archive_gateway.discover(coord.ra.deg, coord.dec.deg, deg / 2)
+        columns = ("access_url", "energy_bandpassname", "dataproduct_subtype", "t_min",
+                   "obs_collection", "frame_id", "observation_date", "source_url", "discovery_source")
+        rows = [(i.url, f"SPHEREx-D{i.detector}", "science", i.mjd, f"spherex_{i.release.lower()}",
+                 i.frame_id, i.observation_date, i.source_url, i.discovery_source) for i in found
+                if allow_release_fallback or collection == f"spherex_{i.release.lower()}"]
+        result = Table(rows=rows, names=columns,
+                       dtype=("U4096", "U16", "U16", float, "U32", "U2048", "U64", "U4096", "U128"))
+        result.sort("t_min")
+        result.meta.update(discovery_complete=found.discovery_complete, discovery_source=found.discovery_source)
+        return result
     res = Irsa.query_sia(pos=(coordinates, deg/2 * u.deg), collection = collection)
     if len(res) == 0:
       return res
