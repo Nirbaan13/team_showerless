@@ -5,12 +5,15 @@ import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, 
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle, ChevronDown } from 'lucide-react';
+import { ObjectSearch } from './ObjectSearch';
+import { findSkyObject } from '../services/skyObjects';
 
 interface LeftControlPanelProps {
   ra: number;
   dec: number;
   fov: FOVOption;
-  onUpdateCoords: (ra: number, dec: number, archive?: ArchiveSelection) => void;
+  onUpdateCoords: (ra: number, dec: number, archive?: ArchiveSelection, objectId?: string) => void;
+  objectId?: string | null;
   archiveSelection?: ArchiveSelection;
   archiveInventory?: ArchiveInventory[];
   archiveInventoryError?: string;
@@ -42,6 +45,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   dec,
   fov,
   onUpdateCoords,
+  objectId,
   archiveSelection = DEFAULT_ARCHIVE,
   archiveInventory = [],
   archiveInventoryError = '',
@@ -68,6 +72,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   const [decInput, setDecInput] = useState(dec.toFixed(6));
   const [coordError, setCoordError] = useState<string | null>(null);
   const [archiveDraft, setArchiveDraft] = useState(archiveSelection);
+  const selectedObject = findSkyObject(objectId);
   React.useEffect(() => setArchiveDraft(archiveSelection), [archiveSelection]);
   const archiveBrowse = isArchiveBrowse(archiveDraft);
   const selectedIds = archiveDraft.provider.split(',').filter(Boolean);
@@ -92,12 +97,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
     setCoordError(null);
   }, [ra, dec, activeCandidate?.ra, activeCandidate?.dec]);
 
-  const handleApplyCoords = (e: React.FormEvent) => {
-    e.preventDefault();
+  const applyCoords = (requestedRa: string, requestedDec: string, requestedObjectId?: string) => {
     const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
-    const parsedRa = Number(raInput.trim());
-    const parsedDec = Number(decInput.trim());
-    if (!decimal.test(raInput.trim()) || !decimal.test(decInput.trim()) || !Number.isFinite(parsedRa) || !Number.isFinite(parsedDec)) {
+    const parsedRa = Number(requestedRa.trim());
+    const parsedDec = Number(requestedDec.trim());
+    if (!decimal.test(requestedRa.trim()) || !decimal.test(requestedDec.trim()) || !Number.isFinite(parsedRa) || !Number.isFinite(parsedDec)) {
       setCoordError('Enter valid numerical coordinates');
       return;
     }
@@ -111,7 +115,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
     if (archiveBrowse && (!selectedIds.length || selectedProviders.some(item => !item))) { setCoordError('Archive inventory is unavailable. Retry when the source can be verified.'); return; }
     setCoordError(null);
     const normalizedRa = ((parsedRa % 360) + 360) % 360;
-    onUpdateCoords(normalizedRa, parsedDec, archiveDraft);
+    onUpdateCoords(normalizedRa, parsedDec, archiveDraft, requestedObjectId);
   };
 
   return (
@@ -123,7 +127,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           Coordinates (J2000)
         </span>
 
-        <form onSubmit={handleApplyCoords} className="space-y-2">
+        <form onSubmit={event => { event.preventDefault(); applyCoords(raInput, decInput); }} className="space-y-2">
           <div className="grid grid-cols-2 gap-1.5">
             <div>
               <label htmlFor="field-ra" className="text-[10px] font-mono text-paper-400 block mb-0.5">RA (deg)</label>
@@ -211,13 +215,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           )}
 
-          <div className="flex gap-1.5 mt-1">
+          <div className="relative flex items-center gap-1.5 mt-1">
             <button
               type="submit"
-              className="btn-tactile flex-1 py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer"
+              className="btn-tactile flex-1 py-2 whitespace-nowrap bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-lg font-mono text-[11px] font-bold border-2 border-black cursor-pointer"
             >
               Update Field
             </button>
+            <ObjectSearch onSelect={object => applyCoords(String(object.ra), String(object.dec), object.id)} />
             <button
               type="button"
               onClick={onRefreshCutout}
@@ -228,6 +233,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <span>Refresh</span>
             </button>
           </div>
+          {selectedObject && <p className="text-[10px] font-mono text-paper-300">Field: {selectedObject.name}</p>}
         </form>
 
         {searchStatus && (

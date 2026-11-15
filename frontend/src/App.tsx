@@ -32,6 +32,7 @@ import {
   type LiveCatalogResponse,
 } from './services/catalogService';
 import { availableImageModes } from './services/imageArtifacts';
+import { findSkyObject } from './services/skyObjects';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useArchiveObservations } from './hooks/useArchiveObservations';
 import { ArchiveObservationsPanel } from './components/ArchiveObservationsPanel';
@@ -175,6 +176,7 @@ export function App() {
   const [currentPresetId, setCurrentPresetId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      if (params.has('object')) return null;
       if ((params.get('archive') && params.get('archive') !== 'irsa-spherex') || params.has('observed_from') || params.has('observed_through')) return null;
       if (params.has('preset')) return params.get('preset');
       if (params.has('ra') && params.has('dec')) return null;
@@ -187,6 +189,7 @@ export function App() {
     return '3i-atlas';
   });
   const [archiveSelection, setArchiveSelection] = useState<ArchiveSelection>(initialArchiveSelection);
+  const [searchObjectId, setSearchObjectId] = useState<string | null>(() => findSkyObject(new URLSearchParams(window.location.search).get('object'))?.id ?? null);
   const archive = useArchiveObservations();
   const archiveBrowsing = !currentPresetId && isArchiveBrowse(archiveSelection);
   const [ra, setRa] = useState<number>(166.790000);
@@ -219,6 +222,7 @@ export function App() {
   const [overlays, setOverlays] = useState<CatalogOverlayState>(ALL_OVERLAYS_ON);
 
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(() => {
+    if (new URLSearchParams(window.location.search).has('object')) return null;
     if (isArchiveBrowse(initialArchiveSelection())) return null;
     if (typeof window !== 'undefined') {
       const cand = new URLSearchParams(window.location.search).get('candidate');
@@ -250,6 +254,7 @@ export function App() {
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
   const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => {
+    if (new URLSearchParams(window.location.search).has('object')) return { source: 'idle', message: 'Refresh to search the selected object field.' };
     if (isArchiveBrowse(initialArchiveSelection())) return { source: 'idle', message: 'Choose the source and observation period, then Update Field.' };
     const preset = new URLSearchParams(window.location.search).get('preset');
     return preset && !STORED_PRESET_IDS.has(preset)
@@ -258,9 +263,9 @@ export function App() {
   });
 
   const [mlAnalysisStatus, setMlAnalysisStatus] = useState<MLAnalysisStatus>({
-    state: 'completed',
-    stage: 'Stored benchmark · no new inference',
-    progress: 100,
+    state: searchObjectId ? 'idle' : 'completed',
+    stage: searchObjectId ? 'No observations requested' : 'Stored benchmark · no new inference',
+    progress: searchObjectId ? 0 : 100,
     stepIndex: 3,
     resultSource: 'stored',
   });
@@ -278,6 +283,7 @@ export function App() {
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
   const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
+    if (new URLSearchParams(window.location.search).has('object')) return [];
     if (isArchiveBrowse(initialArchiveSelection())) return [];
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -335,7 +341,7 @@ export function App() {
       setCandidatesList(updated);
       setSelectedCandidateId(updated[0]?.id ?? null);
     } else {
-      void handleSearchCoordinates(ra, dec, { fov, detector: newArray, frameIndex: 0, candidateId: '' });
+      void handleSearchCoordinates(ra, dec, { fov, detector: newArray, frameIndex: 0, candidateId: '' }, searchObjectId ? archiveSelection : undefined, searchObjectId);
     }
   };
 
@@ -401,6 +407,7 @@ export function App() {
       candidateId: activeTab === 'catalogue' ? selectedCatalogueCandidateId : selectedCandidateId,
       tab: activeTab,
       presetId: currentPresetId,
+      objectId: searchObjectId,
       archive: archiveSelection.provider, observedFrom: archiveSelection.from, observedThrough: archiveSelection.through,
     },
     (partial) => {
@@ -418,6 +425,7 @@ export function App() {
       }
       if (partial.tab !== undefined) setActiveTab(partial.tab);
       if (partial.presetId !== undefined) setCurrentPresetId(partial.presetId);
+      if (partial.objectId !== undefined) setSearchObjectId(findSkyObject(partial.objectId)?.id ?? null);
       if (partial.archive !== undefined || partial.observedFrom !== undefined || partial.observedThrough !== undefined) {
         setArchiveSelection(value => ({ provider: partial.archive ?? value.provider, from: partial.observedFrom ?? value.from, through: partial.observedThrough ?? value.through }));
       }
@@ -436,12 +444,15 @@ export function App() {
 
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
-  const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }, selectionOverride?: ArchiveSelection) => {
+  const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }, selectionOverride?: ArchiveSelection, objectId: string | null = null) => {
     initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
     const selection = selectionOverride ?? (request ? DEFAULT_ARCHIVE : archiveSelection);
+    setSearchObjectId(objectId);
+    setRa(newRa);
+    setDec(newDec);
     const browse = isArchiveBrowse(selection);
     setArchiveSelection(selection);
     archive.reset();
@@ -454,7 +465,7 @@ export function App() {
     }
     const detNum = array as DetectorArrayId;
 
-    if (!browse) {
+    if (!browse && !objectId) {
       const matchedPreset = NASA_TEST_PRESETS.find(p => Math.hypot(p.raDeg - newRa, p.decDeg - newDec) < 0.2);
       if (matchedPreset) {
         handleSelectPreset(matchedPreset);
@@ -489,8 +500,6 @@ export function App() {
       }
     }
 
-    setRa(newRa);
-    setDec(newDec);
     setCurrentPresetId(null);
     setSelectedCandidateId(null);
     setCandidatesList([]);
@@ -549,6 +558,7 @@ export function App() {
 
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
+    setSearchObjectId(null);
     initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
@@ -588,7 +598,7 @@ export function App() {
   };
 
   const handleRefreshCutout = () => {
-    void handleSearchCoordinates(ra, dec);
+    void handleSearchCoordinates(ra, dec, undefined, undefined, searchObjectId);
   };
 
   // Deep-link jump from a verification comment or panel directly into Sky Viewer
@@ -610,6 +620,7 @@ export function App() {
     const detector = setting.selectedArray;
     const frames = getMockEpochFrames(preset.id, detector);
     const candidates = getMockCandidates(preset.id, detector);
+    setSearchObjectId(null);
     archive.reset();
     setArchiveSelection(DEFAULT_ARCHIVE);
     setCurrentPresetId(preset.id);
@@ -1135,8 +1146,9 @@ export function App() {
               archiveSelection={archiveSelection}
               archiveInventory={archive.inventory}
               archiveInventoryError={archive.inventoryError}
-              onUpdateCoords={(nRa, nDec, selection) => {
-                void handleSearchCoordinates(nRa, nDec, undefined, selection);
+              objectId={searchObjectId}
+              onUpdateCoords={(nRa, nDec, selection, objectId) => {
+                void handleSearchCoordinates(nRa, nDec, undefined, selection, objectId);
                 setMobileViewerPane('canvas');
               }}
               onUpdateFov={setFov}
