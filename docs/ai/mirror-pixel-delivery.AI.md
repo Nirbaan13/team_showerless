@@ -29,6 +29,26 @@ Verified before opening the draft PR:
 - An isolated container on the VPS fetched a real WISE-field cutout directly from S3: 9,380,512 network bytes from a 65,710,080-byte parent, 44 ranges, 73.35 seconds. No production service was restarted for this test.
 - Backend and ML Docker-specific context smoke builds include the helper and import the complete caller chain successfully.
 
-The VPS measurement means an 18-second mirror deadline is insufficient. Python callers now use a separate 90-second mirror deadline, while IBE retains its existing 18-second bound. Both native network and output budgets remain 24 MiB. This is a slow fallback rather than an immediate response; metadata completeness and the number of usable observations can still limit an analysis. Production rollout and cold API checks remain pending review.
+The VPS measurement means an 18-second mirror deadline is insufficient. Python callers now use a separate 90-second mirror deadline, while IBE retains its existing 18-second bound. Both native network and output budgets remain 24 MiB. This is a slow fallback rather than an immediate response; metadata completeness and the number of usable observations can still limit an analysis. Production rollout remains pending human review.
+
+## Cold end-to-end outage verification on the VPS
+
+On 2026-11-15, an isolated test API used an empty pixel cache and 29 verified metadata records. SIA and TAP were configured to unreachable loopback ports. The container mapped `irsa.ipac.caltech.edu` to loopback as well, preventing an accidental IBE request from succeeding. Production containers remained running throughout.
+
+The exact original object was `dr1/level2/2025W19_1B/l2b-v27-2026-197/5/level2_2025W19_1B_0231_1D5_spx_l2b-v27-2026-197.fits` from the official NASA S3 mirror.
+
+| API path | Result | Time | Downloaded FITS | IMAGE shape |
+|---|---|---:|---:|---|
+| Legacy `/api/observations/default` | One of one chunks ready | 52.06 seconds | 3,985,920 bytes | 49×50 |
+| Federated `/api/archive-searches` → `/api/archive-downloads` with `require_cutout` | Completed, real asset downloadable | 44.28 seconds | 3,962,880 bytes | 37×38 |
+
+The legacy job retained `archive_mirror_partial` as a coverage warning; no pixel transfer failed. Both HTTP responses were reopened as FITS and contained IMAGE, FLAGS, VARIANCE, ZODI, EPSF and WCS-WAVE, with their original S3 URL recorded in `SRCURL`. Different request geometries explain the different native shapes.
+
+Exported response SHA-256 values:
+
+- Legacy: `25c1f76fc3175bee51effea8f7c483d26a233b0104a1b1a149169784f3379ffc`.
+- Federated: `58674afdf7eb43af5d24643a9d8b987913fd4f382eb9e5d2c946b30d93ebf5c6`.
+
+Runtime logs and JSON manifests are preserved locally in `/tmp/spaceapps-irsa-pixel-proof/`; original verification scripts and science comparison results remain there or in `/tmp/spaceapps-verify-native.py`. These checks establish delivery under a forced outage. They do not claim complete sky coverage, a confirmed object detection, or successful model inference for every field.
 
 Geometry remains an enclosing native-axis subset. Python callers retain the previous IBE-compatible size semantics; this is not a guarantee that every corner of a north-aligned sky box is present on a rotated detector grid. Supporting a distinct sky-box contract is separate from transporting the same original data during an outage.
