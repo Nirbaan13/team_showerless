@@ -8,8 +8,6 @@
 !ml/candidate-example.json
 !ml/spherex_3i_atlas.npz
 !ml/spherex-result.png
-!backend/
-!backend/python/
 !backend/python/irsa_cutout.py
 !science/archive_gateway.py
 !science/motion/live.py
