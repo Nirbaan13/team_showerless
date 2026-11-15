@@ -66,6 +66,7 @@ export interface SpherexEpochFrame {
 
 export interface CandidateObject {
   id: string;
+  catalogueId?: string;
   ra: number;
   dec: number;
   pixelX: number;

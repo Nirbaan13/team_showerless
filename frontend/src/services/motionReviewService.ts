@@ -324,6 +324,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
 
     candidates.push({
       id: displayId,
+      catalogueId: (review.target === '3I/ATLAS' && bTrack.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && bTrack.known_match) ? 'PX-000002' : undefined,
       ra,
       dec,
       pixelX: px,
@@ -402,6 +403,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
 
     candidates.push({
       id: displayId,
+      catalogueId: (review.target === '3I/ATLAS' && track.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && track.known_match) ? 'PX-000002' : undefined,
       ra,
       dec,
       pixelX: px,

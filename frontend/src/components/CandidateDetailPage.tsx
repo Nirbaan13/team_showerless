@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { CandidateRecord, ClassificationVote, UserRole, ValidationStatus } from '../types/catalogue';
 import {
   fetchCandidateById,
+  evaluateConsensus,
   submitClassificationVote,
 } from '../services/catalogueService';
 import { SpectrumPlot } from './SpectrumPlot';
@@ -42,6 +43,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
   onOpenSkyViewer,
   onOpenFeed,
 }) => {
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [candidate, setCandidate] = useState<CandidateRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -64,8 +66,10 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
     try {
       const data = await fetchCandidateById(candidateId);
       setCandidate(data);
+      setLoadError(null);
     } catch (err) {
-      console.error('Failed to load candidate detail:', err);
+      setCandidate(null);
+      setLoadError(err instanceof Error ? err.message : 'Registry unavailable');
     } finally {
       setIsLoading(false);
     }
@@ -173,7 +177,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12 bg-paper-950 text-paper-300 font-mono text-xs space-y-4">
         <AlertTriangle className="w-10 h-10 text-ochre-400" />
-        <h2 className="text-base font-bold text-white">Candidate {candidateId} Not Found</h2>
+        <h2 role="alert" className="text-base font-bold text-white">{loadError ?? `Candidate ${candidateId} Not Found`}</h2>
         <p className="text-paper-500 max-w-sm text-center">
           The requested candidate record could not be retrieved from the persistent catalog.
         </p>
@@ -187,19 +191,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
     );
   }
 
-  const consensus = candidate.consensus || {
-    total_votes: candidate.consensus_summary?.total_votes || 1,
-    likely_real: candidate.consensus_summary?.likely_real_votes || 1,
-    likely_artifact: candidate.consensus_summary?.likely_artifact_votes || 0,
-    uncertain: 0,
-    already_known: 0,
-    positive_ratio: (candidate.consensus_summary?.positive_percentage || 100) / 100,
-    artifact_ratio: 0,
-    level1_qualified: true,
-    level2_qualified: candidate.status === 'community_verified',
-    checks_passed: true,
-    validation_summary: {},
-  };
+  const consensus = candidate.consensus ?? evaluateConsensus(candidate, candidate.classifications ?? [], candidate.validation_checks ?? []).metrics;
 
   const getValidationBadge = (status?: ValidationStatus) => {
     switch (status) {
@@ -537,13 +529,13 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div className="p-4 rounded-xl bg-paper-950 border border-paper-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-bold text-white">Gaia DR3 Crossmatch</span>
-                {getValidationBadge(consensus.validation_summary['gaia_crossmatch'] as any || 'passed')}
+                {getValidationBadge(consensus.validation_summary['gaia_crossmatch'] as any || 'pending')}
               </div>
               <p className="text-[11px] font-mono text-paper-400 leading-relaxed">
                 Evaluates sidereal starfield catalog. Verified absence of static optical star confirms genuine non-sidereal object.
               </p>
               <div className="text-[10px] font-mono text-paper-500 pt-1 border-t border-paper-800">
-                Separation: &gt;12.0″ • Clean Field
+                See recorded validation evidence; absent checks remain pending.
               </div>
             </div>
 
@@ -551,13 +543,13 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div className="p-4 rounded-xl bg-paper-950 border border-paper-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-bold text-white">S/N Threshold Gate</span>
-                {getValidationBadge(consensus.validation_summary['snr_threshold'] as any || 'passed')}
+                {getValidationBadge(consensus.validation_summary['snr_threshold'] as any || 'pending')}
               </div>
               <p className="text-[11px] font-mono text-paper-400 leading-relaxed">
                 Nominal criterion: SNR ≥ 5.0σ across primary spectral detection channels.
               </p>
               <div className="text-[10px] font-mono text-emerald-400 font-bold pt-1 border-t border-paper-800">
-                Measured: {candidate.snr.toFixed(1)}σ (Passed)
+                Recorded SNR: {candidate.snr.toFixed(1)}σ
               </div>
             </div>
 
@@ -565,7 +557,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div className="p-4 rounded-xl bg-paper-950 border border-paper-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-bold text-white">Motion Linear Fit</span>
-                {getValidationBadge(consensus.validation_summary['multi_epoch_motion'] as any || 'passed')}
+                {getValidationBadge(consensus.validation_summary['multi_epoch_motion'] as any || 'pending')}
               </div>
               <p className="text-[11px] font-mono text-paper-400 leading-relaxed">
                 Nominal criterion: Trajectory fit RMS &lt; 0.50 px across ≥3 epochs.
@@ -579,13 +571,13 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div className="p-4 rounded-xl bg-paper-950 border border-paper-800 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-bold text-white">Artifact Flag Check</span>
-                {getValidationBadge(consensus.validation_summary['spectral_plausibility'] as any || 'passed')}
+                {getValidationBadge(consensus.validation_summary['spectral_plausibility'] as any || 'pending')}
               </div>
               <p className="text-[11px] font-mono text-paper-400 leading-relaxed">
                 Rejects cosmic ray hits, detector edge reflections, and uncorrected bad pixels.
               </p>
               <div className="text-[10px] font-mono text-paper-500 pt-1 border-t border-paper-800">
-                FLAGS & 2175: Clean Continuum
+                See recorded spectral validation evidence.
               </div>
             </div>
           </div>
