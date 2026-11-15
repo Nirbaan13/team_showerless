@@ -16,55 +16,90 @@ def main():
     ftps.connect(server, 21, timeout=30)
     ftps.login(user, pwd)
     ftps.prot_p()
-    pwd_dir = ftps.pwd()
-    print(f"Logged in successfully. Remote PWD: {pwd_dir}")
 
-    # Remove accidental nested public_html directory if it was created
+    print("Initial PWD:", ftps.pwd())
     try:
-        entries = ftps.nlst()
-        if 'public_html' in entries or './public_html' in entries:
-            print("Cleaning up accidental nested public_html folder...")
-            def cleanup_recursive(path):
-                try:
-                    for item in ftps.nlst(path):
-                        if item.endswith('/.') or item.endswith('/..'):
-                            continue
-                        try:
-                            ftps.delete(item)
-                        except Exception:
-                            cleanup_recursive(item)
-                    ftps.rmd(path)
-                except Exception as e:
-                    print(f"Cleanup warning for {path}: {e}")
-            cleanup_recursive('public_html')
+        ftps.cwd('/')
+        print("Root PWD:", ftps.pwd())
     except Exception as e:
-        print(f"Check nested dir note: {e}")
+        print("Could not cwd to /:", e)
 
-    dist_dir = os.path.abspath('frontend/dist')
-    if not os.path.isdir(dist_dir):
-        print(f"ERROR: Build directory {dist_dir} does not exist.")
-        sys.exit(1)
+    print("\nListing root directory:")
+    ftps.dir()
 
-    def upload_recursive(local_base, remote_base=''):
-        for item in sorted(os.listdir(local_base)):
-            local_path = os.path.join(local_base, item)
-            remote_path = f"{remote_base}/{item}".lstrip('/')
-            if os.path.isdir(local_path):
+    # Find the target directory where the live site files reside
+    target_dirs = []
+    def find_doc_roots(current_path=''):
+        try:
+            items = ftps.nlst(current_path)
+            for item in items:
+                base = item.rstrip('/').split('/')[-1]
+                if base in ('.', '..'): continue
+                if 'index-Cg5wohe9.js' in base:
+                    parent = os.path.dirname(item)
+                    grandparent = os.path.dirname(parent)
+                    print(f"🎯 FOUND LIVE FILE at: {item} -> Docroot is: {grandparent or '/'}")
+                    if grandparent not in target_dirs:
+                        target_dirs.append(grandparent or '/')
+                # Recurse into directories
                 try:
-                    ftps.mkd(remote_path)
-                    print(f"📁 Created directory: {remote_path}")
+                    # test if it's a dir
+                    ftps.cwd(item)
+                    ftps.cwd('..')
+                    find_doc_roots(item)
                 except Exception:
                     pass
-                upload_recursive(local_path, remote_path)
-            else:
-                size = os.path.getsize(local_path)
-                with open(local_path, 'rb') as f:
-                    ftps.storbinary(f"STOR {remote_path}", f)
-                print(f"📄 Uploaded: {remote_path} ({size:,} bytes)")
+        except Exception as e:
+            pass
 
-    print(f"\nDeploying files from {dist_dir} directly to {pwd_dir}...")
-    upload_recursive(dist_dir)
-    print("\n✅ Hostinger deployment completed successfully!")
+    find_doc_roots()
+    print("Discovered target docroots:", target_dirs)
+
+    # If not found via search, fallback to PWD
+    if not target_dirs:
+        # Check domains/ directory
+        try:
+            domains = ftps.nlst('domains')
+            print("Found domains:", domains)
+            for d in domains:
+                target_dirs.append(f"{d}/public_html")
+        except Exception:
+            pass
+
+    if not target_dirs:
+        target_dirs = ['/public_html', '/']
+
+    dist_dir = os.path.abspath('frontend/dist')
+
+    for docroot in target_dirs:
+        print(f"\n==========================================")
+        print(f"Deploying to docroot: {docroot}")
+        print(f"==========================================")
+        try:
+            ftps.cwd(docroot)
+        except Exception as e:
+            print(f"Could not cwd to {docroot}: {e}")
+            continue
+
+        def upload_recursive(local_base, remote_base=''):
+            for item in sorted(os.listdir(local_base)):
+                local_path = os.path.join(local_base, item)
+                remote_path = f"{remote_base}/{item}".lstrip('/')
+                if os.path.isdir(local_path):
+                    try:
+                        ftps.mkd(remote_path)
+                    except Exception:
+                        pass
+                    upload_recursive(local_path, remote_path)
+                else:
+                    size = os.path.getsize(local_path)
+                    with open(local_path, 'rb') as f:
+                        ftps.storbinary(f"STOR {remote_path}", f)
+                    print(f"📄 Uploaded to {docroot}/{remote_path} ({size:,} bytes)")
+
+        upload_recursive(dist_dir)
+
+    print("\n✅ All target docroots synchronized successfully!")
     ftps.quit()
 
 if __name__ == '__main__':
