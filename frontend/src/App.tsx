@@ -454,6 +454,41 @@ export function App() {
     }
     const detNum = array as DetectorArrayId;
 
+    if (!browse) {
+      const matchedPreset = NASA_TEST_PRESETS.find(p => Math.hypot(p.raDeg - newRa, p.decDeg - newDec) < 0.2);
+      if (matchedPreset) {
+        handleSelectPreset(matchedPreset);
+        if (request?.detector && request.detector !== 'all') {
+          setSelectedArray(request.detector);
+          const cands = getMockCandidates(matchedPreset.id, request.detector);
+          setCandidatesList(cands);
+          if (request.candidateId && cands.some(c => c.id === request.candidateId)) {
+            setSelectedCandidateId(request.candidateId);
+          }
+        }
+        return;
+      }
+      if (Math.hypot(223.025 - newRa, -11.992 - newDec) < 0.3) {
+        const vestaPreset: TargetPreset = {
+          id: (request?.detector ?? selectedArray) === 3 ? 'vesta-d3' : 'vesta-d6',
+          name: '(4) Vesta',
+          subtitle: 'Main-Belt Asteroid (DR1 BLOOM Mask)',
+          raHms: '14h 52m 06s',
+          decDms: '-11° 59\' 31"',
+          raDeg: 223.025,
+          decDeg: -11.992,
+          description: 'Bright asteroid saturated core recovered via BLOOM bitmask centroids across DR1 visits.',
+          recommendedArray: (request?.detector ?? selectedArray) === 3 ? 3 : 6,
+          expectedClass: 'moving_object',
+        };
+        handleSelectPreset(vestaPreset);
+        if (request?.candidateId) {
+          setSelectedCandidateId(request.candidateId);
+        }
+        return;
+      }
+    }
+
     setRa(newRa);
     setDec(newDec);
     setCurrentPresetId(null);
