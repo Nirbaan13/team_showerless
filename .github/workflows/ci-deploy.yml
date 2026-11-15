@@ -56,6 +56,9 @@ jobs:
           python -m pytest -q ml/pvusatov/verification/final ml/pvusatov/releases/v3/test_smoke.py --ignore=ml/pvusatov/verification/final/test_summarize_results.py
           python ml/pvusatov/verification/final/audit_snapshot.py
           python ml/pvusatov/releases/v3/smoke.py
+      - name: Test experimental v4 scientific tools
+        working-directory: .
+        run: PYTHONPATH=.:ml/pvusatov/backend/inference python -m pytest -q ml/pvusatov/experiments/v4
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin

@@ -1,0 +1,25 @@
+{
+  "scope": "controlled160-treepureleaf regression; no scientificmodelrefit",
+  "tree_count": 160,
+  "reference_scores": [
+    0.0,
+    1.0
+  ],
+  "raw_onnx_scores": [
+    0.0,
+    1.0000015497207642
+  ],
+  "adapter_scores": [
+    0.0,
+    1.0
+  ],
+  "score_numerics": {
+    "dtype": "float32",
+    "unit_interval_roundoff_tolerance": 2e-06,
+    "roundoff_action": "clip"
+  },
+  "source_before_policy": "9a59769f2e3c876188bacf16d28eb04cabe5e39e9679b0f5c6c211a917b944ce",
+  "old_strict_loader_rejected": true,
+  "boundary_float32_upper": 1.0000020265579224,
+  "boundary_nextafter_rejected": 1.000002145767212
+}

@@ -1,0 +1,138 @@
+[
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_1A/l2b-v27-2026-216/3/level2_2026W04_1A_0586_1D3_spx_l2b-v27-2026-216.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_1A_0586_1D3_spx_l2b-v27-2026-216.fits",
+    "bytes": 4106880,
+    "sha256": "6c63fde08b98597a7e56eb885eb9050086d84ee38794891e8503afe90ba245d7",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:22 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_1A_0586_1",
+    "detector": 3,
+    "t_min_mjd": 61061.896975,
+    "t_max_mjd": 61061.898307
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_1A/l2b-v27-2026-216/3/level2_2026W04_1A_0586_2D3_spx_l2b-v27-2026-216.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_1A_0586_2D3_spx_l2b-v27-2026-216.fits",
+    "bytes": 4106880,
+    "sha256": "0b4bc17b74fdf2fbbf3798bce205da6fcf5fe1f19ea1ff5672edeeef14ab8f1a",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:30 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_1A_0586_2",
+    "detector": 3,
+    "t_min_mjd": 61061.898467,
+    "t_max_mjd": 61061.899799
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_1A/l2b-v27-2026-216/3/level2_2026W04_1A_0586_3D3_spx_l2b-v27-2026-216.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_1A_0586_3D3_spx_l2b-v27-2026-216.fits",
+    "bytes": 4106880,
+    "sha256": "12e7d3abf6f37040a0211ad25b0be50ae4f07e0b3b47ecc4866a979b5d5438e1",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:41 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_1A_0586_3",
+    "detector": 3,
+    "t_min_mjd": 61061.899959,
+    "t_max_mjd": 61061.901292
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_2A/l2b-v27-2026-218/3/level2_2026W04_2A_0059_2D3_spx_l2b-v27-2026-218.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_2A_0059_2D3_spx_l2b-v27-2026-218.fits",
+    "bytes": 4106880,
+    "sha256": "06ae9f3e117b8785b3f7bfd13c24f688dc1cbb9e445b40dce10cf208cd1af618",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:51 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_2A_0059_2",
+    "detector": 3,
+    "t_min_mjd": 61062.781153,
+    "t_max_mjd": 61062.782486
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_2A/l2b-v27-2026-218/3/level2_2026W04_2A_0059_4D3_spx_l2b-v27-2026-218.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_2A_0059_4D3_spx_l2b-v27-2026-218.fits",
+    "bytes": 4106880,
+    "sha256": "a65e637d90a1c81267237e5f5aec536f3637156f83ebf303eb85a7355913d09e",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:00 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_2A_0059_4",
+    "detector": 3,
+    "t_min_mjd": 61062.784156,
+    "t_max_mjd": 61062.785488
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_2A/l2b-v27-2026-218/3/level2_2026W04_2A_0135_1D3_spx_l2b-v27-2026-218.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_2A_0135_1D3_spx_l2b-v27-2026-218.fits",
+    "bytes": 4106880,
+    "sha256": "686f015f020f44bdb4bf81cd007d21c7c280037752faaec3b8e94834dcf00d5c",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:11 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_2A_0135_1",
+    "detector": 3,
+    "t_min_mjd": 61063.189854,
+    "t_max_mjd": 61063.191186
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_2A/l2b-v27-2026-218/3/level2_2026W04_2A_0135_2D3_spx_l2b-v27-2026-218.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_2A_0135_2D3_spx_l2b-v27-2026-218.fits",
+    "bytes": 4106880,
+    "sha256": "054b18a66b1206ae5b2af471dd0c4cbe9400a49e9d26304483ea3d64c1f0f81b",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:22 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_2A_0135_2",
+    "detector": 3,
+    "t_min_mjd": 61063.191346,
+    "t_max_mjd": 61063.192678
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W04_2A/l2b-v27-2026-218/3/level2_2026W04_2A_0135_4D3_spx_l2b-v27-2026-218.fits?center=249.04951409%2C59.91952773&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final10/level2_2026W04_2A_0135_4D3_spx_l2b-v27-2026-218.fits",
+    "bytes": 4106880,
+    "sha256": "b6a7db1d36ee76a774ec275080f130e115cd0811cbc619801b47d728bc3944c8",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:32 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W04_2A_0135_4",
+    "detector": 3,
+    "t_min_mjd": 61063.19433,
+    "t_max_mjd": 61063.195663
+  }
+]

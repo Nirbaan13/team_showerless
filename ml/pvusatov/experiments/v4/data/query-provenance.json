@@ -1,0 +1,988 @@
+{
+  "schema_version": 4,
+  "scope": "Exact official IRSA SIA query metadata bytes compressed for offline provenance; NO native image pixels",
+  "plan_sha256": "55e0203db48bc294c6b1f4999d0582d1d9030d9e3e1b558d9f00364ac797e6cd",
+  "queries": [
+    {
+      "parent_id": "v4-train01",
+      "split": "train",
+      "center": [
+        228.745009,
+        -69.43558622
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+228.745009+-69.43558622+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 290,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train01/discovery.json",
+          "uncompressed_sha256": "e1f12d79420a061d0555b5074ddd6479dde9b10e2eb559a5388d9598977f5a61",
+          "uncompressed_bytes": 638111,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train01-discovery.json.gz",
+          "gzip_sha256": "b6425cf5151857f81dac1cbf7a4f36f879245f1d86b737f72558d5cfc34e49f2",
+          "gzip_bytes": 44505
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train01/sia-512.xml",
+          "uncompressed_sha256": "b3738a1942977fdac6d8d63179da62ef47cb223340eaf7ff0aa2a3358f4b4200",
+          "uncompressed_bytes": 633262,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train01-sia-512.xml.gz",
+          "gzip_sha256": "9c4a09946fd1fe06b2cc42898784b2df562e17b7d9b1dff3a9d747a9e6c6d1b1",
+          "gzip_bytes": 48575
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation01",
+      "split": "validation",
+      "center": [
+        108.42757587,
+        -10.72370325
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+108.42757587+-10.72370325+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 265,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation01/discovery.json",
+          "uncompressed_sha256": "b0c698c455a915b8c151e6d76f26ef9de5388fd08ef4f7327c51faab3d9be556",
+          "uncompressed_bytes": 584263,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation01-discovery.json.gz",
+          "gzip_sha256": "b0cb6ba84351ca1eeaad516ae20e97411aca139de89fa9d87d369f98d84afddf",
+          "gzip_bytes": 40755
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation01/sia-512.xml",
+          "uncompressed_sha256": "adbfac82933e9c6394677f2907f56611c4031bd441ad7a3f3c31f98bdb768d6a",
+          "uncompressed_bytes": 582065,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation01-sia-512.xml.gz",
+          "gzip_sha256": "196cc607d767264363bc475b559ec176c814b02bff701c32bf85a381bd642076",
+          "gzip_bytes": 44796
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final01",
+      "split": "final",
+      "center": [
+        144.82678533,
+        -65.93335872
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+144.82678533+-65.93335872+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 364,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final01/discovery.json",
+          "uncompressed_sha256": "a4e9d1c12df9fcb8bf107bcccdc0f9b24c746567088ac0abc30a25946ab9ee4a",
+          "uncompressed_bytes": 800706,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final01-discovery.json.gz",
+          "gzip_sha256": "05ce2856303e5f0f9504bdf81c7d93a5f896bd230c6432feeaa4b53db37e699a",
+          "gzip_bytes": 55834
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final01/sia-512.xml",
+          "uncompressed_sha256": "803ffad3b30e97d77ca9caac028481297f6576278407fb549529fa2fd1c1dcf2",
+          "uncompressed_bytes": 787933,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final01-sia-512.xml.gz",
+          "gzip_sha256": "72b28a0208f7394cbb621090c5d020fa42dc613d8cd2328a0ad58de6723a3032",
+          "gzip_bytes": 59603
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train02",
+      "split": "train",
+      "center": [
+        329.84077089,
+        0.98198712
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+329.84077089+0.98198712+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 234,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train02/discovery.json",
+          "uncompressed_sha256": "4e10345c23ab3b11cf9d1969bc5efca9108a7570398554cf79d506af937d0666",
+          "uncompressed_bytes": 515102,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train02-discovery.json.gz",
+          "gzip_sha256": "c5edb95b30e6dd69bf76561c163103860b43323cb893f695b51d1423f1615df0",
+          "gzip_bytes": 36702
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train02/sia-512.xml",
+          "uncompressed_sha256": "3e4cce8ae97431c47de8332c1dac20b30f5352eba423083286bb88c3fa003f3b",
+          "uncompressed_bytes": 516146,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train02-sia-512.xml.gz",
+          "gzip_sha256": "4f1d5ebfa0ee01ca16ea476d9732a45b49bb4a7c21b66962806ed849344b617c",
+          "gzip_bytes": 40644
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation02",
+      "split": "validation",
+      "center": [
+        314.21657412,
+        -53.0549699
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+314.21657412+-53.0549699+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 257,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation02/discovery.json",
+          "uncompressed_sha256": "e7f2c64bef09cfb549adf742b9ff06860b2a92185d87fc430f29431238bdafea",
+          "uncompressed_bytes": 565746,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation02-discovery.json.gz",
+          "gzip_sha256": "77ca34063e163d4dff64b0403c7b68daed8b7a2381a26a2e623ac8fd5a2d712c",
+          "gzip_bytes": 39786
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation02/sia-512.xml",
+          "uncompressed_sha256": "9012f5f8f95c84e29168bb53fa3659381cdfb57c3c4c38d61d5095075455f909",
+          "uncompressed_bytes": 564417,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation02-sia-512.xml.gz",
+          "gzip_sha256": "0b00a3861a893247d0e7e7e2841c50f8ad8eff5b861691db67176da9806a4e40",
+          "gzip_bytes": 43764
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final02",
+      "split": "final",
+      "center": [
+        358.2432199,
+        20.82723636
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+358.2432199+20.82723636+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 233,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final02/discovery.json",
+          "uncompressed_sha256": "b7d58b8f722186e05b6c75f44967d4d3a096cc7a9d18887d4941857bc9f841fa",
+          "uncompressed_bytes": 512231,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final02-discovery.json.gz",
+          "gzip_sha256": "067073be2364e853a716369cbe46efc18f570a6e02454491c3ec8a087f3bf772",
+          "gzip_bytes": 36112
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final02/sia-512.xml",
+          "uncompressed_sha256": "44bbf2468c058086325c4a5c40bcb15aad42063f00487272b9a323312435371d",
+          "uncompressed_bytes": 513493,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final02-sia-512.xml.gz",
+          "gzip_sha256": "01bfc1d971980381c26880624839947e5d3d37a7b160b0847badd168bfe529a3",
+          "gzip_bytes": 40210
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train03",
+      "split": "train",
+      "center": [
+        188.08439718,
+        -52.76297986
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+188.08439718+-52.76297986+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 303,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train03/discovery.json",
+          "uncompressed_sha256": "9b40cf7e0d0b3d2ceceed710d5f56eb466ae1924606cd750ab39d12ae8e89c66",
+          "uncompressed_bytes": 667256,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train03-discovery.json.gz",
+          "gzip_sha256": "44cae3e5d7121d12eb657e40b13025a3e2f2b359d2316b52cb1198a098bf2eb3",
+          "gzip_bytes": 47320
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train03/sia-512.xml",
+          "uncompressed_sha256": "e88ce8682a746fa280ee4c953f5acc82775b9861c0233a76883f3a36cf57bf4a",
+          "uncompressed_bytes": 661011,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train03-sia-512.xml.gz",
+          "gzip_sha256": "dbc46c6a2c6b2d25912e318d66e189f485559befe1a53c6ba775f1780968c1e8",
+          "gzip_bytes": 51280
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation03",
+      "split": "validation",
+      "center": [
+        66.37912355,
+        34.85237859
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+66.37912355+34.85237859+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 226,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation03/discovery.json",
+          "uncompressed_sha256": "e57b05b71bef2c9a3ce4fd685f2e1d33175c7739f05a026f4b29ca6a8d5d5960",
+          "uncompressed_bytes": 495934,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation03-discovery.json.gz",
+          "gzip_sha256": "f0b93218a7307637aad46e93c73f9ea83f696da48c98596e68495ca1ce0131fc",
+          "gzip_bytes": 34770
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation03/sia-512.xml",
+          "uncompressed_sha256": "4a0b9f62c0b786c25aaf706fd7ee7524b8cbe1eff750fc22822e0237c52407a1",
+          "uncompressed_bytes": 497913,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation03-sia-512.xml.gz",
+          "gzip_sha256": "09b554432dfb3088654798aba92d60f1fda957c3776c8ecc9c6d9fdffa8cd974",
+          "gzip_bytes": 38918
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final03",
+      "split": "final",
+      "center": [
+        3.13466202,
+        72.64994146
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+3.13466202+72.64994146+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 314,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final03/discovery.json",
+          "uncompressed_sha256": "5317ee95617719c5c03d62e0bc463d3070d2b0ed5391d5ee70a26ec2cd892971",
+          "uncompressed_bytes": 688532,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final03-discovery.json.gz",
+          "gzip_sha256": "a826962fecc598ca7ff63b8391232d990d55a13b5b497a6c018c6b4effce2bd0",
+          "gzip_bytes": 48427
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final03/sia-512.xml",
+          "uncompressed_sha256": "c59350424e0f1fd10293a021dcceaa6146fa551c78b68b1da5997cbe93345e24",
+          "uncompressed_bytes": 681119,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final03-sia-512.xml.gz",
+          "gzip_sha256": "936975d821a79581511688d7b9f2564f4ed56d3dabf41360650b252839cca94a",
+          "gzip_bytes": 52389
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train04",
+      "split": "train",
+      "center": [
+        344.94770504,
+        -25.62633834
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+344.94770504+-25.62633834+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 223,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train04/discovery.json",
+          "uncompressed_sha256": "296f87b6141d04e726293c4d55e6d9e7127116953c40fdd426398f9e3a46f25a",
+          "uncompressed_bytes": 491523,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train04-discovery.json.gz",
+          "gzip_sha256": "90894f235c13598f5401641d5daa4a5655f0c0337058b525c662699e34494224",
+          "gzip_bytes": 34656
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train04/sia-512.xml",
+          "uncompressed_sha256": "6a0c95357c52f3298ac49966a06ccd93e48991bb8344ec8f6a6c3cf04a70443b",
+          "uncompressed_bytes": 493850,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train04-sia-512.xml.gz",
+          "gzip_sha256": "d3a99ef7ee7a9bdf567078a1714e02a6c710a5119d7cd8ceb6c5533521e74f6c",
+          "gzip_bytes": 38695
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation04",
+      "split": "validation",
+      "center": [
+        11.61995898,
+        -2.15648135
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+11.61995898+-2.15648135+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 226,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation04/discovery.json",
+          "uncompressed_sha256": "35591424a132308c82453719c67bbf5a1b6ee06f7ff4defd22414638181f0aab",
+          "uncompressed_bytes": 498198,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation04-discovery.json.gz",
+          "gzip_sha256": "7a0a887afe1a9d244cf3acd2981307b8b5b55bdc2749526d6149167a2799a332",
+          "gzip_bytes": 36159
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation04/sia-512.xml",
+          "uncompressed_sha256": "f23a6088096344d775408d9614b903bbb8800e3972861ae3bb1b68e29a5c3ce7",
+          "uncompressed_bytes": 500189,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation04-sia-512.xml.gz",
+          "gzip_sha256": "6b78dd18e59c9ae46b16f397a6f42002c3a69d149527df7f7f188b123dd8e075",
+          "gzip_bytes": 40278
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final04",
+      "split": "final",
+      "center": [
+        134.21657412,
+        53.0549699
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+134.21657412+53.0549699+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 251,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final04/discovery.json",
+          "uncompressed_sha256": "9de66cd75807b1b0f82bd8a2c3c25227c930b5368d7c4e46e85235eb40519cbe",
+          "uncompressed_bytes": 551440,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final04-discovery.json.gz",
+          "gzip_sha256": "1b77dd3457bd13ce0d77ccb7726b0d4c20572a6c3a4d9887ad023d30e5c4bd60",
+          "gzip_bytes": 38623
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final04/sia-512.xml",
+          "uncompressed_sha256": "44e8ca55858f9273299a24d295cbfa71879c695e573770c4a3ae33d8d6810628",
+          "uncompressed_bytes": 550717,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final04-sia-512.xml.gz",
+          "gzip_sha256": "921ad4691d212b696c574c2d749b8753f34e404dc922b94d8c27bf789eb949a7",
+          "gzip_bytes": 42607
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train05",
+      "split": "train",
+      "center": [
+        231.80823511,
+        -44.53010034
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+231.80823511+-44.53010034+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 238,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train05/discovery.json",
+          "uncompressed_sha256": "ebe469b3a926dbfcb3752903049b7a9dc84eb9edac11d592d64c2efcde956171",
+          "uncompressed_bytes": 524417,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train05-discovery.json.gz",
+          "gzip_sha256": "970539a209c63efa204a8fed5b29e8053ab4842a5dbb757fc08b502d7c4540a8",
+          "gzip_bytes": 36917
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train05/sia-512.xml",
+          "uncompressed_sha256": "eeafbcfebc799efb59771920f7e7603036f541be647f1c8fc0580d3ce26bb5ce",
+          "uncompressed_bytes": 525067,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train05-sia-512.xml.gz",
+          "gzip_sha256": "e24d7aa136eef96d2874db48bdcfec186f93d41ebe0efc4f90ef62815861d3a2",
+          "gzip_bytes": 40960
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation05",
+      "split": "validation",
+      "center": [
+        272.62839734,
+        1.96849569
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+272.62839734+1.96849569+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 289,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation05/discovery.json",
+          "uncompressed_sha256": "075ce6f7a8d9f3305e9fd1a0d20b1114a6b45d58859d631bd6d7fc568307479f",
+          "uncompressed_bytes": 635344,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation05-discovery.json.gz",
+          "gzip_sha256": "3d4c3bc8557cc12ab697473472faa81a6ac30eaab62649c51eefe5007a05bb90",
+          "gzip_bytes": 44233
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation05/sia-512.xml",
+          "uncompressed_sha256": "ec09c159d478725696eeef75a85ab4bfb1fc1596646b88b8d906ff1be676b98f",
+          "uncompressed_bytes": 630584,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation05-sia-512.xml.gz",
+          "gzip_sha256": "2bc111bc70fe156375bd46403d65f72899363bdb650b1a17dbc7d86eb12fc090",
+          "gzip_bytes": 48198
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final05",
+      "split": "final",
+      "center": [
+        92.62839734,
+        -1.96849569
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+92.62839734+-1.96849569+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 228,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final05/discovery.json",
+          "uncompressed_sha256": "18b9f1523734121bcfca2c893984310c8e318824d3dd34b73eb0734fc6035fe3",
+          "uncompressed_bytes": 501752,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final05-discovery.json.gz",
+          "gzip_sha256": "f7bc6093612443acd6881cce1bbbe53906c6d77b51da84db10987d6daf158017",
+          "gzip_bytes": 35524
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final05/sia-512.xml",
+          "uncompressed_sha256": "cdd43f5b2b1ec56f833f8356b3920f8e5d588ab66bb399e648b225b035d2c46d",
+          "uncompressed_bytes": 503537,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final05-sia-512.xml.gz",
+          "gzip_sha256": "8f235ea9ab70edc87c635dd967d226251ff636b9716d96d42380f708d867b255",
+          "gzip_bytes": 39592
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train06",
+      "split": "train",
+      "center": [
+        197.9339074,
+        2.6049264
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+197.9339074+2.6049264+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 307,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train06/discovery.json",
+          "uncompressed_sha256": "8990871f8c29806ff300bd519055f9d0082c4bd30a4dfdfd5f195980cb510ad4",
+          "uncompressed_bytes": 674933,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train06-discovery.json.gz",
+          "gzip_sha256": "5f7f93d980f5ba131f4639b0dede9dc42a55092a90113a8e658aecd73d775aa7",
+          "gzip_bytes": 47580
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train06/sia-512.xml",
+          "uncompressed_sha256": "f778e6a0c7050e3243d5b61bf92d31c3ffe648b7860b565e059c8b63287ae589",
+          "uncompressed_bytes": 668284,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train06-sia-512.xml.gz",
+          "gzip_sha256": "3ca4ef02feba200598ece2eaf373f23b1b4ceede27e84a2e50ee8be8daf10c6b",
+          "gzip_bytes": 51414
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation06",
+      "split": "validation",
+      "center": [
+        37.76682914,
+        -17.30497014
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+37.76682914+-17.30497014+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 264,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation06/discovery.json",
+          "uncompressed_sha256": "1bb94821dda51dc28040484c893e5da87cf4ef76dec54d8320a0201018c94b53",
+          "uncompressed_bytes": 581460,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation06-discovery.json.gz",
+          "gzip_sha256": "c356a07eb8784ee1422a8e44ab0ea014e0346d88f639a079d9e0fc1635d2257a",
+          "gzip_bytes": 40854
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation06/sia-512.xml",
+          "uncompressed_sha256": "ea8316044b7fbc5620cfae9d88c087cad5d0c7c2f75dda0268af91d91a85d02d",
+          "uncompressed_bytes": 579322,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation06-sia-512.xml.gz",
+          "gzip_sha256": "2ff1f1d5f94539e33e214d1e58b0348c39fe2634077bdef7d2472f31ed4e6bca",
+          "gzip_bytes": 44858
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final06",
+      "split": "final",
+      "center": [
+        356.01045855,
+        -48.43370974
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+356.01045855+-48.43370974+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 284,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final06/discovery.json",
+          "uncompressed_sha256": "67a7fb5732c6977866c662025da63fc9d543dc1617396145f990e8746d7f0026",
+          "uncompressed_bytes": 625067,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final06-discovery.json.gz",
+          "gzip_sha256": "91fe48a44faa6ca25076fef9f4b1f746b31ce625b9c7629f7cf7e894d0649207",
+          "gzip_bytes": 43711
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final06/sia-512.xml",
+          "uncompressed_sha256": "f4d10bd762ac944dfa15fb331322d0a4f28d51883ca7b2db020109afd1352c4e",
+          "uncompressed_bytes": 620806,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final06-sia-512.xml.gz",
+          "gzip_sha256": "ac53cae6ad30dcb27373f83ade10dcee1918b5722061d26a23fddec6b63238b7",
+          "gzip_bytes": 47736
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train07",
+      "split": "train",
+      "center": [
+        106.10958247,
+        -28.55590977
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+106.10958247+-28.55590977+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 340,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train07/discovery.json",
+          "uncompressed_sha256": "6367bf23f689105404f25a53d729d62c075afc997af3bd1d21676f428a9dbb6b",
+          "uncompressed_bytes": 749401,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train07-discovery.json.gz",
+          "gzip_sha256": "318cb072b75a1c5e9cef710c0910401039b32104cefadc09765edd27b9666d41",
+          "gzip_bytes": 51887
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train07/sia-512.xml",
+          "uncompressed_sha256": "000c7f2ca9c08ae1f0c1248b33dd16373d72be24ebf6c3bbe644db4b97219d03",
+          "uncompressed_bytes": 739196,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train07-sia-512.xml.gz",
+          "gzip_sha256": "4aa821e896fc6f757778b224be5f93288c41bd4358d0b17fec1cb4aef0c7aeac",
+          "gzip_bytes": 55781
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation07",
+      "split": "validation",
+      "center": [
+        110.47930535,
+        7.1236773
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+110.47930535+7.1236773+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 258,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation07/discovery.json",
+          "uncompressed_sha256": "cd57cea511079578c9e97676fe175c13eb2b952a382eb1a543a232d657336f0a",
+          "uncompressed_bytes": 566800,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation07-discovery.json.gz",
+          "gzip_sha256": "e45024d95486147f3678eaea13103c9b3c711959a7afb1620e06dd0edc2f3b13",
+          "gzip_bytes": 39575
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation07/sia-512.xml",
+          "uncompressed_sha256": "4d64344a26ac40a78901964a6ed8f691a743fdd8e3d062eb21c44be49549cae0",
+          "uncompressed_bytes": 565359,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation07-sia-512.xml.gz",
+          "gzip_sha256": "f77f859b566de3100fe322db1fe42a19a137a37d913b5c7139c85e9cf3079e1b",
+          "gzip_bytes": 43626
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final07",
+      "split": "final",
+      "center": [
+        125.11633088,
+        -18.64203631
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+125.11633088+-18.64203631+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 299,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final07/discovery.json",
+          "uncompressed_sha256": "5778d434172acebb75dbda161dde1bc8668fc7c06bb8c37949515d524d5f1216",
+          "uncompressed_bytes": 659241,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final07-discovery.json.gz",
+          "gzip_sha256": "a9fa56e0854669a9818c48f65b8259f2e9fc15e228e1f335c88dae53ef0bb3a7",
+          "gzip_bytes": 46059
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final07/sia-512.xml",
+          "uncompressed_sha256": "d3d8c4a57de95d7006ecabe93dafbeb56a9a0d0a0b20a3d002c488106f84cffe",
+          "uncompressed_bytes": 653424,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final07-sia-512.xml.gz",
+          "gzip_sha256": "1655f0d9445444573fa9c2a5f38168530dbf72cfa35acaedb64bbc3694c7e2ee",
+          "gzip_bytes": 50071
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-train08",
+      "split": "train",
+      "center": [
+        338.06523414,
+        -73.69972706
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+338.06523414+-73.69972706+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 318,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train08/discovery.json",
+          "uncompressed_sha256": "a30f3a46e6143bb0b17df61621e78f36f952c3dd6c61a12f94e29cf62f724e57",
+          "uncompressed_bytes": 699131,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train08-discovery.json.gz",
+          "gzip_sha256": "ad05b451af8653a46982536a1d48fae848c17652e281fbbb290af08b6e6dfd39",
+          "gzip_bytes": 48706
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-train08/sia-512.xml",
+          "uncompressed_sha256": "19fed2890196e090325cd31c997a9035f12d289414eb485f99707a5ececfa70c",
+          "uncompressed_bytes": 691292,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-train08-sia-512.xml.gz",
+          "gzip_sha256": "bab3ac6d5a5d22d93571ce2e34087246491cb8b850fe0b24be155e21a843add3",
+          "gzip_bytes": 52719
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-validation08",
+      "split": "validation",
+      "center": [
+        202.80213225,
+        -21.93796287
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+202.80213225+-21.93796287+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 222,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation08/discovery.json",
+          "uncompressed_sha256": "fe4bdadb1da720ad6cd80d1808fdbefe42f1f7f683c3867d69f4716076c13792",
+          "uncompressed_bytes": 489597,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation08-discovery.json.gz",
+          "gzip_sha256": "7b68e775184ae3bf617292189dbf4fdaaebee51ed4e13c7ffe647c3dd19d314f",
+          "gzip_bytes": 34406
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-validation08/sia-512.xml",
+          "uncompressed_sha256": "e1cb6e1e08ce4c6854527687ad6fcf908d1d2cbe9918e665de8788fc763ef767",
+          "uncompressed_bytes": 492011,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-validation08-sia-512.xml.gz",
+          "gzip_sha256": "552bcbbc35caa8ddea6cec24d72821f673820e70f2968d687443839ca52f827f",
+          "gzip_bytes": 38500
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final08",
+      "split": "final",
+      "center": [
+        176.01045855,
+        48.43370974
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+176.01045855+48.43370974+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 341,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final08/discovery.json",
+          "uncompressed_sha256": "c717b37878efccc8bef40c5775275dcd3e57a0cecd3715648b7c06910f024ebd",
+          "uncompressed_bytes": 748683,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final08-discovery.json.gz",
+          "gzip_sha256": "3c42ec7d3573fd28f178708820d9102d05219081cce215cb0ed9017c915a9878",
+          "gzip_bytes": 51650
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final08/sia-512.xml",
+          "uncompressed_sha256": "3eeb7767438048c990a134f4562056df5bf0585be1e2fe59c40b62405a617bfb",
+          "uncompressed_bytes": 738387,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final08-sia-512.xml.gz",
+          "gzip_sha256": "69fb825cbc2052b1035fa2b657bab5127d7b0c24d33d3f7fe4468a6ace7d5b3a",
+          "gzip_bytes": 55614
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final09",
+      "split": "final",
+      "center": [
+        267.69676808,
+        -46.87176902
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+267.69676808+-46.87176902+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 252,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final09/discovery.json",
+          "uncompressed_sha256": "c3d60d40a9a9fd1f6c143b5c74263554dc569e1237df70533a99b77dff0189f4",
+          "uncompressed_bytes": 554758,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final09-discovery.json.gz",
+          "gzip_sha256": "48f7938b2d03307ab4cdc8324f6e224a94847996a7d3aefd404372af9e42425f",
+          "gzip_bytes": 38090
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final09/sia-512.xml",
+          "uncompressed_sha256": "dbb7828371870d53c4b6e2efc12b07f6f8a7af861b1b21b01ef379500b1d8a48",
+          "uncompressed_bytes": 553969,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final09-sia-512.xml.gz",
+          "gzip_sha256": "e5fec06081439a8430d3efc0ee72df817519e127c9f245ab9eb930989eac4e64",
+          "gzip_bytes": 42096
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final10",
+      "split": "final",
+      "center": [
+        249.04951409,
+        59.91952773
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+249.04951409+59.91952773+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 359,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final10/discovery.json",
+          "uncompressed_sha256": "e73b5b03530a21fa194f0c3604f9b47087988046707602ed2e210c337dc7402e",
+          "uncompressed_bytes": 788072,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final10-discovery.json.gz",
+          "gzip_sha256": "30e73f272473fdc46b5d1e57ae6c63ad1eec5f10774e1c8008e1ceccb0b2b481",
+          "gzip_bytes": 54371
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final10/sia-512.xml",
+          "uncompressed_sha256": "5d4df8868815de152b9cb1f954f2efb048a6b817431ba52ce758326712bfdb8b",
+          "uncompressed_bytes": 775851,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final10-sia-512.xml.gz",
+          "gzip_sha256": "e747f3a002fa117cdf19894b4bd3e6c331080762adc35b4e7ce5ac9129e38a98",
+          "gzip_bytes": 58251
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final11",
+      "split": "final",
+      "center": [
+        8.08439718,
+        52.76297986
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+8.08439718+52.76297986+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 293,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final11/discovery.json",
+          "uncompressed_sha256": "11c8da14460748a889ed60cb6bfbe4cd5e7aa1ed799596f26a0c9dd493f64cde",
+          "uncompressed_bytes": 642818,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final11-discovery.json.gz",
+          "gzip_sha256": "c6663345f183dac0af2cbfeb1d176407f1d11dbc1c40dc18738a4a2f60ac78fb",
+          "gzip_bytes": 45649
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final11/sia-512.xml",
+          "uncompressed_sha256": "5a62afea612f1882da227feefd3e7da9b544f188d3026cf91c963c13103773f4",
+          "uncompressed_bytes": 637651,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final11-sia-512.xml.gz",
+          "gzip_sha256": "3cc14e93b0eb0b77b3ae890b0ce88a867f170a66e0d2609b214d41e3ead5822c",
+          "gzip_bytes": 49697
+        }
+      ]
+    },
+    {
+      "parent_id": "v4-final12",
+      "split": "final",
+      "center": [
+        22.80213225,
+        21.93796287
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+22.80213225+21.93796287+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "rows": 256,
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "error": null,
+      "files": [
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final12/discovery.json",
+          "uncompressed_sha256": "a4dccb2354c41e4f6f2cfd96d0346835c0c90ca18ba91728d6b739837af51c06",
+          "uncompressed_bytes": 562702,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final12-discovery.json.gz",
+          "gzip_sha256": "276110fff24306cfdbc5d5e0fe680d29ba42d96b2a8d091d239ae7bb809cb257",
+          "gzip_bytes": 39541
+        },
+        {
+          "original_path": "/tmp/spaceapps-v4-native-data/metadata/v4-final12/sia-512.xml",
+          "uncompressed_sha256": "b30c8d4d090abc7e1c0f4109562861a99e111b9e0ee2afb2992e3d491ff377ac",
+          "uncompressed_bytes": 561503,
+          "published_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/query-evidence/v4-final12-sia-512.xml.gz",
+          "gzip_sha256": "391e0c88ed767f9dd93174e99474a40e13a41cbfb484f83532015b3e10c193c2",
+          "gzip_bytes": 43609
+        }
+      ]
+    }
+  ],
+  "total_gzip_bytes": 2496883
+}

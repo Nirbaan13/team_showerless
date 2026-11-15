@@ -1,0 +1,9 @@
+{
+  "path": "/tmp/spaceapps-v4-ranker/synthetic-validation-30-v1.json.gz",
+  "sha256": "a2be9e01a6f0fa770a7c08023422743fc074604ac422d58236521eb050682744",
+  "bytes": 14894495,
+  "evaluation_complete": true,
+  "planned": 1000,
+  "error_fields": 0,
+  "source_changes": {}
+}

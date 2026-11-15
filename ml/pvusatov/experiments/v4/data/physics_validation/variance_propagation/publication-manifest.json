@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-15T07:12:41.131191+00:00",
+  "scope": "Conditional TRAIN-only registration covariance engineering; no raw/native/derived FITS included",
+  "files": [
+    {
+      "path": "attempt01-reporting-error/failure.log",
+      "sha256": "8480c19fa77f20af6c131aba2ba1bb3c9da5df016ae4547029c14a9d74ea70ce",
+      "bytes": 1101
+    },
+    {
+      "path": "attempt01-reporting-error/invocation.json",
+      "sha256": "90b02adbad68a9c0db6184e060ebb5ca1b9c908703932fe603f3dac378fc332b",
+      "bytes": 1480
+    },
+    {
+      "path": "attempt01-reporting-error/manifest.json",
+      "sha256": "de1e497b79f837213c2354d4b526b92d7f53e8b0164d0068915f5facda87c144",
+      "bytes": 859
+    },
+    {
+      "path": "attempt01-reporting-error/results.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "attempt01-reporting-error/run_study.py",
+      "sha256": "0c7cf7d170ee35144a4f22f32a702204e31da87a6c7f13c361131f9eec9e460c",
+      "bytes": 16754
+    },
+    {
+      "path": "invocation.json",
+      "sha256": "81a65881ace6bf7a0add28beff19143850544ea3eb6eb4fc0d5e390f0070b424",
+      "bytes": 1480
+    },
+    {
+      "path": "operators.py",
+      "sha256": "1688a8df33b5bfb8b11a3fe2482eebea5f57326c1c3f349a412d65b090ec9a07",
+      "bytes": 3726
+    },
+    {
+      "path": "plan.json",
+      "sha256": "54a4e8c243d7bb44aad61944d723f8527fa19fb316de02010420544feab54394",
+      "bytes": 4844
+    },
+    {
+      "path": "results.jsonl",
+      "sha256": "6376d2982d27c30564d37d5777b1fe33d4f588049eb7aaf013fadf3bad8d80a6",
+      "bytes": 107431
+    },
+    {
+      "path": "run_study.py",
+      "sha256": "83201c373dd8d251cb397a55c13d05178bafe4735c9f6323b1dfa644ef495330",
+      "bytes": 16757
+    },
+    {
+      "path": "summary.json",
+      "sha256": "4741f5c38ecd5e8466e02216f2a69b049c25c38acacd095f829b99d1dac36d8c",
+      "bytes": 5586
+    },
+    {
+      "path": "test_frame_reporting.py",
+      "sha256": "775653d4cea6e64edd73393539092c98830f2001c57cfa537640384986b8f696",
+      "bytes": 1563
+    },
+    {
+      "path": "test_operators.py",
+      "sha256": "2d034603c631bab68c5e18f42908319a761b184d33ac0bb99dfa4f2c9c9d06d9",
+      "bytes": 2708
+    }
+  ],
+  "documentation": {
+    "path": "../../../data-variance.AI.md",
+    "sha256": "ff5a40853f6903da84c49114e6dde6875a5111045e4a44c5c6a2453878a7e1cf"
+  },
+  "source_photon_noise_added": false,
+  "model_or_detector_called": false,
+  "final_pixels_opened": false
+}

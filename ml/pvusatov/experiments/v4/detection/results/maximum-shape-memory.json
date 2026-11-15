@@ -1,0 +1,16 @@
+{
+  "shape": [
+    32,
+    512,
+    512
+  ],
+  "nonempty_tracks": 1,
+  "matched_epochs": 32,
+  "peak_rss_mib": 566.578125,
+  "model_headroom_mib": 150.0,
+  "limit_mib": 1024.0,
+  "passes": true,
+  "elapsed_seconds": 30.161152284003037,
+  "feature_source_sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+  "feature_contract_sha256": "67ad2d61e3f26384860c313f69e916ab6b9ed1c46c6016012af0ae7144d3977b"
+}

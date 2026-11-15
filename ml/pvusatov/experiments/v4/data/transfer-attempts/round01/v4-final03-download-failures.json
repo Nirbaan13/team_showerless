@@ -1,0 +1,7 @@
+[
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W32_2D/l2b-v27-2026-226/2/level2_2025W32_2D_0075_1D2_spx_l2b-v27-2026-226.fits?center=3.13466202%2C72.64994146&size=0.12",
+    "obs_id": "2025W32_2D_0075_1",
+    "error": "HTTPError: HTTP Error 503: Service Unavailable"
+  }
+]

@@ -1,0 +1,1748 @@
+{
+  "schema_version": 1,
+  "designation": "DEV uniform-patch PSF gate; not selected",
+  "source_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/analyze_gate_controls.py": "46f6f970ed1b67689801148d68cb78fb0fcd7b2022624ad1100da7271fae7d50",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/psf_gate.py": "b64458f5b180340da41daa5c84c976d594a166e320103bc0be39b0acd71f80c4",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+  },
+  "native_handoff_sha256": "f8898016db7fda2b74c59099b09c3ea864b5b1d39312273f06831915c9990afa",
+  "cases": {
+    "comet-d2": {
+      "control_identity": "selected DEV object; all unmatched tracks UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            6,
+            6,
+            9
+          ],
+          "peaks_after": [
+            6,
+            6,
+            9
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.010963401000481099,
+          "prepare_cpu_seconds": 0.010961341999999874,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.0014199439974618144,
+          "link_cpu_seconds": 0.0014216380000000584,
+          "total_wall_seconds": 0.012383344997942913,
+          "total_cpu_seconds": 0.012382979999999932,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 1,
+          "known_target_ranks": [
+            1
+          ]
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            6,
+            6,
+            9
+          ],
+          "peaks_after": [
+            2,
+            5,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.010963401000481099,
+          "prepare_cpu_seconds": 0.010961341999999874,
+          "gate_wall_seconds": 0.017464372001995798,
+          "gate_cpu_seconds": 0.017465011999999724,
+          "link_wall_seconds": 0.0007596610012114979,
+          "link_cpu_seconds": 0.000760684000000289,
+          "total_wall_seconds": 0.029187434003688395,
+          "total_cpu_seconds": 0.029187037999999887,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 1,
+          "known_target_ranks": [
+            1
+          ]
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            6,
+            6,
+            9
+          ],
+          "peaks_after": [
+            2,
+            5,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.010963401000481099,
+          "prepare_cpu_seconds": 0.010961341999999874,
+          "gate_wall_seconds": 0.017464372001995798,
+          "gate_cpu_seconds": 0.017465011999999724,
+          "link_wall_seconds": 0.0006442529993364587,
+          "link_cpu_seconds": 0.0006444950000004113,
+          "total_wall_seconds": 0.029072026001813356,
+          "total_cpu_seconds": 0.02907084900000001,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 1,
+          "known_target_ranks": [
+            1
+          ]
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            6,
+            6,
+            9
+          ],
+          "peaks_after": [
+            2,
+            5,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.010963401000481099,
+          "prepare_cpu_seconds": 0.010961341999999874,
+          "gate_wall_seconds": 0.017464372001995798,
+          "gate_cpu_seconds": 0.017465011999999724,
+          "link_wall_seconds": 0.0006279899971559644,
+          "link_cpu_seconds": 0.0006279060000000669,
+          "total_wall_seconds": 0.02905576299963286,
+          "total_cpu_seconds": 0.029054259999999665,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 1,
+          "known_target_ranks": [
+            1
+          ]
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "comet-d6": {
+      "control_identity": "selected DEV object; all unmatched tracks UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            18,
+            58,
+            24,
+            23
+          ],
+          "peaks_after": [
+            18,
+            58,
+            24,
+            23
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.0630686259974027,
+          "prepare_cpu_seconds": 0.06307302000000004,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.025602886998967733,
+          "link_cpu_seconds": 0.025607335999999314,
+          "total_wall_seconds": 0.08867151299637044,
+          "total_cpu_seconds": 0.08868035599999935,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 36,
+          "known_target_ranks": [
+            4
+          ]
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            18,
+            58,
+            24,
+            23
+          ],
+          "peaks_after": [
+            16,
+            27,
+            20,
+            18
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.0630686259974027,
+          "prepare_cpu_seconds": 0.06307302000000004,
+          "gate_wall_seconds": 0.10649224799999502,
+          "gate_cpu_seconds": 0.10649537100000028,
+          "link_wall_seconds": 0.01200402100221254,
+          "link_cpu_seconds": 0.012006068000000703,
+          "total_wall_seconds": 0.18156489499961026,
+          "total_cpu_seconds": 0.18157445900000102,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 13,
+          "known_target_ranks": [
+            2
+          ]
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            18,
+            58,
+            24,
+            23
+          ],
+          "peaks_after": [
+            16,
+            18,
+            15,
+            10
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.0630686259974027,
+          "prepare_cpu_seconds": 0.06307302000000004,
+          "gate_wall_seconds": 0.10649224799999502,
+          "gate_cpu_seconds": 0.10649537100000028,
+          "link_wall_seconds": 0.007937162001326215,
+          "link_cpu_seconds": 0.007936904000000133,
+          "total_wall_seconds": 0.17749803599872394,
+          "total_cpu_seconds": 0.17750529500000045,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 3,
+          "known_target_ranks": [
+            2
+          ]
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            18,
+            58,
+            24,
+            23
+          ],
+          "peaks_after": [
+            16,
+            11,
+            12,
+            10
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.0630686259974027,
+          "prepare_cpu_seconds": 0.06307302000000004,
+          "gate_wall_seconds": 0.10649224799999502,
+          "gate_cpu_seconds": 0.10649537100000028,
+          "link_wall_seconds": 0.006621283006097656,
+          "link_cpu_seconds": 0.006621410000000161,
+          "total_wall_seconds": 0.17618215700349538,
+          "total_cpu_seconds": 0.17618980100000048,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 2,
+          "known_target_ranks": [
+            2
+          ]
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "vesta-d3": {
+      "control_identity": "selected DEV object; all unmatched tracks UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            100,
+            100,
+            70
+          ],
+          "peaks_after": [
+            100,
+            100,
+            70
+          ],
+          "peak_cap_reached": true,
+          "search_complete": false,
+          "prepare_wall_seconds": 0.04295347999868682,
+          "prepare_cpu_seconds": 0.042957030000000174,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.044311181001830846,
+          "link_cpu_seconds": 0.04431393000000039,
+          "total_wall_seconds": 0.08726466100051766,
+          "total_cpu_seconds": 0.08727096000000056,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 112,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            100,
+            100,
+            70
+          ],
+          "peaks_after": [
+            69,
+            71,
+            48
+          ],
+          "peak_cap_reached": true,
+          "search_complete": false,
+          "prepare_wall_seconds": 0.04295347999868682,
+          "prepare_cpu_seconds": 0.042957030000000174,
+          "gate_wall_seconds": 0.0848332620007568,
+          "gate_cpu_seconds": 0.08483566700000011,
+          "link_wall_seconds": 0.0199362889979966,
+          "link_cpu_seconds": 0.01992807600000024,
+          "total_wall_seconds": 0.14772303099744022,
+          "total_cpu_seconds": 0.14772077300000053,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 32,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            100,
+            100,
+            70
+          ],
+          "peaks_after": [
+            68,
+            68,
+            45
+          ],
+          "peak_cap_reached": true,
+          "search_complete": false,
+          "prepare_wall_seconds": 0.04295347999868682,
+          "prepare_cpu_seconds": 0.042957030000000174,
+          "gate_wall_seconds": 0.0848332620007568,
+          "gate_cpu_seconds": 0.08483566700000011,
+          "link_wall_seconds": 0.018501607002690434,
+          "link_cpu_seconds": 0.018502739000000545,
+          "total_wall_seconds": 0.14628834900213405,
+          "total_cpu_seconds": 0.14629543600000083,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 27,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            100,
+            100,
+            70
+          ],
+          "peaks_after": [
+            66,
+            67,
+            45
+          ],
+          "peak_cap_reached": true,
+          "search_complete": false,
+          "prepare_wall_seconds": 0.04295347999868682,
+          "prepare_cpu_seconds": 0.042957030000000174,
+          "gate_wall_seconds": 0.0848332620007568,
+          "gate_cpu_seconds": 0.08483566700000011,
+          "link_wall_seconds": 0.017919859994435683,
+          "link_cpu_seconds": 0.01791928499999962,
+          "total_wall_seconds": 0.1457066019938793,
+          "total_cpu_seconds": 0.1457119819999999,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 27,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 1,
+      "bloom_known_target_recovered": true,
+      "bloom_scores_null": true
+    },
+    "vesta-d6": {
+      "control_identity": "selected DEV object; all unmatched tracks UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            32,
+            33,
+            29
+          ],
+          "peaks_after": [
+            32,
+            33,
+            29
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.04301678400224773,
+          "prepare_cpu_seconds": 0.043019654000000074,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.00855026999488473,
+          "link_cpu_seconds": 0.008552070000000356,
+          "total_wall_seconds": 0.05156705399713246,
+          "total_cpu_seconds": 0.05157172400000043,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 17,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            32,
+            33,
+            29
+          ],
+          "peaks_after": [
+            24,
+            25,
+            20
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.04301678400224773,
+          "prepare_cpu_seconds": 0.043019654000000074,
+          "gate_wall_seconds": 0.0780565859968192,
+          "gate_cpu_seconds": 0.0780598889999995,
+          "link_wall_seconds": 0.004145481005252805,
+          "link_cpu_seconds": 0.004147013999999949,
+          "total_wall_seconds": 0.12521885100431973,
+          "total_cpu_seconds": 0.12522655699999952,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 3,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            32,
+            33,
+            29
+          ],
+          "peaks_after": [
+            23,
+            24,
+            18
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.04301678400224773,
+          "prepare_cpu_seconds": 0.043019654000000074,
+          "gate_wall_seconds": 0.0780565859968192,
+          "gate_cpu_seconds": 0.0780598889999995,
+          "link_wall_seconds": 0.003550830006133765,
+          "link_cpu_seconds": 0.003550910000000407,
+          "total_wall_seconds": 0.12462420000520069,
+          "total_cpu_seconds": 0.12463045299999997,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 2,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            32,
+            33,
+            29
+          ],
+          "peaks_after": [
+            23,
+            24,
+            18
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.04301678400224773,
+          "prepare_cpu_seconds": 0.043019654000000074,
+          "gate_wall_seconds": 0.0780565859968192,
+          "gate_cpu_seconds": 0.0780598889999995,
+          "link_wall_seconds": 0.0034372720037936233,
+          "link_cpu_seconds": 0.0034367609999996773,
+          "total_wall_seconds": 0.12451064200286055,
+          "total_cpu_seconds": 0.12451630399999924,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 2,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 1,
+      "bloom_known_target_recovered": true,
+      "bloom_scores_null": true
+    },
+    "v4-train01": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            29,
+            26,
+            30,
+            26,
+            31,
+            29,
+            17,
+            42
+          ],
+          "peaks_after": [
+            29,
+            26,
+            30,
+            26,
+            31,
+            29,
+            17,
+            42
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02073867400031304,
+          "prepare_cpu_seconds": 0.02074136400000004,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 1.1695797989959829,
+          "link_cpu_seconds": 1.1687641440000007,
+          "total_wall_seconds": 1.190318472996296,
+          "total_cpu_seconds": 1.1895055080000008,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 147,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            29,
+            26,
+            30,
+            26,
+            31,
+            29,
+            17,
+            42
+          ],
+          "peaks_after": [
+            23,
+            20,
+            16,
+            16,
+            21,
+            17,
+            9,
+            29
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02073867400031304,
+          "prepare_cpu_seconds": 0.02074136400000004,
+          "gate_wall_seconds": 0.023772622997057624,
+          "gate_cpu_seconds": 0.023770948000000125,
+          "link_wall_seconds": 0.4800959830026841,
+          "link_cpu_seconds": 0.4797330139999998,
+          "total_wall_seconds": 0.5246072800000547,
+          "total_cpu_seconds": 0.524245326,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 72,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            29,
+            26,
+            30,
+            26,
+            31,
+            29,
+            17,
+            42
+          ],
+          "peaks_after": [
+            23,
+            20,
+            16,
+            16,
+            21,
+            17,
+            9,
+            29
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02073867400031304,
+          "prepare_cpu_seconds": 0.02074136400000004,
+          "gate_wall_seconds": 0.023772622997057624,
+          "gate_cpu_seconds": 0.023770948000000125,
+          "link_wall_seconds": 0.4518442619955749,
+          "link_cpu_seconds": 0.451568494,
+          "total_wall_seconds": 0.4963555589929456,
+          "total_cpu_seconds": 0.49608080600000015,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 72,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            29,
+            26,
+            30,
+            26,
+            31,
+            29,
+            17,
+            42
+          ],
+          "peaks_after": [
+            23,
+            19,
+            14,
+            16,
+            21,
+            16,
+            9,
+            29
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02073867400031304,
+          "prepare_cpu_seconds": 0.02074136400000004,
+          "gate_wall_seconds": 0.023772622997057624,
+          "gate_cpu_seconds": 0.023770948000000125,
+          "link_wall_seconds": 0.43936696899618255,
+          "link_cpu_seconds": 0.4391465029999999,
+          "total_wall_seconds": 0.4838782659935532,
+          "total_cpu_seconds": 0.4836588150000001,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 69,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train02": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            13,
+            14,
+            14,
+            13,
+            16,
+            8,
+            16,
+            7
+          ],
+          "peaks_after": [
+            13,
+            14,
+            14,
+            13,
+            16,
+            8,
+            16,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02102339600241976,
+          "prepare_cpu_seconds": 0.02102349799999992,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.23610250699857716,
+          "link_cpu_seconds": 0.2360408120000006,
+          "total_wall_seconds": 0.2571259030009969,
+          "total_cpu_seconds": 0.2570643100000005,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 40,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            13,
+            14,
+            14,
+            13,
+            16,
+            8,
+            16,
+            7
+          ],
+          "peaks_after": [
+            10,
+            10,
+            11,
+            12,
+            12,
+            6,
+            6,
+            5
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02102339600241976,
+          "prepare_cpu_seconds": 0.02102349799999992,
+          "gate_wall_seconds": 0.023376641001959797,
+          "gate_cpu_seconds": 0.023377836999999957,
+          "link_wall_seconds": 0.13466304400208173,
+          "link_cpu_seconds": 0.13461321399999981,
+          "total_wall_seconds": 0.1790630810064613,
+          "total_cpu_seconds": 0.1790145489999997,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 28,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            13,
+            14,
+            14,
+            13,
+            16,
+            8,
+            16,
+            7
+          ],
+          "peaks_after": [
+            10,
+            10,
+            11,
+            12,
+            12,
+            6,
+            6,
+            5
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02102339600241976,
+          "prepare_cpu_seconds": 0.02102349799999992,
+          "gate_wall_seconds": 0.023376641001959797,
+          "gate_cpu_seconds": 0.023377836999999957,
+          "link_wall_seconds": 0.13487183999677654,
+          "link_cpu_seconds": 0.1347827069999994,
+          "total_wall_seconds": 0.1792718770011561,
+          "total_cpu_seconds": 0.17918404199999927,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 28,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            13,
+            14,
+            14,
+            13,
+            16,
+            8,
+            16,
+            7
+          ],
+          "peaks_after": [
+            9,
+            10,
+            11,
+            12,
+            12,
+            6,
+            6,
+            5
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02102339600241976,
+          "prepare_cpu_seconds": 0.02102349799999992,
+          "gate_wall_seconds": 0.023376641001959797,
+          "gate_cpu_seconds": 0.023377836999999957,
+          "link_wall_seconds": 0.1300148110021837,
+          "link_cpu_seconds": 0.13001921600000088,
+          "total_wall_seconds": 0.17441484800656326,
+          "total_cpu_seconds": 0.17442055100000076,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 26,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train03": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            44,
+            40,
+            31,
+            35,
+            31,
+            13,
+            16,
+            10
+          ],
+          "peaks_after": [
+            44,
+            40,
+            31,
+            35,
+            31,
+            13,
+            16,
+            10
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020206968998536468,
+          "prepare_cpu_seconds": 0.02020836600000031,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.8108323790002032,
+          "link_cpu_seconds": 0.8297829869999997,
+          "total_wall_seconds": 0.8310393479987397,
+          "total_cpu_seconds": 0.8499913530000001,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 64,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            44,
+            40,
+            31,
+            35,
+            31,
+            13,
+            16,
+            10
+          ],
+          "peaks_after": [
+            24,
+            19,
+            17,
+            25,
+            18,
+            7,
+            10,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020206968998536468,
+          "prepare_cpu_seconds": 0.02020836600000031,
+          "gate_wall_seconds": 0.023702375998254865,
+          "gate_cpu_seconds": 0.02370549699999991,
+          "link_wall_seconds": 0.2793309010012308,
+          "link_cpu_seconds": 0.29059764500000007,
+          "total_wall_seconds": 0.32324024599802215,
+          "total_cpu_seconds": 0.3345115080000003,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 34,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            44,
+            40,
+            31,
+            35,
+            31,
+            13,
+            16,
+            10
+          ],
+          "peaks_after": [
+            24,
+            18,
+            17,
+            25,
+            18,
+            7,
+            10,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020206968998536468,
+          "prepare_cpu_seconds": 0.02020836600000031,
+          "gate_wall_seconds": 0.023702375998254865,
+          "gate_cpu_seconds": 0.02370549699999991,
+          "link_wall_seconds": 0.2525957199977711,
+          "link_cpu_seconds": 0.26625296299999945,
+          "total_wall_seconds": 0.2965050649945624,
+          "total_cpu_seconds": 0.3101668259999997,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 34,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            44,
+            40,
+            31,
+            35,
+            31,
+            13,
+            16,
+            10
+          ],
+          "peaks_after": [
+            23,
+            17,
+            17,
+            25,
+            18,
+            7,
+            10,
+            7
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020206968998536468,
+          "prepare_cpu_seconds": 0.02020836600000031,
+          "gate_wall_seconds": 0.023702375998254865,
+          "gate_cpu_seconds": 0.02370549699999991,
+          "link_wall_seconds": 0.2431127710005967,
+          "link_cpu_seconds": 0.24461094399999972,
+          "total_wall_seconds": 0.287022115997388,
+          "total_cpu_seconds": 0.28852480699999994,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 33,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 2,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train04": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            5,
+            5,
+            6,
+            5,
+            6,
+            8,
+            3,
+            3
+          ],
+          "peaks_after": [
+            5,
+            5,
+            6,
+            5,
+            6,
+            8,
+            3,
+            3
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02092784999695141,
+          "prepare_cpu_seconds": 0.02092997799999985,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.05126693000056548,
+          "link_cpu_seconds": 0.051271176000000196,
+          "total_wall_seconds": 0.07219477999751689,
+          "total_cpu_seconds": 0.07220115400000005,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 13,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            5,
+            5,
+            6,
+            5,
+            6,
+            8,
+            3,
+            3
+          ],
+          "peaks_after": [
+            3,
+            3,
+            5,
+            4,
+            5,
+            4,
+            1,
+            2
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02092784999695141,
+          "prepare_cpu_seconds": 0.02092997799999985,
+          "gate_wall_seconds": 0.023372026997094508,
+          "gate_cpu_seconds": 0.023375099000000787,
+          "link_wall_seconds": 0.02396614100143779,
+          "link_cpu_seconds": 0.02396839499999892,
+          "total_wall_seconds": 0.06826601799548371,
+          "total_cpu_seconds": 0.06827347199999956,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 9,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            5,
+            5,
+            6,
+            5,
+            6,
+            8,
+            3,
+            3
+          ],
+          "peaks_after": [
+            3,
+            3,
+            5,
+            4,
+            5,
+            4,
+            1,
+            2
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02092784999695141,
+          "prepare_cpu_seconds": 0.02092997799999985,
+          "gate_wall_seconds": 0.023372026997094508,
+          "gate_cpu_seconds": 0.023375099000000787,
+          "link_wall_seconds": 0.024419025001407135,
+          "link_cpu_seconds": 0.03372076199999974,
+          "total_wall_seconds": 0.06871890199545305,
+          "total_cpu_seconds": 0.07802583900000037,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 9,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            5,
+            5,
+            6,
+            5,
+            6,
+            8,
+            3,
+            3
+          ],
+          "peaks_after": [
+            3,
+            3,
+            5,
+            4,
+            5,
+            4,
+            1,
+            2
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02092784999695141,
+          "prepare_cpu_seconds": 0.02092997799999985,
+          "gate_wall_seconds": 0.023372026997094508,
+          "gate_cpu_seconds": 0.023375099000000787,
+          "link_wall_seconds": 0.023934954006108455,
+          "link_cpu_seconds": 0.02393462000000035,
+          "total_wall_seconds": 0.06823483100015437,
+          "total_cpu_seconds": 0.06823969700000099,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 9,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train05": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            1,
+            26,
+            26,
+            34,
+            44,
+            46,
+            52,
+            55
+          ],
+          "peaks_after": [
+            1,
+            26,
+            26,
+            34,
+            44,
+            46,
+            52,
+            55
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02037809199828189,
+          "prepare_cpu_seconds": 0.020381820000000772,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.9306360270056757,
+          "link_cpu_seconds": 0.9308251110000008,
+          "total_wall_seconds": 0.9510141190039576,
+          "total_cpu_seconds": 0.9512069310000015,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 848,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            1,
+            26,
+            26,
+            34,
+            44,
+            46,
+            52,
+            55
+          ],
+          "peaks_after": [
+            0,
+            19,
+            17,
+            25,
+            23,
+            30,
+            35,
+            41
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02037809199828189,
+          "prepare_cpu_seconds": 0.020381820000000772,
+          "gate_wall_seconds": 0.023222778996569104,
+          "gate_cpu_seconds": 0.023645744999999607,
+          "link_wall_seconds": 0.38488525000138907,
+          "link_cpu_seconds": 0.3991125199999992,
+          "total_wall_seconds": 0.42848612099624006,
+          "total_cpu_seconds": 0.4431400849999996,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 318,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            1,
+            26,
+            26,
+            34,
+            44,
+            46,
+            52,
+            55
+          ],
+          "peaks_after": [
+            0,
+            19,
+            17,
+            25,
+            23,
+            30,
+            35,
+            41
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02037809199828189,
+          "prepare_cpu_seconds": 0.020381820000000772,
+          "gate_wall_seconds": 0.023222778996569104,
+          "gate_cpu_seconds": 0.023645744999999607,
+          "link_wall_seconds": 0.413986252999166,
+          "link_cpu_seconds": 0.4398858719999996,
+          "total_wall_seconds": 0.457587123994017,
+          "total_cpu_seconds": 0.483913437,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 318,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            1,
+            26,
+            26,
+            34,
+            44,
+            46,
+            52,
+            55
+          ],
+          "peaks_after": [
+            0,
+            19,
+            17,
+            25,
+            23,
+            30,
+            33,
+            41
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.02037809199828189,
+          "prepare_cpu_seconds": 0.020381820000000772,
+          "gate_wall_seconds": 0.023222778996569104,
+          "gate_cpu_seconds": 0.023645744999999607,
+          "link_wall_seconds": 0.3796041539972066,
+          "link_cpu_seconds": 0.38122773299999935,
+          "total_wall_seconds": 0.4232050249920576,
+          "total_cpu_seconds": 0.4252552979999997,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 307,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train06": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            8,
+            4,
+            3,
+            4,
+            2,
+            5,
+            2,
+            1
+          ],
+          "peaks_after": [
+            8,
+            4,
+            3,
+            4,
+            2,
+            5,
+            2,
+            1
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.019658737001009285,
+          "prepare_cpu_seconds": 0.02748767099999938,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.01848021100158803,
+          "link_cpu_seconds": 0.019720036000000718,
+          "total_wall_seconds": 0.03813894800259732,
+          "total_cpu_seconds": 0.0472077070000001,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 9,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            8,
+            4,
+            3,
+            4,
+            2,
+            5,
+            2,
+            1
+          ],
+          "peaks_after": [
+            7,
+            3,
+            3,
+            3,
+            2,
+            3,
+            1,
+            1
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.019658737001009285,
+          "prepare_cpu_seconds": 0.02748767099999938,
+          "gate_wall_seconds": 0.02344866500061471,
+          "gate_cpu_seconds": 0.023450056999999802,
+          "link_wall_seconds": 0.01384316500480054,
+          "link_cpu_seconds": 0.013844487000000072,
+          "total_wall_seconds": 0.056950567006424535,
+          "total_cpu_seconds": 0.06478221499999925,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 8,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            8,
+            4,
+            3,
+            4,
+            2,
+            5,
+            2,
+            1
+          ],
+          "peaks_after": [
+            7,
+            3,
+            3,
+            3,
+            2,
+            3,
+            1,
+            1
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.019658737001009285,
+          "prepare_cpu_seconds": 0.02748767099999938,
+          "gate_wall_seconds": 0.02344866500061471,
+          "gate_cpu_seconds": 0.023450056999999802,
+          "link_wall_seconds": 0.013834676006808877,
+          "link_cpu_seconds": 0.013835337999999808,
+          "total_wall_seconds": 0.05694207800843287,
+          "total_cpu_seconds": 0.06477306599999899,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 8,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            8,
+            4,
+            3,
+            4,
+            2,
+            5,
+            2,
+            1
+          ],
+          "peaks_after": [
+            7,
+            3,
+            3,
+            3,
+            2,
+            3,
+            1,
+            1
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.019658737001009285,
+          "prepare_cpu_seconds": 0.02748767099999938,
+          "gate_wall_seconds": 0.02344866500061471,
+          "gate_cpu_seconds": 0.023450056999999802,
+          "link_wall_seconds": 0.013185984003939666,
+          "link_cpu_seconds": 0.013186875999998904,
+          "total_wall_seconds": 0.05629338600556366,
+          "total_cpu_seconds": 0.06412460399999809,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 8,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train07": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            21,
+            26,
+            27,
+            32,
+            27,
+            31,
+            34,
+            41
+          ],
+          "peaks_after": [
+            21,
+            26,
+            27,
+            32,
+            27,
+            31,
+            34,
+            41
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.021048886002972722,
+          "prepare_cpu_seconds": 0.02105091700000017,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 1.241743167003733,
+          "link_cpu_seconds": 1.265973493999999,
+          "total_wall_seconds": 1.2627920530067058,
+          "total_cpu_seconds": 1.287024410999999,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 414,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            21,
+            26,
+            27,
+            32,
+            27,
+            31,
+            34,
+            41
+          ],
+          "peaks_after": [
+            17,
+            18,
+            22,
+            26,
+            23,
+            23,
+            27,
+            32
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.021048886002972722,
+          "prepare_cpu_seconds": 0.02105091700000017,
+          "gate_wall_seconds": 0.023577512001793366,
+          "gate_cpu_seconds": 0.023577278999999507,
+          "link_wall_seconds": 0.8233566530034295,
+          "link_cpu_seconds": 0.8355515939999982,
+          "total_wall_seconds": 0.8679830510081956,
+          "total_cpu_seconds": 0.8801797899999979,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 266,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            21,
+            26,
+            27,
+            32,
+            27,
+            31,
+            34,
+            41
+          ],
+          "peaks_after": [
+            17,
+            18,
+            22,
+            26,
+            23,
+            23,
+            25,
+            30
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.021048886002972722,
+          "prepare_cpu_seconds": 0.02105091700000017,
+          "gate_wall_seconds": 0.023577512001793366,
+          "gate_cpu_seconds": 0.023577278999999507,
+          "link_wall_seconds": 0.7728683860041201,
+          "link_cpu_seconds": 0.7750788479999997,
+          "total_wall_seconds": 0.8174947840088862,
+          "total_cpu_seconds": 0.8197070439999994,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 251,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            21,
+            26,
+            27,
+            32,
+            27,
+            31,
+            34,
+            41
+          ],
+          "peaks_after": [
+            17,
+            18,
+            22,
+            24,
+            22,
+            23,
+            25,
+            29
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.021048886002972722,
+          "prepare_cpu_seconds": 0.02105091700000017,
+          "gate_wall_seconds": 0.023577512001793366,
+          "gate_cpu_seconds": 0.023577278999999507,
+          "link_wall_seconds": 0.7449446620012168,
+          "link_cpu_seconds": 0.7449373280000025,
+          "total_wall_seconds": 0.7895710600059829,
+          "total_cpu_seconds": 0.7895655240000021,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 232,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 0,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    },
+    "v4-train08": {
+      "control_identity": "UNKNOWN",
+      "methods": {
+        "None": {
+          "error": null,
+          "gate_snr": null,
+          "peaks_before": [
+            17,
+            12,
+            11,
+            19,
+            15,
+            16,
+            12,
+            18
+          ],
+          "peaks_after": [
+            17,
+            12,
+            11,
+            19,
+            15,
+            16,
+            12,
+            18
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020725113005028106,
+          "prepare_cpu_seconds": 0.020726277000001403,
+          "gate_wall_seconds": 0.0,
+          "gate_cpu_seconds": 0.0,
+          "link_wall_seconds": 0.25735735499620205,
+          "link_cpu_seconds": 0.25736177099999935,
+          "total_wall_seconds": 0.27808246800123015,
+          "total_cpu_seconds": 0.27808804800000075,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 38,
+          "known_target_ranks": []
+        },
+        "2.0": {
+          "error": null,
+          "gate_snr": 2.0,
+          "peaks_before": [
+            17,
+            12,
+            11,
+            19,
+            15,
+            16,
+            12,
+            18
+          ],
+          "peaks_after": [
+            7,
+            8,
+            7,
+            9,
+            8,
+            10,
+            5,
+            15
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020725113005028106,
+          "prepare_cpu_seconds": 0.020726277000001403,
+          "gate_wall_seconds": 0.023896662998595275,
+          "gate_cpu_seconds": 0.02389718299999899,
+          "link_wall_seconds": 0.09514513199974317,
+          "link_cpu_seconds": 0.09514981599999928,
+          "total_wall_seconds": 0.13976690800336655,
+          "total_cpu_seconds": 0.13977327599999967,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 19,
+          "known_target_ranks": []
+        },
+        "3.0": {
+          "error": null,
+          "gate_snr": 3.0,
+          "peaks_before": [
+            17,
+            12,
+            11,
+            19,
+            15,
+            16,
+            12,
+            18
+          ],
+          "peaks_after": [
+            7,
+            8,
+            7,
+            9,
+            8,
+            10,
+            5,
+            15
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020725113005028106,
+          "prepare_cpu_seconds": 0.020726277000001403,
+          "gate_wall_seconds": 0.023896662998595275,
+          "gate_cpu_seconds": 0.02389718299999899,
+          "link_wall_seconds": 0.0961758980047307,
+          "link_cpu_seconds": 0.0961778570000007,
+          "total_wall_seconds": 0.14079767400835408,
+          "total_cpu_seconds": 0.1408013170000011,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 19,
+          "known_target_ranks": []
+        },
+        "4.0": {
+          "error": null,
+          "gate_snr": 4.0,
+          "peaks_before": [
+            17,
+            12,
+            11,
+            19,
+            15,
+            16,
+            12,
+            18
+          ],
+          "peaks_after": [
+            7,
+            8,
+            7,
+            9,
+            8,
+            10,
+            5,
+            14
+          ],
+          "peak_cap_reached": false,
+          "search_complete": true,
+          "prepare_wall_seconds": 0.020725113005028106,
+          "prepare_cpu_seconds": 0.020726277000001403,
+          "gate_wall_seconds": 0.023896662998595275,
+          "gate_cpu_seconds": 0.02389718299999899,
+          "link_wall_seconds": 0.09431466399837518,
+          "link_cpu_seconds": 0.09431613699999986,
+          "total_wall_seconds": 0.13893644000199856,
+          "total_cpu_seconds": 0.13893959700000025,
+          "limitation": "local Gaussian/MAD SNR is an approximate finite-support point-template statistic",
+          "candidate_rows": 19,
+          "known_target_ranks": []
+        }
+      },
+      "bloom_candidates": 2,
+      "bloom_known_target_recovered": false,
+      "bloom_scores_null": true
+    }
+  }
+}

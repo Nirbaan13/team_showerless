@@ -1,0 +1,61 @@
+"""Known-label rows and independent-group weights for V4 development only."""
+from collections import Counter
+import numpy as np
+
+
+def labeled_rows(fields,kind):
+    if kind not in {'synthetic','native_moving','native_stationary'}:
+        raise ValueError('unknown scientific label provenance')
+    rows=[];labels=[];groups=[];dimension=0
+    for field in fields:
+        features=field.get('features_v4',field['features'])
+        if features:dimension=len(features[0])
+        if kind!='synthetic' and not field['attribution_eligible']:continue
+        if len(features)!=len(field['matches']):raise ValueError('feature/label row mismatch')
+        group=str(field['seed']) if kind=='synthetic' else field['parent_id']
+        for row,match in zip(features,field['matches']):
+            if kind=='native_moving' and match<0:continue
+            if kind=='native_stationary' and match!=-1:continue
+            if kind=='synthetic' and match< -1:continue
+            rows.append(row);labels.append(int(match>=0));groups.append(group)
+    x=np.asarray(rows,dtype=np.float32).reshape(-1,dimension)
+    if not np.isfinite(x).all():raise ValueError('nonfinite training features')
+    return x,np.asarray(labels,dtype=np.int64),groups
+
+
+def group_class_weights(labels,groups):
+    y=np.asarray(labels);groups=np.asarray(groups)
+    if y.shape!=groups.shape or not np.isin(y,[0,1]).all():raise ValueError('known class labels required')
+    result=np.zeros(len(y),float)
+    for label in np.unique(y):
+        counts=Counter(groups[y==label])
+        for group,count in counts.items():result[(y==label)&(groups==group)]=1/(len(counts)*count)
+    return result*len(result)/result.sum() if len(result) else result
+
+
+def pairwise_rows(fields,max_negatives=64,seed=20261115):
+    """Symmetric within-field synthetic pairs; unknown rows never competitors.
+
+    Half the budget uses high-heuristic known negatives, the remainder a seeded
+    uniform sample. Each qualifying independent synthetic field has equal mass.
+    Input features can be transformed first with training-only preprocessing.
+    """
+    rng=np.random.default_rng(seed);differences=[];labels=[];weights=[];dimension=0
+    for field in fields:
+        x=np.asarray(field.get('features_v4',field['features']),np.float64)
+        if not len(x):continue
+        dimension=x.shape[1];m=np.asarray(field['matches']);positive=np.flatnonzero(m>=0);negative=np.flatnonzero(m==-1)
+        if not len(positive) or not len(negative):continue
+        if len(negative)>max_negatives:
+            heuristic=np.asarray(field.get('baseline',np.zeros(len(x))))
+            hard=negative[np.argsort(-heuristic[negative],kind='stable')[:max_negatives//2]]
+            rest=np.setdiff1d(negative,hard)
+            negative=np.r_[hard,rng.choice(rest,max_negatives-len(hard),replace=False)]
+        count=len(positive)*len(negative)
+        for p in positive:
+            for n in negative:
+                delta=x[p]-x[n]
+                differences.extend([delta,-delta]);labels.extend([1,0]);weights.extend([1/(2*count)]*2)
+    matrix=np.asarray(differences,dtype=np.float64).reshape(-1,dimension)
+    if not len(matrix):raise ValueError('no known within-field positive/negative pairs')
+    return matrix,np.asarray(labels,dtype=np.int64),np.asarray(weights)*len(weights)/sum(weights)

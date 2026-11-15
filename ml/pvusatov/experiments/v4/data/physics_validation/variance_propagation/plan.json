@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T06:52:20.413623+00:00",
+  "scope": "TRAIN-only conditional uncertainty propagation engineering; not instrument covariance, source photon-noise simulation, training examples or model evaluation",
+  "parents": [
+    {
+      "parent_id": "v4-train01",
+      "split": "train",
+      "detector": 1,
+      "center": [
+        228.745009,
+        -69.43558622
+      ],
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train01-downloads.json",
+        "sha256": "1465c20805da6677df74ca7926312c496023cb0ff9bf11aafbb6876509d6149c"
+      }
+    },
+    {
+      "parent_id": "v4-train02",
+      "split": "train",
+      "detector": 2,
+      "center": [
+        329.84077089,
+        0.98198712
+      ],
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train02-downloads.json",
+        "sha256": "abbcb482f81d2aca7e80b5773b99dea647f9b017025c0bc5eb1de08c0dada6db"
+      }
+    },
+    {
+      "parent_id": "v4-train03",
+      "split": "train",
+      "detector": 3,
+      "center": [
+        188.08439718,
+        -52.76297986
+      ],
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train03-downloads.json",
+        "sha256": "763a71acd741d4fbda3c8f2436299a15b18ee89bc75be8265cd33b2a54068629"
+      }
+    }
+  ],
+  "epochs": "ALL8declaredphysicalexposures perTRAINparent,sortedbyactualMJD;24framesremain3correlatedskyparents",
+  "region": {
+    "width_arcmin": 6.0,
+    "height_arcmin": 6.0,
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion"
+  },
+  "patch_radius_pixels": 3,
+  "gaussian_template_sigma_pixels": 0.8,
+  "patches": [
+    {
+      "id": "center-phase",
+      "registered_xy_formula": "[(width-1)/2+.25,(height-1)/2+.75]"
+    },
+    {
+      "id": "registered-left-edge",
+      "registered_xy_formula": "[1.25,(height-1)/2+.25]"
+    },
+    {
+      "id": "mixed-support-boundary",
+      "registered_xy_formula": "nearest-to-registered-center midpoint between horizontallyadjacent finite/nonfinite preparepixels with3pixelmargin; ifnone tryvertical; tiesbyy,x; unavailableexplicitlyretained,noreplacement"
+    }
+  ],
+  "native_input_covariance_assumption": "Independent Gaussian nativepixelperturbations withdiagonal calibratedVARIANCE; no claim this diagonal assumption describes real detectorcovariance",
+  "registration": "FULLcelestialTAN-SIP inversecoordinates; exactorder1 constant-zero bilinearweights withmotion-goodnativeflags/finiteIMAGE-ZODI/positivefiniteVARIANCE; normalizebygood support onlywhere>=.995; outsidecoordinates entirelyzero asimmutableprepare",
+  "analytic_variance": "SUM_i(w_ri^2*V_i)/support_r^2; never linearinterpolationofvariance",
+  "analytic_covariance": "SUM_i(w_ri*w_si*V_i)/(support_r*support_s) over shared nativepixels",
+  "realization_count_per_frame": 2048,
+  "batch_size": 128,
+  "seeds_by_parent": {
+    "v4-train01": 3700001,
+    "v4-train02": 3700002,
+    "v4-train03": 3700003
+  },
+  "seed_per_epoch": "parentseed+100*zero-basedMJDorderedepoch",
+  "median_policy": "Apply the actual prepare-style globalnanmedian recentering to originalregisteredimage+propagatedperturbation. Fit amplitude+constantbackground; verify zero-sum amplitudeweights remove the medianconstant. Do not silentlyignore recentering.",
+  "affine_fit": "KnownGaussian template+constant, weighted least squares using analytical registereddiagonal variance only. Compare exact a^T C a against naive diagonal fitvariance and MC samplevariance. Retain all valid patchpixels, require>=3usableanddesignrank2; unavailablecasesexplicit,notresampled.",
+  "statistics": "Record MC samplemean/variance, analyticvariance, chi-square95%interval and zscore; no model selection/gate. All2048draws counted, no outlierclipping.",
+  "conditional_native_derivative_spotcheck": "For firstGaussian draw of each parent firstepoch only: truthfulfloat64 IMAGE copy,VARIANCEreference/FLAGS/ZODI/EPSF/OBSIDs/WCSunchanged,checksumsupdated,all8originalepochsrepreparedwithonlythatonecopy; comparedelta vsoperator+globalmedian. Delete3scratchderivativesafterchecking.",
+  "source_photon_noise_added": false,
+  "training_or_inference_called": false,
+  "final_pixels_opened": false,
+  "limitations": [
+    "CalibratednativeVARIANCE includespipelineestimatednoise; independentnativeGaussian assumption isonlyconditionalengineeringtest.",
+    "No gain/electronconversion or sourcePoissonnoise invented.",
+    "Fluxcoefficient isGaussian-template surfacebrightnessdiscretesum, notcalibratedpointsourceflux.",
+    "MonteCarlo realizationsarenotindependentskyfields."
+  ]
+}

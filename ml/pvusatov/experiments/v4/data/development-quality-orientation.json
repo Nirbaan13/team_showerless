@@ -1,0 +1,1150 @@
+{
+  "schema_version": 4,
+  "created_utc": "2026-11-15T06:01:18.327672+00:00",
+  "scope": "New V4 TRAIN only. No FINAL pixel access, detector/model call or fitting.",
+  "source_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/development_quality.py": "61031227b44938620b1e1e95dd53d3eb5990248598641e6963827a57710432c4",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/training/evaluate_background.py": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15"
+  },
+  "original_official_orientation_evidence": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/evidence/orientation-evidence.json",
+    "sha256": "45f6a96072313b516b80c1b73f47b4ad17463f90ffcd9df15462a7233c2545c1"
+  },
+  "primary_sources": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf",
+      "version": "2.1,2026-11-10",
+      "pages": [
+        52,
+        59,
+        60,
+        74,
+        81
+      ],
+      "sha256": "9f3085cea74c6cdb647cc373bef27aaae50e394d348402e68ea2558ea06011cd"
+    },
+    {
+      "url": "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/",
+      "sections": [
+        "4.3",
+        "5.1",
+        "6.2"
+      ]
+    }
+  ],
+  "interpretation": "SWIR ePSFs use native IMAGE axes; SKY is common SWIR view, not north-up. Sample native ePSF once, then apply WCS projection once.",
+  "final_pixels_opened": false,
+  "new_probe_frames": 24,
+  "detectors_verified": [
+    1,
+    2,
+    3
+  ],
+  "max_centroid_error_px": 0.10759706815959975,
+  "records": [
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0437_1",
+      "source_sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.390062693102827,
+        31.10905048923442
+      ],
+      "registered_centroid_xy": [
+        29.370882365814737,
+        31.062087769567555
+      ],
+      "centroid_error_px": 0.05072851262738588
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0437_2",
+      "source_sha256": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.740965720486177,
+        30.984237510695017
+      ],
+      "registered_centroid_xy": [
+        29.757958672781076,
+        31.041499839735152
+      ],
+      "centroid_error_px": 0.05973051778444111
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0437_3",
+      "source_sha256": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.134276117895038,
+        30.622323486792794
+      ],
+      "registered_centroid_xy": [
+        29.095137661356134,
+        30.65257135988741
+      ],
+      "centroid_error_px": 0.049464660182757574
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0437_4",
+      "source_sha256": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.100834545900167,
+        31.490942288446895
+      ],
+      "registered_centroid_xy": [
+        29.06191176742238,
+        31.486335129797855
+      ],
+      "centroid_error_px": 0.039194497002108294
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0463_2",
+      "source_sha256": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.445874575754974,
+        31.287178604406115
+      ],
+      "registered_centroid_xy": [
+        29.436919577303563,
+        31.266859583807687
+      ],
+      "centroid_error_px": 0.022204832702457884
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0463_3",
+      "source_sha256": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.59940607708287,
+        31.326484049090887
+      ],
+      "registered_centroid_xy": [
+        29.601860381510804,
+        31.305186949638422
+      ],
+      "centroid_error_px": 0.021438051574551604
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0463_4",
+      "source_sha256": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        28.780798095858245,
+        31.163759555877355
+      ],
+      "registered_centroid_xy": [
+        28.80223333131741,
+        31.134784591009478
+      ],
+      "centroid_error_px": 0.0360418910198205
+    },
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "obs_id": "2026W07_2A_0475_2",
+      "source_sha256": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.118460099516998,
+        31.040942273271476
+      ],
+      "registered_centroid_xy": [
+        29.12212469728268,
+        31.016337081527418
+      ],
+      "centroid_error_px": 0.024876590151105982
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_1C_0593_1",
+      "source_sha256": "1b6934be2db3a65c83e11fbfb2c7d27c4680207d90dfcc551fe3838ad462669e",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.381213140556845,
+        30.175502041359806
+      ],
+      "registered_centroid_xy": [
+        30.36191434201955,
+        30.137571848985527
+      ],
+      "centroid_error_px": 0.0425575271665657
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_1C_0593_2",
+      "source_sha256": "8065aaa05d0c525d5cff503d0c053e386c24d5fbd04f578fbbd8d5b55cafa3bc",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.46457384039201,
+        30.59020258214333
+      ],
+      "registered_centroid_xy": [
+        30.457072550153175,
+        30.59902656244266
+      ],
+      "centroid_error_px": 0.011581536321671458
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_1C_0593_3",
+      "source_sha256": "743106b31427ab21341dc37c7ce6e8ebb0673ae96ee2ac08b38f7e607bad92a6",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        31.03381399974576,
+        30.850889939418796
+      ],
+      "registered_centroid_xy": [
+        31.074025654376292,
+        30.864319518647385
+      ],
+      "centroid_error_px": 0.04239493798063812
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_1C_0593_4",
+      "source_sha256": "242390dce8ccf8056ed7b9e8828b4fb5fea9b61586bc29c850856f4adb055776",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.70278836772367,
+        30.413706652690557
+      ],
+      "registered_centroid_xy": [
+        30.729368084016052,
+        30.411502648093506
+      ],
+      "centroid_error_px": 0.02667093838707826
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_2B_0139_1",
+      "source_sha256": "c5b32985977e566f3d2751f8c81f78717a6a1e7f6778df1eb5efaa1574110694",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.917496771931685,
+        30.827800124777394
+      ],
+      "registered_centroid_xy": [
+        30.95581458507183,
+        30.848315324761106
+      ],
+      "centroid_error_px": 0.043464102823075855
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_2B_0139_2",
+      "source_sha256": "ae6b4ec33646abc06fec4d952f3f88459a66ab7690e6c9d93a68f01652b5018d",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.814457377544173,
+        30.559984340780005
+      ],
+      "registered_centroid_xy": [
+        30.85578994513403,
+        30.581397318029893
+      ],
+      "centroid_error_px": 0.046549938112466126
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_2B_0168_3",
+      "source_sha256": "41e448391f5be48d8ee1af313df69483ddefab3d070a561374119a89eded15f3",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        31.076817645754495,
+        30.61677524766422
+      ],
+      "registered_centroid_xy": [
+        31.07845623353438,
+        30.637185861412828
+      ],
+      "centroid_error_px": 0.020476281974697016
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "obs_id": "2025W23_2B_0168_4",
+      "source_sha256": "79184b4b7677298420a4ba0b7d09da6304c38a195ba4746c45852be3085e5ee5",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        30.702780652656404,
+        30.584735418793166
+      ],
+      "registered_centroid_xy": [
+        30.718949019216797,
+        30.601625796565973
+      ],
+      "centroid_error_px": 0.02338163678058846
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0356_1",
+      "source_sha256": "85f7b6be28f305e07e8fe1da4660680039bf3b69b847b43d04c40c5d60b76ac1",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.28447648430327,
+        26.235465738722
+      ],
+      "registered_centroid_xy": [
+        29.208395431481414,
+        26.159381558513104
+      ],
+      "centroid_error_px": 0.10759706815959975
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0356_2",
+      "source_sha256": "9bd8b5892296d9a185c1cf6c4dd0ff34004107faa52f310ad31c5a9bd049d1cf",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.12560222992962,
+        26.21178696342377
+      ],
+      "registered_centroid_xy": [
+        29.12120072742533,
+        26.17446725353014
+      ],
+      "centroid_error_px": 0.037578371050911635
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0356_3",
+      "source_sha256": "1b2ccde40e7583743bc3c42fdaf1f14b427ffc422905eb5a65c541cabab5e29c",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.402981338449415,
+        26.51068391489604
+      ],
+      "registered_centroid_xy": [
+        29.383963797890715,
+        26.525836110327088
+      ],
+      "centroid_error_px": 0.024315753644140157
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0356_4",
+      "source_sha256": "a9b998fce8012a7a3b5a58836bf2792f89843795722216373fc5e12c1e32467e",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.406285862323532,
+        26.613750878894358
+      ],
+      "registered_centroid_xy": [
+        29.40291101315295,
+        26.646739428440835
+      ],
+      "centroid_error_px": 0.03316072990910442
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0607_1",
+      "source_sha256": "121d7d509077b6bb93a2e6b68e625453b172014891359c326d7e7101b4f48a65",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.61211412818845,
+        26.488816594132796
+      ],
+      "registered_centroid_xy": [
+        29.634594067314005,
+        26.471512559103356
+      ],
+      "centroid_error_px": 0.028368596923161633
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0607_2",
+      "source_sha256": "63d4b4735a2673092d916f77f832d90bd5b505a6e43a038d489c6499490d4e8f",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        29.071172892949424,
+        27.20542139849553
+      ],
+      "registered_centroid_xy": [
+        29.097063819986904,
+        27.183221192986935
+      ],
+      "centroid_error_px": 0.03410556006700431
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0607_3",
+      "source_sha256": "e6d8cb57be65d402f4711eda23d2fab6397914e9c7370bb12ce9ebd776273cc3",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        28.61976349041439,
+        26.7832144678824
+      ],
+      "registered_centroid_xy": [
+        28.67893723388386,
+        26.84050962168216
+      ],
+      "centroid_error_px": 0.08236665930538332
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "obs_id": "2025W26_2A_0607_4",
+      "source_sha256": "0cf38546a8d87cd8b19d053b68c54be7dcbaef9f9822ff0a9a0fdb70bb966652",
+      "image_detcoord": "sky",
+      "epsf_detcoord": "sky",
+      "native_marker_offset_xy": [
+        1,
+        2
+      ],
+      "registered_expected_xy": [
+        28.674656930453708,
+        26.67760654558226
+      ],
+      "registered_centroid_xy": [
+        28.732140143474542,
+        26.709635918771305
+      ],
+      "centroid_error_px": 0.06580425917888327
+    }
+  ],
+  "development_quality": [
+    {
+      "parent_id": "v4-train01",
+      "detector": 1,
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "times_hours": [
+        0.0,
+        0.03581416670931503,
+        0.07162861106917262,
+        0.10744277777848765,
+        3.3362555555650033,
+        3.3720697222743183,
+        3.407883611158468,
+        4.981572777789552
+      ],
+      "span_hours": 4.981572777789552,
+      "frames": [
+        {
+          "frame_id": "level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0437_1:D1",
+          "midpoint_utc": "2026-02-14T20:09:58.930Z",
+          "midpoint_mjd": 61085.84026539352,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0437_1",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0437_2:D1",
+          "midpoint_utc": "2026-02-14T20:12:07.861Z",
+          "midpoint_mjd": 61085.841757650465,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0437_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0437_3:D1",
+          "midpoint_utc": "2026-02-14T20:14:16.793Z",
+          "midpoint_mjd": 61085.84324991898,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0437_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0437_4:D1",
+          "midpoint_utc": "2026-02-14T20:16:25.724Z",
+          "midpoint_mjd": 61085.84474217593,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0437_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0463_2:D1",
+          "midpoint_utc": "2026-02-14T23:30:09.450Z",
+          "midpoint_mjd": 61085.97927604167,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0463_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0463_3:D1",
+          "midpoint_utc": "2026-02-14T23:32:18.381Z",
+          "midpoint_mjd": 61085.980768298614,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0463_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0463_4:D1",
+          "midpoint_utc": "2026-02-14T23:34:27.311Z",
+          "midpoint_mjd": 61085.982260543984,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0463_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226",
+          "observation_id": "2026W07_2A_0475_2:D1",
+          "midpoint_utc": "2026-02-15T01:08:52.592Z",
+          "midpoint_mjd": 61086.04783092593,
+          "detector": 1,
+          "physical_observation_id": "2026W07_2A_0475_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-226",
+          "software_version": "7.0.5",
+          "sha256": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b",
+          "input_size_bytes": 4023360
+        }
+      ],
+      "per_epoch": [
+        {
+          "obs_id": "2026W07_2A_0437_1",
+          "finite_signal_fraction": 0.8997414536052858,
+          "motion_mask_outlier_fraction": 0.0,
+          "robust_signal_sigma": 0.09337058066093544
+        },
+        {
+          "obs_id": "2026W07_2A_0437_2",
+          "finite_signal_fraction": 0.9026141913243321,
+          "motion_mask_outlier_fraction": 0.0043091065785693765,
+          "robust_signal_sigma": 0.09728378254983848
+        },
+        {
+          "obs_id": "2026W07_2A_0437_3",
+          "finite_signal_fraction": 0.8833668486067222,
+          "motion_mask_outlier_fraction": 0.0011490950876185005,
+          "robust_signal_sigma": 0.09816997998961222
+        },
+        {
+          "obs_id": "2026W07_2A_0437_4",
+          "finite_signal_fraction": 0.8419994254524562,
+          "motion_mask_outlier_fraction": 0.0,
+          "robust_signal_sigma": 0.09724851789718775
+        },
+        {
+          "obs_id": "2026W07_2A_0463_2",
+          "finite_signal_fraction": 0.8882505027291009,
+          "motion_mask_outlier_fraction": 0.0034472852628555013,
+          "robust_signal_sigma": 0.10132188002007396
+        },
+        {
+          "obs_id": "2026W07_2A_0463_3",
+          "finite_signal_fraction": 0.8066647515081873,
+          "motion_mask_outlier_fraction": 0.002872737719046251,
+          "robust_signal_sigma": 0.10885910070457662
+        },
+        {
+          "obs_id": "2026W07_2A_0463_4",
+          "finite_signal_fraction": 0.866704969836254,
+          "motion_mask_outlier_fraction": 0.0034472852628555013,
+          "robust_signal_sigma": 0.18628260251377488
+        },
+        {
+          "obs_id": "2026W07_2A_0475_2",
+          "finite_signal_fraction": 0.8730249928181557,
+          "motion_mask_outlier_fraction": 0.0,
+          "robust_signal_sigma": 0.10742499899432474
+        }
+      ],
+      "warnings": [
+        "passband_variation_not_corrected",
+        "psf_matching_not_applied",
+        "outlier_measurements_retained"
+      ]
+    },
+    {
+      "parent_id": "v4-train02",
+      "detector": 2,
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "times_hours": [
+        0.0,
+        0.03581388888414949,
+        0.07162805541884154,
+        0.10744194430299103,
+        26.09567166661145,
+        26.131485833320767,
+        29.420412222098093,
+        29.45622638880741
+      ],
+      "span_hours": 29.45622638880741,
+      "frames": [
+        {
+          "frame_id": "level2_2025W23_1C_0593_1D2_spx_l2b-v27-2026-200",
+          "observation_id": "2025W23_1C_0593_1:D2",
+          "midpoint_utc": "2025-06-05T02:27:15.859Z",
+          "midpoint_mjd": 60831.10226688658,
+          "detector": 2,
+          "physical_observation_id": "2025W23_1C_0593_1",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-200",
+          "software_version": "7.0.5",
+          "sha256": "1b6934be2db3a65c83e11fbfb2c7d27c4680207d90dfcc551fe3838ad462669e",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_1C_0593_2D2_spx_l2b-v27-2026-200",
+          "observation_id": "2025W23_1C_0593_2:D2",
+          "midpoint_utc": "2025-06-05T02:29:24.789Z",
+          "midpoint_mjd": 60831.10375913195,
+          "detector": 2,
+          "physical_observation_id": "2025W23_1C_0593_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-200",
+          "software_version": "7.0.5",
+          "sha256": "8065aaa05d0c525d5cff503d0c053e386c24d5fbd04f578fbbd8d5b55cafa3bc",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_1C_0593_3D2_spx_l2b-v27-2026-200",
+          "observation_id": "2025W23_1C_0593_3:D2",
+          "midpoint_utc": "2025-06-05T02:31:33.720Z",
+          "midpoint_mjd": 60831.105251388886,
+          "detector": 2,
+          "physical_observation_id": "2025W23_1C_0593_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-200",
+          "software_version": "7.0.5",
+          "sha256": "743106b31427ab21341dc37c7ce6e8ebb0673ae96ee2ac08b38f7e607bad92a6",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_1C_0593_4D2_spx_l2b-v27-2026-200",
+          "observation_id": "2025W23_1C_0593_4:D2",
+          "midpoint_utc": "2025-06-05T02:33:42.650Z",
+          "midpoint_mjd": 60831.10674363426,
+          "detector": 2,
+          "physical_observation_id": "2025W23_1C_0593_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-200",
+          "software_version": "7.0.5",
+          "sha256": "242390dce8ccf8056ed7b9e8828b4fb5fea9b61586bc29c850856f4adb055776",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_2B_0139_1D2_spx_l2b-v27-2026-201",
+          "observation_id": "2025W23_2B_0139_1:D2",
+          "midpoint_utc": "2025-06-06T04:33:00.277Z",
+          "midpoint_mjd": 60832.18958653935,
+          "detector": 2,
+          "physical_observation_id": "2025W23_2B_0139_1",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-201",
+          "software_version": "7.0.5",
+          "sha256": "c5b32985977e566f3d2751f8c81f78717a6a1e7f6778df1eb5efaa1574110694",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_2B_0139_2D2_spx_l2b-v27-2026-201",
+          "observation_id": "2025W23_2B_0139_2:D2",
+          "midpoint_utc": "2025-06-06T04:35:09.208Z",
+          "midpoint_mjd": 60832.1910787963,
+          "detector": 2,
+          "physical_observation_id": "2025W23_2B_0139_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-201",
+          "software_version": "7.0.5",
+          "sha256": "ae6b4ec33646abc06fec4d952f3f88459a66ab7690e6c9d93a68f01652b5018d",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_2B_0168_3D2_spx_l2b-v27-2026-201",
+          "observation_id": "2025W23_2B_0168_3:D2",
+          "midpoint_utc": "2025-06-06T07:52:29.343Z",
+          "midpoint_mjd": 60832.32811739583,
+          "detector": 2,
+          "physical_observation_id": "2025W23_2B_0168_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-201",
+          "software_version": "7.0.5",
+          "sha256": "41e448391f5be48d8ee1af313df69483ddefab3d070a561374119a89eded15f3",
+          "input_size_bytes": 4023360
+        },
+        {
+          "frame_id": "level2_2025W23_2B_0168_4D2_spx_l2b-v27-2026-201",
+          "observation_id": "2025W23_2B_0168_4:D2",
+          "midpoint_utc": "2025-06-06T07:54:38.274Z",
+          "midpoint_mjd": 60832.32960965278,
+          "detector": 2,
+          "physical_observation_id": "2025W23_2B_0168_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-201",
+          "software_version": "7.0.5",
+          "sha256": "79184b4b7677298420a4ba0b7d09da6304c38a195ba4746c45852be3085e5ee5",
+          "input_size_bytes": 4023360
+        }
+      ],
+      "per_epoch": [
+        {
+          "obs_id": "2025W23_1C_0593_1",
+          "finite_signal_fraction": 0.9425452456190749,
+          "motion_mask_outlier_fraction": 0.06578569376615916,
+          "robust_signal_sigma": 0.016531359365174168
+        },
+        {
+          "obs_id": "2025W23_1C_0593_2",
+          "finite_signal_fraction": 0.9505889112324045,
+          "motion_mask_outlier_fraction": 0.06118931341568515,
+          "robust_signal_sigma": 0.015554136154950353
+        },
+        {
+          "obs_id": "2025W23_1C_0593_3",
+          "finite_signal_fraction": 0.9313415685147945,
+          "motion_mask_outlier_fraction": 0.06549841999425453,
+          "robust_signal_sigma": 0.0163676943257124
+        },
+        {
+          "obs_id": "2025W23_1C_0593_4",
+          "finite_signal_fraction": 0.9451307095662166,
+          "motion_mask_outlier_fraction": 0.06808388394139615,
+          "robust_signal_sigma": 0.016338801571283725
+        },
+        {
+          "obs_id": "2025W23_2B_0139_1",
+          "finite_signal_fraction": 0.9531743751795461,
+          "motion_mask_outlier_fraction": 0.06894570525711002,
+          "robust_signal_sigma": 0.015682669934638543
+        },
+        {
+          "obs_id": "2025W23_2B_0139_2",
+          "finite_signal_fraction": 0.9399597816719334,
+          "motion_mask_outlier_fraction": 0.06492387245044527,
+          "robust_signal_sigma": 0.01564665957808336
+        },
+        {
+          "obs_id": "2025W23_2B_0168_3",
+          "finite_signal_fraction": 0.9313415685147945,
+          "motion_mask_outlier_fraction": 0.03993105429474289,
+          "robust_signal_sigma": 0.03635462364560346
+        },
+        {
+          "obs_id": "2025W23_2B_0168_4",
+          "finite_signal_fraction": 0.9413961505314565,
+          "motion_mask_outlier_fraction": 0.05860384946854352,
+          "robust_signal_sigma": 0.015474640527112438
+        }
+      ],
+      "warnings": [
+        "passband_variation_not_corrected",
+        "psf_matching_not_applied",
+        "outlier_measurements_retained"
+      ]
+    },
+    {
+      "parent_id": "v4-train03",
+      "detector": 3,
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "times_hours": [
+        0.0,
+        0.03581416670931503,
+        0.07162805559346452,
+        0.10744249995332211,
+        34.2472186111263,
+        34.28303250001045,
+        34.318846666719764,
+        34.35466083325446
+      ],
+      "span_hours": 34.35466083325446,
+      "frames": [
+        {
+          "frame_id": "level2_2025W26_2A_0356_1D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0356_1:D3",
+          "midpoint_utc": "2025-06-28T04:07:41.490Z",
+          "midpoint_mjd": 60854.17200798611,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0356_1",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "85f7b6be28f305e07e8fe1da4660680039bf3b69b847b43d04c40c5d60b76ac1",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0356_2D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0356_2:D3",
+          "midpoint_utc": "2025-06-28T04:09:50.421Z",
+          "midpoint_mjd": 60854.17350024306,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0356_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "9bd8b5892296d9a185c1cf6c4dd0ff34004107faa52f310ad31c5a9bd049d1cf",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0356_3D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0356_3:D3",
+          "midpoint_utc": "2025-06-28T04:11:59.351Z",
+          "midpoint_mjd": 60854.17499248843,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0356_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "1b2ccde40e7583743bc3c42fdaf1f14b427ffc422905eb5a65c541cabab5e29c",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0356_4D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0356_4:D3",
+          "midpoint_utc": "2025-06-28T04:14:08.283Z",
+          "midpoint_mjd": 60854.17648475694,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0356_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "a9b998fce8012a7a3b5a58836bf2792f89843795722216373fc5e12c1e32467e",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0607_1D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0607_1:D3",
+          "midpoint_utc": "2025-06-29T14:22:31.477Z",
+          "midpoint_mjd": 60855.59897542824,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0607_1",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "121d7d509077b6bb93a2e6b68e625453b172014891359c326d7e7101b4f48a65",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0607_2D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0607_2:D3",
+          "midpoint_utc": "2025-06-29T14:24:40.407Z",
+          "midpoint_mjd": 60855.60046767361,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0607_2",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "63d4b4735a2673092d916f77f832d90bd5b505a6e43a038d489c6499490d4e8f",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0607_3D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0607_3:D3",
+          "midpoint_utc": "2025-06-29T14:26:49.338Z",
+          "midpoint_mjd": 60855.60195993056,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0607_3",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "e6d8cb57be65d402f4711eda23d2fab6397914e9c7370bb12ce9ebd776273cc3",
+          "input_size_bytes": 4106880
+        },
+        {
+          "frame_id": "level2_2025W26_2A_0607_4D3_spx_l2b-v27-2026-214",
+          "observation_id": "2025W26_2A_0607_4:D3",
+          "midpoint_utc": "2025-06-29T14:28:58.269Z",
+          "midpoint_mjd": 60855.6034521875,
+          "detector": 3,
+          "physical_observation_id": "2025W26_2A_0607_4",
+          "observation_id_source": "fits:OBSID",
+          "units": "MJy / sr",
+          "release": "unknown",
+          "processing_version": "l2b-v27-2026-214",
+          "software_version": "7.0.5",
+          "sha256": "0cf38546a8d87cd8b19d053b68c54be7dcbaef9f9822ff0a9a0fdb70bb966652",
+          "input_size_bytes": 4106880
+        }
+      ],
+      "per_epoch": [
+        {
+          "obs_id": "2025W26_2A_0356_1",
+          "finite_signal_fraction": 0.8744613616776789,
+          "motion_mask_outlier_fraction": 0.008618213157138753,
+          "robust_signal_sigma": 0.09164420599843277
+        },
+        {
+          "obs_id": "2025W26_2A_0356_2",
+          "finite_signal_fraction": 0.8460212582591209,
+          "motion_mask_outlier_fraction": 0.006032749209997127,
+          "robust_signal_sigma": 0.090890554051359
+        },
+        {
+          "obs_id": "2025W26_2A_0356_3",
+          "finite_signal_fraction": 0.7483481758115484,
+          "motion_mask_outlier_fraction": 0.008330939385234128,
+          "robust_signal_sigma": 0.08351909855738651
+        },
+        {
+          "obs_id": "2025W26_2A_0356_4",
+          "finite_signal_fraction": 0.8618213157138753,
+          "motion_mask_outlier_fraction": 0.006320022981901752,
+          "robust_signal_sigma": 0.08516425570144452
+        },
+        {
+          "obs_id": "2025W26_2A_0607_1",
+          "finite_signal_fraction": 0.8839413961505315,
+          "motion_mask_outlier_fraction": 0.008618213157138753,
+          "robust_signal_sigma": 0.0858401380267039
+        },
+        {
+          "obs_id": "2025W26_2A_0607_2",
+          "finite_signal_fraction": 0.7236426314277506,
+          "motion_mask_outlier_fraction": 0.008618213157138753,
+          "robust_signal_sigma": 0.08267308644728585
+        },
+        {
+          "obs_id": "2025W26_2A_0607_3",
+          "finite_signal_fraction": 0.7400172364263142,
+          "motion_mask_outlier_fraction": 0.009767308244757253,
+          "robust_signal_sigma": 0.07535223973832444
+        },
+        {
+          "obs_id": "2025W26_2A_0607_4",
+          "finite_signal_fraction": 0.8580867566791152,
+          "motion_mask_outlier_fraction": 0.0034472852628555013,
+          "robust_signal_sigma": 0.07660138558496456
+        }
+      ],
+      "warnings": [
+        "passband_variation_not_corrected",
+        "psf_matching_not_applied",
+        "outlier_measurements_retained"
+      ]
+    }
+  ],
+  "limitations": [
+    "Axis consistency checks do not validate empirical PSF shape/photometry.",
+    "No MWIR D4\u2013D6 orientation claim.",
+    "Coverage/background statistics do not select or replace declared parents.",
+    "Real controls remain UNKNOWN; no real precision or probability estimate."
+  ]
+}

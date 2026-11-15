@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-15T06:40:40.800857+00:00",
+  "scope": "TRAIN-only engineering interpretation; original result files, metrics, source, model and cohorts unmodified",
+  "plan_sha256": "8f7ae2a66172df19648f74148f5485c31e0f7c0ae1b6d36b4a65e394556bbdd3",
+  "analysis_source_sha256": "4de0edb819eaf6c94dfd5de770722c7056264b9da5a21f4a647ee8ba6540323f",
+  "stages": {
+    "stationary": {
+      "summary_sha256": "ee2a441cc68d358d69188347bb7be0b361c8569dd61bb81f42dfdad627460557",
+      "records_sha256": "2514965c2a514c658cd91c159470c12677cb3e7a466107b363f146f8edc8e083",
+      "planned_trials": 63,
+      "executed_trials": 63,
+      "unavailable_trials": 0,
+      "runtime_errors": 0,
+      "derivative_epochs": 504,
+      "maximum_absolute_prepared_delta_error": 3.8416381187289517e-11,
+      "raw_unconditioned_maximum_relative_L2": 9.008454477742647e-11,
+      "zero_response_epochs": 0,
+      "positive_response_epochs": 504,
+      "maximum_relative_L2_positive_response": 9.008454477742647e-11,
+      "maximum_absolute_error_zero_response": null,
+      "large_relative_error_epochs": 0,
+      "large_relative_error_epochs_with_exactly_zero_response": 0,
+      "maximum_absolute_median_shift": 0.0012511117656499038,
+      "maximum_median_constant_prediction_error": 1.7093965132275457e-13,
+      "epsf_zone_disagreements": 0,
+      "all_full_celestial_wcs_include_sip": true,
+      "native_crop_response_sum_range": [
+        0.9430157749832148,
+        1.0000000000000004
+      ],
+      "native_motion_good_response_sum_range": [
+        0.23159443643941333,
+        1.0000000000000004
+      ]
+    },
+    "moving": {
+      "summary_sha256": "841e768ad39a0cc8bc6668156deef7dcf4e76696dbc9d459f5271d3c541726f4",
+      "records_sha256": "018f2c358460925381fe6ae85fd76ebec5959db4319371512f24d659040ea2d0",
+      "planned_trials": 108,
+      "executed_trials": 108,
+      "unavailable_trials": 0,
+      "runtime_errors": 0,
+      "derivative_epochs": 864,
+      "maximum_absolute_prepared_delta_error": 4.3787640180426024e-11,
+      "raw_unconditioned_maximum_relative_L2": 1.0,
+      "zero_response_epochs": 81,
+      "positive_response_epochs": 744,
+      "maximum_relative_L2_positive_response": 4.4907648913413477e-11,
+      "maximum_absolute_error_zero_response": 6.938893903907228e-18,
+      "large_relative_error_epochs": 9,
+      "large_relative_error_epochs_with_exactly_zero_response": 9,
+      "maximum_absolute_median_shift": 0.0012122413375902225,
+      "maximum_median_constant_prediction_error": 3.269075548456568e-14,
+      "epsf_zone_disagreements": 0,
+      "all_full_celestial_wcs_include_sip": true,
+      "native_crop_response_sum_range": [
+        0.0,
+        1.0000000000000002
+      ],
+      "native_motion_good_response_sum_range": [
+        0.0,
+        1.0000000000000002
+      ]
+    }
+  },
+  "total_trials": 171,
+  "total_derivative_epochs": 1368,
+  "scratch_derivatives_retained": 0,
+  "added_photon_noise": false,
+  "variance_updated": false,
+  "final_pixels_opened": false,
+  "model_or_detector_called": false,
+  "finding": "Independent pre-registration IMAGE overlay and the historical registered response agree in absolute prepared-image units for these cases, after the existing median subtraction. Near-zero response makes relative error ill-conditioned; original unconditioned maximum remains visible.",
+  "scientific_limits": [
+    "No calibrated point-source flux or Poisson/electron conversion established.",
+    "No empirical PSF-shape or photometric calibration validation.",
+    "No ranking/recovery metric or real-control precision estimate.",
+    "Phase/mask/SIP agreement is engineering consistency, not astronomical motion confirmation."
+  ]
+}

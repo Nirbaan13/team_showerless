@@ -1,0 +1,12 @@
+[
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W08_2A/l2b-v27-2026-227/2/level2_2026W08_2A_0052_3D2_spx_l2b-v27-2026-227.fits?center=231.80823511%2C-44.53010034&size=0.12",
+    "obs_id": "2026W08_2A_0052_3",
+    "error": "HTTPError: HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W08_2A/l2b-v27-2026-227/2/level2_2026W08_2A_0252_1D2_spx_l2b-v27-2026-227.fits?center=231.80823511%2C-44.53010034&size=0.12",
+    "obs_id": "2026W08_2A_0252_1",
+    "error": "HTTPError: HTTP Error 503: Service Unavailable"
+  }
+]

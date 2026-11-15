@@ -1,0 +1,873 @@
+{
+  "schema_version": 4,
+  "declared_utc": "2026-11-15T05:52:58.419946+00:00",
+  "purpose": "NEW V4 native train/development-validation/quarantined-final; metadata-only prospective selection",
+  "parent_unit": "Sky position containing ALL physical OBSIDs, detectors, crops, processing versions, epochs and derivatives; no independent-N inflation",
+  "groups": [
+    {
+      "center": [
+        228.745009,
+        -69.43558622
+      ],
+      "galactic_lon_lat_deg": [
+        315.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-train01",
+      "group_id": "v4-train01",
+      "split": "train",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        108.42757587,
+        -10.72370325
+      ],
+      "galactic_lon_lat_deg": [
+        225.0,
+        0.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-validation01",
+      "group_id": "v4-validation01",
+      "split": "validation",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        144.82678533,
+        -65.93335872
+      ],
+      "galactic_lon_lat_deg": [
+        285.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final01",
+      "group_id": "v4-final01",
+      "split": "final",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        329.84077089,
+        0.98198712
+      ],
+      "galactic_lon_lat_deg": [
+        60.0,
+        -40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-train02",
+      "group_id": "v4-train02",
+      "split": "train",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        314.21657412,
+        -53.0549699
+      ],
+      "galactic_lon_lat_deg": [
+        345.0,
+        -40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-validation02",
+      "group_id": "v4-validation02",
+      "split": "validation",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        358.2432199,
+        20.82723636
+      ],
+      "galactic_lon_lat_deg": [
+        105.0,
+        -40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final02",
+      "group_id": "v4-final02",
+      "split": "final",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        188.08439718,
+        -52.76297986
+      ],
+      "galactic_lon_lat_deg": [
+        300.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-train03",
+      "group_id": "v4-train03",
+      "split": "train",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        66.37912355,
+        34.85237859
+      ],
+      "galactic_lon_lat_deg": [
+        165.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-validation03",
+      "group_id": "v4-validation03",
+      "split": "validation",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        3.13466202,
+        72.64994146
+      ],
+      "galactic_lon_lat_deg": [
+        120.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final03",
+      "group_id": "v4-final03",
+      "split": "final",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        344.94770504,
+        -25.62633834
+      ],
+      "galactic_lon_lat_deg": [
+        30.0,
+        -65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-train04",
+      "group_id": "v4-train04",
+      "split": "train",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        11.61995898,
+        -2.15648135
+      ],
+      "galactic_lon_lat_deg": [
+        120.0,
+        -65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-validation04",
+      "group_id": "v4-validation04",
+      "split": "validation",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        134.21657412,
+        53.0549699
+      ],
+      "galactic_lon_lat_deg": [
+        165.0,
+        40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final04",
+      "group_id": "v4-final04",
+      "split": "final",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        231.80823511,
+        -44.53010034
+      ],
+      "galactic_lon_lat_deg": [
+        330.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-train05",
+      "group_id": "v4-train05",
+      "split": "train",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        272.62839734,
+        1.96849569
+      ],
+      "galactic_lon_lat_deg": [
+        30.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-validation05",
+      "group_id": "v4-validation05",
+      "split": "validation",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        92.62839734,
+        -1.96849569
+      ],
+      "galactic_lon_lat_deg": [
+        210.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final05",
+      "group_id": "v4-final05",
+      "split": "final",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        197.9339074,
+        2.6049264
+      ],
+      "galactic_lon_lat_deg": [
+        315.0,
+        65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-train06",
+      "group_id": "v4-train06",
+      "split": "train",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        37.76682914,
+        -17.30497014
+      ],
+      "galactic_lon_lat_deg": [
+        195.0,
+        -65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-validation06",
+      "group_id": "v4-validation06",
+      "split": "validation",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        356.01045855,
+        -48.43370974
+      ],
+      "galactic_lon_lat_deg": [
+        330.0,
+        -65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final06",
+      "group_id": "v4-final06",
+      "split": "final",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        106.10958247,
+        -28.55590977
+      ],
+      "galactic_lon_lat_deg": [
+        240.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-train07",
+      "group_id": "v4-train07",
+      "split": "train",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        110.47930535,
+        7.1236773
+      ],
+      "galactic_lon_lat_deg": [
+        210.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-validation07",
+      "group_id": "v4-validation07",
+      "split": "validation",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        125.11633088,
+        -18.64203631
+      ],
+      "galactic_lon_lat_deg": [
+        240.0,
+        10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final07",
+      "group_id": "v4-final07",
+      "split": "final",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        338.06523414,
+        -73.69972706
+      ],
+      "galactic_lon_lat_deg": [
+        315.0,
+        -40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-train08",
+      "group_id": "v4-train08",
+      "split": "train",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        202.80213225,
+        -21.93796287
+      ],
+      "galactic_lon_lat_deg": [
+        315.0,
+        40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-validation08",
+      "group_id": "v4-validation08",
+      "split": "validation",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        176.01045855,
+        48.43370974
+      ],
+      "galactic_lon_lat_deg": [
+        150.0,
+        65.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final08",
+      "group_id": "v4-final08",
+      "split": "final",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        267.69676808,
+        -46.87176902
+      ],
+      "galactic_lon_lat_deg": [
+        345.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final09",
+      "group_id": "v4-final09",
+      "split": "final",
+      "preferred_detector": 2
+    },
+    {
+      "center": [
+        249.04951409,
+        59.91952773
+      ],
+      "galactic_lon_lat_deg": [
+        90.0,
+        40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final10",
+      "group_id": "v4-final10",
+      "split": "final",
+      "preferred_detector": 3
+    },
+    {
+      "center": [
+        8.08439718,
+        52.76297986
+      ],
+      "galactic_lon_lat_deg": [
+        120.0,
+        -10.0
+      ],
+      "stratum": "low_galactic_latitude",
+      "parent_id": "v4-final11",
+      "group_id": "v4-final11",
+      "split": "final",
+      "preferred_detector": 1
+    },
+    {
+      "center": [
+        22.80213225,
+        21.93796287
+      ],
+      "galactic_lon_lat_deg": [
+        135.0,
+        -40.0
+      ],
+      "stratum": "off_plane",
+      "parent_id": "v4-final12",
+      "group_id": "v4-final12",
+      "split": "final",
+      "preferred_detector": 2
+    }
+  ],
+  "grid": {
+    "galactic_longitudes_deg": [
+      0,
+      15,
+      30,
+      45,
+      60,
+      75,
+      90,
+      105,
+      120,
+      135,
+      150,
+      165,
+      180,
+      195,
+      210,
+      225,
+      240,
+      255,
+      270,
+      285,
+      300,
+      315,
+      330,
+      345
+    ],
+    "galactic_latitudes_deg": [
+      -65,
+      -40,
+      -10,
+      0,
+      10,
+      40,
+      65
+    ],
+    "selection": "Round-robin split slots; odd slot low latitude/even offplane; deterministic maximum minimum separation from all excluded and already selected centers; tie by Galactic lon/lat; NO archive query, pixel or model outcome used",
+    "minimum_center_separation_deg": 8.0
+  },
+  "excluded_parent_centers": {
+    "train01": [
+      15.0,
+      -30.0
+    ],
+    "train02": [
+      45.0,
+      20.0
+    ],
+    "train03": [
+      75.0,
+      -15.0
+    ],
+    "train04": [
+      105.0,
+      40.0
+    ],
+    "train05": [
+      150.0,
+      -20.0
+    ],
+    "train06": [
+      180.0,
+      25.0
+    ],
+    "train07": [
+      240.0,
+      -25.0
+    ],
+    "train08": [
+      270.0,
+      35.0
+    ],
+    "validation01": [
+      30.0,
+      45.0
+    ],
+    "validation02": [
+      165.0,
+      5.0
+    ],
+    "validation03": [
+      300.0,
+      -20.0
+    ],
+    "final01": [
+      60.0,
+      -45.0
+    ],
+    "final02": [
+      135.0,
+      20.0
+    ],
+    "final03": [
+      225.0,
+      15.0
+    ],
+    "final04": [
+      330.0,
+      40.0
+    ],
+    "validation-stress01": [
+      266.4168,
+      -29.0078
+    ],
+    "validation-stress02": [
+      305.59875,
+      41.1488889
+    ],
+    "validation06": [
+      288.4275759,
+      10.7237033
+    ],
+    "validation07": [
+      318.0043815,
+      48.3296372
+    ],
+    "validation08": [
+      46.8132814,
+      58.2977051
+    ],
+    "validation09": [
+      238.7463378,
+      31.1454092
+    ],
+    "validation10": [
+      35.7948783,
+      6.1519051
+    ],
+    "validation11": [
+      178.1156476,
+      -10.2275287
+    ],
+    "final05": [
+      271.9404223,
+      -20.2900295
+    ],
+    "final06": [
+      301.866188,
+      32.4424569
+    ],
+    "final07": [
+      91.9404223,
+      20.2900295
+    ],
+    "final08": [
+      225.5362254,
+      2.195004
+    ],
+    "final09": [
+      197.6899661,
+      67.0181134
+    ],
+    "final10": [
+      44.1650668,
+      -61.1831929
+    ],
+    "M101": [
+      210.80227,
+      54.34895
+    ],
+    "v2_final": [
+      127.69444,
+      -39.1776
+    ],
+    "legacy_december-d2": [
+      167.20443983247623,
+      5.147592894670331
+    ],
+    "legacy_december-d6": [
+      166.7887585666903,
+      5.2922907865006055
+    ],
+    "legacy_vesta-d6": [
+      223.024824,
+      -11.992269666666667
+    ],
+    "legacy_vesta-d3": [
+      223.024824,
+      -11.992269666666667
+    ]
+  },
+  "excluded_physical_obsids": [
+    "2025W17_4B_0352_1",
+    "2025W17_4B_0352_2",
+    "2025W17_4B_0352_3",
+    "2025W17_4B_0352_4",
+    "2025W18_1B_0313_1",
+    "2025W18_1B_0313_2",
+    "2025W18_1B_0313_3",
+    "2025W18_1B_0313_4",
+    "2025W18_1B_0325_1",
+    "2025W18_1B_0345_1",
+    "2025W18_1B_0345_4",
+    "2025W18_2B_0045_4",
+    "2025W19_2B_0102_1",
+    "2025W19_2B_0102_2",
+    "2025W19_2B_0102_3",
+    "2025W19_2B_0102_4",
+    "2025W19_2B_0182_1",
+    "2025W19_2B_0182_2",
+    "2025W19_2B_0182_3",
+    "2025W19_2B_0182_4",
+    "2025W19_2B_0237_1",
+    "2025W19_2B_0237_2",
+    "2025W19_2B_0237_3",
+    "2025W19_2B_0496_3",
+    "2025W19_2B_0496_4",
+    "2025W20_1C_0233_1",
+    "2025W20_1C_0233_2",
+    "2025W20_1C_0233_3",
+    "2025W20_1C_0233_4",
+    "2025W20_1C_0298_1",
+    "2025W20_1C_0320_3",
+    "2025W20_1C_0375_1",
+    "2025W20_1C_0375_4",
+    "2025W22_2B_0255_1",
+    "2025W22_2B_0255_2",
+    "2025W22_2B_0255_3",
+    "2025W22_2B_0266_1",
+    "2025W22_2B_0266_3",
+    "2025W22_2B_0415_2",
+    "2025W22_2B_0440_3",
+    "2025W22_2B_0452_1",
+    "2025W24_1A_0174_1",
+    "2025W24_1A_0174_2",
+    "2025W24_1A_0174_3",
+    "2025W24_1A_0174_4",
+    "2025W24_1A_0186_1",
+    "2025W24_1A_0186_2",
+    "2025W24_1A_0186_4",
+    "2025W24_1A_0199_1",
+    "2025W24_2D_0326_1",
+    "2025W24_2D_0326_2",
+    "2025W24_2D_0326_3",
+    "2025W24_2D_0567_2",
+    "2025W24_2D_0567_3",
+    "2025W24_2D_0567_4",
+    "2025W24_2D_0581_1",
+    "2025W24_2D_0581_4",
+    "2025W25_1B_0052_3",
+    "2025W25_1B_0306_1",
+    "2025W25_1B_0306_4",
+    "2025W26_2A_0665_2",
+    "2025W26_2A_0665_3",
+    "2025W26_2A_0665_4",
+    "2025W27_1A_0151_1",
+    "2025W27_1A_0151_3",
+    "2025W27_1A_0295_1",
+    "2025W27_1A_0295_2",
+    "2025W27_1A_0295_4",
+    "2025W28_1B_0424_1",
+    "2025W28_1B_0424_2",
+    "2025W28_1B_0424_3",
+    "2025W28_1B_0424_4",
+    "2025W28_1B_0507_1",
+    "2025W28_1B_0541_1",
+    "2025W28_1B_0541_4",
+    "2025W28_2A_0004_4",
+    "2025W28_2A_0150_2",
+    "2025W28_2A_0150_3",
+    "2025W28_2A_0150_4",
+    "2025W28_2A_0254_1",
+    "2025W28_2A_0347_1",
+    "2025W28_2A_0347_4",
+    "2025W28_2A_0371_3",
+    "2025W28_2A_0432_4",
+    "2025W30_2B_0459_1",
+    "2025W30_2B_0459_2",
+    "2025W30_2B_0459_3",
+    "2025W30_2B_0459_4",
+    "2025W30_2B_0548_3",
+    "2025W30_2B_0586_2",
+    "2025W31_1A_0005_4",
+    "2025W31_1A_0110_3",
+    "2025W31_1A_0300_1",
+    "2025W31_1A_0300_2",
+    "2025W31_1A_0300_3",
+    "2025W31_1A_0300_4",
+    "2025W31_1A_0392_1",
+    "2025W31_1A_0392_3",
+    "2025W31_1A_0404_2",
+    "2025W31_1A_0404_4",
+    "2025W32_1A_0105_1",
+    "2025W32_1A_0225_1",
+    "2025W32_1A_0341_1",
+    "2025W32_1A_0341_2",
+    "2025W32_1A_0341_3",
+    "2025W32_1A_0347_1",
+    "2025W32_1A_0388_1",
+    "2025W32_1A_0433_1",
+    "2025W32_1A_0470_1",
+    "2025W32_1A_0470_3",
+    "2025W32_1A_0470_4",
+    "2025W32_1A_0502_1",
+    "2025W32_1A_0502_2",
+    "2025W32_1A_0502_3",
+    "2025W32_1A_0502_4",
+    "2025W32_1A_0550_1",
+    "2025W32_1A_0550_2",
+    "2025W32_1A_0550_3",
+    "2025W32_1A_0550_4",
+    "2025W32_1A_0649_1",
+    "2025W32_1A_0649_2",
+    "2025W32_1A_0649_3",
+    "2025W32_1A_0649_4",
+    "2025W34_2B_0114_1",
+    "2025W34_2B_0114_2",
+    "2025W34_2B_0114_3",
+    "2025W34_2B_0114_4",
+    "2025W34_2B_0210_1",
+    "2025W34_2B_0210_3",
+    "2025W34_2B_0234_1",
+    "2025W34_2B_0234_3",
+    "2025W34_2B_0432_1",
+    "2025W34_2B_0432_2",
+    "2025W34_2B_0432_3",
+    "2025W35_1A_0117_1",
+    "2025W35_1A_0117_3",
+    "2025W35_1A_0117_4",
+    "2025W35_1A_0143_1",
+    "2025W35_1A_0143_3",
+    "2025W35_1A_0512_1",
+    "2025W35_1A_0512_2",
+    "2025W35_1A_0512_3",
+    "2025W35_1A_0512_4",
+    "2025W36_1A_0489_1",
+    "2025W36_1A_0489_2",
+    "2025W36_1A_0489_3",
+    "2025W36_1A_0489_4",
+    "2025W36_1A_0504_1",
+    "2025W36_1A_0504_3",
+    "2025W36_1A_0504_4",
+    "2025W36_1A_0517_2",
+    "2025W37_1A_0116_1",
+    "2025W37_1A_0116_2",
+    "2025W37_1A_0116_3",
+    "2025W37_1A_0116_4",
+    "2025W37_1A_0318_1",
+    "2025W37_1A_0318_2",
+    "2025W37_1A_0318_3",
+    "2025W37_1A_0318_4",
+    "2025W39_1A_0598_1",
+    "2025W39_1A_0598_2",
+    "2025W39_1A_0598_3",
+    "2025W39_1A_0598_4",
+    "2025W39_2A_0130_1",
+    "2025W39_2A_0130_2",
+    "2025W39_2A_0130_3",
+    "2025W39_2A_0130_4",
+    "2025W39_2A_0138_1",
+    "2025W39_2A_0138_2",
+    "2025W39_2A_0138_3",
+    "2025W39_2A_0232_1",
+    "2025W39_2A_0232_2",
+    "2025W39_2A_0232_4",
+    "2025W39_2A_0326_1",
+    "2025W39_2A_0347_1",
+    "2025W39_2A_0347_2",
+    "2025W39_2A_0347_3",
+    "2025W39_2A_0389_1",
+    "2025W39_2A_0389_2",
+    "2025W39_2A_0389_3",
+    "2025W39_2A_0389_4",
+    "2025W39_2A_0434_1",
+    "2025W39_2A_0478_1",
+    "2025W39_2A_0550_1",
+    "2025W39_2A_0550_2",
+    "2025W39_2A_0550_3",
+    "2025W39_2A_0550_4",
+    "2025W43_2A_0697_1",
+    "2025W43_2A_0697_2",
+    "2025W43_2A_0697_3",
+    "2025W43_2A_0697_4",
+    "2025W44_1A_0070_1",
+    "2025W44_1A_0070_2",
+    "2025W44_1A_0070_3",
+    "2025W44_1A_0070_4",
+    "2025W45_2A_0035_1",
+    "2025W45_2A_0035_2",
+    "2025W45_2A_0035_3",
+    "2025W45_2A_0035_4",
+    "2025W45_2A_0097_1",
+    "2025W45_2A_0154_3",
+    "2025W45_2A_0223_2",
+    "2025W45_2A_0295_4",
+    "2025W50_2A_0685_2",
+    "2025W50_2A_0698_1",
+    "2025W50_2A_0712_2",
+    "2025W50_2A_0741_2",
+    "2025W50_2A_0755_2",
+    "2025W50_2A_0797_4",
+    "2025W50_2A_0813_1"
+  ],
+  "v3_physical_exposures": 200,
+  "input_provenance": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/audit.json",
+      "sha256": "134088ce787f42415f4d366edbc3d11245bc46ff683f8bf8b80035484974f456"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/expansion-v2/audit-expanded-v2.json",
+      "sha256": "c09d22e1b6e8fbbe04e57c7a3b799b966c089caf5baa7d8e9a615f77f1bf76b1"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/physical-observation-audit.json",
+      "sha256": "89c482957c091c5060e3b4b3297c1c96d1d604c2bb64ea30f4997e35e8ff792b"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/fixtures/observations.csv",
+      "sha256": "b2f01f993bdc09516de43ee8fd90771a4f3dbe07cac13a34b9094a4f4e1c9af6"
+    }
+  ],
+  "declaration_source_sha256": "36bd1d2188acea5facbc5f310ff0ecf199a8d11085ff9e8e96d68d94903d8e35",
+  "query": {
+    "endpoint": "https://irsa.ipac.caltech.edu/SIA",
+    "collection": "spherex_dr1",
+    "position_radius_deg": 0.001,
+    "maxrec": 512,
+    "overflow_fallback_maxrec": 4096,
+    "network_workers_max": 4,
+    "retries": 4
+  },
+  "acquisition": {
+    "target_exposures": 8,
+    "minimum_exposures": 3,
+    "cutout_size_deg": 0.12,
+    "analysis_width_arcmin": 6.0,
+    "analysis_height_arcmin": 6.0,
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion",
+    "supported_detectors": [
+      1,
+      2,
+      3
+    ],
+    "selection": "Remove all V3/legacy/V4-other-parent physical OBSIDs before selection. Earliest cluster >=3 epochs within1.5h plus evenly spanning followups. Priority tiers:8 epochs >=2h within48h;8 >=2h within168h;6\u20137 >=2h within48h;6\u20137 >=2h within168h;otherwise >=3 within168h constrained. Within tier prefer declared detector, then earliest date, then shortest window. No replacement sky parents after archive or model outcomes. Short variants remain same parent.",
+    "transport": "Actual official IRSA IBE native MEF cutouts; preserve native orientation and all mission HDUs; bounded retries and SHA256/size/FITS-header integrity",
+    "failure_policy": "Keep explicitly failed/constrained declared parent; no performance-based replacement. Metadata-only detector/cadence fallback above predeclared; any further change requires append-only protocol before pixels/outcomes."
+  },
+  "quarantine": "Final opaque bytes/hash/header-integrity only; no pixel reader, registration, injections, features, inference or scoring until coordinator prospective final model/code freeze and explicit authorization.",
+  "science_limits": [
+    "Native SWIR D1\u2013D3 ePSF offsets are native detector axes; sample native ePSF then WCS-project once. SKY label does not mean north-up. Existing official orientation verification retained.",
+    "Unknown real controls never receive fabricated negative labels or real-precision claims.",
+    "V3 train/validation may remain DEVELOPMENT; published V3 FINAL is excluded from V4 model selection and is not fresh holdout."
+  ]
+}

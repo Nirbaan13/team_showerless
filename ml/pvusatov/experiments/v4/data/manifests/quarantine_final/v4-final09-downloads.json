@@ -1,0 +1,142 @@
+[
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/2/level2_2025W35_1A_0661_1D2_spx_l2b-v27-2026-230.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_1A_0661_1D2_spx_l2b-v27-2026-230.fits",
+    "bytes": 4023360,
+    "sha256": "9e4166d0ad10351d209af7e9a0afce385bed4aa1bf5206f2479f1edbf8aeb3c4",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:04:49 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_1A_0661_1",
+    "detector": 2,
+    "t_min_mjd": 60915.441811,
+    "t_max_mjd": 60915.443143
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/2/level2_2025W35_1A_0661_2D2_spx_l2b-v27-2026-230.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_1A_0661_2D2_spx_l2b-v27-2026-230.fits",
+    "bytes": 4023360,
+    "sha256": "7b45f5d4cc1f88b517fea3e095b88a4259487f4f8b2c6315f0ce5e172eaf53cd",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:00 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_1A_0661_2",
+    "detector": 2,
+    "t_min_mjd": 60915.443303,
+    "t_max_mjd": 60915.444635
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/2/level2_2025W35_1A_0661_3D2_spx_l2b-v27-2026-230.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_1A_0661_3D2_spx_l2b-v27-2026-230.fits",
+    "bytes": 4023360,
+    "sha256": "47db61f316951fccb3a9f9017995b8481daa266039b0b10d9842405d4aec06be",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:12 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [
+      "HTTPError: HTTP Error 503: Service Unavailable"
+    ],
+    "obs_id": "2025W35_1A_0661_3",
+    "detector": 2,
+    "t_min_mjd": 60915.444795,
+    "t_max_mjd": 60915.446128
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_1A/l2b-v27-2026-230/2/level2_2025W35_1A_0661_4D2_spx_l2b-v27-2026-230.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_1A_0661_4D2_spx_l2b-v27-2026-230.fits",
+    "bytes": 4023360,
+    "sha256": "ddd29afa43b864b01462640653bba30fd3404a93550808c5cb7d68172e33bc1d",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:22 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [
+      "HTTPError: HTTP Error 503: Service Unavailable"
+    ],
+    "obs_id": "2025W35_1A_0661_4",
+    "detector": 2,
+    "t_min_mjd": 60915.446287,
+    "t_max_mjd": 60915.44762
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_2A/l2b-v27-2026-231/2/level2_2025W35_2A_0261_4D2_spx_l2b-v27-2026-231.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_2A_0261_4D2_spx_l2b-v27-2026-231.fits",
+    "bytes": 4023360,
+    "sha256": "616aea22708a58542d36001c3be66c6bee7afbf30c7fb76dff0783c9fc2fa9ff",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:27 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_2A_0261_4",
+    "detector": 2,
+    "t_min_mjd": 60916.874482,
+    "t_max_mjd": 60916.875814
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_2A/l2b-v27-2026-231/2/level2_2025W35_2A_0273_1D2_spx_l2b-v27-2026-231.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_2A_0273_1D2_spx_l2b-v27-2026-231.fits",
+    "bytes": 4023360,
+    "sha256": "bcb9ce723a236d4b5c7d60c48b83c29c7a3438f92a6293b7b92e2e2d506d8fae",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:36 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_2A_0273_1",
+    "detector": 2,
+    "t_min_mjd": 60916.938329,
+    "t_max_mjd": 60916.939661
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_2A/l2b-v27-2026-231/2/level2_2025W35_2A_0273_3D2_spx_l2b-v27-2026-231.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_2A_0273_3D2_spx_l2b-v27-2026-231.fits",
+    "bytes": 4023360,
+    "sha256": "b590e762bbeafa43c0bdcb5b1f2bee0a93e94c7c372896d71d20337554b47bad",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:48 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_2A_0273_3",
+    "detector": 2,
+    "t_min_mjd": 60916.941314,
+    "t_max_mjd": 60916.942646
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W35_2A/l2b-v27-2026-231/2/level2_2025W35_2A_0273_4D2_spx_l2b-v27-2026-231.fits?center=267.69676808%2C-46.87176902&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final09/level2_2025W35_2A_0273_4D2_spx_l2b-v27-2026-231.fits",
+    "bytes": 4023360,
+    "sha256": "777a8ebdba33d53ecd457f0448236fa50f96e58d70eeed23465cf77a50aada7f",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:58 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W35_2A_0273_4",
+    "detector": 2,
+    "t_min_mjd": 60916.942806,
+    "t_max_mjd": 60916.944138
+  }
+]
