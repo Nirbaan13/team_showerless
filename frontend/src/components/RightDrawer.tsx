@@ -137,7 +137,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
-  const activeTab = controlledTab ?? internalTab;
+
+  useEffect(() => {
+    if (controlledTab) {
+      setInternalTab(controlledTab);
+    }
+  }, [controlledTab]);
+
+  const activeTab = internalTab;
   const setActiveTab = (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => {
     setInternalTab(tab);
     if (onTabChange) onTabChange(tab);

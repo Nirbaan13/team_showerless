@@ -226,7 +226,6 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
 
       const el = document.getElementById(currentStepConfig.targetId);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         setTargetRect(el.getBoundingClientRect());
 
         if (currentStepConfig.targetId === 'tutorial-target-coords') {
@@ -274,9 +273,6 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
 
   const isFirstStep = step === 0;
   const isLastStep = step === TUTORIAL_STEPS.length - 1;
-  const isRightPanelTarget =
-    currentStepConfig.targetId === 'tutorial-target-ai' ||
-    currentStepConfig.targetId === 'tutorial-target-spectrum';
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-auto select-none overflow-hidden anim-fall">
@@ -309,11 +305,9 @@ export const GuidedTutorialOverlay: React.FC<GuidedTutorialOverlayProps> = ({
         </div>
       )}
 
-      {/* Floating Tutorial Callout Card - Positions dynamically to never cover target */}
+      {/* Floating Tutorial Callout Card - Stably centered between left & right sidebars */}
       <div
-        className={`absolute inset-x-3 bottom-3 sm:inset-x-auto sm:bottom-auto sm:top-16 ${
-          isRightPanelTarget ? 'sm:left-8 md:left-10 sm:right-auto' : 'sm:right-6 md:right-8 sm:left-auto'
-        } w-auto sm:w-[460px] max-w-[95vw] max-h-[85vh] overflow-y-auto bg-paper-950/95 border-2 border-emerald-400/80 rounded-2xl shadow-2xl p-4 sm:p-5 text-xs font-mono text-paper-200 z-50 space-y-3.5 backdrop-blur-md`}
+        className="absolute inset-x-3 bottom-3 sm:inset-x-auto sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-auto sm:right-auto w-auto sm:w-[500px] max-w-[95vw] max-h-[82vh] overflow-y-auto bg-paper-950/95 border-2 border-emerald-400/80 rounded-2xl shadow-2xl p-4 sm:p-5 text-xs font-mono text-paper-200 z-50 space-y-3.5 backdrop-blur-md"
       >
         {/* Header with Step Badge and Close */}
         <div className="flex items-center justify-between pb-2 border-b border-paper-800">

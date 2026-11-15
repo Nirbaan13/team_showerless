@@ -1576,7 +1576,11 @@ export function App() {
         step={tutorialStep}
         onNext={() => setTutorialStep((s) => Math.min(s + 1, 6))}
         onPrev={() => setTutorialStep((s) => Math.max(s - 1, 0))}
-        onClose={() => setIsTutorialActive(false)}
+        onClose={() => {
+          setIsTutorialActive(false);
+          setDrawerControlledTab(null);
+          setTutorialStep(0);
+        }}
         onChangeMobilePane={(pane) => setMobileViewerPane(pane)}
         onSelectDrawerTab={(tab) => setDrawerControlledTab(tab)}
       />
