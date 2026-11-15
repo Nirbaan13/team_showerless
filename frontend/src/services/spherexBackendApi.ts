@@ -137,7 +137,7 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
   detector: DetectorArrayId;
   signal?: AbortSignal;
   onProgress?: (progress: LiveCutoutProgress) => void;
-}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string }> {
+}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string; model: import('../../../ml/pvusatov/frontend/src/services/inferenceApi').InferenceModel }> {
   const prep = await prepareRegion(
     {
       right_ascension_deg: params.ra,
@@ -220,17 +220,17 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
     volunteerNotes: `Live NASA IRSA SPHEREx cutout track #${c.rank} (${c.detections.length} epochs, speed ${c.speed_arcsec_per_hour.toFixed(1)}″/h, RMS ${c.fit_rms_px.toFixed(2)} px).`,
     isKnownCatalogMatch: false,
     mlRank: c.rank,
-    mlScore: c.score ?? 0.9,
-    mlPriorityScore: c.score ?? 0.9,
+    mlScore: c.score ?? undefined,
+    mlPriorityScore: c.score ?? undefined,
     heuristicRank: c.baseline_rank,
-    randomForestRank: c.rank,
+    randomForestRank: undefined,
     fitRmsPx: c.fit_rms_px,
     speedArcsecPerHour: c.speed_arcsec_per_hour,
     motionStackDataUrl: inferenceResource(c.moving_stack_url, job.id),
     fixedStackDataUrl: inferenceResource(c.stationary_stack_url, job.id),
   }));
 
-  return { frames, candidates, modelName: res.model.model_id };
+  return { frames, candidates, modelName: res.model.model_id, model: res.model };
 }
 
 /**

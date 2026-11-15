@@ -220,14 +220,10 @@ export function App() {
 
   const [mlAnalysisStatus, setMlAnalysisStatus] = useState<MLAnalysisStatus>({
     state: 'completed',
-    stage: 'ML Track Ranking & Coadd Stacking Complete',
+    stage: 'Stored benchmark · no new inference',
     progress: 100,
     stepIndex: 3,
-    tracksDetected: 10,
-    modelName: 'SPHEREx RF-Ranker v2 + LOO',
-    latencyMs: 1420,
-    topSpeedArcsecHr: 175.7,
-    topFitRmsPx: 0.22,
+    resultSource: 'stored',
   });
   const mlRunIdRef = useRef(0);
   const liveRequestRef = useRef<AbortController | null>(null);
@@ -391,52 +387,6 @@ export function App() {
 
 
 
-  const triggerBackgroundMlProgress = (
-    runId: number,
-    onComplete: () => void,
-    minDurationMs = 1750
-  ) => {
-    setMlAnalysisStatus({
-      state: 'running',
-      stage: 'Aligning multi-epoch SPHEREx cutouts & leave-one-out subtraction...',
-      progress: 28,
-      stepIndex: 1,
-    });
-
-    window.setTimeout(() => {
-      if (mlRunIdRef.current !== runId) return;
-      setMlAnalysisStatus((prev) =>
-        prev.state === 'running'
-          ? {
-              ...prev,
-              stage: 'Extracting S/N ≥ 4 peaks & linking linear velocity trajectories...',
-              progress: 64,
-              stepIndex: 2,
-            }
-          : prev
-      );
-    }, Math.round(minDurationMs * 0.36));
-
-    window.setTimeout(() => {
-      if (mlRunIdRef.current !== runId) return;
-      setMlAnalysisStatus((prev) =>
-        prev.state === 'running'
-          ? {
-              ...prev,
-              stage: 'Scoring candidates with Random Forest ranker & stacking 29×29 coadds...',
-              progress: 90,
-              stepIndex: 3,
-            }
-          : prev
-      );
-    }, Math.round(minDurationMs * 0.72));
-
-    window.setTimeout(() => {
-      if (mlRunIdRef.current !== runId) return;
-      onComplete();
-    }, minDurationMs);
-  };
-
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }) => {
     liveRequestRef.current?.abort();
@@ -481,7 +431,9 @@ export function App() {
       setActiveFrameIndex(Math.max(0, Math.min(request?.frameIndex ?? 0, result.frames.length - 1)));
       setSearchStatus({ source: 'live', message: `${result.frames.length} downloaded observations; analysis completed` });
       setMlAnalysisStatus({ state: 'completed', stage: 'Difference-image analysis completed', progress: 100, stepIndex: 3,
-        tracksDetected: result.candidates.length, modelName: result.modelName, latencyMs: Math.round(performance.now() - startTime),
+        tracksDetected: result.candidates.length, modelName: result.modelName,
+        resultSource: 'live', modelFamily: result.model.model_family, modelSha256: result.model.sha256,
+        scoreKind: result.model.score_kind, scoreDescription: result.model.score_description, latencyMs: Math.round(performance.now() - startTime),
         topSpeedArcsecHr: result.candidates[0]?.speedArcsecPerHour, topFitRmsPx: result.candidates[0]?.fitRmsPx });
     } catch (error) {
       if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
@@ -497,8 +449,7 @@ export function App() {
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
     liveRequestRef.current?.abort();
-    const runId = ++mlRunIdRef.current;
-    const startTime = performance.now();
+    ++mlRunIdRef.current;
 
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
@@ -528,31 +479,8 @@ export function App() {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 200);
 
-    triggerBackgroundMlProgress(
-      runId,
-      () => {
-        const latestCands = getMockCandidates(preset.id, preset.recommendedArray);
-        setCandidatesList(latestCands);
-        if (latestCands.length > 0) {
-          setSelectedCandidateId((prev) =>
-            prev && latestCands.some((c) => c.id === prev) ? prev : latestCands[0].id
-          );
-        }
-        const top = latestCands[0];
-        setMlAnalysisStatus({
-          state: 'completed',
-          stage: 'ML Track Ranking & Coadd Stacking Complete',
-          progress: 100,
-          stepIndex: 3,
-          tracksDetected: latestCands.length,
-          modelName: 'SPHEREx RF-Ranker v2 + LOO',
-          latencyMs: Math.round(performance.now() - startTime),
-          topSpeedArcsecHr: top?.speedArcsecPerHour ?? 175.7,
-          topFitRmsPx: top?.fitRmsPx ?? 0.22,
-        });
-      },
-      1450
-    );
+    setMlAnalysisStatus({ state: 'completed', stage: 'Stored benchmark · no new inference',
+      progress: 100, stepIndex: 3, resultSource: 'stored', tracksDetected: newCands.length });
   };
 
   const handleRefreshCutout = () => {
@@ -588,7 +516,7 @@ export function App() {
     setBlinkMode(false);
     setIsLoading(false);
     setSearchStatus({ source: 'preset', message: `Precomputed benchmark: ${preset.name}` });
-    setMlAnalysisStatus({ state: 'completed', stage: 'Precomputed benchmark analysis', progress: 100, stepIndex: 3, tracksDetected: candidates.length });
+    setMlAnalysisStatus({ state: 'completed', stage: 'Stored benchmark · no new inference', progress: 100, stepIndex: 3, resultSource: 'stored', tracksDetected: candidates.length });
     setActiveTab('viewer');
   };
 

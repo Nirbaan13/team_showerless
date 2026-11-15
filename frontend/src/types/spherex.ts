@@ -95,7 +95,7 @@ export interface CandidateObject {
     sourceUrl: string;
     exposuresCount: number;
   };
-  /** Detector score 0–1 (higher = more likely a real moving object). Supplied by the ML pipeline when available. */
+  /** Ranking utility; its meaning is declared by the producing model. Supplied by the ML pipeline when available. */
   mlScore?: number;
   mlRank?: number; // 1 = highest priority
   mlPriorityScore?: number; // 0.0 - 1.0
@@ -199,6 +199,11 @@ export interface MLAnalysisStatus {
   stepIndex: 1 | 2 | 3;
   tracksDetected?: number;
   modelName?: string;
+  resultSource?: 'stored' | 'live';
+  modelFamily?: string;
+  modelSha256?: string;
+  scoreKind?: string;
+  scoreDescription?: string;
   latencyMs?: number;
   topScore?: number;
   topSpeedArcsecHr?: number;

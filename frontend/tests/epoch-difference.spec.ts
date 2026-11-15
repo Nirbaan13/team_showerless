@@ -43,7 +43,7 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
     }] : [];
     const job = { id: 'analysis-test' , status: state.analysis, download_id: 'download-test', status_url: '/api/analyses/analysis-test', events_url: '/api/analyses/analysis-test/events',
       ...(state.analysis === 'failed' ? { error: { code: 'processing_failed', message: 'Could not compute difference images', retryable: true } } : {}),
-      ...(state.analysis === 'completed' ? { result: { schema_version: 1, analysis_id: 'analysis-test', model: { model_id: 'fixture-model', sha256: 'a'.repeat(64), score_kind: 'ranking' }, frames, candidates, warnings: [], settings: {}, provenance: {} } } : {}),
+      ...(state.analysis === 'completed' ? { result: { schema_version: 1, analysis_id: 'analysis-test', model: { model_id: 'fixture-model', model_family: 'RankNetTreeBoost', sha256: 'a'.repeat(64), score_kind: 'sigmoid_pairwise_utility', score_description: 'Pairwise ranking utility; not a calibrated probability' }, frames, candidates, warnings: [], settings: {}, provenance: {} } } : {}),
     };
     if (path === '/api/analyses/motion') { state.analysisStarts++; return route.fulfill({ status: 202, json: job }); }
     if (path === '/api/analyses/analysis-test') return route.fulfill({ json: job });
@@ -216,4 +216,28 @@ test('an explicit preset verification cancels a pending custom analysis and rest
   await expect.poll(async () => (await drawn(page)).includes(reviews[0].frames[0].residual)).toBe(true);
   state.analysis = 'failed';
   await expect(page.getByText('Coordinate ML failed', { exact: true })).toHaveCount(0);
+});
+
+
+test('stored benchmarks disclose provenance without pretending to run a new model', async ({ page }) => {
+  const { state } = await backend(page);
+  await page.goto('/?tab=home');
+  await page.getByRole('button', { name: /3I\/ATLAS/ }).first().click();
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Stored benchmark · no new inference', { exact: true })).toBeVisible();
+  await expect(page.getByText(/Scoring candidates with Random Forest/)).toHaveCount(0);
+  await expect(page.getByText(/(?:Active|Inspect) \(\d+%\)/)).toHaveCount(0);
+  await expect(page.getByText('Scores order candidates; they are not discovery probabilities.', { exact: true })).toBeVisible();
+  expect(state.analysisStarts).toBe(0);
+});
+
+test('live analysis displays the returned model family, ID, score meaning and server ranking', async ({ page }) => {
+  await backend(page, { withCandidate: true });
+  await openViewer(page); await search(page);
+  await expect(page.getByText('fixture-model', { exact: true })).toBeVisible();
+  await expect(page.getByText('RankNetTreeBoost', { exact: true })).toBeVisible();
+  await expect(page.getByText('sigmoid_pairwise_utility', { exact: true })).toBeVisible();
+  await expect(page.getByText('Pairwise ranking utility; not a calibrated probability', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Random Forest', exact: true })).toHaveCount(0);
+  await expect(page.getByText('Score 0.700', { exact: true })).toBeVisible();
 });

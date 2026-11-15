@@ -39,10 +39,12 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
 }) => {
   const [rankingMode, setRankingMode] = useState<'heuristic' | 'forest'>('heuristic');
 
+  const isStored = mlAnalysisStatus?.resultSource === 'stored';
   const baseRanked = useMemo(() => rankCandidates(candidates), [candidates]);
 
   const ranked = useMemo(() => {
     const items = [...baseRanked];
+    if (!isStored) return items.sort((a, b) => (a.candidate.mlRank ?? a.rank) - (b.candidate.mlRank ?? b.rank)).map(item => ({ ...item, displayRank: item.candidate.mlRank ?? item.rank }));
     if (rankingMode === 'forest') {
       items.sort((a, b) => {
         const rfA =
@@ -87,7 +89,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         displayRank,
       };
     });
-  }, [baseRanked, rankingMode]);
+  }, [baseRanked, rankingMode, isStored]);
 
   const validated = useMemo(
     () => baseRanked.find((r) => r.candidate.validationData)?.candidate.validationData,
@@ -136,7 +138,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-300 truncate">
                 {mlAnalysisStatus.state === 'running'
                   ? mlAnalysisStatus.stepIndex === 1 ? 'Loading observations…' : 'Preparing difference images…'
-                  : mlAnalysisStatus.state === 'failed' ? 'Coordinate ML failed' : 'Coordinate ML Ready'}
+                  : mlAnalysisStatus.state === 'failed' ? 'Coordinate ML failed' : isStored ? 'Stored benchmark · no new inference' : 'Coordinate ML Ready'}
               </span>
             </div>
             {ra !== undefined && dec !== undefined && (
@@ -172,45 +174,19 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         </div>
       )}
 
-      {/* Heuristic vs Random Forest Toggle */}
-      <div className="p-2.5 rounded-xl bg-paper-950 border-2 border-black space-y-2 anim-fall">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-paper-300 font-bold">
-            Ranking Algorithm
-          </span>
-          <span className="text-[9px] font-mono text-emerald-400">
-            {rankingMode === 'forest' ? '400 Sim Fields RF' : 'Leave-One-Out (Default)'}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Ranking method">
-          <button
-            type="button"
-            aria-pressed={rankingMode === 'heuristic'}
-            onClick={() => setRankingMode('heuristic')}
-            className={`btn-tactile-sm py-1.5 px-2.5 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
-              rankingMode === 'heuristic'
-                ? 'bg-emerald-400 text-gray-950'
-                : 'bg-paper-900 text-paper-300 hover:text-white'
-            }`}
-          >
-            Heuristic (Default)
-          </button>
-
-          <button
-            type="button"
-            aria-pressed={rankingMode === 'forest'}
-            onClick={() => setRankingMode('forest')}
-            className={`btn-tactile-sm py-1.5 px-2.5 rounded-lg border-2 border-black font-mono text-[10px] font-bold transition-all cursor-pointer ${
-              rankingMode === 'forest'
-                ? 'bg-sky-400 text-gray-950'
-                : 'bg-paper-900 text-paper-300 hover:text-white'
-            }`}
-          >
-            Random Forest
-          </button>
-        </div>
-      </div>
+      <section aria-label="Analysis provenance" className="p-2.5 rounded-xl bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1 break-words">
+        <p>Result source: {isStored ? 'Packaged benchmark review (/motion/review.json)' : 'Backend analysis'}</p>
+        <p>Model: <span>{mlAnalysisStatus?.modelName ?? 'Model ID unavailable in stored review'}</span></p>
+        <p>Algorithm: <span>{mlAnalysisStatus?.modelFamily ?? (isStored ? 'Stored leave-one-out / BLOOM tracks; optional RF ranks' : 'Unavailable')}</span></p>
+        {mlAnalysisStatus?.modelSha256 && <details><summary>Model SHA-256</summary><p>{mlAnalysisStatus.modelSha256}</p></details>}
+        {mlAnalysisStatus?.scoreKind && <p>Score kind: <span>{mlAnalysisStatus.scoreKind}</span></p>}
+        {mlAnalysisStatus?.scoreDescription && <p>{mlAnalysisStatus.scoreDescription}</p>}
+        <p>Scores order candidates; they are not discovery probabilities.</p>
+      </section>
+      {isStored && <div className="flex gap-2" role="group" aria-label="Stored ranking method">
+        <button type="button" aria-pressed={rankingMode === 'heuristic'} onClick={() => setRankingMode('heuristic')} className="px-2 py-1 border rounded text-xs">Stored heuristic rank</button>
+        <button type="button" aria-pressed={rankingMode === 'forest'} disabled={!candidates.some(c => c.randomForestRank != null)} onClick={() => setRankingMode('forest')} className="px-2 py-1 border rounded text-xs disabled:opacity-40">Stored RF rank</button>
+      </div>}
 
       {/* Stack assets are evidence only when returned by the pipeline. */}
       {activeCandidate && (
@@ -246,7 +222,6 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
       <ol className="space-y-2">
         {ranked.map((r, i) => {
           const isSelected = r.candidate.id === selectedCandidateId;
-          const pct = Math.round(r.score * 100);
           const hRank = r.candidate.heuristicRank ?? r.candidate.validationData?.baselineRank ?? i + 1;
           const rfRank = r.candidate.randomForestRank ?? r.candidate.validationData?.randomForestRank;
           const isBloom = r.candidate.detectionMethod === 'bloom_centroids';
@@ -312,24 +287,13 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
                     <span>
                       H:#{hRank}
                       {rfRank != null ? ` · RF:#${rfRank}` : ''} ·{' '}
-                      {(r.candidate.speedArcsecPerHour ?? 18.4).toFixed(1)}″/h
+                      {r.candidate.speedArcsecPerHour !== undefined ? `${r.candidate.speedArcsecPerHour.toFixed(1)}″/h` : 'Speed unavailable'}
                     </span>
                     <span className={isSelected ? 'text-emerald-300 font-bold' : 'text-paper-300 font-semibold'}>
-                      {isSelected ? `Active (${pct}%)` : `Inspect (${pct}%)`}
+                      {!isStored && r.source === 'pipeline' ? `Score ${r.score.toFixed(3)}` : 'Stored rank'}
                     </span>
                   </div>
-                  <div className="mt-1 h-1.5 rounded-full bg-paper-800 overflow-hidden">
-                    <div
-                      className={`h-full ${
-                        pct >= 70
-                          ? 'bg-emerald-400'
-                          : pct >= 40
-                          ? 'bg-amber-400'
-                          : 'bg-rose-400'
-                      }`}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
+
                 </div>
               </button>
             </li>
@@ -339,7 +303,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
 
       {isScientistMode && (
         <p className="text-[10px] font-mono text-paper-500">
-          Toggle Heuristic (leave-one-out matched filter) vs Random Forest (trained on 400 synthetic SPHEREx fields) to compare track prioritization.
+          Stored ranking controls reorder packaged results. Live results retain the server ranking.
         </p>
       )}
     </div>
