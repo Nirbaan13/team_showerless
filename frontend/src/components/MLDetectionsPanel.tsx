@@ -40,6 +40,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
   const [rankingMode, setRankingMode] = useState<'heuristic' | 'forest'>('heuristic');
 
   const isStored = mlAnalysisStatus?.resultSource === 'stored';
+  const isPackaged = mlAnalysisStatus?.resultSource === 'packaged';
   const baseRanked = useMemo(() => rankCandidates(candidates), [candidates]);
 
   const ranked = useMemo(() => {
@@ -58,7 +59,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           b.candidate.heuristicRank ??
           b.rank;
         if (rfA !== rfB) return rfA - rfB;
-        return b.score - a.score;
+        return (b.score ?? 0) - (a.score ?? 0);
       });
     } else {
       items.sort((a, b) => {
@@ -71,7 +72,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           b.candidate.validationData?.baselineRank ??
           b.rank;
         if (hA !== hB) return hA - hB;
-        return b.score - a.score;
+        return (b.score ?? 0) - (a.score ?? 0);
       });
     }
 
@@ -113,7 +114,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
           AI Track Ranker &amp; Insights
         </span>
         <span className="text-[10px] font-mono text-paper-300 bg-paper-950 px-2 py-0.5 rounded border border-paper-800">
-          {validated ? `${validated.totalCandidates} tracks` : `${ranked.length} tracks`}
+          {isPackaged ? 'Not analysed' : validated ? `${validated.totalCandidates} tracks` : `${ranked.length} tracks`}
         </span>
       </div>
 
@@ -187,6 +188,11 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         </div>
       )}
 
+      {isPackaged && <section aria-label="Analysis provenance" className="p-2.5 rounded-xl border border-paper-800 text-xs text-paper-300">
+        <p>Result source: Packaged real archive data</p>
+        <p role="status">{mlAnalysisStatus.stage}</p>
+        <p>No model was run. Candidate scores, difference images and fitted motion are unavailable.</p>
+      </section>}
       {isStored && <div className="flex gap-2" role="group" aria-label="Stored ranking method">
         <button type="button" aria-pressed={rankingMode === 'heuristic'} onClick={() => setRankingMode('heuristic')} className="px-2 py-1 border rounded text-xs">Stored heuristic rank</button>
         <button type="button" aria-pressed={rankingMode === 'forest'} disabled={!candidates.some(c => c.randomForestRank != null)} onClick={() => setRankingMode('forest')} className="px-2 py-1 border rounded text-xs disabled:opacity-40">Stored RF rank</button>
@@ -305,7 +311,7 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
                       {r.candidate.speedArcsecPerHour !== undefined ? `${r.candidate.speedArcsecPerHour.toFixed(1)}″/h` : 'Speed unavailable'}
                     </span>
                     <span className={isSelected ? 'text-emerald-300 font-bold' : 'text-paper-300 font-semibold'}>
-                      {!isStored && r.source === 'pipeline' ? `Score ${r.score.toFixed(3)}` : 'Stored rank'}
+                      {!isStored && r.source === 'pipeline' ? `Score ${r.score?.toFixed(3) ?? 'unavailable'}` : 'Stored rank'}
                     </span>
                   </div>
 

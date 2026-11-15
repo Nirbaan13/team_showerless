@@ -18,9 +18,9 @@ export type CandidateClassification =
   | 'artifact' 
   | 'unreviewed';
 
-export type ConfidenceLevel = 'low' | 'medium' | 'high';
+export type ConfidenceLevel = 'low' | 'medium' | 'high' | 'unavailable';
 
-export type FOVOption = "1'" | "3'" | "5'" | "10'";
+export type FOVOption = "1'" | "3'" | "5'" | "10'" | "12'";
 
 export interface TargetPreset {
   id: string;
@@ -44,8 +44,8 @@ export interface SpherexEpochFrame {
   wavelengthMinUm: number;
   wavelengthMaxUm: number;
   channelIndex?: number; // 1 to 102
-  flaggedPixelPercentage: number;
-  cosmicRayHits: number;
+  flaggedPixelPercentage?: number;
+  cosmicRayHits?: number;
   isAvailable: boolean;
   skipReason?: string; // Reason if isAvailable is false
   imageDataUrl?: string; // Rendered aligned cutout bitmap or SVG simulation
@@ -57,7 +57,10 @@ export interface SpherexEpochFrame {
   archiveUrl?: string; // Direct NASA/IPAC IRSA FITS URL
   release?: string; // DR1 or QR2/QR3
   coverage?: number; // Fraction of valid finite pixels (0-1)
+  packagedArchive?: { fitsUrl: string; sourceSha256: string; previewSha256: string; coordinateNote: string };
   headerMetadata: {
+    flagsNonzeroPercentage?: number;
+    flagsNote?: string;
     exposureTimeSec?: number;
     airmass?: number;
     zodiBrightnessMjySr?: number;
@@ -76,8 +79,8 @@ export interface CandidateObject {
     epochIndex: number;
     x: number;
     y: number;
-    flux: number;
-    snr: number;
+    flux?: number;
+    snr?: number;
   }[];
   classification: CandidateClassification;
   confidence: ConfidenceLevel;
@@ -89,10 +92,10 @@ export interface CandidateObject {
   properMotionMasYr?: { pmRa: number; pmDec: number };
   validationData?: {
     objectName: string;
-    maxOffsetPx: number;
+    maxOffsetPx?: number;
     baselineRank: number;
     totalCandidates: number;
-    randomForestRank: number;
+    randomForestRank?: number;
     datasetDoi: string;
     sourceUrl: string;
     exposuresCount: number;
@@ -201,7 +204,7 @@ export interface MLAnalysisStatus {
   stepIndex: 1 | 2 | 3;
   tracksDetected?: number;
   modelName?: string;
-  resultSource?: 'stored' | 'live';
+  resultSource?: 'stored' | 'live' | 'packaged';
   modelFamily?: string;
   modelSha256?: string;
   scoreKind?: string;
@@ -215,7 +218,7 @@ export interface MLAnalysisStatus {
 
 
 export interface ObservationLoadStatus {
-  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback' | 'archive';
+  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback' | 'archive' | 'packaged';
   message: string;
   warnings?: string[];
 }

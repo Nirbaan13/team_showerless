@@ -103,6 +103,37 @@ class PublishTests(unittest.TestCase):
                 self.request(**change)
         self.assertEqual(self.calls, [])
 
+    def test_rebuilt_v1_downloads_versioned_release_without_changing_asset_or_image_tags(self):
+        tag = 'demo-v1-main-' + 'b' * 40
+        result = self.publish(self.request(release_tag=tag))
+        download = next(argv for argv, _ in self.calls if argv[:3] == ['gh', 'release', 'download'])
+        self.assertEqual(download[3], tag)
+        self.assertEqual(download[download.index('--pattern') + 1], 'spaceapps-demo-v1.tar.gz')
+        self.assertEqual(result['release_tag'], tag)
+        self.assertEqual(result['tags'], ['ghcr.io/nirbaan13/team-showerless-demo:v1-' + self.revision,
+                                          'ghcr.io/nirbaan13/team-showerless-demo:v1'])
+
+    def test_v2_accepts_its_own_full_sha_main_release_tag(self):
+        request = self.request(version='v2', release_tag='demo-v2-main-' + 'b' * 40)
+        self.assertEqual(request['release_tag'], 'demo-v2-main-' + 'b' * 40)
+        self.assertEqual(request['asset'], 'spaceapps-demo-v2.tar.gz')
+
+    def test_versioned_release_tags_reject_cross_version_short_sha_paths_and_controls(self):
+        for version, other in (('v1', 'v2'), ('v2', 'v1')):
+            prefix = 'demo-' + version + '-main-'
+            bad_tags = [
+                'demo-' + other + '-main-' + 'b' * 40,
+                prefix + 'b' * 39, prefix + 'b' * 41,
+                prefix + 'g' * 40, prefix + 'B' * 40,
+                prefix + 'b' * 40 + '/child', '../' + prefix + 'b' * 40,
+                prefix + 'b' * 40 + '\n', prefix + 'b' * 40 + '\x00',
+                'demo-' + version + '-main', 'demo-' + version + '-other-' + 'b' * 40,
+            ]
+            for tag in bad_tags:
+                with self.subTest(version=version, tag=tag), self.assertRaises(ValueError):
+                    self.request(version=version, release_tag=tag)
+        self.assertEqual(self.calls, [])
+
     def test_publishes_only_verified_bundle_with_version_and_immutable_revision_tags(self):
         result = self.publish()
         self.assertEqual(result['tags'], ['ghcr.io/nirbaan13/team-showerless-demo:v1-' + self.revision, 'ghcr.io/nirbaan13/team-showerless-demo:v1'])

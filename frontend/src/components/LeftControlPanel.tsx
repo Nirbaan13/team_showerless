@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import React, { useState } from 'react';
 import { DEFAULT_ARCHIVE, type ArchiveSelection } from '../services/archiveObservationsApi';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
@@ -24,7 +25,7 @@ interface LeftControlPanelProps {
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
   searchStatus?: {
-    source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle' | 'archive';
+    source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle' | 'archive' | 'packaged';
     message: string;
     warnings?: string[];
   };
@@ -178,11 +179,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
             <div className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
-              <span className="text-paper-300">{searchStatus.source === 'archive' ? 'Archive metadata · images not implied' : searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
+              <span className="text-paper-300">{searchStatus.source === 'packaged' ? 'Packaged real archive data' : searchStatus.source === 'archive' ? 'Archive metadata · images not implied' : searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
                 : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
                 : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
             </div>
-            {(searchStatus.source === 'error' || searchStatus.source === 'loading' || searchStatus.source === 'archive') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+            {(searchStatus.source === 'error' || searchStatus.source === 'loading' || searchStatus.source === 'archive' || searchStatus.source === 'packaged') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
             {!!searchStatus.warnings?.length && <div role="status" aria-label="Observation warnings" className="space-y-1 border-t border-paper-700 pt-1 text-amber-300">
               {searchStatus.warnings.map((warning, index) => <p key={index} className="break-words">{warning}</p>)}
             </div>}
@@ -193,7 +194,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         <div id="tutorial-target-fov" className="mt-2.5 pt-2 border-t border-paper-800 transition-all duration-300">
           <span className="text-[10px] font-mono text-paper-400 block mb-1">Field of View (FOV)</span>
           <div className="grid grid-cols-4 gap-1.5">
-            {(["1'", "3'", "5'", "10'"] as FOVOption[]).map((f) => (
+            {(["1'", "3'", "5'", "10'", ...(DEMO_REAL_ONLY ? ["12'"] : [])] as FOVOption[]).map((f) => (
               <button
                 key={f}
                 onClick={() => onUpdateFov(f)}
@@ -419,6 +420,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               )}
             </div>
 
+            {searchStatus?.source === 'packaged' && <p className="text-xs text-paper-300">Catalog overlays unavailable: frame WCS was not supplied.</p>}
             {/* Live Catalog Query Status & Agency Provenance Box */}
             <div className="p-2 rounded-lg bg-paper-950 border border-emerald-500/30 space-y-1.5 font-mono text-[9px]">
               <div className="flex items-center justify-between gap-1">
@@ -514,6 +516,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   <input
                     type="checkbox"
                     checked={overlays.gaiaDr3}
+                    disabled={searchStatus?.source === 'packaged'}
                     onChange={() => onToggleOverlay('gaiaDr3')}
                     className="accent-emerald-400 rounded cursor-pointer shrink-0"
                   />
@@ -563,6 +566,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   <input
                     type="checkbox"
                     checked={overlays.wise}
+                    disabled={searchStatus?.source === 'packaged'}
                     onChange={() => onToggleOverlay('wise')}
                     className="accent-emerald-400 rounded cursor-pointer shrink-0"
                   />
@@ -614,6 +618,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   <input
                     type="checkbox"
                     checked={overlays.solarSystemEphemeris}
+                    disabled={searchStatus?.source === 'packaged'}
                     onChange={() => onToggleOverlay('solarSystemEphemeris')}
                     className="accent-emerald-400 rounded cursor-pointer shrink-0"
                   />

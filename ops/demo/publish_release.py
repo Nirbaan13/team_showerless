@@ -32,8 +32,8 @@ def release_request(version, checksum, revision, repository, release_tag=None):
     if repository.lower() != REPOSITORY.lower():
         raise ValueError('publication is restricted to ' + REPOSITORY)
     tag = release_tag or 'demo-' + version
-    if tag != 'demo-' + version:
-        raise ValueError('release tag must match demo-' + version)
+    if not re.fullmatch(r'demo-' + re.escape(version) + r'(?:-main-[0-9a-f]{40})?', tag):
+        raise ValueError('release tag must match demo-' + version + ' or demo-' + version + '-main-<40-character SHA>')
     return dict(version=version, checksum=checksum, revision=revision,
                 repository=REPOSITORY, release_tag=tag,
                 asset='spaceapps-demo-' + version + '.tar.gz',

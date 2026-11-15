@@ -70,7 +70,7 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     healthcheck:
-      test: [CMD, python3, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2).close()"]
+      test: [CMD-SHELL, "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2).close()\""]
       interval: 5s
       timeout: 3s
       start_period: 20s
