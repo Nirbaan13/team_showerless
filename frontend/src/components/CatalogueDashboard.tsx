@@ -1,3 +1,5 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
+import { ArtifactImage } from './ArtifactImage';
 import React, { useState, useEffect } from 'react';
 import type {
   CandidateRecord,
@@ -405,7 +407,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                   {/* Thumbnail Preview: Shift & Stack Follow Coadd */}
                   <div className="flex items-center gap-3 bg-paper-950 p-2.5 rounded-xl border border-paper-800">
                     <div className="relative w-16 h-16 bg-black rounded-lg overflow-hidden border border-paper-800 shrink-0">
-                      <img
+                      {DEMO_REAL_ONLY ? <ArtifactImage src={cand.motion_stack_url} alt="Motion stack" /> : (<img
                         src={`/api/motion/coadd/${cand.id}/motion.png`}
                         alt={cand.name}
                         className="w-full h-full object-cover pixelated"
@@ -413,7 +415,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                           (e.target as HTMLImageElement).src =
                             'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="%23111"><rect width="64" height="64"/><circle cx="32" cy="32" r="6" fill="%2310b981"/></svg>';
                         }}
-                      />
+                      />)}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div className="w-4 h-4 rounded-full border border-emerald-400/80" />
                       </div>
@@ -427,7 +429,7 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                         Dec <span className="text-ochre-300">{cand.dec.toFixed(4)}°</span>
                       </div>
                       <div className="text-paper-500 text-[10px]">
-                        Speed: <span className="text-paper-300 font-bold">{cand.speed_arcsec_hr.toFixed(1)}″/hr</span>
+                        Speed: <span className="text-paper-300 font-bold">{cand.speed_arcsec_hr?.toFixed(1) ?? 'unavailable'}″/hr</span>
                       </div>
                     </div>
                   </div>
@@ -512,9 +514,9 @@ export const CatalogueDashboard: React.FC<CatalogueDashboardProps> = ({
                         {cand.candidate_type.replace('_', ' ')}
                       </td>
                       <td className="py-3 px-4 text-ochre-300 font-bold">
-                        {cand.speed_arcsec_hr > 0 ? `${cand.speed_arcsec_hr.toFixed(1)}″/hr` : '—'}
+                        {cand.speed_arcsec_hr == null ? 'Unavailable' : cand.speed_arcsec_hr > 0 ? `${cand.speed_arcsec_hr?.toFixed(1) ?? 'unavailable'}″/hr` : '—'}
                       </td>
-                      <td className="py-3 px-4 text-sky-300 font-bold">{cand.snr.toFixed(1)}σ</td>
+                      <td className="py-3 px-4 text-sky-300 font-bold">{cand.snr?.toFixed(1) ?? 'unavailable'}σ</td>
                       <td className="py-3 px-4 text-emerald-400 font-bold">
                         {cand.consensus_summary?.positive_percentage ?? 0}%
                       </td>

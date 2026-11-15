@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import type {
   SpherexEpochFrame,
   CandidateObject,
@@ -227,9 +228,9 @@ export function convertReviewToEpochFrames(review: MotionReviewDataset): Spherex
       detectorArray,
       wavelengthMinUm: wMin,
       wavelengthMaxUm: wMax,
-      channelIndex: chIdx + idx,
-      flaggedPixelPercentage: Number(((1 - frame.coverage) * 100).toFixed(2)),
-      cosmicRayHits: Math.max(4, Math.round((1 - frame.coverage) * 240)),
+      channelIndex: DEMO_REAL_ONLY ? undefined : chIdx + idx,
+      flaggedPixelPercentage: DEMO_REAL_ONLY ? undefined : Number(((1 - frame.coverage) * 100).toFixed(2)),
+      cosmicRayHits: DEMO_REAL_ONLY ? undefined : Math.max(4, Math.round((1 - frame.coverage) * 240)),
       isAvailable: true,
       imageDataUrl: frame.aligned,
       residualDataUrl: frame.residual,
@@ -256,6 +257,10 @@ function buildEpochPositionsForTrack(
     const posIndex = track.epochs.indexOf(fIdx);
     if (posIndex >= 0) {
       const [x, y] = track.positions_xy[posIndex];
+      if (DEMO_REAL_ONLY) {
+        result.push({ epochIndex: fIdx, x, y, ...(track.snr?.[posIndex] != null ? { snr: track.snr[posIndex] } : {}) });
+        continue;
+      }
       const snr = track.snr?.[posIndex] ?? (track.bloom_area_px?.[posIndex] ? track.bloom_area_px[posIndex] * 1.5 : 18.0);
       result.push({
         epochIndex: fIdx,
@@ -264,7 +269,7 @@ function buildEpochPositionsForTrack(
         flux: Number(Math.max(10, snr * 1.4).toFixed(1)),
         snr: Number(snr.toFixed(1)),
       });
-    } else if (track.positions_xy.length >= 2) {
+    } else if (!DEMO_REAL_ONLY && track.positions_xy.length >= 2) {
       // Linearly interpolate position for frames where the object wasn't directly linked
       const firstEpoch = track.epochs[0];
       const lastEpoch = track.epochs[track.epochs.length - 1];
@@ -307,14 +312,14 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
 
     candidates.push({
       id: displayId,
-      catalogueId: (review.target === '3I/ATLAS' && bTrack.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && bTrack.known_match) ? 'PX-000002' : undefined,
+      catalogueId: DEMO_REAL_ONLY ? undefined : (review.target === '3I/ATLAS' && bTrack.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && bTrack.known_match) ? 'PX-000002' : undefined,
       ra,
       dec,
       pixelX: px,
       pixelY: py,
       epochPositions,
       classification: 'moving_object',
-      confidence: bTrack.known_match ? 'high' : 'medium',
+      confidence: DEMO_REAL_ONLY ? 'unavailable' : bTrack.known_match ? 'high' : 'medium',
       volunteerNotes: bTrack.known_match
         ? `${review.target} saturated core recovered via detector BLOOM bitmask centroids across ${bTrack.epochs.length}/${totalFrames} visits (${bTrack.bloom_area_px?.join(', ')} flagged px). Max ephemeris offset ${bTrack.max_offset_px?.toFixed(3)} px; sky speed ${speedArcsecHr}″/h.`
         : `BLOOM mask centroid track across ${bTrack.epochs.length} visits. Linear fit RMS ${bTrack.fit_rms_px.toFixed(2)} px.`,
@@ -322,14 +327,14 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       matchedCatalog: bTrack.known_match ? 'NEO Ephemeris' : null,
       catalogId: bTrack.known_match ? `${review.target} (JPL Horizons)` : undefined,
       mlRank: idx + 1,
-      mlScore: bTrack.known_match ? 0.99 : 0.85,
-      mlPriorityScore: bTrack.known_match ? 0.99 : 0.85,
+      mlScore: DEMO_REAL_ONLY ? undefined : bTrack.known_match ? 0.99 : 0.85,
+      mlPriorityScore: DEMO_REAL_ONLY ? undefined : bTrack.known_match ? 0.99 : 0.85,
       fixedStackDataUrl: bTrack.fixed_stack,
       motionStackDataUrl: bTrack.motion_stack,
       stackContributingExposures: bTrack.stack_contributing_exposures,
       detectionMethod: 'bloom_centroids',
       heuristicRank: bTrack.rank,
-      randomForestRank: bTrack.random_forest_rank ?? bTrack.rank,
+      randomForestRank: bTrack.random_forest_rank ?? (DEMO_REAL_ONLY ? null : bTrack.rank),
       fitRmsPx: bTrack.fit_rms_px,
       speedPxPerHour: bTrack.speed_px_per_time,
       speedArcsecPerHour: speedArcsecHr,
@@ -340,10 +345,10 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       validationData: bTrack.known_match
         ? {
             objectName: `${review.target} (${review.detector} BLOOM)`,
-            maxOffsetPx: bTrack.max_offset_px ?? 0.3,
+            maxOffsetPx: bTrack.max_offset_px ?? (DEMO_REAL_ONLY ? undefined : 0.3),
             baselineRank: bTrack.rank,
             totalCandidates: totalBloom,
-            randomForestRank: bTrack.random_forest_rank ?? 1,
+            randomForestRank: bTrack.random_forest_rank ?? (DEMO_REAL_ONLY ? undefined : 1),
             datasetDoi: '10.26131/IRSA652',
             sourceUrl: review.source || 'https://irsa.ipac.caltech.edu/Missions/spherex.html',
             exposuresCount: bTrack.epochs.length,
@@ -364,7 +369,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       track.known_match && review.target === '3I/ATLAS' && review.id === 'december-d6' && track.rank === 1;
     const hasOutlierFlag = track.outlier_at_position?.some(Boolean) ?? false;
 
-    const inferredClass: CandidateObject['classification'] = track.known_match
+    const inferredClass: CandidateObject['classification'] = DEMO_REAL_ONLY && !track.known_match ? 'unreviewed' : track.known_match
       ? 'moving_object'
       : track.rank === 2
       ? 'moving_object'
@@ -372,7 +377,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       ? 'artifact'
       : 'unreviewed';
 
-    const displayId = isPrimaryAtlas
+    const displayId = DEMO_REAL_ONLY && !track.known_match ? `${review.id}-${track.id}` : isPrimaryAtlas
       ? '3I/ATLAS'
       : track.known_match && review.target
       ? `${review.target} (${review.detector})`
@@ -386,14 +391,14 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
 
     candidates.push({
       id: displayId,
-      catalogueId: (review.target === '3I/ATLAS' && track.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && track.known_match) ? 'PX-000002' : undefined,
+      catalogueId: DEMO_REAL_ONLY ? undefined : (review.target === '3I/ATLAS' && track.known_match) ? 'PX-000001' : (review.target === '(4) Vesta' && track.known_match) ? 'PX-000002' : undefined,
       ra,
       dec,
       pixelX: px,
       pixelY: py,
       epochPositions,
       classification: inferredClass,
-      confidence: track.known_match ? 'high' : track.rank <= 3 ? 'medium' : 'low',
+      confidence: DEMO_REAL_ONLY ? 'unavailable' : track.known_match ? 'high' : track.rank <= 3 ? 'medium' : 'low',
       volunteerNotes: track.known_match
         ? `Real SPHEREx ${review.detector} recovery of ${review.target} across ${track.epochs.length}/${totalFrames} exposures. Max offset ${track.max_offset_px?.toFixed(3)} px from JPL Horizons ephemeris. Heuristic #${track.rank}/${totalLoo}, Random Forest #${track.random_forest_rank ?? track.rank}/${totalLoo}.`
         : inferredClass === 'artifact'
@@ -403,8 +408,8 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       matchedCatalog: track.known_match ? 'NEO Ephemeris' : null,
       catalogId: track.known_match ? `${review.target} (JPL Horizons Ephemeris)` : undefined,
       mlRank: review.bloom_tracks.length + track.rank,
-      mlScore: score,
-      mlPriorityScore: score,
+      mlScore: DEMO_REAL_ONLY ? undefined : score,
+      mlPriorityScore: DEMO_REAL_ONLY ? undefined : score,
       fixedStackDataUrl: track.fixed_stack,
       motionStackDataUrl: track.motion_stack,
       stackContributingExposures: track.stack_contributing_exposures,
@@ -421,10 +426,10 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       validationData: track.known_match
         ? {
             objectName: review.target || '3I/ATLAS',
-            maxOffsetPx: track.max_offset_px ?? 0.539,
+            maxOffsetPx: track.max_offset_px ?? (DEMO_REAL_ONLY ? undefined : 0.539),
             baselineRank: track.rank,
             totalCandidates: totalLoo,
-            randomForestRank: track.random_forest_rank ?? track.rank,
+            randomForestRank: track.random_forest_rank ?? (DEMO_REAL_ONLY ? undefined : track.rank),
             datasetDoi: '10.26131/IRSA652',
             sourceUrl: review.source || 'https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html',
             exposuresCount: track.epochs.length,

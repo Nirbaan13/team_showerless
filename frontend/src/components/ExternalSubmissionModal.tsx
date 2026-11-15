@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import React, { useState, useMemo } from 'react';
 import type { CandidateRecord, SubmissionDestination, ExternalSubmissionRecord } from '../types/catalogue';
 import {
@@ -337,7 +338,7 @@ export const ExternalSubmissionModal: React.FC<ExternalSubmissionModalProps> = (
             <button
               type="button"
               onClick={handleDispatch}
-              disabled={isDispatching}
+              disabled={isDispatching || DEMO_REAL_ONLY}
               className="btn-tactile px-5 py-1.5 rounded-xl border-2 border-black bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold text-xs font-mono flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] flex-1 sm:flex-initial"
             >
               <Send className="w-3.5 h-3.5 stroke-[2.5]" />

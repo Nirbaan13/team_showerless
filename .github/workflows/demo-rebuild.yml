@@ -1,0 +1,67 @@
+name: Manually rebuild real demo v1 from current main
+
+# Optional action only: normal pushes and production deployments do not run it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: demo-manual-rebuild-main
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    if: github.repository == 'Nirbaan13/team_showerless' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      release_tag: ${{ steps.rebuild.outputs.release_tag }}
+      bundle_sha256: ${{ steps.rebuild.outputs.bundle_sha256 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: sbt
+          cache-dependency-path: |
+            backend/build.sbt
+            backend/project/build.properties
+      - name: Verify archive and release boundaries
+        run: |
+          python3 -m unittest discover -s ops/demo -p 'test_bundle.py'
+          python3 -m unittest discover -s ops/demo -p 'test_rebuild_release.py'
+          python3 -m unittest discover -s ops/demo -p 'test_publish_release.py'
+      - name: Install frontend build dependencies
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+      - name: Rebuild current-main services and upload a versioned real-data release
+        id: rebuild
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 ops/demo/rebuild_release.py \
+            --work-dir "$RUNNER_TEMP/demo-main-rebuild" \
+            --revision "$GITHUB_SHA" \
+            --engine docker
+  publish:
+    needs: rebuild
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/demo-publish.yml
+    with:
+      version: v1
+      release_tag: ${{ needs.rebuild.outputs.release_tag }}
+      bundle_sha256: ${{ needs.rebuild.outputs.bundle_sha256 }}

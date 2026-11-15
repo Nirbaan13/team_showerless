@@ -1,10 +1,11 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import type { CandidateObject } from '../types/spherex';
 
 export interface RankedCandidate {
   candidate: CandidateObject;
   rank: number;
-  score: number; // 0–1
-  source: 'pipeline' | 'baseline';
+  score: number | null; // 0–1 when supplied; null means unavailable
+  source: 'pipeline' | 'baseline' | 'unavailable';
 }
 
 /**
@@ -18,7 +19,7 @@ export function baselineScore(c: CandidateObject): number {
   const pts = c.epochPositions;
   if (!pts || pts.length === 0) return 0;
 
-  const meanSnr = pts.reduce((s, p) => s + p.snr, 0) / pts.length;
+  const meanSnr = pts.reduce((s, p) => s + (p.snr ?? 0), 0) / pts.length;
   const snrTerm = Math.min(1, meanSnr / 20);
   const coverageTerm = Math.min(1, pts.length / 4);
 
@@ -42,7 +43,7 @@ export function baselineScore(c: CandidateObject): number {
   }
 
   // Flux stability: a single-epoch spike is more likely an artifact/transient
-  const fluxes = pts.map((p) => p.flux);
+  const fluxes = pts.map((p) => p.flux ?? 0);
   const meanF = fluxes.reduce((s, f) => s + f, 0) / fluxes.length;
   const sd = Math.sqrt(fluxes.reduce((s, f) => s + (f - meanF) ** 2, 0) / fluxes.length);
   const stabilityTerm = meanF > 0 ? Math.max(0, 1 - sd / meanF) : 0;
@@ -56,8 +57,8 @@ export function rankCandidates(list: CandidateObject[]): RankedCandidate[] {
       const hasPipeline = typeof candidate.mlScore === 'number';
       return {
         candidate,
-        score: hasPipeline ? (candidate.mlScore as number) : baselineScore(candidate),
-        source: (hasPipeline ? 'pipeline' : 'baseline') as RankedCandidate['source'],
+        score: hasPipeline ? (candidate.mlScore as number) : DEMO_REAL_ONLY ? null : baselineScore(candidate),
+        source: (hasPipeline ? 'pipeline' : DEMO_REAL_ONLY ? 'unavailable' : 'baseline') as RankedCandidate['source'],
         rank: 0,
       };
     })
@@ -66,7 +67,7 @@ export function rankCandidates(list: CandidateObject[]): RankedCandidate[] {
       const ra = a.candidate.validationData?.baselineRank ?? Infinity;
       const rb = b.candidate.validationData?.baselineRank ?? Infinity;
       if (ra !== rb) return ra - rb;
-      return b.score - a.score;
+      return (b.score ?? 0) - (a.score ?? 0);
     })
     .map((r, i) => ({ ...r, rank: r.candidate.validationData?.baselineRank ?? i + 1 }));
 }
@@ -91,7 +92,7 @@ export function getPriorityColors(rank: number): PriorityColorDef {
         fill: 'rgba(239, 68, 68, 0.45)',
         text: '#fee2e2',
         badgeBg: '#dc2626',
-        label: 'Priority 1 (Highest Confidence)',
+        label: DEMO_REAL_ONLY ? 'Rank 1' : 'Priority 1 (Highest Confidence)',
       };
     case 2:
       return {

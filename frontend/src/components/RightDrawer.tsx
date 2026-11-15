@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY, VERIFICATION_STORAGE_KEY } from '../lib/demoMode';
 import React, { useState, useEffect, useRef } from 'react';
 import type {
   SpherexEpochFrame,
@@ -81,7 +82,7 @@ const CLASSIFICATION_GUIDE: Record<string, ClassificationGuideItem> = {
 function hasExistingThread(candidateId: string | null | undefined): boolean {
   if (!candidateId) return false;
   try {
-    const saved = localStorage.getItem('spherex_community_comments');
+    const saved = localStorage.getItem(VERIFICATION_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.some((c: any) => c.candidateId === candidateId || c.setting?.candidateId === candidateId)) {
@@ -89,7 +90,7 @@ function hasExistingThread(candidateId: string | null | undefined): boolean {
       }
     }
   } catch {}
-  return SEEDED_VERIFICATION_DISCUSSIONS.some(c => c.candidateId === candidateId || c.setting?.candidateId === candidateId);
+  return !DEMO_REAL_ONLY && SEEDED_VERIFICATION_DISCUSSIONS.some(c => c.candidateId === candidateId || c.setting?.candidateId === candidateId);
 }
 
 interface RightDrawerProps {
@@ -193,7 +194,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   const handleOpenSubmissionForCandidate = async (candidateKey: string) => {
     let record = await fetchCandidateById(candidateKey);
-    if (!record && candidate) {
+    if (!record && candidate && !DEMO_REAL_ONLY) {
       record = {
         id: candidateKey,
         name: candidate.validationData?.objectName || candidate.catalogId || candidate.id,
@@ -327,10 +328,10 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     };
 
     try {
-      const existingRaw = localStorage.getItem('spherex_community_comments');
+      const existingRaw = localStorage.getItem(VERIFICATION_STORAGE_KEY);
       const existing: VerificationComment[] = existingRaw ? JSON.parse(existingRaw) : [];
       const updated = [newCommentEntry, ...existing.filter((c) => c.id !== newCommentEntry.id)];
-      localStorage.setItem('spherex_community_comments', JSON.stringify(updated));
+      localStorage.setItem(VERIFICATION_STORAGE_KEY, JSON.stringify(updated));
       window.dispatchEvent(new Event('spherex_comments_updated'));
     } catch {}
 
@@ -673,7 +674,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
               isScientistMode={isScientistMode}
             />
 
-            {isScientistMode && (
+            {isScientistMode && DEMO_REAL_ONLY && <p className="text-xs text-paper-400">FITS header metadata unavailable in this response. Inspect the source FITS for calibration and WCS.</p>}
+            {isScientistMode && !DEMO_REAL_ONLY && (
               <details className="p-3 bg-paper-950 border border-emerald-500/40 rounded-lg font-mono text-[10px] text-emerald-300">
                 <summary className="cursor-pointer font-bold text-emerald-400 text-[11px]">FITS header (Primary HDU)</summary>
                 <div className="mt-2 space-y-1">

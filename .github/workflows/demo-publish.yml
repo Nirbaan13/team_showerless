@@ -1,6 +1,20 @@
 name: Publish offline demo installer
 
 on:
+  workflow_call:
+    inputs:
+      version:
+        description: Demo version supplied by an explicit manual rebuild
+        type: string
+        required: true
+      bundle_sha256:
+        description: Exact SHA256 of the versioned release bundle
+        type: string
+        required: true
+      release_tag:
+        description: Exact versioned release created by the rebuild job
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       version:
@@ -14,7 +28,7 @@ on:
         type: string
         required: true
       release_tag:
-        description: Release tag (blank derives demo-v1 or demo-v2)
+        description: Release tag (blank derives demo-VERSION; accepts demo-VERSION-main-FULL40SHA)
         type: string
         default: ''
         required: false

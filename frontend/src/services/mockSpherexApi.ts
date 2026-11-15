@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import type {
   TargetPreset,
   SpherexEpochFrame,
@@ -152,6 +153,8 @@ function getStoredEpochFrames(targetId: string, arrayId: number): SpherexEpochFr
   }
 
   if (['3i-atlas', '3i-atlas-d2', 'vesta-d6', 'vesta-d3'].includes(targetId)) return [];
+
+  if (DEMO_REAL_ONLY) return [];
 
   if (targetId === 'barnards-star') {
     return REAL_BARNARD_FRAMES.map((obs, idx) => ({
@@ -327,6 +330,8 @@ function getStoredCandidates(targetId: string, arrayId: number): CandidateObject
       return convertReviewToCandidates(precomputed);
     }
   }
+
+  if (DEMO_REAL_ONLY) return [];
 
   if (targetId === 'vesta-d6' || targetId === 'vesta-d3') {
     const detLabel = targetId === 'vesta-d3' ? 'D3' : 'D6';
@@ -1229,6 +1234,7 @@ export function getMock102BandSpectrum(
   ra: number = 284.14,
   dec: number = -45.12
 ): SpectralDataPoint[] {
+  if (DEMO_REAL_ONLY) return [];
   const points: SpectralDataPoint[] = [];
   const minW = 0.75;
   const maxW = 5.00;

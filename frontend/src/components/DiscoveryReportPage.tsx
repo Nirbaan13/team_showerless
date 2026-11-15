@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import React, { useState } from 'react';
 import type { CandidateObject, SpectralDataPoint } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
@@ -49,7 +50,7 @@ export const DiscoveryReportPage: React.FC<DiscoveryReportPageProps> = ({
       motionEpochs: candidate.epochPositions,
       spectralDataSummary: {
         channelsRecorded: spectrumData.length,
-        wavelengthRangeUm: [0.75, 5.0],
+        wavelengthRangeUm: DEMO_REAL_ONLY && !spectrumData.length ? null : [0.75, 5.0],
       },
     };
 
@@ -138,23 +139,23 @@ export const DiscoveryReportPage: React.FC<DiscoveryReportPageProps> = ({
           <div className="p-4 rounded-xl bg-paper-900 border-2 border-black card-tactile space-y-1">
             <span className="text-[11px] font-mono text-paper-400 uppercase">Detection Confidence</span>
             <div className="text-lg font-bold text-white capitalize">{candidate.confidence} Confidence</div>
-            <p className="text-[11px] text-paper-500">Cross-epoch proper motion verified</p>
+            <p className="text-[11px] text-paper-500">{DEMO_REAL_ONLY ? 'Confidence requires independent assessment' : 'Cross-epoch proper motion verified'}</p>
           </div>
 
           <div className="p-4 rounded-xl bg-paper-900 border-2 border-black card-tactile space-y-1">
             <span className="text-[11px] font-mono text-paper-400 uppercase">Catalog Cross-Match</span>
             <div className="text-lg font-bold text-emerald-400">
-              {candidate.matchedCatalog || 'Uncatalogued Candidate'}
+              {candidate.matchedCatalog || 'Cross-match unavailable'}
             </div>
-            <p className="text-[11px] text-paper-500">{candidate.catalogId || 'No matching known star recorded'}</p>
+            <p className="text-[11px] text-paper-500">{candidate.catalogId || 'No verified counterpart recorded'}</p>
           </div>
 
           <div className="p-4 rounded-xl bg-paper-900 border-2 border-black card-tactile space-y-1">
             <span className="text-[11px] font-mono text-paper-400 uppercase">Proper Motion Track</span>
             <div className="text-lg font-bold text-ochre-400">
-              {candidate.properMotionMasYr ? `${candidate.properMotionMasYr.pmDec} mas/yr` : 'Measured Across 5 Epochs'}
+              {candidate.properMotionMasYr ? `${candidate.properMotionMasYr.pmDec} mas/yr` : DEMO_REAL_ONLY ? `${candidate.epochPositions.length} linked detections` : 'Measured Across 5 Epochs'}
             </div>
-            <p className="text-[11px] text-paper-500">Consistent astrometric vector</p>
+            <p className="text-[11px] text-paper-500">{DEMO_REAL_ONLY ? 'Published linked positions' : 'Consistent astrometric vector'}</p>
           </div>
         </div>
 

@@ -1,3 +1,5 @@
+import { loadPackagedArchivePreviews, matchingPackagedPreset } from './services/packagedArchivePreviews';
+import { DEMO_REAL_ONLY } from './lib/demoMode';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import type {
   TargetPreset,
@@ -79,6 +81,8 @@ function fullViewerUrl() {
 }
 
 export function App() {
+  // Capture entry coordinates before URL synchronization writes initial defaults.
+  const [initialEntrySearch] = useState(() => window.location.search);
   // Check if loaded inside an iframe (?embed=true)
   const isEmbedMode =
     typeof window !== 'undefined' &&
@@ -391,6 +395,7 @@ export function App() {
   }, [ra, dec, fov, activeCandidate?.id, activeCandidate?.ra, activeCandidate?.dec, catalogRefreshCounter]);
 
   const spectrumData = useMemo(() => {
+    if (DEMO_REAL_ONLY) return [];
     return getMock102BandSpectrum(activeCandidate?.id || 'default', activeCandidate?.ra ?? ra, activeCandidate?.dec ?? dec);
   }, [activeCandidate, ra, dec]);
 
@@ -465,7 +470,7 @@ export function App() {
     }
     const detNum = array as DetectorArrayId;
 
-    if (!objectId) {
+    if (!DEMO_REAL_ONLY && !objectId) {
       const matchedPreset = NASA_TEST_PRESETS.find(p => Math.hypot(p.raDeg - newRa, p.decDeg - newDec) < 0.2);
       if (matchedPreset) {
         handleSelectPreset(matchedPreset);
@@ -516,6 +521,22 @@ export function App() {
     setSearchStatus({ source: 'loading', message: 'Loading observations from NASA IRSA' });
     setMlAnalysisStatus({ state: 'running', stage: 'Waiting for archive observations', progress: 0, stepIndex: 1 });
     try {
+      const packaged = await loadPackagedArchivePreviews({ ra: newRa, dec: newDec, detector: detNum, fovArcmin: parseFloat(request?.fov ?? fov) || 5 }, controller.signal);
+      if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
+      if (packaged) {
+        setCustomFrames(packaged.frames);
+        setCandidatesList([]);
+        setSelectedCandidateId(null);
+        setActiveFrameIndex(Math.max(0, Math.min(request?.frameIndex ?? 0, packaged.frames.length - 1)));
+        setSubtractionMode('raw_calibrated');
+        setOverlays({ gaiaDr3: false, wise: false, solarSystemEphemeris: false });
+        setSearchStatus({ source: 'packaged', message: `${packaged.name}: ${packaged.frames.length} packaged real observations${packaged.unavailableCount ? `; ${packaged.unavailableCount} previews unavailable` : ''}. ${packaged.coordinateNote}` });
+        setMlAnalysisStatus({ state: 'idle', stage: packaged.frames.length < 3
+          ? 'Motion analysis not run: insufficient evidence; at least three observations are required.'
+          : 'Motion analysis not run: these are raw archive field previews; target identification and motion are unassessed.',
+          progress: 0, stepIndex: 1, resultSource: 'packaged' });
+        return;
+      }
       const result = await fetchLiveBackendCutoutAnalysis({
         ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum, signal: controller.signal,
         onProgress: progress => {
@@ -542,8 +563,8 @@ export function App() {
       if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
       const message = error instanceof Error ? error.message : 'Observation request failed';
 
-      // If this is an explicit mock test failure (e.g. archive_timeout in test 148), preserve the error state
-      if (message.includes('archive_timeout')) {
+      // Strict mode preserves acquisition failures instead of entering the ordinary fallback.
+      if (DEMO_REAL_ONLY || message.includes('archive_timeout')) {
         setCustomFrames([]);
         setCandidatesList([]);
         setSelectedCandidateId(null);
@@ -620,6 +641,12 @@ export function App() {
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
     setSearchObjectId(null);
+    if (DEMO_REAL_ONLY && !preset.motionReviewId && !preset.id.startsWith('vesta') && preset.id !== '3i-atlas-d2') {
+      setSelectedArray(preset.recommendedArray);
+      setFov("12'");
+      void handleSearchCoordinates(preset.raDeg, preset.decDeg, { fov: "12'", detector: preset.recommendedArray, frameIndex: 0, candidateId: '' });
+      return;
+    }
     initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
@@ -657,6 +684,32 @@ export function App() {
       progress: 100, stepIndex: 3, resultSource: 'stored', tracksDetected: newCands.length });
   };
 
+  // Direct star preset links use the same real acquisition flow as a coordinate search.
+  const initialRealPresetRequested = useRef(false);
+  useEffect(() => {
+    if (!DEMO_REAL_ONLY || initialRealPresetRequested.current) return;
+    initialRealPresetRequested.current = true;
+    const preset = NASA_TEST_PRESETS.find(item => item.id === currentPresetId);
+    if (preset && !preset.motionReviewId) {
+      handleSelectPreset(preset);
+      return;
+    }
+    if (isArchiveBrowse(initialArchiveSelection())) return;
+    const params = new URLSearchParams(initialEntrySearch);
+    if (!params.has('preset') && params.has('ra') && params.has('dec')) {
+      const linkedRa = Number(params.get('ra'));
+      const linkedDec = Number(params.get('dec'));
+      const linkedDetector = params.has('detector') ? Number(params.get('detector')) : undefined;
+      const field = matchingPackagedPreset(linkedRa, linkedDec, linkedDetector);
+      if (field) {
+        const linkedFov = ["1'", "3'", "5'", "10'", "12'"].includes(params.get('fov') ?? '') ? params.get('fov') as FOVOption : "12'";
+        setFov(linkedFov);
+        setSelectedArray(field.recommendedArray);
+        void handleSearchCoordinates(linkedRa, linkedDec, { fov: linkedFov, detector: field.recommendedArray, frameIndex: Math.max(0, Number.parseInt(params.get('frame') ?? '0', 10) || 0), candidateId: '' });
+      }
+    }
+  }, []);
+
   const handleRefreshCutout = () => {
     void handleSearchCoordinates(ra, dec, undefined, undefined, searchObjectId);
   };
@@ -669,7 +722,7 @@ export function App() {
     setSubtractionMode(setting.subtractionMode);
     setDrawerControlledTab('chat');
     const preset = NASA_TEST_PRESETS.find(item => item.id === setting.targetPresetId);
-    if (!preset) {
+    if (!preset || (DEMO_REAL_ONLY && !preset.motionReviewId)) {
       void handleSearchCoordinates(setting.ra, setting.dec, {
         fov: setting.fov, detector: setting.selectedArray, frameIndex: setting.activeFrameIndex, candidateId: setting.candidateId,
       });
