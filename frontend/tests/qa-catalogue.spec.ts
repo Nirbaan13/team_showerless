@@ -42,3 +42,20 @@ test('discussion uses registry consensus and offers no simulated peer votes', as
   await expect(page.getByRole('button', { name: /Reach 10/ })).toHaveCount(0);
   expect(writes).toHaveLength(0);
 });
+
+test('dossier links retain the requested registry identity after reload and sharing', async ({ page }) => {
+  await page.route('https://**', route => route.abort());
+  await page.route('**/api/**', route => {
+    const id = new URL(route.request().url()).pathname.match(/^\/api\/catalogue\/candidates\/(PX-\d+)$/)?.[1];
+    if (id) return route.fulfill({ json: { ...record, id, name: `Dossier ${id}`, classifications: [], validation_checks: [], external_submissions: [] } });
+    return route.fulfill({ status: 503, json: { message: 'Unavailable' } });
+  });
+  await page.addInitScript(() => { Object.defineProperty(navigator, 'clipboard', { value: { writeText: async (text: string) => { (window as any).copiedPermalink = text; } } }); });
+  await page.goto('/?tab=catalogue&candidate=PX-000004');
+  await expect(page.getByRole('heading', { name: 'Dossier PX-000004', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/candidate=PX-000004/);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Dossier PX-000004', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Share|Permalink|Copy Link/i }).first().click();
+  await expect.poll(() => page.evaluate(() => (window as any).copiedPermalink)).toContain('candidate=PX-000004');
+});

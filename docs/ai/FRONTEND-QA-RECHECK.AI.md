@@ -23,7 +23,7 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-009 | Pending | Canvas overlay transforms |
 | QA-010 | Pending | Scientific HUD and cursor metadata |
 | QA-011 | Pending | Catalogue failures/empty results |
-| QA-012 | Pending | Dossier permalink/reload |
+| QA-012 | Already fixed in main, verified | Browser opens PX-000004 directly, reloads without changing identity, and copies a permalink retaining candidate=PX-000004. Existing URL state fix retained. |
 | QA-013 | Already fixed in main, verified | Real Chromium taps at 390×844: Play lies above fixed navigation, changes to Pause, advances the visit, and Next remains clickable. No competing layout fix. |
 | QA-014 | Fixed locally | Three browser checks pass: registry errors expose no seed records; zero votes and missing checks stay zero/pending in list+dossier; discussion reads the same persisted identity/consensus and has no simulated peer votes. Removed local success on failed record/vote writes. Live legacy routing currently returns 501; handled under QA-005. |
 | QA-015 | Fixed locally | Browser regression passes. Removed 102-channel slider, molecular quick-picks and unused selected-channel state; detector controls explicitly describe the image granularity. |
