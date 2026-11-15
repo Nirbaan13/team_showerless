@@ -17,6 +17,20 @@ timeout=${DEPLOY_HEALTH_TIMEOUT:-60}
 exec 9>"$app_dir/deploy.lock"
 flock -w 600 9
 
+# Keep host routing independent of the Compose file shipped in each image.
+# Parse data only: this file must never be evaluated as shell commands.
+host_binding=
+if [[ -e "$app_dir/listen.env" ]]; then
+    mapfile -t binding_lines <"$app_dir/listen.env"
+    if [[ ${#binding_lines[@]} -ne 1 || ! ${binding_lines[0]} =~ ^APP_PORT=(127\.0\.0\.1:)?([1-9][0-9]{0,4})$ ]] ||
+        (( 10#${BASH_REMATCH[2]:-0} > 65535 )); then
+        echo "listen.env must contain one valid APP_PORT setting" >&2
+        exit 64
+    fi
+    host_binding=${binding_lines[0]}
+    export APP_PORT=${host_binding#APP_PORT=}
+fi
+
 previous_image=
 previous_id=
 if [[ -f "$app_dir/current.env" ]]; then
@@ -57,6 +71,9 @@ cleanup() {
 }
 trap cleanup EXIT
 printf 'APP_IMAGE=%s\n' "$image" >"$candidate"
+if [[ -n $host_binding ]]; then
+    printf '%s\n' "$host_binding" >>"$candidate"
+fi
 
 # Ship topology with the immutable image, so an old API-only VPS Compose file
 # upgrades together with its release. Keep the installed topology until success

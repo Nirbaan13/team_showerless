@@ -1,0 +1,41 @@
+{
+	http_port {$SPACEAPPS_HTTP_PORT:80}
+	https_port {$SPACEAPPS_HTTPS_PORT:443}
+	admin {$SPACEAPPS_CADDY_ADMIN:127.0.0.1:2019}
+	# Isolated routing tests use a private CA without changing system trust.
+	skip_install_trust
+}
+
+spherexblink.tech, www.spherexblink.tech {
+	{$SPACEAPPS_TLS_POLICY}
+	encode zstd gzip
+
+	handle_path /backend/* {
+		reverse_proxy {$SPACEAPPS_API_UPSTREAM:127.0.0.1:18000}
+	}
+
+	# Keep the frontend's separately owned motion/catalogue routing intact.
+	@frontend_api path /api/motion/* /api/catalogue/*
+	handle @frontend_api {
+		reverse_proxy {$SPACEAPPS_FRONTEND_UPSTREAM:127.0.0.1:8080}
+	}
+
+	@backend path /api /api/* /health /version /docs /docs/* /openapi.json
+	handle @backend {
+		reverse_proxy {$SPACEAPPS_API_UPSTREAM:127.0.0.1:18000}
+	}
+
+	handle {
+		reverse_proxy {$SPACEAPPS_FRONTEND_UPSTREAM:127.0.0.1:8080}
+	}
+}
+
+# Explicit host routing keeps redirects ahead of the legacy API catch-all.
+http://spherexblink.tech, http://www.spherexblink.tech {
+	redir https://{host}{uri} 308
+}
+
+# Existing direct-IP clients and CI health checks retain the API on port 80.
+:{$SPACEAPPS_HTTP_PORT:80} {
+	reverse_proxy {$SPACEAPPS_API_UPSTREAM:127.0.0.1:18000}
+}
