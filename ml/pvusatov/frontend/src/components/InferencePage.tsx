@@ -11,6 +11,8 @@ const terminal = (job: InferenceJob) => job.status === 'completed' || job.status
 const title: Record<string, string> = { 'comet-d6': '3I/ATLAS · detector 6', 'comet-d2': '3I/ATLAS · detector 2', 'vesta-d6': 'Vesta · detector 6', 'vesta-d3': 'Vesta · detector 3' };
 const warningText: Record<string, string> = {
   experimental_synthetic_trained_ranking: 'The experimental ranker was trained on simulated fields. Its score is not a discovery probability.',
+  experimental_uncalibrated_ranking: 'The score ranks candidates for review. It is not a calibrated probability or confirmation of motion.',
+  observations_without_usable_requested_coverage: 'Some observations do not cover this area with usable measurements. Inspect frame coverage before interpreting motion.',
   passband_variation_not_corrected: 'Wavelength coverage may differ between exposures; brightness changes need further review.',
   psf_matching_not_applied: 'Point-spread functions have not been matched between exposures.',
   short_linear_arc_model: 'Tracks assume approximately constant velocity over the selected dates.',
@@ -162,7 +164,7 @@ export function InferencePage() {
           </details>
           <button className="inference-primary" disabled={pending || !model || (mode === 'preset' && !presets.length)} type="submit">{pending ? 'Analysis running…' : 'Run analysis'}</button>
         </form>
-        {model && <div className="inference-model"><strong>{model.model_id}</strong><span>Frozen {model.model_family === 'ExtraTreesClassifier' ? 'ExtraTrees' : model.model_family === 'RandomForestClassifier' ? 'Random Forest' : 'tree ensemble'} · experimental ranking</span><code title={model.sha256}>SHA-256 {model.sha256.slice(0, 16)}…</code></div>}
+        {model && <div className="inference-model"><strong title={model.model_id}>{model.release_name ?? model.model_id}</strong><span>Frozen {model.model_family === 'RankNetTreeBoost' ? 'RankNet' : model.model_family === 'ListNetTreeBoost' ? 'ListNet' : model.model_family === 'HistGradientBoostingClassifier' ? 'gradient boosting' : model.model_family === 'ExtraTreesClassifier' ? 'ExtraTrees' : model.model_family === 'RandomForestClassifier' ? 'Random Forest' : 'tree ensemble'} · experimental ranking</span><code title={model.sha256}>SHA-256 {model.sha256.slice(0, 16)}…</code></div>}
       </aside>
       <section className="inference-results">
         {error && <div role="alert" className="inference-error">{error}</div>}

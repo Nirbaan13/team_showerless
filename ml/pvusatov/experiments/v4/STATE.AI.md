@@ -1,3 +1,23 @@
+# CURRENT override — 2026-11-15 09:18 UTC
+
+Continue substantive work until12:50UTC/15:50Moscow; no earlycompletion. Branchfeat/ml-v4-quality nowmergesorigin/main44cc7e3 at a16e50b. PR17stilldraft. Pre-finalcommitceec9ab waspushedbeforefirstinference.
+
+FIRST FINAL attempt1896 completedsynthetic butnativefailed beforeanycompleteparent because oldprepare rejects onezerocoverageframe in v4-final04; privateInferenceError thenfailedProcessPoolunpickling. Allscientificoutcomes STILLUNOPENED. Allfirstfiles/logs/freeze1896immutable; opaque4fileinventoryunderverification/v4-final-repair-1. No nativecompletecaches. Root-onlyprepareaudit confirmsfinal04epochindex5empty, other7usable; other11parentold/newpreparationbitwiseequal.
+
+BLINDED amendmentcurrentverification/v4-final-repair-1/amendment.json: keepall12x8IDs/times/3240trials/3000seeds, fixedC596/472a/B1selection, no refit/reselection/gatechanges. Newprepare27ef087 retainsNaNepoch+warning and>=3useful. Newnative_injectionsdfd829e3 excludesONLYemptyepochsfromMAD; anyinvalidnonemptyMADfatal. Transport7b096 wrapsprivateexceptions asbuiltinRuntimeError. Comparer6b7fcd4 exactrowprojectionno numericvaluesprinted; ROOTmustinvokeonlyafterbothamendedcomplete BEFOREreport.
+
+NEW FINALfreezecreatedandopaquelyvalidated (NOTEXECUTEDYET): verification/v4-final-repair-1/freeze.json anchor1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4; exactsource_snapshotthere/source. Rootauthorizationrecordsoriginaloutputsclosed. RepairedDEVsmoke530431...completeincludingreport, underverification/v4-development/coverage-repair-smoke (fulltinycaches+sourcearchive). Independentdatareview37focusedtests+actualTRAIN04all270images/identitiesexact, maskedderivative270pass; reviewdata/evaluation-review/coverage-repair/REVIEW.AI.md. Beforecanonicalrerun:commit/pushnewrepair+frozenclosureafterfreshfulltests. Thenrunnewnative+synthetic4workerseach intoNEW/tmp directory; no resultsreadbeforebothterminal0. Thenloadfrozencompare_attemptsviaexactbootstrap+exact_module, verify_attempts(...both_runs_finished=True), saveproof; iffalseHALTBLINDED. Onlyiftrue runcheckedreport once andreadcanonicalmetrics. DistinguishC13SCORERundersharedamendedprepfromunchangeddeployedendtoendwhichfails04. Allgatesstillrequired.
+
+ROOTremaining:collectfulltestsession18627; stage/commit/pushrepair (allnewMLstable, avoidactive .tmp files); canonicalrerun; equality+report; ifgatespass updateDocker/Dockerfile.dockerignore toV4(runtime+requirements+models+newsmoke), actualCI/mergePRmain andliveCLI/HTTP/gRPC/PNGs/UI/Swagger/latest/versioncheck. BackendOpenAPIpathNOWbackend/docs/openapi.yaml, Scalacorebackend/scala/src; preserveallteammateprovider/pipelinechanges. RootalreadyupdatedsharedOpenAPImodel_familyenum+release_name, namespacedTSfamilies/UIwarnings/alias andScalaAnalysespublicFields; compile/buildpending.
+
+Medianoptimization: workernewruntimepipeline1d4a7793 usesmedian353f4d0 exactresidualbitparity; feature843/modelcd715/C596/472a unchanged. OldsevennowSIXunchangedmodules becauseintentionalprepare27efrepair. Sourcehistoricalpre-median/pre-coveragepreserved.112medianparitytests,20realcases/1710PNGs byteexact. Stage speed23–34x, NOTwholepipelineclaim. Newexceptionalfallbackbefore-sortremoved827MiBregression: zerosnew607.7MiB, mixed429.7. Fullmaxafter638MiB; localwallunstable. FreshCPUbefore95s/after43sincludesfixtureconstruction. Workerfinishingproofs/docs sourceparked. NeedSHIPNEWVPSbundle3/rerunhardgatebecauseoldVPSproofisOLD2b078pipeline/e464prepare.
+
+OLDVPSproofPASS andindependentauditunderverification/v4-runtime/vps-evidence and audit-ranker.*: exact153publishedscoresPython3.12vs3.14, hard1CPU/1GiB/noSwap/noOOM/noNetwork/readOnly; max727.15MiB44s, presets110MiB6.48s. Isolateddepsimage8df(spaceapps-ml-v4-deps-probe:20261115) remainsVPSready. RootSSHkey/strictknownhostsbelowinoldcheckpoint. DoNOTrebuilddepsnecessary; bundlesourceonly. Hostprobe scripts/tmp/spaceapps-v4-evaluation/{run-vps-probes.py,pack-vps-proofs.py} needuniquev3container/bundledir/outputlabels andnewtarsha. PublicproductionunchangedC13 sofar.
+
+Threeworkersready/reusable: detectionfinishingmedianproofs; dataindependentreviewcomplete(noFINALaccess); review_v4_release implementedtransport/injections/comparer and105evaltests(noFINALaccess); rankerVPSauditcomplete(noFINALaccess). Rootnextmaybeindependentcanonicalaccountingafterunblinding. OldmetadataCeres4D2unresolved.52px/.637parallaxstillunscored, noadditionalqueries.
+
+---
+
 # V4 active-work state
 
 Checkpoint: 2026-11-15 08:25 UTC. Continue substantive work until **2026-11-15 12:50 UTC / 15:50 Moscow**. The user explicitly rejected the earlier eight-hour stop; exclude the idle gap. A passed release milestone does not end the remaining active-work goal.

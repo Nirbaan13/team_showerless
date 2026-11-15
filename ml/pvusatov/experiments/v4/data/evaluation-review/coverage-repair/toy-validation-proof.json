@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scope": "Temporary controlled FITS only; no real/FINAL pixels, detections or models",
+  "cases": [
+    {
+      "case": "usable_0",
+      "accepted": false,
+      "error_code": "insufficient_observations"
+    },
+    {
+      "case": "usable_1",
+      "accepted": false,
+      "error_code": "insufficient_observations"
+    },
+    {
+      "case": "usable_2",
+      "accepted": false,
+      "error_code": "insufficient_observations"
+    },
+    {
+      "case": "usable_3",
+      "accepted": true,
+      "physical_epochs": 4,
+      "usable_epochs": 3
+    },
+    {
+      "case": "malformed_hdu",
+      "old_and_new_error_codes": [
+        "invalid_fits",
+        "invalid_fits"
+      ]
+    },
+    {
+      "case": "malformed_shape",
+      "old_and_new_error_codes": [
+        "invalid_fits",
+        "invalid_fits"
+      ]
+    },
+    {
+      "case": "malformed_date",
+      "old_and_new_error_codes": [
+        "invalid_fits",
+        "invalid_fits"
+      ]
+    }
+  ],
+  "prepare_source_sha256": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+  "scratch_deleted": true
+}

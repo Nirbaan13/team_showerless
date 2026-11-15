@@ -115,3 +115,37 @@ A read-only review found that `max_peaks:100.0` and `min_epochs:3.0` satisfied t
 ### Replay guard correction preserves the cache producer's representation
 
 The first typed pilot deliberately fails closed if replayed C13 candidates differ. Epochs/positions agreed, but the original guard wrongly compared fresh Float64 statistics to cache values at1e-10: the actual cache producer explicitly serializes these statistics as Float32. Typical differences were one Float32 rounding unit (~6e-8 relative). Therefore native injected typed searches were withheld, and all54 errors remain in each v1 report. The separate v2 native-only replays use `replay_guard.py`: **exact candidate epochs/positions and exact Float32 six-feature arrays**, matching `cache_native._record_measurement`; no spatial/truth tolerance is loosened. Two controlled RED→GREEN tests accept the actual Float32 representation and reject a one-ULP feature change or tiny coordinate change. The v1 protocol/source/results remain preserved; no running source was edited.
+
+## Completed detector pilots: preserve negative transfer evidence
+
+All separately typed joint-search variants failed to improve the small human review budgets on the structured DEVELOPMENT backgrounds. Threshold5 results below use actual published ordering; hypotheses have fitted positions and null learned scores. Candidate caps remain explicit, so raw proposal counts are bounded outputs rather than complete false-candidate counts.
+
+| Fixed cohort | Truth denominator / independent units | C13 K3 | Joint sum K3 | Robust-positive K3 | Transient-competitor K3 |
+|---|---|---:|---:|---:|---:|
+| Structured synthetic pilot |385 truths / 200 fields |79 |22 |45 |70 |
+| Native moving-injection pilot |54 correlated derivatives / 2 TRAIN parents |11 |0 |1 |4 |
+| Ideal Gaussian/white-noise stress, eight epochs/ 7 h, nominal amplitude 3 |100 sources / 100 shared-noise parents |2 |98 |91 |93 |
+
+The corrected native replay verified exact candidate epochs/positions and exact producer-Float32 six-feature arrays before any injected typed search. All54 derivatives completed without science errors. The transient competitor found15 spatial matches versus C13's12, but only 9 had actual matched-epoch truth span≥3px (C13:8), and its K1/K3 fell7/ 11→0/ 4. Extra raw recovery therefore does not establish useful review performance. Sum/robust publication caps affected all 54 native derivatives at threshold 5. Native unmatched control tracks remain UNKNOWN; none are negative ground truth.
+
+The PSF-information gate also remains ineligible. On the same 200 synthetic fields, thresholds 2/ 3 modestly changed detected129→130 and K3 79→80, while native120 derivatives from four OLD TRAIN parents changed detected32→31 and K1/K3 25/ 30→24/ 29; rows603→602. Fixing the uniform-patch coverage mistake explained most of the earlier support-driven loss, but did not produce useful native burden reduction or recovery no-regression.
+
+Compact immutable evidence index: `results/detector-pilot-evidence-index.json`, SHA256 `db9b44fb10ac4cc5e76a9886bee7d9739b3eda8dad3d95965e52f5514e4c799a`. It binds five compact summaries, full raw report/protocol/source hashes, original representation-guard failures, corrected attempts, actual fitted-epoch geometry checks, independent parent grouping, null maxima and timing/RSS. Full raw reports remain hashed in `/tmp/spaceapps-v4-detection`.
+
+## Idealized observability stress is diagnostic, excluded from selection
+
+Coordinator reserved100 new engineering parents 3802000–3802099. The exact source-bound protocol was written before draws, SHA256 `efdcc9dd715269dced753923da4424d347feb3f48c99c27ac8039398080d4a8f`. Each parent's same eight white-Gaussian noise images, source angle and midpoint are reused across3/ 8 epochs, short 0.35 h/long 7 h cadence, and known simulation template amplitudes 0/ 2/ 3/ 4/ 6:2,000 correlated derivatives, not 2,000 independent fields. Three-epoch subsets use original epochs 0/ 3/ 7. The whole64×64 grid is searched blindly, with the unchanged declared typed statistics and thresholds 5/ 6/ 7.
+
+At long cadence/eight epochs/amplitude 2, C13/joint-sum/robust/competitor K3 recoveries were0/ 51/ 7/ 14 of100. At amplitude 3 they were2/ 98/ 91/ 93. This verifies conditional subthreshold sensitivity when PSF/noise assumptions match. It does not establish native performance: structured synthetic and real-background pilots above remain negative. Noise-only long/eight-epoch controls generated0/ 257/ 1/ 4 published rows, in0/ 89/ 1/ 4 of100 fields. The proxy thresholds have different null distributions; these values are not equivalent calibrated Gaussian significance levels.
+
+Short-cadence true displacement is1.4px. Joint sum can spatially recover49/ 100 amplitude 6 sources with eight epochs, but **every** such recovery is correctly unresolved under the3px matched-epoch criterion. This is not evidence of confirmed slow motion. Known amplitude/noise units are simulated, not measured physical flux or native covariance calibration. No model/detector promotion is selected from this idealized stress.
+
+All2,000 derivatives completed without errors in1,033.37 s using four single-thread workers; peak worker RSS192.94 MiB. Compact per-field metric matrix/protocol/noise-pair hashes: `results/idealized-observability-v1-compact.json`, SHA256 `7ee29fe2186e17a4a99039bc226b223683ddcd7484d6a48697835704bf144f4b`,431,641 bytes. The matching protocol bytes are preserved under `results/idealized-observability-protocol-v1.json`.
+
+## Exact median-order-statistic performance research
+
+`median_reference.py` is a NEW experimental helper; it does not modify frozen or V4 runtime sources. It sorts finite values once per pixel and derives each removed epoch's odd/even central order statistics. Columns with finite zeros, subnormals or magnitudes>Float64max/ 4 deliberately call the immutable reference, as do non-Float64 arrays. This preserves signed-zero/tie/overflow behavior rather than asserting universal equivalence from ordinary random values.
+
+Initial108 tests passed:100 reserved engineering random/masked/permuted cases3803000–3803099, all finite counts 0..32, ties, infinities, signed zeros, subnormal/extreme permutations, noncontiguous/Fortran layouts, Float32 fallback, and all four actual prepared presets. A further broad IEEE754 bit-pattern test is being checked separately; results remain version-bound to the installed NumPy implementation.
+
+On one pinned CPU with32×512×512 Float64 images, complete output-byte SHA256 parity held. Unmasked legacy 18.672 s/ 608.73 MiB versus sorted 0.554 s/ 299.55 MiB;12%masked legacy 15.955 s/ 569.22 MiB versus sorted 0.673 s/ 299.14 MiB. The measured standalone residual-stage speedups are33.68× and 23.72×. These are **not** whole-pipeline speedups or a production change. Exceptional fallback-heavy images can retain legacy cost. Proof `results/median-reference-maximum-v1.json`, SHA256 `91700bf6a597e686484ac6da64feb51a32a9f6387c3e6b5dc6121ff0f7d23807`; prototype source SHA256 `39d65fc5890f99cc3a04a138bf800cd9345056f4c8afa4bc97e693e3f6e14976`.

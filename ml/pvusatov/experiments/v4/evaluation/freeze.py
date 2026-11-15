@@ -29,6 +29,10 @@ SOURCES = dict(
     geometry='experiments/v4/evaluation/geometry.py',
     geometry_validation='verification/final/summary_geometry.py',
     data_binding='experiments/v4/evaluation/data_binding.py',
+    prepare='releases/v4/runtime/ml_inference/prepare.py',
+    native_injections='experiments/v4/evaluation/native_injections.py',
+    worker_transport='experiments/v4/evaluation/worker_transport.py',
+    attempt_equality='experiments/v4/evaluation/compare_attempts.py',
     scene='experiments/v4/evaluation/scene.py',
     native_cache='experiments/v4/evaluation/cache_native.py',
     features='experiments/v4/detection/features.py',
@@ -100,6 +104,8 @@ def exact_module(name, ref, base):
 def validate_plan(value):
     if value.get('schema_version') != 4 or value.get('status') != 'frozen':
         raise ValueError('V4 evaluation must be frozen')
+    if value.get('protocol_revision') != 'v4-blinded-coverage-repair-1':
+        raise ValueError('explicit blinded coverage amendment is required')
     scope = value.get('scope')
     if scope not in ('development', 'final') or value.get('authorized_final') is not (scope == 'final'):
         raise ValueError('freeze scope or explicit final authorization differs')
@@ -164,6 +170,44 @@ def require_checked_execution(frozen, namespace, source_name):
         raise ValueError('use execute.py to compile the authorized validator source exactly')
 
 
+def check_amendment(value, base):
+    """The repair cannot silently change a model, cohort, simulator or gate."""
+    path = checked_ref(value['provenance']['amendment'], base)
+    amendment = read_json(path)
+    if (amendment.get('amendment_id') != value['protocol_revision']
+            or amendment.get('scientific_outcomes_inspected') is not False
+            or amendment.get('candidate_reselection') is not False or amendment.get('refit') is not False
+            or amendment.get('parents_replaced') is not False or amendment.get('observations_dropped') is not False
+            or amendment.get('cohort_and_seeds_unchanged') is not True
+            or amendment.get('promotion_gates_unchanged') is not True):
+        raise ValueError('blinded amendment invariants differ')
+    original_ref = {key:amendment['original_freeze'][key] for key in ('path', 'sha256')}
+    if original_ref['sha256'] != '1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57':
+        raise ValueError('original frozen attempt differs')
+    original = read_json(checked_ref(original_ref, base))
+    allowed = {'freeze', 'scene', 'run_native', 'report'}
+    added = {'prepare', 'native_injections', 'worker_transport', 'attempt_equality'}
+    if set(value['sources']) != set(original['sources']) | added:
+        raise ValueError('repair source closure differs')
+    for name, ref in original['sources'].items():
+        if name not in allowed and ref['sha256'] != value['sources'][name]['sha256']:
+            raise ValueError('repair changed an undeclared scientific source: ' + name)
+    for role in ('baseline', 'candidate'):
+        for kind in ('artifact', 'metadata'):
+            if value['models'][role][kind]['sha256'] != original['models'][role][kind]['sha256']:
+                raise ValueError('repair changed a frozen model or metadata')
+    if (value['detector_settings'] != original['detector_settings']
+            or value['native']['region'] != original['native']['region']):
+        raise ValueError('repair changed scientific settings')
+    if value['scope'] == 'final' and (value['native'] != original['native'] or value['synthetic'] != original['synthetic']):
+        raise ValueError('repair changed final inputs, seed map or exclusions')
+    audit_ref = {key:amendment['coverage_audit'][key] for key in ('path', 'sha256')}
+    audit = read_json(checked_ref(audit_ref, base))
+    if audit.get('prepare_source_sha256') != value['sources']['prepare']['sha256']:
+        raise ValueError('repair preparation differs from the blinded coverage audit')
+    value['_coverage_audit'] = {row['parent_id']: row for row in audit['results']}
+
+
 def validate_freeze(path, expected_sha256):
     path = Path(path).resolve()
     if not re.fullmatch('[0-9a-f]{64}', str(expected_sha256)) or digest(path) != expected_sha256:
@@ -183,8 +227,9 @@ def validate_freeze(path, expected_sha256):
             raise ValueError('scientific source path differs: ' + name)
     if value.get('versions') != versions():
         raise ValueError('scientific environment differs from freeze')
-    for key in ('protocol', 'acquisition_plan', 'selection_record', 'data_audit', 'development_handoff'):
+    for key in ('protocol', 'acquisition_plan', 'selection_record', 'data_audit', 'development_handoff', 'amendment'):
         checked_ref(value['provenance'][key], base)
+    check_amendment(value, base)
     check_selection(read_json(value['provenance']['selection_record']['path']), value['models'], final=value['scope'] == 'final')
     for ref in value['provenance'].get('additional', []):
         checked_ref(ref, base)

@@ -1,0 +1,57 @@
+{
+  "designation": "Bundle3 exact covered-input parity; partial-coverage repair separately tested, FINAL outcomes not read",
+  "before": {
+    "path": "ml/pvusatov/releases/v4/runtime/verification/development-integration.json",
+    "sha256": "17f814c5c1e8a73cccd74503ecbc749fbbc5dc8197ea43b110acebae7f20a998",
+    "source_sha256": {
+      "__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+      "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+      "contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+      "detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+      "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+      "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+      "pipeline.py": "2b078aede763339b6362e94fa3329deac80687d521ff6579cae608c5a8304ed9",
+      "prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+      "render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+    }
+  },
+  "after": {
+    "path": "ml/pvusatov/releases/v4/runtime/verification/development-integration-bundle3.json",
+    "sha256": "6a25738e14dabb968fc31502be0c657c3a012b1e57cbf56542706fa0b4cb5048",
+    "source_sha256": {
+      "__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+      "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+      "contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+      "detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+      "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+      "median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+      "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+      "pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+      "prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+      "render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+    }
+  },
+  "matched_cases": 20,
+  "byte_identical_pngs": 1710,
+  "all_records_except_walltime_exact": true,
+  "models_and_metadata_unchanged": true,
+  "selected_graph_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "selected_metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "tests": {
+    "runtime_source_sha256": "7c7df928879fc9b6bbd00a7da2e1f65a6f36d445a4fe2fc76b2c7787c6a6124c",
+    "coverage_source_sha256": "9bbb536814e5065fe66cce813286767c23dd484d4da6ef5dac93482cc64c8bf7",
+    "median_source_sha256": "8d11b779ccf24ac244a283b2be22439ab04459238e58c11167fe4f80112d6f0e",
+    "observation": "139 passed in17.84s:112median,22runtime,5coverage"
+  },
+  "preserved_sources": [
+    "source_history/pre-median-v1",
+    "source_history/pre-coverage-v1",
+    "source_history/pre-exception-scheduling-v1"
+  ],
+  "limitations": [
+    "hard deployment cgroup proof owned by coordinator",
+    "coverage amendment deliberately changes formerly failed empty-epoch requests; covered arrays/ranking remain equal"
+  ]
+}

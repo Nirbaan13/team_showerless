@@ -1,0 +1,136 @@
+{
+  "protocol": {
+    "designation": "ENGINEERING parity/timing only; no science/train/final",
+    "parity_seeds": [
+      3803000,
+      3803099
+    ],
+    "benchmark_seed": 3803000,
+    "shape": [
+      32,
+      512,
+      512
+    ],
+    "masks": [
+      0.0,
+      0.12
+    ],
+    "methods": [
+      "legacy",
+      "sorted"
+    ],
+    "source_sha256": {
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/median_reference.py": "39d65fc5890f99cc3a04a138bf800cd9345056f4c8afa4bc97e693e3f6e14976",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d"
+    },
+    "requirement": "bitwise identical full Float64 residual bytes, finite/NaN/sign-zero parity"
+  },
+  "protocol_sha256": "ffcec9e8f6d7cd4898d25f2b22a583bbe1569356e38bb9a7caf8a84e1113f905",
+  "numpy_version": "2.5.3",
+  "measurements": [
+    {
+      "method": "legacy",
+      "seed": 3803000,
+      "mask_fraction": 0.0,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "wall_seconds": 18.672213755002304,
+      "cpu_seconds": 18.645072766,
+      "rss_mib": 608.734375,
+      "result_bytes_sha256": "f3b136ee106bd06665bcc0e69235d9ea3a2c688abda3ea6392291c2970b9e2b0",
+      "finite_values": 8388608,
+      "nan_values": 0,
+      "diagnostics": null,
+      "cpu_affinity": [
+        0
+      ]
+    },
+    {
+      "method": "sorted",
+      "seed": 3803000,
+      "mask_fraction": 0.0,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "wall_seconds": 0.5543632910048473,
+      "cpu_seconds": 0.5537665760000001,
+      "rss_mib": 299.55078125,
+      "result_bytes_sha256": "f3b136ee106bd06665bcc0e69235d9ea3a2c688abda3ea6392291c2970b9e2b0",
+      "finite_values": 8388608,
+      "nan_values": 0,
+      "diagnostics": {
+        "mode": "sorted_float64_with_exceptional_column_fallback",
+        "fast_columns": 262144,
+        "fallback_columns": 0,
+        "finite_count_min": 32,
+        "finite_count_max": 32,
+        "fallback_policy": "any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic"
+      },
+      "cpu_affinity": [
+        0
+      ]
+    },
+    {
+      "method": "legacy",
+      "seed": 3803000,
+      "mask_fraction": 0.12,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "wall_seconds": 15.954630934997112,
+      "cpu_seconds": 15.931167449,
+      "rss_mib": 569.21875,
+      "result_bytes_sha256": "1408d7ee6213e64dd54a50f6f82f3c987ea183733b838538ff38bdee418d523c",
+      "finite_values": 7381104,
+      "nan_values": 1007504,
+      "diagnostics": null,
+      "cpu_affinity": [
+        0
+      ]
+    },
+    {
+      "method": "sorted",
+      "seed": 3803000,
+      "mask_fraction": 0.12,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "wall_seconds": 0.6727100329953828,
+      "cpu_seconds": 0.672167258,
+      "rss_mib": 299.14453125,
+      "result_bytes_sha256": "1408d7ee6213e64dd54a50f6f82f3c987ea183733b838538ff38bdee418d523c",
+      "finite_values": 7381104,
+      "nan_values": 1007504,
+      "diagnostics": {
+        "mode": "sorted_float64_with_exceptional_column_fallback",
+        "fast_columns": 262144,
+        "fallback_columns": 0,
+        "finite_count_min": 18,
+        "finite_count_max": 32,
+        "fallback_policy": "any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic"
+      },
+      "cpu_affinity": [
+        0
+      ]
+    }
+  ],
+  "bitwise_parity": true,
+  "speedup_by_mask": {
+    "0.0": 33.68226947559383,
+    "0.12": 23.716951067246264
+  },
+  "limitations": [
+    "standalone residual stage, not a full runtime/deployment gate",
+    "exact installedNumPy semantics checked; no frozen/runtime source changed",
+    "exceptional columns deliberately retain legacy performance"
+  ]
+}

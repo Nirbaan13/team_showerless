@@ -281,6 +281,14 @@ def summarize(path, anchor, native_manifest, synthetic_manifest, *, both_runs_fi
                     raise ValueError('native acquisition or preparation differs')
                 binding.validate_prepared_frames(frozen['_native_expected'][parent['parent_id']],
                                                  cache['frames'], cache['times_hours'])
+                pixels = cache.get('finite_pixel_counts'); shape = cache['registered_shape']
+                if (not isinstance(pixels, list) or len(pixels) != shape[0]
+                        or any(type(count) is not int or not 0 <= count <= shape[1]*shape[2] for count in pixels)
+                        or sum(count > 0 for count in pixels) < 3
+                        or cache.get('protocol_revision') != frozen['protocol_revision']):
+                    raise ValueError('coverage-preserving preparation metadata differs')
+                if frozen['scope'] == 'final' and pixels != frozen['_coverage_audit'][parent['parent_id']]['finite_pixel_counts']:
+                    raise ValueError('native coverage differs from the blinded preparation audit')
                 expected_trials = {(speed, direction, brightness) for speed in (.01, .03, .1, .3, 1., 4., 10., 25., 50.)
                                    for direction in range(6) for brightness in (3., 6., 12., 24., 48.)}
                 actual_trials = {(row.get('speed_px_hour'), row.get('direction_id'), row.get('brightness')) for row in rows}
@@ -296,6 +304,11 @@ def summarize(path, anchor, native_manifest, synthetic_manifest, *, both_runs_fi
             for row in rows:
                 if domain == 'native' and (row.get('parent_id') != parent['parent_id'] or row.get('seed') != parent['seed']):
                     raise ValueError('native field identity differs')
+                if domain == 'native' and (row.get('noise_reference_usable_epoch_count') != sum(count > 0 for count in pixels)
+                        or row.get('noise_reference_policy') != 'all_nonempty_registered_epochs_positive_finite_mad_min3'
+                        or any(row['center_usable_flags'][i] for i, count in enumerate(pixels) if count == 0)
+                        or any(pixels[epoch] == 0 for epochs in row['candidate_epochs'] for epoch in epochs)):
+                    raise ValueError('empty native epochs were removed, used as measurements or changed noise normalization')
                 validate_field(row, domain, times=cache.get('times_hours') if domain == 'native' else None,
                                shape=cache.get('registered_shape') if domain == 'native' else None,
                                geometry_validator=geometry.validate_matched_geometry,
@@ -323,12 +336,15 @@ def summarize(path, anchor, native_manifest, synthetic_manifest, *, both_runs_fi
         capped[domain] = cap_count; diagnostic_reports[domain] = diagnostics(fields, left, right, domain)
     validate_freeze(path, anchor)
     return dict(schema_version=4, scope=frozen['scope'], freeze_sha256=anchor,
-                comparison='C13 and one frozen V4 scorer on identical measured proposals',
+                protocol_revision=frozen['protocol_revision'],
+                comparison='Frozen C13 scorer and one frozen V4 scorer under shared coverage-preserving preparation',
                 reports=output, recovery_gate=metrics.recovery_gate(output['synthetic'], output['native'],
                     baseline_controls=controls, candidate_controls=controls),
                 unknown_controls=dict(baseline_candidate_rows=controls, candidate_candidate_rows=controls,
                                       truth_labels='UNKNOWN; workload is not precision'),
                 peak_cap_trials=capped, caches=cache_refs, diagnostics=diagnostic_reports,
                 limitations=['injection recovery is not real-object sensitivity or survey precision',
+                             'blinded coverage-informed engineering amendment; not unchanged original preregistration',
+                             'generic coverage repair is shared by both scorers and is not a V4 learner gain',
                              'three-pixel geometry is a diagnostic, not an astrometric detection limit',
                              'model scores are uncalibrated', 'runtime/integration gates remain separate'])

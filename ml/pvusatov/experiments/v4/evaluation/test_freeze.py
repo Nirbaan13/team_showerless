@@ -12,6 +12,7 @@ SPEC.loader.exec_module(freeze)
 
 def plan():
     return dict(schema_version=4, status='frozen', scope='final', authorized_final=True,
+                protocol_revision='v4-blinded-coverage-repair-1',
                 runtime=dict(workers=6, math_threads=1, max_frames=32, max_grid=512),
                 proposal_policy='c13-sigma08-v1', detector_settings=freeze.PROFILE,
                 models={'baseline': {'artifact': {'sha256': freeze.C13}}, 'candidate': {}},

@@ -1,0 +1,27 @@
+{
+  "scope": "TRAIN04 only; no detectors/models/FINAL; engineering parity",
+  "seed": 3800904,
+  "source_sha256": {
+    "old_prepare": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "new_prepare": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "legacy_latents": "5629b6a9e6ec92e328650ae9e3abd1ba60aac96e90614ab9c3acaf0c8e4e1dcd",
+    "native_epsf": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+    "new_injection": "dfd829e310a74e5bd446a439af9560386bdfb96f5b01386178e32eed024bcf5b",
+    "contracts": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816"
+  },
+  "manifest_sha256": "5a0f65687a2140da043b35a786af43bf2e157dcf1ddac7cbea327ba05a8145d7",
+  "physical_obsids": [
+    "2025W47_1A_0331_1",
+    "2025W47_1A_0331_2",
+    "2025W47_1A_0331_3",
+    "2025W47_1A_0331_4",
+    "2025W47_1A_0571_1",
+    "2025W47_1A_0571_2",
+    "2025W47_1A_0571_4",
+    "2025W47_1A_0637_4"
+  ],
+  "covered_trials": 270,
+  "masked_derivative_trials": 270,
+  "derivative": "Temporary FLAGS|1 in first TRAIN frame; original physical identities/times retained; not archive bytes",
+  "outputs": "Aggregate equality hashes only; temporary FITS deleted"
+}

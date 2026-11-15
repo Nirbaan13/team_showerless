@@ -1,0 +1,25 @@
+{
+  "scope": "opaque byte hashes only; no cache JSON/scientific outcome inspection",
+  "files": [
+    {
+      "path": "/tmp/spaceapps-v4-evaluation/final-1896/native.log",
+      "sha256": "568c17acd2443bc322bd5238a102fc0757bba8ae59477d8a34ee91b4c7dad114",
+      "bytes": 1904
+    },
+    {
+      "path": "/tmp/spaceapps-v4-evaluation/final-1896/synthetic/run-synthetic-manifest.json",
+      "sha256": "705eb5983bed6630a2b7a92152cbddd7de848fb1859debc313ed83d21af98be1",
+      "bytes": 989
+    },
+    {
+      "path": "/tmp/spaceapps-v4-evaluation/final-1896/synthetic/synthetic.json.gz",
+      "sha256": "6839667eb237b26400138815b58a8d41d391cdfc04a99d7d4d1d329a06fbed5d",
+      "bytes": 42964402
+    },
+    {
+      "path": "/tmp/spaceapps-v4-evaluation/final-1896/synthetic.log",
+      "sha256": "7f52db78e10696bb7464ab1467d3d9046e887d9fbdac95f26ae7b9987d721bd6",
+      "bytes": 1179
+    }
+  ]
+}

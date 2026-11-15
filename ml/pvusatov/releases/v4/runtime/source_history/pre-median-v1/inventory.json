@@ -1,0 +1,22 @@
+{
+  "designation": "Exact pre-median runtime and proof snapshot; scientific source retained",
+  "files": {
+    "measure_maximum-original-v1.py.source": "230f1231519d71f2a2d8df176d1c56df66344ba30410e429c8a2279df06c3fce",
+    "test_runtime.py.source": "8cb56c8a7601dd11be782a4044972e0409cf290e103f8d753c55a94512ffa1b9",
+    "runtime/measure_maximum.py": "3399629bc6c71559a134e8a79b571ce6b8875d5152f77c71f051e076b5f9f65c",
+    "runtime/IMPLEMENTATION.AI.md": "59323e87f9c5b8637a66968ccd2599a42ab4d742029ed69bfaa64c62e9ee13a6",
+    "runtime/verify_development.py": "660c12a90e64e8f571c95f3e7bdc1c64a40b3e633ff3cd3c6aacaa3ed77bfbde",
+    "runtime/ml_inference/model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "runtime/ml_inference/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "runtime/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "runtime/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "runtime/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "runtime/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "runtime/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "runtime/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "runtime/ml_inference/pipeline.py": "2b078aede763339b6362e94fa3329deac80687d521ff6579cae608c5a8304ed9",
+    "runtime/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "runtime/verification/maximum-shape-local.json": "e4677e22ef0a72b8f01789337ae13662385c8dae5954b628386b1ad6596febf9",
+    "runtime/verification/development-integration.json": "17f814c5c1e8a73cccd74503ecbc749fbbc5dc8197ea43b110acebae7f20a998"
+  }
+}

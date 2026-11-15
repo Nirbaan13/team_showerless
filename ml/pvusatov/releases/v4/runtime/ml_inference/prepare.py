@@ -240,10 +240,10 @@ def _fits(source, options):
                 support=map_coordinates(good.astype(float),points,order=1,cval=0)
                 projected=map_coordinates(np.where(good,signal,0),points,order=1,cval=0)
                 usable=support>=.995
-                if not usable.any():
-                    raise InferenceError('no_coverage','An observation has no usable requested sky coverage')
                 projected=np.divide(projected,support,where=usable,out=np.full(projected.shape,np.nan))
-                projected-=np.nanmedian(projected)
+                # Preserve this physical epoch even when its entire requested
+                # footprint is masked; it contributes no fabricated signal.
+                if usable.any(): projected-=np.nanmedian(projected)
                 outlier=map_coordinates(((flags&OUTLIER_BIT)!=0).astype(float),points,order=1,cval=0)>0
                 bloom=map_coordinates(((flags&BLOOM_BIT)!=0).astype(np.uint8),points,order=0,cval=0).astype(bool)
                 midpoint=float(h['MJD-AVG']); date=str(h['DATE-AVG']).removesuffix('Z')
@@ -264,6 +264,8 @@ def _fits(source, options):
     images,times,frames,outlier,bloom=_ordered(np.stack(images),dates,ids,frame_ids,np.stack(outliers),np.stack(blooms))
     for frame in frames: frame.update(lookup[frame['frame_id']])
     warnings=['passband_variation_not_corrected','psf_matching_not_applied']
+    if not np.isfinite(images).any(axis=(1,2)).all():
+        warnings.append('observations_without_usable_requested_coverage')
     if len(frames)<len(rows): warnings.append('duplicate_observations_deduplicated')
     if any(frame['observation_id_source'].startswith('manifest:') for frame in frames):
         warnings.append('physical_observation_id_missing_manifest_fallback')
@@ -280,4 +282,6 @@ def prepare(request):
     _shape(stack.images)
     if len(stack.images)<options['min_epochs']:
         raise InferenceError('insufficient_observations','Insufficient independent observations for the requested minimum epochs')
+    if np.count_nonzero(np.isfinite(stack.images).any(axis=(1,2)))<options['min_epochs']:
+        raise InferenceError('insufficient_observations','Insufficient observations with usable requested sky coverage')
     return stack

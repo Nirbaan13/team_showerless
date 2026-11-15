@@ -46,8 +46,9 @@ def request(model, preset='comet-d2', **extra):
 
 def test_copied_sources_and_fixtures_match_frozen_inputs():
     for source in (ORIGINAL / 'ml_inference').glob('*.py'):
-        if source.name not in ('pipeline.py', 'model.py'):
+        if source.name not in ('pipeline.py', 'model.py', 'prepare.py'):
             assert (RUNTIME / 'ml_inference' / source.name).read_bytes() == source.read_bytes()
+    assert (RUNTIME / 'source_history/pre-coverage-v1/prepare.py').read_bytes() == (ORIGINAL / 'ml_inference/prepare.py').read_bytes()
     assert (RUNTIME / 'ml_inference/features.py').read_bytes() == (DETECTION / 'features.py').read_bytes()
     assert (RUNTIME / 'ml_inference/model.py').read_bytes() == (DETECTION / 'runtime_model.py').read_bytes()
     for source in (ORIGINAL / 'fixtures').iterdir():
@@ -249,3 +250,45 @@ def test_maximum_probe_timeout_is_bounded_before_source_or_model_access(tmp_path
     assert process.returncode == 2
     assert 'timeout' in process.stderr and not (tmp_path/'unused-proof.json').exists()
     assert 'FileNotFoundError' not in process.stderr
+
+
+def test_optimized_median_is_used_without_replacing_classical_reference(model, tmp_path):
+    pipeline = package()
+    original = pipeline.leave_one_out_residuals
+    calls = []
+    def observe(images):
+        calls.append(images.shape)
+        return original(images)
+    with patch.object(pipeline,'leave_one_out_residuals',side_effect=observe):
+        result = pipeline.run(request(model),tmp_path/'out')
+    assert len(calls) == 1
+    assert result['comparison']['shared_median_count'] >= 0
+
+
+@pytest.mark.parametrize('preset',['comet-d2','comet-d6','vesta-d3','vesta-d6'])
+def test_pre_median_runtime_has_exact_features_candidates_scores_and_pngs(preset, tmp_path):
+    archive = RUNTIME / 'source_history/pre-median-v1/runtime/ml_inference'
+    name = 'isolated_v4_pre_median_ml'
+    if name not in sys.modules:
+        spec = importlib.util.spec_from_file_location(name,archive/'__init__.py',submodule_search_locations=[str(archive)])
+        module = importlib.util.module_from_spec(spec);sys.modules[name] = module;spec.loader.exec_module(module)
+    before = __import__(name+'.pipeline',fromlist=['pipeline']);after = package()
+    matrices = []
+    for label,pipeline in [('before',before),('after',after)]:
+        extractor = pipeline.extract_features;captured = []
+        def observe(*args,**kwargs):
+            result = extractor(*args,**kwargs);captured.append(result);return result
+        with patch.object(pipeline,'extract_features',side_effect=observe):
+            result = pipeline.run(request(RELEASE/'model',preset),tmp_path/label)
+        matrices.append((captured[0]['features_v4'],captured[0]['candidate_ids'],result))
+    np.testing.assert_array_equal(matrices[0][0].view(np.uint64),matrices[1][0].view(np.uint64))
+    assert matrices[0][1] == matrices[1][1]
+    assert matrices[0][2] == matrices[1][2]
+    for resource in matrices[0][2]['resources']:
+        assert (tmp_path/'before'/resource['name']).read_bytes() == (tmp_path/'after'/resource['name']).read_bytes()
+
+
+def test_runtime_median_function_is_the_verified_prototype_without_math_edits():
+    import inspect
+    from ml.pvusatov.experiments.v4.detection.median_reference import leave_one_out_residuals
+    assert inspect.getsource(package().leave_one_out_residuals) == inspect.getsource(leave_one_out_residuals)

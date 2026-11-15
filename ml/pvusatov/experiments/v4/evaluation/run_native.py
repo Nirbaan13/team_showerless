@@ -51,6 +51,7 @@ def run_parent(task):
                     input_sources=ordered, frames=stack.frames, center_deg=center,
                     times_hours=stack.times.tolist(), registered_shape=list(stack.images.shape),
                     preparation_options=region, downloads_manifest=parent['downloads_manifest'],
+                    protocol_revision=frozen['protocol_revision'], finite_pixel_counts=np.isfinite(stack.images).sum(axis=(1,2)).tolist(),
                     control=control, control_diagnostics={'peak_cap_reached': control['peak_cap_reached']},
                     comparison='C13 and selected V4 scores on exactly the same measured candidate IDs',
                     limitations=['native ePSF source added after registration', 'fixed flux across passbands',
@@ -60,7 +61,7 @@ def run_parent(task):
     injection = SimpleNamespace(project_response=modules.native.project_response,
                                 add_injection=modules.native.add_projected_injection)
     try:
-        for identity, images, positions, error in modules.latent._native_latents(parent, stack, natives, injection, expected_shape, None):
+        for identity, images, positions, error in modules.injections.native_latents(parent, stack, natives, injection, expected_shape, modules.latent):
             if error:
                 raise ValueError('frozen injection failed: ' + json.dumps(error))
             tracks, measured = scene.measure(images, stack.times, stack, modules)
@@ -89,8 +90,9 @@ def run(freeze_path, anchor, output):
         raise ValueError('frozen run destination must be new and empty')
     tasks = [(str(Path(freeze_path).resolve()), anchor, str(output), parent['parent_id']) for parent in frozen['native']['parents']]
     results = []
+    transport = exact_module('v4_checked_worker_transport', frozen['sources']['worker_transport'], Path(freeze_path).parent)
     with ProcessPoolExecutor(max_workers=frozen['runtime']['workers'], mp_context=multiprocessing.get_context('fork')) as pool:
-        for future in as_completed([pool.submit(run_parent, task) for task in tasks]):
+        for future in as_completed([pool.submit(transport.safe_call, run_parent, task) for task in tasks]):
             record = future.result(); results.append(record)
             print(json.dumps(dict(parent_id=record['parent_id'], completed=True, sha256=record['sha256'])), flush=True)
     manifest = dict(schema_version=4, kind='native', scope=frozen['scope'], freeze_sha256=anchor,

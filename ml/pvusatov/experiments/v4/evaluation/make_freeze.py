@@ -22,7 +22,7 @@ def ref(path):
 
 def build(scope, candidate_dir, selection_record, output, *, workers=4,
           dev_parent='v4-train04', dev_native_seed=3800501,
-          dev_synthetic_start=3800600, dev_synthetic_fields=12, source_snapshot=None):
+          dev_synthetic_start=3800600, dev_synthetic_fields=12, source_snapshot=None, amendment=None):
     source = Path(__file__).with_name('freeze.py')
     validator = ModuleType('v4_freeze_builder_schema')
     exec(compile(source.read_bytes(), str(source), 'exec'), validator.__dict__)
@@ -32,6 +32,7 @@ def build(scope, candidate_dir, selection_record, output, *, workers=4,
     development = json.loads((data / 'development-handoff.json').read_text())
     if scope not in ('development', 'final'):
         raise ValueError('scope must be development or final')
+    if amendment is None: raise ValueError('explicit blinded coverage amendment is required')
     selected_ids = ['v4-final%02d' % i for i in range(1, 13)] if scope == 'final' else [dev_parent]
     groups = {row['parent_id']: row for row in acquisition['groups']}
     parents = {row['parent_id']: row for row in audit['parents']}
@@ -57,6 +58,7 @@ def build(scope, candidate_dir, selection_record, output, *, workers=4,
             if ref(target)['sha256'] != ref(ROOT / relative)['sha256']:
                 raise ValueError('source changed during snapshot')
     value = dict(schema_version=4, status='frozen', scope=scope, authorized_final=scope == 'final',
+                 protocol_revision='v4-blinded-coverage-repair-1',
                  source_root=str(source_root), runtime=dict(workers=workers, math_threads=1, max_frames=32, max_grid=512),
                  proposal_policy='c13-sigma08-v1', detector_settings=validator.PROFILE,
                  models={role:dict(artifact=ref(directory / 'ranker.onnx'), metadata=ref(directory / 'metadata.json'))
@@ -66,6 +68,7 @@ def build(scope, candidate_dir, selection_record, output, *, workers=4,
                                  acquisition_plan=ref(data / 'partition-plan.json'),
                                  data_audit=ref(data / 'complete-audit.json'),
                                  development_handoff=ref(data / 'development-handoff.json'),
+                                 amendment=ref(amendment),
                                  selection_record=ref(selection_record)),
                  native=dict(parents=native, excluded_physical_obsids=sorted(set(exclusions)),
                              region=dict(width_arcmin=6., height_arcmin=6., pixel_scale_arcsec=6.15, mask_policy='motion')),
@@ -95,4 +98,5 @@ if __name__ == '__main__':
     parser.add_argument('--dev-synthetic-start', type=int, default=3800600)
     parser.add_argument('--dev-synthetic-fields', type=int, default=12)
     parser.add_argument('--source-snapshot')
+    parser.add_argument('--amendment', required=True)
     print(json.dumps(build(**vars(parser.parse_args())), indent=2))

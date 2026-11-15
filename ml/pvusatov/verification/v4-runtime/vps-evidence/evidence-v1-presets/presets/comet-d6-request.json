@@ -1,0 +1,1 @@
+{"schema_version": 1, "analysis_id": "v4-hard-cgroup-comet-d6", "model_dir": "/probe/inference/models", "source": {"kind": "preset", "preset_id": "comet-d6", "path": "/probe/inference/fixtures/comet-d6.npz"}}

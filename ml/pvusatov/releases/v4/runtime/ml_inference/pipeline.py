@@ -8,6 +8,7 @@ from .detector import (difference_frames, filtered_evidence, _detect_peaks,
                        link_detections, find_candidates, baseline_score)
 from .model import load_ranker
 from .features import extract_features
+from .median_reference import leave_one_out_residuals
 from .render import stretch, write_png, track_images
 
 ALGORITHM_VERSION='motion-v4-unconfigured'
@@ -82,7 +83,7 @@ def run(request,output,progress=None):
     if progress: progress('inferencing')
     sigma=ranker.detector_profile['psf_sigma']
     settings['psf_sigma']=sigma
-    residuals=difference_frames(stack.images,leave_one_out=True)
+    residuals=leave_one_out_residuals(stack.images)
     # Only significance is reused. Discard smoothed/support maps each epoch.
     significance=np.stack([filtered_evidence(diff,np.isfinite(diff),sigma,.8)[1] for diff in residuals])
     peaks=[_detect_peaks(diff,np.isfinite(diff),sigma,settings['min_snr'],settings['max_peaks'],.8) for diff in residuals]

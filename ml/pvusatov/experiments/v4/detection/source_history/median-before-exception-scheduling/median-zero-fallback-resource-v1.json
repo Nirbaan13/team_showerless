@@ -1,0 +1,39 @@
+{
+  "designation": "Controlled exceptional-column resource probe; no runtime/source edit",
+  "measurements": [
+    {
+      "method": "legacy",
+      "input": "all finite positive zeros",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 15.754322175002017,
+      "rss_mib": 607.37109375,
+      "diagnostics": null,
+      "result_sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351"
+    },
+    {
+      "method": "sorted",
+      "input": "all finite positive zeros",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 16.34167264500138,
+      "rss_mib": 827.68359375,
+      "diagnostics": {
+        "mode": "sorted_float64_with_exceptional_column_fallback",
+        "fast_columns": 0,
+        "fallback_columns": 262144,
+        "finite_count_min": 32,
+        "finite_count_max": 32,
+        "fallback_policy": "any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic"
+      },
+      "result_sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351"
+    }
+  ],
+  "source_sha256": "39d65fc5890f99cc3a04a138bf800cd9345056f4c8afa4bc97e693e3f6e14976"
+}

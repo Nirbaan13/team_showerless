@@ -1,0 +1,84 @@
+[
+  {
+    "name": "spaceapps-v4-probe-presets-20261115",
+    "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+    "user": "app",
+    "host": {
+      "Memory": 1073741824,
+      "MemorySwap": 1073741824,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "Tmpfs": {
+        "/tmp": "rw,size=256m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v1-presets",
+        "Destination": "/evidence",
+        "RW": true
+      },
+      {
+        "Type": "volume",
+        "Source": "/var/lib/docker/volumes/7ebb86f9c22bc983423d61d107417d647d68e6b8b968b9b890426bf7ae88766b/_data",
+        "Destination": "/app/data",
+        "RW": true
+      },
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/bundle-v1",
+        "Destination": "/probe",
+        "RW": false
+      }
+    ],
+    "state": {
+      "Status": "exited",
+      "OOMKilled": false,
+      "ExitCode": 0
+    }
+  },
+  {
+    "name": "spaceapps-v4-probe-maximum-20261115",
+    "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+    "user": "app",
+    "host": {
+      "Memory": 1073741824,
+      "MemorySwap": 1073741824,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "Tmpfs": {
+        "/tmp": "rw,size=256m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/bundle-v1",
+        "Destination": "/probe",
+        "RW": false
+      },
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v1-maximum",
+        "Destination": "/evidence",
+        "RW": true
+      },
+      {
+        "Type": "volume",
+        "Source": "/var/lib/docker/volumes/f140313c7460379da5045c93b806fe4a97364b191be00a191d6eaeb1089e5595/_data",
+        "Destination": "/app/data",
+        "RW": true
+      }
+    ],
+    "state": {
+      "Status": "exited",
+      "OOMKilled": false,
+      "ExitCode": 0
+    }
+  }
+]

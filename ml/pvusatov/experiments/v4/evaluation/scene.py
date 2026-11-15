@@ -32,7 +32,7 @@ def science(frozen):
     source_module('ml_inference', refs['legacy_init'])
     legacy = {}
     for name in ('contracts', 'detector', 'model', 'prepare', 'render', 'pipeline'):
-        legacy[name] = source_module('ml_inference.' + name, refs['legacy_' + name])
+        legacy[name] = source_module('ml_inference.' + name, refs['prepare'] if name == 'prepare' else refs['legacy_' + name])
     source_module('training', refs['training_init'])
     native = source_module('training.evaluate_background', refs['native_psf'])
     simulator = source_module('training.simulate_v2', refs['simulate'])
@@ -49,12 +49,13 @@ def science(frozen):
     # All graph/feature/model policy checks above precede any FITS reader call.
     cache = source_module('v4_frozen_native_core', refs['native_cache'])
     latent = source_module('v3_frozen_native_latents', refs['native_latents'])
+    injections = source_module('v4_frozen_native_injections', refs['native_injections'])
     geometry = source_module('v4_frozen_geometry', refs['geometry'])
     paired = source_module('v4_frozen_paired_accounting', refs['paired'])
     return SimpleNamespace(prepare=legacy['prepare'].prepare, detector=legacy['detector'],
                            native=native, simulator=simulator, features=features,
                            baseline=baseline, candidate=candidate, cache=cache,
-                           latent=latent, geometry=geometry, paired=paired)
+                           latent=latent, injections=injections, geometry=geometry, paired=paired)
 
 
 def measure(images, times, stack, modules):

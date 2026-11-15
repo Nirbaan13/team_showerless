@@ -1637,13 +1637,14 @@ components:
       required: [model_id, sha256, feature_names, score_kind]
       properties:
         model_id: {type: string}
+        release_name: {type: string, description: Optional human-readable experimental release name; model_id and sha256 remain the artifact identity.}
         sha256: {type: string, pattern: '^[a-f0-9]{64}$'}
         feature_names: {type: array, items: {type: string}}
         score_kind: {type: string}
         status: {type: string}
         score_description: {type: string}
         training_manifest_sha256: {type: string}
-        model_family: {type: string, enum: [RandomForestClassifier, ExtraTreesClassifier]}
+        model_family: {type: string, enum: [RandomForestClassifier, ExtraTreesClassifier, HistGradientBoostingClassifier, RankNetTreeBoost, ListNetTreeBoost], description: Ranking model family. score_kind defines the uncalibrated score semantics.}
         detector_profile:
           type: object
           description: Artifact-bound training detector defaults; request thresholds and speed options remain configurable.
