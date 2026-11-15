@@ -493,3 +493,23 @@ test('candidate-only WISE link uses the detector declared by its preset', async 
   await expect(metadata.getByText(/^Detector: D5;/)).toBeVisible();
   await expect.poll(() => new URL(page.url()).searchParams.get('candidate')).toBe('cand-wise-0855-01');
 });
+
+for (const failure of ['preparation-502', 'download-failed'] as const) {
+  test(`issue #31: ${failure} cannot advertise phantom detector stacks`, async ({ page }) => {
+    const { state } = await backend(page, { download: 'failed' });
+    if (failure === 'preparation-502') await page.route('**/backend/api/observations/default?**', route => route.fulfill({ status: 502, json: { code: 'archive_http_error', message: 'Archive returned HTTP 502', retryable: true } }));
+    await openViewer(page);
+    await page.getByRole('button', { name: /^Band 2 \(/ }).click();
+    await page.getByRole('textbox', { name: 'RA (deg)', exact: true }).fill('250');
+    await page.getByRole('textbox', { name: 'Dec (deg)', exact: true }).fill('10');
+    await search(page);
+    await expect(page.getByRole('alert').filter({ hasText: /Archive|archive/i }).first()).toBeVisible();
+    const bands = page.locator('#tutorial-target-bands');
+    await expect(bands.getByText('No data', { exact: true })).toHaveCount(6);
+    await expect(bands.getByText(/exp · Stack/)).toHaveCount(0);
+    await expect(bands.getByRole('button', { name: /^Switch to Band/ })).toHaveCount(0);
+    await expect(bands.getByText(/Not Photographed/)).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Play Movie', exact: true })).toBeDisabled();
+    expect(state.analysisStarts).toBe(0);
+  });
+}

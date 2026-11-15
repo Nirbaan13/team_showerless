@@ -40,3 +40,18 @@ browser regressions passed together. Oxlint exits successfully with existing
 React warnings. The isolated Nginx suite passes all 13 native/ML routing cases.
 QA-006 remains an external acquisition incident: a fresh successful IRSA download
 has not been demonstrated. Release revision and live routing checks are recorded in the repair PR after merge.
+
+
+## Issue #31 follow-up
+
+The reported false green D3/D6 stack badges came from default exposure counts for
+an empty custom field. PR #30 already removed that fallback. Two additional browser
+regressions cover HTTP 502 during preparation and a failed download job: all six
+detectors stay without data, stack badges and stack-switch suggestions are absent,
+and no analysis starts. The public production UI at revision 0e768b8 passed the
+same failure scenario, alongside live public/native registry route checks.
+
+The ML release verifier now distinguishes native Scala capabilities from the
+separate persisted ML registry, while still rejecting retired generated image
+routes. Three HTTP contract tests pass. Hostinger waits longer for VPS delivery;
+the first release probe expired while the Docker image was still transferring.

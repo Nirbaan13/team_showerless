@@ -1,4 +1,4 @@
-"""Verify frontend API routing against the advertised Scala capabilities."""
+"""Verify native Scala processing, the separate ML registry, and retired image guards."""
 import argparse
 import json
 import time
@@ -28,21 +28,25 @@ def probe(base):
     status, models = request(base, '/api/analyses/models')
     assert status == 200 and isinstance(models, dict) and models.get('models'), ('models', status)
     checked = []
-    for path, feature in [
-        ('/api/motion/verifications', 'legacy_motion_service'),
-        ('/api/catalogue/kpis', 'community_catalogue'),
-        ('/api/catalogue/candidates', 'community_catalogue'),
+    # Native capabilities describe the Scala service, while Nginx routes the
+    # persisted registry/discussions to the separately deployed ML HTTP service.
+    for path, expected_type, required_key in [
+        ('/api/motion/verifications', list, None),
+        ('/api/catalogue/kpis', dict, 'total_candidates'),
+        ('/api/catalogue/candidates', dict, 'candidates'),
     ]:
-        advertised = capabilities[feature]['status']
-        assert advertised in {'supported', 'unsupported'}, (feature, advertised)
         status, body = request(base, path)
-        expected = 501 if advertised == 'unsupported' else 200
-        assert status == expected, (path, advertised, status)
-        if expected == 501:
-            assert body['code'] == 'unsupported_legacy_operation', (path, body)
-            assert body['retryable'] is False
-            assert body['motion_analysis_url'] == motion['endpoint']
-        checked.append(dict(path=path, advertised=advertised, http_status=status))
+        assert status == 200 and isinstance(body, expected_type), (path, status, body)
+        if required_key is not None:
+            assert required_key in body, (path, body)
+        checked.append(dict(path=path, service='persistent_ml_registry', http_status=status))
+    # Reconnecting registry operations must never reactivate generated images.
+    for path in ['/api/motion/coadd/PX-000001/motion.png', '/api/motion/cutout/render']:
+        status, body = request(base, path)
+        assert status == 501 and body['code'] == 'unsupported_legacy_operation', (path, status, body)
+        assert body['retryable'] is False
+        assert body['motion_analysis_url'] == motion['endpoint']
+        checked.append(dict(path=path, service='retired_image_operation', http_status=status))
     return dict(status='PASS', backend_revision=capabilities['revision'],
                 installed_models=len(models['models']), routes=checked)
 

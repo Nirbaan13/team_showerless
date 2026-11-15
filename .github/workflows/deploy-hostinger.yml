@@ -14,7 +14,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     name: Build & Sync to spherexblink.tech
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
               with urllib.request.urlopen(request, timeout=15) as response:
                   assert response.headers.get_content_type() == 'application/json', (path, response.headers.get_content_type())
                   return json.load(response)
-          deadline = time.monotonic() + 180
+          deadline = time.monotonic() + 600
           while True:
               try:
                   assert read('/frontend-version.json')['version'] == os.environ['GITHUB_SHA']

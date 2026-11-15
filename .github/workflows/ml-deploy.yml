@@ -43,5 +43,5 @@ jobs:
               -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$hosts" \
               -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
               "$VPS_USER@144.124.238.101" "deploy-ml $GITHUB_SHA"
-      - name: Verify frontend routes against advertised Scala capabilities
+      - name: Verify native science and persisted registry routes
         run: python3 ml/pvusatov/tools/ml_image_scope/verify_frontend_routes.py --base-url http://144.124.238.101:8080
