@@ -90,6 +90,23 @@ def canonical_tag(value):
     return value
 
 
+def docker_import_manifest_id(config_id, config_size, layers):
+    """Reconstruct containerd's compact schema-2 manifest for a classic save.
+
+    Descriptor order matches containerd/core/images/archive/importer.go. Every
+    digest and size supplied here is measured from the verified archive bytes.
+    """
+    document = {
+        'schemaVersion': 2,
+        'mediaType': 'application/vnd.docker.distribution.manifest.v2+json',
+        'config': {'mediaType': 'application/vnd.docker.container.image.v1+json',
+                   'digest': normalize_image_id(config_id), 'size': config_size},
+        'layers': layers,
+    }
+    encoded = json.dumps(document, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+    return 'sha256:' + hashlib.sha256(encoded).hexdigest()
+
+
 def validate_images(path, inventory, overlay_path=None):
     """Verify classic Docker-save IDs or OCI manifest -> config hash chains.
 
@@ -97,7 +114,7 @@ def validate_images(path, inventory, overlay_path=None):
     layers in memory. Docker 29 may report the manifest ID; Podman reports the
     linked config ID. Both remain recorded and individually verified.
     """
-    members, documents, hashes = {}, {}, {}
+    members, documents, hashes, prefixes = {}, {}, {}, {}
     legacy_records, oci_descriptors = [], []
     for archive_path in [path] + ([overlay_path] if overlay_path is not None else []):
         seen = set()
@@ -113,9 +130,12 @@ def validate_images(path, inventory, overlay_path=None):
                 digest = hashlib.sha256()
                 capture = member.size <= 8 * 1024 * 1024
                 chunks = []
+                prefix = b''
                 with archive.extractfile(member) as stream:
                     for chunk in iter(lambda: stream.read(1024 * 1024), b''):
                         digest.update(chunk)
+                        if not prefix:
+                            prefix = chunk[:10]
                         if capture:
                             chunks.append(chunk)
                 identity = 'sha256:' + digest.hexdigest()
@@ -123,6 +143,7 @@ def validate_images(path, inventory, overlay_path=None):
                 if member.name in hashes and hashes[member.name] != identity and not metadata:
                     raise ValueError('conflicting image payload across archives: ' + member.name)
                 hashes[member.name] = identity
+                prefixes[member.name] = prefix
                 members[member.name] = member
                 if member.name.startswith('blobs/sha256/') and identity != 'sha256:' + member.name.split('/')[-1]:
                     raise ValueError('OCI blob digest mismatch: ' + member.name)
@@ -144,7 +165,7 @@ def validate_images(path, inventory, overlay_path=None):
             raise ValueError('OCI descriptor digest/size/config link mismatch: ' + name)
         return documents[name], identity, name
 
-    configs, config_tags = {}, {}
+    configs, config_tags, import_ids = {}, {}, {}
     for record in legacy_records:
         name = record['Config']
         if name not in documents:
@@ -155,6 +176,13 @@ def validate_images(path, inventory, overlay_path=None):
         for layer in record.get('Layers', []):
             if layer not in members:
                 raise ValueError('missing saved image layer: ' + layer)
+        layer_descriptors = []
+        for layer in record.get('Layers', []):
+            media_type = 'application/vnd.docker.image.rootfs.diff.tar'
+            if prefixes[layer].startswith((b'\x1f\x8b', b'\x28\xb5\x2f\xfd')):
+                media_type += '.gzip'
+            layer_descriptors.append({'mediaType': media_type, 'digest': hashes[layer], 'size': members[layer].size})
+        import_ids.setdefault(identity, set()).add(docker_import_manifest_id(identity, members[name].size, layer_descriptors))
 
     oci_manifests = {}
     for descriptor in oci_descriptors:
@@ -202,13 +230,11 @@ def validate_images(path, inventory, overlay_path=None):
             raise ValueError(name + ': saved image revision differs from source inventory')
         expected['archive_config_id'] = config_id
         expected['archive_rootfs'] = config.get('rootfs', {}).get('diff_ids', [])
+        expected['archive_import_manifest_ids'] = sorted(import_ids.get(config_id, set()))
     return inventory
 
 
-def validate_loaded_image(expected, actual):
-    identity = normalize_image_id(actual['Id'])
-    if identity not in {expected['image_id'], expected['archive_config_id']}:
-        raise ValueError('loaded image ID differs from source manifest and verified config digest')
+def validate_loaded_configuration(expected, actual):
     if actual['Architecture'] != expected['architecture'] or actual['Os'] != expected['os']:
         raise ValueError('loaded image platform differs from release inventory')
     revision = (actual.get('Config', {}).get('Labels') or {}).get('org.opencontainers.image.revision')
@@ -217,6 +243,42 @@ def validate_loaded_image(expected, actual):
     layers = actual.get('RootFS', {}).get('Layers', [])
     if layers != expected['archive_rootfs']:
         raise ValueError('loaded image root filesystem layers differ from verified image config')
+
+
+def accepted_image_ids(expected):
+    return {expected['image_id'], expected['archive_config_id'],
+            *(normalize_image_id(item) for item in expected.get('archive_import_manifest_ids', []))}
+
+
+def validate_loaded_image(expected, actual):
+    validate_loaded_configuration(expected, actual)
+    identity = normalize_image_id(actual['Id'])
+    if identity not in accepted_image_ids(expected):
+        raise ValueError('loaded image ID differs from source/config digest and verified import manifest IDs')
+    return identity
+
+
+def verify_loaded_image(engine, expected, actual):
+    """Require an exact hash chain even if the daemon substitutes compressed layers.
+
+    Containerd may reuse existing compressed blobs instead of the uncompressed
+    layer bytes in a classic archive. Only for an unrecognized ID, export the
+    loaded tag and prove its manifest links to our exact saved config digest.
+    Matching labels or rootfs alone never authorize an unknown image ID.
+    """
+    validate_loaded_configuration(expected, actual)
+    identity = normalize_image_id(actual['Id'])
+    if identity in accepted_image_ids(expected):
+        return identity
+    with tempfile.TemporaryDirectory(prefix='spaceapps-demo-image-proof-') as stage:
+        archive = Path(stage) / 'loaded-image.tar'
+        engine.call('image', 'save', '--output', str(archive), expected['image'])
+        proof = dict(expected, image_id=identity)
+        validate_images(archive, {'services': {'loaded image': proof}})
+        if proof['archive_config_id'] != expected['archive_config_id']:
+            raise ValueError('loaded manifest does not reference the exact verified saved config digest')
+        if proof['archive_rootfs'] != expected['archive_rootfs']:
+            raise ValueError('loaded manifest root filesystem differs from the verified saved config')
     return identity
 
 
@@ -390,6 +452,17 @@ def seed_volume(engine, name, project, image, archive_path, prefix, identity):
                     '--volume', name + ':/target', image, '-c', script, prefix, identity, stdin=source)
 
 
+def enrich_runtime_inventory(directory, manifest):
+    """Derive new identity metadata for old releases, without rewriting them."""
+    inventory = manifest['inventory']
+    records = [*inventory['services'].values(), *inventory.get('source_images', [])]
+    if any('archive_import_manifest_ids' not in record for record in records):
+        directory = Path(directory)
+        overlay = directory / 'overlay-images.tar' if 'overlay-images.tar' in manifest['files'] else None
+        validate_images(directory / 'images.tar', inventory, overlay)
+    return inventory
+
+
 def install(directory, engine, project, port, action='up', timeout=240):
     project = validate_project(project)
     if not 1024 <= port <= 65535:
@@ -408,13 +481,14 @@ def install(directory, engine, project, port, action='up', timeout=240):
         engine.call(*command, 'down', env=environment)
         print('Demo stopped; seed and user changes remain in its project volumes.')
         return
+    enrich_runtime_inventory(directory, manifest)
     engine.call('image', 'load', '--input', str(directory / 'images.tar'))
     if 'overlay-images.tar' in manifest['files']:
         engine.call('image', 'load', '--input', str(directory / 'overlay-images.tar'))
     runtime_ids = {}
     for expected in [*inventory.values(), *manifest['inventory'].get('source_images', [])]:
         actual = engine.json('image', 'inspect', expected['image'])[0]
-        runtime_ids[expected['image']] = validate_loaded_image(expected, actual)
+        runtime_ids[expected['image']] = verify_loaded_image(engine, expected, actual)
     for service, variable in [('frontend', 'FRONTEND'), ('api', 'API'), ('ml-inference', 'ML')]:
         environment[variable + '_IMAGE'] = runtime_ids[inventory[service]['image']]
     identity = manifest['files']['seeddata.tar']['sha256']
