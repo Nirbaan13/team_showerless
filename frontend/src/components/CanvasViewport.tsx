@@ -76,6 +76,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const [showSourceLabels, setShowSourceLabels] = useState(false);
   const [zoom, setZoom] = useState(1.4);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -427,12 +428,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
       // 4. Object Name Label (for known / confirmed objects or selected candidate)
       const objectLabel =
-        cand.validationData?.objectName ||
-        cand.catalogId ||
-        cand.matchedCatalog ||
-        (cand.isKnownCatalogMatch ? 'Known Object' : `Candidate #${rank}`);
+        (cand.validationData?.objectName || cand.catalogId || cand.matchedCatalog || `Candidate #${rank}`).slice(0, 35);
 
-      if (objectLabel && (isSelected || cand.isKnownCatalogMatch || rank <= 4)) {
+      if (objectLabel && (isSelected || showSourceLabels)) {
         ctx.font = `bold ${9 / zoom}px "JetBrains Mono", monospace`;
         const labelWidth = ctx.measureText(objectLabel).width + 8 / zoom;
         const labelHeight = 13 / zoom;
@@ -525,6 +523,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const boxHalf = (isSelectedGaia ? 8.5 : 6.5) / zoom;
         ctx.strokeRect(gx - boxHalf, gy - boxHalf, boxHalf * 2, boxHalf * 2);
 
+        if (!showSourceLabels && !isSelectedGaia) return;
         // Label pill
         const tag = `${isSelectedGaia ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
@@ -586,6 +585,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.arc(wx, wy, rad, 0, Math.PI * 2);
         ctx.stroke();
 
+        if (!showSourceLabels && !isSelectedWise) return;
         const tag = `${isSelectedWise ? '★ ' : ''}${src.label}`;
         ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(69, 26, 3, 0.85)';
@@ -632,12 +632,14 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.moveTo(ex, ey - 10 / zoom);
         ctx.lineTo(ex, ey + 10 / zoom);
         ctx.stroke();
+        if (showSourceLabels || neoCandidate?.id === selectedCandidateId) {
         ctx.font = `bold ${8.5 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(8, 47, 73, 0.88)';
         const tw = ctx.measureText(ephLabel).width + 6 / zoom;
         ctx.fillRect(ex + 10 / zoom, ey + 6 / zoom, tw, 12 / zoom);
         ctx.fillStyle = '#7dd3fc';
         ctx.fillText(ephLabel, ex + 13 / zoom, ey + 15 / zoom);
+        }
       }
 
       // Also draw live-pulled CDS SIMBAD objects
@@ -652,6 +654,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         ctx.moveTo(sx, sy - 7 / zoom);
         ctx.lineTo(sx, sy + 7 / zoom);
         ctx.stroke();
+        if (!showSourceLabels) return;
         const sTag = `SIMBAD: ${simSrc.label}`;
         ctx.font = `bold ${7.5 / zoom}px "JetBrains Mono", monospace`;
         ctx.fillStyle = 'rgba(8, 47, 73, 0.85)';
@@ -673,7 +676,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         selectedCand.epochPositions[activeFrameIndex] ||
         selectedCand.epochPositions[0];
       const { cx: ux, cy: uy } = getCanvasCoords(pos.x, pos.y);
-      const uncatTag = `★ Selected Object: No Gaia/WISE/Horizons Match (${selectedCand.classification.replace('_', ' ')})`;
+      const uncatTag = 'Catalogue match unverified';
       ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
       const tw = ctx.measureText(uncatTag).width + 8 / zoom;
       ctx.fillStyle = 'rgba(88, 28, 135, 0.88)';
@@ -712,7 +715,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [bitmapReady, targetBitmapUrl, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
+  }, [bitmapReady, targetBitmapUrl, showSourceLabels, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -886,7 +889,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
       {/* Coordinate HUD / Scientist Telemetry HUD */}
       {bitmapReady && (isScientistMode ? (
-        <div className="absolute top-2.5 left-2.5 bg-paper-950/95 border-2 border-emerald-500/60 shadow-xl rounded-lg p-3 text-[11px] font-mono text-paper-200 pointer-events-none backdrop-blur-sm z-20 max-w-sm space-y-2">
+        <details aria-label="Image metadata" className="absolute top-14 left-2.5 bg-paper-950/95 border border-paper-700 shadow-xl rounded-lg p-2 text-[11px] font-mono text-paper-200 backdrop-blur-sm z-20 max-w-[min(20rem,calc(100%-1.25rem))] max-h-[45%] overflow-y-auto"
+          onPointerDown={e => e.stopPropagation()} onMouseDown={e => e.stopPropagation()} onClick={e => e.stopPropagation()} onTouchStart={e => e.stopPropagation()}>
+          <summary className="cursor-pointer text-emerald-300">Image metadata</summary>
+          <label className="flex gap-2 items-center my-2"><input type="checkbox" checked={showSourceLabels} onChange={e => setShowSourceLabels(e.target.checked)} />Show source labels</label>
+          {candidates.find(c => c.id === selectedCandidateId) && <p className="break-words py-1">Selected: {candidates.find(c => c.id === selectedCandidateId)?.validationData?.objectName || candidates.find(c => c.id === selectedCandidateId)?.catalogId || selectedCandidateId}</p>}
+
           <div className="flex items-center justify-between border-b border-paper-800 pb-1.5">
             <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -935,7 +943,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             <span>Grid: Equat. RA/Dec lines</span>
             <span className="text-emerald-500/80">Photometric cal: ±1.8%</span>
           </div>
-        </div>
+        </details>
       ) : (
         <div className="absolute top-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2.5 py-1 rounded text-[11px] font-mono text-paper-200 pointer-events-none flex items-center gap-3">
           <div>

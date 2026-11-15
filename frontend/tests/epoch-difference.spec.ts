@@ -241,3 +241,24 @@ test('live analysis displays the returned model family, ID, score meaning and se
   await expect(page.getByRole('button', { name: 'Random Forest', exact: true })).toHaveCount(0);
   await expect(page.getByText('Score 0.700', { exact: true })).toBeVisible();
 });
+
+
+for (const width of [1500, 390]) {
+  test(`image metadata stays compact and expandable at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    await backend(page);
+    await page.goto('/?tab=viewer&preset=3i-atlas');
+    await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+    const details = page.locator('details[aria-label="Image metadata"]');
+    await expect(details).toBeVisible();
+    await expect(details).not.toHaveAttribute('open', '');
+    const compact = await details.boundingBox();
+    expect(compact!.height).toBeLessThan(80);
+    expect(compact!.width).toBeLessThan(width - 20);
+    await details.locator('summary').click();
+    await expect(details).toHaveAttribute('open', '');
+    await expect(details.getByRole('checkbox', { name: 'Show source labels' })).not.toBeChecked();
+    await details.locator('summary').click();
+    await page.getByRole('button', { name: 'Zoom In', exact: true }).click();
+  });
+}

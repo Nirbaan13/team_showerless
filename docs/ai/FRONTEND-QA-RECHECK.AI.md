@@ -28,6 +28,6 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-014 | Pending | Persisted consensus consistency |
 | QA-015 | Pending | Remove unsupported channel selection |
 | QA-016 | Pending | Distinct UTC visit labels |
-| QA-017 | Pending | Compact readable HUD/labels |
+| QA-017 | Fixed locally | Browser checks at 1500×1000 and 390×844 pass: metadata starts collapsed, expands on demand, and zoom remains clickable. Catalogue labels opt in; only selected candidate names show by default, with the full selected name in metadata. |
 | QA-018 | Fixed locally | Two browser regressions pass: stored review selection starts no inference or timed ML progress; live results display server model ID/family/SHA and score meaning, preserving server rank. Removed percent probability styling, fabricated default score/speed, and unused generated stack images. |
 | QA-019 | Fixed locally | Main already rejected Dec 91; retained that fix. Two browser checks pass. Reject malformed whole values instead of parseFloat prefixes; document RA wrapping; accessible field errors. |
