@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { OBSERVATION_ERA_PRESETS, type ObservationEraSpec } from '../services/spherexBackendApi';
-import { DEFAULT_ARCHIVE, isArchiveBrowse, observationBounds, type ArchiveSelection, type ArchiveInventory } from '../services/archiveObservationsApi';
+import { DEFAULT_ARCHIVE, type ArchiveSelection } from '../services/archiveObservationsApi';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
-import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle, ChevronDown } from 'lucide-react';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle } from 'lucide-react';
 import { ObjectSearch } from './ObjectSearch';
 import { findSkyObject } from '../services/skyObjects';
 
@@ -14,9 +13,6 @@ interface LeftControlPanelProps {
   fov: FOVOption;
   onUpdateCoords: (ra: number, dec: number, archive?: ArchiveSelection, objectId?: string) => void;
   objectId?: string | null;
-  archiveSelection?: ArchiveSelection;
-  archiveInventory?: ArchiveInventory[];
-  archiveInventoryError?: string;
   onUpdateFov: (fov: FOVOption) => void;
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
@@ -47,9 +43,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   fov,
   onUpdateCoords,
   objectId,
-  archiveSelection = DEFAULT_ARCHIVE,
-  archiveInventory = [],
-  archiveInventoryError = '',
   onUpdateFov,
   selectedArray,
   onSelectArray,
@@ -72,20 +65,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
   const [coordError, setCoordError] = useState<string | null>(null);
-  const [archiveDraft, setArchiveDraft] = useState(archiveSelection);
   const selectedObject = findSkyObject(objectId);
-  React.useEffect(() => setArchiveDraft(archiveSelection), [archiveSelection]);
-  const archiveBrowse = isArchiveBrowse(archiveDraft);
-  const selectedIds = archiveDraft.provider.split(',').filter(Boolean);
-  const selectedProviders = selectedIds.map(id => archiveInventory.find(item => item.id === id));
-  const imageProviders = archiveInventory.filter(item => item.capabilities.availability === 'available' && item.capabilities.product_kinds.includes('image') && (item.capabilities.original || item.capabilities.cutout));
-  const allProviderIds = imageProviders.map(item => item.id).join(',');
-  const eraSelection = (era: ObservationEraSpec): ArchiveSelection => ({
-    provider: (era.id === 'all' ? imageProviders.map(item => item.id) : era.providers.filter(id => imageProviders.some(item => item.id === id))).join(','),
-    from: era.timeStartUtc?.slice(0, 10) || '',
-    through: era.timeEndUtc ? new Date(Date.parse(era.timeEndUtc) - 1).toISOString().slice(0, 10) : '',
-  });
-
   const detectorCoverage = React.useMemo(() => {
     return getDetectorCoverageForTarget(currentPresetId || null, frames);
   }, [currentPresetId, frames]);
@@ -110,13 +90,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       setCoordError('Declination must be between -90° and +90°');
       return;
     }
-    try { observationBounds(archiveDraft); } catch (error) {
-      setCoordError(error instanceof Error ? error.message : 'Invalid observation dates'); return;
-    }
-    if (archiveBrowse && (!selectedIds.length || selectedProviders.some(item => !item))) { setCoordError('Archive inventory is unavailable. Retry when the source can be verified.'); return; }
     setCoordError(null);
     const normalizedRa = ((parsedRa % 360) + 360) % 360;
-    onUpdateCoords(normalizedRa, parsedDec, archiveDraft, requestedObjectId);
+    onUpdateCoords(normalizedRa, parsedDec, DEFAULT_ARCHIVE, requestedObjectId);
   };
 
   return (
@@ -166,49 +142,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           </div>
 
-          <div>
-            <label htmlFor="field-archive" className="block text-paper-400 mb-1">Archive</label>
-            <select id="field-archive" value={archiveDraft.provider} onChange={e => { setArchiveDraft(value => ({ ...value, provider: e.target.value })); setCoordError(null); }}
-              className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1">
-              {!archiveInventory.some(item => item.id === 'irsa-spherex') && <option value="irsa-spherex">IRSA SPHEREx</option>}
-              {allProviderIds.includes(',') && <option value={allProviderIds}>All available image archives</option>}
-              {archiveDraft.provider.includes(',') && archiveDraft.provider !== allProviderIds && <option value={archiveDraft.provider}>Multiple selected archives</option>}
-              {!archiveDraft.provider && <option value="">Choose archives</option>}
-              {archiveDraft.provider && !archiveDraft.provider.includes(',') && archiveDraft.provider !== 'irsa-spherex' && !selectedProviders[0] && <option value={archiveDraft.provider} disabled>{archiveDraft.provider} · inventory unavailable</option>}
-              {archiveInventory.map(item => <option key={item.id} value={item.id}
-                disabled={item.capabilities.availability !== 'available' || !item.capabilities.product_kinds.includes('image') || (!item.capabilities.original && !item.capabilities.cutout)}>
-                {item.id === 'cadc' ? 'CADC' : item.id === 'irsa-spherex' ? 'IRSA SPHEREx' : item.id.toUpperCase()}
-                {item.capabilities.availability !== 'available' ? ` · ${item.capabilities.availability}` : !item.capabilities.product_kinds.includes('image') ? ' · no images' : (!item.capabilities.original && !item.capabilities.cutout) ? ' · delivery unavailable' : ''}
-              </option>)}
-            </select>
-            {archiveInventoryError && <p role="alert" className="text-amber-300">Archive inventory unavailable: {archiveInventoryError}</p>}
-            {selectedProviders.filter((item): item is ArchiveInventory => !!item).map(item => <div key={item.id} className="text-paper-400 mt-1">{item.id} · Time filter: {item.capabilities.time_filter}
-              {item.capabilities.restrictions?.map((restriction, i) => <p key={i}>{restriction}</p>)}
-            </div>)}
-          </div>
-          <details id="tutorial-target-epoch" className="group">
-            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-paper-400 [&::-webkit-details-marker]:hidden">
-              <ChevronDown aria-hidden="true" className="h-3 w-3 shrink-0 transition-transform group-open:rotate-180" />
-              <span>Observation Era</span>
-            </summary>
-            <div className="space-y-1 pt-1">
-            <div className="grid grid-cols-2 gap-1">
-              {OBSERVATION_ERA_PRESETS.map(era => <button key={era.id} type="button" disabled={era.id !== 'custom' && !eraSelection(era).provider}
-                onClick={() => {
-                  if (era.id === 'custom') document.getElementById('observed-from')?.focus();
-                  else setArchiveDraft(eraSelection(era));
-                  setCoordError(null);
-                }} title={era.description} className="rounded border border-paper-700 bg-paper-950 px-2 py-1 text-left disabled:opacity-40">
-                {era.label}<span className="block text-paper-400">{era.periodLabel}</span>
-              </button>)}
-            </div>
-            <label htmlFor="observed-from" className="block text-paper-400">Observed from</label>
-            <input id="observed-from" type="date" value={archiveDraft.from} onChange={e => { setArchiveDraft(value => ({ ...value, from: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
-            <label htmlFor="observed-through" className="block text-paper-400">Observed through</label>
-            <input id="observed-through" type="date" value={archiveDraft.through} onChange={e => { setArchiveDraft(value => ({ ...value, through: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
-            <p className="text-paper-400">Observation dates in UTC; end date includes the whole day. Apply source and period with Update Field.</p>
-            </div>
-          </details>
+          <a href="https://github.com/Nirbaan13/team_showerless/pull/38" target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-between gap-2 text-paper-400 hover:text-paper-200">
+            <span>Archive observations</span><span className="rounded border border-paper-700 px-1.5 py-0.5 text-[9px] uppercase tracking-wide">In future</span>
+          </a>
           <p id="coordinate-hint" className="text-[10px] text-paper-400">RA wraps into [0°, 360°). Dec must be −90° to +90°.</p>
           {coordError && (
             <div id="coordinate-error" role="alert" className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
@@ -228,7 +165,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               type="button"
               onClick={onRefreshCutout}
               className="btn-tactile px-3 py-2 bg-paper-800 hover:bg-paper-700 text-paper-200 hover:text-white rounded-lg font-mono text-[11px] font-bold border-2 border-paper-700 hover:border-paper-600 cursor-pointer flex items-center justify-center gap-1"
-              title="Refresh the last applied coordinates, archive and observation period"
+              title="Refresh the last applied coordinates"
             >
               <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
               <span>Refresh</span>
@@ -274,7 +211,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       </div>
 
       {/* 2. SPHEREx Infrared Filter Bands */}
-      <fieldset disabled={archiveBrowse} id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
+      <fieldset id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-400" />
@@ -353,7 +290,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
 
         {/* Warning Banner when an unobserved detector band is selected */}
-        {!archiveBrowse && selectedArray !== 'all' && detectorCoverage[selectedArray]?.status === 'none' && (
+        {selectedArray !== 'all' && detectorCoverage[selectedArray]?.status === 'none' && (
           <div className="mt-2 p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-[10px] font-mono text-amber-200">
             <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
@@ -381,11 +318,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         )}
 
         <p className="mt-2 text-[10px] text-paper-400">Images are selected by detector. Channel-resolved images are unavailable.</p>
-        {archiveBrowse && <p className="text-amber-300 mt-2">SPHEREx detector controls do not filter other instruments or generic archive products.</p>}
       </fieldset>
 
       {/* 3. Image Filtering & Movement Isolation */}
-      <fieldset disabled={archiveBrowse} id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
+      <fieldset id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Filter className="w-3.5 h-3.5 text-emerald-400" />
           {viewMode === 'scientist' ? 'Background Subtraction Algorithm' : 'Image Filter'}
