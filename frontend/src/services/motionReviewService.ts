@@ -163,11 +163,15 @@ export function resolveMotionReviewIdForPreset(
   if (!presetId) return null;
   if (presetId === '3i-atlas-d2') return 'december-d2';
   if (presetId === '3i-atlas') {
-    return selectedArray === 2 ? 'december-d2' : 'december-d6';
+    if (selectedArray === 2) return 'december-d2';
+    if (selectedArray === 6 || selectedArray === 'all') return 'december-d6';
+    return null;
   }
   if (presetId === 'vesta-d3') return 'vesta-d3';
-  if (presetId === 'vesta-d6') {
-    return selectedArray === 3 ? 'vesta-d3' : 'vesta-d6';
+  if (presetId === 'vesta-d6' || presetId.startsWith('vesta')) {
+    if (selectedArray === 3) return 'vesta-d3';
+    if (selectedArray === 6 || selectedArray === 'all') return 'vesta-d6';
+    return null;
   }
   return null;
 }

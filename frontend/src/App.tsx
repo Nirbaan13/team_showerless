@@ -248,7 +248,9 @@ export function App() {
   const frames = useMemo(() => {
     void motionReviewsRevision;
     if (currentPresetId) {
-      const arrayId = selectedArray === 'all' ? 6 : selectedArray;
+      const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
+      const defaultBand = preset?.recommendedArray ?? 6;
+      const arrayId = selectedArray === 'all' ? defaultBand : selectedArray;
       return getMockEpochFrames(currentPresetId, arrayId);
     }
     return customFrames ?? [];
@@ -267,7 +269,8 @@ export function App() {
       }
       const presetParam = params.get('preset');
       if (presetParam) {
-        return getMockCandidates(presetParam, 6);
+        const matched = NASA_TEST_PRESETS.find((p) => p.id === presetParam);
+        return getMockCandidates(presetParam, matched?.recommendedArray ?? 6);
       }
     }
     return getMockCandidates('3i-atlas', 6);
@@ -278,17 +281,17 @@ export function App() {
     return subscribeMotionReviews(() => {
       setMotionReviewsRevision((r) => r + 1);
       if (currentPresetId) {
-        const arrayId = selectedArray === 'all' ? 6 : selectedArray;
+        const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
+        const defaultBand = preset?.recommendedArray ?? 6;
+        const arrayId = selectedArray === 'all' ? defaultBand : selectedArray;
         const updated = getMockCandidates(currentPresetId, arrayId);
-        if (updated.length > 0) {
-          setCandidatesList(updated);
-          setSelectedCandidateId((prev) => {
-            if (!prev) return updated[0].id;
-            if (updated.some((c) => c.id === prev)) return prev;
-            if (findCandidateAcrossAllPresets(prev)) return prev;
-            return updated[0].id;
-          });
-        }
+        setCandidatesList(updated);
+        setSelectedCandidateId((prev) => {
+          if (!prev) return updated[0]?.id ?? null;
+          if (updated.some((c) => c.id === prev)) return prev;
+          if (findCandidateAcrossAllPresets(prev)) return prev;
+          return updated[0]?.id ?? null;
+        });
       }
     });
   }, [currentPresetId, selectedArray]);
@@ -297,17 +300,17 @@ export function App() {
     setSelectedArray(newArray);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
     if (currentPresetId) {
-      const arrayId = newArray === 'all' ? 6 : newArray;
+      const preset = NASA_TEST_PRESETS.find((p) => p.id === currentPresetId);
+      const defaultBand = preset?.recommendedArray ?? 6;
+      const arrayId = newArray === 'all' ? defaultBand : newArray;
       const updated = getMockCandidates(currentPresetId, arrayId);
-      if (updated.length > 0) {
-        setCandidatesList(updated);
-        setSelectedCandidateId((prev) => {
-          if (!prev) return updated[0].id;
-          if (updated.some((c) => c.id === prev)) return prev;
-          if (findCandidateAcrossAllPresets(prev)) return prev;
-          return updated[0].id;
-        });
-      }
+      setCandidatesList(updated);
+      setSelectedCandidateId((prev) => {
+        if (!prev) return updated[0]?.id ?? null;
+        if (updated.some((c) => c.id === prev)) return prev;
+        if (findCandidateAcrossAllPresets(prev)) return prev;
+        return updated[0]?.id ?? null;
+      });
     }
   };
 
@@ -1083,6 +1086,8 @@ export function App() {
               liveCatalog={liveCatalog}
               isCatalogLoading={isCatalogLoading}
               onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
+              currentPresetId={currentPresetId}
+              frames={frames}
               className="h-full w-full"
             />
           </div>
