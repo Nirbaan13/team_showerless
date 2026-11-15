@@ -446,7 +446,7 @@ export function App() {
     setArchiveSelection(selection);
     archive.reset();
     const array = request?.detector ?? selectedArray;
-    if (array === 'all') {
+    if (!browse && array === 'all') {
       setCurrentPresetId(null); setCustomFrames([]); setCandidatesList([]); setSelectedCandidateId(null);
       setSearchStatus({ source: 'error', message: 'Multi-detector composite unavailable. Select an individual detector.' });
       setMlAnalysisStatus({ state: 'idle', stage: 'No composite data', progress: 0, stepIndex: 1 });

@@ -106,10 +106,18 @@ provider failures, unsupported filters, empty/truncated results, ready/unavailab
 preview states, per-record eligibility, clearing stale results, share/reload
 coordinates and embed links. Existing native SPHEREx tests remain enabled.
 
-Final validation after integrating main PR 28: **47 Playwright tests passed**,
-including 13 archive-period tests and all existing tests. Lint and the production
+Latest main's public API delivery and scientific-provenance repair (PR 30) was
+also retained. Its native All Bands guard is scoped to native processing so it
+cannot block CADC browsing. That integration regression was reproduced before
+the fix and passed afterward.
+
+Verification: the full suite on the latest integrated main passed **57 tests**.
+After the final one-condition guard fix, all **14 archive-period tests** and the
+existing native All Bands control test passed. The final lint and production
 build passed; existing React lint and bundle-size warnings remain. Independent
-review found no remaining material issues.
+review found no remaining material issues. One parallel local attempt collided
+in Playwright's shared trace directory; the final archive rerun used an isolated
+output directory and passed.
 
 Commands: `npm --prefix frontend run lint`, `npm --prefix frontend run build`,
 `cd frontend && npm test`, and `git diff --check`. CI tests are asynchronous and

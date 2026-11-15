@@ -219,3 +219,11 @@ test('existing era shortcuts feed the same validated Update Field query and reta
   expect(state.queries[1].searchParams.get('providers')?.split(',')).toEqual(['cadc', 'eso']);
   await expect(page.getByText('eso: no provider outcome returned; completeness is unknown.', { exact: true })).toBeVisible();
 });
+
+test('archive discovery ignores a previous SPHEREx All Bands selection', async ({ page }) => {
+  const state = await backend(page); await open(page, '/?tab=viewer&detector=all');
+  await fields(page); await apply(page);
+  await expect(page.getByText('HST/server-a', { exact: true })).toBeVisible();
+  await expect(page.getByText('Multi-detector composite unavailable. Select an individual detector.', { exact: true })).toHaveCount(0);
+  expect(state.queries).toHaveLength(1); expect(state.analyses).toBe(0);
+});
