@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api/motion': process.env.MOTION_SERVICE_URL || env.MOTION_SERVICE_URL || 'http://127.0.0.1:8001',
+        '/api/catalogue': process.env.MOTION_SERVICE_URL || env.MOTION_SERVICE_URL || 'http://127.0.0.1:8001',
         '/detect': process.env.MOTION_SERVICE_URL || env.MOTION_SERVICE_URL || 'http://127.0.0.1:8001',
         '/backend': {
           target: process.env.VITE_API_PROXY || 'http://127.0.0.1:8000',

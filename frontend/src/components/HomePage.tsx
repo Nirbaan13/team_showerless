@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import type { TargetPreset } from '../types/spherex';
 import { NASA_TEST_PRESETS } from '../services/mockSpherexApi';
-import { ArrowRight, Compass, UserCheck } from 'lucide-react';
+import { ArrowRight, Compass, UserCheck, Database } from 'lucide-react';
 
 interface HomePageProps {
   onSearchCoordinates: (ra: number, dec: number) => void;
   onSelectPreset: (preset: TargetPreset) => void;
   onOpenFeed?: () => void;
+  onOpenCatalogue?: () => void;
+  onLaunchViewer?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onSearchCoordinates,
   onSelectPreset,
   onOpenFeed,
+  onOpenCatalogue,
+  onLaunchViewer,
 }) => {
   const [raInput, setRaInput] = useState('');
   const [decInput, setDecInput] = useState('');
@@ -115,9 +119,20 @@ export const HomePage: React.FC<HomePageProps> = ({
           ))}
         </div>
 
-        {/* Dedicated Sky Blue Button: Community Verification Feed */}
-        {onOpenFeed && (
-          <div className="anim-fall pt-1" style={{ animationDelay: '280ms' }}>
+        {/* Primary Action Buttons: Sky Viewer, Verification Feed, Candidate Catalogue */}
+        <div className="anim-fall pt-2 flex flex-wrap items-center justify-center gap-3 w-full" style={{ animationDelay: '280ms' }}>
+          {onLaunchViewer && (
+            <button
+              onClick={onLaunchViewer}
+              className="btn-tactile px-5 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-xs font-bold flex items-center gap-2 group cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all"
+            >
+              <Compass className="w-4 h-4 stroke-[2.5] text-gray-950 group-hover:rotate-45 transition-transform" />
+              <span>Launch Sky Viewer</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] text-gray-950" />
+            </button>
+          )}
+
+          {onOpenFeed && (
             <button
               onClick={onOpenFeed}
               className="btn-tactile px-5 py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-gray-950 border-2 border-black font-mono text-xs font-bold flex items-center gap-2 group cursor-pointer shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all"
@@ -126,8 +141,19 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>Community Verification Feed</span>
               <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] text-gray-950" />
             </button>
-          </div>
-        )}
+          )}
+
+          {onOpenCatalogue && (
+            <button
+              onClick={onOpenCatalogue}
+              className="btn-tactile px-5 py-2.5 rounded-xl bg-paper-900 hover:bg-paper-850 text-emerald-300 hover:text-white border-2 border-black font-mono text-xs font-bold flex items-center gap-2 group cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all"
+            >
+              <Database className="w-4 h-4 stroke-[2.5] text-emerald-400 group-hover:scale-110 transition-transform" />
+              <span>Candidate Catalogue</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

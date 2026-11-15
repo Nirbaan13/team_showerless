@@ -51,6 +51,8 @@ import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
+import { CatalogueDashboard } from './components/CatalogueDashboard';
+import { CandidateDetailPage } from './components/CandidateDetailPage';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
 import {
@@ -62,6 +64,7 @@ import {
   Menu,
   X,
   Share2,
+  Database,
 } from 'lucide-react';
 import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
 
@@ -70,13 +73,22 @@ export function App() {
   const isEmbedMode =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference'>(() => {
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference' | 'catalogue'>(() => {
     if (isEmbedMode) return 'viewer';
-    if (typeof window !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       const requestedTab = searchParams.get('tab');
-      if (requestedTab === 'viewer' || requestedTab === 'feed' || requestedTab === 'report' || requestedTab === 'home' || requestedTab === 'inference') {
+      if (
+        requestedTab === 'viewer' ||
+        requestedTab === 'catalogue' ||
+        requestedTab === 'feed' ||
+        requestedTab === 'report' ||
+        requestedTab === 'home' ||
+        requestedTab === 'inference'
+      ) {
         return requestedTab;
+      }
+      if (searchParams.has('candidate')) {
+        return 'catalogue';
       }
       if (searchParams.has('ra') && searchParams.has('dec')) {
         return 'viewer';
@@ -88,7 +100,15 @@ export function App() {
         return 'viewer';
       }
     }
-    return 'home';
+    return 'viewer';
+  });
+
+  const [selectedCatalogueCandidateId, setSelectedCatalogueCandidateId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('candidate') || null;
+    }
+    return null;
   });
   const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>(
     'canvas'
@@ -844,126 +864,119 @@ export function App() {
         />
       )}
 
-      {/* Top Header: Responsive with Mobile 3-Lines (Hamburger) Sidebar Menu */}
+      {/* Top Header: Seamless Responsive Navigation Bar */}
       {!isEmbedMode && (
-        <header className="h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
-        {/* Mobile Left: 3-Lines Hamburger Menu Button */}
-        <div className="flex items-center gap-2.5 md:hidden">
+        <header className="h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-2 sm:px-4 flex items-center justify-between text-xs select-none z-30 gap-2">
+          {/* Left: Hamburger (Mobile) + Logo & Direct Tab Navigation */}
+          <div className="flex items-center space-x-1.5 sm:space-x-3 min-w-0">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="btn-tactile-sm p-1.5 rounded-lg border-2 border-black bg-paper-950 text-paper-200 hover:text-emerald-400 cursor-pointer flex items-center justify-center shadow-sm"
-            aria-label="Open mobile navigation menu"
-            title="Open Menu"
+            className="md:hidden btn-tactile-sm p-1 rounded-lg border-2 border-black bg-paper-950 text-paper-300 hover:text-emerald-400 cursor-pointer flex items-center justify-center shrink-0"
+            title="Open Navigation Menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4" />
           </button>
 
           <div
             onClick={() => setActiveTab('home')}
-            className="flex items-center space-x-2 cursor-pointer group"
+            className="flex items-center space-x-2 cursor-pointer group shrink-0"
+            title="SPHEREx Blink Homepage"
           >
             <SpherexBlinkLogo size={22} />
-            <span className="font-bold text-white tracking-wide text-xs font-sans group-hover:text-emerald-400 transition-colors">
-              SPHEREx <span className="text-emerald-400">Blink</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Desktop Left: Logo & Direct Tab Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
-          <div
-            onClick={() => setActiveTab('home')}
-            className="flex items-center space-x-2.5 cursor-pointer group"
-          >
-            <SpherexBlinkLogo size={24} />
-            <span className="font-bold text-white tracking-wide text-xs font-sans group-hover:text-emerald-400 transition-colors">
+            <span className="font-bold text-white tracking-wide text-xs font-sans group-hover:text-emerald-400 transition-colors hidden xl:inline">
               SPHEREx <span className="text-emerald-400">Blink</span>
             </span>
           </div>
 
-          {/* Simple Tab Navigation */}
-          <nav className="flex items-center space-x-1.5 sm:space-x-2 font-mono text-[11px]">
+          {/* Core Tab Navigation: Always Visible Across All Screen Sizes */}
+          <nav className="flex items-center space-x-1 font-mono text-[11px] overflow-x-auto no-scrollbar py-0.5">
             <button
               type="button"
               onClick={() => setActiveTab('home')}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer shrink-0 ${
                 activeTab === 'home'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
-                  : 'bg-paper-900 text-paper-300 hover:text-white'
+                  : 'bg-paper-950 text-paper-300 hover:text-white'
               }`}
+              title="Homepage & Coordinate Search"
             >
-              <Home className="w-3.5 h-3.5" />
-              <span>Homepage</span>
+              <Home className="w-3.5 h-3.5 text-emerald-400 group-hover:text-gray-950" />
+              <span className="font-semibold">Home</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('viewer')}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer shrink-0 ${
                 activeTab === 'viewer'
                   ? 'bg-emerald-400 text-gray-950 font-bold'
-                  : 'bg-paper-900 text-paper-300 hover:text-white'
+                  : 'bg-paper-950 text-paper-300 hover:text-white'
               }`}
+              title="Interactive Sky Viewer"
             >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Sky Viewer</span>
+              <Compass className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-semibold">Sky Viewer</span>
             </button>
 
+            {/* Verification Feed Button */}
             <button
               type="button"
               onClick={() => setActiveTab('feed')}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
+              className={`btn-tactile-sm px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer shrink-0 ${
                 activeTab === 'feed'
-                  ? 'bg-sky-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(56,189,248,0.4)]'
-                  : 'bg-paper-900 text-sky-300 hover:text-white hover:bg-sky-950/40'
+                  ? 'bg-sky-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(56,189,248,0.4)]'
+                  : 'bg-paper-950 text-sky-300 hover:text-white border-sky-500/40'
               }`}
+              title="Community Verification Feed & Peer-Review Discussions"
             >
-              <UserCheck className="w-3.5 h-3.5" />
-              <span>Verification Feed</span>
+              <UserCheck className="w-3.5 h-3.5 text-sky-400" />
+              <span className="font-semibold">Verification Feed</span>
             </button>
 
+            {/* Candidate Catalog Button - directly beside Verification Feed */}
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCatalogueCandidateId(null);
+                setActiveTab('catalogue');
+              }}
+              className={`btn-tactile-sm px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer shrink-0 ${
+                activeTab === 'catalogue'
+                  ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                  : 'bg-paper-950 text-emerald-300 hover:text-white border-emerald-500/40'
+              }`}
+              title="PlanetX Persistent Candidate Catalog & External Submissions"
+            >
+              <Database className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-semibold">Candidate Catalog</span>
+            </button>
           </nav>
         </div>
 
-        {/* Mobile Right: Quick Experience Mode Toggle */}
-        <div className="flex md:hidden items-center gap-2">
-          <button
-            onClick={() => handleSetViewMode(viewMode === 'volunteer' ? 'scientist' : 'volunteer')}
-            className={`btn-tactile-sm px-2.5 py-1 rounded-lg border-2 border-black font-mono text-[10px] font-bold cursor-pointer transition-all ${
-              viewMode === 'volunteer'
-                ? 'bg-emerald-400 text-gray-950'
-                : 'bg-paper-950 text-emerald-400 border-emerald-500/50'
-            }`}
-            title="Tap to toggle between Volunteer and Scientist view"
-          >
-            {viewMode === 'volunteer' ? 'Volunteer' : 'Scientist'}
-          </button>
-        </div>
-
-        {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Right Controls: Volunteer/Scientist Toggle & Toolbar */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
-              className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer ${
                 viewMode === 'volunteer'
                   ? 'bg-emerald-400 text-gray-950'
                   : 'text-paper-400 hover:text-paper-100'
               }`}
-              title="Volunteer View: Intuitive starfield for citizen science & candidate triage"
+              title="Volunteer View"
             >
-              Volunteer
+              Vol
             </button>
             <button
               onClick={() => handleSetViewMode('scientist')}
-              className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
+              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer ${
                 viewMode === 'scientist'
                   ? 'bg-emerald-400 text-gray-950'
                   : 'text-paper-400 hover:text-paper-100'
               }`}
-              title="Scientist View: Astrophysics research HUD, celestial coordinates, and FITS telemetry"
+              title="Scientist View"
             >
-              Scientist
+              Sci
             </button>
           </div>
 
@@ -978,6 +991,11 @@ export function App() {
             candidateId={selectedCandidateId}
             presetId={currentPresetId}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
+            onOpenFeed={() => setActiveTab('feed')}
+            onOpenCatalogue={() => {
+              setSelectedCatalogueCandidateId(null);
+              setActiveTab('catalogue');
+            }}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />
@@ -1079,6 +1097,24 @@ export function App() {
                 <span>Verification Feed</span>
               </button>
 
+              <button
+                onClick={() => {
+                  setSelectedCatalogueCandidateId(null);
+                  setActiveTab('catalogue');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
+                  activeTab === 'catalogue'
+                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                    : 'bg-paper-900 text-emerald-400 hover:bg-paper-850'
+                }`}
+              >
+                <Database
+                  className={`w-4 h-4 ${activeTab === 'catalogue' ? 'text-gray-950' : 'text-emerald-400'}`}
+                />
+                <span>Candidate Catalog</span>
+              </button>
+
               {/* View Mode Switcher in Mobile Drawer */}
               <div className="pt-4 border-t border-paper-800 space-y-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block">
@@ -1159,13 +1195,25 @@ export function App() {
           onSearchCoordinates={handleSearchCoordinates}
           onSelectPreset={handleSelectPreset}
           onOpenFeed={() => setActiveTab('feed')}
+          onOpenCatalogue={() => {
+            setSelectedCatalogueCandidateId(null);
+            setActiveTab('catalogue');
+          }}
+          onLaunchViewer={() => setActiveTab('viewer')}
         />
       )}
 
       {/* 2. Dedicated Community Verification Feed View */}
       {activeTab === 'feed' && (
-        <div className="flex-1 overflow-y-auto bg-paper-950 p-3 sm:p-6 md:p-10 relative anim-fall select-none pb-20 sm:pb-10">
-          <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
+        <div className="relative flex-1 overflow-y-auto bg-paper-950 p-3 sm:p-6 md:p-10 anim-fall select-none pb-20 sm:pb-10">
+          {/* Subtle cosmic space hero backdrop */}
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-20"
+            style={{ backgroundImage: "url('/space-hero.jpg')" }}
+          />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/60 via-paper-950/80 to-paper-950 pointer-events-none" />
+          <div className="relative max-w-5xl mx-auto space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-paper-800 gap-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 sm:p-2.5 rounded-xl bg-sky-400/10 border-2 border-sky-400/40 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)] shrink-0">
@@ -1195,6 +1243,32 @@ export function App() {
             />
           </div>
         </div>
+      )}
+
+      {/* 2.5 PlanetX Persistent Scientific Catalogue & Candidate Detail */}
+      {activeTab === 'catalogue' && (
+        selectedCatalogueCandidateId ? (
+          <CandidateDetailPage
+            candidateId={selectedCatalogueCandidateId}
+            onBack={() => setSelectedCatalogueCandidateId(null)}
+            onOpenSkyViewer={(nRa, nDec, candId) => {
+              void handleSearchCoordinates(nRa, nDec);
+              if (candId) setSelectedCandidateId(candId);
+              setActiveTab('viewer');
+            }}
+            onOpenFeed={() => setActiveTab('feed')}
+          />
+        ) : (
+          <CatalogueDashboard
+            onSelectCandidate={(candId) => setSelectedCatalogueCandidateId(candId)}
+            onOpenSkyViewer={(nRa, nDec, candId) => {
+              void handleSearchCoordinates(nRa, nDec);
+              if (candId) setSelectedCandidateId(candId);
+              setActiveTab('viewer');
+            }}
+            onOpenFeed={() => setActiveTab('feed')}
+          />
+        )
       )}
 
       {/* 3. Dossier Report Page */}
@@ -1361,6 +1435,21 @@ export function App() {
               spectrumData={spectrumData}
               onUpdateCandidateClassification={handleUpdateCandidateClassification}
               onOpenDiscoveryReport={() => setActiveTab('report')}
+              onOpenFeed={() => setActiveTab('feed')}
+              onOpenCatalogue={(candId) => {
+                if (candId) {
+                  const norm = candId.toLowerCase();
+                  if (norm.startsWith('px-')) setSelectedCatalogueCandidateId(candId.toUpperCase());
+                  else if (norm.includes('atlas') || norm.includes('3i')) setSelectedCatalogueCandidateId('PX-000001');
+                  else if (norm.includes('vesta') || norm.includes('4')) setSelectedCatalogueCandidateId('PX-000002');
+                  else if (norm.includes('barnard')) setSelectedCatalogueCandidateId('PX-000003');
+                  else if (norm.includes('wise') || norm.includes('0855')) setSelectedCatalogueCandidateId('PX-000004');
+                  else setSelectedCatalogueCandidateId(candId);
+                } else {
+                  setSelectedCatalogueCandidateId(null);
+                }
+                setActiveTab('catalogue');
+              }}
               isScientistMode={viewMode === 'scientist'}
               ra={ra}
               dec={dec}

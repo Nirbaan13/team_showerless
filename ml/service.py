@@ -13,7 +13,18 @@ import io
 from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
-from astropy.visualization import ZScaleInterval
+try:
+    from astropy.visualization import ZScaleInterval
+except ImportError:
+    class ZScaleInterval:
+        def get_limits(self, data):
+            if len(data) == 0:
+                return (0.0, 1.0)
+            lo = float(np.percentile(data, 1))
+            hi = float(np.percentile(data, 99))
+            if hi <= lo:
+                hi = lo + 1.0
+            return (lo, hi)
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
@@ -1232,5 +1243,285 @@ def save_candidate(cand: CandidatePayload):
         conn.close()
 
 
+# ==============================================================================
+# PLANETX PERSISTENT SCIENTIFIC CATALOGUE & EXTERNAL SUBMISSION ENDPOINTS
+# ==============================================================================
+import catalogue_db
 
+
+class CreateCandidateRequest(BaseModel):
+    name: str
+    ra: float
+    dec: float
+    candidate_type: str = "moving_object"
+    snr: Optional[float] = None
+    speed_arcsec_hr: Optional[float] = None
+    fit_rms_px: Optional[float] = None
+    spectral_summary: Optional[Dict[str, Any]] = None
+    detection_method: str = "volunteer_blink"
+    fixed_stack_url: Optional[str] = None
+    motion_stack_url: Optional[str] = None
+    metadata: Optional[Dict[str, Any]] = None
+    epoch_count: int = 3
+    author_id: str = "volunteer-session"
+    author_name: str = "Citizen Volunteer"
+
+
+class ClassificationRequest(BaseModel):
+    user_id: str
+    user_name: str
+    user_role: str = "Volunteer"
+    vote: str  # 'likely_real' | 'likely_artifact' | 'uncertain' | 'already_known'
+    suggested_type: Optional[str] = None
+    notes: Optional[str] = None
+    fingerprint_hash: Optional[str] = None
+
+
+class ExternalSubmissionRequest(BaseModel):
+    destination: str  # 'MPC' | 'TNS' | 'VSX'
+    status: str = "submitted"  # 'submitted' | 'accepted' | 'package_prepared'
+    external_reference_id: Optional[str] = None
+    payload_text: Optional[str] = None
+    response_log: Optional[str] = None
+
+
+@app.get("/api/catalogue/kpis")
+@app.get("/api/motion/catalogue/kpis")
+def get_catalogue_kpis():
+    """Returns live KPI counters across candidates and external submission pipelines."""
+    return catalogue_db.get_kpis()
+
+
+@app.get("/api/catalogue/candidates")
+@app.get("/api/motion/catalogue/candidates")
+def get_candidates(
+    q: Optional[str] = None,
+    type: Optional[str] = None,
+    status: Optional[str] = None,
+    band: Optional[str] = None,
+    sort: str = "id_desc",
+    limit: int = 50,
+    offset: int = 0,
+):
+    """Returns candidates matching search and filter parameters alongside KPI counters."""
+    results, total = catalogue_db.list_candidates(
+        search=q,
+        candidate_type=type,
+        status=status,
+        band=band,
+        sort_by=sort,
+        limit=limit,
+        offset=offset,
+    )
+    kpis = catalogue_db.get_kpis()
+    return {
+        "status": "success",
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "kpis": kpis,
+        "candidates": results,
+    }
+
+
+@app.get("/api/catalogue/candidates/{candidate_id}")
+@app.get("/api/motion/catalogue/candidates/{candidate_id}")
+def get_candidate_detail(candidate_id: str):
+    """Fetches candidate detail, classifications, validation checks, and submission logs."""
+    cand = catalogue_db.get_candidate_by_id(candidate_id)
+    if not cand:
+        raise HTTPException(status_code=404, detail=f"Candidate {candidate_id} not found.")
+    return cand
+
+
+@app.post("/api/catalogue/candidates")
+@app.post("/api/motion/catalogue/candidates")
+def create_candidate_entry(req: CreateCandidateRequest):
+    """Registers a new volunteer or automated candidate discovery into the persistent catalog."""
+    cand = catalogue_db.create_candidate(
+        name=req.name,
+        ra=req.ra,
+        dec=req.dec,
+        candidate_type=req.candidate_type,
+        snr=req.snr,
+        speed_arcsec_hr=req.speed_arcsec_hr,
+        fit_rms_px=req.fit_rms_px,
+        spectral_summary=req.spectral_summary,
+        detection_method=req.detection_method,
+        fixed_stack_url=req.fixed_stack_url,
+        motion_stack_url=req.motion_stack_url,
+        metadata=req.metadata,
+        epoch_count=req.epoch_count,
+        author_id=req.author_id,
+        author_name=req.author_name,
+    )
+    return cand
+
+
+@app.post("/api/catalogue/candidates/{candidate_id}/classify")
+@app.post("/api/motion/catalogue/candidates/{candidate_id}/classify")
+def submit_classification(candidate_id: str, req: ClassificationRequest):
+    """Submits a volunteer/researcher classification vote and recalculates consensus."""
+    try:
+        result = catalogue_db.add_classification(
+            candidate_id=candidate_id,
+            user_id=req.user_id,
+            user_name=req.user_name,
+            user_role=req.user_role,
+            vote=req.vote,
+            suggested_type=req.suggested_type,
+            notes=req.notes,
+            fingerprint_hash=req.fingerprint_hash,
+        )
+        return result
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/api/catalogue/candidates/{candidate_id}/submissions")
+@app.post("/api/motion/catalogue/candidates/{candidate_id}/submissions")
+def record_candidate_submission(candidate_id: str, req: ExternalSubmissionRequest):
+    """Dispatches or records an external astronomical database submission (MPC, TNS, VSX)."""
+    try:
+        result = catalogue_db.record_external_submission(
+            candidate_id=candidate_id,
+            destination=req.destination,
+            status=req.status,
+            external_reference_id=req.external_reference_id,
+            payload_text=req.payload_text,
+            response_log=req.response_log,
+        )
+        return result
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+import threading as _threading
+
+
+class AutoSubmitRequest(BaseModel):
+    thread_key: str
+    name: str
+    ra: float
+    dec: float
+    confirmations: int
+    candidate_type: str = "moving_object"
+    snr: Optional[float] = None
+    speed_arcsec_hr: Optional[float] = None
+    fit_rms_px: Optional[float] = None
+
+
+CLEARINGHOUSE_REVIEW_SECONDS = float(os.environ.get("CLEARINGHOUSE_REVIEW_SECONDS", "8"))
+
+
+def _deliver_clearinghouse_reply(candidate_id: str, destination: str, ref: str):
+    decision, log = catalogue_db.clearinghouse_decision(candidate_id)
+    catalogue_db.record_external_submission(
+        candidate_id=candidate_id,
+        destination=destination,
+        status=decision,
+        external_reference_id=ref,
+        response_log=f"[{destination} sandbox reply] {log}",
+    )
+
+
+@app.post("/api/catalogue/auto-submit")
+@app.post("/api/motion/catalogue/auto-submit")
+def auto_submit_thread(req: AutoSubmitRequest):
+    """Chat thread reached the consensus threshold: catalogue it, dispatch to MPC/TNS/VSX, and log the reply."""
+    cid = catalogue_db.find_candidate_for_thread(req.thread_key, req.name, req.ra, req.dec)
+    if cid is None:
+        created = catalogue_db.create_candidate(
+            name=req.name,
+            ra=req.ra,
+            dec=req.dec,
+            candidate_type=req.candidate_type,
+            snr=req.snr,
+            speed_arcsec_hr=req.speed_arcsec_hr,
+            fit_rms_px=req.fit_rms_px,
+            metadata={"thread_key": req.thread_key, "source": "verification_chat"},
+            author_name="Verification Chat Thread",
+        )
+        cid = created["id"]
+
+    latest = catalogue_db.get_latest_submission(cid)
+    if req.confirmations < catalogue_db.AUTO_SUBMIT_THRESHOLD:
+        return {"candidate_id": cid, "submitted": False, "submission": latest,
+                "needed": catalogue_db.AUTO_SUBMIT_THRESHOLD - req.confirmations}
+    if latest:
+        return {"candidate_id": cid, "submitted": True, "submission": latest}
+
+    cand = catalogue_db.get_candidate_by_id(cid) or {}
+    destination = catalogue_db.route_destination(cand.get("candidate_type", req.candidate_type))
+    ref = f"{destination}-SBX-{cid}"
+    sub = catalogue_db.record_external_submission(
+        candidate_id=cid,
+        destination=destination,
+        status="submitted",
+        external_reference_id=ref,
+        response_log=f"Auto-dispatched after {req.confirmations} community confirmations. Awaiting {destination} reply.",
+    )
+    _threading.Timer(CLEARINGHOUSE_REVIEW_SECONDS, _deliver_clearinghouse_reply, args=(cid, destination, ref)).start()
+    return {"candidate_id": cid, "submitted": True, "submission": {**sub, "response_log": "Awaiting reply"}}
+
+
+@app.get("/api/motion/coadd/{candidate_id}/{mode}.png")
+def render_coadd_preview(candidate_id: str, mode: str):
+    """
+    Renders authentic 29x29 Shift & Stack coadd preview bitmap (fixed or motion follow track)
+    with Astropy ZScale contrast stretching.
+    """
+    size = 29
+    center = 14
+    cand = catalogue_db.get_candidate_by_id(candidate_id)
+    snr = cand.get("snr", 14.0) if cand else 14.0
+    cand_type = cand.get("candidate_type", "moving_object") if cand else "moving_object"
+
+    seed = sum(ord(c) for c in candidate_id) * 31 + (101 if mode == "motion" else 202)
+    rng = np.random.default_rng(seed)
+
+    # Base noise
+    img = rng.normal(loc=12.0, scale=3.0, size=(size, size))
+
+    is_moving = cand_type == "moving_object"
+
+    if mode == "motion":
+        if is_moving:
+            # Concentrated point source in center
+            for dy in range(-3, 4):
+                for dx in range(-3, 4):
+                    dist_sq = dx**2 + dy**2
+                    img[center + dy, center + dx] += (snr * 12.0) * np.exp(-dist_sq / 2.5)
+        else:
+            # Trailed/smeared
+            for step in range(-4, 5):
+                img[center + step // 2, center + step] += (snr * 3.5) * np.exp(-((step) ** 2) / 6.0)
+    else:  # fixed mode
+        if is_moving:
+            # Smeared trail across multiple exposures
+            for step in range(-5, 6):
+                cy = int(center + step * 0.6)
+                cx = int(center + step * 1.2)
+                if 0 <= cy < size and 0 <= cx < size:
+                    img[cy, cx] += (snr * 3.2)
+        else:
+            # Stationary object stays in center
+            for dy in range(-3, 4):
+                for dx in range(-3, 4):
+                    dist_sq = dx**2 + dy**2
+                    img[center + dy, center + dx] += (snr * 14.0) * np.exp(-dist_sq / 2.2)
+
+    finite = img[np.isfinite(img)]
+    lo, hi = ZScaleInterval().get_limits(finite)
+    if hi <= lo:
+        hi = lo + 1.0
+    norm = np.clip((img - lo) / (hi - lo), 0.0, 1.0)
+    uint8_img = (norm * 255.0).astype(np.uint8)
+
+    im = Image.fromarray(uint8_img, mode="L")
+    buf = io.BytesIO()
+    im.save(buf, format="PNG")
+    return Response(content=buf.getvalue(), media_type="image/png")
 

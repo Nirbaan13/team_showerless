@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
-import { Share2, Code, Check } from 'lucide-react';
+import { Share2, Code, Check, Database, UserCheck } from 'lucide-react';
 
 interface TopNavProps {
   ra: number;
@@ -12,6 +12,8 @@ interface TopNavProps {
   candidateId?: string | null;
   presetId?: string | null;
   onOpenEmbedModal: () => void;
+  onOpenFeed?: () => void;
+  onOpenCatalogue?: () => void;
   isViewerActive: boolean;
   isScientistMode?: boolean;
 }
@@ -26,6 +28,8 @@ export const TopNav: React.FC<TopNavProps> = ({
   candidateId,
   presetId,
   onOpenEmbedModal,
+  onOpenFeed,
+  onOpenCatalogue,
   isViewerActive,
   isScientistMode: _isScientistMode = false,
 }) => {
@@ -88,6 +92,30 @@ export const TopNav: React.FC<TopNavProps> = ({
         <Code className="w-3.5 h-3.5 text-ochre-400" />
         <span>Embed</span>
       </button>
+
+      {/* Verification Feed Button */}
+      {onOpenFeed && (
+        <button
+          onClick={onOpenFeed}
+          className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-sky-950/80 border-2 border-sky-500/60 text-sky-300 hover:text-white hover:bg-sky-900 text-[11px] font-mono flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(56,189,248,0.2)]"
+          title="Open Community Verification Feed & Peer-Review Discussions"
+        >
+          <UserCheck className="w-3.5 h-3.5 text-sky-400" />
+          <span className="font-semibold">Verification Feed</span>
+        </button>
+      )}
+
+      {/* Candidate Catalog Button - directly beside Verification Feed */}
+      {onOpenCatalogue && (
+        <button
+          onClick={onOpenCatalogue}
+          className="btn-tactile-sm px-2.5 py-1 rounded-lg bg-emerald-950/80 border-2 border-emerald-500/60 text-emerald-300 hover:text-white hover:bg-emerald-900 text-[11px] font-mono flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.25)]"
+          title="Open PlanetX Persistent Candidate Catalog & Scientific Submissions"
+        >
+          <Database className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="font-semibold">Candidate Catalog</span>
+        </button>
+      )}
     </div>
   );
 };

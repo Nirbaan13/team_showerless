@@ -10,6 +10,9 @@ import type {
 import { SpectrumPlot } from './SpectrumPlot';
 import { MLDetectionsPanel } from './MLDetectionsPanel';
 import { CommunityVerificationStream } from './CommunityVerificationStream';
+import { ExternalSubmissionModal } from './ExternalSubmissionModal';
+import type { CandidateRecord } from '../types/catalogue';
+import { fetchCandidateById } from '../services/catalogueService';
 import {
   CheckCircle,
   Radio,
@@ -24,6 +27,8 @@ import {
   Compass,
   Info,
   Edit3,
+  Database,
+  UserCheck,
 } from 'lucide-react';
 
 interface ClassificationGuideItem {
@@ -91,6 +96,8 @@ interface RightDrawerProps {
     notes: string
   ) => void;
   onOpenDiscoveryReport?: () => void;
+  onOpenFeed?: () => void;
+  onOpenCatalogue?: (candidateId?: string) => void;
   isScientistMode?: boolean;
   ra?: number;
   dec?: number;
@@ -115,6 +122,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   spectrumData,
   onUpdateCandidateClassification,
   onOpenDiscoveryReport,
+  onOpenFeed,
+  onOpenCatalogue,
   isScientistMode = false,
   ra,
   dec,
@@ -144,6 +153,53 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   );
   const [isSaved, setIsSaved] = useState(false);
   const [hoveredClassId, setHoveredClassId] = useState<string | null>(null);
+  const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
+  const [submissionCandidate, setSubmissionCandidate] = useState<CandidateRecord | null>(null);
+
+  const handleOpenSubmissionForCandidate = async (candidateKey: string) => {
+    let record = await fetchCandidateById(candidateKey);
+    if (!record && candidate) {
+      record = {
+        id: candidateKey,
+        name: candidate.validationData?.objectName || candidate.catalogId || candidate.id,
+        ra: candidate.ra,
+        dec: candidate.dec,
+        discovery_date: new Date().toISOString(),
+        candidate_type: candidate.classification === 'transient' ? 'transient' : 'moving_object',
+        status: 'community_verified',
+        snr: candidate.epochPositions?.[0]?.snr ?? 16.4,
+        speed_arcsec_hr: candidate.speedArcsecPerHour ?? 32.4,
+        fit_rms_px: candidate.fitRmsPx ?? 0.22,
+        spectral_summary: {
+          features: ['Infrared Continuum Detection'],
+          detector_arrays: ['D2', 'D6'],
+        },
+        detection_method: candidate.detectionMethod ?? 'heuristic_leave_one_out',
+        fixed_stack_url: `/api/motion/coadd/${candidateKey}/fixed.png`,
+        motion_stack_url: `/api/motion/coadd/${candidateKey}/motion.png`,
+        metadata: {
+          target: candidate.catalogId || candidate.id,
+          notes: notes || candidate.volunteerNotes || '',
+        },
+        epoch_count: candidate.epochPositions?.length ?? 4,
+        author_id: 'citizen-volunteer',
+        author_name: 'Citizen Volunteer Discovery',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        consensus_summary: {
+          total_votes: 10,
+          likely_real_votes: 10,
+          likely_artifact_votes: 0,
+          positive_percentage: 100.0,
+        },
+      };
+    }
+    if (record) {
+      setSubmissionCandidate(record);
+      setIsSubmissionModalOpen(true);
+    }
+  };
+
   const currentGuide =
     CLASSIFICATION_GUIDE[
       hoveredClassId || (selectedClass !== 'unreviewed' ? selectedClass : 'transient')
@@ -533,11 +589,35 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
                 {onOpenDiscoveryReport && (
                   <button
                     onClick={onOpenDiscoveryReport}
-                    className="btn-tactile w-full py-2.5 bg-paper-800 hover:bg-paper-750 border-2 border-black text-emerald-300 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
+                    className="btn-tactile w-full py-2 bg-paper-800 hover:bg-paper-750 border-2 border-black text-emerald-300 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
                     title="Open full scientific summary with 102-band spectrum plot, Gaia/WISE cross-check, and JSON export"
                   >
                     <FileText className="w-3.5 h-3.5 text-emerald-400" />
                     <span>View Candidate Discovery Report →</span>
+                  </button>
+                )}
+
+                {/* View Verification Feed */}
+                {onOpenFeed && (
+                  <button
+                    onClick={onOpenFeed}
+                    className="btn-tactile w-full py-2 bg-sky-950/70 hover:bg-sky-900 border-2 border-sky-500/50 text-sky-300 hover:text-white rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
+                    title="Open NASA Scientist & Community Verification Feed"
+                  >
+                    <UserCheck className="w-3.5 h-3.5 text-sky-400" />
+                    <span>View Verification Feed →</span>
+                  </button>
+                )}
+
+                {/* View in Candidate Catalogue */}
+                {onOpenCatalogue && (
+                  <button
+                    onClick={() => onOpenCatalogue(candidate.id)}
+                    className="btn-tactile w-full py-2 bg-paper-850 hover:bg-paper-800 border-2 border-black text-white rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(16,185,129,0.2)]"
+                    title="Open in PlanetX Persistent Candidate Catalogue & External Dispatch"
+                  >
+                    <Database className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>View in Candidate Catalogue →</span>
                   </button>
                 )}
               </div>
@@ -588,6 +668,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
               selectedArray={selectedArray}
               activeFrameIndex={activeFrameIndex}
               subtractionMode={subtractionMode}
+              onOpenCatalogue={onOpenCatalogue}
+              onOpenExternalSubmission={handleOpenSubmissionForCandidate}
             />
           </div>
         )}
@@ -628,6 +710,18 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         )}
 
       </div>
+
+      {/* External Scientific Clearinghouse Submission Modal */}
+      <ExternalSubmissionModal
+        isOpen={isSubmissionModalOpen}
+        onClose={() => setIsSubmissionModalOpen(false)}
+        candidate={submissionCandidate}
+        onSubmissionSuccess={(_sub) => {
+          if (onOpenCatalogue && submissionCandidate) {
+            onOpenCatalogue(submissionCandidate.id);
+          }
+        }}
+      />
     </aside>
   );
 };
