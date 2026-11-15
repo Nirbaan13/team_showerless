@@ -37,6 +37,12 @@ jobs:
         run: |
           npm run lint
           npm run build
+      - name: Install browser for viewer regression tests
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Test real viewer states and epoch difference rendering
+        working-directory: frontend
+        run: npm test
       - name: Check frontend deployment scripts
         run: bash -n ops/deploy-frontend.sh ops/bootstrap-frontend.sh ops/frontend/test-deploy.sh
       - name: Build exact frontend revision

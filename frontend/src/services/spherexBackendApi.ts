@@ -1,7 +1,7 @@
 /**
  * SPHEREx Backend Client Service
- * Aligns with backend/docs/openai/openapi.yaml on the configured VPS.
- * Includes resilient auto-fallback so the frontend NEVER crashes if the VPS goes offline.
+ * Aligns with backend/docs/openapi.yaml on the configured VPS.
+ * The live viewer preserves asynchronous job states and reports failures explicitly.
  */
 
 export interface SkyQueryRequest {
@@ -109,106 +109,124 @@ export function buildRealSkyCutoutPhotoUrl(
  * 1) GET /backend/api/observations/default (downloads real NASA IRSA SPHEREx FITS cutouts)
  * 2) POST /backend/api/analyses/motion (renders frame-000.png, difference-000.png, bloom-000.png & detects tracks)
  */
+export interface LiveCutoutProgress {
+  phase: 'downloading' | 'processing';
+  message: string;
+  ready: number;
+  total: number;
+}
+
+async function waitForLiveJob(signal?: AbortSignal): Promise<void> {
+  signal?.throwIfAborted();
+  await new Promise<void>((resolve, reject) => {
+    const finish = () => { signal?.removeEventListener('abort', abort); resolve(); };
+    const timer = setTimeout(finish, 1000);
+    const abort = () => { clearTimeout(timer); reject(signal?.reason ?? new DOMException('Aborted', 'AbortError')); };
+    signal?.addEventListener('abort', abort, { once: true });
+  });
+}
+
 export async function fetchLiveBackendCutoutAnalysis(params: {
   ra: number;
   dec: number;
   fovArcmin: number;
   detector: DetectorArrayId;
   signal?: AbortSignal;
-}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[] } | null> {
-  try {
-    const prep = await prepareRegion(
-      {
-        right_ascension_deg: params.ra,
-        declination_deg: params.dec,
-        width_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
-        height_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
-        detector_array: params.detector,
-      },
-      params.signal
-    );
-    if (!prep?.id) return null;
+  onProgress?: (progress: LiveCutoutProgress) => void;
+}): Promise<{ frames: SpherexEpochFrame[]; candidates: CandidateObject[]; modelName: string }> {
+  const prep = await prepareRegion(
+    {
+      right_ascension_deg: params.ra,
+      declination_deg: params.dec,
+      width_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
+      height_arcmin: Math.max(2, Math.min(15, params.fovArcmin)),
+      detector_array: params.detector,
+    },
+    params.signal
+  );
+  if (!prep?.id) throw new Error('invalid_response: Download acceptance returned no job ID');
 
-    let job = await startInference(
-      { download_id: prep.id },
-      { min_snr: 4.0, mask_policy: 'motion' },
-      params.signal
-    );
-
-    const deadline = Date.now() + 18000;
-    while (
-      job &&
-      !['completed', 'failed', 'cancelled'].includes(job.status) &&
-      Date.now() < deadline
-    ) {
-      await new Promise((r) => setTimeout(r, 800));
-      job = await getInference(job.id, params.signal);
-    }
-
-    if (job?.status !== 'completed' || !job.result || job.result.frames.length === 0) {
-      return null;
-    }
-
-    const res = job.result;
-    const frames: SpherexEpochFrame[] = res.frames.map((f, idx) => ({
-      frameId: f.frame_id || f.observation_id,
-      epochIndex: idx,
-      observationDate: f.midpoint_utc,
-      detectorArray: (f.detector || params.detector) as DetectorArrayId,
-      wavelengthMinUm: 0.75 + (params.detector - 1) * 0.7,
-      wavelengthMaxUm: 1.11 + (params.detector - 1) * 0.7,
-      channelIndex: params.detector * 16,
-      flaggedPixelPercentage: Number((f.outlier_fraction * 100).toFixed(2)),
-      cosmicRayHits: Math.max(2, Math.round(f.outlier_fraction * 200)),
-      isAvailable: true,
-      imageDataUrl: inferenceResource(f.image_url, job.id),
-      residualDataUrl: inferenceResource(f.difference_url, job.id),
-      bloomDataUrl: inferenceResource(f.bloom_url, job.id),
-      imageWidth: f.width,
-      imageHeight: f.height,
-      archiveUrl: f.access_url,
-      release: (f.release as 'DR1' | 'QR2' | 'QR3') || 'DR1',
-      coverage: f.coverage_fraction,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.0,
-        zodiBrightnessMjySr: 12.4,
-        snrEstimated: 18.5,
-      },
-    }));
-
-    const candidates: CandidateObject[] = res.candidates.slice(0, 8).map((c, idx) => ({
-      id: c.id || `track-${idx + 1}`,
-      ra: c.right_ascension_deg,
-      dec: c.declination_deg,
-      pixelX: c.detections[0]?.x ?? 128,
-      pixelY: c.detections[0]?.y ?? 128,
-      epochPositions: c.detections.map((d) => ({
-        epochIndex: d.frame_index,
-        x: d.x,
-        y: d.y,
-        flux: Math.max(10, (d.residual_snr ?? 8) * 1.6),
-        snr: Number((d.residual_snr ?? 8).toFixed(1)),
-      })),
-      classification: idx === 0 ? 'moving_object' : 'already_known',
-      confidence: idx === 0 ? 'high' : 'medium',
-      volunteerNotes: `Live NASA IRSA SPHEREx cutout track #${c.rank} (${c.detections.length} epochs, speed ${c.speed_arcsec_per_hour.toFixed(1)}″/h, RMS ${c.fit_rms_px.toFixed(2)} px).`,
-      isKnownCatalogMatch: false,
-      mlRank: c.rank,
-      mlScore: c.score ?? 0.9,
-      mlPriorityScore: c.score ?? 0.9,
-      heuristicRank: c.baseline_rank,
-      randomForestRank: c.rank,
-      fitRmsPx: c.fit_rms_px,
-      speedArcsecPerHour: c.speed_arcsec_per_hour,
-      motionStackDataUrl: inferenceResource(c.moving_stack_url, job.id),
-      fixedStackDataUrl: inferenceResource(c.stationary_stack_url, job.id),
-    }));
-
-    return { frames, candidates };
-  } catch {
-    return null;
+  // A failed archive request is not an empty scientific result. Wait for its
+  // real terminal state before starting an analysis that depends on its FITS.
+  let download = await getDownloadJob(prep.id, params.signal);
+  while (!['completed', 'completed_with_errors', 'failed'].includes(download.status)) {
+    params.onProgress?.({ phase: 'downloading', message: `Loading observations: ${download.status}`, ready: download.progress.ready_chunks, total: download.progress.total_chunks });
+    await waitForLiveJob(params.signal);
+    download = await getDownloadJob(prep.id, params.signal);
   }
+  if (download.status === 'failed' || download.chunks.some(chunk => chunk.status !== 'ready')) {
+    const error = download.errors?.[0] ?? download.chunks.find(chunk => chunk.error)?.error;
+    throw new Error(`${error?.code ?? 'download_failed'}: ${error?.message ?? 'The archive did not publish the requested observations'}`);
+  }
+  if (!download.chunks.length) throw new Error('no_observations: The archive returned no usable observations for this request');
+
+  params.onProgress?.({ phase: 'processing', message: 'Preparing difference images', ready: 0, total: 0 });
+  let job = await startInference({ download_id: prep.id }, { min_snr: 4.0, mask_policy: 'motion' }, params.signal);
+  while (!['completed', 'failed', 'cancelled'].includes(job.status)) {
+    params.onProgress?.({ phase: 'processing', message: `Preparing difference images: ${job.status}`, ready: 0, total: 0 });
+    await waitForLiveJob(params.signal);
+    job = await getInference(job.id, params.signal);
+  }
+  if (job.status !== 'completed') throw new Error(`${job.error?.code ?? 'processing_failed'}: ${job.error?.message ?? 'Difference-image analysis did not complete'}`);
+  if (!job.result?.frames?.length) throw new Error('no_image_data: Analysis returned no image frames');
+
+  const res = job.result;
+  const frames: SpherexEpochFrame[] = res.frames.map((f, idx) => ({
+    frameId: f.frame_id || f.observation_id,
+    epochIndex: idx,
+    observationDate: f.midpoint_utc,
+    detectorArray: (f.detector || params.detector) as DetectorArrayId,
+    wavelengthMinUm: 0.75 + (params.detector - 1) * 0.7,
+    wavelengthMaxUm: 1.11 + (params.detector - 1) * 0.7,
+    channelIndex: params.detector * 16,
+    flaggedPixelPercentage: Number((f.outlier_fraction * 100).toFixed(2)),
+    cosmicRayHits: Math.max(2, Math.round(f.outlier_fraction * 200)),
+    isAvailable: true,
+    imageDataUrl: inferenceResource(f.image_url, job.id),
+    residualDataUrl: inferenceResource(f.difference_url, job.id),
+    bloomDataUrl: inferenceResource(f.bloom_url, job.id),
+    imageWidth: f.width,
+    imageHeight: f.height,
+    archiveUrl: f.access_url,
+    release: (f.release as 'DR1' | 'QR2' | 'QR3') || 'DR1',
+    coverage: f.coverage_fraction,
+    headerMetadata: {
+      exposureTimeSec: 142.5,
+      airmass: 1.0,
+      zodiBrightnessMjySr: 12.4,
+      snrEstimated: 18.5,
+    },
+  }));
+
+  const candidates: CandidateObject[] = res.candidates.slice(0, 8).map((c, idx) => ({
+    id: c.id || `track-${idx + 1}`,
+    ra: c.right_ascension_deg,
+    dec: c.declination_deg,
+    pixelX: c.detections[0]?.x ?? 128,
+    pixelY: c.detections[0]?.y ?? 128,
+    epochPositions: c.detections.map((d) => ({
+      epochIndex: d.frame_index,
+      x: d.x,
+      y: d.y,
+      flux: Math.max(10, (d.residual_snr ?? 8) * 1.6),
+      snr: Number((d.residual_snr ?? 8).toFixed(1)),
+    })),
+    classification: idx === 0 ? 'moving_object' : 'already_known',
+    confidence: idx === 0 ? 'high' : 'medium',
+    volunteerNotes: `Live NASA IRSA SPHEREx cutout track #${c.rank} (${c.detections.length} epochs, speed ${c.speed_arcsec_per_hour.toFixed(1)}″/h, RMS ${c.fit_rms_px.toFixed(2)} px).`,
+    isKnownCatalogMatch: false,
+    mlRank: c.rank,
+    mlScore: c.score ?? 0.9,
+    mlPriorityScore: c.score ?? 0.9,
+    heuristicRank: c.baseline_rank,
+    randomForestRank: c.rank,
+    fitRmsPx: c.fit_rms_px,
+    speedArcsecPerHour: c.speed_arcsec_per_hour,
+    motionStackDataUrl: inferenceResource(c.moving_stack_url, job.id),
+    fixedStackDataUrl: inferenceResource(c.stationary_stack_url, job.id),
+  }));
+
+  return { frames, candidates, modelName: res.model.model_id };
 }
 
 /**
@@ -445,42 +463,14 @@ export async function requestObservationPreparation(params: {
 }
 
 /**
- * Fetches the current download job manifest with auto-fallback.
+ * Fetches the actual download manifest; failures must remain visible to callers.
  */
-export async function getDownloadJob(jobId: string): Promise<DownloadJobManifest> {
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3500);
-
-    const response = await fetch(`${BACKEND_BASE_URL}/api/downloads/${jobId}`, {
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch download job ${jobId} (status ${response.status})`);
-    }
-    return await response.json();
-  } catch (err) {
-    console.warn(`[SPHEREx API] Failed to fetch live job ${jobId}. Returning cached state.`, err);
-    return {
-      id: jobId,
-      status: 'completed',
-      mode: 'default',
-      query: { right_ascension_deg: 0, declination_deg: 0 },
-      observations: [],
-      chunks: [],
-      progress: {
-        discovery_complete: true,
-        total_chunks: 5,
-        ready_chunks: 5,
-        failed_chunks: 0,
-        unavailable_chunks: 0,
-      },
-      status_url: `/api/downloads/${jobId}`,
-      events_url: `/api/downloads/${jobId}/events`,
-    };
-  }
+export async function getDownloadJob(jobId: string, signal?: AbortSignal): Promise<DownloadJobManifest> {
+  const response = await fetch(`${BACKEND_BASE_URL}/api/downloads/${encodeURIComponent(jobId)}`, { signal, headers: { Accept: 'application/json' } });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(`${data?.code ?? 'download_request_failed'}: ${data?.message ?? `Download status returned HTTP ${response.status}`}`);
+  if (!data?.status || !Array.isArray(data.chunks) || !data.progress) throw new Error('invalid_response: Download status returned no valid manifest');
+  return data as DownloadJobManifest;
 }
 
 /**
