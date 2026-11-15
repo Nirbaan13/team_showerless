@@ -43,20 +43,5 @@ jobs:
               -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$hosts" \
               -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4 \
               "$VPS_USER@144.124.238.101" "deploy-ml $GITHUB_SHA"
-      - name: Verify frontend motion and catalogue proxies
-        run: |
-          python3 - <<'PY'
-          import json, time, urllib.request
-          paths = ['/api/motion/verifications', '/api/catalogue/kpis', '/api/catalogue/candidates']
-          for path in paths:
-              for attempt in range(30):
-                  try:
-                      with urllib.request.urlopen('http://144.124.238.101:8080' + path, timeout=10) as response:
-                          json.load(response)
-                      print('Frontend proxy verified:', path)
-                      break
-                  except Exception:
-                      if attempt == 29:
-                          raise
-                      time.sleep(2)
-          PY
+      - name: Verify frontend routes against advertised Scala capabilities
+        run: python3 ml/pvusatov/tools/ml_image_scope/verify_frontend_routes.py --base-url http://144.124.238.101:8080
