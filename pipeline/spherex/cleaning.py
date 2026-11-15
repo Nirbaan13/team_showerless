@@ -1,4 +1,8 @@
 
+import numpy as np
+from astropy.io import fits
+from astropy.wcs import WCS
+
 OUTLIER_BIT = 1 << 19
 SOURCE_BIT = 1 << 21
 BLOOM_BIT = 1 << 26
@@ -6,8 +10,10 @@ def allowed_bits(retain_outliers=False):
     return SOURCE_BIT | (OUTLIER_BIT if retain_outliers else 0)
 def build_mask(flags, signal, variance, retain_outliers=False):
     flags = np.asarray(flags).astype(np.int64)
+    signal = np.asarray(signal)
     good = ((flags & ~allowed_bits(retain_outliers)) == 0) & np.isfinite(signal)
     if variance is not None:
+        variance = np.asarray(variance)
         good &= np.isfinite(variance) & (variance > 0)
     return ~good
     

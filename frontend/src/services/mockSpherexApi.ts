@@ -879,6 +879,48 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   ];
 }
 
+/**
+ * Searches across all known presets and review datasets to find a candidate by ID or catalog name.
+ * Returns the candidate along with the matching presetId and array ID if found.
+ */
+export function findCandidateAcrossAllPresets(candidateId: string): {
+  candidate: CandidateObject;
+  presetId: string;
+  recommendedArray: number;
+} | null {
+  if (!candidateId) return null;
+  const candidatePresets: { id: string; array: number }[] = [
+    { id: '3i-atlas', array: 6 },
+    { id: '3i-atlas-d2', array: 2 },
+    { id: 'vesta-d6', array: 6 },
+    { id: 'vesta-d3', array: 3 },
+    { id: 'barnards-star', array: 2 },
+    { id: 'wise-0855', array: 6 },
+    { id: 'kh-15d', array: 4 },
+    { id: 'r-draconis', array: 6 },
+  ];
+
+  const searchNorm = candidateId.trim().toLowerCase();
+
+  for (const preset of candidatePresets) {
+    const list = getMockCandidates(preset.id, preset.array);
+    const found = list.find((c) => {
+      if (c.id.toLowerCase() === searchNorm) return true;
+      if (c.catalogId && c.catalogId.toLowerCase() === searchNorm) return true;
+      if (c.validationData?.objectName && c.validationData.objectName.toLowerCase() === searchNorm) return true;
+      return false;
+    });
+    if (found) {
+      return {
+        candidate: found,
+        presetId: preset.id,
+        recommendedArray: preset.array,
+      };
+    }
+  }
+  return null;
+}
+
 export interface CatalogOverlaySource {
   dx: number;
   dy: number;
