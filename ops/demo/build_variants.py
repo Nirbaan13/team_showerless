@@ -47,15 +47,15 @@ def build(inventory_path, output, executable='podman'):
         tag='localhost/spaceapps-demo-'+kind+'-real:'+revision
         with tempfile.TemporaryDirectory(prefix='spaceapps-real-variant-') as tmp:
             stage=Path(tmp)
-            common=f'FROM {base}\nARG APP_REVISION={revision}\nLABEL org.opencontainers.image.revision="${{APP_REVISION}}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
+            common=f'FROM {base}\nARG DEMO_REVISION={revision}\nLABEL org.opencontainers.image.revision="${{DEMO_REVISION}}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
             if kind=='frontend':
                 shutil.copytree(root/'frontend/dist',stage/'dist')
                 (stage/'dist/demo-mode.json').write_text(json.dumps({'profile':'v1-real','real_only':True,'revision':revision,'parent_image_id':original['image_id']}))
-                text=common+'ENV FRONTEND_REVISION=${APP_REVISION}\nRUN rm -rf /usr/share/nginx/html/*\nCOPY dist/ /usr/share/nginx/html/\nRUN printf \'{"version":"%s"}\\n\' "$APP_REVISION" > /usr/share/nginx/html/frontend-version.json\n'
+                text=common+'ENV FRONTEND_REVISION=${DEMO_REVISION}\nRUN rm -rf /usr/share/nginx/html/*\nCOPY dist/ /usr/share/nginx/html/\nRUN printf \'{"version":"%s"}\\n\' "$DEMO_REVISION" > /usr/share/nginx/html/frontend-version.json\n'
             else:
                 for rel in ['ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py']:
                     shutil.copy2(root/rel,stage/Path(rel).name)
-                text=common+'ENV APP_REVISION=${APP_REVISION} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\n'
+                text=common+'ENV APP_REVISION=${DEMO_REVISION} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\n'
             (stage/'Dockerfile').write_text(text)
             pull='--pull=never' if executable=='podman' else '--pull=false'
             format_args=['--format','docker'] if executable=='podman' else []
