@@ -1,0 +1,16 @@
+{
+  "authorized_at_utc": "2026-11-15T11:21:44.067784+00:00",
+  "freeze_sha256": "de2ab671569c46e7129cfe9954855cbd4ff83e78565866e9acf38bde006a47fb",
+  "authorized_domain": "synthetic",
+  "synthetic_seeds": [
+    4100000,
+    4100999
+  ],
+  "fields": 1000,
+  "selection_sha256": "eebadab67f344848f35b118605a6b09e5383189120f91ce70d1ca75f970e84e5",
+  "independent_source_review": "16puretests and opaque18-source exact-compile preflight; independent detector GO",
+  "native_authorized": false,
+  "native_status": "12planned parents/0acquired;1620planned injections unperformed",
+  "production_policy_change_authorized": false,
+  "required_before_execution": "Commit and push this freeze and authorization before simulator/model inference"
+}

@@ -1,0 +1,53 @@
+         5185463 function calls in 7.751 seconds
+
+   Ordered by: cumulative time
+   List reduced from 183 to 45 due to restriction <45>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    7.751    7.751 profile_reference.py:18(<lambda>)
+        1    0.002    0.002    7.751    7.751 features.py:219(extract_features)
+        1    1.318    1.318    7.749    7.749 features.py:149(extract)
+    68305    0.089    0.000    2.884    0.000 _function_base_impl.py:3914(median)
+    68305    0.178    0.000    2.795    0.000 _function_base_impl.py:3827(_ureduce)
+    68305    0.523    0.000    2.561    0.000 _function_base_impl.py:4003(_median)
+    16060    0.123    0.000    1.889    0.000 detector.py:29(features)
+   131403    0.218    0.000    1.425    0.000 fromnumeric.py:3737(mean)
+   139433    0.523    0.000    1.328    0.000 _methods.py:115(_mean)
+   449588    0.811    0.000    0.811    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+    23519    0.067    0.000    0.790    0.000 fromnumeric.py:3871(std)
+    23519    0.068    0.000    0.723    0.000 _methods.py:217(_std)
+    23519    0.405    0.000    0.643    0.000 _methods.py:148(_var)
+    68305    0.229    0.000    0.601    0.000 _utils_impl.py:407(_median_nancheck)
+   162952    0.365    0.000    0.432    0.000 _methods.py:73(_count_reduce_items)
+    68305    0.084    0.000    0.406    0.000 fromnumeric.py:732(partition)
+     6882    0.095    0.000    0.337    0.000 _function_base_impl.py:450(average)
+    68305    0.251    0.000    0.251    0.000 {method 'partition' of 'numpy.ndarray' objects}
+    49902    0.112    0.000    0.244    0.000 fromnumeric.py:66(_wrapreduction)
+    68585    0.105    0.000    0.241    0.000 numerictypes.py:418(issubdtype)
+    71746    0.108    0.000    0.227    0.000 {method 'any' of 'numpy.generic' objects}
+    31549    0.042    0.000    0.219    0.000 fromnumeric.py:3187(min)
+    19869    0.129    0.000    0.176    0.000 features.py:98(_coherent)
+    49694    0.036    0.000    0.160    0.000 {method 'sum' of 'numpy.ndarray' objects}
+    95838    0.046    0.000    0.157    0.000 _methods.py:55(_any)
+     8030    0.029    0.000    0.147    0.000 __init__.py:185(dumps)
+        1    0.006    0.006    0.140    0.140 features.py:125(_samples)
+    11471    0.070    0.000    0.131    0.000 _linalg.py:2598(norm)
+   530486    0.130    0.000    0.130    0.000 {built-in method builtins.issubclass}
+     8030    0.008    0.000    0.129    0.000 {method 'mean' of 'numpy.ndarray' objects}
+   137170    0.077    0.000    0.127    0.000 numerictypes.py:230(issubclass_)
+    49694    0.022    0.000    0.124    0.000 _methods.py:47(_sum)
+    22943    0.028    0.000    0.122    0.000 fromnumeric.py:2474(any)
+     8030    0.022    0.000    0.114    0.000 encoder.py:185(encode)
+    68305    0.111    0.000    0.111    0.000 {method 'take' of 'numpy.ndarray' objects}
+   381642    0.108    0.000    0.108    0.000 {built-in method numpy.asanyarray}
+     6882    0.033    0.000    0.107    0.000 _function_base_impl.py:420(_weights_are_valid)
+   392786    0.100    0.000    0.100    0.000 {built-in method builtins.isinstance}
+    22943    0.046    0.000    0.095    0.000 fromnumeric.py:86(_wrapreduction_any_all)
+     8030    0.083    0.000    0.083    0.000 encoder.py:207(iterencode)
+      136    0.001    0.000    0.069    0.001 _interpolation.py:374(map_coordinates)
+    36315    0.069    0.000    0.069    0.000 {built-in method numpy.asarray}
+       24    0.000    0.000    0.065    0.003 features.py:92(_sample)
+      136    0.064    0.000    0.064    0.000 {built-in method scipy.ndimage._nd_image.geometric_transform}
+    68306    0.061    0.000    0.061    0.000 {method 'flatten' of 'numpy.ndarray' objects}
+
+

@@ -124,7 +124,7 @@ def emit(identity,images,times,truth,prediction,control=None):
         attribution=s['accounting'].common_attribution(control_labels,control['kept'])
     rows=[]
     for i,((links,t),features,score,candidate_id,label,span)in enumerate(zip(prediction['pool'],prediction['features'],prediction['scores'],prediction['candidate_ids'],labels,spans)):
-        rows.append(dict(pool_index=i,candidate_id=candidate_id,links=[list(link)for link in links],epochs=list(t.epochs),
+        rows.append(dict(pool_index=i,candidate_id=candidate_id,links=[[int(epoch),int(index)]for epoch,index in links],epochs=list(t.epochs),
             positions_xy=[list(xy)for xy in t.positions_xy],features_v4=features,score=score,match=label,matched_truth_span_px=span,
             baseline_score=float(s['detector'].baseline_score(t))))
     counts={r:s['accounting'].policy_counts(labels,prediction['scores'],prediction['kept'][r],spans)for r in ROLES}
