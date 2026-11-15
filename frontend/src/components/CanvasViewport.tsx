@@ -361,6 +361,59 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           data[idx] = 250;
           data[idx + 1] = 250;
           data[idx + 2] = 250;
+          data[idx + 3] = 255;
+        }
+
+        // 4. Render candidate moving source so it visibly drifts across epochs when blinking!
+        candidates.forEach((cand) => {
+          const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+          if (pos) {
+            const cx = Math.round(pos.x);
+            const cy = Math.round(pos.y);
+            const candFlux = Math.max(160, Math.min(255, pos.flux * 4));
+            for (let dy = -3; dy <= 3; dy++) {
+              for (let dx = -3; dx <= 3; dx++) {
+                const px = cx + dx;
+                const py = cy + dy;
+                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
+                  const r2 = dx * dx + dy * dy;
+                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(candFlux * Math.exp(-r2 / 1.8)));
+                  const idx = (py * 256 + px) * 4;
+                  data[idx] = pVal;
+                  data[idx + 1] = pVal;
+                  data[idx + 2] = pVal;
+                  data[idx + 3] = 255;
+                }
+              }
+            }
+          }
+        });
+
+        // 5. In difference mode: stationary stars are removed; show the moving motion dipole
+        if (subtractionMode === 'epoch_difference') {
+          candidates.forEach((cand) => {
+            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+            const prevPos = cand.epochPositions[Math.max(0, activeFrameIndex - 1)];
+            if (pos && prevPos) {
+              const cx = Math.round(pos.x);
+              const cy = Math.round(pos.y);
+              for (let dy = -3; dy <= 3; dy++) {
+                for (let dx = -3; dx <= 3; dx++) {
+                  const px = cx + dx;
+                  const py = cy + dy;
+                  if (px >= 0 && px < 256 && py >= 0 && py < 256) {
+                    const r2 = dx * dx + dy * dy;
+                    const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(220 * Math.exp(-r2 / 1.5)));
+                    const idx = (py * 256 + px) * 4;
+                    data[idx] = pVal;
+                    data[idx + 1] = pVal;
+                    data[idx + 2] = pVal;
+                    data[idx + 3] = 255;
+                  }
+                }
+              }
+            }
+          });
         }
 
         offCtx.putImageData(imgData, 0, 0);
