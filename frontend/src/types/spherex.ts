@@ -192,8 +192,13 @@ export interface ViewerState {
   simulateNetworkLatency: boolean;
 }
 
+export interface ObservationLoadStatus {
+  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback';
+  message: string;
+}
+
 export interface MLAnalysisStatus {
-  state: 'idle' | 'running' | 'completed';
+  state: 'idle' | 'running' | 'completed' | 'failed';
   stage: string;
   progress: number;
   stepIndex: 1 | 2 | 3;

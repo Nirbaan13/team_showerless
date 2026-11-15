@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, ObservationLoadStatus } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
@@ -20,10 +20,7 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
-  searchStatus?: {
-    source: 'live' | 'fallback' | 'preset';
-    message: string;
-  };
+  searchStatus?: ObservationLoadStatus;
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
   isCatalogLoading?: boolean;
@@ -128,23 +125,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </form>
 
         {searchStatus && (
-          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
-            <span
-              className={`w-2 h-2 rounded-full shrink-0 ${
-                searchStatus.source === 'live'
-                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-                  : searchStatus.source === 'preset'
-                  ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8]'
-                  : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-              }`}
-            />
-            <span className="truncate text-paper-300" title={searchStatus.message}>
-              {searchStatus.source === 'live'
-                ? 'NASA IRSA / SPHEREx Stream'
-                : searchStatus.source === 'preset'
-                ? 'Benchmark Preset'
-                : 'SPHEREx Survey Stream'}
-            </span>
+          <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
+              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
+                : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
+                : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
+            </div>
+            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
           </div>
         )}
 
