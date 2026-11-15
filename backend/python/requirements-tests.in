@@ -1,0 +1,2 @@
+# HTTP boundary tests; scientific and pipeline dependencies use their existing locks.
+httpx==0.28.1

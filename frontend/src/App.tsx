@@ -11,28 +11,20 @@ import type {
   SpherexEpochFrame,
   VerificationSetting,
   MLAnalysisStatus,
+  ObservationLoadStatus,
 } from './types/spherex';
 import {
   getMockEpochFrames,
   getMockCandidates,
   findCandidateAcrossAllPresets,
   getMock102BandSpectrum,
-  resolveCoordinateCatalogContext,
-  fetchKnownCatalogObjectAtCoord,
+  NASA_TEST_PRESETS,
 } from './services/mockSpherexApi';
 import {
-  searchArchiveObservations,
-  convertObservationsToEpochFrames,
-  buildRealSkyCutoutPhotoUrl,
   fetchLiveBackendCutoutAnalysis,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
-  findMatchingPrecomputedReview,
-  convertReviewToEpochFrames,
-  convertReviewToCandidates,
-  searchLiveMotionMicroservice,
-  detectTracksViaMicroservice,
 } from './services/motionReviewService';
 import {
   fetchLiveCatalogForCoordinate,
@@ -53,6 +45,7 @@ import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { CatalogueDashboard } from './components/CatalogueDashboard';
 import { CandidateDetailPage } from './components/CandidateDetailPage';
+import { GuidedTutorialOverlay } from './components/GuidedTutorialOverlay';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
 import {
@@ -65,6 +58,7 @@ import {
   X,
   Share2,
   Database,
+  HelpCircle,
 } from 'lucide-react';
 import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
 
@@ -101,7 +95,7 @@ export function App() {
         return 'viewer';
       }
     }
-    return 'viewer';
+    return 'home';
   });
 
   const [selectedCatalogueCandidateId, setSelectedCatalogueCandidateId] = useState<string | null>(() => {
@@ -136,6 +130,21 @@ export function App() {
       localStorage.setItem('spherex_view_mode', mode);
     } catch {
       // sandboxed
+    }
+  };
+
+  // Interactive Guided Tutorial state (triggered exclusively from Home page)
+  const [isTutorialActive, setIsTutorialActive] = useState<boolean>(false);
+  const [tutorialStep, setTutorialStep] = useState<number>(0);
+
+  const handleStartTutorial = () => {
+    setActiveTab('viewer');
+    setIsTutorialActive(true);
+    setTutorialStep(0);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setMobileViewerPane('controls');
+    } else {
+      setMobileViewerPane('canvas');
     }
   };
 
@@ -179,7 +188,7 @@ export function App() {
       const cand = new URLSearchParams(window.location.search).get('candidate');
       if (cand) return cand;
     }
-    return '3I/ATLAS';
+    return currentPresetId ? '3I/ATLAS' : null;
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
@@ -204,17 +213,15 @@ export function App() {
   }, []);
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
-  const [searchStatus, setSearchStatus] = useState<{
-    source: 'live' | 'fallback' | 'preset';
-    message: string;
-  }>({
-    source: 'preset',
-    message: 'NASA Benchmark: 3I/ATLAS (D6)',
-  });
+  const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => currentPresetId
+    ? { source: 'preset', message: 'NASA Benchmark: 3I/ATLAS (D6)' }
+    : { source: 'idle', message: 'Update Field to request observations for these coordinates' });
+  const liveRequestRef = useRef<AbortController | null>(null);
+  useEffect(() => () => liveRequestRef.current?.abort(), []);
 
   const [mlAnalysisStatus, setMlAnalysisStatus] = useState<MLAnalysisStatus>({
-    state: 'completed',
-    stage: 'ML Track Ranking & Coadd Stacking Complete',
+    state: currentPresetId ? 'completed' : 'idle',
+    stage: currentPresetId ? 'ML Track Ranking & Coadd Stacking Complete' : 'No analysis requested',
     progress: 100,
     stepIndex: 3,
     tracksDetected: 10,
@@ -231,14 +238,11 @@ export function App() {
       const arrayId = selectedArray === 'all' ? 6 : selectedArray;
       return getMockEpochFrames(currentPresetId, arrayId);
     }
-    if (customFrames && customFrames.length > 0) {
-      return customFrames;
-    }
-    const arrayId = selectedArray === 'all' ? 3 : selectedArray;
-    return getMockEpochFrames('custom', arrayId);
+    return customFrames ?? [];
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
   const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
+    if (!currentPresetId) return [];
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const candParam = params.get('candidate');
@@ -429,302 +433,65 @@ export function App() {
   };
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
-  const handleSearchCoordinates = async (newRa: number, newDec: number) => {
+  const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }) => {
+    liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
+    const array = request?.detector ?? selectedArray;
+    const detNum = (array === 'all' ? 6 : array) as DetectorArrayId;
 
     setRa(newRa);
     setDec(newDec);
-    setSelectedCandidateId(null);
     setCurrentPresetId(null);
-    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
-    setCatalogRefreshCounter((c) => c + 1);
+    setSelectedCandidateId(null);
+    setCandidatesList([]);
+    setCustomFrames([]);
+    setActiveFrameIndex(0);
+    setIsPlaying(false);
+    setBlinkMode(false);
+    setIsLoading(false);
+    setCatalogRefreshCounter(c => c + 1);
     setActiveTab('viewer');
 
-    const fovArcmin = parseFloat(fov) || 5;
-    const detNum = (selectedArray === 'all' ? 6 : selectedArray) as DetectorArrayId;
-
-    // 1. Immediately load initial observation frames so the Sky Viewer opens right away
-    const matchingReview = findMatchingPrecomputedReview(newRa, newDec, selectedArray);
-    if (matchingReview) {
-      const revFrames = convertReviewToEpochFrames(matchingReview);
-      setCustomFrames(revFrames);
-      setActiveFrameIndex(0);
-      setSearchStatus({
-        source: 'preset',
-        message: `SPHEREx Cutout Stream: ${matchingReview.target} (${matchingReview.detector}) — Running ML Analysis...`,
-      });
-    } else {
-      const initialFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
-        ...f,
-        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
-      }));
-      setCustomFrames(initialFrames);
-      setActiveFrameIndex(0);
-      setSearchStatus({
-        source: 'live',
-        message: `Loaded Real Cutout @ RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}° — Simultaneous ML Analysis Running...`,
-      });
-    }
-
-    // Brief 200ms transition so user immediately enters the Sky Viewer while ML runs simultaneously
-    setIsLoading(true);
-    window.setTimeout(() => setIsLoading(false), 200);
-
-    // Start simultaneous visual ML progress steps
-    let resolvedCands: CandidateObject[] | null = null;
-    let resolvedFrames: SpherexEpochFrame[] | null = null;
-    let resolvedMessage: string | null = null;
-    let resolvedSource: 'live' | 'fallback' | 'preset' = 'live';
-    let timerFinished = false;
-    let jobFinished = false;
-
-    const finalizeMlInsights = () => {
-      if (mlRunIdRef.current !== runId || !timerFinished || !jobFinished) return;
-      if (resolvedFrames && resolvedFrames.length > 0) {
-        setCustomFrames(resolvedFrames);
-      }
-      const cands = resolvedCands && resolvedCands.length > 0 ? resolvedCands : [];
-      if (cands.length > 0) {
-        setCandidatesList(cands);
-        setSelectedCandidateId(cands[0].id);
-      }
-      if (resolvedMessage) {
-        setSearchStatus({
-          source: resolvedSource,
-          message: resolvedMessage,
-        });
-      }
-      const top = cands[0];
-      setMlAnalysisStatus({
-        state: 'completed',
-        stage: 'ML Track Ranking & Coadd Stacking Complete',
-        progress: 100,
-        stepIndex: 3,
-        tracksDetected: cands.length || 1,
-        modelName: 'SPHEREx RF-Ranker v2 + LOO',
-        latencyMs: Math.round(performance.now() - startTime),
-        topSpeedArcsecHr: top?.speedArcsecPerHour ?? 28.4,
-        topFitRmsPx: top?.fitRmsPx ?? 0.24,
-      });
-    };
-
-    triggerBackgroundMlProgress(
-      runId,
-      () => {
-        timerFinished = true;
-        finalizeMlInsights();
-      },
-      1800
-    );
-
-    // 2. Simultaneously execute the ML microservice & archive queries in the background
+    const controller = new AbortController();
+    liveRequestRef.current = controller;
+    setSearchStatus({ source: 'loading', message: 'Loading observations from NASA IRSA' });
+    setMlAnalysisStatus({ state: 'running', stage: 'Waiting for archive observations', progress: 0, stepIndex: 1 });
     try {
-      const controller = new AbortController();
-      const liveTimer = window.setTimeout(() => controller.abort('timeout'), 3500);
-      const liveResult = await searchLiveMotionMicroservice({
-        ra_deg: newRa,
-        dec_deg: newDec,
-        detector: detNum,
-        start_date: '2025-12-12',
-        end_date: '2025-12-16',
-        size_arcmin: Math.max(2, Math.min(30, fovArcmin)),
-        retain_outliers: true,
-        signal: controller.signal,
-      }).finally(() => window.clearTimeout(liveTimer));
-
-      if (!liveResult.isPrecomputedFallback) {
-        resolvedFrames = convertReviewToEpochFrames(liveResult.review);
-        resolvedCands = convertReviewToCandidates(liveResult.review);
-        resolvedSource = 'live';
-        resolvedMessage = `Live ML Track Detector: ${resolvedFrames.length} SPHEREx visits aligned (${resolvedCands.length} tracks)`;
-        jobFinished = true;
-        finalizeMlInsights();
-        return;
-      }
-    } catch {
-      // Proceed to precomputed or archive + /detect pipeline
-    }
-
-    if (matchingReview) {
-      resolvedFrames = convertReviewToEpochFrames(matchingReview);
-      resolvedCands = convertReviewToCandidates(matchingReview);
-      resolvedSource = 'preset';
-      resolvedMessage = `ML Analysis Complete: ${matchingReview.target} (${matchingReview.detector} · ${resolvedCands.length} tracks)`;
-      jobFinished = true;
-      finalizeMlInsights();
-      return;
-    }
-
-    // 2b. Try the deployed Scala + Python backend cutout pipeline (/backend/api/observations/default + /backend/api/analyses/motion)
-    try {
-      const backendCutout = await fetchLiveBackendCutoutAnalysis({
-        ra: newRa,
-        dec: newDec,
-        fovArcmin,
-        detector: detNum,
+      const result = await fetchLiveBackendCutoutAnalysis({
+        ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum, signal: controller.signal,
+        onProgress: progress => {
+          if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
+          setSearchStatus({ source: 'loading', message: progress.message });
+          setMlAnalysisStatus({ state: 'running', stage: progress.message,
+            progress: progress.total > 0 ? Math.round(100 * progress.ready / progress.total) : 0,
+            stepIndex: progress.phase === 'downloading' ? 1 : 2 });
+        },
       });
-      if (backendCutout && backendCutout.frames.length > 0) {
-        resolvedFrames = backendCutout.frames;
-        resolvedCands = backendCutout.candidates;
-        resolvedSource = 'live';
-        resolvedMessage = `Live Backend SPHEREx Cutouts: ${resolvedFrames.length} frames & ${resolvedCands.length} tracks`;
-        jobFinished = true;
-        finalizeMlInsights();
-        return;
-      }
-    } catch {
-      // Proceed to archive observation search + real sky cutout photo
+      if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
+      setCustomFrames(result.frames);
+      setCandidatesList(result.candidates);
+      const selected = result.candidates.find(candidate => candidate.id === request?.candidateId) ?? result.candidates[0];
+      setSelectedCandidateId(selected?.id ?? null);
+      setActiveFrameIndex(Math.max(0, Math.min(request?.frameIndex ?? 0, result.frames.length - 1)));
+      setSearchStatus({ source: 'live', message: `${result.frames.length} downloaded observations; analysis completed` });
+      setMlAnalysisStatus({ state: 'completed', stage: 'Difference-image analysis completed', progress: 100, stepIndex: 3,
+        tracksDetected: result.candidates.length, modelName: result.modelName, latencyMs: Math.round(performance.now() - startTime),
+        topSpeedArcsecHr: result.candidates[0]?.speedArcsecPerHour, topFitRmsPx: result.candidates[0]?.fitRmsPx });
+    } catch (error) {
+      if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
+      const message = error instanceof Error ? error.message : 'Observation request failed';
+      setCustomFrames([]);
+      setCandidatesList([]);
+      setSelectedCandidateId(null);
+      setSearchStatus({ source: 'error', message });
+      setMlAnalysisStatus({ state: 'failed', stage: message, progress: 0, stepIndex: 1 });
     }
-
-    // 3. Query archive observations + /detect ML microservice in parallel
-    try {
-      const searchResult = await searchArchiveObservations({
-        right_ascension_deg: newRa,
-        declination_deg: newDec,
-        width_arcmin: fovArcmin,
-        height_arcmin: fovArcmin,
-        detector_array: selectedArray === 'all' ? undefined : selectedArray,
-      });
-
-      resolvedFrames = convertObservationsToEpochFrames(
-        searchResult.observations,
-        (selectedArray === 'all' ? 2 : selectedArray) as DetectorArrayId,
-        newRa,
-        newDec,
-        fovArcmin
-      );
-      resolvedSource = searchResult.isFallback ? 'fallback' : 'live';
-      resolvedMessage = searchResult.isFallback
-        ? `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`
-        : `Live NASA IRSA + Real Cutout: ${searchResult.totalFound} exposures analyzed`;
-    } catch {
-      resolvedFrames = getMockEpochFrames('custom', detNum).map((f, idx) => ({
-        ...f,
-        imageDataUrl: buildRealSkyCutoutPhotoUrl(newRa, newDec, fovArcmin, idx),
-      }));
-      resolvedSource = 'fallback';
-      resolvedMessage = `Real Cutout Photo + ML Analysis on RA ${newRa.toFixed(2)}°, Dec ${newDec.toFixed(2)}°`;
-    }
-
-    const syntheticStack = Array.from({ length: 4 }, (_, eIdx) => {
-      const grid = Array.from({ length: 32 }, () => Array.from({ length: 32 }, () => 0.1));
-      const px = Math.min(30, 8 + eIdx * 5);
-      const py = Math.min(30, 22 - eIdx * 3);
-      grid[py][px] = 18.0;
-      return grid;
-    });
-    const [detectRes, simbadMatch] = await Promise.all([
-      detectTracksViaMicroservice({
-        images: syntheticStack,
-        times: [0, 1.5, 3.0, 4.5],
-      }),
-      fetchKnownCatalogObjectAtCoord(newRa, newDec),
-    ]);
-    const detectedTop = detectRes?.candidates?.[0];
-    const coordCatalog = resolveCoordinateCatalogContext(newRa, newDec);
-    const matchedObjectName =
-      simbadMatch?.mainId ||
-      coordCatalog.knownObjectName ||
-      coordCatalog.wiseId;
-
-    const customCandidate: CandidateObject = {
-      id: `cand-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
-      ra: newRa,
-      dec: newDec,
-      pixelX: 256,
-      pixelY: 256,
-      mlRank: 1,
-      mlScore: 0.94,
-      mlPriorityScore: 0.94,
-      heuristicRank: 1,
-      randomForestRank: 1,
-      detectionMethod: 'heuristic_leave_one_out',
-      fitRmsPx: detectedTop?.fit_rms_px ? Number(detectedTop.fit_rms_px.toFixed(3)) : 0.24,
-      speedArcsecPerHour: detectedTop ? Number((detectedTop.speed_px_per_time * 6.15).toFixed(1)) : 28.4,
-      epochPositions: [
-        { epochIndex: 0, x: 246, y: 248, flux: 32.5, snr: detectedTop?.snr?.[0] ? Number(detectedTop.snr[0].toFixed(1)) : 16.4 },
-        { epochIndex: 1, x: 251, y: 252, flux: 33.1, snr: detectedTop?.snr?.[1] ? Number(detectedTop.snr[1].toFixed(1)) : 16.8 },
-        { epochIndex: 2, x: 256, y: 256, flux: 32.7, snr: detectedTop?.snr?.[2] ? Number(detectedTop.snr[2].toFixed(1)) : 16.5 },
-        { epochIndex: 3, x: 261, y: 260, flux: 33.4, snr: detectedTop?.snr?.[3] ? Number(detectedTop.snr[3].toFixed(1)) : 17.0 },
-        { epochIndex: 4, x: 266, y: 264, flux: 32.9, snr: 16.7 },
-      ],
-      classification: 'moving_object',
-      confidence: 'high',
-      isKnownCatalogMatch: true,
-      matchedCatalog: coordCatalog.ephemerisLabel ? 'NEO Ephemeris' : 'WISE',
-      catalogId: simbadMatch
-        ? `${simbadMatch.mainId} (${simbadMatch.otype})`
-        : matchedObjectName,
-      volunteerNotes: `Coordinates RA ${newRa.toFixed(4)}°, Dec ${newDec.toFixed(4)}°. Catalog cross-match at exact coordinates: ${
-        simbadMatch ? `${simbadMatch.mainId} (${simbadMatch.otype})` : coordCatalog.wiseId
-      }. Simultaneous ML track detector linked 4-epoch trajectory (S/N ~16.8, RMS ${
-        detectedTop?.fit_rms_px ? detectedTop.fit_rms_px.toFixed(2) : '0.24'
-      } px).`,
-      properMotionMasYr: { pmRa: -110.2, pmDec: 295.4 },
-    };
-
-    const customStarCandidate: CandidateObject = {
-      id: `star-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
-      ra: newRa + 0.008,
-      dec: newDec - 0.006,
-      pixelX: 192,
-      pixelY: 184,
-      mlRank: 2,
-      mlScore: 0.42,
-      mlPriorityScore: 0.42,
-      heuristicRank: 2,
-      randomForestRank: 2,
-      detectionMethod: 'heuristic_leave_one_out',
-      fitRmsPx: 0.48,
-      speedArcsecPerHour: 0.9,
-      epochPositions: [
-        { epochIndex: 0, x: 192, y: 184, flux: 24.0, snr: 13.8 },
-        { epochIndex: 1, x: 192, y: 184, flux: 23.8, snr: 13.5 },
-        { epochIndex: 2, x: 192, y: 184, flux: 24.2, snr: 14.0 },
-        { epochIndex: 3, x: 192, y: 184, flux: 23.9, snr: 13.7 },
-        { epochIndex: 4, x: 192, y: 184, flux: 24.1, snr: 13.9 },
-      ],
-      classification: 'already_known',
-      confidence: 'high',
-      isKnownCatalogMatch: true,
-      matchedCatalog: 'Gaia DR3',
-      catalogId: coordCatalog.gaiaId,
-      volunteerNotes: `Stationary astrometric reference star at (${(newRa + 0.008).toFixed(4)}°, ${(newDec - 0.006).toFixed(4)}°) matched to ${coordCatalog.gaiaId}: stays sharp in Fixed Sky Spot stack, smears when shifted.`,
-    };
-
-    const customArtifactCandidate: CandidateObject = {
-      id: `art-${newRa.toFixed(2)}-${newDec.toFixed(2)}`,
-      ra: newRa - 0.009,
-      dec: newDec + 0.007,
-      pixelX: 310,
-      pixelY: 212,
-      mlRank: 3,
-      mlScore: 0.18,
-      mlPriorityScore: 0.18,
-      heuristicRank: 3,
-      randomForestRank: 3,
-      detectionMethod: 'heuristic_leave_one_out',
-      fitRmsPx: 2.35,
-      speedArcsecPerHour: 4.1,
-      epochPositions: [
-        { epochIndex: 0, x: 310, y: 212, flux: 29.0, snr: 8.6 },
-        { epochIndex: 1, x: 315, y: 205, flux: 4.1, snr: 1.4 },
-      ],
-      classification: 'artifact',
-      confidence: 'medium',
-      isKnownCatalogMatch: false,
-      catalogId: 'Detector Spike #3',
-      volunteerNotes: 'Single-exposure cosmic-ray hit: does not reinforce along a multi-epoch track.',
-    };
-
-    resolvedCands = [customCandidate, customStarCandidate, customArtifactCandidate];
-    jobFinished = true;
-    finalizeMlInsights();
   };
 
   // Handler when user clicks a benchmark preset on Home page
   const handleSelectPreset = (preset: TargetPreset) => {
+    liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
 
@@ -789,47 +556,35 @@ export function App() {
 
   // Deep-link jump from a verification comment or panel directly into Sky Viewer
   const handleSelectVerificationTarget = (setting: VerificationSetting) => {
-    const runId = ++mlRunIdRef.current;
-    const startTime = performance.now();
-    const detId = setting.selectedArray === 'all' ? 6 : setting.selectedArray;
-    if (setting.targetPresetId) {
-      setCurrentPresetId(setting.targetPresetId);
-      setCustomFrames(null);
-      const cands = getMockCandidates(setting.targetPresetId, detId);
-      setCandidatesList(cands);
-    }
-    setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
-    setRa(setting.ra);
-    setDec(setting.dec);
     setFov(setting.fov);
     setSelectedArray(setting.selectedArray);
-    setActiveFrameIndex(setting.activeFrameIndex);
     setSubtractionMode(setting.subtractionMode);
-    setSelectedCandidateId(setting.candidateId);
     setDrawerControlledTab('chat');
+    const preset = NASA_TEST_PRESETS.find(item => item.id === setting.targetPresetId);
+    if (!preset) {
+      void handleSearchCoordinates(setting.ra, setting.dec, {
+        fov: setting.fov, detector: setting.selectedArray, frameIndex: setting.activeFrameIndex, candidateId: setting.candidateId,
+      });
+      return;
+    }
+    liveRequestRef.current?.abort();
+    ++mlRunIdRef.current;
+    const detector = setting.selectedArray === 'all' ? 6 : setting.selectedArray;
+    const frames = getMockEpochFrames(preset.id, detector);
+    const candidates = getMockCandidates(preset.id, detector);
+    setCurrentPresetId(preset.id);
+    setCustomFrames(null);
+    setCandidatesList(candidates);
+    setSelectedCandidateId(candidates.find(candidate => candidate.id === setting.candidateId)?.id ?? candidates[0]?.id ?? null);
+    setRa(preset.raDeg);
+    setDec(preset.decDeg);
+    setActiveFrameIndex(Math.max(0, Math.min(setting.activeFrameIndex, frames.length - 1)));
+    setIsPlaying(false);
+    setBlinkMode(false);
+    setIsLoading(false);
+    setSearchStatus({ source: 'preset', message: `Precomputed benchmark: ${preset.name}` });
+    setMlAnalysisStatus({ state: 'completed', stage: 'Precomputed benchmark analysis', progress: 100, stepIndex: 3, tracksDetected: candidates.length });
     setActiveTab('viewer');
-
-    triggerBackgroundMlProgress(
-      runId,
-      () => {
-        const cands = setting.targetPresetId
-          ? getMockCandidates(setting.targetPresetId, detId)
-          : candidatesList;
-        const top = cands[0];
-        setMlAnalysisStatus({
-          state: 'completed',
-          stage: 'ML Track Ranking & Coadd Stacking Complete',
-          progress: 100,
-          stepIndex: 3,
-          tracksDetected: cands.length || 1,
-          modelName: 'SPHEREx RF-Ranker v2 + LOO',
-          latencyMs: Math.round(performance.now() - startTime),
-          topSpeedArcsecHr: top?.speedArcsecPerHour ?? 175.7,
-          topFitRmsPx: top?.fitRmsPx ?? 0.22,
-        });
-      },
-      1350
-    );
   };
 
   const handleToggleOverlay = (key: keyof CatalogOverlayState) => {
@@ -956,6 +711,18 @@ export function App() {
 
         {/* Right Controls: Volunteer/Scientist Toggle & Toolbar */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Tutorial Button (Available ONLY on Home page directly beside the Vol/Sci toggle) */}
+          {activeTab === 'home' && (
+            <button
+              onClick={handleStartTutorial}
+              className="btn-tactile-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border-2 border-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-gray-950 font-bold font-mono text-xs flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.35)] cursor-pointer transition-all shrink-0"
+              title="Launch Guided Sky Viewer Tutorial"
+            >
+              <HelpCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Tutorial</span>
+            </button>
+          )}
+
           <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
@@ -1147,6 +914,20 @@ export function App() {
                     <span className="text-[9px] font-normal opacity-80">Research HUD</span>
                   </button>
                 </div>
+
+                {/* Tutorial trigger button on mobile drawer - available ONLY on Home page */}
+                {activeTab === 'home' && (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleStartTutorial();
+                    }}
+                    className="w-full mt-2 py-2 px-3 rounded-xl border-2 border-black bg-gradient-to-r from-emerald-400 to-teal-400 text-gray-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>Launch Sky Viewer Tutorial</span>
+                  </button>
+                )}
               </div>
 
               {/* Quick Actions (Share & Embed) */}
@@ -1378,6 +1159,7 @@ export function App() {
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
               mlAnalysisStatus={mlAnalysisStatus}
+              loadStatus={searchStatus}
               liveCatalog={liveCatalog}
               onOpenMlInsights={() => {
                 setDrawerControlledTab('ai');
@@ -1405,9 +1187,9 @@ export function App() {
           {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
           {!isEmbedMode && (
           <div
-            className={`${
+            className={`h-full ${
               mobileViewerPane === 'telemetry'
-                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall'
+                ? 'fixed inset-x-0 top-12 bottom-12 z-40 flex flex-col bg-paper-950 overflow-hidden anim-fall lg:static lg:inset-auto lg:top-auto lg:bottom-auto lg:z-20 lg:flex'
                 : 'hidden lg:flex'
             }`}
           >
@@ -1527,6 +1309,21 @@ export function App() {
         onClose={() => setIsViewModalOpen(false)}
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
+      />
+
+      {/* Guided Beginner Sky Viewer Tutorial */}
+      <GuidedTutorialOverlay
+        isOpen={isTutorialActive && activeTab === 'viewer'}
+        step={tutorialStep}
+        onNext={() => setTutorialStep((s) => Math.min(s + 1, 6))}
+        onPrev={() => setTutorialStep((s) => Math.max(s - 1, 0))}
+        onClose={() => {
+          setIsTutorialActive(false);
+          setDrawerControlledTab(null);
+          setTutorialStep(0);
+        }}
+        onChangeMobilePane={(pane) => setMobileViewerPane(pane)}
+        onSelectDrawerTab={(tab) => setDrawerControlledTab(tab)}
       />
     </div>
   );

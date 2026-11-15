@@ -137,7 +137,14 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   className = '',
 }) => {
   const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
-  const activeTab = controlledTab ?? internalTab;
+
+  useEffect(() => {
+    if (controlledTab) {
+      setInternalTab(controlledTab);
+    }
+  }, [controlledTab]);
+
+  const activeTab = internalTab;
   const setActiveTab = (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => {
     setInternalTab(tab);
     if (onTabChange) onTabChange(tab);
@@ -316,6 +323,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   return (
     <aside
+      id="tutorial-target-right-panel"
       style={typeof window !== 'undefined' && window.innerWidth < 1024 ? undefined : { width: `${width}px` }}
       className={`relative bg-paper-900 border-l border-paper-800 flex flex-col h-full lg:h-[calc(100vh-3rem)] text-xs select-none z-20 shrink-0 transition-[width] duration-75 ${className}`}
     >
@@ -416,17 +424,19 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       <div className="flex-1 overflow-y-auto">
         {/* TAB 0: AI-RANKED DETECTIONS (main feature) */}
         {activeTab === 'ai' && (
-          <MLDetectionsPanel
-            candidates={candidates}
-            selectedCandidateId={selectedCandidateId}
-            onSelectCandidate={(id) => {
-              onSelectCandidate(id);
-            }}
-            isScientistMode={isScientistMode}
-            mlAnalysisStatus={mlAnalysisStatus}
-            ra={ra}
-            dec={dec}
-          />
+          <div id="tutorial-target-ai" className="h-full transition-all duration-300">
+            <MLDetectionsPanel
+              candidates={candidates}
+              selectedCandidateId={selectedCandidateId}
+              onSelectCandidate={(id) => {
+                onSelectCandidate(id);
+              }}
+              isScientistMode={isScientistMode}
+              mlAnalysisStatus={mlAnalysisStatus}
+              ra={ra}
+              dec={dec}
+            />
+          </div>
         )}
 
         {/* TAB 1: CANDIDATE TRIAGE & VERIFICATION */}
@@ -676,7 +686,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
         {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}
         {activeTab === 'spectrum' && (
-          <div className="p-3.5 space-y-3">
+          <div id="tutorial-target-spectrum" className="p-3.5 space-y-3 transition-all duration-300">
             <SpectrumPlot
               data={spectrumData}
               objectLabel={

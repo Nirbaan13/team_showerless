@@ -10,9 +10,14 @@ import java.nio.charset.StandardCharsets.UTF_8
 
 final case class PipelineResponse(bytes:Array[Byte],contentType:String)
 
-/** Scala-owned adapter to the team's existing HTTP API; no Python wrappers. */
+/** Bounded transport to the team pipeline and its independent unification module. */
 final class HttpPipelineClient private(base:URI,client:HttpClient,slots:Semaphore,timeout:Duration):
-  private val routes=Set("/api/cutout/search","/api/cutout/render","/api/spectrum","/api/spectrum/measure")
+  private val routes=Set("/api/cutout/search","/api/cutout/render","/api/spectrum","/api/spectrum/measure","/internal/image-unifications")
+  def unify(body:Json):Task[Json]=
+    request("POST","/internal/image-unifications",body=Some(body)).flatMap { response=>
+      ZIO.fromEither(new String(response.bytes,UTF_8).fromJson[Json])
+        .mapError(_=>ApiError("pipeline_protocol","The unification pipeline returned invalid JSON"))
+    }
   def request(method:String,path:String,query:String="",body:Option[Json]=None):Task[PipelineResponse]=slots.withPermit {
     ZIO.attemptBlockingInterrupt {
       if !routes.contains(path) || !Set("GET","POST").contains(method) then throw ApiError("invalid_request","Unsupported pipeline operation")

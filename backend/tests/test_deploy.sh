@@ -47,6 +47,9 @@ with urllib.request.urlopen("http://127.0.0.1:8002/health", timeout=5) as respon
     health = json.load(response)
 assert health["status"] == "ok", health
 '
+    docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
+        --env-file "$APP_DIR/current.env" exec -T pipeline \
+        /opt/inference-venv/bin/python /app/pipeline/unification_smoke.py
     # The existing pipeline cache keeps its original absolute path.
     test "$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
         --env-file "$APP_DIR/current.env" exec -T pipeline cat /tmp/spherex_cutouts/deploy-sentinel)" = persisted

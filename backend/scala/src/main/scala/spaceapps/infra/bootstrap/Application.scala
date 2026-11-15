@@ -8,6 +8,8 @@ import spaceapps.irsa.model.*
 import spaceapps.irsa.integrations.LiveArchive
 import spaceapps.irsa.integrations.grpc.GrpcServer
 import spaceapps.processing.integrations.HttpPipelineClient
+import spaceapps.processing.service.Unifications
+import spaceapps.processing.controller.UnificationApi
 import spaceapps.irsa.repository.Repository
 import spaceapps.repository.AnalysisRepository
 import spaceapps.infra.service.FileCache
@@ -56,9 +58,11 @@ object Application:
         file_bytes=math.min(env("ARCHIVE_FILE_BYTES","268435456").toLong,env("MAX_PRODUCT_BYTES","268435456").toLong),
         max_active_jobs=env("ARCHIVE_MAX_ACTIVE_JOBS","32").toInt),Some(cache))
       downloadsApi=new DownloadsApi(downloadsRuntime.service)
+      unifications <- Unifications.make(jobs,downloadsRuntime.service,downloadsRuntime.repository,cache,data,data.resolve("jobs.sqlite"),pipeline.unify)
+      unificationApi=new UnificationApi(unifications)
       grpcPort <- GrpcServer.start(jobs,env("APP_REVISION","development"),env("GRPC_HOST","0.0.0.0"),env("GRPC_PORT","50051").toInt,channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       _ <- ZIO.logInfo(s"gRPC listener started on port $grpcPort")
       _ <- ZIO.logInfo(s"Starting IRSA retrieval service, revision ${env("APP_REVISION","development")}")
-      _ <- Server.serve(api.routes ++ downloadsApi.routes)
+      _ <- Server.serve(api.routes ++ downloadsApi.routes ++ unificationApi.routes)
     yield ()
   }.provide(Client.default,Server.defaultWithPort(env("PORT","8000").toInt))

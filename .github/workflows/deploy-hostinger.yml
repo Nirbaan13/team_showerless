@@ -1,0 +1,43 @@
+name: Hostinger deploy (agents wait)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: hostinger-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-hostinger:
+    if: github.ref == 'refs/heads/main'
+    name: Build & Sync to spherexblink.tech
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install & Build Frontend
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          if [ -f public/.htaccess ]; then
+            cp public/.htaccess dist/.htaccess
+          fi
+
+      - name: Deploy to Hostinger Live Site via FTPS
+        env:
+          HOSTINGER_FTP_SERVER: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          HOSTINGER_FTP_USERNAME: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          HOSTINGER_FTP_PASSWORD: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+        run: python3 ops/deploy_hostinger.py

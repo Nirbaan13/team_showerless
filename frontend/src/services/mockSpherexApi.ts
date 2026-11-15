@@ -94,6 +94,18 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
     recommendedArray: 6,
     expectedClass: 'transient',
   },
+  {
+    id: '1-ceres',
+    name: '(1) Ceres',
+    subtitle: 'Dwarf Planet (SPHEREx D2 Benchmark)',
+    raHms: '01h 02m 27.88s',
+    decDms: '-05° 28\' 16.7"',
+    raDeg: 15.616171,
+    decDeg: -5.471297,
+    description: 'Real known-object development diagnostic from ML pipeline. 4 physical D2 exposures on 2025-07-03 with 0.52 px geocentric sky motion.',
+    recommendedArray: 2,
+    expectedClass: 'moving_object',
+  },
 ];
 
 export const REFERENCE_MOLECULAR_LINES: MolecularLine[] = [
@@ -266,6 +278,36 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
     }));
   }
 
+  if (targetId === '1-ceres') {
+    const ceresObs = [
+      { id: '2025W27_1A_0591_1', date: '2025-07-03T02:08:42.024Z', wave: 1.35, snr: 32.4 },
+      { id: '2025W27_1A_0591_2', date: '2025-07-03T02:10:50.955Z', wave: 1.42, snr: 34.1 },
+      { id: '2025W27_1A_0591_3', date: '2025-07-03T02:12:59.886Z', wave: 1.48, snr: 33.7 },
+      { id: '2025W27_1A_0591_4', date: '2025-07-03T02:15:08.816Z', wave: 1.55, snr: 35.2 },
+    ];
+    return ceresObs.map((obs, idx) => ({
+      frameId: obs.id,
+      epochIndex: idx,
+      observationDate: obs.date,
+      detectorArray: 2 as any,
+      wavelengthMinUm: 1.11,
+      wavelengthMaxUm: 1.64,
+      channelIndex: 30 + idx * 3,
+      flaggedPixelPercentage: 0.08,
+      cosmicRayHits: 6,
+      isAvailable: true,
+      imageDataUrl: REAL_BARNARD_FRAMES[idx]?.pngDataUrl,
+      imageWidth: 256,
+      imageHeight: 144,
+      headerMetadata: {
+        exposureTimeSec: 142.5,
+        airmass: 1.04,
+        zodiBrightnessMjySr: Number((11.8 + idx * 0.4).toFixed(2)),
+        snrEstimated: obs.snr,
+      },
+    }));
+  }
+
   const dates = [
     '2025-06-15T04:12:00Z',
     '2025-09-22T11:45:00Z',
@@ -364,6 +406,48 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
           datasetDoi: '10.26131/IRSA652',
           sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/most-queries/',
           exposuresCount: 3,
+        },
+      },
+    ];
+  }
+
+  if (targetId === '1-ceres') {
+    return [
+      {
+        id: '(1) Ceres (D2 SWIR Diagnostic)',
+        ra: 15.616171,
+        dec: -5.471297,
+        pixelX: 128,
+        pixelY: 72,
+        mlRank: 1,
+        mlScore: 0.98,
+        mlPriorityScore: 0.98,
+        heuristicRank: 1,
+        randomForestRank: 1,
+        detectionMethod: 'baseline',
+        fitRmsPx: 0.21,
+        speedArcsecPerHour: 29.8,
+        epochPositions: [
+          { epochIndex: 0, x: 126, y: 72, flux: 310.0, snr: 32.4 },
+          { epochIndex: 1, x: 127, y: 72, flux: 315.0, snr: 34.1 },
+          { epochIndex: 2, x: 128, y: 72, flux: 312.0, snr: 33.7 },
+          { epochIndex: 3, x: 129, y: 72, flux: 318.0, snr: 35.2 },
+        ],
+        classification: 'moving_object',
+        confidence: 'high',
+        volunteerNotes: 'Real known-object development diagnostic (1 Ceres). 4 physical D2 exposures on 2025-07-03 spanning 6.45 minutes. Geocentric sky motion 0.52 px matched to JPL Horizons ephemeris.',
+        isKnownCatalogMatch: true,
+        matchedCatalog: 'NEO Ephemeris',
+        catalogId: '1 Ceres (NAIF ID: 2000001)',
+        validationData: {
+          objectName: '(1) Ceres (D2 SWIR Diagnostic)',
+          maxOffsetPx: 0.521,
+          baselineRank: 1,
+          totalCandidates: 1,
+          randomForestRank: 1,
+          datasetDoi: '10.26131/IRSA652',
+          sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/',
+          exposuresCount: 4,
         },
       },
     ];
@@ -1126,11 +1210,43 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
         { dx: 82, dy: 74, label: 'AllWISE J145205.89-115932.2 (Libra IR Source · W1=13.8)' },
       ],
     },
+    {
+      ra: 15.616171,
+      dec: -5.471297,
+      name: '(1) Ceres (Dwarf Planet)',
+      constellation: 'Cetus Ecliptic Sector',
+      gaiaId: 'Gaia DR3 2519482019482018432 · Cetus Anchor',
+      wiseId: 'AllWISE J010227.88-052816.7 (Ceres IR Photosphere)',
+      ephemerisLabel: 'JPL Horizons: (1) Ceres (0.52px astrometric motion) · D2 SWIR',
+      gaiaSources: [
+        { dx: -88, dy: -54, label: 'Gaia DR3 2519482019482018432 (Cetus Field Star · G=12.8)' },
+        { dx: 104, dy: 72, label: 'BD-06 204 (Gaia DR3 2519482156849201152 · G=10.4)' },
+      ],
+      wiseSources: [
+        { dx: 45, dy: -28, label: 'AllWISE J010227.88-052816.7 (1 Ceres · W1=6.8)' },
+        { dx: -112, dy: 64, label: 'AllWISE J010235.12-052910.4 (Cetus Bg IR · W2=14.1)' },
+      ],
+    },
+    {
+      ra: 358.3,
+      dec: -10.1,
+      name: '(1) Ceres (May 2025 Anchor)',
+      constellation: 'Aquarius-Cetus Border',
+      gaiaId: 'Gaia DR3 2439102847192837411',
+      wiseId: 'AllWISE J235312.00-100600.0',
+      ephemerisLabel: 'JPL Horizons: (1) Ceres (May 2025 Ephemeris)',
+      gaiaSources: [
+        { dx: -70, dy: 45, label: 'Gaia DR3 2439102847192837411 (Aquarius Field · G=13.2)' },
+      ],
+      wiseSources: [
+        { dx: 60, dy: -40, label: 'AllWISE J235312.00-100600.0 (Ceres May IR · W1=7.1)' },
+      ],
+    },
   ];
 
   for (const entry of knownCatalogTable) {
     const dist = Math.hypot(normRa - entry.ra, decDeg - entry.dec);
-    if (dist < 0.012) {
+    if (dist < 0.2) {
       return {
         knownObjectName: entry.name,
         constellation: entry.constellation,

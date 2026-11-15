@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, ObservationLoadStatus } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
@@ -20,10 +20,7 @@ interface LeftControlPanelProps {
   onToggleOverlay: (key: keyof CatalogOverlayState) => void;
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
-  searchStatus?: {
-    source: 'live' | 'fallback' | 'preset';
-    message: string;
-  };
+  searchStatus?: ObservationLoadStatus;
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
   isCatalogLoading?: boolean;
@@ -39,7 +36,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onUpdateFov,
   selectedArray,
   onSelectArray,
-  selectedChannel: _selectedChannel,
+  selectedChannel,
   onSelectChannel,
   subtractionMode,
   onChangeSubtractionMode,
@@ -66,17 +63,21 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 
   const handleApplyCoords = (e: React.FormEvent) => {
     e.preventDefault();
-    const parsedRa = parseFloat(raInput);
-    const parsedDec = parseFloat(decInput);
+    const cleanRa = raInput.trim().replace(/[^\d.-]/g, '');
+    const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
+    const parsedRa = parseFloat(cleanRa);
+    const parsedDec = parseFloat(cleanDec);
     if (!isNaN(parsedRa) && !isNaN(parsedDec)) {
-      onUpdateCoords(parsedRa, parsedDec);
+      const normalizedRa = ((parsedRa % 360) + 360) % 360;
+      const clampedDec = Math.max(-90, Math.min(90, parsedDec));
+      onUpdateCoords(normalizedRa, clampedDec);
     }
   };
 
   return (
     <aside className={`w-full md:w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-full md:h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20 ${className}`}>
       {/* 1. Target Query */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-coords" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Search className="w-3.5 h-3.5 text-ochre-400" />
           Coordinates (J2000)
@@ -124,28 +125,19 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </form>
 
         {searchStatus && (
-          <div className="mt-2 p-1.5 rounded-lg bg-paper-950 border border-paper-800 flex items-center gap-1.5 text-[10px] font-mono">
-            <span
-              className={`w-2 h-2 rounded-full shrink-0 ${
-                searchStatus.source === 'live'
-                  ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
-                  : searchStatus.source === 'preset'
-                  ? 'bg-sky-400'
-                  : 'bg-amber-400'
-              }`}
-            />
-            <span className="truncate text-paper-300" title={searchStatus.message}>
-              {searchStatus.source === 'live'
-                ? 'NASA IRSA Live Stream'
-                : searchStatus.source === 'preset'
-                ? 'Benchmark Preset'
-                : 'Offline Mock Fallback'}
-            </span>
+          <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
+              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
+                : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
+                : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
+            </div>
+            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
           </div>
         )}
 
         {/* FOV Area Size */}
-        <div className="mt-2.5 pt-2 border-t border-paper-800">
+        <div id="tutorial-target-fov" className="mt-2.5 pt-2 border-t border-paper-800 transition-all duration-300">
           <span className="text-[10px] font-mono text-paper-400 block mb-1">Field of View (FOV)</span>
           <div className="grid grid-cols-4 gap-1.5">
             {(["1'", "3'", "5'", "10'"] as FOVOption[]).map((f) => (
@@ -166,7 +158,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       </div>
 
       {/* 2. SPHEREx Infrared Filter Bands */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-400" />
@@ -224,10 +216,75 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             );
           })}
         </div>
+
+        {/* 102-Band Spectrophotometric Fine-Tuning Slider */}
+        <div className="mt-2.5 pt-2 border-t border-paper-800">
+          <div className="flex items-center justify-between text-[10px] font-mono mb-1">
+            <span className="text-paper-400 font-semibold">102-Band Channel:</span>
+            <span className="text-emerald-300 font-bold">
+              {selectedChannel ? `Ch #${selectedChannel} (${(0.75 + (selectedChannel - 1) * (4.25 / 101)).toFixed(2)} µm)` : 'Broad Band (Stacked)'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="range"
+              min="1"
+              max="102"
+              value={selectedChannel ?? (selectedArray === 'all' ? 51 : (Number(selectedArray) - 1) * 17 + 9)}
+              onChange={(e) => {
+                const ch = parseInt(e.target.value, 10);
+                onSelectChannel(ch);
+                const arrId = Math.min(6, Math.max(1, Math.floor((ch - 1) / 17) + 1)) as DetectorArrayId;
+                if (selectedArray !== arrId && selectedArray !== 'all') {
+                  onSelectArray(arrId);
+                }
+              }}
+              className="w-full accent-emerald-400 cursor-pointer h-1.5 bg-paper-950 rounded-lg"
+            />
+            {selectedChannel !== null && (
+              <button
+                type="button"
+                onClick={() => onSelectChannel(null)}
+                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-paper-800 text-paper-400 hover:text-white cursor-pointer"
+                title="Reset to full detector array"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+
+          {/* Key Molecular Line Fast-Picks */}
+          <div className="mt-1.5 flex flex-wrap gap-1">
+            {[
+              { ch: 26, label: 'H₂O 1.5µm', arr: 2 },
+              { ch: 42, label: 'H₂O 2.0µm', arr: 3 },
+              { ch: 59, label: 'H₂O 3.0µm', arr: 4 },
+              { ch: 81, label: 'CO₂ 4.27µm', arr: 5 },
+              { ch: 93, label: 'CO 4.67µm', arr: 6 },
+            ].map((p) => (
+              <button
+                key={p.ch}
+                type="button"
+                onClick={() => {
+                  onSelectArray(p.arr as DetectorArrayId);
+                  onSelectChannel(p.ch);
+                }}
+                className={`px-1.5 py-0.5 rounded text-[8px] font-mono border transition-all cursor-pointer ${
+                  selectedChannel === p.ch
+                    ? 'bg-emerald-400 text-gray-950 font-bold border-black shadow-[0_0_6px_rgba(16,185,129,0.5)]'
+                    : 'bg-paper-950 text-paper-400 hover:text-emerald-300 border-paper-800'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* 3. Image Filtering & Movement Isolation */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Filter className="w-3.5 h-3.5 text-emerald-400" />
           {viewMode === 'scientist' ? 'Background Subtraction Algorithm' : 'Image Filter'}
@@ -295,7 +352,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           null;
 
         return (
-          <div className="p-3 space-y-2">
+          <div id="tutorial-target-catalogs" className="p-3 space-y-2 transition-all duration-300">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Database className="w-3.5 h-3.5 text-emerald-400" />
