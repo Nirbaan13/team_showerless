@@ -37,7 +37,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         <button
           onClick={onStepBackward}
           disabled={!hasFrames}
-          className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
+          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Previous Epoch Frame"
         >
           <SkipBack className="w-3.5 h-3.5" />
@@ -46,7 +46,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         <button
           onClick={onTogglePlay}
           disabled={!hasFrames}
-          className="btn-tactile px-3.5 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-[11px] font-bold cursor-pointer flex items-center gap-1.5"
+          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile px-3.5 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 border-2 border-black font-mono text-[11px] font-bold cursor-pointer flex items-center gap-1.5"
         >
           {isPlaying ? (
             <>
@@ -64,7 +64,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         <button
           onClick={onStepForward}
           disabled={!hasFrames}
-          className="btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
+          className="disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm p-1.5 rounded-lg bg-paper-950 border-2 border-black text-paper-400 hover:text-paper-100 cursor-pointer"
           title="Next Epoch Frame"
         >
           <SkipForward className="w-3.5 h-3.5" />
@@ -74,7 +74,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         <button
           onClick={onToggleBlinkMode}
           disabled={!hasFrames}
-          className={`btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
+          className={`disabled:opacity-40 disabled:cursor-not-allowed btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
             blinkMode
               ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]'
               : 'bg-paper-950 text-paper-300 hover:text-white'

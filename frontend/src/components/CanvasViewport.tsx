@@ -212,7 +212,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
 
     // In Scientist Mode: Draw astronomical coordinate grid lines (RA/Dec J2000 ICRS)
-    if (isScientistMode) {
+    if (isScientistMode && bitmapReady) {
       ctx.save();
       ctx.strokeStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.12)' : 'rgba(52, 211, 153, 0.2)';
       ctx.lineWidth = 1 / zoom;

@@ -84,6 +84,7 @@ test('archive_timeout clears demo epochs and candidates and never starts a doome
   await expect(page.getByRole('alert').filter({ hasText: 'archive_timeout' }).first()).toBeVisible();
   await expect(page.getByText('NASA IRSA / SPHEREx Stream', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Coordinate ML Ready', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Play Movie', exact: true })).toBeDisabled();
   await expect(page.getByText('Ranked Objects (0)', { exact: true })).toHaveCount(0);
   await expect(page.getByText('No observations loaded', { exact: true })).toBeVisible();
   await expect(page.getByText(/Motion cannot be assessed/).first()).toBeVisible();
