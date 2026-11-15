@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import tempfile
 from bundle import Engine, normalize_image_id, validate_inventory, validate_loaded_image
+from build_variants import validate_built_revision
 
 FILES = {
  'backend/python/irsa_mirror.py':'integrations/irsa_mirror.py',
@@ -51,9 +52,9 @@ def build(inventory_path, source, revision, output, executable='podman'):
   for rel,target in FILES.items():
    dest=context/'files'/target;dest.parent.mkdir(parents=True,exist_ok=True)
    dest.write_bytes(subprocess.check_output(['git','show',revision+':'+rel],cwd=source))
-  dockerfile=(f'FROM {base}\nUSER root\nARG DEMO_REVISION={revision}\n'
-   f'LABEL org.opencontainers.image.revision="${{DEMO_REVISION}}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
-   'ENV APP_REVISION=${DEMO_REVISION} IRSA_CUTOUT_SCRIPT=/app/backend/python/irsa_cutout.py\n'
+  dockerfile=(f'FROM {base}\nUSER root\n'
+   f'LABEL org.opencontainers.image.revision="{revision}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
+   f'ENV APP_REVISION={revision} IRSA_CUTOUT_SCRIPT=/app/backend/python/irsa_cutout.py\n'
    'RUN rm -rf /app/classes /app/lib\n'
    'COPY --chown=10001:10001 stage/ /app/\nCOPY --chown=10001:10001 files/ /app/\n'
    'RUN /opt/inference-venv/bin/python -c "import sys; sys.path.insert(0,\'/app/integrations\'); import irsa_catalog; from backend.python.irsa_cutout import cutout"\nUSER app\n')
@@ -61,6 +62,7 @@ def build(inventory_path, source, revision, output, executable='podman'):
   args=['build','--pull=never','--format','docker'] if executable=='podman' else ['build','--pull=false']
   engine.call(*args,'--file',str(context/'Dockerfile'),'--tag',tag,str(context))
  built=engine.json('image','inspect',tag)[0]
+ validate_built_revision(built,revision,'APP_REVISION')
  record={'image':tag,'image_id':normalize_image_id(built['Id']),'revision':revision,'os':built['Os'],'architecture':built['Architecture'],'parent_image_id':original['image_id'],'demo_profile':'v1-real','derived_from_deployed_image':True,'compiled_tree':git('rev-parse',revision+'^{tree}')}
  inventory['services']['api']=record;inventory['services']['pipeline']=copy.deepcopy(record)
  inventory['api_source_revision']=revision

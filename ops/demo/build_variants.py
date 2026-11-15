@@ -26,6 +26,15 @@ def inspect(engine, reference):
     return engine.json('image','inspect',reference)[0]
 
 
+def validate_built_revision(image, revision, environment_name):
+    """Reject stale cached image metadata before recording the requested revision."""
+    config = image.get('Config') or {}
+    label = (config.get('Labels') or {}).get('org.opencontainers.image.revision')
+    environment = dict(entry.split('=', 1) for entry in config.get('Env') or [] if '=' in entry)
+    if label != revision or environment.get(environment_name) != revision:
+        raise ValueError(f'Built image revision mismatch: expected {revision}; label={label!r}, {environment_name}={environment.get(environment_name)!r}')
+
+
 def build(inventory_path, output, executable='podman'):
     root=Path(__file__).resolve().parents[2]
     inventory=validate_inventory(json.loads(Path(inventory_path).read_text()))
@@ -47,20 +56,22 @@ def build(inventory_path, output, executable='podman'):
         tag='localhost/spaceapps-demo-'+kind+'-real:'+revision
         with tempfile.TemporaryDirectory(prefix='spaceapps-real-variant-') as tmp:
             stage=Path(tmp)
-            common=f'FROM {base}\nARG DEMO_REVISION={revision}\nLABEL org.opencontainers.image.revision="${{DEMO_REVISION}}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
+            common=f'FROM {base}\nLABEL org.opencontainers.image.revision="{revision}" org.opencontainers.image.source="https://github.com/Nirbaan13/team_showerless" org.spaceapps.demo.profile="v1-real" org.spaceapps.demo.parent_image="{original["image_id"]}"\n'
             if kind=='frontend':
                 shutil.copytree(root/'frontend/dist',stage/'dist')
                 (stage/'dist/demo-mode.json').write_text(json.dumps({'profile':'v1-real','real_only':True,'revision':revision,'parent_image_id':original['image_id']}))
-                text=common+'ENV FRONTEND_REVISION=${DEMO_REVISION}\nRUN rm -rf /usr/share/nginx/html/*\nCOPY dist/ /usr/share/nginx/html/\nRUN printf \'{"version":"%s"}\\n\' "$DEMO_REVISION" > /usr/share/nginx/html/frontend-version.json\n'
+                (stage/'dist/frontend-version.json').write_text(json.dumps({'version':revision})+'\n')
+                text=common+f'ENV FRONTEND_REVISION={revision}\nRUN rm -rf /usr/share/nginx/html/*\nCOPY dist/ /usr/share/nginx/html/\n'
             else:
                 for rel in ['ml/service.py','ml/catalogue_db.py','science/archive_gateway.py','science/motion/live.py','backend/python/irsa_cutout.py']:
                     shutil.copy2(root/rel,stage/Path(rel).name)
-                text=common+'ENV APP_REVISION=${DEMO_REVISION} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\nCOPY --chown=10001:10001 irsa_cutout.py /app/backend/python/irsa_cutout.py\n'
+                text=common+f'ENV APP_REVISION={revision} DEMO_REAL_ONLY=1\nCOPY --chown=10001:10001 service.py catalogue_db.py /app/\nCOPY --chown=10001:10001 archive_gateway.py /app/science/\nCOPY --chown=10001:10001 live.py /app/science/motion/\nCOPY --chown=10001:10001 irsa_cutout.py /app/backend/python/irsa_cutout.py\n'
             (stage/'Dockerfile').write_text(text)
             pull='--pull=never' if executable=='podman' else '--pull=false'
             format_args=['--format','docker'] if executable=='podman' else []
             engine.call('build',pull,*format_args,'--file',str(stage/'Dockerfile'),'--tag',tag,str(stage))
         built=inspect(engine,tag)
+        validate_built_revision(built,revision,'FRONTEND_REVISION' if kind=='frontend' else 'APP_REVISION')
         result['services'][name]={'image':tag,'image_id':normalize_image_id(built['Id']),'revision':revision,'os':built['Os'],'architecture':built['Architecture'],'parent_image_id':original['image_id'],'demo_profile':'v1-real','derived_from_deployed_image':True}
         if built.get('Variant'):result['services'][name]['variant']=built['Variant']
     Path(output).write_text(json.dumps(result,indent=2)+'\n')
