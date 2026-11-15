@@ -279,18 +279,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         }
 
         ctx.drawImage(cachedImg, -imgW / 2, -imgH / 2, imgW, imgH);
-
-        // Apply authentic false-color infrared spectral tint per detector array
-        if (!isWhiteBg && bandStyle.tintColor) {
-          ctx.fillStyle = bandStyle.tintColor;
-          ctx.fillRect(-imgW / 2, -imgH / 2, imgW, imgH);
-        }
-
-        // If raw_calibrated: overlay subtle diffuse warm zodiacal light haze across the sensor
-        if (subtractionMode === 'raw_calibrated' && !isWhiteBg) {
-          ctx.fillStyle = 'rgba(255, 210, 150, 0.05)';
-          ctx.fillRect(-imgW / 2, -imgH / 2, imgW, imgH);
-        }
         ctx.restore();
         hasDrawnRealImage = true;
       }
