@@ -1,6 +1,6 @@
-package spaceapps.unification
+package spaceapps.processing.service.model
 
-import spaceapps.domain.ApiError
+import spaceapps.infra.model.ApiError
 import zio.json.*
 import zio.json.ast.Json
 import scala.util.Try
@@ -12,13 +12,13 @@ final case class UnificationRecord(job:UnificationJob,request:Json)
 
 object UnificationRequest:
   private def invalid():Nothing=throw ApiError("invalid_request","Invalid image unification selection, grid or options")
-  private[unification] def obj(json:Json,allowed:Set[String]):Map[String,Json]=json match
+  private[processing] def obj(json:Json,allowed:Set[String]):Map[String,Json]=json match
     case Json.Obj(fields) if fields.map(_._1).distinct.size==fields.size && fields.forall((k,_)=>allowed(k))=>fields.toMap
     case _=>invalid()
-  private[unification] def string(value:Json):String=value match
+  private[processing] def string(value:Json):String=value match
     case Json.Str(s) if s.nonEmpty && s.length<=256=>s
     case _=>invalid()
-  private[unification] def integer(value:Json,min:Int,max:Int):Int=value match
+  private[processing] def integer(value:Json,min:Int,max:Int):Int=value match
     case Json.Num(n) if n.scale<=0 || n.stripTrailingZeros().scale<=0=>
       val v=Try(n.intValueExact()).getOrElse(invalid())
       if v<min || v>max then invalid() else v

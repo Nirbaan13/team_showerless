@@ -1,11 +1,15 @@
-package spaceapps.unification
+package spaceapps.processing
+
+import spaceapps.processing.service.model.UnificationRequest
+import spaceapps.processing.service.Unifications
+import spaceapps.processing.repository.UnificationRepository
 
 import zio.*
 import zio.json.*
 import zio.json.ast.Json
 import zio.test.*
 import java.nio.file.Files
-import spaceapps.service.FitsCache
+import spaceapps.infra.service.FileCache
 
 object UnificationSpec extends ZIOSpecDefault:
   private def parse(s:String)=s.fromJson[Json].toOption.get
@@ -55,7 +59,7 @@ object UnificationSpec extends ZIOSpecDefault:
     test("cache owns and evicts only canonical final unification outputs") {
       ZIO.scoped { for
         dir <- temp
-        cache <- FitsCache.open(dir,dir.resolve("state.sqlite"),100,60,0)
+        cache <- FileCache.open(dir,dir.resolve("state.sqlite"),100,60,0)
         id="12345678-1234-1234-1234-123456789abc"
         finalPath=dir.resolve(s"unifications/$id/dataset.npz")
         unrelated=dir.resolve(s"unifications/$id/output/user.npz")

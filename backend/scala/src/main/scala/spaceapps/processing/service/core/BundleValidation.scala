@@ -1,6 +1,6 @@
-package spaceapps.unification
+package spaceapps.processing.service.core
 
-import spaceapps.domain.ApiError
+import spaceapps.infra.model.ApiError
 import java.nio.file.Path
 import java.util.zip.ZipFile
 import java.nio.charset.StandardCharsets.US_ASCII
@@ -9,7 +9,7 @@ import zio.json.*
 import zio.json.ast.Json
 
 /** Independent, bounded structural check before a private worker artifact becomes public. */
-private[unification] object BundleValidation:
+private[processing] object BundleValidation:
   private def invalid():Nothing=throw ApiError("invalid_output","Invalid or oversized NPZ bundle")
   def validate(path:Path,frames:Int,height:Int,width:Int,expectedManifest:Option[String]=None):Unit=
     val zip=new ZipFile(path.toFile)

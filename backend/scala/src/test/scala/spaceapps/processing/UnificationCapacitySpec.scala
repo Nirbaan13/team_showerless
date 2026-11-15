@@ -1,6 +1,6 @@
-package spaceapps.unification
+package spaceapps.processing
 
-import spaceapps.service.FitsCache
+import spaceapps.infra.service.FileCache
 import zio.*
 import zio.test.*
 import java.nio.file.Files
@@ -13,7 +13,7 @@ object UnificationCapacitySpec extends ZIOSpecDefault:
           val stream=Files.walk(p)
           try stream.sorted(java.util.Comparator.reverseOrder()).forEach(Files.deleteIfExists(_)) finally stream.close()
         }.orDie)
-        cache <- FitsCache.open(root,root.resolve("state.sqlite"),100,60,0)
+        cache <- FileCache.open(root,root.resolve("state.sqlite"),100,60,0)
         _ <- ZIO.attemptBlocking(Files.write(root.resolve("existing.dat"),Array.fill[Byte](20)(1)))
         job=root.resolve("unifications/12345678-1234-1234-1234-123456789abc")
         output=job.resolve("output/dataset.npz")

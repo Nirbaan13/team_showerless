@@ -63,7 +63,7 @@ application-scoped workers. POST returns202 with id/status_url; GET returns dura
 state; artifact GET serves only a completed registered bundle. The existing four
 synchronous pipeline proxy endpoints keep their current contracts.
 
-Resolve archive IDs through ArchiveService and associated metadata; native chunks
+Resolve archive IDs through scoped DownloadsService.resource and associated metadata; native chunks
 through Jobs.leasedResource. Snapshot with a hardlink or bounded copy under the job
 directory, verify SHA against persisted archive bytes, and keep snapshots through
 bounded remote completion. A cache pin alone cannot prevent same-ID atomic source

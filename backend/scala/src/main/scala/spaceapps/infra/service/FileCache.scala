@@ -169,7 +169,11 @@ object FileCache:
         (relative.getNameCount==2 && relative.getName(0).toString=="raw" && name.matches(s"[0-9a-f]{64}[.]fits[.]$uuid[.]part")) ||
         (relative.getNameCount==3 && relative.getName(0).toString=="jobs" && name.matches(s"[0-9a-f]{40}[.](?:fits|png)[.]$uuid[.]part")) ||
         (relative.getNameCount==2 && relative.getName(0).toString=="calibration-cache" && name.matches(s"[0-9a-f]{64}(?:[.]$uuid)?[.]part")) ||
-        (relative.getNameCount==2 && relative.getName(0).toString=="archive-assets" && name.matches("(?:transfer|decoded)-[a-zA-Z0-9_-]+[.]part"))
+        (relative.getNameCount==2 && relative.getName(0).toString=="archive-assets" && name.matches("(?:transfer|decoded)-[a-zA-Z0-9_-]+[.]part")) ||
+        (relative.getNameCount>=3 && relative.getName(0).toString=="unifications" && relative.getName(1).toString.matches(uuid) && (
+          (relative.getNameCount==3 && (name=="request.json" || name.matches(s"dataset[.]npz[.]$uuid[.]part"))) ||
+          (relative.getNameCount==4 && relative.getName(2).toString=="inputs" && name.matches("[0-9]{3}[.]fits")) ||
+          (relative.getNameCount==4 && relative.getName(2).toString=="output" && name.matches("(?:dataset[.]npz|manifest[.]json)(?:[.]partial)?"))))
       if partial then
         if Files.isSymbolicLink(path) || !Files.isRegularFile(path,java.nio.file.LinkOption.NOFOLLOW_LINKS) then
           throw ApiError("invalid_product","Unsafe abandoned cache partial file")

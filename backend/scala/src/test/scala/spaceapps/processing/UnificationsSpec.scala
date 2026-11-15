@@ -1,11 +1,18 @@
-package spaceapps.unification
+package spaceapps.processing
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.Repository
-import spaceapps.archive.repository.ArchiveRepository
-import spaceapps.archive.service.*
-import spaceapps.archive.integrations.protocol.*
+import spaceapps.processing.controller.UnificationApi
+import spaceapps.processing.service.Unifications
+import spaceapps.processing.service.model.*
+import spaceapps.processing.repository.UnificationRepository
+
+import spaceapps.irsa.model.*
+import spaceapps.infra.model.ApiError
+import spaceapps.irsa.service.*
+import spaceapps.infra.service.FileCache
+import spaceapps.irsa.repository.Repository
+import spaceapps.downloads.repository.DownloadsRepository
+import spaceapps.downloads.service.*
+import spaceapps.downloads.integrations.protocol.*
 import zio.*
 import zio.json.*
 import zio.json.ast.Json
@@ -27,7 +34,7 @@ object UnificationsSpec extends ZIOSpecDefault:
   private def terminal(s:Unifications,id:String):Task[UnificationJob]=s.get(id).flatMap(j=>if Set("failed","completed")(j.status) then ZIO.succeed(j) else ZIO.sleep(10.millis) *> terminal(s,id))
   private def fixture(dir:Path,budget:Long=1024L*1024*1024)=for
     repo <- Repository.open(dir.resolve("state.sqlite"))
-    cache <- FitsCache.open(dir,dir.resolve("state.sqlite"),budget,64L*1024*1024,0)
+    cache <- FileCache.open(dir,dir.resolve("state.sqlite"),budget,64L*1024*1024,0)
     source=new Archive:
       def search(q:Query)=ZIO.succeed(List(image))
       def fetch(i:ArchiveImage,p:Path)=write(p,"original native bytes")
@@ -37,12 +44,12 @@ object UnificationsSpec extends ZIOSpecDefault:
     completed <- done(jobs,download.id)
     native <- jobs.resource(completed.chunks.head.id,false)
     _ <- ZIO.fail(new Exception(s"Native fixture did not publish: ${completed.toJson}; $native")).unless(completed.status=="completed" && native.isInstanceOf[Resource.Ready])
-    ar <- ArchiveRepository.open(dir.resolve("state.sqlite"))
+    ar <- DownloadsRepository.open(dir.resolve("state.sqlite"))
     registry=new ProviderRegistry(Nil)
     discovery <- FederatedDiscovery.make(registry,ar)
     client <- ZIO.service[Client]
-    downloads <- ArchiveDownloads.make(registry,ar,new StreamingDownloader(new ArchiveTransport(client),dir.resolve("archive")))
-    service=new ArchiveService(registry,ar,discovery,downloads)
+    downloads <- DownloadJobs.make(registry,ar,new StreamingDownloader(new ArchiveTransport(client),dir.resolve("archive-assets"),capacity=Some(cache)))
+    service=new DownloadsService(registry,ar,discovery,downloads)
   yield (jobs,cache,ar,service,completed)
   private def selection(d:Download):Json=Json.Obj("inputs"->Json.Arr(Json.Obj("kind"->Json.Str("native_chunk"),"id"->Json.Str(d.chunks.head.id),"download_id"->Json.Str(d.id))),"grid"->Json.Obj("kind"->Json.Str("pixel"),"width"->Json.Num(2),"height"->Json.Num(2)))
   private def obj(j:Json)=j.asInstanceOf[Json.Obj].fields.toMap
@@ -129,13 +136,13 @@ object UnificationsSpec extends ZIOSpecDefault:
         dir <- temp
         f <- fixture(dir)
         (jobs,cache,ar,archive,d)=f
-        record=spaceapps.archive.domain.ArchiveRecord.create("eso","science","observation-real",spaceapps.archive.domain.ProductKind.image)
-        _ <- ar.saveSearch(spaceapps.archive.domain.SearchSnapshot("search",spaceapps.archive.domain.ArchiveQuery(spaceapps.archive.domain.Circle(1,2,1),List("eso")),status="completed",records=List(record)))
+        record=spaceapps.downloads.model.ArchiveRecord.create("eso","science","observation-real",spaceapps.downloads.model.ProductKind.image)
+        _ <- ar.saveSearch(spaceapps.downloads.model.SearchSnapshot("search",spaceapps.downloads.model.ArchiveQuery(spaceapps.downloads.model.Circle(1,2,1),List("eso")),status="completed",records=List(record)))
         id="a"*64
-        path=dir.resolve("archive").resolve(id)
+        path=dir.resolve("archive-assets").resolve(id)
         _ <- write(path,"persisted archive bytes")
-        stored=spaceapps.archive.domain.StoredAsset(id,23,sha(path),"native")
-        _ <- ar.saveDownload(spaceapps.archive.domain.DownloadSnapshot("archive-download",spaceapps.archive.domain.DownloadSelection(List(record.id)),status="completed",assets=List(spaceapps.archive.domain.AssetOutcome(record.id,"ready",Some(stored)))))
+        stored=spaceapps.downloads.model.StoredAsset(id,23,sha(path),"native")
+        _ <- ar.saveDownload(spaceapps.downloads.model.DownloadSnapshot("archive-download",spaceapps.downloads.model.DownloadSelection(List(record.id)),status="completed",assets=List(spaceapps.downloads.model.AssetOutcome(record.id,"ready",Some(stored)))))
         request=Json.Obj("inputs"->Json.Arr(Json.Obj("kind"->Json.Str("archive_asset"),"id"->Json.Str(id))),"grid"->obj(selection(d))("grid"))
         s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r))
         accepted <- s.submit(request)
@@ -151,12 +158,12 @@ object UnificationsSpec extends ZIOSpecDefault:
         dir <- temp
         f <- fixture(dir)
         (jobs,cache,ar,archive,d)=f
-        records=List("product-v1","product-v2").map(product=>spaceapps.archive.domain.ArchiveRecord.create("eso","science",product,spaceapps.archive.domain.ProductKind.image,native=Map("obs_id"->"physical-exposure-7")))
-        _ <- ar.saveSearch(spaceapps.archive.domain.SearchSnapshot("identity-search",spaceapps.archive.domain.ArchiveQuery(spaceapps.archive.domain.Circle(1,2,1),List("eso")),status="completed",records=records))
+        records=List("product-v1","product-v2").map(product=>spaceapps.downloads.model.ArchiveRecord.create("eso","science",product,spaceapps.downloads.model.ProductKind.image,native=Map("obs_id"->"physical-exposure-7")))
+        _ <- ar.saveSearch(spaceapps.downloads.model.SearchSnapshot("identity-search",spaceapps.downloads.model.ArchiveQuery(spaceapps.downloads.model.Circle(1,2,1),List("eso")),status="completed",records=records))
         ids=List("a"*64,"b"*64)
-        _ <- ZIO.foreachDiscard(ids)(id=>write(dir.resolve("archive").resolve(id),"persisted archive bytes"))
-        assets=ids.zip(records).map { (id,r)=>spaceapps.archive.domain.AssetOutcome(r.id,"ready",Some(spaceapps.archive.domain.StoredAsset(id,23,sha(dir.resolve("archive").resolve(id)),"native"))) }
-        _ <- ar.saveDownload(spaceapps.archive.domain.DownloadSnapshot("identity-download",spaceapps.archive.domain.DownloadSelection(records.map(_.id)),status="completed",assets=assets))
+        _ <- ZIO.foreachDiscard(ids)(id=>write(dir.resolve("archive-assets").resolve(id),"persisted archive bytes"))
+        assets=ids.zip(records).map { (id,r)=>spaceapps.downloads.model.AssetOutcome(r.id,"ready",Some(spaceapps.downloads.model.StoredAsset(id,23,sha(dir.resolve("archive-assets").resolve(id)),"native"))) }
+        _ <- ar.saveDownload(spaceapps.downloads.model.DownloadSnapshot("identity-download",spaceapps.downloads.model.DownloadSelection(records.map(_.id)),status="completed",assets=assets))
         captured <- Promise.make[Nothing,List[Json]]
         s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=> {
           val metadata=obj(r)("inputs").asInstanceOf[Json.Arr].elements.toList.map(i=>obj(i)("metadata"))
@@ -279,7 +286,7 @@ object UnificationsSpec extends ZIOSpecDefault:
           b.redirectErrorStream(true);b.redirectOutput(dir.resolve("python-http.log").toFile);b.start()
         })(p=>ZIO.attemptBlocking {p.destroy();if !p.waitFor(10,java.util.concurrent.TimeUnit.SECONDS) then {p.destroyForcibly();p.waitFor()};()}.orDie)
         _ <- ZIO.attemptBlocking {val socket=new java.net.Socket("127.0.0.1",port);socket.close()}.retry(Schedule.spaced(100.millis) && Schedule.recurs(150))
-        client <- spaceapps.integrations.processing.HttpPipelineClient.make(s"http://127.0.0.1:$port")
+        client <- spaceapps.processing.integrations.HttpPipelineClient.make(s"http://127.0.0.1:$port")
         s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),client.unify)
         accepted <- s.submit(selection(d))
         completed <- terminal(s,accepted.id)

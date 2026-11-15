@@ -1,7 +1,7 @@
 package spaceapps
 
-import spaceapps.integrations.processing.HttpPipelineClient
-import spaceapps.domain.ApiError
+import spaceapps.processing.integrations.HttpPipelineClient
+import spaceapps.infra.model.ApiError
 import zio.*
 import zio.json.*
 import zio.json.ast.Json

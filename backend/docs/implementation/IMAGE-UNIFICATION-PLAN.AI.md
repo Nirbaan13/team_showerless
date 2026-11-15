@@ -85,8 +85,8 @@ Owner: Python numerical worker, only `pipeline/unification` excluding
 
 ## Task 2: durable Scala jobs and artifact lifecycle
 
-Owner: Scala worker, new `spaceapps.unification` production/tests and narrow
-`FitsCache` ownership extension with tests. Constructor accepts
+Owner: Scala worker, the layered `spaceapps.processing` production/tests and narrow
+`infra.service.FileCache` ownership extension with tests. Constructor accepts
 `invoke: Json => Task[Json]` so transport is independently testable.
 
 - [x] Write failing ID-resolution, completed-artifact, snapshot, restart and

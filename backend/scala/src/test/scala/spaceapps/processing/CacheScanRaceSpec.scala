@@ -1,6 +1,6 @@
-package spaceapps.unification
+package spaceapps.processing
 
-import spaceapps.service.FitsCache
+import spaceapps.infra.service.FileCache
 import zio.*
 import zio.test.*
 import java.nio.file.Files
@@ -15,7 +15,7 @@ object CacheScanRaceSpec extends ZIOSpecDefault:
           try stream.sorted(java.util.Comparator.reverseOrder()).forEach(Files.deleteIfExists(_)) finally stream.close()
         }.orDie)
         data=root.resolve("data")
-        cache <- FitsCache.open(data,root.resolve("state.sqlite"),2*1024*1024,1024*1024,0)
+        cache <- FileCache.open(data,root.resolve("state.sqlite"),2*1024*1024,1024*1024,0)
         running=new AtomicBoolean(true)
         threadError=new AtomicReference[Throwable]()
         thread <- ZIO.acquireRelease(ZIO.attemptBlocking {

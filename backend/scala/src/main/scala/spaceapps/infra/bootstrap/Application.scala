@@ -8,7 +8,8 @@ import spaceapps.irsa.model.*
 import spaceapps.irsa.integrations.LiveArchive
 import spaceapps.irsa.integrations.grpc.GrpcServer
 import spaceapps.processing.integrations.HttpPipelineClient
-import spaceapps.unification.{Unifications,UnificationApi}
+import spaceapps.processing.service.Unifications
+import spaceapps.processing.controller.UnificationApi
 import spaceapps.irsa.repository.Repository
 import spaceapps.repository.AnalysisRepository
 import spaceapps.infra.service.FileCache

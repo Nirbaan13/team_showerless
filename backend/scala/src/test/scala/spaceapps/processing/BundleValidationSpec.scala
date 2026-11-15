@@ -1,11 +1,14 @@
-package spaceapps.unification
+package spaceapps.processing
+
+import spaceapps.processing.service.core.BundleValidation
+
 import zio.*
 import zio.test.*
 import java.nio.file.{Files,Path}
 import java.util.zip.{ZipEntry,ZipOutputStream}
 import scala.util.Try
 
-private[unification] object BundleFixture:
+private[processing] object BundleFixture:
   def npy(dtype:String,shape:List[Int],bytes:Option[Array[Byte]]=None):Array[Byte]=
     val tuple=shape.mkString(", ")+(if shape.size==1 then "," else "")
     val base=s"{'descr': '$dtype', 'fortran_order': False, 'shape': ($tuple), }"

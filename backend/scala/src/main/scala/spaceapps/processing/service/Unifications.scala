@@ -1,10 +1,14 @@
-package spaceapps.unification
+package spaceapps.processing.service
 
-import spaceapps.domain.{ApiError,Download}
-import spaceapps.archive.domain.ArchiveFailure
-import spaceapps.archive.repository.ArchiveRepository
-import spaceapps.archive.service.ArchiveService
-import spaceapps.service.{FitsCache,Jobs,Resource}
+import spaceapps.processing.service.model.*
+import spaceapps.processing.service.core.BundleValidation
+import spaceapps.processing.repository.UnificationRepository
+import spaceapps.infra.model.ApiError
+import spaceapps.downloads.model.{ArchiveFailure,AssetResource}
+import spaceapps.downloads.repository.DownloadsRepository
+import spaceapps.downloads.service.DownloadsService
+import spaceapps.infra.service.FileCache
+import spaceapps.irsa.service.{Jobs,Resource}
 import zio.*
 import zio.json.*
 import zio.json.ast.Json
@@ -13,7 +17,7 @@ import java.security.MessageDigest
 import java.util.UUID
 import scala.jdk.CollectionConverters.*
 
-final class Unifications private(jobs:Jobs,archive:ArchiveService,archives:ArchiveRepository,cache:FitsCache,
+final class Unifications private(jobs:Jobs,archive:DownloadsService,archives:DownloadsRepository,cache:FileCache,
   data:Path,repository:UnificationRepository,invoke:Json=>Task[Json]):
   import Unifications.*
   private def directory(id:String)=data.resolve("unifications").resolve(id)
@@ -21,9 +25,12 @@ final class Unifications private(jobs:Jobs,archive:ArchiveService,archives:Archi
   private def resolve(input:UnificationInput):ZIO[Scope,Throwable,Source]=
     if input.kind=="archive_asset" then
       for
-        located <- archive.artifact(input.id).mapError(e=>ApiError(e.code,e.message,e.retryable))
+        resource <- archive.resource(input.id).mapError(e=>ApiError(e.code,e.message,e.retryable))
+        located <- resource match
+          case AssetResource.Ready(path,stored)=>ZIO.succeed(path->stored)
+          case AssetResource.Failed(error)=>ZIO.fail(ApiError(error.code,error.message,error.retryable))
+          case AssetResource.Pending=>ZIO.fail(ApiError("invalid_input","Archive asset is not complete and available"))
         (path,stored)=located
-        _ <- cache.protect(path)
         downloads <- archives.allDownloads
         outcome <- ZIO.fromOption(downloads.flatMap(_.assets).find(a=>a.status=="ready" && a.asset.exists(_.id==input.id))).orElseFail(ApiError("not_found","Completed archive asset metadata not found"))
         record <- archives.record(outcome.record_id)
@@ -192,7 +199,7 @@ final class Unifications private(jobs:Jobs,archive:ArchiveService,archives:Archi
         case _=>ApiError("processing_failed","Image unification failed",true)
       clean(id,true).ignore *> repository.update(record.job.copy(status="failed",artifact_url=None,error=Some(safe)))
     }.onInterrupt(clean(id,true).ignore *> repository.update(record.job.copy(status="failed",error=Some(ApiError("interrupted","Image unification was interrupted; submit again",true)))).ignore).ensuring(clean(id).ignore)
-  private[unification] val worker:UIO[Unit]=(repository.claim.flatMap {
+  private[processing] val worker:UIO[Unit]=(repository.claim.flatMap {
     case Some(record)=>run(record)
     case None=>ZIO.sleep(100.millis)
   }.catchAll(e=>ZIO.logWarning("Unification worker could not access durable state") *> ZIO.sleep(250.millis))).forever
@@ -202,7 +209,7 @@ object Unifications:
   private val MaxBundle=192L*1024*1024
   private final case class Source(input:UnificationInput,path:Path,bytes:Long,sha:String,profile:String,metadata:Json)
   /** Product/reduction identifiers are provenance, never evidence of a distinct exposure. */
-  private[unification] def physicalIdentity(provider:String,collection:String,native:Map[String,String]):Option[String]=
+  private[processing] def physicalIdentity(provider:String,collection:String,native:Map[String,String]):Option[String]=
     val fields=native.map((key,value)=>key.toUpperCase(java.util.Locale.ROOT)->value.trim)
     val identity=provider match
       case "eso" | "cadc"=>fields.get("OBS_ID").filter(_.nonEmpty).map(id=>Json.Arr(Json.Str(collection),Json.Str(id)).toJson)
@@ -240,7 +247,7 @@ object Unifications:
     if Files.exists(path,LinkOption.NOFOLLOW_LINKS) then
       val stream=Files.walk(path)
       try stream.sorted(java.util.Comparator.reverseOrder()).forEach(Files.deleteIfExists(_)) finally stream.close()
-  def make(jobs:Jobs,archiveService:ArchiveService,archiveRepository:ArchiveRepository,cache:FitsCache,data:Path,database:Path,invoke:Json=>Task[Json]):ZIO[Scope,Throwable,Unifications]=for
+  def make(jobs:Jobs,archiveService:DownloadsService,archiveRepository:DownloadsRepository,cache:FileCache,data:Path,database:Path,invoke:Json=>Task[Json]):ZIO[Scope,Throwable,Unifications]=for
     repository <- UnificationRepository.open(database)
     interrupted <- repository.recover
     root=data.toAbsolutePath.normalize()

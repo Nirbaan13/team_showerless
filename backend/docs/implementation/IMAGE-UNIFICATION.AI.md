@@ -8,7 +8,8 @@ frontend and frozen inference code are unchanged.
 
 ## Usage
 
-First download native products through the archive or SPHEREx APIs. Select the
+First list observations with `GET /api/observations-search`, then download the
+chosen `observation_ids` with `POST /api/observations-download`. Select the
 completed **asset ID**, not the archive search record ID, for archive inputs:
 
 ```http
@@ -30,7 +31,7 @@ For a completed SPHEREx native chunk use
 Only default, unprocessed native downloads are accepted. Invalid IDs fail before
 admission. Poll the returned `status_url`; completed jobs provide `artifact_url`.
 Jobs survive restart as durable records; interrupted jobs become failed rather
-than exposing partial data. Artifacts share the FITS cache budget and can be
+than exposing partial data. Artifacts share the common file cache budget and can be
 evicted. A completed job with an unavailable artifact reports that explicitly.
 
 `image_hdu` optionally selects a FITS HDU number or name. Without it the file
@@ -123,3 +124,27 @@ CI installs pinned/hash-locked test dependencies, runs numerical/HTTP and Scala
 suites, builds the exact image and checks the packaged private HTTP/ML loader
 alongside deployment and rollback. Research alternatives and primary sources are
 recorded in IMAGE-UNIFICATION-RESEARCH.AI.md.
+
+## Scala module ownership
+
+All Scala implementation belongs to `spaceapps.processing`:
+
+- `controller.UnificationApi` exposes the three public HTTP routes.
+- `service.Unifications` validates selections and manages durable processing jobs,
+  source snapshots, verification and artifact publication.
+- `service.model` owns processing request/job models; `service.core.BundleValidation`
+  checks the private worker's NPZ before publication.
+- `repository.UnificationRepository` persists job state in SQLite.
+- `integrations.HttpPipelineClient` calls the existing pipeline container.
+
+The composition root in `infra.bootstrap.Application` wires processing to
+`downloads` and `irsa`. Archive inputs use `DownloadsService.resource` in the
+processing scope, retaining a shared-cache lease while inspecting and snapshotting
+them. Native IRSA inputs use `Jobs.leasedResource`. The processing worker does
+not run a new archive search or download products implicitly.
+
+`infra.service.FileCache` accounts for FITS, PNG, calibration files, archive assets
+and validated NPZ under one LRU budget. A directory reservation includes staging
+inputs and output; adoption reuses that reservation. Known unification staging
+files are reclaimed before any producer starts. Final NPZ recovery still consults
+the durable processing state.

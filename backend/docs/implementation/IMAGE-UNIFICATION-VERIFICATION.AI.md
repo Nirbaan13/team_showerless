@@ -78,3 +78,38 @@ certainty about that earlier single failure.
 A selected-cube regression additionally verifies celestial pixel-axis correspondence.
 A plane that fixes RA and retains frequency/DEC cannot be registered as a sky
 image; explicit pixel mode remains available with unknown astrometry.
+
+## PR #19 rebase and processing module integration (2026-11-15)
+
+Rebased onto the merged downloads/common-observations implementation from PR #18.
+Moved all Scala unification production code to processing controller, service,
+service/model, service/core and repository packages; retained the HTTP transport
+in processing/integrations. Updated bootstrap and tests to the current module
+owners. Original PR #19 Python unification code and frontend code are unchanged
+by this integration.
+
+Archive source resolution now uses the scoped downloads resource operation so
+the same LRU coordinator holds an input lease during inspection and snapshotting.
+Known unification staging is reclaimed before producer startup. The extended
+shared-cache crash recovery test first failed with cache_capacity against the
+old cleanup, then passed after recognizing the generated staging paths. Final
+NPZ publication still uses the existing directory reservation, product size
+limit and common LRU index.
+
+Fresh verification after integration:
+
+- Scala test/stage: **234 passed, zero failed, three optional live checks ignored**.
+  UNIFICATION_PYTHON enabled the real Scala HTTP -> Python -> NPZ -> ML-loader test.
+- Python pipeline scientific/HTTP suite: **57 passed**, one external
+  Starlette/httpx deprecation warning.
+- OpenAPI: all 38 existing main paths and 45 schemas are structurally unchanged;
+  total 41 paths and 51 schemas. All local references resolve and component
+  schemas pass JSON Schema syntax validation.
+- Deployment shell syntax and SSH command-rejection checks pass.
+- Independent read-only review found no Critical or Important integration
+  findings, including the startup cleanup. Minor stale module names in design
+  and plan documents were corrected. A dedicated final-NPZ/unknown-child recovery
+  preservation assertion remains an optional coverage improvement.
+
+Exact Docker build, packaged-operation smoke, deployment/rollback and old Compose
+upgrade checks run in PR CI; local Docker daemon access remains unavailable.

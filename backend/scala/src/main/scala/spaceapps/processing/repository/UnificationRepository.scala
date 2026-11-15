@@ -1,6 +1,7 @@
-package spaceapps.unification
+package spaceapps.processing.repository
 
-import spaceapps.domain.ApiError
+import spaceapps.processing.service.model.{UnificationJob,UnificationRecord}
+import spaceapps.infra.model.ApiError
 import zio.*
 import zio.json.*
 import zio.json.ast.Json
