@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 /**
  * SPHEREx Backend Client Service
  * Aligns with backend/docs/openapi.yaml on the configured VPS.
@@ -66,6 +67,8 @@ export interface SSEEventHandlers {
   onJobCompleted?: (payload: { job_id: string; status: string }) => void;
   onError?: (error: Event) => void;
 }
+
+const DETECTOR_RANGES: Record<number, [number, number]> = { 1: [0.75, 1.11], 2: [1.11, 1.64], 3: [1.64, 2.42], 4: [2.42, 3.82], 5: [3.82, 4.42], 6: [4.42, 5.0] };
 
 const BACKEND_BASE_URL =
   (import.meta.env.VITE_BACKEND_URL as string) || '/backend';
@@ -260,11 +263,11 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
     epochIndex: idx,
     observationDate: f.midpoint_utc,
     detectorArray: (f.detector || params.detector) as DetectorArrayId,
-    wavelengthMinUm: 0.75 + (params.detector - 1) * 0.7,
-    wavelengthMaxUm: 1.11 + (params.detector - 1) * 0.7,
-    channelIndex: params.detector * 16,
+    wavelengthMinUm: DEMO_REAL_ONLY ? DETECTOR_RANGES[params.detector][0] : 0.75 + (params.detector - 1) * 0.7,
+    wavelengthMaxUm: DEMO_REAL_ONLY ? DETECTOR_RANGES[params.detector][1] : 1.11 + (params.detector - 1) * 0.7,
+    channelIndex: DEMO_REAL_ONLY ? undefined : params.detector * 16,
     flaggedPixelPercentage: Number((f.outlier_fraction * 100).toFixed(2)),
-    cosmicRayHits: Math.max(2, Math.round(f.outlier_fraction * 200)),
+    cosmicRayHits: DEMO_REAL_ONLY ? undefined : Math.max(2, Math.round(f.outlier_fraction * 200)),
     isAvailable: true,
     imageDataUrl: inferenceResource(f.image_url, job.id),
     residualDataUrl: inferenceResource(f.difference_url, job.id),
@@ -287,11 +290,11 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
       epochIndex: d.frame_index,
       x: d.x,
       y: d.y,
-      flux: Math.max(10, (d.residual_snr ?? 8) * 1.6),
-      snr: Number((d.residual_snr ?? 8).toFixed(1)),
+      flux: DEMO_REAL_ONLY ? undefined : Math.max(10, (d.residual_snr ?? 8) * 1.6),
+      snr: DEMO_REAL_ONLY ? d.residual_snr ?? undefined : Number((d.residual_snr ?? 8).toFixed(1)),
     })),
-    classification: idx === 0 ? 'moving_object' : 'already_known',
-    confidence: idx === 0 ? 'high' : 'medium',
+    classification: DEMO_REAL_ONLY ? 'unreviewed' : idx === 0 ? 'moving_object' : 'already_known',
+    confidence: DEMO_REAL_ONLY ? 'unavailable' : idx === 0 ? 'high' : 'medium',
     volunteerNotes: `Live NASA IRSA SPHEREx cutout track #${c.rank} (${c.detections.length} epochs, speed ${c.speed_arcsec_per_hour.toFixed(1)}″/h, RMS ${c.fit_rms_px.toFixed(2)} px).`,
     isKnownCatalogMatch: false,
     mlRank: c.rank,
@@ -312,6 +315,7 @@ export async function fetchLiveBackendCutoutAnalysis(params: {
  * Procedural fallback generator when coordinates have no NASA IRSA archive coverage or backend is offline.
  */
 export function generateFallbackObservations(query: SkyQueryRequest): ObservationMetadata[] {
+  if (DEMO_REAL_ONLY) return [];
   const dates = [
     '2025-06-15T04:12:00Z',
     '2025-09-22T11:45:00Z',
@@ -374,29 +378,23 @@ export function convertObservationsToEpochFrames(
     detectorArray: (obs.detector_array >= 1 && obs.detector_array <= 6
       ? obs.detector_array
       : fallbackArrayId) as DetectorArrayId,
-    wavelengthMinUm: obs.wavelength_min_um ?? (0.75 + ((obs.detector_array || 2) - 1) * 0.7),
-    wavelengthMaxUm: obs.wavelength_max_um ?? (1.11 + ((obs.detector_array || 2) - 1) * 0.7),
-    channelIndex: obs.channel_index ?? ((obs.detector_array || 2) * 16),
-    flaggedPixelPercentage: Number(
-      obs.header_metadata?.flagged_pixel_percentage ?? (obs.is_available ? 0.2 : 100)
-    ),
-    cosmicRayHits: Number(
-      obs.header_metadata?.cosmic_ray_hits ?? (obs.is_available ? 10 : 0)
-    ),
+    wavelengthMinUm: obs.wavelength_min_um ?? (DEMO_REAL_ONLY ? DETECTOR_RANGES[obs.detector_array || fallbackArrayId][0] : 0.75 + ((obs.detector_array || 2) - 1) * 0.7),
+    wavelengthMaxUm: obs.wavelength_max_um ?? (DEMO_REAL_ONLY ? DETECTOR_RANGES[obs.detector_array || fallbackArrayId][1] : 1.11 + ((obs.detector_array || 2) - 1) * 0.7),
+    channelIndex: obs.channel_index ?? (DEMO_REAL_ONLY ? undefined : (obs.detector_array || 2) * 16),
+    flaggedPixelPercentage: DEMO_REAL_ONLY ? obs.header_metadata?.flagged_pixel_percentage : Number(obs.header_metadata?.flagged_pixel_percentage ?? (obs.is_available ? 0.2 : 100)),
+    cosmicRayHits: DEMO_REAL_ONLY ? obs.header_metadata?.cosmic_ray_hits : Number(obs.header_metadata?.cosmic_ray_hits ?? (obs.is_available ? 10 : 0)),
     isAvailable: obs.is_available,
     skipReason: obs.skip_reason,
     imageDataUrl:
       obs.header_metadata?.image_data_url ||
-      (coordRa !== undefined && coordDec !== undefined
+      (!DEMO_REAL_ONLY && coordRa !== undefined && coordDec !== undefined
         ? buildRealSkyCutoutPhotoUrl(coordRa, coordDec, fovArcmin, idx)
         : undefined),
     headerMetadata: {
-      exposureTimeSec: Number(obs.header_metadata?.exposure_time_sec ?? 142.5),
-      airmass: Number(obs.header_metadata?.airmass ?? 1.0),
-      zodiBrightnessMjySr: Number(obs.header_metadata?.zodi_brightness ?? 12.4),
-      snrEstimated: Number(
-        obs.header_metadata?.snr_estimated ?? (obs.is_available ? 22.0 : 0)
-      ),
+      exposureTimeSec: DEMO_REAL_ONLY ? obs.header_metadata?.exposure_time_sec : Number(obs.header_metadata?.exposure_time_sec ?? 142.5),
+      airmass: DEMO_REAL_ONLY ? obs.header_metadata?.airmass : Number(obs.header_metadata?.airmass ?? 1.0),
+      zodiBrightnessMjySr: DEMO_REAL_ONLY ? obs.header_metadata?.zodi_brightness : Number(obs.header_metadata?.zodi_brightness ?? 12.4),
+      snrEstimated: DEMO_REAL_ONLY ? obs.header_metadata?.snr_estimated : Number(obs.header_metadata?.snr_estimated ?? (obs.is_available ? 22.0 : 0)),
     },
   }));
 }
@@ -623,6 +621,7 @@ export async function requestObservationPreparation(params: {
 
     return await response.json();
   } catch (err) {
+    if (DEMO_REAL_ONLY) throw err;
     console.warn('[SPHEREx API] Backend offline. Providing resilient completed job manifest.', err);
     return {
       id: `job-resilient-${Date.now()}`,

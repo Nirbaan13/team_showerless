@@ -98,9 +98,9 @@ export interface CandidateRecord {
   discovery_date: string;
   candidate_type: CandidateType;
   status: CandidateStatus;
-  snr: number;
-  speed_arcsec_hr: number;
-  fit_rms_px: number;
+  snr: number | null;
+  speed_arcsec_hr: number | null;
+  fit_rms_px: number | null;
   spectral_summary: Record<string, any>;
   detection_method:
     | 'heuristic_leave_one_out'

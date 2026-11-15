@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import React, { useState, useEffect, useRef } from 'react';
 import type {
   SpherexEpochFrame,
@@ -165,7 +166,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
   const handleOpenSubmissionForCandidate = async (candidateKey: string) => {
     let record = await fetchCandidateById(candidateKey);
-    if (!record && candidate) {
+    if (!record && candidate && !DEMO_REAL_ONLY) {
       record = {
         id: candidateKey,
         name: candidate.validationData?.objectName || candidate.catalogId || candidate.id,

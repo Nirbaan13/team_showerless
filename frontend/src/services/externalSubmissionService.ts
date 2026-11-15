@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 /**
  * PlanetX External Astronomical Submission Pipeline Service
  * 
@@ -28,6 +29,7 @@ export interface DestinationRecommendation {
  * to automatically recommend the scientifically appropriate destination.
  */
 export function routeCandidateDestination(candidate: CandidateRecord): DestinationRecommendation {
+  if (DEMO_REAL_ONLY) return { destination: 'MPC', destinationFullName: 'Minor Planet Center', agency: 'IAU', reason: 'Reporting requires validated per-epoch astrometry and photometry.', eligibilityStatus: 'requires_photometry', portalUrl: 'https://www.minorplanetcenter.net/', formatName: 'Unavailable' };
   const speed = candidate.speed_arcsec_hr ?? 0;
   const epochs = candidate.epoch_count ?? 1;
   const type = candidate.candidate_type;
@@ -38,7 +40,7 @@ export function routeCandidateDestination(candidate: CandidateRecord): Destinati
       destination: 'MPC',
       destinationFullName: 'IAU Minor Planet Center (MPC)',
       agency: 'Smithsonian Astrophysical Observatory / NASA PDS SBN',
-      reason: `Object displays clear non-sidereal sky motion (${speed.toFixed(1)}″/hr) across ${epochs} epochs (fit RMS: ${candidate.fit_rms_px.toFixed(2)} px). Eligible for spaceborne ADES astrometric reporting.`,
+      reason: `Object displays clear non-sidereal sky motion (${speed.toFixed(1)}″/hr) across ${epochs} epochs (fit RMS: ${(candidate.fit_rms_px ?? 0).toFixed(2)} px). Eligible for spaceborne ADES astrometric reporting.`,
       eligibilityStatus: epochs >= 3 ? 'eligible' : 'requires_more_epochs',
       portalUrl: 'https://www.minorplanetcenter.net/db_search',
       formatName: 'ADES XML / PSV Astrometry',
@@ -94,10 +96,11 @@ function formatCoordStrings(raDeg: number, decDeg: number) {
  * 2A. MPC Astrometric Data Exchange Standard (ADES) XML Generator
  */
 export function generateAdesXml(candidate: CandidateRecord): string {
+  if (DEMO_REAL_ONLY) return 'Unavailable: measured per-epoch photometry and validated external reporting are not available.';
   const { raStr, decStr } = formatCoordStrings(candidate.ra, candidate.dec);
   const trackSub = candidate.id.replace('-', '');
   const obsTime = candidate.discovery_date || new Date().toISOString();
-  const mag = fluxMjyToMag(candidate.snr * 1.2);
+  const mag = fluxMjyToMag((candidate.snr ?? 0) * 1.2);
   const primaryBand = candidate.spectral_summary?.detector_arrays?.[0] || 'SPX6';
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -114,7 +117,7 @@ export function generateAdesXml(candidate: CandidateRecord): string {
     <submStation>SPHEREx</submStation>
     <mode>CCD</mode>
     <astRef>PlanetX Pipeline v1.0 / SPHEREx Public Archive</astRef>
-    <remarks>Candidate ${candidate.name} (${candidate.id}) - Speed ${candidate.speed_arcsec_hr.toFixed(1)} arcsec/hr, Fit RMS ${candidate.fit_rms_px.toFixed(2)} px</remarks>
+    <remarks>Candidate ${candidate.name} (${candidate.id}) - Speed ${(candidate.speed_arcsec_hr ?? 0).toFixed(1)} arcsec/hr, Fit RMS ${(candidate.fit_rms_px ?? 0).toFixed(2)} px</remarks>
   </optical>
 </ades>`;
 }
@@ -123,10 +126,11 @@ export function generateAdesXml(candidate: CandidateRecord): string {
  * 2B. MPC ADES PSV (Pipe-Separated Values) 80-Column Record Generator
  */
 export function generateAdesPsv(candidate: CandidateRecord): string {
+  if (DEMO_REAL_ONLY) return 'Unavailable: measured per-epoch photometry and validated external reporting are not available.';
   const { raStr, decStr } = formatCoordStrings(candidate.ra, candidate.dec);
   const trackSub = candidate.id.replace('-', '');
   const obsTime = candidate.discovery_date || new Date().toISOString();
-  const mag = fluxMjyToMag(candidate.snr * 1.2);
+  const mag = fluxMjyToMag((candidate.snr ?? 0) * 1.2);
   const primaryBand = candidate.spectral_summary?.detector_arrays?.[0] || 'SPX6';
 
   const header = `#version=2017
@@ -140,12 +144,13 @@ export function generateAdesPsv(candidate: CandidateRecord): string {
  * 2C. IAU Transient Name Server (TNS) JSON Formatter
  */
 export function generateTnsJson(candidate: CandidateRecord): string {
+  if (DEMO_REAL_ONLY) return 'Unavailable: measured per-epoch photometry and validated external reporting are not available.';
   const obsTime = candidate.discovery_date
     ? candidate.discovery_date.replace('T', ' ').replace('Z', '').split('.')[0]
     : new Date().toISOString().replace('T', ' ').substring(0, 19);
 
   const primaryBand = candidate.spectral_summary?.detector_arrays?.[0] || 'Band6';
-  const fluxVal = Number((candidate.snr * 0.8).toFixed(1));
+  const fluxVal = Number(((candidate.snr ?? 0) * 0.8).toFixed(1));
 
   const tnsObject = {
     reporter: "PlanetX Citizen Science Project (NASA Space Apps)",
@@ -173,7 +178,7 @@ export function generateTnsJson(candidate: CandidateRecord): string {
       detector_coverage: candidate.spectral_summary?.detector_arrays || ["D1", "D6"],
       detection_method: candidate.detection_method,
     },
-    remarks: `Detected in SPHEREx multi-epoch infrared survey. Apparent sky speed ${candidate.speed_arcsec_hr.toFixed(1)} arcsec/hr with trajectory fit RMS ${candidate.fit_rms_px.toFixed(2)} px. Molecular absorption features: ${JSON.stringify(candidate.spectral_summary?.features || [])}.`,
+    remarks: `Detected in SPHEREx multi-epoch infrared survey. Apparent sky speed ${(candidate.speed_arcsec_hr ?? 0).toFixed(1)} arcsec/hr with trajectory fit RMS ${(candidate.fit_rms_px ?? 0).toFixed(2)} px. Molecular absorption features: ${JSON.stringify(candidate.spectral_summary?.features || [])}.`,
   };
 
   return JSON.stringify(tnsObject, null, 2);
@@ -183,9 +188,10 @@ export function generateTnsJson(candidate: CandidateRecord): string {
  * 2D. AAVSO Variable Star Index (VSX) Upload Formatter
  */
 export function generateVsxPayload(candidate: CandidateRecord): string {
+  if (DEMO_REAL_ONLY) return 'Unavailable: measured per-epoch photometry and validated external reporting are not available.';
   const { raStr, decStr } = formatCoordStrings(candidate.ra, candidate.dec);
-  const maxMag = fluxMjyToMag(candidate.snr * 1.5);
-  const minMag = fluxMjyToMag(candidate.snr * 0.7);
+  const maxMag = fluxMjyToMag((candidate.snr ?? 0) * 1.5);
+  const minMag = fluxMjyToMag((candidate.snr ?? 0) * 0.7);
 
   return `[AAVSO VSX VARIABLE STAR SUBMISSION]
 Primary Identifier : ${candidate.name}
@@ -234,6 +240,7 @@ export async function dispatchExternalSubmission(
   customReferenceId?: string,
   submissionStatus: import('../types/catalogue').SubmissionStatus = 'submitted'
 ): Promise<ExternalSubmissionRecord> {
+  if (DEMO_REAL_ONLY) throw new Error('External submission is unavailable in the real-only demo. No transmission has occurred.');
   const now = new Date().toISOString();
   const refId =
     customReferenceId ||

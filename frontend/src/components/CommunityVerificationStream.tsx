@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY, VERIFICATION_STORAGE_KEY } from '../lib/demoMode';
 import React, { useState, useEffect } from 'react';
 import type {
   CandidateObject,
@@ -30,7 +31,7 @@ import {
   Database,
 } from 'lucide-react';
 
-const STORAGE_KEY = 'spherex_community_comments';
+const STORAGE_KEY = VERIFICATION_STORAGE_KEY;
 
 interface CommunityVerificationStreamProps {
   candidate: CandidateObject | null;
@@ -72,13 +73,13 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
         if (parsed.length > 0) return parsed;
       }
     } catch {}
-    return SEEDED_VERIFICATION_DISCUSSIONS;
+    return DEMO_REAL_ONLY ? [] : SEEDED_VERIFICATION_DISCUSSIONS;
   });
 
   useEffect(() => {
     let isMounted = true;
     fetchVerifications().then((data) => {
-      if (isMounted && data.length > 0) {
+      if (isMounted) {
         setComments(data);
       }
     });

@@ -27,6 +27,7 @@ except ImportError:
             return (lo, hi)
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from PIL import Image
 from pydantic import BaseModel, Field
 
@@ -47,6 +48,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def real_only_products(request, call_next):
+    # These legacy routes manufacture their pixels, photometry, catalog fallbacks,
+    # or clearinghouse replies; the real backend supplies the supported products.
+    path = request.url.path
+    synthetic = path in {"/catalog", "/api/motion/catalog", "/api/motion/cutout/render", "/api/motion/spectrum", "/api/catalogue/auto-submit", "/api/motion/catalogue/auto-submit"} or path.startswith("/api/motion/coadd/")
+    if os.getenv("DEMO_REAL_ONLY") == "1" and synthetic:
+        return JSONResponse(status_code=501, content={"detail": "Unavailable in real-only demo: this legacy endpoint has no measured data product. Use the real backend or published review artifacts."})
+    return await call_next(request)
+
 
 DIR_PATH = Path(__file__).resolve().parent
 MOTION_SLOTS = BoundedSemaphore(2)
@@ -1026,7 +1038,7 @@ def init_db():
 
         # Seed if empty
         row = conn.execute("SELECT COUNT(*) AS cnt FROM verifications").fetchone()
-        if row and row["cnt"] == 0:
+        if row and row["cnt"] == 0 and os.getenv("DEMO_REAL_ONLY") != "1":
             for item in SEEDED_VERIFICATIONS:
                 conn.execute("""
                     INSERT OR IGNORE INTO verifications (
@@ -1151,7 +1163,7 @@ def post_verification(item: VerificationPayload):
             dec = float(setting.get("dec", 0.0) or 0.0)
             name = setting.get("candidateName") or item.candidateId
             existing_cid = catalogue_db.find_candidate_for_thread(cand_id, name, ra, dec)
-            if not existing_cid:
+            if not existing_cid and os.getenv("DEMO_REAL_ONLY") != "1":
                 catalogue_db.create_candidate(
                     name=name,
                     ra=ra,
@@ -1379,7 +1391,7 @@ def create_candidate_entry(req: CreateCandidateRequest):
         fixed_stack_url=req.fixed_stack_url,
         motion_stack_url=req.motion_stack_url,
         metadata=req.metadata,
-        epoch_count=req.epoch_count,
+        epoch_count=(0 if os.getenv("DEMO_REAL_ONLY") == "1" and "epoch_count" not in req.model_fields_set else req.epoch_count),
         author_id=req.author_id,
         author_name=req.author_name,
     )

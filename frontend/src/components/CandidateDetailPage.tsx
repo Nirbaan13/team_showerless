@@ -1,3 +1,5 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
+import { ArtifactImage } from './ArtifactImage';
 import React, { useState, useEffect } from 'react';
 import type { CandidateRecord, ClassificationVote, UserRole, ValidationStatus } from '../types/catalogue';
 import {
@@ -327,16 +329,16 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
             <div>
               <span className="text-paper-500 block text-[10px] uppercase">Apparent Sky Speed</span>
               <span className="text-ochre-300 font-bold">
-                {candidate.speed_arcsec_hr > 0 ? `${candidate.speed_arcsec_hr.toFixed(1)}″/hr` : 'Stationary (<0.5″/hr)'}
+                {candidate.speed_arcsec_hr == null ? 'Unavailable' : candidate.speed_arcsec_hr > 0 ? `${candidate.speed_arcsec_hr?.toFixed(1) ?? 'unavailable'}″/hr` : 'Stationary (<0.5″/hr)'}
               </span>
             </div>
             <div>
               <span className="text-paper-500 block text-[10px] uppercase">Trajectory Fit RMS</span>
-              <span className="text-emerald-400 font-bold">{candidate.fit_rms_px.toFixed(2)} px</span>
+              <span className="text-emerald-400 font-bold">{candidate.fit_rms_px?.toFixed(2) ?? 'unavailable'} px</span>
             </div>
             <div>
               <span className="text-paper-500 block text-[10px] uppercase">Detection Significance</span>
-              <span className="text-sky-300 font-bold">{candidate.snr.toFixed(1)}σ SNR ({candidate.epoch_count} epochs)</span>
+              <span className="text-sky-300 font-bold">{candidate.snr?.toFixed(1) ?? 'unavailable'}σ SNR ({candidate.epoch_count} epochs)</span>
             </div>
           </div>
         </div>
@@ -362,7 +364,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   Fixed Sky Spot Stack
                 </span>
                 <div className="relative w-36 h-36 bg-black rounded-lg overflow-hidden border border-paper-800 flex items-center justify-center">
-                  <img
+                  {DEMO_REAL_ONLY ? <ArtifactImage src={candidate.fixed_stack_url} alt="Fixed sky stack" /> : (<img
                     src={`/api/motion/coadd/${candidate.id}/fixed.png`}
                     alt="Fixed Sky Coadd"
                     className="w-full h-full object-cover pixelated"
@@ -370,7 +372,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                       (e.target as HTMLImageElement).src =
                         'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="%23111"><rect width="100" height="100"/><circle cx="50" cy="50" r="15" fill="%23333"/><line x1="30" y1="50" x2="70" y2="50" stroke="%23555" stroke-width="2"/></svg>';
                     }}
-                  />
+                  />)}
                   {/* Reticle Ring */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-8 h-8 rounded-full border border-dashed border-ochre-400/80" />
@@ -388,7 +390,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   <span>Follow-Track Coadd</span>
                 </div>
                 <div className="relative w-36 h-36 bg-black rounded-lg overflow-hidden border border-emerald-500/50 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                  <img
+                  {DEMO_REAL_ONLY ? <ArtifactImage src={candidate.motion_stack_url} alt="Motion stack" /> : (<img
                     src={`/api/motion/coadd/${candidate.id}/motion.png`}
                     alt="Motion Follow Coadd"
                     className="w-full h-full object-cover pixelated"
@@ -396,7 +398,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                       (e.target as HTMLImageElement).src =
                         'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="%23111"><rect width="100" height="100"/><circle cx="50" cy="50" r="8" fill="%2310b981"/></svg>';
                     }}
-                  />
+                  />)}
                   {/* Concentric Target Reticle Ring */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-8 h-8 rounded-full border-2 border-emerald-400 animate-pulse" />
@@ -404,15 +406,15 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                   </div>
                 </div>
                 <div className="text-[10px] font-mono text-emerald-300 font-bold text-center">
-                  Point-Source Coadded ({candidate.snr.toFixed(1)}σ)
+                  Point-Source Coadded ({candidate.snr?.toFixed(1) ?? 'unavailable'}σ)
                 </div>
               </div>
             </div>
 
             <p className="text-[11px] font-mono text-paper-400 leading-relaxed bg-paper-950/60 p-3 rounded-xl border border-paper-800">
-              When shifting exposures along the candidate trajectory ({candidate.speed_arcsec_hr.toFixed(1)}″/hr),
+              When shifting exposures along the candidate trajectory ({candidate.speed_arcsec_hr?.toFixed(1) ?? 'unavailable'}″/hr),
               the target coadds constructively into a concentrated central PSF with fit RMS of{' '}
-              <span className="text-emerald-400 font-bold">{candidate.fit_rms_px.toFixed(2)} px</span>,
+              <span className="text-emerald-400 font-bold">{candidate.fit_rms_px?.toFixed(2) ?? 'unavailable'} px</span>,
               distinguishing real celestial motion from static artifacts.
             </p>
           </div>
@@ -439,7 +441,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
 
             <div className="flex flex-col items-center justify-center space-y-3">
               <div className="relative w-56 h-56 bg-black rounded-xl overflow-hidden border-2 border-paper-800 flex items-center justify-center">
-                <img
+                {DEMO_REAL_ONLY ? <ArtifactImage src={candidate.metadata?.frame_urls?.[activeBlinkEpoch]} alt="Epoch image" /> : (<img
                   src={`/api/motion/cutout/render?ra=${candidate.ra}&dec=${candidate.dec}&epoch=${activeBlinkEpoch}&width=256&height=256`}
                   alt={`FITS Epoch ${activeBlinkEpoch}`}
                   className="w-full h-full object-cover pixelated"
@@ -447,7 +449,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                     (e.target as HTMLImageElement).src =
                       'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="%2309090b"><rect width="200" height="200"/><circle cx="100" cy="100" r="10" fill="%2338bdf8"/></svg>';
                   }}
-                />
+                />)}
                 <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-sky-300 border border-sky-400/40">
                   Epoch {activeBlinkEpoch + 1} / {candidate.epoch_count}
                 </div>
@@ -549,7 +551,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                 Nominal criterion: SNR ≥ 5.0σ across primary spectral detection channels.
               </p>
               <div className="text-[10px] font-mono text-emerald-400 font-bold pt-1 border-t border-paper-800">
-                Recorded SNR: {candidate.snr.toFixed(1)}σ
+                Recorded SNR: {candidate.snr?.toFixed(1) ?? 'unavailable'}σ
               </div>
             </div>
 
@@ -563,7 +565,7 @@ export const CandidateDetailPage: React.FC<CandidateDetailPageProps> = ({
                 Nominal criterion: Trajectory fit RMS &lt; 0.50 px across ≥3 epochs.
               </p>
               <div className="text-[10px] font-mono text-emerald-400 font-bold pt-1 border-t border-paper-800">
-                Fit RMS: {candidate.fit_rms_px.toFixed(2)} px ({candidate.epoch_count} epochs)
+                Fit RMS: {candidate.fit_rms_px?.toFixed(2) ?? 'unavailable'} px ({candidate.epoch_count} epochs)
               </div>
             </div>
 

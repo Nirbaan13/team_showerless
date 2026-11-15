@@ -111,7 +111,7 @@ def init_db():
         cur = conn.cursor()
         cur.execute("SELECT COUNT(*) FROM candidates;")
         count = cur.fetchone()[0]
-        if count == 0:
+        if count == 0 and os.getenv("DEMO_REAL_ONLY") != "1":
             seed_benchmark_candidates(conn)
 
 
@@ -779,11 +779,13 @@ def create_candidate(
     fixed_stack_url: Optional[str] = None,
     motion_stack_url: Optional[str] = None,
     metadata: Optional[Dict[str, Any]] = None,
-    epoch_count: int = 3,
+    epoch_count: Optional[int] = None,
     author_id: str = "volunteer-session",
     author_name: str = "Citizen Volunteer",
 ) -> Dict[str, Any]:
     """Creates a new candidate and assigns next sequential PX-XXXXXX ID."""
+    if epoch_count is None:
+        epoch_count = 0 if os.getenv("DEMO_REAL_ONLY") == "1" else 3
     with get_connection() as conn:
         cid = generate_candidate_id(conn)
         now = datetime.now(timezone.utc).isoformat()
@@ -809,8 +811,8 @@ def create_candidate(
             fit_rms_px,
             json.dumps(spectral_summary or {}),
             detection_method,
-            fixed_stack_url or f"/api/motion/coadd/{cid}/fixed.png",
-            motion_stack_url or f"/api/motion/coadd/{cid}/motion.png",
+            fixed_stack_url or ("" if os.getenv("DEMO_REAL_ONLY") == "1" else f"/api/motion/coadd/{cid}/fixed.png"),
+            motion_stack_url or ("" if os.getenv("DEMO_REAL_ONLY") == "1" else f"/api/motion/coadd/{cid}/motion.png"),
             json.dumps(metadata or {}),
             epoch_count,
             author_id,
@@ -887,6 +889,9 @@ def _run_default_validation_checks(
     conn: sqlite3.Connection,
 ):
     """Executes quantitative scientific data-quality checks on a candidate."""
+    if os.getenv("DEMO_REAL_ONLY") == "1":
+        # No crossmatch or spectral products were measured by this legacy routine.
+        return
     now = datetime.now(timezone.utc).isoformat()
     cur = conn.cursor()
 

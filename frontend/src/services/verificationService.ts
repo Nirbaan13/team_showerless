@@ -1,7 +1,8 @@
+import { DEMO_REAL_ONLY, VERIFICATION_STORAGE_KEY } from '../lib/demoMode';
 import type { VerificationComment } from '../types/spherex';
 import { SEEDED_VERIFICATION_DISCUSSIONS } from './mockVerificationData';
 
-const STORAGE_KEY = 'spherex_community_comments';
+const STORAGE_KEY = VERIFICATION_STORAGE_KEY;
 
 function getLocalVerifications(): VerificationComment[] {
   try {
@@ -15,7 +16,7 @@ function getLocalVerifications(): VerificationComment[] {
   } catch {
     // Ignore JSON/localStorage failure
   }
-  return SEEDED_VERIFICATION_DISCUSSIONS;
+  return DEMO_REAL_ONLY ? [] : SEEDED_VERIFICATION_DISCUSSIONS;
 }
 
 function saveLocalVerifications(comments: VerificationComment[]): void {

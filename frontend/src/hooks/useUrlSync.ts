@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import { useEffect, useCallback } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
 
@@ -42,7 +43,7 @@ export function useUrlSync(
       if (params.has('observed_through')) partial.observedThrough = params.get('observed_through')!;
       if (params.has('fov')) {
         const val = params.get('fov') as FOVOption;
-        if (["1'", "3'", "5'", "10'"].includes(val)) partial.fov = val;
+        if (["1'", "3'", "5'", "10'", ...(DEMO_REAL_ONLY ? ["12'"] : [])].includes(val)) partial.fov = val;
       }
       if (params.has('detector')) {
         const raw = params.get('detector');

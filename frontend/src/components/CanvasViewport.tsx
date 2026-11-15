@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY } from '../lib/demoMode';
 import React, { useRef, useEffect, useState } from 'react';
 import type {
   SpherexEpochFrame,
@@ -296,7 +297,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     candidates.forEach((cand, candIdx) => {
       ctx.save();
       const isSelected = selectedCandidateId === cand.id;
-      const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+      const currentPos = DEMO_REAL_ONLY ? cand.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) : cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+      if (!currentPos) { ctx.restore(); return; }
       const { cx: offsetX, cy: offsetY } = getCanvasCoords(currentPos.x, currentPos.y);
 
       // Priority ranking: Priority 1 gets intense deep red, fading to softer reds for lower priority
@@ -320,7 +322,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
       // 2. High-precision astronomical targeting reticle [ ] framing candidate pixel cluster
       // The interior is completely clear so raw detector pixels are fully visible without fake yellow/white dots
-      const reticleSize = Math.max(16, Math.min(30, (currentPos.flux / 10) + 14));
+      const reticleSize = Math.max(16, Math.min(30, ((currentPos.flux ?? 20) / 10) + 14));
       drawTargetingReticle(offsetX, offsetY, reticleSize, isSelected, isSelected ? '#34d399' : priority.border);
 
       // 3. Priority Pill Badge
@@ -396,11 +398,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     // Per-Target & Per-Object Live Space Agency Catalog Overlays (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
     const selectedCand =
-      candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
+      candidates.filter(c => !DEMO_REAL_ONLY || c.epochPositions.some(pos => pos.epochIndex === activeFrameIndex)).find((c) => c.id === selectedCandidateId) || (DEMO_REAL_ONLY ? null : candidates[0] || null);
     const gaiaOverlaySources = liveCatalog?.gaiaSources ?? [];
     const wiseOverlaySources = liveCatalog?.wiseSources ?? [];
 
-    if (overlays.gaiaDr3) {
+    if (overlays.gaiaDr3 && loadStatus?.source !== 'packaged') {
       // 1. Draw live-pulled ESA Gaia DR3 stars in this field
       gaiaOverlaySources.forEach((src, idx) => {
         let gx = src.dx;
@@ -409,7 +411,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           idx === 0
             ? candidates.find((c) => c.matchedCatalog === 'Gaia DR3')
             : undefined;
-        if (matchingGaiaCand) {
+        if (matchingGaiaCand && !DEMO_REAL_ONLY) {
           const pos =
             matchingGaiaCand.epochPositions[activeFrameIndex] ||
             matchingGaiaCand.epochPositions[0];
@@ -444,8 +446,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         candidates.find((c) => c.matchedCatalog === 'Gaia DR3')?.id !== selectedCand.id
       ) {
         const pos =
-          selectedCand.epochPositions[activeFrameIndex] ||
-          selectedCand.epochPositions[0];
+          selectedCand.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) || selectedCand.epochPositions[0];
         const { cx: gx, cy: gy } = getCanvasCoords(pos.x, pos.y);
         ctx.strokeStyle = '#34d399';
         ctx.lineWidth = 2.2 / zoom;
@@ -460,7 +461,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
     }
 
-    if (overlays.wise) {
+    if (overlays.wise && loadStatus?.source !== 'packaged') {
       // 2. Draw live-pulled NASA/IPAC AllWISE mid-infrared sources in this field
       wiseOverlaySources.forEach((src, idx) => {
         let wx = src.dx;
@@ -469,7 +470,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           idx === 0
             ? candidates.find((c) => c.matchedCatalog === 'WISE')
             : undefined;
-        if (matchingWiseCand) {
+        if (matchingWiseCand && !DEMO_REAL_ONLY) {
           const pos =
             matchingWiseCand.epochPositions[activeFrameIndex] ||
             matchingWiseCand.epochPositions[0];
@@ -503,30 +504,31 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     // 3. Draw JPL Horizons Solar System Ephemeris & CDS SIMBAD sources when ticked
     const neoCandidate =
       (selectedCand?.matchedCatalog === 'NEO Ephemeris' ? selectedCand : null) ||
-      candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
+      candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris' && (!DEMO_REAL_ONLY || c.epochPositions.some(pos => pos.epochIndex === activeFrameIndex)));
 
-    if (overlays.solarSystemEphemeris) {
+    if (overlays.solarSystemEphemeris && loadStatus?.source !== 'packaged') {
       if (neoCandidate || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
         let ex = liveCatalog?.ephemerisSources[0]?.dx ?? 0;
         let ey = liveCatalog?.ephemerisSources[0]?.dy ?? 0;
         if (neoCandidate) {
           const pos =
-            neoCandidate.epochPositions[activeFrameIndex] ||
-            neoCandidate.epochPositions[0];
+            neoCandidate.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) || neoCandidate.epochPositions[0];
           const coords = getCanvasCoords(pos.x, pos.y);
           ex = coords.cx;
           ey = coords.cy;
         }
+        const offsetIndex = DEMO_REAL_ONLY ? neoCandidate?.epochPositions.findIndex(pos => pos.epochIndex === activeFrameIndex) ?? -1 : activeFrameIndex;
+        const epochOffsetPx = neoCandidate?.ephemerisOffsetsPx?.[offsetIndex];
         const offsetPx =
-          neoCandidate?.ephemerisOffsetsPx?.[activeFrameIndex] ??
+          epochOffsetPx ??
           neoCandidate?.validationData?.maxOffsetPx ??
-          0.54;
+          (DEMO_REAL_ONLY ? undefined : 0.54);
         const ephLabel = `★ ${
           liveCatalog?.ephemerisSources[0]?.label ||
           neoCandidate?.validationData?.objectName ||
           neoCandidate?.catalogId ||
           'JPL Horizons'
-        } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
+        } [Epoch ${activeFrameIndex + 1} · ${offsetPx == null ? 'offset unavailable' : `${DEMO_REAL_ONLY && epochOffsetPx == null ? 'max ' : ''}Δ=${offsetPx.toFixed(2)}px`}]`;
         ctx.strokeStyle = '#38bdf8';
         ctx.lineWidth = 1.8 / zoom;
         ctx.beginPath();
@@ -576,8 +578,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       (overlays.gaiaDr3 || overlays.wise || overlays.solarSystemEphemeris)
     ) {
       const pos =
-        selectedCand.epochPositions[activeFrameIndex] ||
-        selectedCand.epochPositions[0];
+        (DEMO_REAL_ONLY ? selectedCand.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) : selectedCand.epochPositions[activeFrameIndex]) || selectedCand.epochPositions[0];
       const { cx: ux, cy: uy } = getCanvasCoords(pos.x, pos.y);
       const uncatTag = 'Catalogue match unverified';
       ctx.font = `bold ${8 / zoom}px "JetBrains Mono", monospace`;
@@ -618,7 +619,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('10 px', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [bitmapReady, targetBitmapUrl, showSourceLabels, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
+  }, [loadStatus?.source, bitmapReady, targetBitmapUrl, showSourceLabels, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -674,7 +675,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     const imgH = 512 * (natH / natW);
 
     for (const cand of candidates) {
-      const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+      const pos = DEMO_REAL_ONLY ? cand.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) : cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+      if (!pos) continue;
       const cx = (pos.x + 0.5) * scale - 256;
       const cy = (pos.y + 0.5) * scale - imgH / 2;
       const dist = Math.hypot(transformedX - cx, transformedY - cy);
@@ -751,7 +753,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           const imgH = 512 * (natH / natW);
 
           for (const cand of candidates) {
-            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+            const pos = DEMO_REAL_ONLY ? cand.epochPositions.find(pos => pos.epochIndex === activeFrameIndex) : cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
+            if (!pos) continue;
             const cx = (pos.x + 0.5) * scale - 256;
             const cy = (pos.y + 0.5) * scale - imgH / 2;
             const dist = Math.hypot(transformedX - cx, transformedY - cy);
@@ -791,7 +794,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               : bitmapFailed ? 'The image could not be loaded.' : 'No image data is available for this layer.'}</p>
             {loadStatus?.source === 'error' && (loadStatus.message.includes('502') || loadStatus.message.includes('timeout')) && (
               <p className="text-[11px] text-amber-300/90 bg-amber-950/40 p-2 rounded border border-amber-800/60 text-left">
-                <strong>NASA IRSA Server Notice:</strong> NASA IPAC IRSA TAP gateway is currently returning 502 / timing out on custom coordinate queries. For instant offline evaluation with real data, select any of the 6 Benchmark Presets on the Home page (e.g. 3I/ATLAS, (4) Vesta).
+                {DEMO_REAL_ONLY ? <><strong>Archive request incomplete:</strong> The request did not complete. Stored 3I/ATLAS and Vesta review artifacts remain available.</> : <><strong>NASA IRSA Server Notice:</strong> NASA IPAC IRSA TAP gateway is currently returning 502 / timing out on custom coordinate queries. For instant offline evaluation with real data, select any of the 6 Benchmark Presets on the Home page (e.g. 3I/ATLAS, (4) Vesta).</>}
               </p>
             )}
             <p className="text-xs text-paper-400">Motion cannot be assessed from unavailable image data.</p>
@@ -814,6 +817,13 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             <p>Detector: D{activeFrame?.detectorArray}; pixels: {activeFrame?.imageWidth ?? '?'} × {activeFrame?.imageHeight ?? '?'}</p>
             <p>Coverage: {activeFrame?.coverage !== undefined ? `${(activeFrame.coverage * 100).toFixed(1)}%` : 'Unavailable'}</p>
             <p>Sky coordinates unavailable: frame WCS was not supplied.</p>
+            {activeFrame?.packagedArchive && <>
+              <p>{activeFrame.packagedArchive.coordinateNote}</p>
+              <p>Raw field preview; target identification and motion are unassessed.</p>
+              <p><a href={activeFrame.packagedArchive.fitsUrl} className="underline" download>Download real FITS cutout</a></p>
+              <p><a href={activeFrame.archiveUrl} className="underline" target="_blank" rel="noreferrer">NASA IRSA source FITS</a></p>
+              {activeFrame.headerMetadata.flagsNonzeroPercentage !== undefined && <p>FLAGS nonzero: {activeFrame.headerMetadata.flagsNonzeroPercentage.toFixed(2)}%. {activeFrame.headerMetadata.flagsNote}</p>}
+            </>}
             <p>Photometry, PSF and calibration: unavailable in this frame response.</p>
             {cursorCoords && <p>Image pixel (zero-based): x {cursorCoords.x.toFixed(1)}, y {cursorCoords.y.toFixed(1)}</p>}
           </div>
@@ -823,6 +833,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           Requested field: RA {centerRa.toFixed(4)}°, Dec {centerDec.toFixed(4)}° · cursor sky position unavailable
         </div>
       ))}
+
+      {bitmapReady && loadStatus?.source === 'packaged' && (
+        <div role="status" aria-label="Raw archive provenance" className="absolute bottom-3 left-2.5 right-2.5 max-w-xl rounded-lg border border-paper-700 bg-paper-950/95 p-2 text-xs text-paper-200 pointer-events-none">
+          Packaged real archive data · {mlAnalysisStatus?.stage ?? 'Motion analysis not run.'}
+        </div>
+      )}
 
       {/* Unavailable Detector Array Overlay */}
       {activeFrame && !activeFrame.isAvailable && (

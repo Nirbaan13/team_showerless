@@ -38,7 +38,7 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
   useEffect(() => {
     let isMounted = true;
     fetchVerifications().then((data) => {
-      if (isMounted && data.length > 0) {
+      if (isMounted) {
         setAllComments(data);
       }
     });

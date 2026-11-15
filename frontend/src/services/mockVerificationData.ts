@@ -1,3 +1,4 @@
+import { DEMO_REAL_ONLY, VERIFICATION_STORAGE_KEY } from '../lib/demoMode';
 import type { VerificationComment } from '../types/spherex';
 
 export const SEEDED_VERIFICATION_DISCUSSIONS: VerificationComment[] = [
@@ -181,9 +182,10 @@ export const SEEDED_VERIFICATION_DISCUSSIONS: VerificationComment[] = [
 
 export function getInitialVerificationComments(): VerificationComment[] {
   try {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('spherex_community_comments') : null;
+    const saved = typeof window !== 'undefined' ? localStorage.getItem(VERIFICATION_STORAGE_KEY) : null;
     if (saved) {
       const parsed: VerificationComment[] = JSON.parse(saved);
+      if (DEMO_REAL_ONLY) return Array.isArray(parsed) ? parsed : [];
       const userWithSettings = parsed.filter((c) => c.setting);
       const combined = [...userWithSettings, ...SEEDED_VERIFICATION_DISCUSSIONS];
       return Array.from(new Map(combined.map((c) => [c.id, c])).values());
@@ -191,5 +193,5 @@ export function getInitialVerificationComments(): VerificationComment[] {
   } catch {
     // Ignore localStorage failures
   }
-  return SEEDED_VERIFICATION_DISCUSSIONS;
+  return DEMO_REAL_ONLY ? [] : SEEDED_VERIFICATION_DISCUSSIONS;
 }

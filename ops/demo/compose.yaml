@@ -1,0 +1,104 @@
+services:
+  api:
+    mem_limit: 3g
+    cpus: 2
+    pids_limit: 384
+    image: ${API_IMAGE:?verified API image required}
+    platform: ${API_PLATFORM}
+    pull_policy: never
+    environment:
+      DATA_DIR: /app/data
+      PROCESSING_URL: http://pipeline:8002
+      CUTOUT_SERVICE_URL: http://pipeline:8002
+      ML_SERVICE_URL: http://ml-inference:8001
+      IRSA_DISCOVERY_URL: http://api:8000/api/irsa/discovery
+      IRSA_MIRROR_SCAN_ENABLED: 'false'
+    volumes:
+      - api-data:/app/data
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      pipeline: {condition: service_healthy}
+      ml-inference: {condition: service_healthy}
+  pipeline:
+    mem_limit: 2g
+    cpus: 2
+    pids_limit: 256
+    image: ${API_IMAGE:?verified API image required}
+    platform: ${API_PLATFORM}
+    pull_policy: never
+    working_dir: /app/pipeline
+    command: [/opt/inference-venv/bin/python, -m, uvicorn, 'unification.app:app', --host, 0.0.0.0, --port, '8002']
+    environment:
+      PYTHONPATH: /app:/app/pipeline
+      IRSA_DISCOVERY_URL: http://api:8000/api/irsa/discovery
+      UNIFICATION_DATA_ROOT: /tmp/spherex_cutouts
+    volumes:
+      - api-data:/app/data
+      - api-data:/tmp/spherex_cutouts
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, --max-time, '2', 'http://127.0.0.1:8002/health']
+      interval: 3s
+      timeout: 3s
+      start_period: 20s
+      retries: 10
+  ml-inference:
+    mem_limit: 2g
+    cpus: 2
+    pids_limit: 256
+    image: ${ML_IMAGE:?verified ML image required}
+    platform: ${ML_PLATFORM}
+    pull_policy: never
+    environment:
+      IRSA_DISCOVERY_URL: http://api:8000/api/irsa/discovery
+      VERIFICATIONS_DB_PATH: /app/data/verifications.sqlite
+      PLANETX_DB_PATH: /app/data/planetx_catalogue.db
+      DEMO_REAL_ONLY: '1'
+      XDG_CACHE_HOME: /tmp/cache
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    volumes:
+      - ml-data:/app/data
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, python3, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=2).close()"]
+      interval: 5s
+      timeout: 3s
+      start_period: 20s
+      retries: 10
+  frontend:
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 64
+    image: ${FRONTEND_IMAGE:?verified frontend image required}
+    platform: ${FRONTEND_PLATFORM}
+    pull_policy: never
+    ports:
+      - '127.0.0.1:${DEMO_PORT:-8080}:8080'
+    volumes:
+      - runtime-config:/etc/nginx/conf.d:ro
+      - api-data:/demo-data:ro
+    read_only: true
+    tmpfs: [/var/cache/nginx, /var/run, /tmp]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      api: {condition: service_healthy}
+volumes:
+  api-data:
+    external: true
+    name: ${DEMO_PROJECT}_api-data
+  ml-data:
+    external: true
+    name: ${DEMO_PROJECT}_ml-data
+  runtime-config:
+    external: true
+    name: ${DEMO_PROJECT}_runtime-config
