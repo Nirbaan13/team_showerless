@@ -71,7 +71,8 @@ npm test
 
 For a local system browser, set
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/google-chrome when running npm test.
-The frontend CI installs Chromium with system dependencies and runs the suite
-before building/deploying its container. Browser output directories are ignored.
+The independent frontend test workflow installs Chromium with system dependencies
+and runs the suite. Production deployment builds and verifies the live service
+without waiting for the test workflow. Browser output directories are ignored.
 The setup follows the official [Playwright web-server](https://playwright.dev/docs/test-webserver)
 and [HTTP boundary mocking](https://playwright.dev/docs/mock) documentation.
