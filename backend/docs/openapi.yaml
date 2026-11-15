@@ -8,6 +8,10 @@ info:
     The observation endpoints replace POST /api/downloads and select the
     processing mode through the URL. Download status, events, chunk data,
     and preview endpoints are retained.
+    The downloads module provides federated discovery and asynchronous downloads.
+    Current archive and legacy IRSA URLs remain stable during module migration.
+    All downloaded products, calibration files and generated previews share a
+    persistent LRU budget. Active transfers and streaming readers hold leases.
     URLs may be returned before their resources are ready. Clients must use
     resource status or readiness events before fetching image or FITS data.
     Optional observed_after and observed_before timestamps constrain observation
@@ -27,12 +31,12 @@ tags:
   - name: Chunks
   - name: Equipment
   - name: Analyses
-  - name: Archives
+  - name: Federated Downloads
 paths:
   /api/archives:
     get:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: listArchives
       summary: List independent archive capabilities and qualification restrictions
       responses:
@@ -47,7 +51,7 @@ paths:
   /api/archive-searches:
     post:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: createArchiveSearch
       summary: Queue a durable federated metadata search
       requestBody:
@@ -73,7 +77,7 @@ paths:
     - $ref: '#/components/parameters/Id'
     get:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveSearch
       summary: Get job status and a bounded local snapshot page
       description: 'Local pagination is independent of upstream completeness. An opaque
@@ -114,7 +118,7 @@ paths:
     - $ref: '#/components/parameters/Id'
     post:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: continueArchiveSearch
       summary: Resume one genuine provider continuation
       description: 'Only providers with has_continuation=true can resume. The initial
@@ -153,7 +157,7 @@ paths:
   /api/archive-downloads:
     post:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: createArchiveDownload
       summary: Queue selected server-known native science products
       description: 'Submit record IDs from archive search. Arbitrary upstream URLs are
@@ -189,7 +193,7 @@ paths:
                   $ref: '#/components/schemas/ArchiveDelivery'
       responses:
         '202':
-          description: Accepted native-product download job
+          description: Accepted immediately; status_url contains pending chunks and events_url streams progress
           content:
             application/json:
               schema:
@@ -205,7 +209,7 @@ paths:
     - $ref: '#/components/parameters/Id'
     get:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveDownload
       summary: Get persisted per-asset state, provenance and local artifact URLs
       responses:
@@ -217,14 +221,44 @@ paths:
                 $ref: '#/components/schemas/ArchiveDownload'
         '404':
           $ref: '#/components/responses/NotFound'
+  /api/archive-downloads/{id}/events:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Federated Downloads]
+      operationId: watchArchiveDownload
+      summary: Stream persistent download progress and chunk readiness
+      description: |
+        Without Last-Event-ID, emits a current job.updated snapshot, followed by
+        committed updates. With Last-Event-ID, replays all later committed events.
+        Event IDs are monotonic within this download. Data is an ArchiveDownload.
+        Events: job.updated, chunk.started, chunk.ready, chunk.failed, job.completed.
+        The stream closes after job.completed. Disconnecting leaves accepted work
+        running. A completed replay with no newer events closes immediately.
+      parameters:
+      - name: Last-Event-ID
+        in: header
+        required: false
+        description: Previously received event ID; must not exceed the latest committed ID
+        schema: {type: integer, minimum: 0}
+      responses:
+        '200':
+          description: Unbuffered ordered SSE stream
+          content:
+            text/event-stream:
+              schema: {type: string}
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
   /api/archive-assets/{id}:
     parameters:
     - $ref: '#/components/parameters/Id'
     get:
       tags:
-      - Archives
+      - Federated Downloads
       operationId: getArchiveAsset
-      summary: Retrieve a completed server-known native science artifact
+      summary: Retrieve a server-known artifact or its pending state
       description: Native gzip products retain gzip bytes. This route does not run SPHEREx
         processing.
       responses:
@@ -239,6 +273,14 @@ paths:
               schema:
                 type: string
                 format: binary
+        '202':
+          $ref: '#/components/responses/PendingResource'
+        '409':
+          description: Selected product failed, was skipped, or has left the cache
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveFailure'
         '404':
           $ref: '#/components/responses/NotFound'
   /api/spectrum:
@@ -1183,6 +1225,10 @@ components:
         status_url:
           type: string
           format: uri-reference
+        events_url:
+          type: string
+          format: uri-reference
+          description: Present for download jobs; omitted for metadata search jobs
     ArchiveFailure:
       type: object
       required:
@@ -1403,6 +1449,9 @@ components:
       - selection
       - assets
       - status_url
+      - events_url
+      - chunks
+      - progress
       properties:
         id:
           type: string
@@ -1451,6 +1500,28 @@ components:
         status_url:
           type: string
           format: uri-reference
+        events_url:
+          type: string
+          format: uri-reference
+        chunks:
+          type: array
+          description: Stable native-product links are advertised before files are ready
+          items:
+            $ref: '#/components/schemas/ArchiveDownloadChunk'
+        progress:
+          $ref: '#/components/schemas/Progress'
+    ArchiveDownloadChunk:
+      type: object
+      required: [id, record_id, artifact_url, status]
+      properties:
+        id: {type: string}
+        record_id: {type: string}
+        artifact_url: {type: string, format: uri-reference}
+        status:
+          type: string
+          enum: [pending, downloading, ready, skipped, failed]
+        error:
+          $ref: '#/components/schemas/ArchiveFailure'
     PipelineSpectrum:
       type: object
       description: Original team-service response; no 102-band completeness or calibrated-science guarantee is added.

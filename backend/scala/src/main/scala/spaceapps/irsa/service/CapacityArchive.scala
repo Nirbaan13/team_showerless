@@ -1,0 +1,17 @@
+package spaceapps.irsa.service
+import spaceapps.infra.service.FileCache
+
+import spaceapps.irsa.model.{ArchiveImage,Query}
+import zio.*
+import java.nio.file.Path
+
+/** The same coordinator is carried into Jobs so reservation spans atomic publication. */
+object CapacityArchive:
+  private[service] final class Bounded(val delegate:Archive,val cache:FileCache) extends Archive:
+    def search(query:Query):Task[List[ArchiveImage]]=delegate.search(query)
+    override def select(image:ArchiveImage,query:Query):Task[ArchiveImage]=delegate.select(image,query)
+    def fetch(image:ArchiveImage,destination:Path):Task[Unit]=cache.transfer(destination)(delegate.fetch(image,destination))
+  def make(delegate:Archive,root:Path,maxCacheBytes:Long,maxProductBytes:Long,minFreeBytes:Long,
+    cache:Option[FileCache]=None):Task[Archive]=
+    ZIO.fromOption(cache).orElse(FileCache.open(root,root.resolve("jobs.sqlite"),maxCacheBytes,maxProductBytes,minFreeBytes))
+      .map(new Bounded(delegate,_))

@@ -1,9 +1,12 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.{Repository,FitsCacheRepository}
-import spaceapps.controller.Api
+import spaceapps.irsa.model.*
+import spaceapps.infra.service.FileCache
+
+import spaceapps.irsa.service.*
+import spaceapps.irsa.repository.Repository
+import spaceapps.infra.repository.FileCacheRepository
+import spaceapps.infra.controller.Api
 import zio.*
 import zio.http.{Request,Status}
 import zio.test.*
@@ -19,7 +22,7 @@ object CacheLruSpec extends ZIOSpecDefault:
     val paths=Files.walk(dir)
     try paths.sorted(java.util.Comparator.reverseOrder()).forEach(Files.deleteIfExists(_)) finally paths.close()
   }.orDie)
-  private def cache(dir:Path,budget:Long=80,max:Long=40)=FitsCache.open(dir,dir.resolve("jobs.sqlite"),budget,max,0)
+  private def cache(dir:Path,budget:Long=80,max:Long=40)=FileCache.open(dir,dir.resolve("jobs.sqlite"),budget,max,0)
   private val source=new Archive:
     def search(q:Query)=ZIO.succeed(List(image))
     def fetch(i:ArchiveImage,p:Path)=write(p,40)
@@ -46,6 +49,39 @@ object CacheLruSpec extends ZIOSpecDefault:
         disk <- ZIO.attempt(List(first,second,other).map(Files.exists(_)))
       yield assertTrue(result.isSuccess,disk==List(false,true,true)) }
     },
+    test("one LRU evicts archive, calibration and preview files in persisted access order") {
+      ZIO.scoped { for
+        dir <- temp
+        c <- cache(dir,120)
+        a=dir.resolve("archive-assets").resolve("a"*64)
+        b=dir.resolve("calibration-cache").resolve("b"*64)
+        preview=dir.resolve("jobs/job").resolve("c"*40+".png")
+        d=native(dir,'d')
+        _ <- c.publish(a)(write(_,40)) *> c.publish(b)(write(_,40)) *> c.publish(preview)(write(_,40))
+        _ <- ZIO.scoped(c.cached(a))
+        reopened <- cache(dir,120)
+        _ <- reopened.publish(d)(write(_,40))
+        first <- ZIO.attempt(List(a,b,preview,d).map(Files.exists(_)))
+        _ <- reopened.publish(b)(write(_,40))
+        second <- ZIO.attempt(List(a,b,preview,d).map(Files.exists(_)))
+      yield assertTrue(first==List(true,false,true,true),second==List(true,true,false,true)) }
+    },
+    test("an active equipment reader survives global eviction and releases its lease") {
+      ZIO.scoped { for
+        dir <- temp
+        c <- cache(dir,40)
+        equipment=dir.resolve("calibration-cache").resolve("e"*64)
+        next=native(dir,'f')
+        _ <- c.publish(equipment)(write(_,40))
+        entered <- Promise.make[Nothing,Unit]
+        reader <- ZIO.scoped(c.cached(equipment) *> entered.succeed(()) *> ZIO.never).forkScoped
+        _ <- entered.await
+        blocked <- c.publish(next)(write(_,40)).exit
+        _ <- reader.interrupt
+        released <- c.publish(next)(write(_,40)).exit
+        disk <- ZIO.attempt(!Files.exists(equipment) && Files.exists(next))
+      yield assertTrue(blocked.isFailure,released.isSuccess,disk) }
+    },
     test("reuse touches LRU order durably rather than evicting the first downloaded file") {
       ZIO.scoped { for
         dir <- temp
@@ -55,7 +91,7 @@ object CacheLruSpec extends ZIOSpecDefault:
         hit <- ZIO.scoped(c.cached(a))
         reopened <- cache(dir)
         _ <- reopened.publish(d)(write(_,40))
-        rows <- ZIO.attempt(new FitsCacheRepository(dir.resolve("jobs.sqlite")).entries())
+        rows <- ZIO.attempt(new FileCacheRepository(dir.resolve("jobs.sqlite")).entries())
         disk <- ZIO.attempt(List(a,b,d).map(Files.exists(_)))
       yield assertTrue(hit.contains(a),disk==List(true,false,true),
         rows.map(_._2).toSet==Set(a,d),rows.forall(_._3==40),rows.last._2==d) }
@@ -115,7 +151,7 @@ object CacheLruSpec extends ZIOSpecDefault:
         _ <- ZIO.attempt(Files.delete(a)) *> write(b,40)
         _ <- ZIO.attempt(Files.setLastModifiedTime(b,FileTime.fromMillis(1)))
         reopened <- cache(dir)
-        rows <- ZIO.attempt(new FitsCacheRepository(dir.resolve("jobs.sqlite")).entries())
+        rows <- ZIO.attempt(new FileCacheRepository(dir.resolve("jobs.sqlite")).entries())
         _ <- reopened.publish(d)(write(_,40))
         _ <- reopened.publish(a)(write(_,40))
         disk <- ZIO.attempt(List(b,a,d).map(Files.exists(_)))
@@ -182,7 +218,7 @@ object CacheLruSpec extends ZIOSpecDefault:
         jobs <- Jobs.make(repo,archive,NoProcessing,dir)
         accepted <- jobs.submit(query,"default",None)
         first <- done(jobs,accepted.id)
-        port <- spaceapps.integrations.grpc.GrpcServer.start(jobs,"test","127.0.0.1",0)
+        port <- spaceapps.irsa.integrations.grpc.GrpcServer.start(jobs,"test","127.0.0.1",0)
         client <- spaceapps.integrations.grpc.v1.ZioRetrieval.RetrievalServiceClient.scoped(
           scalapb.zio_grpc.ZManagedChannel(io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder.forAddress("127.0.0.1",port).usePlaintext()))
         started <- Promise.make[Nothing,Unit]

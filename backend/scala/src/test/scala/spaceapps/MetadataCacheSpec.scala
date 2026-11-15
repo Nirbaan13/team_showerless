@@ -1,8 +1,9 @@
 package spaceapps
 
-import spaceapps.repository.Repository
-import spaceapps.domain.{ApiError, ArchiveImage, Observation}
-import spaceapps.service.MetadataService
+import spaceapps.irsa.repository.Repository
+import spaceapps.irsa.model.{ApiError, ArchiveImage, Observation}
+
+import spaceapps.irsa.service.MetadataService
 import zio.*
 import zio.http.Client
 import zio.json.ast.Json

@@ -1,9 +1,10 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.repository.Repository
-import spaceapps.service.MetadataService
-import spaceapps.integrations.fits.FitsHeaders
+import spaceapps.irsa.model.*
+import spaceapps.irsa.repository.Repository
+
+import spaceapps.irsa.service.MetadataService
+import spaceapps.infra.integrations.fits.FitsHeaders
 import zio.*
 import zio.http.Client
 import zio.json.*

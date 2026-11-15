@@ -1,10 +1,11 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.Repository
-import spaceapps.integrations.irsa.LiveArchive
-import spaceapps.controller.Api
+import spaceapps.irsa.model.*
+
+import spaceapps.irsa.service.*
+import spaceapps.irsa.repository.Repository
+import spaceapps.irsa.integrations.LiveArchive
+import spaceapps.infra.controller.Api
 
 import zio.*
 import zio.http.*

@@ -1,8 +1,8 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.integrations.irsa.LiveArchive
-import spaceapps.repository.Repository
+import spaceapps.irsa.model.*
+import spaceapps.irsa.integrations.LiveArchive
+import spaceapps.irsa.repository.Repository
 import zio.*
 import zio.http.Client
 import zio.json.*

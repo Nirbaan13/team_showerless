@@ -1,10 +1,11 @@
 package spaceapps
 
-import spaceapps.domain.*
-import spaceapps.service.*
-import spaceapps.repository.Repository
-import spaceapps.integrations.irsa.LiveArchive
-import spaceapps.controller.Api
+import spaceapps.irsa.model.*
+
+import spaceapps.irsa.service.*
+import spaceapps.irsa.repository.Repository
+import spaceapps.irsa.integrations.LiveArchive
+import spaceapps.infra.controller.Api
 
 import zio.*
 import zio.json.*
@@ -36,7 +37,7 @@ object JobsSpec extends ZIOSpecDefault:
         dir <- temp
         repo <- Repository.open(dir.resolve("jobs.db"))
         accepted <- repo.accept(query,"default",None,32)
-        promised=spaceapps.domain.Chunk("promised-before-upgrade",image.observation.frame_id,"pending","unavailable","/api/chunks/promised-before-upgrade/preview","/api/chunks/promised-before-upgrade")
+        promised=spaceapps.irsa.model.Chunk("promised-before-upgrade",image.observation.frame_id,"pending","unavailable","/api/chunks/promised-before-upgrade/preview","/api/chunks/promised-before-upgrade")
         _ <- repo.update(accepted.id,"job.updated")(r=>r.copy(images=List(image),download=r.download.copy(status="preparing",chunks=List(promised),progress=Progress(true,1))))
         source=new Archive:
           def search(q:Query)=ZIO.fail(ApiError("unexpected_search","Stored discovery must be recovered"))
@@ -56,7 +57,7 @@ object JobsSpec extends ZIOSpecDefault:
           oldKey = Hash.sha256(s"default||${query.document.toJson}")
           oldFile = dir.resolve("raw").resolve(Hash.sha256(s"${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}")+".fits")
           _ <- write(oldFile, "old whole frame")
-          oldChunk = spaceapps.domain.Chunk("legacy-chunk", image.observation.frame_id, "ready", "unavailable", "/api/chunks/legacy-chunk/preview", "/api/chunks/legacy-chunk")
+          oldChunk = spaceapps.irsa.model.Chunk("legacy-chunk", image.observation.frame_id, "ready", "unavailable", "/api/chunks/legacy-chunk/preview", "/api/chunks/legacy-chunk")
           _ <- repo.update(old.id, "job.completed")(r=>r.copy(requestKey=oldKey,images=List(image),download=r.download.copy(status="completed",observations=List(image.observation),chunks=List(oldChunk),progress=Progress(true,1,1,0,0))))
           _ <- ZIO.attemptBlocking {
             val c=java.sql.DriverManager.getConnection(s"jdbc:sqlite:${dir.resolve("jobs.db")}")
