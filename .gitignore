@@ -9,3 +9,5 @@ __pycache__/
 *.key
 *.sqlite
 *.sqlite3
+crawler_checkpoint.json
+data/crawler_checkpoint.json

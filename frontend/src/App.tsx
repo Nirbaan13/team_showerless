@@ -40,6 +40,7 @@ import {
 } from './services/catalogService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
+import { startPeriodicVerificationSync } from './services/verificationService';
 import { TopNav } from './components/TopNav';
 import { LeftControlPanel } from './components/LeftControlPanel';
 import { CanvasViewport } from './components/CanvasViewport';
@@ -174,6 +175,12 @@ export function App() {
       setIsViewModalOpen(true);
     }
   }, [activeTab]);
+
+  // Dynamically sync verifications & triage stream for active embeds and browser tabs
+  useEffect(() => {
+    const cancelSync = startPeriodicVerificationSync(45000);
+    return () => cancelSync();
+  }, []);
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
   const [searchStatus, setSearchStatus] = useState<{

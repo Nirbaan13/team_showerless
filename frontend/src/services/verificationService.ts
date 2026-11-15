@@ -189,3 +189,19 @@ export async function saveBackendCandidate(candidate: {
   }
   return candidate;
 }
+
+/**
+ * Starts a lightweight periodic background poller to pull new verifications
+ * and triage updates dynamically for live embeds and open browser sessions.
+ */
+export function startPeriodicVerificationSync(intervalMs: number = 45000): () => void {
+  if (typeof window === 'undefined') return () => {};
+  const timer = setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      void fetchVerifications().then(() => notifyUpdated());
+    }
+  }, intervalMs);
+
+  return () => clearInterval(timer);
+}
+
