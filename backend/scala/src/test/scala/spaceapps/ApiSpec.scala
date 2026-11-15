@@ -22,7 +22,7 @@ object ApiSpec extends ZIOSpecDefault:
         def search(q:Query)=ZIO.succeed(Nil)
         def fetch(i:ArchiveImage,p:java.nio.file.Path)=ZIO.unit
       jobs <- Jobs.make(repo,fake,NoProcessing,dir)
-      api <- Api.make(jobs,"test-revision",java.nio.file.Paths.get("docs/openai/openapi.yaml"))
+      api <- Api.make(jobs,"test-revision",java.nio.file.Paths.get("docs/openapi.yaml"))
       result <- use(api)
     yield result
   def spec=suite("HTTP contract")(

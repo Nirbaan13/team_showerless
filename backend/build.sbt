@@ -1,5 +1,7 @@
 ThisBuild / scalaVersion := "3.9.0"
 name := "spaceapps-backend"
+Compile / sourceDirectory := baseDirectory.value / "scala" / "src" / "main"
+Test / sourceDirectory := baseDirectory.value / "scala" / "src" / "test"
 version := sys.env.getOrElse("APP_REVISION", "development")
 // ML implementation is owned alongside its inference runtime under ml/pvusatov.
 lazy val mlBackendRoot = settingKey[File]("Repository ML backend source root")

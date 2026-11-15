@@ -28,6 +28,124 @@ tags:
   - name: Equipment
   - name: Analyses
 paths:
+  /api/spectrum:
+    get:
+      tags: [Pipeline]
+      operationId: getPipelineSpectrum
+      summary: Request measured spectral points from the existing Python service
+      description: >-
+        Scala validates the request and calls the unchanged Python HTTP endpoint.
+        Returns its completed JSON synchronously; no 202 or download-job protocol
+        is introduced. WCS-WAVE aperture points are visualization approximations,
+        not independently calibrated science spectra. Only ZODI-subtracted spectra
+        are implemented by the existing Python endpoint. Python failures remain
+        gateway errors; no synthetic bands or molecules are added by Scala.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: radius_pix, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 2}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 1.5}}
+        - {name: max_frames, in: query, schema: {type: integer, minimum: 1, maximum: 400, default: 120}}
+        - {name: candidate_id, in: query, schema: {type: string, maxLength: 256}, description: Display label only}
+        - {name: subtraction, in: query, schema: {type: string, enum: [zodi_subtracted], default: zodi_subtracted}}
+      responses:
+        '200':
+          description: Original completed spectral JSON from the team service
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PipelineSpectrum'}
+        '404': {description: Python found no usable data}
+        '422': {description: Invalid parameters or unsupported processing option}
+        '502': {description: Python failed or returned invalid data}
+        '503': {description: Python service unavailable}
+        '504': {description: Python HTTP request exceeded the backend deadline}
+  /api/cutout/search:
+    post:
+      tags: [Pipeline]
+      operationId: searchPipelineCutouts
+      summary: Call the existing Python cutout search
+      description: Detector filtering is not implemented by this Python operation and is rejected explicitly.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                size_arcmin: {type: number, minimum: 0.01, maximum: 600, default: 3}
+                collection: {type: string, default: spherex_dr1}
+      responses:
+        '200':
+          description: Original search results
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid search request}
+        '502': {description: Python search failure, including errors reported in a 200 body}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/cutout/render:
+    get:
+      tags: [Pipeline]
+      operationId: renderPipelineCutout
+      summary: Obtain a PNG from the existing Python renderer
+      description: >-
+        The Python service selects the first matching exposure itself. This
+        coordinate-based preview is separate from a native Scala chunk ID and
+        does not claim that it renders a particular downloaded frame.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.01, maximum: 600, default: 3}}
+        - {name: subtraction, in: query, schema: {type: string, enum: [raw_calibrated, zodi_subtracted], default: raw_calibrated}}
+      responses:
+        '200':
+          description: Original PNG, validated for content type and signature
+          content:
+            image/png:
+              schema: {type: string, format: binary}
+        '404': {description: No matching coverage}
+        '422': {description: Invalid render parameters}
+        '502': {description: Python rendering failed or returned an invalid PNG}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/spectrum/measure:
+    post:
+      tags: [Pipeline]
+      operationId: measurePipelineCachedSpectrum
+      summary: Measure existing cutouts in the Python service cache
+      description: >-
+        Accepts cache filenames only, never caller filesystem paths. This route
+        uses the existing Python cache and does not import native Scala jobs into
+        it or change the Python file-handling implementation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                radius_pix: {type: number, minimum: 0.5, maximum: 10, default: 2}
+                cutout_paths:
+                  type: array
+                  maxItems: 120
+                  items: {type: string, maxLength: 256, pattern: '^[A-Za-z0-9_.-]+$'}
+      responses:
+        '200':
+          description: Original measured rows, or original empty-cache response
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid aperture or cache filenames}
+        '502': {description: Python measurement failed}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
   /api/observations/meta:
     get:
       tags: [Observations]
@@ -725,6 +843,35 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    PipelineSpectrum:
+      type: object
+      description: Original team-service response; no 102-band completeness or calibrated-science guarantee is added.
+      required: [target, ra, dec, aperture_radius_pix, subtraction_mode, total_channels, spectrum]
+      properties:
+        target: {type: string}
+        ra: {type: number}
+        dec: {type: number}
+        candidate_id: {type: [string, 'null']}
+        aperture_radius_pix: {type: number}
+        subtraction_mode: {type: string, enum: [zodi_subtracted]}
+        total_channels: {type: integer, minimum: 0}
+        spectrum:
+          type: array
+          items:
+            type: object
+            properties:
+              channel: {type: integer}
+              detector: {type: string}
+              detector_array: {type: integer}
+              wavelength_um: {type: number}
+              bandwidth_um: {type: number}
+              flux_mjy: {type: number}
+              uncertainty_mjy: {type: number}
+              snr: {type: number}
+              flagged: {type: boolean}
+        molecular_detections: {type: array, items: {type: object}}
+        detectors_summary: {type: object, additionalProperties: true}
+      additionalProperties: true
     ObservationMetadata:
       type: object
       required: [frame_id, status, observation, sia, tap, fits]
