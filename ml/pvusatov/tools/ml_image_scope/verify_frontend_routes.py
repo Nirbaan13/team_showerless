@@ -60,7 +60,7 @@ def main():
             result = probe(args.base_url)
             print(json.dumps(result, sort_keys=True))
             return
-        except (AssertionError, KeyError, ValueError, urllib.error.URLError, TimeoutError):
+        except (AssertionError, KeyError, ValueError, urllib.error.URLError, TimeoutError, ConnectionError):
             if attempt == 29:
                 raise
             time.sleep(2)
