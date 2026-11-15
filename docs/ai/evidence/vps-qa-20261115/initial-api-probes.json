@@ -1,0 +1,58 @@
+[
+  {
+    "url": "http://144.124.238.101/health",
+    "status": 200,
+    "seconds": 0.083,
+    "content_type": "application/json",
+    "body": "{\"status\":\"ok\",\"revision\":\"758fb2905650dcd8050e6ae1ba226dbf481dcf01\"}"
+  },
+  {
+    "url": "http://144.124.238.101/version",
+    "status": 200,
+    "seconds": 0.082,
+    "content_type": "application/json",
+    "body": "{\"version\":\"758fb2905650dcd8050e6ae1ba226dbf481dcf01\"}"
+  },
+  {
+    "url": "http://144.124.238.101/openapi.json",
+    "status": 200,
+    "seconds": 0.529,
+    "content_type": "application/json",
+    "body": "['/api/image-unifications', '/api/image-unifications/{id}', '/api/image-unifications/{id}/artifact', '/api/observations-search', '/api/observations-download', '/api/observations-download/{id}', '/api/observations-download/{id}/events', '/api/observations-download/chunks/{id}', '/api/observations-download/chunks/{id}/preview', '/api/archives', '/api/archive-searches', '/api/archive-searches/{id}', '/api/archive-searches/{id}/continue', '/api/archive-downloads', '/api/archive-downloads/{id}', '/api/archive-downloads/{id}/events', '/api/archive-assets/{id}', '/api/spectrum', '/api/cutout/search', '/api/cutout/render', '/api/spectrum/measure', '/api/observations/meta', '/api/equipment', '/api/equipment/calibrations/{id}', '/api/observationsDeep', '/api/observations/search', '/api/observations/default', '/api/observations/range', '/api/observations/polygon', '/api/observations/zodi-reference-subtracted', '/api/observations/epoch-difference', '/api/analyses/motion', '/api/analyses/models', '/api/analyses/presets', '/api/analyses/{id}', '/api/analyses/{id}/events', '/api/analyses/{id}/resources/{name}', '/api/downloads/{id}', '/api/downloads/{id}/events', '/api/chunks/{id}', '/api/chunks/{id}/preview']"
+  },
+  {
+    "url": "http://144.124.238.101:8080/frontend-version.json",
+    "status": 200,
+    "seconds": 0.079,
+    "content_type": "application/json",
+    "body": "{\"version\":\"758fb2905650dcd8050e6ae1ba226dbf481dcf01\"}\n"
+  },
+  {
+    "url": "http://144.124.238.101:8080/backend/health",
+    "status": 200,
+    "seconds": 0.376,
+    "content_type": "application/json",
+    "body": "{\"status\":\"ok\",\"revision\":\"758fb2905650dcd8050e6ae1ba226dbf481dcf01\"}"
+  },
+  {
+    "url": "http://144.124.238.101:8080/api/motion/health",
+    "status": 502,
+    "seconds": 0.373,
+    "content_type": "text/html",
+    "body": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.30.6</center>\r\n</body>\r\n</html>\r\n"
+  },
+  {
+    "url": "http://144.124.238.101:8080/api/catalogue/targets",
+    "status": 502,
+    "seconds": 0.374,
+    "content_type": "text/html",
+    "body": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.30.6</center>\r\n</body>\r\n</html>\r\n"
+  },
+  {
+    "url": "http://144.124.238.101:8080/api/motion/verifications",
+    "status": 502,
+    "seconds": 0.079,
+    "content_type": "text/html",
+    "body": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx/1.30.6</center>\r\n</body>\r\n</html>\r\n"
+  }
+]

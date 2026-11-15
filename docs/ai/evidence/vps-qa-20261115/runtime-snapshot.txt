@@ -1,0 +1,21 @@
+Sun Nov 15 15:46:41 UTC 2026
+spaceapps-api-1 spaceapps-api:758fb2905650dcd8050e6ae1ba226dbf481dcf01 Up 27 minutes (healthy)
+spaceapps-pipeline-1 spaceapps-api:758fb2905650dcd8050e6ae1ba226dbf481dcf01 Up 29 minutes (healthy)
+spaceapps-frontend-frontend-1 spaceapps-frontend:758fb2905650dcd8050e6ae1ba226dbf481dcf01 Up 39 minutes (healthy)
+State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
+LISTEN 0      4096       127.0.0.1:2019       0.0.0.0:*
+LISTEN 0      4096       127.0.0.1:18000      0.0.0.0:*
+LISTEN 0      4096         0.0.0.0:8080       0.0.0.0:*
+LISTEN 0      4096       127.0.0.1:50051      0.0.0.0:*
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*
+LISTEN 0      4096       127.0.0.1:44799      0.0.0.0:*
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*
+LISTEN 0      4096               *:443              *:*
+LISTEN 0      4096               *:80               *:*
+LISTEN 0      4096            [::]:22            [::]:*
+spaceapps-api-1 10.82% 314.6MiB / 7.25GiB
+spaceapps-pipeline-1 0.83% 98.21MiB / 7.25GiB
+spaceapps-frontend-frontend-1 0.00% 5.48MiB / 128MiB
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1       158G   61G   91G  41% /

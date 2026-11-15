@@ -1,0 +1,131 @@
+{
+  "project": "PlanetX Persistent Candidate Catalogue",
+  "repository": "team_showerless (NASA Space Apps Challenge 2026)",
+  "exportedAtUtc": "2026-11-15T15:42:02.160Z",
+  "candidateId": "PX-000001",
+  "candidateName": "3I/ATLAS",
+  "coordinates": {
+    "raJ2000Deg": 166.79,
+    "decJ2000Deg": 5.29
+  },
+  "astrometry": {
+    "speedArcsecHr": 175.7,
+    "trajectoryFitRmsPx": 0.22,
+    "epochCount": 4,
+    "detectionMethod": "heuristic_leave_one_out"
+  },
+  "photometry": {
+    "snr": 18.4,
+    "spectralSummary": {
+      "features": [
+        "Water Ice (H₂O) 3.05 µm",
+        "Carbon Dioxide (CO₂) 4.26 µm",
+        "Carbon Monoxide (CO) 4.67 µm"
+      ],
+      "detector_arrays": [
+        "D2",
+        "D6"
+      ],
+      "wavelength_range_um": [
+        1.11,
+        5
+      ],
+      "water_ice_depth_pct": 34.2,
+      "co2_depth_pct": 26.5
+    }
+  },
+  "scientificValidationMatrix": [
+    {
+      "id": "vc-1",
+      "candidate_id": "PX-000001",
+      "check_name": "gaia_crossmatch",
+      "status": "passed",
+      "details": {
+        "separation_arcsec": 14.8,
+        "matched": false,
+        "notes": "No stationary Gaia DR3 catalog star within 14.8 arcsec."
+      },
+      "evaluated_at": "2026-11-14T11:05:00Z"
+    },
+    {
+      "id": "vc-2",
+      "candidate_id": "PX-000001",
+      "check_name": "snr_threshold",
+      "status": "passed",
+      "details": {
+        "measured_snr": 18.4,
+        "threshold_snr": 5,
+        "sigma_significance": "18.4σ"
+      },
+      "evaluated_at": "2026-11-14T11:05:00Z"
+    },
+    {
+      "id": "vc-3",
+      "candidate_id": "PX-000001",
+      "check_name": "multi_epoch_motion",
+      "status": "passed",
+      "details": {
+        "epochs": 4,
+        "speed_arcsec_hr": 175.7,
+        "fit_rms_px": 0.22,
+        "linear_correlation": 0.998
+      },
+      "evaluated_at": "2026-11-14T11:05:00Z"
+    },
+    {
+      "id": "vc-4",
+      "candidate_id": "PX-000001",
+      "check_name": "spectral_plausibility",
+      "status": "passed",
+      "details": {
+        "h2o_3_05_um": true,
+        "co2_4_26_um": true,
+        "snr_spectral": 14.8
+      },
+      "evaluated_at": "2026-11-14T11:05:00Z"
+    }
+  ],
+  "consensusAudit": {
+    "status": "under_review",
+    "metrics": {
+      "total_votes": 0,
+      "likely_real": 0,
+      "likely_artifact": 0,
+      "uncertain": 0,
+      "already_known": 0,
+      "positive_ratio": 0,
+      "artifact_ratio": 0,
+      "level1_qualified": false,
+      "level2_qualified": false,
+      "checks_passed": true,
+      "validation_summary": {
+        "gaia_crossmatch": "passed",
+        "snr_threshold": "passed",
+        "multi_epoch_motion": "passed",
+        "spectral_plausibility": "passed"
+      }
+    },
+    "reviewers": []
+  },
+  "externalSubmissions": [
+    {
+      "id": "sub-3i-1",
+      "candidate_id": "PX-000001",
+      "destination": "MPC",
+      "status": "package_prepared",
+      "external_reference_id": "MPC-NEOCP-PX0001",
+      "payload_text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ades version=\"2017\">\n  <optical>\n    <trkSub>PX0001</trkSub>\n    <obsTime>2026-11-14T11:01:45.688Z</obsTime>\n    <ra>166.790000</ra>\n    <dec>+05.290000</dec>\n    <astCat>Gaia3</astCat>\n    <mag>17.8</mag>\n    <band>SPX6</band>\n    <submStation>SPHEREx</submStation>\n    <notes>Spaceborne infrared detection via PlanetX Citizen Science LOO pipeline</notes>\n  </optical>\n</ades>",
+      "submitted_at": "2026-11-14T11:30:00Z",
+      "response_log": "ADES XML schema validated. Ready for institutional submission."
+    }
+  ],
+  "metadata": {
+    "target": "3I/ATLAS (Interstellar Comet)",
+    "airmass": 1.12,
+    "exposure_time_sec": 300,
+    "zodi_brightness_mjy_sr": 14.8,
+    "bitmask_flags": "FLAGS & (1|2|4|64|512|1024|2048)",
+    "catalog_crossmatch": "No static star in Gaia DR3 (Horizons ephemeris match within 0.539 px)",
+    "dataset_doi": "10.26131/IRSA652"
+  }
+}

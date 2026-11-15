@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/api/observations/default?right_ascension_deg=-1&declination_deg=91",
+    "status": 422,
+    "body": "{\"code\":\"invalid_request\",\"message\":\"right_ascension_deg outside supported range\",\"retryable\":false}"
+  },
+  {
+    "path": "/api/observations/epoch-difference?right_ascension_deg=250&declination_deg=10&reference_frame_id=test",
+    "status": 501,
+    "body": "{\"code\":\"unsupported_processing\",\"message\":\"The existing pipeline HTTP API does not provide this native-FITS processing operation\",\"retryable\":false}"
+  },
+  {
+    "path": "/api/observations/zodi-reference-subtracted?right_ascension_deg=250&declination_deg=10",
+    "status": 501,
+    "body": "{\"code\":\"unsupported_processing\",\"message\":\"The existing pipeline HTTP API does not provide this native-FITS processing operation\",\"retryable\":false}"
+  },
+  {
+    "path": "/api/analyses/not-a-real-job",
+    "status": 404,
+    "body": "{\"code\":\"not_found\",\"message\":\"Analysis not found\",\"retryable\":false}"
+  }
+]
