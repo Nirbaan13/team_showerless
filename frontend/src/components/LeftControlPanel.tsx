@@ -26,6 +26,7 @@ interface LeftControlPanelProps {
   searchStatus?: {
     source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle' | 'archive';
     message: string;
+    warnings?: string[];
   };
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
@@ -182,6 +183,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
             </div>
             {(searchStatus.source === 'error' || searchStatus.source === 'loading' || searchStatus.source === 'archive') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+            {!!searchStatus.warnings?.length && <div role="status" aria-label="Observation warnings" className="space-y-1 border-t border-paper-700 pt-1 text-amber-300">
+              {searchStatus.warnings.map((warning, index) => <p key={index} className="break-words">{warning}</p>)}
+            </div>}
           </div>
         )}
 

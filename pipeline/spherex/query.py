@@ -1,6 +1,5 @@
 import os
 import time
-import requests
 import astropy.units as u
 from astropy.io import fits
 from astropy.table import Table
@@ -10,19 +9,24 @@ DEFAULT = os.getenv("SPHEREX_COLLECTION", "spherex_dr1") # Configurable default 
 def list_collections():
     tbl = Irsa.list_collections(servicetype = "SIA", filter ="spherex")
     tbl.pprint(max_lines = -1, max_width = -1)
+def _archive_gateway():
+    # Repository scripts can run with only pipeline/ on sys.path. A production
+    # image must package science/archive_gateway.py alongside pipeline/.
+    try:
+        from science import archive_gateway
+    except ModuleNotFoundError as exc:
+        if exc.name != "science":
+            raise
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from science import archive_gateway
+    return archive_gateway
+
+
 def image_search(coordinates, deg, collection, *, allow_release_fallback=False):
     if os.getenv("IRSA_DISCOVERY_URL", "").strip():
-        # Repository scripts can run with only pipeline/ on sys.path. A production
-        # image must package science/archive_gateway.py alongside pipeline/.
-        try:
-            from science import archive_gateway
-        except ModuleNotFoundError as exc:
-            if exc.name != "science":
-                raise
-            import sys
-            from pathlib import Path
-            sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-            from science import archive_gateway
+        archive_gateway = _archive_gateway()
         coord = coordinates.icrs
         found = archive_gateway.discover(coord.ra.deg, coord.dec.deg, deg / 2)
         columns = ("access_url", "energy_bandpassname", "dataproduct_subtype", "t_min",
@@ -50,17 +54,20 @@ def detector(row):
         if col in row.colnames:
             return str(row[col])
     return ""
-def cutout(url, out, retries = 3):
+def cutout(url, out, retries=3, *, source_url=None, discovery_source="sia"):
+    archive_gateway = _archive_gateway()
     for tries in range(1, retries + 1):
+        tmp = out.with_suffix(".part")
         try:
-            r = requests.get(url, timeout = 120)
-            r.raise_for_status()
-            tmp = out.with_suffix(".part")
-            tmp.write_bytes(r.content)
-            fits.open(tmp).close()  # validate before it enters the cache
+            archive_gateway.download_cutout(url, tmp, source_url=source_url,
+                                            discovery_source=discovery_source)
+            with fits.open(tmp):
+                pass  # validate before it enters the cache
             tmp.replace(out)
             return "good"
         except Exception as e:
-            if tries == retries:
+            if tries == retries or discovery_source == "s3_mirror":
                 return f"failure: {e}"
             time.sleep(2 * tries)
+        finally:
+            tmp.unlink(missing_ok=True)

@@ -28,4 +28,6 @@ final class ResilientArchive(primary:Archive,mirror:Archive,services:ExternalSer
       image.copy(accessUrl=Cutouts.url(ibe,query),sourceUrl=Some(parent))
     }
     else primary.select(image,query)
-  def fetch(image:ArchiveImage,destination:Path):Task[Unit]=primary.fetch(image,destination)
+  def fetch(image:ArchiveImage,destination:Path):Task[Unit]=
+    if image.observation.header_metadata.get("discovery_source").contains(Json.Str("s3_mirror")) then mirror.fetch(image,destination)
+    else primary.fetch(image,destination)

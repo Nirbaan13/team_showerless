@@ -47,7 +47,8 @@ def main():
         if out.exists():  # So we cache
             status = "Cached"
         else:
-            status = cutout(cutout_url, out)
+            status = cutout(cutout_url, out, source_url=row.get("source_url"),
+                            discovery_source=str(row.get("discovery_source", "sia")))
         rows.append({
             "file": fname,
             "t_min_mjd": float(row["t_min"]) if "t_min" in row.colnames else float("nan"),
