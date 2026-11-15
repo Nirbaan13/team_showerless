@@ -1,9 +1,12 @@
+import os
+import time
+import requests
 import astropy.units as u
 from astropy.io import fits
 from astropy.table import Table
 from astroquery.ipac.irsa import Irsa
 
-DEFAULT = "spherex_dr1" #May change based on data, pls check
+DEFAULT = os.getenv("SPHEREX_COLLECTION", "spherex_dr1") # Configurable default collection
 def list_collections():
     tbl = Irsa.list_collections(servicetype = "SIA", filter ="spherex")
     tbl.pprint(max_lines = -1, max_width = -1)

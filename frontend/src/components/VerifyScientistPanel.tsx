@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { VerificationComment, VerificationSetting } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
 import { getInitialVerificationComments } from '../services/mockVerificationData';
+import { fetchVerifications, upvoteVerification } from '../services/verificationService';
 import {
   subscribeMotionReviews,
   resolveMotionReviewIdForPreset,
@@ -17,6 +18,7 @@ import {
   Clock,
   Layers,
   Search,
+  ThumbsUp,
 } from 'lucide-react';
 
 interface VerifyScientistPanelProps {
@@ -34,12 +36,22 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
   const [, setReviewsTick] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
+    fetchVerifications().then((data) => {
+      if (isMounted && data.length > 0) {
+        setAllComments(data);
+      }
+    });
+
     const handleCommentsUpdated = () => {
-      setAllComments(getInitialVerificationComments());
+      fetchVerifications().then((data) => {
+        if (isMounted) setAllComments(data);
+      });
     };
     window.addEventListener('spherex_comments_updated', handleCommentsUpdated);
     const unsub = subscribeMotionReviews(() => setReviewsTick((t) => t + 1));
     return () => {
+      isMounted = false;
       window.removeEventListener('spherex_comments_updated', handleCommentsUpdated);
       unsub();
     };
@@ -173,7 +185,21 @@ export const VerifyScientistPanel: React.FC<VerifyScientistPanelProps> = ({
                       {setting.candidateName}
                     </h3>
                   </div>
-                  {getVoteBadge(item.vote)}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {getVoteBadge(item.vote)}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void upvoteVerification(item.id);
+                      }}
+                      className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-emerald-400 border border-paper-800 hover:border-emerald-500/60 transition-colors cursor-pointer"
+                      title="Upvote this verification"
+                    >
+                      <ThumbsUp className="w-2.5 h-2.5" />
+                      <span>{item.upvotes || 1}</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Optional Stack Preview & Top Comment */}

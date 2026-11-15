@@ -9,6 +9,8 @@ interface TopNavProps {
   selectedArray: DetectorArrayId | 'all';
   subtractionMode: SubtractionMode;
   activeFrameIndex: number;
+  candidateId?: string | null;
+  presetId?: string | null;
   onOpenEmbedModal: () => void;
   isViewerActive: boolean;
   isScientistMode?: boolean;
@@ -21,6 +23,8 @@ export const TopNav: React.FC<TopNavProps> = ({
   selectedArray,
   subtractionMode,
   activeFrameIndex,
+  candidateId,
+  presetId,
   onOpenEmbedModal,
   isViewerActive,
   isScientistMode: _isScientistMode = false,
@@ -34,7 +38,10 @@ export const TopNav: React.FC<TopNavProps> = ({
       detector: String(selectedArray),
       subtraction: subtractionMode,
       frame: String(activeFrameIndex),
+      tab: 'viewer',
     });
+    if (candidateId) params.set('candidate', candidateId);
+    if (presetId) params.set('preset', presetId);
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
   };
 

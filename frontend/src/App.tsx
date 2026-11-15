@@ -15,6 +15,7 @@ import type {
 import {
   getMockEpochFrames,
   getMockCandidates,
+  findCandidateAcrossAllPresets,
   getMock102BandSpectrum,
   resolveCoordinateCatalogContext,
   fetchKnownCatalogObjectAtCoord,
@@ -39,6 +40,7 @@ import {
 } from './services/catalogService';
 import { useUrlSync } from './hooks/useUrlSync';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
+import { startPeriodicVerificationSync } from './services/verificationService';
 import { TopNav } from './components/TopNav';
 import { LeftControlPanel } from './components/LeftControlPanel';
 import { CanvasViewport } from './components/CanvasViewport';
@@ -70,11 +72,21 @@ export function App() {
     new URLSearchParams(window.location.search).get('embed') === 'true';
   const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference'>(() => {
     if (isEmbedMode) return 'viewer';
-    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
-      return 'inference';
-    }
-    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
-      return 'viewer';
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const requestedTab = searchParams.get('tab');
+      if (requestedTab === 'viewer' || requestedTab === 'feed' || requestedTab === 'report' || requestedTab === 'home' || requestedTab === 'inference') {
+        return requestedTab;
+      }
+      if (searchParams.has('ra') && searchParams.has('dec')) {
+        return 'viewer';
+      }
+      if (searchParams.has('analysis')) {
+        return 'inference';
+      }
+      if (window.location.hash === '#motion-review') {
+        return 'viewer';
+      }
     }
     return 'home';
   });
@@ -106,7 +118,19 @@ export function App() {
     }
   };
 
-  const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
+  const [currentPresetId, setCurrentPresetId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('preset')) return params.get('preset');
+      if (params.has('ra') && params.has('dec')) return null;
+      const candParam = params.get('candidate');
+      if (candParam) {
+        const found = findCandidateAcrossAllPresets(candParam);
+        if (found) return found.presetId;
+      }
+    }
+    return '3i-atlas';
+  });
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
@@ -129,7 +153,13 @@ export function App() {
   };
   const [overlays, setOverlays] = useState<CatalogOverlayState>(ALL_OVERLAYS_ON);
 
-  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('3I/ATLAS');
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const cand = new URLSearchParams(window.location.search).get('candidate');
+      if (cand) return cand;
+    }
+    return '3I/ATLAS';
+  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
   const [drawerControlledTab, setDrawerControlledTab] = useState<
@@ -145,6 +175,12 @@ export function App() {
       setIsViewModalOpen(true);
     }
   }, [activeTab]);
+
+  // Dynamically sync verifications & triage stream for active embeds and browser tabs
+  useEffect(() => {
+    const cancelSync = startPeriodicVerificationSync(45000);
+    return () => cancelSync();
+  }, []);
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
   const [searchStatus, setSearchStatus] = useState<{
@@ -181,9 +217,23 @@ export function App() {
     return getMockEpochFrames('custom', arrayId);
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
-  const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() =>
-    getMockCandidates('3i-atlas', 6)
-  );
+  const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const candParam = params.get('candidate');
+      if (candParam) {
+        const found = findCandidateAcrossAllPresets(candParam);
+        if (found) {
+          return getMockCandidates(found.presetId, found.recommendedArray);
+        }
+      }
+      const presetParam = params.get('preset');
+      if (presetParam) {
+        return getMockCandidates(presetParam, 6);
+      }
+    }
+    return getMockCandidates('3i-atlas', 6);
+  });
 
   // Hydrate candidates from review.json as soon as the external fetch completes
   useEffect(() => {
@@ -194,9 +244,12 @@ export function App() {
         const updated = getMockCandidates(currentPresetId, arrayId);
         if (updated.length > 0) {
           setCandidatesList(updated);
-          setSelectedCandidateId((prev) =>
-            updated.some((c) => c.id === prev) ? prev : updated[0].id
-          );
+          setSelectedCandidateId((prev) => {
+            if (!prev) return updated[0].id;
+            if (updated.some((c) => c.id === prev)) return prev;
+            if (findCandidateAcrossAllPresets(prev)) return prev;
+            return updated[0].id;
+          });
         }
       }
     });
@@ -210,19 +263,24 @@ export function App() {
       const updated = getMockCandidates(currentPresetId, arrayId);
       if (updated.length > 0) {
         setCandidatesList(updated);
-        setSelectedCandidateId((prev) =>
-          updated.some((c) => c.id === prev) ? prev : updated[0].id
-        );
+        setSelectedCandidateId((prev) => {
+          if (!prev) return updated[0].id;
+          if (updated.some((c) => c.id === prev)) return prev;
+          if (findCandidateAcrossAllPresets(prev)) return prev;
+          return updated[0].id;
+        });
       }
     }
   };
 
   const activeCandidate = useMemo(() => {
-    return (
-      candidatesList.find((c) => c.id === selectedCandidateId) ||
-      candidatesList[0] ||
-      null
-    );
+    if (selectedCandidateId) {
+      const match = candidatesList.find((c) => c.id === selectedCandidateId);
+      if (match) return match;
+      const globalMatch = findCandidateAcrossAllPresets(selectedCandidateId);
+      if (globalMatch) return globalMatch.candidate;
+    }
+    return candidatesList[0] || null;
   }, [candidatesList, selectedCandidateId]);
 
   const [liveCatalog, setLiveCatalog] = useState<LiveCatalogResponse | null>(null);
@@ -275,6 +333,9 @@ export function App() {
       selectedArray,
       subtractionMode,
       activeFrameIndex,
+      candidateId: selectedCandidateId,
+      tab: activeTab,
+      presetId: currentPresetId,
     },
     (partial) => {
       if (partial.ra !== undefined) setRa(partial.ra);
@@ -283,6 +344,9 @@ export function App() {
       if (partial.selectedArray !== undefined) setSelectedArray(partial.selectedArray);
       if (partial.subtractionMode !== undefined) setSubtractionMode(partial.subtractionMode);
       if (partial.activeFrameIndex !== undefined) setActiveFrameIndex(partial.activeFrameIndex);
+      if (partial.candidateId !== undefined) setSelectedCandidateId(partial.candidateId);
+      if (partial.tab !== undefined) setActiveTab(partial.tab);
+      if (partial.presetId !== undefined) setCurrentPresetId(partial.presetId);
     }
   );
 
@@ -781,7 +845,8 @@ export function App() {
       )}
 
       {/* Top Header: Responsive with Mobile 3-Lines (Hamburger) Sidebar Menu */}
-      <header className="h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
+      {!isEmbedMode && (
+        <header className="h-12 shrink-0 bg-paper-900 border-b border-paper-800 px-3 sm:px-4 flex items-center justify-between text-xs select-none z-30">
         {/* Mobile Left: 3-Lines Hamburger Menu Button */}
         <div className="flex items-center gap-2.5 md:hidden">
           <button
@@ -910,12 +975,15 @@ export function App() {
             selectedArray={selectedArray}
             subtractionMode={subtractionMode}
             activeFrameIndex={activeFrameIndex}
+            candidateId={selectedCandidateId}
+            presetId={currentPresetId}
             onOpenEmbedModal={() => setIsEmbedModalOpen(true)}
             isViewerActive={activeTab === 'viewer'}
             isScientistMode={viewMode === 'scientist'}
           />
         </div>
       </header>
+      )}
 
       {/* Mobile Left Sidebar Drawer (Opened by 3 lines / Hamburger button) */}
       {isMobileMenuOpen && (
@@ -1140,8 +1208,9 @@ export function App() {
 
       {/* 4. Sky Viewport: Edge-to-Edge Celestial Canvas */}
       {activeTab === 'viewer' && (
-        <div className="flex flex-1 overflow-hidden relative anim-fall flex-col md:flex-row h-[calc(100vh-3rem)]">
+        <div className={`flex flex-1 overflow-hidden relative anim-fall flex-col md:flex-row ${isEmbedMode ? 'h-screen' : 'h-[calc(100vh-3rem)]'}`}>
           {/* Left Control Panel: Desktop side-column, Mobile full-pane overlay */}
+          {!isEmbedMode && (
           <div
             className={`${
               mobileViewerPane === 'controls'
@@ -1190,13 +1259,33 @@ export function App() {
               className="h-full w-full"
             />
           </div>
+          )}
 
           {/* Main Viewport: Canvas & Playback */}
           <main
-            className={`flex-1 flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)] overflow-hidden relative ${
+            className={`flex-1 flex flex-col ${
+              isEmbedMode
+                ? 'h-screen'
+                : 'h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)]'
+            } overflow-hidden relative ${
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}
           >
+            {isEmbedMode && (
+              <div className="absolute top-2 left-2 z-30 bg-paper-950/90 border border-paper-800 rounded-lg px-2.5 py-1 text-[11px] font-mono text-paper-200 flex items-center gap-2 shadow-lg backdrop-blur-sm pointer-events-auto select-none">
+                <span className="font-bold text-white">SPHEREx Sky Explorer</span>
+                <span className="text-paper-500">•</span>
+                <span className="text-emerald-400 font-semibold">{ra.toFixed(4)}°, {dec.toFixed(4)}°</span>
+                <a
+                  href={`${window.location.origin}${window.location.pathname}?ra=${ra.toFixed(6)}&dec=${dec.toFixed(6)}&fov=${fov}&detector=${selectedArray}&tab=viewer`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ochre-400 hover:text-ochre-300 underline font-bold ml-1 cursor-pointer"
+                >
+                  Open Full App ↗
+                </a>
+              </div>
+            )}
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -1239,6 +1328,7 @@ export function App() {
           </main>
 
           {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
+          {!isEmbedMode && (
           <div
             className={`${
               mobileViewerPane === 'telemetry'
@@ -1284,8 +1374,10 @@ export function App() {
               className="h-full w-full"
             />
           </div>
+          )}
 
           {/* Mobile Bottom Dock (< md screens) */}
+          {!isEmbedMode && (
           <nav className="md:hidden fixed bottom-0 inset-x-0 h-12 bg-paper-950/95 backdrop-blur border-t border-paper-800 z-40 flex items-center justify-around px-2">
             <button
               onClick={() => setMobileViewerPane('canvas')}
@@ -1321,6 +1413,7 @@ export function App() {
               <span>Controls</span>
             </button>
           </nav>
+          )}
         </div>
       )}
 
@@ -1334,6 +1427,8 @@ export function App() {
         selectedArray={selectedArray}
         subtractionMode={subtractionMode}
         activeFrameIndex={activeFrameIndex}
+        candidateId={selectedCandidateId}
+        presetId={currentPresetId}
       />
 
       {/* Choose Your View Assessment Pop-up Modal */}

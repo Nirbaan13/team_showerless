@@ -7,6 +7,7 @@ from math import ceil, isfinite
 from pathlib import Path
 import re
 from tempfile import TemporaryDirectory
+import os
 from time import monotonic
 from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import HTTPRedirectHandler, build_opener
@@ -18,7 +19,9 @@ from .prepare_fits import align_exposure, grid_coordinates, stack_payload
 from .review import build_review
 
 ARCHIVE_HOST = 'irsa.ipac.caltech.edu'
-COLLECTIONS = ('spherex_dr1', 'spherex_qr3')
+COLLECTIONS = tuple(
+    c.strip() for c in os.getenv('SPHEREX_COLLECTIONS', 'spherex_dr1,spherex_qr3,spherex_dr2,spherex_qr4').split(',') if c.strip()
+)
 PIXEL_SCALE = 6.15
 MAX_VISITS = 8
 MAX_RECORDS = 256
@@ -110,7 +113,7 @@ def parse_exposures(content, detector, start, stop):
         identifier = match[1]
         exposure = Exposure(identifier, time, urlunsplit(url._replace(query='', fragment='')),
                             collection.removeprefix('spherex_').upper())
-        if identifier not in exposures or exposure.release == 'DR1':
+        if identifier not in exposures or exposure.release.startswith('DR'):
             exposures[identifier] = exposure
     return sorted(exposures.values(), key=lambda exposure: (exposure.mjd, exposure.id))
 

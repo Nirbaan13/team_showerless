@@ -7,3 +7,7 @@ __pycache__/
 !.env.example
 *.pem
 *.key
+*.sqlite
+*.sqlite3
+crawler_checkpoint.json
+data/crawler_checkpoint.json

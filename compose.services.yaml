@@ -67,6 +67,10 @@ services:
     restart: unless-stopped
     ports:
       - "${ML_PORT:-8001}:8001"
+    volumes:
+      - api-data:/app/data
+    environment:
+      - VERIFICATIONS_DB_PATH=/app/data/verifications.sqlite
     healthcheck:
       test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')\" || exit 1"]
       interval: 5s

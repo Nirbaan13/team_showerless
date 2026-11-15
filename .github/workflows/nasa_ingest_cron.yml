@@ -1,0 +1,53 @@
+name: SPHEREx NASA IRSA Ingestion & Automated Pipeline
+
+on:
+  schedule:
+    # Run daily at 04:00 UTC to discover new SPHEREx public observation releases
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: 'Days to scan back (1-6)'
+        required: false
+        default: '6'
+      dry_run:
+        description: 'Dry run without persisting new candidate tracks'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  crawler:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pipeline Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy scikit-learn astropy requests fastapi httpx uvicorn pillow
+
+      - name: Run Pipeline & Microservice Test Suites
+        run: |
+          PYTHONPATH=pipeline python -m unittest pipeline/test_pipeline.py
+          PYTHONPATH=pipeline:science/motion:ml python -m unittest pipeline/spherex/test_crawler.py
+          PYTHONPATH=ml:science/motion python -m unittest ml/test_service.py
+
+      - name: Execute Autonomous NASA IRSA Crawler
+        env:
+          SPHEREX_COLLECTIONS: 'spherex_dr1,spherex_qr3,spherex_dr2,spherex_qr4'
+        run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+          DAYS_BACK="${{ github.event.inputs.days_back || '6' }}"
+          PYTHONPATH=pipeline:science/motion:ml python pipeline/spherex/crawler.py --once --days-back "$DAYS_BACK" $DRY_RUN_FLAG
