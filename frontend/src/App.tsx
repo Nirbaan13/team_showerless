@@ -32,8 +32,6 @@ import {
   convertReviewToCandidates,
   searchLiveMotionMicroservice,
   detectTracksViaMicroservice,
-  type MotionReviewDataset,
-  type MotionTrackCandidate,
 } from './services/motionReviewService';
 import {
   fetchLiveCatalogForCoordinate,
@@ -50,7 +48,6 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
-import { MotionReview } from './components/MotionReview';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
@@ -71,14 +68,15 @@ export function App() {
   const isEmbedMode =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion' | 'inference'>(() => {
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference'>(() => {
     if (isEmbedMode) return 'viewer';
     if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
       return 'inference';
     }
-    return typeof window !== 'undefined' && window.location.hash === '#motion-review'
-      ? 'motion'
-      : 'home';
+    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
+      return 'viewer';
+    }
+    return 'home';
   });
   const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>(
     'canvas'
@@ -109,13 +107,10 @@ export function App() {
   };
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (activeTab === 'motion') url.hash = 'motion-review';
-    else if (url.hash === '#motion-review') url.hash = '';
-    if (url.href !== window.location.href) {
-      window.history.replaceState(window.history.state, '', url);
+    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
+      setDrawerControlledTab('ai');
     }
-  }, [activeTab]);
+  }, []);
 
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
   const [ra, setRa] = useState<number>(166.790000);
@@ -306,45 +301,7 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
-  // Handler when user jumps from MotionReview directly into the Sky Viewer
-  const handleOpenMotionReviewInViewer = (
-    review: MotionReviewDataset,
-    frameIdx: number,
-    layer: 'aligned' | 'residual' | 'bloom',
-    track?: MotionTrackCandidate
-  ) => {
-    const convertedFrames = convertReviewToEpochFrames(review);
-    const convertedCands = convertReviewToCandidates(review);
-    const detNum = Number(review.detector?.replace(/\D/g, '')) || 6;
-    const detArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
 
-    setCurrentPresetId(null);
-    setCustomFrames(convertedFrames);
-    setCandidatesList(convertedCands);
-    setSelectedArray(detArray);
-    setActiveFrameIndex(Math.min(frameIdx, Math.max(0, convertedFrames.length - 1)));
-    setSubtractionMode(
-      layer === 'bloom'
-        ? 'bloom_mask'
-        : layer === 'residual'
-        ? 'epoch_difference'
-        : 'raw_calibrated'
-    );
-
-    if (convertedCands.length > 0) {
-      const firstCoord = track?.sky_deg?.[0] || [ convertedCands[0].ra, convertedCands[0].dec ];
-      setRa(firstCoord[0]);
-      setDec(firstCoord[1]);
-      setSelectedCandidateId(convertedCands[0].id);
-    }
-
-    setSearchStatus({
-      source: review.live_search ? 'live' : 'preset',
-      message: `Motion Review: ${review.target ?? review.id} (${review.detector ?? 'SPHEREx'})`,
-    });
-    setDrawerControlledTab('ai');
-    setActiveTab('viewer');
-  };
 
   const triggerBackgroundMlProgress = (
     runId: number,
@@ -904,19 +861,6 @@ export function App() {
               <span>Verification Feed</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('motion')}
-              className={`btn-tactile-sm px-2.5 sm:px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all border-2 border-black cursor-pointer ${
-                activeTab === 'motion'
-                  ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                  : 'bg-paper-900 text-paper-300 hover:text-white'
-              }`}
-              title="Astrometric Motion Review & Machine Learning Ranking"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Motion Review</span>
-            </button>
           </nav>
         </div>
 
@@ -937,11 +881,7 @@ export function App() {
 
         {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
         <div className="hidden md:flex items-center gap-2">
-          <div
-            className={`${
-              activeTab === 'motion' ? 'hidden' : 'flex'
-            } items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm`}
-          >
+          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
               className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
@@ -1075,23 +1015,6 @@ export function App() {
                 <span>Verification Feed</span>
               </button>
 
-              <button
-                onClick={() => {
-                  setActiveTab('motion');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full btn-tactile p-3 rounded-xl border-2 border-black flex items-center gap-3 text-xs font-mono font-bold cursor-pointer transition-all ${
-                  activeTab === 'motion'
-                    ? 'bg-emerald-400 text-gray-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                    : 'bg-paper-900 text-paper-200 hover:bg-paper-850'
-                }`}
-              >
-                <Sparkles
-                  className={`w-4 h-4 ${activeTab === 'motion' ? 'text-gray-950' : 'text-emerald-400'}`}
-                />
-                <span>Motion Review</span>
-              </button>
-
               {/* View Mode Switcher in Mobile Drawer */}
               <div className="pt-4 border-t border-paper-800 space-y-2">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-paper-500 font-bold px-1 block">
@@ -1165,15 +1088,6 @@ export function App() {
       {/* -1. Raw Inference View (when requested) */}
       {activeTab === 'inference' && <InferencePage />}
 
-      {/* 0. Motion Review View */}
-      {activeTab === 'motion' && (
-        <MotionReview
-          ra={ra}
-          dec={dec}
-          detector={selectedArray}
-          onOpenInViewer={handleOpenMotionReviewInViewer}
-        />
-      )}
 
       {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
