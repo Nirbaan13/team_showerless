@@ -361,3 +361,37 @@ test('HUD reports frame evidence and requested coordinates without invented WCS 
   await canvas.hover({ position: { x: 400, y: 350 } });
   await expect(metadata.getByText('Requested field: RA 250.000000°, Dec 10.000000°', { exact: true })).toBeVisible();
 });
+
+test('every candidate keeps the image transform after zoom and pan', async ({ page }) => {
+  await backend(page);
+  await page.addInitScript(() => {
+    const fillRect = CanvasRenderingContext2D.prototype.fillRect;
+    const fillText = CanvasRenderingContext2D.prototype.fillText;
+    (window as any).markerTransforms = [];
+    CanvasRenderingContext2D.prototype.fillRect = function (...args) {
+      if (args[0] === 0 && args[1] === 0 && args[2] === this.canvas.clientWidth) (window as any).markerTransforms = [];
+      return Reflect.apply(fillRect, this, args);
+    };
+    CanvasRenderingContext2D.prototype.fillText = function (...args) {
+      if (/^(?:★ )?#\d+(?: SELECTED)?$/.test(args[0])) {
+        const { a, d, e, f } = this.getTransform();
+        (window as any).markerTransforms.push([a, d, e, f]);
+      }
+      return Reflect.apply(fillText, this, args);
+    };
+  });
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const check = async () => {
+    await expect.poll(() => page.evaluate(() => (window as any).markerTransforms.length)).toBeGreaterThan(2);
+    const matrices = await page.evaluate(() => (window as any).markerTransforms);
+    expect(new Set(matrices.map((matrix: number[]) => JSON.stringify(matrix))).size).toBe(1);
+  };
+  await check();
+  await page.getByRole('button', { name: 'Zoom Out', exact: true }).click();
+  await check();
+  const canvas = await page.locator('#tutorial-target-skyview canvas').boundingBox();
+  await page.mouse.move(canvas!.x + 400, canvas!.y + 400);
+  await page.mouse.down(); await page.mouse.move(canvas!.x + 430, canvas!.y + 420, { steps: 3 }); await page.mouse.up();
+  await check();
+});
