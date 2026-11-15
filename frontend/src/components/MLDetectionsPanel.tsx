@@ -192,8 +192,11 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
       {activeCandidate && (
         <section className="p-3 rounded-xl bg-paper-950 border border-paper-800 space-y-3" aria-label="Candidate image stacks">
           <h3 className="font-mono text-[11px] font-bold text-paper-100 flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" />Shift &amp; Stack Coadd</h3>
-          <p className="text-[10px] text-paper-400">{activeCandidate.stackContributingExposures !== undefined
-            ? `${activeCandidate.stackContributingExposures} co-added exposures` : 'Co-add exposure count unavailable'}</p>
+          <p className="text-[10px] text-paper-400">
+            {activeCandidate.stackContributingExposures !== undefined
+              ? `${activeCandidate.stackContributingExposures} co-added exposures ${activeCandidate.stackContributingExposures >= 3 ? '(≥3 visits)' : '(<3 insufficient to stack)'}`
+              : 'Co-add exposure count unavailable'}
+          </p>
           <div className="grid grid-cols-2 gap-2">
             <figure className="space-y-1">
               <StackImage src={activeCandidate.fixedStackDataUrl} alt="Fixed sky position stack" />
