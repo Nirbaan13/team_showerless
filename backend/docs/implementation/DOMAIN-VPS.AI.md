@@ -114,5 +114,6 @@ deployment lock and restoring the actual live latest tag afterward. Production
 containers/data are distinct from its fixture Compose project.
 
 The WhatsApp DNS handoff failed with the connector's device-list/LID error. No
-notification was delivered. DNS instructions must be forwarded to Nirbaan by the
-user until messaging is restored.
+notification was delivered. No DNS action or forwarding is required while the
+public site remains on Hostinger. If a future cutover is authorized, its DNS
+instructions can be forwarded by the user until messaging is restored.
