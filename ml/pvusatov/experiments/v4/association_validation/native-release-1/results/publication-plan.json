@@ -1,0 +1,53 @@
+{
+  "archive_bytes": 1482526720,
+  "archive_sha256": "78fd49b821c58e891b9bd05c24f63a42edf2d66e3f682399d5d8d1a0d7936173",
+  "manifest_sha256": "4237504472fe9f2bcfb7d5eebb1421920c6f3cb0db4129122d42781408792ef6",
+  "manifest_url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/numeric-cache-manifest.json",
+  "model_policy_promotion": false,
+  "numeric_member_count": 3267,
+  "parts": [
+    {
+      "bytes": 268435456,
+      "path": "native-numeric-cache.tar.part000",
+      "sha256": "e2c669c8ee4b86954003ce32a67ef76a10593f88f60e49939ebc796132a2908b",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part000"
+    },
+    {
+      "bytes": 268435456,
+      "path": "native-numeric-cache.tar.part001",
+      "sha256": "8650120f75d7edfa7b7218c162d1f893573afe6e70aa75a98eedc7d370fef0ad",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part001"
+    },
+    {
+      "bytes": 268435456,
+      "path": "native-numeric-cache.tar.part002",
+      "sha256": "fef570dcbaa703c17676d81d3ae09066b67dc328fc7d6feb5c7a3e892449b561",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part002"
+    },
+    {
+      "bytes": 268435456,
+      "path": "native-numeric-cache.tar.part003",
+      "sha256": "9c07355a371a1a46ccdd61bcf3824619b0086e8bf84412b3be1ab32199b018e1",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part003"
+    },
+    {
+      "bytes": 268435456,
+      "path": "native-numeric-cache.tar.part004",
+      "sha256": "078e2e9a83fe2f9a856c41a63a0341333a52688ff398f9a0f46954e17bfa9339",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part004"
+    },
+    {
+      "bytes": 140349440,
+      "path": "native-numeric-cache.tar.part005",
+      "sha256": "773b3e1b06cb2e56f4a484f14e58f90b641363ff8bb17f80fd90a1b5951979ad",
+      "url": "https://github.com/Nirbaan13/team_showerless/releases/download/research-v4-association-native-20261115/native-numeric-cache.tar.part005"
+    }
+  ],
+  "publication_status_authority": "Read the GitHub release and release-verification.json; this preserved plan predates upload completion",
+  "release_tag": "research-v4-association-native-20261115",
+  "release_url": "https://github.com/Nirbaan13/team_showerless/releases/tag/research-v4-association-native-20261115",
+  "schema_version": 1,
+  "source_commit": "a3422a07c0f624c0f6ab43ec437b9b84ecccb73b",
+  "stage": "prospective_exact_artifact_publication",
+  "verification_receipt_asset": "release-verification.json"
+}
