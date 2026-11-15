@@ -1000,9 +1000,21 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
                   ? 'bg-emerald-400 text-gray-950 border-black font-bold'
                   : 'bg-paper-950 text-paper-300 border-paper-800 hover:text-white'
               }`}
-              title="Aligned SPHEREx Exposure"
+              title="Aligned SPHEREx Exposure (Raw)"
             >
               Aligned
+            </button>
+            <button
+              type="button"
+              onClick={() => onChangeSubtractionMode('zodi_reference_subtracted')}
+              className={`px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                subtractionMode === 'zodi_reference_subtracted'
+                  ? 'bg-emerald-400 text-gray-950 border-black font-bold'
+                  : 'bg-paper-950 text-paper-300 border-paper-800 hover:text-white'
+              }`}
+              title="Zodiacal Light Subtracted Cutout (clean = img - zodi)"
+            >
+              Zodi Clean
             </button>
             <button
               type="button"
@@ -1071,6 +1083,12 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
           <span>|</span>
           <span>Band {activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>
+          {subtractionMode === 'zodi_reference_subtracted' && (
+            <>
+              <span>|</span>
+              <span className="text-emerald-400 font-bold">Zodi Clean</span>
+            </>
+          )}
           {subtractionMode === 'epoch_difference' && (
             <>
               <span>|</span>

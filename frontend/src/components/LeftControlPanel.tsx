@@ -203,28 +203,19 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                     ? 'bg-paper-800 text-paper-100 font-medium'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                 }`}
-                title={`Wavelength: ${spec.range} | ${spec.res}\n${spec.desc}`}
+                title={`Wavelength: ${spec.range} | Resolving Power: ${spec.res} (${spec.desc})`}
               >
-                <div>
-                  <div className="font-mono text-[11px] font-semibold text-paper-200 flex items-center gap-1.5">
-                    <span>{spec.name}</span>
-                    {viewMode === 'scientist' ? (
-                      <span className="text-[10px] font-mono text-emerald-400 font-normal">
-                        ({spec.range})
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-sans font-normal text-paper-400">
-                        ({spec.label})
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-[10px] font-mono text-paper-500">
-                    {viewMode === 'scientist' ? (
-                      <span className="text-paper-400">Resolving Power: {spec.res}</span>
-                    ) : (
-                      spec.desc
-                    )}
-                  </div>
+                <div className="font-mono text-[11px] font-semibold text-paper-200 flex items-center gap-1.5">
+                  <span>{spec.name}</span>
+                  {viewMode === 'scientist' ? (
+                    <span className="text-[10px] font-mono text-emerald-400 font-normal">
+                      ({spec.range})
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-sans font-normal text-paper-400">
+                      ({spec.label})
+                    </span>
+                  )}
                 </div>
                 {isSelected && (
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -247,22 +238,22 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             {
               id: 'raw_calibrated',
               label: viewMode === 'scientist' ? 'Level 2/3 Aligned FITS' : 'Aligned Sky (Raw)',
-              desc: viewMode === 'scientist' ? 'Gnomonic WCS aligned flux (MJy/sr)' : 'Standard telescope exposure',
+              desc: 'Standard telescope exposure with calibrated flags',
+            },
+            {
+              id: 'zodi_reference_subtracted',
+              label: viewMode === 'scientist' ? 'Zodi Reference Subtracted' : 'Zodi Subtracted (Clean)',
+              desc: 'Interplanetary zodiacal dust haze removed (clean = img - zodi)',
             },
             {
               id: 'epoch_difference',
               label: viewMode === 'scientist' ? 'Per-Frame Difference (LOO Δt)' : 'Difference Image (Motion)',
-              desc: viewMode === 'scientist' ? 'Leave-one-out median reference subtracted' : 'Subtracts static stars to reveal motion',
+              desc: 'Leave-one-out reference subtracted to reveal moving objects',
             },
             {
               id: 'bloom_mask',
               label: viewMode === 'scientist' ? 'BLOOM Bitmask Core Overlay' : 'BLOOM Mask (Bright Cores)',
-              desc: viewMode === 'scientist' ? 'Detector saturation core flags (e.g. Vesta)' : 'Links bright saturated asteroid cores',
-            },
-            {
-              id: 'zodi_reference_subtracted',
-              label: viewMode === 'scientist' ? 'Zodi Reference Subtracted' : 'Remove Dust Glare (Clean)',
-              desc: viewMode === 'scientist' ? 'Diffuse interplanetary dust model removed' : 'Cuts out solar system dust haze',
+              desc: 'Detector saturation core bitmask (e.g. Vesta)',
             },
           ].map((mode) => {
             const isSelected = subtractionMode === mode.id;
@@ -270,15 +261,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <button
                 key={mode.id}
                 onClick={() => onChangeSubtractionMode(mode.id as SubtractionMode)}
-                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
+                className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-emerald-300 font-semibold'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-100'
                 }`}
                 title={mode.desc}
               >
-                <div className="font-mono text-[11px]">{mode.label}</div>
-                <div className="text-[10px] text-paper-500 font-sans">{mode.desc}</div>
+                <span className="font-mono text-[11px]">{mode.label}</span>
+                {isSelected && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                )}
               </button>
             );
           })}

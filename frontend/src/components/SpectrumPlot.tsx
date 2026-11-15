@@ -31,7 +31,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
   candidateId = null,
   isScientistMode: _isScientistMode = false,
 }) => {
-  const [apertureRadius, setApertureRadius] = useState<number>(2.0);
+  const apertureRadius = 2.0;
   const [subtractionMode, setSubtractionMode] = useState<'zodi_subtracted' | 'raw_calibrated'>('zodi_subtracted');
   const [selectedDetector, setSelectedDetector] = useState<string | 'all'>('all');
   const [spectrumResult, setSpectrumResult] = useState<TargetSpectrumResult | null>(null);
@@ -306,98 +306,52 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
         </div>
       </div>
 
-      {/* Detected Molecular Absorption Features Card */}
+      {/* Detected Molecular Absorption Features */}
       {molecularDetections && molecularDetections.length > 0 && (
-        <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/40 space-y-1.5">
-          <div className="flex items-center justify-between font-mono text-[10px]">
-            <span className="text-emerald-400 font-bold flex items-center gap-1">
-              <Activity className="w-3 h-3" />
-              <span>Molecular Signatures Identified</span>
+        <div className="p-2 rounded-lg bg-emerald-950/20 border border-emerald-500/30 flex flex-wrap gap-1.5 items-center">
+          <span className="text-emerald-400 font-mono text-[10px] font-bold flex items-center gap-1 mr-1">
+            <Activity className="w-3 h-3" />
+            <span>Signatures:</span>
+          </span>
+          {molecularDetections.map((m: MolecularDetection) => (
+            <span
+              key={m.species}
+              className="px-2 py-0.5 rounded-md bg-paper-950 border border-emerald-500/40 text-emerald-300 font-mono text-[10px] flex items-center gap-1.5"
+            >
+              <span className="font-bold">{m.species}</span>
+              <span className="text-paper-400">{m.center_um} µm</span>
+              <span className="px-1 rounded bg-emerald-900/60 text-emerald-300 text-[9px] font-bold">
+                SNR {m.significance_snr}
+              </span>
             </span>
-            <span className="text-paper-400">102-Band Matching</span>
-          </div>
-
-          <div className="space-y-1.5">
-            {molecularDetections.map((m: MolecularDetection) => (
-              <div key={m.species} className="p-1.5 rounded bg-paper-950/80 border border-paper-800/80 text-[10px]">
-                <div className="flex items-center justify-between font-mono">
-                  <span className="text-emerald-300 font-bold">
-                    {m.species} ({m.center_um} µm)
-                  </span>
-                  <span className="px-1.5 py-0.2 rounded bg-emerald-900/60 text-emerald-300 text-[9px] font-bold">
-                    SNR {m.significance_snr}
-                  </span>
-                </div>
-                <div className="text-[10px] text-paper-400 mt-0.5 leading-snug">
-                  {m.interpretation}
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       )}
 
-      {/* Interactive Controls (Aperture & Subtraction Mode) */}
-      <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
-        {/* Aperture radius */}
-        <div className="p-1.5 rounded bg-paper-950 border border-paper-800">
-          <div className="text-paper-400 text-[9px] uppercase font-bold mb-1">Aperture Radius (px)</div>
-          <div className="flex gap-1">
-            {[1.5, 2.0, 3.0].map((r) => (
-              <button
-                key={r}
-                onClick={() => setApertureRadius(r)}
-                className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer ${
-                  apertureRadius === r
-                    ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
-                    : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
-                }`}
-              >
-                {r.toFixed(1)}px
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Subtraction mode */}
-        <div className="p-1.5 rounded bg-paper-950 border border-paper-800">
-          <div className="text-paper-400 text-[9px] uppercase font-bold mb-1">Background Subtraction</div>
-          <div className="flex gap-1">
-            <button
-              onClick={() => setSubtractionMode('zodi_subtracted')}
-              className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer truncate ${
-                subtractionMode === 'zodi_subtracted'
-                  ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
-                  : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
-              }`}
-              title="Zodiacal light subtracted (clean = img - zodi)"
-            >
-              Zodi Subtracted
-            </button>
-            <button
-              onClick={() => setSubtractionMode('raw_calibrated')}
-              className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer truncate ${
-                subtractionMode === 'raw_calibrated'
-                  ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
-                  : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
-              }`}
-              title="Raw un-subtracted detector flux"
-            >
-              Raw
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main SVG Plot */}
       <div className="bg-paper-950 border border-paper-800 rounded-lg p-2.5 relative select-none">
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-[10px] font-semibold text-paper-200">
+        <div className="flex items-center justify-between mb-2 font-mono text-[10px]">
+          <span className="font-semibold text-paper-200">
             Flux Density F_λ (mJy) vs. Wavelength λ (µm)
           </span>
-          <span className="text-[10px] font-mono text-emerald-400 font-bold">
-            102 Channels (D1–D6)
-          </span>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() =>
+                setSubtractionMode((prev) =>
+                  prev === 'zodi_subtracted' ? 'raw_calibrated' : 'zodi_subtracted'
+                )
+              }
+              className={`px-2 py-0.5 rounded text-[9px] font-bold border transition-colors cursor-pointer ${
+                subtractionMode === 'zodi_subtracted'
+                  ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
+                  : 'bg-paper-900 border-paper-800 text-paper-400 hover:text-white'
+              }`}
+              title="Toggle Zodiacal Light subtraction (clean = img - zodi)"
+            >
+              {subtractionMode === 'zodi_subtracted' ? 'Zodi Clean' : 'Raw Flux'}
+            </button>
+            <span className="text-emerald-400 font-bold">102 Bands</span>
+          </div>
         </div>
 
         <div className="relative">
@@ -567,78 +521,49 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
         </div>
       </div>
 
-      {/* 6 Detectors Quick Filter Pills (D1–D6) */}
-      <div className="space-y-1">
-        <div className="flex items-center justify-between text-[9px] font-mono text-paper-400">
-          <span>SPHEREx Detector Arrays (17 bands each)</span>
-          <span>Click to focus</span>
-        </div>
-        <div className="grid grid-cols-6 gap-1 text-[10px] font-mono text-center">
-          {[
-            ['D1', '0.75–1.1', DETECTOR_COLORS.D1],
-            ['D2', '1.1–1.6', DETECTOR_COLORS.D2],
-            ['D3', '1.6–2.4', DETECTOR_COLORS.D3],
-            ['D4', '2.4–3.8', DETECTOR_COLORS.D4],
-            ['D5', '3.8–4.4', DETECTOR_COLORS.D5],
-            ['D6', '4.4–5.0', DETECTOR_COLORS.D6],
-          ].map(([d, r, col]) => {
-            const isSel = selectedDetector === d;
-            return (
-              <button
-                key={d}
-                onClick={() => setSelectedDetector(selectedDetector === d ? 'all' : d)}
-                style={{ borderColor: isSel ? col : undefined }}
-                className={`p-1 rounded bg-paper-950 border transition-all cursor-pointer ${
-                  isSel ? 'bg-paper-900 font-bold scale-[1.02]' : 'border-paper-800 hover:border-paper-700'
-                }`}
-              >
-                <div style={{ color: col }} className="font-bold">
-                  {d}
-                </div>
-                <div className="text-[8px] text-paper-500">{r}µm</div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Shasta IRSA Aperture Detector Telemetry Summary */}
       {spectrumResult?.detectors_summary && Object.keys(spectrumResult.detectors_summary).length > 0 && (
         <div className="p-2 rounded-lg bg-paper-950 border border-paper-800 space-y-1.5 font-mono text-[10px]">
           <div className="flex items-center justify-between text-paper-300 font-bold text-[9px] uppercase tracking-wider">
-            <span>IRSA Aperture Telemetry Summary</span>
+            <span>IRSA Aperture Telemetry</span>
             <span className="text-emerald-400 font-normal">
               {spectrumResult.total_channels || channels.length} Bands Analyzed
             </span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-            {Object.entries(spectrumResult.detectors_summary).map(([det, stats]) => (
-              <div key={det} className="p-1.5 rounded bg-paper-900 border border-paper-800 flex flex-col">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-white" style={{ color: DETECTOR_COLORS[det] }}>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
+            {Object.entries(spectrumResult.detectors_summary).map(([det, stats]) => {
+              const isFocused = selectedDetector === det;
+              return (
+                <button
+                  key={det}
+                  type="button"
+                  onClick={() => setSelectedDetector(isFocused ? 'all' : det)}
+                  className={`p-1 rounded border transition-all cursor-pointer flex flex-col text-center ${
+                    isFocused
+                      ? 'bg-paper-800 border-emerald-400 font-bold scale-[1.02]'
+                      : 'bg-paper-900 border-paper-800 hover:border-paper-700'
+                  }`}
+                  title={`Click to focus ${det} bands on plot`}
+                >
+                  <span className="font-bold text-white text-[11px]" style={{ color: DETECTOR_COLORS[det] }}>
                     {det}
                   </span>
-                  <span className="text-[9px] text-paper-400">{stats.channels} bands</span>
-                </div>
-                <div className="text-[9px] text-paper-300 mt-0.5">
-                  Mean Flux: <span className="text-emerald-300 font-bold">{stats.mean_flux_mjy} mJy</span>
-                </div>
-                <div className="text-[9px] text-paper-400">
-                  Mean SNR: <span className="text-sky-300 font-bold">{stats.mean_snr}</span>
-                </div>
-              </div>
-            ))}
+                  <span className="text-[9px] text-emerald-300 font-bold">{stats.mean_flux_mjy} mJy</span>
+                  <span className="text-[8px] text-paper-400">SNR {stats.mean_snr}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Scientific Validation Badge */}
-      <div className="p-2 rounded bg-paper-950 border border-paper-800/80 flex items-center justify-between text-[10px] font-mono text-paper-400">
+      {/* Scientific Calibration Status */}
+      <div className="px-2.5 py-1.5 rounded-lg bg-paper-950 border border-paper-800/80 flex items-center justify-between text-[10px] font-mono text-paper-400">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-          <span>FLAGS &amp; Bitmask Cleaned (SOURCE 1&lt;&lt;21, OUTLIER 1&lt;&lt;19, BLOOM 1&lt;&lt;26)</span>
+          <span>WCS-WAVE Spectrophotometry</span>
         </div>
-        <span className="text-emerald-400 font-bold">100% Calibrated</span>
+        <span className="text-emerald-400 font-bold">102 Bands Calibrated</span>
       </div>
     </div>
   );
