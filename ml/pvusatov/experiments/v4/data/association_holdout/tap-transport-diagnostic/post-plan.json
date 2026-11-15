@@ -1,0 +1,13 @@
+{
+  "declared_utc": "2026-11-15T10:50:16.157803+00:00",
+  "role": "Same diagnostic query via TAP POST form, NO selection",
+  "endpoint": "https://irsa.ipac.caltech.edu/TAP/sync",
+  "parameters": {
+    "REQUEST": "doQuery",
+    "LANG": "ADQL",
+    "FORMAT": "csv",
+    "QUERY": "SELECT TOP 1 a.uri FROM spherex.artifact a JOIN spherex.plane p ON a.planeid=p.planeid WHERE 1=CONTAINS(POINT('ICRS',154.20377653,-47.09320195),p.poly) AND a.uri LIKE 'ibe/data/spherex/dr1/level2/%'"
+  },
+  "timeout_seconds": 30,
+  "response_cap_bytes": 4194304
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "analysis_id": "ENGINEERING-density-8",
+  "model_dir": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model",
+  "source": {
+    "kind": "preset",
+    "preset_id": "comet-d2",
+    "path": "/tmp/spaceapps-v4-density-iqxmzne9/engineering.npz"
+  },
+  "options": {
+    "min_snr": 4.0,
+    "max_candidates": 100,
+    "max_peaks": 100
+  }
+}

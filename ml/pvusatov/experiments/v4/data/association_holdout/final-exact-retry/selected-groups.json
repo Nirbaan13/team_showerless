@@ -1,0 +1,242 @@
+[
+  {
+    "center": [
+      154.20377653,
+      -47.09320195
+    ],
+    "galactic_lon_lat_deg": [
+      277.5,
+      8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-01",
+    "parent_id": "association-holdout-01",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 1,
+    "seed": 3900001,
+    "minimum_center_distance_deg": 19.487663403358674,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      60.65544865,
+      2.95400593
+    ],
+    "galactic_lon_lat_deg": [
+      187.5,
+      -35.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-02",
+    "parent_id": "association-holdout-02",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 2,
+    "seed": 3900002,
+    "minimum_center_distance_deg": 22.889717231640137,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      79.04639226,
+      52.11002338
+    ],
+    "galactic_lon_lat_deg": [
+      157.5,
+      8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-03",
+    "parent_id": "association-holdout-03",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 3,
+    "seed": 3900003,
+    "minimum_center_distance_deg": 19.189705587198496,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      247.19620024,
+      7.44284809
+    ],
+    "galactic_lon_lat_deg": [
+      22.5,
+      35.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-04",
+    "parent_id": "association-holdout-04",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 1,
+    "seed": 3900004,
+    "minimum_center_distance_deg": 22.20383450411542,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      285.33486404,
+      -12.88765097
+    ],
+    "galactic_lon_lat_deg": [
+      22.5,
+      -8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-05",
+    "parent_id": "association-holdout-05",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 2,
+    "seed": 3900005,
+    "minimum_center_distance_deg": 14.806419642981234,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      142.32946053,
+      0.99517302
+    ],
+    "galactic_lon_lat_deg": [
+      232.5,
+      35.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-06",
+    "parent_id": "association-holdout-06",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 3,
+    "seed": 3900006,
+    "minimum_center_distance_deg": 20.312363062844526,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      90.22344196,
+      39.42294992
+    ],
+    "galactic_lon_lat_deg": [
+      172.5,
+      8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-07",
+    "parent_id": "association-holdout-07",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 1,
+    "seed": 3900007,
+    "minimum_center_distance_deg": 11.368786866652798,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      158.87560323,
+      28.38978507
+    ],
+    "galactic_lon_lat_deg": [
+      202.5,
+      60.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-08",
+    "parent_id": "association-holdout-08",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 2,
+    "seed": 3900008,
+    "minimum_center_distance_deg": 19.148543936019838,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      292.05643392,
+      0.3856764
+    ],
+    "galactic_lon_lat_deg": [
+      37.5,
+      -8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-09",
+    "parent_id": "association-holdout-09",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 3,
+    "seed": 3900009,
+    "minimum_center_distance_deg": 10.949135449085896,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      339.09981938,
+      17.06063382
+    ],
+    "galactic_lon_lat_deg": [
+      82.5,
+      -35.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-10",
+    "parent_id": "association-holdout-10",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 1,
+    "seed": 3900010,
+    "minimum_center_distance_deg": 18.48104403148122,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      316.58881058,
+      59.24743149
+    ],
+    "galactic_lon_lat_deg": [
+      97.5,
+      8.0
+    ],
+    "stratum": "low_galactic_latitude",
+    "group_id": "association-holdout-11",
+    "parent_id": "association-holdout-11",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 2,
+    "seed": 3900011,
+    "minimum_center_distance_deg": 10.949135427425523,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  },
+  {
+    "center": [
+      132.87978105,
+      71.52664268
+    ],
+    "galactic_lon_lat_deg": [
+      142.5,
+      35.0
+    ],
+    "stratum": "off_plane",
+    "group_id": "association-holdout-12",
+    "parent_id": "association-holdout-12",
+    "split": "quarantined_association_holdout",
+    "preferred_detector": 3,
+    "seed": 3900012,
+    "minimum_center_distance_deg": 18.481044029418992,
+    "error": "Exactly8eligible physical exposures not available in declared metadata domain",
+    "excluded_row_count": 0,
+    "pixels_opened": false
+  }
+]

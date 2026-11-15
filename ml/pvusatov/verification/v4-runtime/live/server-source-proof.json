@@ -1,0 +1,52 @@
+{
+  "checked_at_utc": "2026-11-15T11:15:15.849972+00:00",
+  "services": {
+    "backend": {
+      "revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+      "image_id": "sha256:b6f024346c50f89c6a6abcb1fc168b1bed8ccc52e66182bb550aad786f2a5841",
+      "latest_matches_running": true,
+      "health": "healthy"
+    },
+    "frontend": {
+      "revision": "a674c8d33642731e60117ec46c5c88b7d9f7db1c",
+      "image_id": "sha256:8b214fdb3c437b379bcf53a690e8aaac2205ab2c184738210fe7ee23850fbbaf",
+      "latest_matches_running": true,
+      "health": "healthy"
+    },
+    "pipeline": {
+      "revision": "5b76a26dd6e7f6de83d8fbb716ca3032b59a2a84",
+      "image_id": "sha256:b6f024346c50f89c6a6abcb1fc168b1bed8ccc52e66182bb550aad786f2a5841",
+      "same_image_as_backend": true,
+      "health": "healthy",
+      "direct_health_verified": true
+    }
+  },
+  "python": "3.12.3",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "runtime_sha256": {
+    "contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "training_packages": [],
+  "private_grpc_binding": [
+    "127.0.0.1:50051"
+  ]
+}

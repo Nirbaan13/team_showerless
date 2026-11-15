@@ -1,0 +1,27 @@
+# Independent association holdout acquisition
+
+This is a prospective **next research holdout**, separate from V4 release validation. Twelve parent slots were fixed before archive queries. **All four bounded query batches failed with HTTP 502: 12 planned parents, zero acquired parents, zero files.** The handoff explicitly sets `evaluation_ready=false`. Pixels, injections and inference remain unauthorized. This directory does not claim a successful new twelve-parent data bank or a coverage result.
+
+The declared cohort alternates six low Galactic latitude and six off-plane positions, with preferred detectors D1/D2/D3 balanced four each. Positions come from a fixed Galactic grid and a deterministic farthest-distance rule. Their minimum separation from all earlier or newly declared parent centers is 10.949135 degrees. All 438 prior physical OBSIDs are excluded: the old 210, V4's 224, and four Ceres exposures. The association pilot uses existing TRAIN01/TRAIN03 exposures and adds no new raw parent. All versions, detectors and epochs sharing a physical OBSID are excluded together.
+
+Each slot requires exactly eight unique physical observations from one supported detector. The read-only verified V4 selection implementation chooses an initial three exposures within 1.5 hours and deterministic temporal supplements, preferring an eight-epoch span of at least two hours within 48 hours, with a predeclared 168-hour/detector fallback. Missing fields remain planned missing; there are no coverage-driven replacement centers or pixel/model-based substitutions. Six-arcminute science ROIs are spatially distinct. Full native-parent footprint checks remain pending until actual metadata rows exist; center separation is not presented as a completed audit of unavailable `s_region` records.
+
+The original seed reservation `3900001..3900012` overlapped a prior synthetic range. No draws occurred. The coordinator corrected the reservation prospectively to **4110001..4110012**, recorded in the append-only transport amendment. Original plans and hashes remain unchanged. Acquisition itself generates no trials.
+
+The initial all-time SIA batch and a percent-encoded transport retry each returned upstream HTTP 502 for all twelve slots. One exact-query diagnostic through independently verified VPS SSH egress also returned 502; it performed only a bounded urllib metadata request and modified no remote files, containers or services. TAP GET and POST diagnostics returned the same failure. These failures establish **no archive-coverage result** and provide no rows that could legitimately be selected.
+
+The coordinator then approved a prospectively documented **narrower, nonexhaustive** TIME domain, 2025-07-01 through 2025-08-15, with the same twelve centers and eligibility rules. Its twelve fixed requests also returned 502. This was not globally equivalent to the original all-time query. The separately declared final exact all-time retry ran at 11:15 UTC, within the original 11:24 UTC deadline, and all twelve requests again failed. `quarantined-handoff.json` and `metadata-audit-proof.json` preserve final accounting. Each batch attempted two HTTP requests per slot; failed metadata is not silently interpreted as an empty successful table.
+
+The [official IRSA access guide](https://irsa.ipac.caltech.edu/spherex-archive-documentation/spherex-data-access/) documents the SIA2 collection and native MEF cutout interfaces. The [official cutout tutorial](https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/) supplies the `spherex.artifact`/`spherex.plane` TAP example used only for the bounded transport diagnostic. The diagnostic `TOP 1` response could never serve as a complete selection domain or establish noncoverage.
+
+Acquisition is bounded to 96 files, four transfers, 500 MB and the declared deadline. MEF bytes would be hashed and checked only through the existing seek-based FITS header scanner, without opening any HDU data array. Required D1–D3 ePSF orientation, physical identity, image/flag/variance/ZODI shape, mission extensions and header times would be verified before a usable handoff. No downloaded headers or pixels are fabricated when the archive fails.
+
+Historical `byte-header-audit.json` files contain the generic stage label `ACQUIRED_QUARANTINED` even with zero counts, because the imported implementation used a constant label. The explicit state and handoff correct its interpretation without rewriting evidence. Exceptions retain the original error strings; `query-url-index.json` reconstructs their exact URLs from the frozen plan and prospective amendments. No response bodies or metadata rows are invented.
+
+Run the portable metadata-only audit with:
+
+```sh
+python ml/pvusatov/experiments/v4/data/association_holdout/audit_holdout.py
+```
+
+It checks source bindings, prior physical exclusions, parent/stratum/detector declarations, the corrected seed reservation, all four twelve-slot failure batches, zero-data accounting and quarantine flags. It never opens FITS or imports inference. Scope is metadata/provenance and failure accounting, not coverage, recovery, precision or a release gate. Four new geometry/identity/source-integrity tests and unchanged acquisition/header tests pass together (**eight tests**). A fresh temporary relocation, supplied only the five referenced source/metadata dependencies, also passed the audit without requiring original `/tmp` data roots or FITS; `portable-replay-proof.json` records this check.

@@ -1,0 +1,16 @@
+{
+  "status": "INCOMPLETE_OR_NO_ELIGIBLE_GROUPS",
+  "amendment_sha256": "60014b689ee0fcb76f054044803d733d415d2472d23905bacfdaca93b9d9c29b",
+  "audit_sha256": "915758616fb155f0c476112b69871206763da43b098eb0d5b2ccb47fac61427b",
+  "exact_query_urls": 12,
+  "counts": {
+    "groups_planned": 12,
+    "selected_metadata_groups": 0,
+    "downloaded_files": 0,
+    "bytes": 0
+  },
+  "missing_remain_planned": true,
+  "pixels_opened": false,
+  "inference_authorized": false,
+  "selection_not_exhaustive_full_archive": true
+}

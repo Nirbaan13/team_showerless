@@ -1,0 +1,79 @@
+{
+  "recorded_at_utc": "2026-11-15T10:48:16.065010+00:00",
+  "designation": "Root DEV-informed policy selection for new independent RESEARCH evaluation, not a V4 release change",
+  "selected_policy": "learned_pair",
+  "threshold": 4.0,
+  "comparator": "legacy baseline-score pair-exclusive pruning; both retained pools ranked by the same frozen C596",
+  "selection_was_prospective_before_pilot_results": false,
+  "selection_reason": "Development pilot improves synthetic reviewed recovery and modestly improves native resolved recovery without near-duplicate pool explosion; test whether this survives independent fields",
+  "pilot_evidence": {
+    "ml/pvusatov/experiments/v4/association_pilot/protocol.json": "afc9a5e27007fdf139728c31d8cfa7db34b8e1e9f8ad5e6a9d552e2380c2f8fe",
+    "ml/pvusatov/experiments/v4/association_pilot/results/run.json": "2b6aa9e711822cbd4be8acf6115c3eb6db699c7e142d54160dc2f86307d47d7e",
+    "ml/pvusatov/experiments/v4/association_pilot/policies.py": "854c2abf696dfa5094dfb79c0a39eeecdc796f5ac723bbe6f8727eceaccf271d"
+  },
+  "fixed_graph_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "fixed_metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "pilot_limitations": [
+    "Native data contain only two TRAIN backgrounds",
+    "Native raw K3 gain +8 consists of +1 actual-matched-span>=3px and +7 unresolved spatial recoveries",
+    "Full-pool feature/scoring increases native processing CPU roughly4.5x in the measured pilot",
+    "UNKNOWN workload is not false-positive precision; utility is not probability"
+  ],
+  "native_plan": {
+    "parents": 12,
+    "epochs": 8,
+    "parent_seed_first": 4110001,
+    "parent_seed_count": 12,
+    "speeds_px_per_hour": [
+      0.01,
+      0.03,
+      0.1,
+      0.3,
+      1.0,
+      4.0,
+      10.0,
+      25.0,
+      50.0
+    ],
+    "direction_ids": [
+      0,
+      2,
+      4
+    ],
+    "draw_all_six_directions_before_filter": true,
+    "brightness": [
+      3.0,
+      6.0,
+      12.0,
+      24.0,
+      48.0
+    ],
+    "trials_per_parent": 135,
+    "planned_injections": 1620,
+    "uninjected_controls": 12,
+    "recenter_into_coverage": false
+  },
+  "synthetic_plan": {
+    "seed_first": 4100000,
+    "count": 1000,
+    "calibration": "Original TRAIN-only bank",
+    "no_instrument_masks": true
+  },
+  "primary_reporting": [
+    "All planned and common-attributable K1/K3",
+    "Actual matched-epoch truth-span>=3px descriptive recovery",
+    "Per-parent/speed/brightness/cadence strata",
+    "Native UNKNOWN workload; capped/error/missing trials",
+    "Whole-parent/whole-field paired10000-draw bootstrap with seed2026111502",
+    "CPU, candidate growth and retained pool parity"
+  ],
+  "prohibitions": [
+    "No new fit or policy/threshold reselection from holdout",
+    "No V4 FINAL pixel/cache reads",
+    "No V4 model/runtime/freeze/gate changes",
+    "No dropping failed or missing planned trials",
+    "No confirmed motion or survey precision claim"
+  ],
+  "production_promotion_authorized": false,
+  "independent_data_status_at_selection": "Acquisition metadata transport failures reported; zero new raw files available, no new inference or truth drawn"
+}

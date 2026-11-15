@@ -1,0 +1,181 @@
+{
+  "status": "SOURCE_STABLE_ENGINEERING_DIAGNOSTIC",
+  "created_utc": "2026-11-15T10:36:18.121319+00:00",
+  "files": [
+    {
+      "path": "DENSITY-STRESS.AI.md",
+      "sha256": "22abc9e38432093904c20a0cec43e3f38e57a3c3d569fce4cff453f69f0b840a",
+      "bytes": 5241
+    },
+    {
+      "path": "case-8/proof.json",
+      "sha256": "c4a17a40c45b19bc92fcd8fadac96167842cfc01567260c86dc4156a5c974558",
+      "bytes": 2830
+    },
+    {
+      "path": "case-8/request.json",
+      "sha256": "86260b5fea2dfba9335f9a1ca5437767d8b5af28669c225a95225a252859a4d6",
+      "bytes": 396
+    },
+    {
+      "path": "case-8/result.json",
+      "sha256": "3767cb3312d8685417ab6ee92192d37327d2c16a1c86a9ee46b560a38df1b5d6",
+      "bytes": 174
+    },
+    {
+      "path": "case-8/stderr.log",
+      "sha256": "0519fa3aa47d73f081c2082d765e9ed10ba5bdb5f3f6ea3a1571caf99fd7e564",
+      "bytes": 110
+    },
+    {
+      "path": "case-8/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "case-v2-100/proof.json",
+      "sha256": "b53b594f293a596550fd2af9975bd817d6ad382c824ed782d42b8c6a5f7d9326",
+      "bytes": 2842
+    },
+    {
+      "path": "case-v2-100/request.json",
+      "sha256": "be436c9274084c76c95b253abf0c87d5bb55e3d7bbe79a919422c13bcc674196",
+      "bytes": 398
+    },
+    {
+      "path": "case-v2-100/result.json",
+      "sha256": "bfd84aa6dc7ce6ff090e610aa63974ad496c61857015a2f02e94dae1976a6fca",
+      "bytes": 184
+    },
+    {
+      "path": "case-v2-100/stderr.log",
+      "sha256": "3aed81a020e7a181de4c9e29d0d6e886f384e6420bed0eccfb79f426de6e41f4",
+      "bytes": 157
+    },
+    {
+      "path": "case-v2-100/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "case-v2-32/proof.json",
+      "sha256": "0e7846bb98842fe7a875561dbe1a9f9e37109a7cbf37a2b9e81448d98c39c02b",
+      "bytes": 2841
+    },
+    {
+      "path": "case-v2-32/request.json",
+      "sha256": "5cd783d96605f4f859bad65b1b084008b707d8c3727c7313d6109c2791a9a55a",
+      "bytes": 397
+    },
+    {
+      "path": "case-v2-32/result.json",
+      "sha256": "8abcdb1f2f45b370ada38b39978f15d7d593a9e8064892c4b876516326d71717",
+      "bytes": 183
+    },
+    {
+      "path": "case-v2-32/stderr.log",
+      "sha256": "3aed81a020e7a181de4c9e29d0d6e886f384e6420bed0eccfb79f426de6e41f4",
+      "bytes": 157
+    },
+    {
+      "path": "case-v2-32/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "case-v2-8/proof.json",
+      "sha256": "90977965353d6f1aa804f991fc22a2978f1b08bf1f46a45a8e16371737bf4ab3",
+      "bytes": 45176
+    },
+    {
+      "path": "case-v2-8/request.json",
+      "sha256": "69a12336838113224219b7dd4d962479e2030bb32981d8b63dc9456424071e1b",
+      "bytes": 396
+    },
+    {
+      "path": "case-v2-8/result.json",
+      "sha256": "6606d08c085bb67a965605f732ce172ee3240a3ea46e8ec89c35e74279009b4b",
+      "bytes": 342672
+    },
+    {
+      "path": "case-v2-8/stderr.log",
+      "sha256": "b3a72985582842503298c7ae4e5046a481085615236a02426e5fee83b412c0cb",
+      "bytes": 134
+    },
+    {
+      "path": "case-v2-8/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "local-summary.json",
+      "sha256": "8c1fa5f7d3e50632402c0dddec0dd2e4d29eadecdf2cb4cf10078115009043e6",
+      "bytes": 3715
+    },
+    {
+      "path": "plan-v2.json",
+      "sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+      "bytes": 3257
+    },
+    {
+      "path": "plan.json",
+      "sha256": "2b41b0c88f8addbcdfea4078dfbcdeb8e20dd39829bb124f8d2a782087e52748",
+      "bytes": 2902
+    },
+    {
+      "path": "portable-local/case-100-proof.json",
+      "sha256": "4578dabad815a2ad23c486e9dead431edaee5df2d706e3f1c36b8c56e4a61089",
+      "bytes": 2853
+    },
+    {
+      "path": "portable-local/case-32-proof.json",
+      "sha256": "070a4a7709c36549bd485ee0b27dda4cc2d8c93f48496619a11d31385f6b67d3",
+      "bytes": 2850
+    },
+    {
+      "path": "portable-local/case-8-proof.json",
+      "sha256": "863bb9d7a25b73f7edf21cd6175fd170c69197a20e7f56e71cbb7a9217cf8f70",
+      "bytes": 45181
+    },
+    {
+      "path": "portable-local/equivalence.json",
+      "sha256": "60ced0706be4da1f658a89eb61026f4fc0378207e2242835f2aa24799fa04aec",
+      "bytes": 338
+    },
+    {
+      "path": "portable-local/portable-receipt.json",
+      "sha256": "5e9520467df7b67a5cd7ca213f1ba4693c61c2c6af74b36fe89c00a8f51623ca",
+      "bytes": 2146
+    },
+    {
+      "path": "portable.py",
+      "sha256": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+      "bytes": 4069
+    },
+    {
+      "path": "probe-v1.py.source",
+      "sha256": "7b55b01644b3cf04c931eb8986d2cc651be3e76f9523b5903ea9278054aeaea0",
+      "bytes": 9848
+    },
+    {
+      "path": "probe.py",
+      "sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+      "bytes": 10288
+    },
+    {
+      "path": "test_density.py",
+      "sha256": "203c057b91b6b5ae8c71e2ecdf657b6480844cf918412ded05a4ad4d6a13e864",
+      "bytes": 1688
+    }
+  ],
+  "file_count": 33,
+  "total_bytes": 493423,
+  "scope": "Fixed8/32/100source density local actualCLI + portable external-output replay, no production/FINAL/Ceres access; no cgroup claim",
+  "plan_sha256": "82b9e11bddae88e43737b62e6fa343fc368ca4cfbd58c472325c225b8be2c331",
+  "probe_sha256": "c0635f0952a1a521ea3c5408285035de8becf1f3f712066b0fe73711f78e9fcf",
+  "wrapper_sha256": "128d0e09a6f12cfe05cefe8d9db5c24c1139de941f1c8be432fe1a27db03614d",
+  "local_summary_sha256": "8c1fa5f7d3e50632402c0dddec0dd2e4d29eadecdf2cb4cf10078115009043e6",
+  "portable_receipt_sha256": "5e9520467df7b67a5cd7ca213f1ba4693c61c2c6af74b36fe89c00a8f51623ca",
+  "test_result": "34 runtime/coverage/generator tests pass with required PYTHONPATH",
+  "temporary_fixtures_published": false
+}
