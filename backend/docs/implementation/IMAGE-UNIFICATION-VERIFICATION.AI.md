@@ -113,3 +113,9 @@ Fresh verification after integration:
 
 Exact Docker build, packaged-operation smoke, deployment/rollback and old Compose
 upgrade checks run in PR CI; local Docker daemon access remains unavailable.
+
+The final rebase includes frontend main a674c8d; it changes no backend/pipeline
+bytes relative to the verified processing integration. The staged application
+smoke passed health/version, Swagger UI, all 41 OpenAPI paths (including both
+common observation operations and image unification), and a real invalid
+processing HTTP request returned 422. No frontend diff remains against main.
