@@ -214,7 +214,7 @@ def test_pipeline_render_downloads_ibe_cutout_and_exposes_native_provenance(gate
     import numpy as np
     from pipeline import service
     monkeypatch.setattr(service, 'CUTOUT_CACHE_DIR', tmp_path)
-    def cutout(url, path):
+    def cutout(url, path, **kwargs):
         assert url == IBE + '?center=359.9,1.0&size=0.05'
         hdus = [fits.PrimaryHDU()]
         for name in ('IMAGE', 'ZODI', 'FLAGS', 'VARIANCE'):
@@ -258,7 +258,7 @@ def test_pipeline_spectrum_keeps_source_and_actual_release(gateway, monkeypatch,
     from fastapi.testclient import TestClient
     from pipeline import service
     monkeypatch.setattr(service, 'CUTOUT_CACHE_DIR', tmp_path)
-    def cutout(url, path):
+    def cutout(url, path, **kwargs):
         assert url.startswith(IBE + '?center=')
         path.write_bytes(b'external-cutout')
         return 'good'
@@ -322,3 +322,200 @@ def test_http_collection_fallback_only_when_collection_is_omitted(gateway, colle
     if expected_total:
         assert payload['results'][0]['release'] == 'QR2'
         assert payload['results'][0]['obs_collection'] == 'spherex_qr2'
+
+
+@pytest.fixture
+def native_cutout(monkeypatch):
+    """Replace only external S3 transport; consumers still read real FITS pixels."""
+    from astropy.io import fits
+    import numpy as np
+    from backend.python import irsa_cutout
+    calls = []
+    def crop(source, selection, output, **limits):
+        assert source == MIRROR
+        assert selection.startswith(IBE + '?center=359.9,1.0&size=')
+        assert limits['max_output_bytes'] == 24 * 1024 * 1024
+        assert limits['max_network_bytes'] == 24 * 1024 * 1024
+        assert limits['timeout_seconds'] == 90
+        calls.append(selection)
+        header = live.grid_coordinates(359.9, 1, 12, 12, live.PIXEL_SCALE)[0].to_header()
+        header.update({'MJD-AVG': 60789.75, 'DATE-AVG': '2025-04-24T18:00:00'})
+        hdus = [fits.PrimaryHDU()]
+        for name, data in [('IMAGE', np.arange(144).reshape(12, 12) + 10),
+                           ('ZODI', np.ones((12, 12))), ('FLAGS', np.zeros((12, 12), dtype='int32')),
+                           ('VARIANCE', np.ones((12, 12)))]:
+            hdus.append(fits.ImageHDU(data, header=header, name=name))
+        fits.HDUList(hdus).writeto(output, overwrite=True)
+        return {'ok': True}
+    monkeypatch.setattr(irsa_cutout, 'cutout', crop)
+    def no_ibe(*args, **kwargs):
+        raise AssertionError('Explicit mirror selection attempted IBE transport')
+    from science import archive_gateway
+    monkeypatch.setattr(archive_gateway, 'read_cutout', no_ibe)
+    monkeypatch.setattr(live, 'read_archive', no_ibe)
+    return calls
+
+
+def test_motion_selected_mirror_loads_real_pixels_without_ibe(native_cutout, tmp_path):
+    exposure = live.Exposure('2025W17_4B_0001_1D1', 60789.75, IBE, 'QR2', MIRROR, 's3_mirror')
+    _, sky = live.grid_coordinates(359.9, 1, 8, 8, live.PIXEL_SCALE)
+    row, reason = live.load_exposure(exposure, tmp_path, (359.9, 1.0), 0.05, sky, False)
+    assert reason is None
+    assert row[0] == 60789.75
+    assert row[3].shape == (8, 8)
+    assert len(native_cutout) == 1
+
+
+def test_pipeline_selected_mirror_downloads_without_ibe(native_cutout, tmp_path):
+    from astropy.io import fits
+    out = tmp_path / 'cutout.fits'
+    status = query.cutout(IBE + '?center=359.9,1.0&size=0.05', out,
+                          source_url=MIRROR, discovery_source='s3_mirror')
+    assert status == 'good'
+    with fits.open(out) as hdus:
+        assert hdus['IMAGE'].data[0, 0] == 10
+    assert len(native_cutout) == 1
+
+
+def test_pipeline_render_uses_selected_mirror_during_ibe_outage(gateway, native_cutout, monkeypatch, tmp_path):
+    from fastapi.testclient import TestClient
+    from pipeline import service
+    monkeypatch.setattr(service, 'CUTOUT_CACHE_DIR', tmp_path)
+    response = TestClient(service.app).get('/api/cutout/render?ra=359.9&dec=1')
+    assert response.status_code == 200
+    assert response.content.startswith(b'\x89PNG\r\n\x1a\n')
+    assert len(native_cutout) == 1
+
+
+def test_pipeline_retryable_ibe_fault_uses_exact_mirror_key(native_cutout, monkeypatch, tmp_path):
+    from urllib.error import HTTPError
+    from science import archive_gateway
+    def unavailable(*args, **kwargs):
+        raise HTTPError(IBE, 503, 'unavailable', {}, None)
+    monkeypatch.setattr(archive_gateway, 'read_cutout', unavailable, raising=False)
+    status = query.cutout(IBE + '?center=359.9,1.0&size=0.05', tmp_path / 'recovered.fits')
+    assert status == 'good'
+    assert len(native_cutout) == 1
+
+
+@pytest.mark.parametrize('status', [400, 403, 404])
+def test_nonretryable_ibe_status_does_not_request_mirror(native_cutout, monkeypatch, tmp_path, status):
+    from urllib.error import HTTPError
+    from science import archive_gateway
+    def rejected(*args, **kwargs):
+        raise HTTPError(IBE, status, 'rejected', {}, None)
+    monkeypatch.setattr(archive_gateway, 'read_cutout', rejected, raising=False)
+    result = query.cutout(IBE + '?center=359.9,1.0&size=0.05', tmp_path / 'absent.fits', retries=1)
+    assert f'HTTP Error {status}' in result
+    assert native_cutout == []
+
+
+def test_conflicting_mirror_source_cannot_select_another_object(native_cutout, tmp_path):
+    result = query.cutout(IBE + '?center=359.9,1.0&size=0.05', tmp_path / 'unsafe.fits', retries=1,
+                          source_url=MIRROR.replace('0001_', '0002_'), discovery_source='s3_mirror')
+    assert result.startswith('failure:')
+    assert native_cutout == []
+
+
+def test_primary_ibe_provenance_can_fallback_to_identical_mirror(native_cutout, monkeypatch, tmp_path):
+    from urllib.error import URLError
+    from science import archive_gateway
+    def unavailable(*args, **kwargs):
+        raise URLError('connection unavailable')
+    monkeypatch.setattr(archive_gateway, 'read_cutout', unavailable)
+    status = query.cutout(IBE + '?center=359.9,1.0&size=0.05', tmp_path / 'primary.fits', retries=1,
+                          source_url=IBE, discovery_source='sia')
+    assert status == 'good'
+    assert len(native_cutout) == 1
+
+
+def test_invalid_ibe_content_never_selects_mirror(native_cutout, monkeypatch, tmp_path):
+    from science import archive_gateway
+    monkeypatch.setattr(archive_gateway, 'read_cutout', lambda *a: b'not FITS')
+    out = tmp_path / 'invalid.fits'
+    result = query.cutout(IBE + '?center=359.9,1.0&size=0.05', out, retries=1)
+    assert result.startswith('failure:')
+    assert not out.exists()
+    assert not out.with_suffix('.part').exists()
+    assert native_cutout == []
+
+
+def test_pipeline_spectrum_uses_selected_mirror_during_ibe_outage(gateway, native_cutout, monkeypatch, tmp_path):
+    from fastapi.testclient import TestClient
+    from pipeline import service
+    monkeypatch.setattr(service, 'CUTOUT_CACHE_DIR', tmp_path)
+    monkeypatch.setattr(service, 'measure_cutout_point', lambda *a, **k: {
+        'detector': 'D1', 'wavelength_um': 1.0, 'bandwidth_um': 0.02, 'flux_mjy': 2.0,
+        'uncertainty_mjy': 0.1, 'snr': 20.0, 'mjd': 60789.75})
+    response = TestClient(service.app).get('/api/spectrum?ra=359.9&dec=1')
+    assert response.status_code == 200
+    assert response.json()['spectrum'][0]['source_url'] == MIRROR
+    assert len(native_cutout) == 1
+
+
+def test_selected_mirror_failure_has_no_ibe_retry_delay(monkeypatch, tmp_path):
+    from backend.python import irsa_cutout
+    attempts = []
+    def unavailable(*args, **kwargs):
+        attempts.append(args[0])
+        raise irsa_cutout.CutoutError('archive_cutout_http', 'S3 temporarily unavailable')
+    def no_delay(*args):
+        raise AssertionError('Selected mirror entered the legacy IBE retry loop')
+    monkeypatch.setattr(irsa_cutout, 'cutout', unavailable)
+    monkeypatch.setattr(query.time, 'sleep', no_delay)
+    result = query.cutout(IBE + '?center=359.9,1.0&size=0.05', tmp_path / 'unavailable.fits',
+                          source_url=MIRROR, discovery_source='s3_mirror')
+    assert result.startswith('failure:')
+    assert attempts == [MIRROR]
+
+
+@pytest.mark.parametrize('declare_length', [False, True])
+def test_ibe_reader_enforces_byte_budget_on_real_http_response(declare_length):
+    from science import archive_gateway
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+        def do_GET(self):
+            self.send_response(200)
+            if declare_length:
+                self.send_header('Content-Length', '256')
+            self.end_headers()
+            self.wfile.write(b'x' * 256)
+    server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+    worker = threading.Thread(target=server.serve_forever, daemon=True)
+    worker.start()
+    try:
+        with pytest.raises(ValueError, match='byte limit'):
+            archive_gateway.read_cutout(f'http://127.0.0.1:{server.server_port}/cutout', 128)
+    finally:
+        server.shutdown()
+        server.server_close()
+        worker.join()
+
+
+
+def test_ibe_reader_keeps_its_short_timeout(monkeypatch, tmp_path):
+    from science import archive_gateway
+    def read(url, limit, timeout):
+        assert timeout == 18
+        assert limit == 24 * 1024 * 1024
+        return b'bounded IBE response'
+    monkeypatch.setattr(archive_gateway, 'read_cutout', read)
+    out = tmp_path / 'primary.fits'
+    archive_gateway.download_cutout(IBE + '?center=359.9,1.0&size=0.05', out)
+    assert out.read_bytes() == b'bounded IBE response'
+
+
+def test_mirror_timeout_can_be_lowered_without_changing_ibe_timeout(monkeypatch, tmp_path):
+    from science import archive_gateway
+    from backend.python import irsa_cutout
+    def crop(source, url, output, **limits):
+        assert limits['timeout_seconds'] == 3
+        assert limits['max_network_bytes'] == 24 * 1024 * 1024
+        assert limits['max_output_bytes'] == 24 * 1024 * 1024
+        Path(output).write_bytes(b'bounded native crop')
+    monkeypatch.setattr(irsa_cutout, 'cutout', crop)
+    out = tmp_path / 'mirror.fits'
+    archive_gateway.download_cutout(IBE + '?center=359.9,1.0&size=0.05', out,
+        source_url=MIRROR, discovery_source='s3_mirror', mirror_timeout=3)
+    assert out.read_bytes() == b'bounded native crop'

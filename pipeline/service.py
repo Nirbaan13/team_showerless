@@ -142,7 +142,9 @@ def render_cutout_png(
     source_key = hashlib.sha256(b_url.encode()).hexdigest()[:16]
     local_file = CUTOUT_CACHE_DIR / f"cutout_{source_key}_{ra:.4f}_{dec:.4f}_{size_arcmin:.1f}.fits"
     if not local_file.exists():
-        status = cutout(cutout_url, local_file)
+        status = cutout(cutout_url, local_file,
+                        source_url=results[0].get("source_url"),
+                        discovery_source=str(results[0].get("discovery_source", "sia")))
         if status != "good":
             raise HTTPException(status_code=502, detail=status)
     try:
@@ -229,7 +231,9 @@ def real_spectrum(
         key = hashlib.md5(f"{base_url}|{ra:.5f}|{dec:.5f}|{size_deg:.5f}".encode()).hexdigest()[:16]
         local_file = CUTOUT_CACHE_DIR / f"spec_{key}.fits"
         if not local_file.exists():
-            status = cutout(f"{base_url}?center={ra},{dec}&size={size_deg}", local_file)
+            status = cutout(f"{base_url}?center={ra},{dec}&size={size_deg}", local_file,
+                            source_url=row.get("source_url"),
+                            discovery_source=str(row.get("discovery_source", "sia")))
             if status != "good":
                 failed += 1
                 continue

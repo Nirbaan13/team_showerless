@@ -9,7 +9,8 @@ import java.util.zip.GZIPInputStream
 import java.security.MessageDigest
 import java.nio.charset.StandardCharsets.US_ASCII
 
-final class StreamingDownloader(transport: ArchiveTransport,val directory: Path,maxBytes: Long = 256L*1024*1024,capacity: Option[FileCache] = None):
+final class StreamingDownloader(transport: ArchiveTransport,val directory: Path,maxBytes: Long = 256L*1024*1024,capacity: Option[FileCache] = None,
+  cutoutTransfer: Option[(String,String,Path)=>Task[Unit]] = None):
   require(maxBytes>0)
   private def reserved[A](path: Path)(effect: Task[A]): Task[A] = capacity.fold(effect)(_.transfer(path)(effect))
   def protect(path: Path): ZIO[Scope,ArchiveFailure,Unit] = capacity.fold[ZIO[Scope,Throwable,Unit]](ZIO.unit)(_.protect(path)).mapError(ArchiveFailure.from)
@@ -34,12 +35,20 @@ final class StreamingDownloader(transport: ArchiveTransport,val directory: Path,
         decoded <- ZIO.acquireRelease(ZIO.attemptBlocking(Files.createTempFile(directory,"decoded-",".part")))(p=>ZIO.attemptBlocking(Files.deleteIfExists(p)).ignore)
         metadata <- reserved(temp) {
           for
-            _ <- transport.response(asset.url,policy) { r=>
-              ZIO.scoped {
-                ZIO.acquireRelease(ZIO.attemptBlocking(Files.newOutputStream(temp)))(o=>ZIO.attemptBlocking(o.close()).orDie).flatMap { out=>
-                  transport.bounded(r,maxBytes).chunks.runForeach(c=>ZIO.attemptBlocking(out.write(c.toArray)))
+            _ <- asset.cutout_source_url match
+              case Some(source)=>
+                ZIO.attempt {policy.validate(source);policy.validate(asset.url)} *>
+                  ZIO.fromOption(cutoutTransfer).orElseFail(ArchiveFailure("native_cutout_unavailable","Native mirror cutout transport is not configured"))
+                    .flatMap(transfer=>transfer(source,asset.url,temp))
+              case None=>transport.response(asset.url,policy) { r=>
+                ZIO.scoped {
+                  ZIO.acquireRelease(ZIO.attemptBlocking(Files.newOutputStream(temp)))(o=>ZIO.attemptBlocking(o.close()).orDie).flatMap { out=>
+                    transport.bounded(r,maxBytes).chunks.runForeach(c=>ZIO.attemptBlocking(out.write(c.toArray)))
+                  }
                 }
               }
+            _ <- ZIO.attemptBlocking {
+              if Files.size(temp)>maxBytes then throw ArchiveFailure("byte_limit","Archive product exceeds byte budget")
             }
             compressed <- ZIO.attemptBlocking {
               val in=Files.newInputStream(temp)

@@ -196,7 +196,10 @@ def load_exposure(exposure, directory, center, size_deg, sky, retain_outliers):
     urls = [f'{exposure.url}?center={center[0]},{center[1]}&size={size}' for size in dict.fromkeys(sizes)]
     for url in urls:
         try:
-            path.write_bytes(read_archive(url, MAX_FITS_BYTES))
+            archive_gateway.download_cutout(url, path, source_url=exposure.source_url,
+                                            discovery_source=exposure.discovery_source,
+                                            max_bytes=MAX_FITS_BYTES, timeout=REQUEST_TIMEOUT,
+                                            read_ibe=read_archive)
         except (OSError, ValueError):
             continue
         try:

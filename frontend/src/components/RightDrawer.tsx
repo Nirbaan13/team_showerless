@@ -13,13 +13,13 @@ import { CommunityVerificationStream } from './CommunityVerificationStream';
 import { ExternalSubmissionModal } from './ExternalSubmissionModal';
 import type { CandidateRecord } from '../types/catalogue';
 import { fetchCandidateById } from '../services/catalogueService';
+import { SEEDED_VERIFICATION_DISCUSSIONS } from '../services/mockVerificationData';
 import {
   CheckCircle,
   Radio,
   HelpCircle,
   Maximize2,
   Minimize2,
-  FileText,
   MessageSquare,
   Cpu,
   Sparkles,
@@ -27,8 +27,6 @@ import {
   Compass,
   Info,
   Edit3,
-  Database,
-  UserCheck,
 } from 'lucide-react';
 
 interface ClassificationGuideItem {
@@ -80,6 +78,20 @@ const CLASSIFICATION_GUIDE: Record<string, ClassificationGuideItem> = {
   },
 };
 
+function hasExistingThread(candidateId: string | null | undefined): boolean {
+  if (!candidateId) return false;
+  try {
+    const saved = localStorage.getItem('spherex_community_comments');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.some((c: any) => c.candidateId === candidateId || c.setting?.candidateId === candidateId)) {
+        return true;
+      }
+    }
+  } catch {}
+  return SEEDED_VERIFICATION_DISCUSSIONS.some(c => c.candidateId === candidateId || c.setting?.candidateId === candidateId);
+}
+
 interface RightDrawerProps {
   frames?: SpherexEpochFrame[];
   activeFrameIndex?: number;
@@ -105,7 +117,7 @@ interface RightDrawerProps {
   selectedArray?: import('../types/spherex').DetectorArrayId | 'all';
   subtractionMode?: import('../types/spherex').SubtractionMode;
   controlledTab?: 'ai' | 'triage' | 'chat' | 'spectrum' | null;
-  onTabChange?: (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => void;
+  onTabChange?: (tab: 'ai' | 'chat' | 'spectrum') => void;
   mlAnalysisStatus?: import('../types/spherex').MLAnalysisStatus;
   currentPresetId?: string | null;
   className?: string;
@@ -121,8 +133,8 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   candidate,
   spectrumData,
   onUpdateCandidateClassification,
-  onOpenDiscoveryReport,
-  onOpenFeed,
+  onOpenDiscoveryReport: _onOpenDiscoveryReport,
+  onOpenFeed: _onOpenFeed,
   onOpenCatalogue,
   isScientistMode = false,
   ra,
@@ -136,16 +148,33 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   currentPresetId = null,
   className = '',
 }) => {
-  const [internalTab, setInternalTab] = useState<'ai' | 'triage' | 'chat' | 'spectrum'>('ai');
+  const [internalTab, setInternalTab] = useState<'ai' | 'chat' | 'spectrum'>('ai');
+  const [chatViewMode, setChatViewMode] = useState<'triage' | 'thread'>('thread');
 
   useEffect(() => {
     if (controlledTab) {
-      setInternalTab(controlledTab);
+      if (controlledTab === 'triage') {
+        setInternalTab('chat');
+        setChatViewMode('triage');
+      } else {
+        setInternalTab(controlledTab as 'ai' | 'chat' | 'spectrum');
+        if (controlledTab === 'chat') {
+          setChatViewMode(hasExistingThread(candidate?.id) ? 'thread' : 'triage');
+        }
+      }
     }
-  }, [controlledTab]);
+  }, [controlledTab, candidate?.id]);
+
+  useEffect(() => {
+    if (!candidate) {
+      setChatViewMode('thread');
+      return;
+    }
+    setChatViewMode(hasExistingThread(candidate.id) ? 'thread' : 'triage');
+  }, [candidate?.id]);
 
   const activeTab = internalTab;
-  const setActiveTab = (tab: 'ai' | 'triage' | 'chat' | 'spectrum') => {
+  const setActiveTab = (tab: 'ai' | 'chat' | 'spectrum') => {
     setInternalTab(tab);
     if (onTabChange) onTabChange(tab);
   };
@@ -158,7 +187,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   const [selectedConfidence, setSelectedConfidence] = useState<ConfidenceLevel>(
     candidate?.confidence || 'medium'
   );
-  const [isSaved, setIsSaved] = useState(false);
   const [hoveredClassId, setHoveredClassId] = useState<string | null>(null);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [submissionCandidate, setSubmissionCandidate] = useState<CandidateRecord | null>(null);
@@ -220,7 +248,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       setNotes(candidate.volunteerNotes);
       setSelectedClass(candidate.classification);
       setSelectedConfidence(candidate.confidence);
-      setIsSaved(false);
     }
   }, [candidate]);
 
@@ -256,7 +283,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
   const handleToggleExpand = () => {
     setWidth((prev) => (prev > 420 ? 340 : 540));
   };
-
 
   const handleSaveTriage = () => {
     if (!candidate) return;
@@ -309,8 +335,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     } catch {}
 
     onUpdateCandidateClassification(candidate.id, selectedClass, selectedConfidence, notes);
-    setIsSaved(true);
-    setActiveTab('chat');
+    setChatViewMode('thread');
   };
 
   return (
@@ -334,7 +359,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         />
       </div>
 
-      {/* Drawer Header & Tabs */}
+      {/* Drawer Header & Tabs: AI Tracks, Chat & Confirm (Unified Triage + Chat), Spectral Analysis */}
       <div className="flex border-b border-paper-800 bg-paper-950 items-center justify-between px-2">
         <div className="flex space-x-1">
           <button
@@ -346,24 +371,12 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             }`}
           >
             <Cpu className="w-3.5 h-3.5 text-emerald-400" />
-            <span>AI</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('triage')}
-            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1 transition-colors cursor-pointer shrink-0 ${
-              activeTab === 'triage'
-                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                : 'border-transparent text-paper-400 hover:text-paper-200'
-            }`}
-          >
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Triage</span>
+            <span>AI Tracks</span>
           </button>
 
           <button
             onClick={() => setActiveTab('chat')}
-            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1 transition-colors cursor-pointer shrink-0 ${
+            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
               activeTab === 'chat'
                 ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
                 : 'border-transparent text-paper-400 hover:text-paper-200'
@@ -386,7 +399,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
           <button
             onClick={() => setActiveTab('spectrum')}
-            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
+            className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
               activeTab === 'spectrum'
                 ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
                 : 'border-transparent text-paper-400 hover:text-paper-200'
@@ -397,7 +410,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </button>
         </div>
 
-        {/* Quick Expand/Shrink Button + Drag hint */}
+        {/* Quick Expand/Shrink Button */}
         <div className="flex items-center gap-1">
           <button
             onClick={handleToggleExpand}
@@ -411,7 +424,7 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
 
       {/* Drawer Body Content */}
       <div className="flex-1 overflow-y-auto">
-        {/* TAB 0: AI-RANKED DETECTIONS (main feature) */}
+        {/* TAB 0: AI-RANKED DETECTIONS */}
         {activeTab === 'ai' && (
           <div id="tutorial-target-ai" className="h-full transition-all duration-300">
             <MLDetectionsPanel
@@ -428,265 +441,221 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
           </div>
         )}
 
-        {/* TAB 1: CANDIDATE TRIAGE & VERIFICATION */}
-        {activeTab === 'triage' && (
-          <div className="p-4 space-y-4">
-            <div className="p-2.5 rounded-xl bg-emerald-950/30 border-2 border-emerald-400/60 flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <span className="font-mono text-[9px] text-emerald-400 uppercase tracking-wider font-bold block">
-                  ★ Selected Object on Sky
-                </span>
-                <span className="text-xs font-mono text-white font-bold truncate block">
-                  {candidate
-                    ? `#${candidate.mlRank} · ${
-                        candidate.validationData?.objectName ||
-                        candidate.catalogId ||
-                        candidate.id
-                      }`
-                    : 'None Selected'}
-                </span>
-              </div>
-              {candidate && (
-                <span className="text-[9px] font-mono font-bold text-gray-950 bg-emerald-400 px-2 py-0.5 rounded border border-black shrink-0">
-                  ACTIVE
-                </span>
-              )}
-            </div>
-
+        {/* TAB 1: UNIFIED CHAT & CONFIRM (TRIAGE + DISCUSSION THREAD) */}
+        {activeTab === 'chat' && (
+          <div className="flex flex-col h-full">
             {candidate ? (
-              <div className="space-y-3.5">
-                {/* Known Catalog Match Badge */}
-                {candidate.isKnownCatalogMatch && (
-                  <div className="p-2.5 rounded-lg bg-paper-950 border border-paper-800 space-y-1">
-                    <span className="font-mono text-[10px] text-paper-400 block uppercase">
-                      Known Catalog Cross-Match
-                    </span>
-                    <div className="flex items-center justify-between text-xs font-mono text-paper-200">
-                      <span className="text-emerald-400 font-semibold">{candidate.matchedCatalog}</span>
-                      <span className="text-paper-400">{candidate.catalogId}</span>
+              chatViewMode === 'triage' ? (
+                /* TRIAGE FORM VIEW (When starting a thread or editing classification) */
+                <div className="p-4 space-y-4 overflow-y-auto">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="p-2.5 rounded-xl bg-emerald-950/30 border-2 border-emerald-400/60 flex-1 min-w-0">
+                      <span className="font-mono text-[9px] text-emerald-400 uppercase tracking-wider font-bold block">
+                        ★ Candidate Triage &amp; Thread Creation
+                      </span>
+                      <span className="text-xs font-mono text-white font-bold truncate block">
+                        #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
+                      </span>
                     </div>
-                  </div>
-                )}
-
-                {/* Candidate Classification */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[10px] font-mono text-paper-400 uppercase font-semibold">
-                      Volunteer Classification
-                    </label>
-                    <span className="text-[9px] font-mono text-paper-500">
-                      Hover for TiH Guide
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {[
-                      { id: 'moving_object', label: 'Moving Object', desc: 'Consistent track' },
-                      { id: 'transient', label: 'Transient', desc: 'Single-epoch burst' },
-                      { id: 'already_known', label: 'Known Catalog', desc: 'Matches Gaia/WISE' },
-                      { id: 'artifact', label: 'Artifact', desc: 'Bad pixel / CR' },
-                    ].map((item) => {
-                      const isSelected = selectedClass === item.id;
-                      const isHovered = hoveredClassId === item.id;
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => setSelectedClass(item.id as CandidateClassification)}
-                          onMouseEnter={() => setHoveredClassId(item.id)}
-                          onMouseLeave={() => setHoveredClassId(null)}
-                          className={`btn-tactile-sm p-2 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-emerald-400 text-gray-950 font-bold'
-                              : isHovered
-                              ? 'bg-paper-800 text-emerald-300'
-                              : 'bg-paper-950 text-paper-400 hover:text-paper-200'
-                          }`}
-                        >
-                          <div className="font-mono text-[11px]">{item.label}</div>
-                        </button>
-                      );
-                    })}
+                    {hasExistingThread(candidate.id) && (
+                      <button
+                        type="button"
+                        onClick={() => setChatViewMode('thread')}
+                        className="btn-tactile-sm px-2.5 py-1.5 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-paper-300 font-mono text-[10px] cursor-pointer shrink-0"
+                      >
+                        ← View Thread
+                      </button>
+                    )}
                   </div>
 
-                  {/* TiH Classification Helper: Volunteer Mode Only & Decluttered */}
-                  {!isScientistMode && (
-                    <div className="mt-2 p-2.5 rounded-xl bg-paper-950 border border-paper-800 space-y-1.5 anim-fall text-[10px]">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
-                          {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
-                          {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
-                          {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
-                          <span className="font-mono font-bold text-paper-100">{currentGuide.name}</span>
-                        </div>
-                        <span
-                          style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
-                          className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
-                        >
-                          {currentGuide.badge}
-                        </span>
-                      </div>
-
-                      <div className="text-paper-300 flex items-start gap-1">
-                        <span className="text-emerald-400 font-bold shrink-0">✓ Key:</span>
-                        <span>{currentGuide.criteria}</span>
-                      </div>
-
-                      <div className="text-paper-400 flex items-start gap-1 pt-1 border-t border-paper-850">
-                        <span className="text-rose-400 font-bold shrink-0">✕ Distinguish:</span>
-                        <span>{currentGuide.distinction}</span>
+                  {/* Known Catalog Match Badge */}
+                  {candidate.isKnownCatalogMatch && (
+                    <div className="p-2.5 rounded-lg bg-paper-950 border border-paper-800 space-y-1">
+                      <span className="font-mono text-[10px] text-paper-400 block uppercase">
+                        Known Catalog Cross-Match
+                      </span>
+                      <div className="flex items-center justify-between text-xs font-mono text-paper-200">
+                        <span className="text-emerald-400 font-semibold">{candidate.matchedCatalog}</span>
+                        <span className="text-paper-400">{candidate.catalogId}</span>
                       </div>
                     </div>
                   )}
-                </div>
 
-                {/* Confidence Level */}
-                <div>
-                  <label className="text-[10px] font-mono text-paper-400 block mb-1.5 uppercase font-semibold">
-                    Confidence Level
-                  </label>
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {(['low', 'medium', 'high'] as ConfidenceLevel[]).map((lvl) => (
-                      <button
-                        key={lvl}
-                        onClick={() => setSelectedConfidence(lvl)}
-                        className={`btn-tactile-sm py-1.5 rounded-lg font-mono text-[10px] uppercase border-2 border-black transition-all cursor-pointer ${
-                          selectedConfidence === lvl
-                            ? 'bg-emerald-400 text-gray-950 font-bold'
-                            : 'bg-paper-950 text-paper-400 hover:text-paper-200'
-                        }`}
-                      >
-                        {lvl}
-                      </button>
-                    ))}
+                  {/* Candidate Classification */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-[10px] font-mono text-paper-400 uppercase font-semibold">
+                        Volunteer Classification
+                      </label>
+                      <span className="text-[9px] font-mono text-paper-500">
+                        Hover for TiH Guide
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: 'moving_object', label: 'Moving Object', desc: 'Consistent track' },
+                        { id: 'transient', label: 'Transient', desc: 'Single-epoch burst' },
+                        { id: 'already_known', label: 'Known Catalog', desc: 'Matches Gaia/WISE' },
+                        { id: 'artifact', label: 'Artifact', desc: 'Bad pixel / CR' },
+                      ].map((item) => {
+                        const isSelected = selectedClass === item.id;
+                        const isHovered = hoveredClassId === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => setSelectedClass(item.id as CandidateClassification)}
+                            onMouseEnter={() => setHoveredClassId(item.id)}
+                            onMouseLeave={() => setHoveredClassId(null)}
+                            className={`btn-tactile-sm p-2 rounded-lg border-2 border-black text-left transition-all cursor-pointer ${
+                              isSelected
+                                ? 'bg-emerald-400 text-gray-950 font-bold'
+                                : isHovered
+                                ? 'bg-paper-800 text-emerald-300'
+                                : 'bg-paper-950 text-paper-400 hover:text-paper-200'
+                            }`}
+                          >
+                            <div className="font-mono text-[11px]">{item.label}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* TiH Classification Helper */}
+                    {!isScientistMode && (
+                      <div className="mt-2 p-2.5 rounded-xl bg-paper-950 border border-paper-800 space-y-1.5 anim-fall text-[10px]">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            {currentGuide.id === 'transient' && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                            {currentGuide.id === 'artifact' && <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />}
+                            {currentGuide.id === 'moving_object' && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
+                            {currentGuide.id === 'already_known' && <Info className="w-3.5 h-3.5 text-slate-400" />}
+                            <span className="font-mono font-bold text-paper-100">{currentGuide.name}</span>
+                          </div>
+                          <span
+                            style={{ backgroundColor: currentGuide.badgeBg, color: currentGuide.badgeText }}
+                            className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black/40"
+                          >
+                            {currentGuide.badge}
+                          </span>
+                        </div>
+                        <div className="text-paper-300 flex items-start gap-1">
+                          <span className="text-emerald-400 font-bold shrink-0">✓ Key:</span>
+                          <span>{currentGuide.criteria}</span>
+                        </div>
+                        <div className="text-paper-400 flex items-start gap-1 pt-1 border-t border-paper-850">
+                          <span className="text-rose-400 font-bold shrink-0">✕ Distinguish:</span>
+                          <span>{currentGuide.distinction}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Notes Input */}
-                <div>
-                  <label className="text-[10px] font-mono text-paper-400 block mb-1 uppercase font-semibold">
-                    Observation Notes
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Enter observation notes or PSF characteristics..."
-                    className="w-full bg-paper-950 border border-paper-800 rounded-lg p-2 font-mono text-xs text-paper-100 focus:outline-none focus:border-emerald-400 resize-none"
+                  {/* Confidence Level */}
+                  <div>
+                    <label className="text-[10px] font-mono text-paper-400 block mb-1.5 uppercase font-semibold">
+                      Confidence Level
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {(['low', 'medium', 'high'] as ConfidenceLevel[]).map((lvl) => (
+                        <button
+                          key={lvl}
+                          onClick={() => setSelectedConfidence(lvl)}
+                          className={`btn-tactile-sm py-1.5 rounded-lg font-mono text-[10px] uppercase border-2 border-black transition-all cursor-pointer ${
+                            selectedConfidence === lvl
+                              ? 'bg-emerald-400 text-gray-950 font-bold'
+                              : 'bg-paper-950 text-paper-400 hover:text-paper-200'
+                          }`}
+                        >
+                          {lvl}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Notes Input */}
+                  <div>
+                    <label className="text-[10px] font-mono text-paper-400 block mb-1 uppercase font-semibold">
+                      Observation Notes &amp; Rationale
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Enter verification notes or motion characteristics..."
+                      className="w-full bg-paper-950 border border-paper-800 rounded-lg p-2 font-mono text-xs text-paper-100 focus:outline-none focus:border-emerald-400 resize-none"
+                    />
+                  </div>
+
+                  {/* Save Confirmation & Start Discussion Button */}
+                  <button
+                    onClick={handleSaveTriage}
+                    className="btn-tactile w-full py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)]"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>{hasExistingThread(candidate.id) ? 'Save Classification & View Discussion →' : 'Save Classification & Start Discussion Thread →'}</span>
+                  </button>
+                </div>
+              ) : (
+                /* CHAT THREAD VIEW (Once the thread starts or exists) */
+                <div className="flex flex-col h-full">
+                  <div className="p-3 bg-paper-950 border-b border-paper-800 space-y-2 shrink-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
+                          ★ Community Discussion &amp; Verification
+                        </span>
+                        <span className="font-mono text-xs font-bold text-white truncate block">
+                          #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setChatViewMode('triage')}
+                        className="btn-tactile-sm px-2.5 py-1 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                        title="Edit classification or triage notes"
+                      >
+                        <Edit3 className="w-3 h-3 text-emerald-400" />
+                        <span>Edit Triage ✎</span>
+                      </button>
+                    </div>
+
+                    {candidate.volunteerNotes && (
+                      <div className="p-2 rounded-lg bg-paper-900/80 border border-paper-800 text-[11px] text-paper-300 leading-relaxed">
+                        <span className="text-emerald-400 font-semibold font-mono text-[10px] uppercase block mb-0.5">Catalog &amp; Discovery Note:</span>
+                        {candidate.volunteerNotes}
+                      </div>
+                    )}
+                  </div>
+
+                  <CommunityVerificationStream
+                    key={candidate?.id || selectedCandidateId || 'none'}
+                    candidate={candidate}
+                    activeCandidateId={candidate?.id || selectedCandidateId || null}
+                    currentPresetId={currentPresetId}
+                    ra={ra}
+                    dec={dec}
+                    fov={fov}
+                    selectedArray={selectedArray}
+                    activeFrameIndex={activeFrameIndex}
+                    subtractionMode={subtractionMode}
+                    onOpenCatalogue={onOpenCatalogue}
+                    onOpenExternalSubmission={handleOpenSubmissionForCandidate}
                   />
                 </div>
-
-                {/* Save Confirmation */}
-                <button
-                  onClick={handleSaveTriage}
-                  className="btn-tactile w-full py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)]"
-                >
-                  <CheckCircle className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>{isSaved ? 'Recorded & Opening Chat ✓' : 'Save Classification & Open Discussion →'}</span>
-                </button>
-
-                {/* View Full Candidate Discovery Report */}
-                {onOpenDiscoveryReport && (
-                  <button
-                    onClick={onOpenDiscoveryReport}
-                    className="btn-tactile w-full py-2 bg-paper-800 hover:bg-paper-750 border-2 border-black text-emerald-300 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
-                    title="Open full scientific summary with 102-band spectrum plot, Gaia/WISE cross-check, and JSON export"
-                  >
-                    <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>View Candidate Discovery Report →</span>
-                  </button>
-                )}
-
-                {/* View Verification Feed */}
-                {onOpenFeed && (
-                  <button
-                    onClick={onOpenFeed}
-                    className="btn-tactile w-full py-2 bg-sky-950/70 hover:bg-sky-900 border-2 border-sky-500/50 text-sky-300 hover:text-white rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(56,189,248,0.2)]"
-                    title="Open NASA Scientist & Community Verification Feed"
-                  >
-                    <UserCheck className="w-3.5 h-3.5 text-sky-400" />
-                    <span>View Verification Feed →</span>
-                  </button>
-                )}
-
-                {/* View in Candidate Catalogue */}
-                {onOpenCatalogue && (
-                  <button
-                    onClick={() => onOpenCatalogue(candidate.id)}
-                    className="btn-tactile w-full py-2 bg-paper-850 hover:bg-paper-800 border-2 border-black text-white rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(16,185,129,0.2)]"
-                    title="Open in PlanetX Persistent Candidate Catalogue & External Dispatch"
-                  >
-                    <Database className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>View in Candidate Catalogue →</span>
-                  </button>
-                )}
-              </div>
+              )
             ) : (
-              <div className="p-8 rounded-xl border border-dashed border-paper-800 text-center space-y-2.5">
+              <div className="p-8 rounded-xl border border-dashed border-paper-800 text-center space-y-2.5 m-4">
                 <HelpCircle className="w-8 h-8 text-paper-600 mx-auto" />
                 <div className="font-mono text-xs text-paper-300 font-semibold">No Target Selected</div>
                 <p className="text-[11px] text-paper-500 max-w-xs mx-auto leading-relaxed">
-                  Click any object in the celestial starfield to inspect its multi-epoch motion vectors.
+                  Click any object in the starfield to inspect its multi-epoch motion vectors and join the community verification discussion.
                 </p>
               </div>
             )}
           </div>
         )}
 
-        {/* TAB 2: CANDIDATE VERIFICATION DISCUSSION & NOTES THREAD */}
-        {activeTab === 'chat' && (
-          <div className="flex flex-col h-full">
-            {candidate ? (
-              <div className="p-3 bg-paper-950 border-b border-paper-800 space-y-2 shrink-0">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="min-w-0">
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
-                      ★ Community Discussion &amp; Verification
-                    </span>
-                    <span className="font-mono text-xs font-bold text-white truncate block">
-                      #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('triage')}
-                    className="btn-tactile-sm px-2.5 py-1 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
-                    title="Classify or submit notes for this candidate"
-                  >
-                    <Edit3 className="w-3 h-3 text-emerald-400" />
-                    <span>Submit Triage →</span>
-                  </button>
-                </div>
-
-                {candidate.volunteerNotes && (
-                  <div className="p-2 rounded-lg bg-paper-900/80 border border-paper-800 text-[11px] text-paper-300 leading-relaxed">
-                    <span className="text-emerald-400 font-semibold font-mono text-[10px] uppercase block mb-0.5">Catalog &amp; Discovery Note:</span>
-                    {candidate.volunteerNotes}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="p-4 bg-paper-950 border-b border-paper-800 text-center text-xs text-paper-400 font-mono">
-                Select any candidate on the sky to inspect its community notes and submit verifications.
-              </div>
-            )}
-            <CommunityVerificationStream
-              key={candidate?.id || selectedCandidateId || 'none'}
-              candidate={candidate}
-              activeCandidateId={candidate?.id || selectedCandidateId || null}
-              currentPresetId={currentPresetId}
-              ra={ra}
-              dec={dec}
-              fov={fov}
-              selectedArray={selectedArray}
-              activeFrameIndex={activeFrameIndex}
-              subtractionMode={subtractionMode}
-              onOpenCatalogue={onOpenCatalogue}
-              onOpenExternalSubmission={handleOpenSubmissionForCandidate}
-            />
-          </div>
-        )}
-
-        {/* TAB 3: 102-BAND SPECTRAL ANALYSIS */}
+        {/* TAB 2: 102-BAND SPECTRAL ANALYSIS */}
         {activeTab === 'spectrum' && (
           <div id="tutorial-target-spectrum" className="p-3.5 space-y-3 transition-all duration-300">
             <SpectrumPlot
@@ -720,7 +689,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             )}
           </div>
         )}
-
       </div>
 
       {/* External Scientific Clearinghouse Submission Modal */}

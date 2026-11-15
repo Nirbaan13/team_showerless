@@ -14,7 +14,8 @@ import java.nio.file.Path
 final case class DownloadsRuntime(registry: ProviderRegistry,repository: DownloadsRepository,discovery: FederatedDiscovery,downloads: DownloadJobs):
   def service: DownloadsService = new DownloadsService(registry,repository,discovery,downloads)
 object DownloadsRuntime:
-  def make(client: Client,irsa: Archive,data: Path,database: Path,limits: ArchiveLimits = ArchiveLimits(),capacity: Option[FileCache] = None): ZIO[Scope,ArchiveFailure,DownloadsRuntime] =
+  def make(client: Client,irsa: Archive,data: Path,database: Path,limits: ArchiveLimits = ArchiveLimits(),capacity: Option[FileCache] = None,
+    cutoutTransfer: Option[(String,String,Path)=>Task[Unit]] = None): ZIO[Scope,ArchiveFailure,DownloadsRuntime] =
     for
       repository <- DownloadsRepository.open(database)
       transport=new ArchiveTransport(client,limits.metadata_bytes,Duration.fromMillis(limits.request_timeout_ms))
@@ -26,7 +27,7 @@ object DownloadsRuntime:
       )++PendingProvider.inventory.map(new PendingProvider(_)))
       discovery <- FederatedDiscovery.make(registry,repository,limits)
       sharedCapacity <- ZIO.fromOption(capacity).orElse(FileCache.open(data,database,20L*1024*1024*1024,limits.file_bytes,512L*1024*1024).mapError(ArchiveFailure.from))
-      downloader=new StreamingDownloader(transport,data.resolve("archive-assets"),limits.file_bytes,Some(sharedCapacity))
+      downloader=new StreamingDownloader(transport,data.resolve("archive-assets"),limits.file_bytes,Some(sharedCapacity),cutoutTransfer)
       _ <- downloader.recover
       downloads <- DownloadJobs.make(registry,repository,downloader,limits)
       _ <- discovery.recover *> downloads.recover

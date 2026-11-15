@@ -5,7 +5,7 @@ import spaceapps.downloads.controller.DownloadsApi
 import spaceapps.downloads.bootstrap.DownloadsRuntime
 import spaceapps.downloads.service.ArchiveLimits
 import spaceapps.irsa.model.*
-import spaceapps.irsa.integrations.{LiveArchive,ResilientArchive,S3MirrorArchive,MirrorProcess}
+import spaceapps.irsa.integrations.{LiveArchive,ResilientArchive,S3MirrorArchive,MirrorProcess,MirrorTransfer}
 import spaceapps.infra.service.ExternalServices
 import spaceapps.infra.integrations.ExternalServiceProbes
 import spaceapps.infra.controller.ExternalHealthApi
@@ -49,9 +49,12 @@ object Application:
       primary = new LiveArchive(client,env("IRSA_SIA_URL","https://irsa.ipac.caltech.edu/SIA"),env("MAX_OBSERVATIONS","256").toInt,env("MAX_PRODUCT_BYTES","268435456").toLong,channelBands)
       external <- ExternalServices.make(ExternalServiceProbes.irsa(client,
         env("IRSA_SIA_URL","https://irsa.ipac.caltech.edu/SIA"),env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync")),1.hour)
+      mirrorTransfer = new MirrorTransfer(primary,env("ML_PYTHON","python3"),Path.of(env("IRSA_CUTOUT_SCRIPT","python/irsa_cutout.py")),
+        math.min(env("MAX_PRODUCT_BYTES","268435456").toLong,67108864L))
       mirror <- S3MirrorArchive.make(new MirrorProcess(env("ML_PYTHON","python3"),
         Path.of(env("IRSA_MIRROR_SCRIPT","python/irsa_mirror.py")),data.resolve("irsa-mirror.sqlite"),
-        "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/",env("IRSA_MIRROR_RELEASES","qr2,dr1,qr3")),primary,env("MAX_OBSERVATIONS","256").toInt)
+        "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/",env("IRSA_MIRROR_RELEASES","qr2,dr1,qr3")),
+        mirrorTransfer,env("MAX_OBSERVATIONS","256").toInt)
       source = new ResilientArchive(primary,mirror,external)
       _ <- mirror.start.when(env("IRSA_MIRROR_SCAN_ENABLED","true").toBoolean)
       _ <- FileCache.recover(data)
@@ -73,7 +76,7 @@ object Application:
         search_deadline_ms=env("ARCHIVE_SEARCH_DEADLINE_MS","120000").toLong,
         metadata_bytes=env("ARCHIVE_METADATA_BYTES","8388608").toLong,
         file_bytes=math.min(env("ARCHIVE_FILE_BYTES","268435456").toLong,env("MAX_PRODUCT_BYTES","268435456").toLong),
-        max_active_jobs=env("ARCHIVE_MAX_ACTIVE_JOBS","32").toInt),Some(cache))
+        max_active_jobs=env("ARCHIVE_MAX_ACTIVE_JOBS","32").toInt),Some(cache),Some(mirrorTransfer.fetchSubset))
       downloadsApi=new DownloadsApi(downloadsRuntime.service)
       unifications <- Unifications.make(jobs,downloadsRuntime.service,downloadsRuntime.repository,cache,data,data.resolve("jobs.sqlite"),pipeline.unify)
       unificationApi=new UnificationApi(unifications)

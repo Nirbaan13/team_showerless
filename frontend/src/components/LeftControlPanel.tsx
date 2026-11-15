@@ -30,6 +30,7 @@ interface LeftControlPanelProps {
   searchStatus?: {
     source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle' | 'archive';
     message: string;
+    warnings?: string[];
   };
   activeCandidate?: CandidateObject | null;
   liveCatalog?: LiveCatalogResponse | null;
@@ -245,6 +246,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
             </div>
             {(searchStatus.source === 'error' || searchStatus.source === 'loading' || searchStatus.source === 'archive') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+            {!!searchStatus.warnings?.length && <div role="status" aria-label="Observation warnings" className="space-y-1 border-t border-paper-700 pt-1 text-amber-300">
+              {searchStatus.warnings.map((warning, index) => <p key={index} className="break-words">{warning}</p>)}
+            </div>}
           </div>
         )}
 
@@ -431,6 +435,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             );
           })}
         </div>
+
+        {(!availableModes.includes('bloom_mask') || !availableModes.includes('zodi_reference_subtracted')) && (
+          <div className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-850 text-[10px] text-paper-400 space-y-1">
+            {!availableModes.includes('bloom_mask') && (
+              <p>• <strong className="text-paper-300">BLOOM Mask:</strong> Unavailable for non-saturated objects. Only applies to saturated asteroid cores (e.g. Vesta).</p>
+            )}
+            {!availableModes.includes('zodi_reference_subtracted') && (
+              <p>• <strong className="text-paper-300">Zodi Subtracted:</strong> Unavailable for this field; zodiacal reference model was not published in this release.</p>
+            )}
+          </div>
+        )}
       </fieldset>
 
       {/* 4. Known Astronomical Catalogs (Live Space Agency Pull per Coordinate & Object) */}

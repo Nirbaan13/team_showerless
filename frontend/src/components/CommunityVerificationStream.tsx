@@ -27,7 +27,6 @@ import {
   ThumbsUp,
   ShieldCheck,
   Activity,
-  Database,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'spherex_community_comments';
@@ -58,8 +57,8 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
   selectedArray = 2,
   activeFrameIndex = 0,
   subtractionMode = 'raw_calibrated',
-  onOpenCatalogue,
-  onOpenExternalSubmission,
+  onOpenCatalogue: _onOpenCatalogue,
+  onOpenExternalSubmission: _onOpenExternalSubmission,
 }) => {
   // Strictly bind to the currently clicked candidate's ID
   const targetId = activeCandidateId || candidate?.id || null;
@@ -357,10 +356,6 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] font-mono text-paper-400 pt-0.5">
               <span>Discussion comments do not count as registry votes.</span>
-              <div className="flex items-center gap-1.5 self-end">
-                {canonicalId && <button type="button" onClick={() => onOpenCatalogue?.(canonicalId)} className="px-2 py-1 border rounded">Vote in registry</button>}
-
-              </div>
             </div>
           </div>
         ) : (
@@ -416,31 +411,6 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
                 {autoSub.log && autoSub.status !== 'submitted' && <div className="text-paper-300">{autoSub.log}</div>}
               </div>
             )}
-
-            <div className="flex items-center gap-2 pt-0.5">
-              {onOpenCatalogue && (
-                <button
-                  type="button"
-                  onClick={() => { const id = autoSub?.candidateId ?? canonicalId; if (id) onOpenCatalogue(id); }}
-                  className="btn-tactile flex-1 py-1.5 px-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-1.5 cursor-pointer"
-                  title="View this candidate in the Candidate Catalog"
-                >
-                  <Database className="w-3.5 h-3.5" />
-                  <span>View in Candidate Catalog →</span>
-                </button>
-              )}
-              {onOpenExternalSubmission && (
-                <button
-                  type="button"
-                  onClick={() => { const id = autoSub?.candidateId ?? canonicalId; if (id) onOpenExternalSubmission(id); }}
-                  className="btn-tactile py-1.5 px-3 rounded-xl bg-paper-900 hover:bg-paper-850 text-emerald-300 font-mono text-xs font-bold border-2 border-black flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
-                  title="View the machine-readable submission payload (ADES / TNS JSON)"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Payload</span>
-                </button>
-              )}
-            </div>
           </div>
         )}
       </div>

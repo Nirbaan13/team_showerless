@@ -22,7 +22,8 @@ RUN python3 -m venv /opt/inference-venv \
 COPY --from=build --chown=app:app /build/backend/target/stage ./
 COPY --chown=app:app backend/docs/openapi.yaml ./docs/openapi.yaml
 COPY --chown=app:app backend/python/irsa_mirror.py backend/python/irsa_catalog.py ./integrations/
-RUN /opt/inference-venv/bin/python -c "import sys; sys.path.insert(0, '/app/integrations'); import irsa_catalog"
+COPY --chown=app:app backend/python/irsa_cutout.py ./backend/python/irsa_cutout.py
+RUN /opt/inference-venv/bin/python -c "import sys; sys.path.insert(0, '/app/integrations'); import irsa_catalog; from backend.python.irsa_cutout import cutout"
 COPY --chown=app:app science/archive_gateway.py ./science/archive_gateway.py
 COPY --chown=app:app pipeline/service.py ./pipeline/service.py
 COPY --chown=app:app pipeline/spherex ./pipeline/spherex
@@ -39,6 +40,7 @@ ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \
     IRSA_MIRROR_SCRIPT=/app/integrations/irsa_mirror.py \
+    IRSA_CUTOUT_SCRIPT=/app/backend/python/irsa_cutout.py \
     PROCESSING_URL=http://pipeline:8002 \
     ML_ROOT=/app/inference \
     ML_PYTHON=/opt/inference-venv/bin/python \
