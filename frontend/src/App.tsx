@@ -34,8 +34,6 @@ import {
 import { availableImageModes } from './services/imageArtifacts';
 import { findSkyObject } from './services/skyObjects';
 import { useUrlSync } from './hooks/useUrlSync';
-import { useArchiveObservations } from './hooks/useArchiveObservations';
-import { ArchiveObservationsPanel } from './components/ArchiveObservationsPanel';
 import { DEFAULT_ARCHIVE, isArchiveBrowse, type ArchiveSelection } from './services/archiveObservationsApi';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { startPeriodicVerificationSync } from './services/verificationService';
@@ -190,8 +188,6 @@ export function App() {
   });
   const [archiveSelection, setArchiveSelection] = useState<ArchiveSelection>(initialArchiveSelection);
   const [searchObjectId, setSearchObjectId] = useState<string | null>(() => findSkyObject(new URLSearchParams(window.location.search).get('object'))?.id ?? null);
-  const archive = useArchiveObservations();
-  const archiveBrowsing = !currentPresetId && isArchiveBrowse(archiveSelection);
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
@@ -445,19 +441,21 @@ export function App() {
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }, selectionOverride?: ArchiveSelection, objectId: string | null = null) => {
+    const selection = selectionOverride ?? (request ? DEFAULT_ARCHIVE : archiveSelection);
+    if (isArchiveBrowse(selection)) {
+      setSearchStatus({ source: 'idle', message: 'Archive observations — In future' });
+      return;
+    }
     initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
-    const selection = selectionOverride ?? (request ? DEFAULT_ARCHIVE : archiveSelection);
     setSearchObjectId(objectId);
     setRa(newRa);
     setDec(newDec);
-    const browse = isArchiveBrowse(selection);
     setArchiveSelection(selection);
-    archive.reset();
     const array = request?.detector ?? selectedArray;
-    if (!browse && array === 'all') {
+    if (array === 'all') {
       setCurrentPresetId(null); setCustomFrames([]); setCandidatesList([]); setSelectedCandidateId(null);
       setSearchStatus({ source: 'error', message: 'Multi-detector composite unavailable. Select an individual detector.' });
       setMlAnalysisStatus({ state: 'idle', stage: 'No composite data', progress: 0, stepIndex: 1 });
@@ -465,7 +463,7 @@ export function App() {
     }
     const detNum = array as DetectorArrayId;
 
-    if (!browse && !objectId) {
+    if (!objectId) {
       const matchedPreset = NASA_TEST_PRESETS.find(p => Math.hypot(p.raDeg - newRa, p.decDeg - newDec) < 0.2);
       if (matchedPreset) {
         handleSelectPreset(matchedPreset);
@@ -513,16 +511,9 @@ export function App() {
 
     const controller = new AbortController();
     liveRequestRef.current = controller;
-    setSearchStatus({ source: 'loading', message: browse ? `Searching ${selection.provider} observation metadata` : 'Loading observations from NASA IRSA' });
+    setSearchStatus({ source: 'loading', message: 'Loading observations from NASA IRSA' });
     setMlAnalysisStatus({ state: 'running', stage: 'Waiting for archive observations', progress: 0, stepIndex: 1 });
     try {
-      if (browse) {
-        const found = await archive.search({ ...selection, ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5 }, controller.signal);
-        if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
-        setSearchStatus({ source: 'archive', message: `${found.returned_count} metadata records; inspect each provider outcome and select IDs to download.` });
-        setMlAnalysisStatus({ state: 'idle', stage: 'Archive discovery only; no ML analysis was requested', progress: 0, stepIndex: 1 });
-        return;
-      }
       const result = await fetchLiveBackendCutoutAnalysis({
         ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum, signal: controller.signal,
         onProgress: progress => {
@@ -563,7 +554,6 @@ export function App() {
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
 
-    archive.reset();
     setArchiveSelection(DEFAULT_ARCHIVE);
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
@@ -621,7 +611,6 @@ export function App() {
     const frames = getMockEpochFrames(preset.id, detector);
     const candidates = getMockCandidates(preset.id, detector);
     setSearchObjectId(null);
-    archive.reset();
     setArchiveSelection(DEFAULT_ARCHIVE);
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
@@ -1143,9 +1132,6 @@ export function App() {
               ra={ra}
               dec={dec}
               fov={fov}
-              archiveSelection={archiveSelection}
-              archiveInventory={archive.inventory}
-              archiveInventoryError={archive.inventoryError}
               objectId={searchObjectId}
               onUpdateCoords={(nRa, nDec, selection, objectId) => {
                 void handleSearchCoordinates(nRa, nDec, undefined, selection, objectId);
@@ -1198,7 +1184,7 @@ export function App() {
                 </a>
               </div>
             )}
-            {archiveBrowsing ? <ArchiveObservationsPanel archive={archive} /> : <CanvasViewport
+            <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
               candidates={candidatesList}
@@ -1223,9 +1209,9 @@ export function App() {
                   setMobileViewerPane('telemetry');
                 }
               }}
-            />}
+            />
 
-            {!archiveBrowsing && <MoviePlayerControls
+            <MoviePlayerControls
               frames={frames}
               activeFrameIndex={activeFrameIndex}
               onSelectFrame={setActiveFrameIndex}
@@ -1237,11 +1223,11 @@ export function App() {
               onToggleBlinkMode={() => setBlinkMode((b) => !b)}
               onStepForward={stepForward}
               onStepBackward={stepBackward}
-            />}
+            />
           </main>
 
           {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
-          {!isEmbedMode && !archiveBrowsing && (
+          {!isEmbedMode && (
           <div
             className={`h-full ${
               mobileViewerPane === 'telemetry'
@@ -1319,7 +1305,7 @@ export function App() {
               <span>Sky View</span>
             </button>
             <button
-              onClick={() => setMobileViewerPane(archiveBrowsing ? 'canvas' : 'telemetry')}
+              onClick={() => setMobileViewerPane('telemetry')}
               className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
                 mobileViewerPane === 'telemetry'
                   ? 'text-emerald-400 font-bold'
@@ -1327,7 +1313,7 @@ export function App() {
               }`}
             >
               <Sparkles className="w-4 h-4 mb-0.5" />
-              <span>{archiveBrowsing ? 'Archive results' : 'Triage & AI'}</span>
+              <span>Triage & AI</span>
             </button>
             <button
               onClick={() => setMobileViewerPane('controls')}
