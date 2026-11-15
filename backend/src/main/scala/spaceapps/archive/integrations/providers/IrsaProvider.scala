@@ -1,6 +1,8 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
-import spaceapps.archive.protocol.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import spaceapps.domain.Query
 import spaceapps.service.Archive
 import zio.*
@@ -25,4 +27,4 @@ final class IrsaProvider(source: Archive,repository: ArchiveRepository) extends 
     }}
   def resolve(r: ArchiveRecord,d: DeliveryRequest): IO[ArchiveFailure,List[ArchiveAsset]] =
     if d.mode==DeliveryMode.require_cutout then ZIO.fail(ArchiveFailure("unsupported_cutout","IRSA bridge exposes native originals; subset processing uses the existing SPHEREx API"))
-    else repository.irsaImage(r.native_id).map(image=>List(ArchiveAsset(AssetCache.key(r,d),id,image.accessUrl)))
+    else repository.irsaImage(r.native_id).map(image=>List(ArchiveAsset(ArchiveAssetKey.key(r,d),id,image.accessUrl)))

@@ -1,6 +1,7 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
-import spaceapps.archive.protocol.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import zio.*
 final class GaiaProvider(transport: ArchiveTransport,endpoint: String = "https://gea.esac.esa.int/tap-server/tap/sync",policy: OriginPolicy = OriginPolicy.gaia) extends ArchiveProvider:
   val id="esa-gaia"

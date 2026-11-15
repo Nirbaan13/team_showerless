@@ -1,5 +1,5 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 import java.io.ByteArrayInputStream
 import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory

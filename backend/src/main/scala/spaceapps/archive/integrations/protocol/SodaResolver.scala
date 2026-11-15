@@ -1,11 +1,11 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 object SodaResolver:
   def url(descriptor: SodaDescriptor,circle: Circle): String =
     if !descriptor.circle then throw ArchiveFailure("unsupported_cutout","Descriptor does not advertise CIRCLE")
     ArchiveTransport.params(descriptor.endpoint,List("ID"->descriptor.dataset_id,"CIRCLE"->s"${circle.ra_degrees} ${circle.dec_degrees} ${circle.radius_degrees}"))
   def select(record: ArchiveRecord,delivery: DeliveryRequest,links: DataLinks): List[ArchiveAsset] =
-    val key=AssetCache.key(record,delivery)
+    val key=ArchiveAssetKey.key(record,delivery)
     val advertised=links.links.filter(l=>l.semantic=="#cutout" && l.error.isEmpty && !l.requires_auth).flatMap(_.service_def).toSet
     val cutout=links.services.find(s=>advertised(s.id) && s.circle)
     if delivery.mode!=DeliveryMode.original && delivery.region.nonEmpty && cutout.nonEmpty then

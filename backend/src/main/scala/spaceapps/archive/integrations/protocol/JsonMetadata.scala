@@ -1,5 +1,5 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 import zio.json.*
 import zio.json.ast.Json
 import java.nio.charset.StandardCharsets.UTF_8

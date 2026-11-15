@@ -1,6 +1,13 @@
 package spaceapps.archive
-import spaceapps.archive.protocol.*
-import spaceapps.controller.ArchiveApi
+import spaceapps.domain.*
+import spaceapps.archive.domain.*
+import spaceapps.service.*
+import spaceapps.archive.service.*
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.bootstrap.ArchiveRuntime
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.integrations.protocol.*
+import spaceapps.archive.controller.ArchiveApi
 import zio.*
 import zio.http.*
 import zio.json.*
@@ -21,7 +28,7 @@ object ArchiveApiSpec extends ZIOSpecDefault:
   def spec=suite("archive HTTP API")(
     test("202 search status URL, persisted records and inventory expose additive contract") {
       withRuntime { runtime=>
-        val api=new ArchiveApi(runtime)
+        val api=new ArchiveApi(runtime.service)
         for
           inventory <- api.routes.runZIO(Request.get("http://localhost/api/archives"))
           post <- api.routes.runZIO(Request.post("http://localhost/api/archive-searches",Body.fromString(ArchiveQuery(Circle(1,2,0.1),List("eso")).toJson)))
@@ -35,7 +42,7 @@ object ArchiveApiSpec extends ZIOSpecDefault:
     },
     test("unknown providers, arbitrary upstream URLs and unknown record IDs are rejected") {
       withRuntime { runtime=>
-        val api=new ArchiveApi(runtime)
+        val api=new ArchiveApi(runtime.service)
         for
           unknown <- api.routes.runZIO(Request.post("http://localhost/api/archive-searches",Body.fromString(ArchiveQuery(Circle(1,2,0.1),List("unknown")).toJson)))
           url <- api.routes.runZIO(Request.post("http://localhost/api/archive-downloads",Body.fromString("{\"record_ids\":[\"https://evil.test/file\"],\"url\":\"https://evil.test/file\"}")))
@@ -56,7 +63,7 @@ object ArchiveApiSpec extends ZIOSpecDefault:
           override def origins=policy
           def capabilities=ZIO.succeed(ProviderCapabilities(List(ProductKind.image),original=true))
           def search(q: ArchiveQuery,c: Option[ProviderCursor])=ZIO.succeed(ProviderPage(Nil,Completeness.complete))
-          def resolve(r: ArchiveRecord,d: DeliveryRequest)=ZIO.succeed(List(ArchiveAsset(AssetCache.key(r,d),id,base+"/native")))
+          def resolve(r: ArchiveRecord,d: DeliveryRequest)=ZIO.succeed(List(ArchiveAsset(ArchiveAssetKey.key(r,d),id,base+"/native")))
         registry=new ProviderRegistry(List(source))
         downloads <- ArchiveDownloads.make(registry,repo,new StreamingDownloader(new ArchiveTransport(client),dir.resolve("assets")))
         job <- downloads.accept(DownloadSelection(List(record.id)))

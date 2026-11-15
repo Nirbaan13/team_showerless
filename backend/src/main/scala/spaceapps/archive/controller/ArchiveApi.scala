@@ -1,12 +1,13 @@
-package spaceapps.controller
-import spaceapps.archive.*
+package spaceapps.archive.controller
+import spaceapps.archive.domain.*
+import spaceapps.archive.service.ArchiveService
 import zio.*
 import zio.http.*
 import zio.json.*
 import zio.json.ast.Json
 import zio.stream.ZStream
 import java.nio.charset.StandardCharsets.UTF_8
-final class ArchiveApi(runtime: ArchiveRuntime):
+final class ArchiveApi(service: ArchiveService):
   private def json[A:JsonEncoder](value: A,status: Status = Status.Ok): Response = Response.json(value.toJson).status(status).addHeader("Cache-Control","no-store")
   private def safe(task: IO[ArchiveFailure,Response]): UIO[Response] = task.catchAll { e=>
     val status=e.code match
@@ -35,17 +36,17 @@ final class ArchiveApi(runtime: ArchiveRuntime):
     yield value
   private def page(id: String,request: Request): IO[ArchiveFailure,Response] =
     val parsed=request.url.queryParams.getAll("limit").headOption.fold[Either[ArchiveFailure,Int]](Right(50))(s=>s.toIntOption.toRight(ArchiveFailure("invalid_cursor","Page limit must be an integer")))
-    ZIO.fromEither(parsed).flatMap(limit=>runtime.repository.page(id,request.url.queryParams.getAll("cursor").headOption,limit)).map(json(_))
+    ZIO.fromEither(parsed).flatMap(limit=>service.page(id,request.url.queryParams.getAll("cursor").headOption,limit)).map(json(_))
   val routes: Routes[Any,Response] = Routes(
-    Method.GET / "api" / "archives" -> handler(safe(runtime.registry.inventory.map(json(_)))),
-    Method.POST / "api" / "archive-searches" -> handler { (request: Request)=>safe(parse[ArchiveQuery](request,Set("region","providers","product_kinds","time_start_utc","time_end_utc","limit_per_provider")).flatMap(runtime.discovery.accept).map(j=>json(j,Status.Accepted))) },
+    Method.GET / "api" / "archives" -> handler(safe(service.inventory.map(json(_)))),
+    Method.POST / "api" / "archive-searches" -> handler { (request: Request)=>safe(parse[ArchiveQuery](request,Set("region","providers","product_kinds","time_start_utc","time_end_utc","limit_per_provider")).flatMap(service.search).map(j=>json(j,Status.Accepted))) },
     Method.GET / "api" / "archive-searches" / string("id") -> handler { (id: String,request: Request)=>safe(page(id,request)) },
     Method.POST / "api" / "archive-searches" / string("id") / "continue" -> handler { (id: String,request: Request)=>
-      safe(parse[Map[String,String]](request,Set("provider")).flatMap(m=>ZIO.fromOption(m.get("provider")).orElseFail(ArchiveFailure("invalid_request","Select a provider"))).flatMap(runtime.discovery.continue(id,_)).map(j=>json(j,Status.Accepted)))
+      safe(parse[Map[String,String]](request,Set("provider")).flatMap(m=>ZIO.fromOption(m.get("provider")).orElseFail(ArchiveFailure("invalid_request","Select a provider"))).flatMap(service.continue(id,_)).map(j=>json(j,Status.Accepted)))
     },
-    Method.POST / "api" / "archive-downloads" -> handler { (request: Request)=>safe(parse[DownloadSelection](request,Set("record_ids","delivery")).flatMap(runtime.downloads.accept).map(j=>json(j,Status.Accepted))) },
-    Method.GET / "api" / "archive-downloads" / string("id") -> handler { (id: String,request: Request)=>safe(runtime.repository.download(id).map(json(_))) },
-    Method.GET / "api" / "archive-assets" / string("id") -> handler { (id: String,request: Request)=>safe(runtime.downloads.artifact(id).map { (path,asset)=>
+    Method.POST / "api" / "archive-downloads" -> handler { (request: Request)=>safe(parse[DownloadSelection](request,Set("record_ids","delivery")).flatMap(service.download).map(j=>json(j,Status.Accepted))) },
+    Method.GET / "api" / "archive-downloads" / string("id") -> handler { (id: String,request: Request)=>safe(service.downloadStatus(id).map(json(_))) },
+    Method.GET / "api" / "archive-assets" / string("id") -> handler { (id: String,request: Request)=>safe(service.artifact(id).map { (path,asset)=>
       Response(body=Body.fromStreamChunked(ZStream.fromPath(path))).addHeader("Content-Type",if asset.compression=="gzip" then "application/gzip" else "application/fits")
         .addHeader("Content-Disposition",s"attachment; filename=\"${asset.id}.fits${if asset.compression=="gzip" then ".gz" else ""}\"")
     }) }

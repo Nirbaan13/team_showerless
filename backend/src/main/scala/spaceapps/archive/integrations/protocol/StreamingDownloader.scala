@@ -1,5 +1,5 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 import spaceapps.integrations.fits.FitsHeaders
 import spaceapps.service.FitsCache
 import zio.*

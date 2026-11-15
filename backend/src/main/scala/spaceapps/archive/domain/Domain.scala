@@ -1,4 +1,4 @@
-package spaceapps.archive
+package spaceapps.archive.domain
 
 import zio.json.*
 import java.time.Instant

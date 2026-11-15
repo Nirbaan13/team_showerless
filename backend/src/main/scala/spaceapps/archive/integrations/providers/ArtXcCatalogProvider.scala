@@ -1,6 +1,7 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
-import spaceapps.archive.protocol.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import zio.*
 final class ArtXcCatalogProvider(transport: ArchiveTransport) extends ArchiveProvider:
   val id="iki-artxc-catalog"

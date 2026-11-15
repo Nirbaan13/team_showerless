@@ -1,5 +1,6 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
 import zio.*
 final class PendingProvider(entry: ProviderInventory) extends ArchiveProvider:
   val id=entry.id

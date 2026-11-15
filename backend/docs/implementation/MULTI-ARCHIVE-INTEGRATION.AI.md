@@ -1,7 +1,7 @@
 # Multi-archive backend integration
 
 Implemented on `feat/multi-archive-integration`, based on `13d580e`. The independent
-`spaceapps.archive` package adds discovery and native-file retrieval without
+archive integration adds discovery and native-file retrieval without
 changing legacy SPHEREx HTTP/gRPC schemas, detectors or `verices_degrees`.
 
 ## Contract
@@ -156,8 +156,7 @@ Network-dependent live tests are ignored in ordinary CI.
 Previous offline verification on 2026-11-14 after merging frontend-only main
 `9843157012595ab03cb3e7683bb8a6c731ace489`:
 
-- `./sbtw 'testOnly spaceapps.archive.*'`: 49 passed, zero failed, two optional
-  live tests ignored.
+- Archive-only tests before the package relocation: 49 passed, zero failed, two optional live tests ignored.
 - `./sbtw test stage`: 153 passed, zero failed, two optional live tests ignored;
   staged runtime built successfully. The 104 existing SPHEREx tests remain green.
 - The branch diff passed `git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol diff --check origin/main..HEAD`; original HTTP fixture CRLF bytes are retained. Deployment/bootstrap/test shell syntax checks passed.
@@ -238,3 +237,30 @@ runtime built successfully. This includes the unchanged 49 archive tests and
 130 main tests, including IRSA cutout, ML analysis, recovery and shared-cache
 regressions. The ignored tests are the two archive live checks and the merged
 IRSA cutout live check.
+
+## Archive module organization
+
+The user clarified the final structure: retain the `spaceapps.archive` module,
+with its own internal application layers. Do not distribute archive classes into
+the application's root controller/service/repository packages.
+
+- `spaceapps.archive.controller`: HTTP routes; depends on ArchiveService only.
+- `spaceapps.archive.service`: use cases, provider selection and job orchestration.
+- `spaceapps.archive.repository`: SQLite archive persistence.
+- `spaceapps.archive.domain`: archive models and stable asset keys.
+- `spaceapps.archive.integrations`: external provider adapters and wire protocols.
+- `spaceapps.archive.bootstrap`: module wiring and background-worker startup.
+
+The application's Main composes this module with the existing SPHEREx API. The
+archive controller no longer reaches repositories, provider registries or download
+workers directly; ArchiveService is its application boundary. Existing search/
+download JSON, persisted rows, public paths, provider outcomes and scientific
+limits are unchanged. No Python or frontend behavior is part of this revision.
+
+Layer refactor verification on2026-11-15: `./sbtw test stage` passed180 tests,
+zero failures, three optional network tests ignored. Independent review found no
+remaining material issue. All20 existing OpenAPI paths and23 existing schemas
+remain structurally identical. The staged Main started in isolated temporary
+storage, served health/Swagger and all27 OpenAPI paths, returned14 inventory
+entries, and persisted an ESASky-only request as unavailable without external
+network access or a fabricated successful result.

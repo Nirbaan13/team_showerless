@@ -1,4 +1,5 @@
-package spaceapps.archive
+package spaceapps.archive.repository
+import spaceapps.archive.domain.*
 import zio.*
 import zio.json.*
 import java.nio.file.{Files,Path}

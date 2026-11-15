@@ -1,4 +1,6 @@
-package spaceapps.archive
+package spaceapps.archive.service
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
 import zio.*
 final class ProviderRegistry(val providers: List[ArchiveProvider]):
   require(providers.map(_.id).distinct.size==providers.size)

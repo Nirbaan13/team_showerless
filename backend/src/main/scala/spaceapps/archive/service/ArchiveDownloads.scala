@@ -1,5 +1,7 @@
-package spaceapps.archive
-import spaceapps.archive.protocol.*
+package spaceapps.archive.service
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import zio.*
 import java.nio.file.{Files,Path}
 import java.util.UUID
@@ -29,7 +31,7 @@ final class ArchiveDownloads private(registry: ProviderRegistry,repository: Arch
         (for
           record <- repository.record(id)
           provider <- registry.get(record.provider)
-          existing <- cached(AssetCache.key(record,job.selection.delivery))
+          existing <- cached(ArchiveAssetKey.key(record,job.selection.delivery))
           assets <- existing match
             case Some(stored)=>ZIO.succeed(List(AssetOutcome(id,"ready",Some(stored),provenance=record.provenance)))
             case None=>provider.resolve(record,job.selection.delivery).flatMap { resolved=>

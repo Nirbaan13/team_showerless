@@ -1,6 +1,7 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
-import spaceapps.archive.protocol.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import zio.*
 final class LamostProvider(transport: ArchiveTransport) extends ArchiveProvider:
   val id="lamost"
@@ -14,7 +15,7 @@ final class LamostProvider(transport: ArchiveTransport) extends ArchiveProvider:
     else publicRelease *> transport.metadata(ArchiveTransport.params(base+"/voservice/conesearch",List("ra"->q.region.ra_degrees.toString,"dec"->q.region.dec_degrees.toString,"sr"->q.region.radius_degrees.toString,"output.fmt"->"json")),OriginPolicy.lamost).flatMap(b=>ZIO.attempt(LamostProvider.decode(b,q)).mapError(ArchiveFailure.from))
   def resolve(r: ArchiveRecord,d: DeliveryRequest): IO[ArchiveFailure,List[ArchiveAsset]] =
     if d.mode==DeliveryMode.require_cutout then ZIO.fail(ArchiveFailure("unsupported_cutout","A spectrum is not a spatial image cutout"))
-    else publicRelease.as(List(ArchiveAsset(AssetCache.key(r,d),id,ArchiveTransport.params(base+"/spectrum/fits",List("obsid"->r.native_id)))))
+    else publicRelease.as(List(ArchiveAsset(ArchiveAssetKey.key(r,d),id,ArchiveTransport.params(base+"/spectrum/fits",List("obsid"->r.native_id)))))
 object LamostProvider:
   def isPublic(bytes: Array[Byte],release: String,version: String): Boolean =
     import JsonMetadata.*

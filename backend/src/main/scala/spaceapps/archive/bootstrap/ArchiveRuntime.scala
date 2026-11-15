@@ -1,11 +1,16 @@
-package spaceapps.archive
-import spaceapps.archive.protocol.*
-import spaceapps.archive.providers.*
+package spaceapps.archive.bootstrap
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
+import spaceapps.archive.integrations.providers.*
 import spaceapps.service.{Archive,FitsCache}
+import spaceapps.archive.service.{ArchiveLimits,ArchiveDownloads,FederatedDiscovery,ProviderRegistry,ArchiveService}
 import zio.*
 import zio.http.Client
 import java.nio.file.Path
-final case class ArchiveRuntime(registry: ProviderRegistry,repository: ArchiveRepository,discovery: FederatedDiscovery,downloads: ArchiveDownloads)
+final case class ArchiveRuntime(registry: ProviderRegistry,repository: ArchiveRepository,discovery: FederatedDiscovery,downloads: ArchiveDownloads):
+  def service: ArchiveService = new ArchiveService(registry,repository,discovery,downloads)
 object ArchiveRuntime:
   def make(client: Client,irsa: Archive,data: Path,database: Path,limits: ArchiveLimits = ArchiveLimits(),capacity: Option[FitsCache] = None): ZIO[Scope,ArchiveFailure,ArchiveRuntime] =
     for

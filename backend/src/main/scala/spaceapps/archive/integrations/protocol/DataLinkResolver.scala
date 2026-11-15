@@ -1,5 +1,5 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 import zio.*
 final case class DataLink(url: Option[String],service_def: Option[String],semantic: String,format: String,estimated_bytes: Option[Long],requires_auth: Boolean,error: Option[String])
 final case class SodaDescriptor(id: String,endpoint: String,dataset_id: String,circle: Boolean)

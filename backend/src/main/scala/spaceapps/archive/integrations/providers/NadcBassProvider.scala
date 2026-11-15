@@ -1,6 +1,7 @@
-package spaceapps.archive.providers
-import spaceapps.archive.*
-import spaceapps.archive.protocol.*
+package spaceapps.archive.integrations.providers
+import spaceapps.archive.integrations.ArchiveProvider
+import spaceapps.archive.domain.*
+import spaceapps.archive.integrations.protocol.*
 import zio.*
 import java.nio.charset.StandardCharsets.UTF_8
 final class NadcBassProvider(transport: ArchiveTransport) extends ArchiveProvider:

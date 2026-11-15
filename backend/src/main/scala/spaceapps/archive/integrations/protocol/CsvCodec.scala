@@ -1,5 +1,5 @@
-package spaceapps.archive.protocol
-import spaceapps.archive.*
+package spaceapps.archive.integrations.protocol
+import spaceapps.archive.domain.*
 import java.nio.charset.StandardCharsets.UTF_8
 object CsvCodec:
   /** RFC4180 quoting, embedded newlines and empty values; IDs never pass through numbers. */

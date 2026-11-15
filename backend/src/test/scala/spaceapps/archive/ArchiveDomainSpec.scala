@@ -1,4 +1,11 @@
 package spaceapps.archive
+import spaceapps.domain.*
+import spaceapps.archive.domain.*
+import spaceapps.service.*
+import spaceapps.archive.service.*
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.bootstrap.ArchiveRuntime
+import spaceapps.archive.integrations.ArchiveProvider
 import zio.test.*
 import zio.json.*
 object ArchiveDomainSpec extends ZIOSpecDefault:
@@ -21,8 +28,8 @@ object ArchiveDomainSpec extends ZIOSpecDefault:
     },
     test("asset identity separates version, epoch and subset, ignoring retrieval grants") {
       val a=ArchiveRecord.create("eso","VISTA","id",ProductKind.image,version=Some("v1"))
-      assertTrue(AssetCache.key(a,DeliveryRequest())==AssetCache.key(a,DeliveryRequest()),
-        AssetCache.key(a,DeliveryRequest())!=AssetCache.key(a.copy(version=Some("v2")),DeliveryRequest()),
-        AssetCache.key(a,DeliveryRequest())!=AssetCache.key(a.copy(time=ObservationTime(start_utc=Some("2020-01-01T00:00:00Z"))),DeliveryRequest()))
+      assertTrue(ArchiveAssetKey.key(a,DeliveryRequest())==ArchiveAssetKey.key(a,DeliveryRequest()),
+        ArchiveAssetKey.key(a,DeliveryRequest())!=ArchiveAssetKey.key(a.copy(version=Some("v2")),DeliveryRequest()),
+        ArchiveAssetKey.key(a,DeliveryRequest())!=ArchiveAssetKey.key(a.copy(time=ObservationTime(start_utc=Some("2020-01-01T00:00:00Z"))),DeliveryRequest()))
     }
   )
