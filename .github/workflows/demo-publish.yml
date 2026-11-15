@@ -1,0 +1,53 @@
+name: Publish offline demo installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Demo version (v2 requires a published v1)
+        type: choice
+        options: [v1, v2]
+        default: v1
+        required: true
+      bundle_sha256:
+        description: Exact SHA256 of the release bundle archive
+        type: string
+        required: true
+      release_tag:
+        description: Release tag (blank derives demo-v1 or demo-v2)
+        type: string
+        default: ''
+        required: false
+
+permissions:
+  contents: read
+  packages: write
+
+# Serialize all versions so the first v1 publication finishes before v2 starts.
+concurrency:
+  group: demo-ghcr-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Verify publisher release boundaries
+        run: python3 -m unittest discover -s ops/demo -p 'test_publish_release.py'
+      - name: Verify release bundle and publish installer to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEMO_VERSION: ${{ inputs.version }}
+          BUNDLE_SHA256: ${{ inputs.bundle_sha256 }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          python3 ops/demo/publish_release.py \
+            --version "$DEMO_VERSION" \
+            --bundle-sha256 "$BUNDLE_SHA256" \
+            --release-tag "$RELEASE_TAG" \
+            --metadata "$RUNNER_TEMP/demo-publish.json"
