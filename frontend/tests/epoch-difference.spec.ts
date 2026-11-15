@@ -286,3 +286,19 @@ test('detector controls do not advertise an unsupported channel image or molecul
   await expect(page.locator('input[type=range][max="102"]')).toHaveCount(0);
   await expect(page.getByText('Images are selected by detector. Channel-resolved images are unavailable.', { exact: true })).toBeVisible();
 });
+
+
+test('mobile playback remains above navigation and receives actual taps', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  const play = page.getByRole('button', { name: 'Play Movie', exact: true });
+  const rect = await play.boundingBox();
+  expect(rect!.y + rect!.height).toBeLessThanOrEqual(796);
+  await play.click();
+  await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible();
+  await expect(page.getByText('Frame 1 of 4', { exact: true })).not.toBeVisible();
+  await page.getByRole('button', { name: 'Pause', exact: true }).click();
+  await page.getByRole('button', { name: 'Next Epoch Frame', exact: true }).click();
+});
