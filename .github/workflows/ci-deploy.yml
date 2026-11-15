@@ -56,6 +56,14 @@ jobs:
           python -m pytest -q ml/pvusatov/verification/final ml/pvusatov/releases/v3/test_smoke.py --ignore=ml/pvusatov/verification/final/test_summarize_results.py
           python ml/pvusatov/verification/final/audit_snapshot.py
           python ml/pvusatov/releases/v3/smoke.py
+      - name: Test experimental v4 scientific tools
+        working-directory: .
+        run: PYTHONPATH=.:ml/pvusatov/backend/inference python -m pytest -q ml/pvusatov/experiments/v4 ml/pvusatov/releases/v4
+      - name: Recount every frozen v4 field without external inputs
+        working-directory: .
+        run: |
+          python ml/pvusatov/verification/v4-final-repair-1/portable-audit/verify.py --deny-external-inputs --probe-denial
+          python -m pytest -q ml/pvusatov/verification/v4-final-repair-1/portable-audit/test_verifier.py
       - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin
@@ -74,9 +82,6 @@ jobs:
         run: docker build --file Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" ..
       - name: Verify packaged real-data inference
         run: |
-          docker run --rm --read-only --tmpfs /tmp \
-            --entrypoint /opt/inference-venv/bin/python \
-            "spaceapps-api:$GITHUB_SHA" /app/inference/smoke.py
           docker run --rm --read-only --tmpfs /tmp \
             --entrypoint /opt/inference-venv/bin/python \
             "spaceapps-api:$GITHUB_SHA" /app/inference/release-smoke.py --model-dir /app/inference/models

@@ -1,0 +1,60 @@
+{
+  "scope": "root-authorized preparation-only infrastructure diagnosis; no detector calls or science scores inspected",
+  "freeze_sha256": "1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57",
+  "diagnostic_source_sha256": "c9a6515d546b67b8c0d93df3ab22421a31e2a7ed7077a5bb76ff4a2d5779f86e",
+  "results": [
+    {
+      "parent_id": "v4-final01",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final02",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final03",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final04",
+      "prepare_success": false,
+      "type": "InferenceError",
+      "module": "ml_inference.contracts",
+      "code": "no_coverage",
+      "message": "An observation has no usable requested sky coverage",
+      "traceback": "Traceback (most recent call last):\n  File \"/tmp/spaceapps-v4-evaluation/diagnose-native-prepare.py\", line 10, in <module>\n    stack=science.prepare(request);binding.validate_prepared_frames(f['_native_expected'][parent['parent_id']],stack.frames,stack.times);del stack\n  File \"/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/source/backend/inference/ml_inference/prepare.py\", line 279, in prepare\n    stack=(_preset if request['source']['kind']=='preset' else _fits)(request['source'],options)\n  File \"/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/source/backend/inference/ml_inference/prepare.py\", line 244, in _fits\n    raise InferenceError('no_coverage','An observation has no usable requested sky coverage')\nml_inference.contracts.InferenceError: An observation has no usable requested sky coverage\n"
+    },
+    {
+      "parent_id": "v4-final05",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final06",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final07",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final08",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final09",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final10",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final11",
+      "prepare_success": true
+    },
+    {
+      "parent_id": "v4-final12",
+      "prepare_success": true
+    }
+  ]
+}

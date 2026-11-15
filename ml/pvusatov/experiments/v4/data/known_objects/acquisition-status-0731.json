@@ -1,0 +1,22 @@
+{
+  "status": "INCOMPLETE_UPSTREAM_ARCHIVE_FAILURE",
+  "recorded_utc": "2026-11-15T07:32:15.484286+00:00",
+  "plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "metadata_search_completed": false,
+  "archive_rows_received": 0,
+  "selected_benchmark": null,
+  "image_downloads": 0,
+  "image_pixels_read": 0,
+  "model_calls": 0,
+  "final_access": false,
+  "ephemeris_targets": 3,
+  "ephemeris_epochs": 1053,
+  "evidence": "Local SIA combined/POS-only/minimal timeouts; exact VPS minimal request HTTP502; official TAP zero-row schema request HTTP502",
+  "interpretation": "No conclusion about target coverage or detector recovery; no first-eligible case can be claimed",
+  "next": "One bounded later retry of exact minimal query; no 72-query timeout loop",
+  "source_execution_history": [
+    "attempt01/search.py",
+    "attempt02/search.py"
+  ],
+  "current_source_role": "Current retry/dedup/convex guards tested offline; no successful target archive rows or pixel outcomes"
+}

@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "declared_utc": "2026-11-15T06:20:06.415202+00:00",
+  "scope": "TRAIN-only independent injection/prepare physics audit; no detector,ranker,model selection or FINAL pixel access",
+  "parents": [
+    {
+      "parent_id": "v4-train01",
+      "split": "train",
+      "center": [
+        228.745009,
+        -69.43558622
+      ],
+      "detector": 1,
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train01-downloads.json",
+        "sha256": "1465c20805da6677df74ca7926312c496023cb0ff9bf11aafbb6876509d6149c"
+      }
+    },
+    {
+      "parent_id": "v4-train02",
+      "split": "train",
+      "center": [
+        329.84077089,
+        0.98198712
+      ],
+      "detector": 2,
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train02-downloads.json",
+        "sha256": "abbcb482f81d2aca7e80b5773b99dea647f9b017025c0bc5eb1de08c0dada6db"
+      }
+    },
+    {
+      "parent_id": "v4-train03",
+      "split": "train",
+      "center": [
+        188.08439718,
+        -52.76297986
+      ],
+      "detector": 3,
+      "downloads_manifest": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train03-downloads.json",
+        "sha256": "763a71acd741d4fbda3c8f2436299a15b18ee89bc75be8265cd33b2a54068629"
+      }
+    }
+  ],
+  "development_handoff_sha256": "f8898016db7fda2b74c59099b09c3ea864b5b1d39312273f06831915c9990afa",
+  "stationary_cases": [
+    {
+      "id": "center-phase-00",
+      "anchor": "floor(native_center)+phase",
+      "phase_xy": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "center-phase-25-75",
+      "anchor": "floor(native_center)+phase",
+      "phase_xy": [
+        0.25,
+        0.75
+      ]
+    },
+    {
+      "id": "center-phase-50",
+      "anchor": "floor(native_center)+phase",
+      "phase_xy": [
+        0.5,
+        0.5
+      ]
+    },
+    {
+      "id": "center-phase-75-25",
+      "anchor": "floor(native_center)+phase",
+      "phase_xy": [
+        0.75,
+        0.25
+      ]
+    },
+    {
+      "id": "left-edge",
+      "anchor": "native_x=1.25,native_y=(height-1)/2+.25"
+    },
+    {
+      "id": "masked-interior",
+      "anchor": "nearest-to-native-center disallowed pixel with 6pixel edge margin; ties by y,x; if unavailable report missing planned case without replacement"
+    },
+    {
+      "id": "mixed-mask-boundary",
+      "anchor": "nearest-to-native-center midpoint between horizontally adjacent good/bad native pixels; if unavailable try vertical; ties by y,x; 6pixel edge margin; unavailable remains explicit"
+    }
+  ],
+  "stationary_sky_rule": "Anchor is first physical epoch after immutableprepare ordering; transform chosen native coordinate through FULL celestial TAN-SIP WCS to sky; same sky coordinate in all8epochs",
+  "amplitude_multipliers_native_MAD": [
+    3.0,
+    12.0,
+    48.0
+  ],
+  "amplitude_rule": "Common group amplitude=multiplier\u00d7median(per-epoch native IMAGE-ZODI robustMAD over motion-good original pixels). Record actualMJy/sr discrete native-pixel-sum units; not calibrated point-source flux.",
+  "native_epsf_construction": "Independently select nearest EPSF zone using alternate-A linear WCS cutout-to-parent pixel coordinates. Sample documented pixel-convolved EPSF on full native integer pixel centers at actual fractional phase; normalize using full untruncated native lattice sum; add source to IMAGE before immutableprepare. Do not call oldproject_response/native_psf_patch to construct injection.",
+  "derivative_policy": "COPY originals, change IMAGE to float64 with BITPIX=-64, retain physicalOBSIDs/allWCSincludingSIP/non-IMAGE arrays, explicitresearch-derivative HISTORY+sourceSHA, regenerate CHECKSUM/DATASUM, record original/derivativehashes and verify unchangedarrays. Delete transientderivedFITSaftereachtrial; preserve truthfulmanifestexamples.",
+  "comparison": "Compare actual prepare(derived)-prepare(original) with oldproject_response registered response; quantify median-subtraction constant and compare oldadd+median route, finite/mask support,centroids/sums/maxabs/relativeL2. No detection/ranking outcomes.",
+  "moving_stage": {
+    "speeds_registered_pixels_per_hour": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "direction_degrees": [
+      0.0,
+      45.0,
+      90.0
+    ],
+    "origin_registered_fraction_xy": [
+      0.5,
+      0.5
+    ],
+    "amplitude_multipliers_native_MAD": [
+      3.0,
+      12.0,
+      48.0
+    ],
+    "epochs": "all8actualphysicalmidpoints; no recentering when sourceleavescoverage",
+    "truth": "straight path on fixedregisteredtangentplane transformed through sky andeach fullnativeSIP WCS"
+  },
+  "photon_noise": "NOaddedshotnoise andNOvarianceupdate; verified electron/gain conversion not established. IMAGE unitsMJy/sr andVARIANCE(MJy/sr)^2; do not inventPoisson counts.",
+  "official_sources": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf",
+      "version": "2.1,2026-11-10",
+      "sha256": "9f3085cea74c6cdb647cc373bef27aaae50e394d348402e68ea2558ea06011cd",
+      "pages_units_and_variance": [
+        13,
+        29
+      ],
+      "pages_native_epsf_orientation": [
+        52,
+        59,
+        60,
+        74,
+        81
+      ]
+    },
+    {
+      "url": "https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/"
+    }
+  ],
+  "resource_bounds": {
+    "cpus": 2,
+    "memory_gib": 4,
+    "maximum_live_derivative_frames": 8
+  },
+  "final_pixels_opened": false
+}

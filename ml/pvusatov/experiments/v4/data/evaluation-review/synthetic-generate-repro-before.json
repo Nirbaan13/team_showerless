@@ -1,0 +1,7 @@
+{
+  "scope": "Actual generate() + actual legacy _record(); fake observable arrays and no detector/model/FITS calls",
+  "source_sha256": "30f61812670ebf2205db8a55d528f1cb30128ad8cc5f33b1da80b588e77cba8a",
+  "status": "raised",
+  "error_type": "TypeError",
+  "message": "dict() got multiple values for keyword argument 'features'"
+}

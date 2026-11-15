@@ -1,0 +1,37 @@
+id,family,subset,native_mass,training_label_policy,pointwise_fraction,native_K1,native_K3,synthetic_K1,synthetic_K3,eligible,adversarial_pass,artifact_bytes,trees,split_nodes,distinct_used_features,selected_quality_columns,actually_used_quality_columns,comet_d2_rank,comet_d6_rank,root_review_min_native_budget_gain,root_review_min_synthetic_budget_gain
+ef8b4b936cc5cc54,extra,legacy_kinematics12,0,all_known,1,345,367,364,595,True,True,6376117,160,81557,12,[],[],1,2,20,115
+652aaa93442e85b2,extra,legacy6,0,all_known,1,253,350,332,552,False,True,5539176,160,70933,6,[],[],1,2,-56,83
+ab0c4f9f9101d567,extra,legacy_flux_morphology21,0,all_known,1,360,378,350,582,True,True,6162681,160,78857,21,[],[],1,2,31,101
+bc9bbe011d72ba0c,extra,noquality27,0,all_known,1,372,382,390,621,True,True,6392496,160,81760,27,[],[],1,2,35,141
+fdffa8b03543ff07,extra,nomask_support23,0,all_known,1,372,381,384,623,True,True,6338567,160,81076,23,[],[],1,2,34,135
+2ff4bc9adccff771,extra,noavailability29,0,all_known,1,373,377,384,623,True,True,6365854,160,81420,27,"[27, 28]",[],1,2,30,135
+628623c644922499,extra,full30,0,all_known,1,369,378,387,621,False,True,6367974,160,81450,27,"[27, 28, 29]",[],1,2,31,138
+89e2e68d1493f806,hist,legacy6,0,all_known,1,275,356,315,558,False,True,298217,160,4557,6,[],[],1,2,-34,66
+3f97b0f3b251fd31,hist,nomask_support23,0,all_known,1,370,378,388,634,True,True,311669,160,4756,22,[],[],1,2,31,139
+878e604b9d723cae,hist,noquality27,0,all_known,1,366,374,393,634,True,True,310077,160,4729,25,[],[],1,2,27,144
+204d19a95108cbd0,ranknet,legacy6,0,all_known,0.5,241,346,326,556,False,True,60048,120,840,6,[],[],1,1,-68,77
+2388b4220b15ddd7,ranknet,noquality27,0,all_known,0.5,369,382,393,624,True,True,60913,120,840,21,[],[],1,2,35,144
+177dc4cff6a003e8,listnet,legacy6,0,all_known,0.5,211,346,326,556,False,True,59985,120,839,6,[],[],1,2,-98,77
+acfe8bc83200d6ea,listnet,noquality27,0,all_known,0.5,372,380,390,628,True,True,60535,120,834,19,[],[],1,1,33,141
+0dc0097af0a9952c,extra,legacy6,2,all_known,1,272,350,333,554,False,True,5535860,160,70905,6,[],[],1,2,-37,84
+5d381f6ef8968987,extra,legacy_kinematics12,2,all_known,1,313,349,363,599,True,True,6235462,160,79792,12,[],[],1,2,2,114
+3b245e293afee821,extra,legacy_flux_morphology21,2,all_known,1,359,375,342,578,True,True,6091370,160,77952,21,[],[],1,2,28,93
+161f029fa86b0d9b,extra,noquality27,2,all_known,1,364,372,380,614,True,True,6363851,160,81391,27,[],[],1,2,25,131
+1cacf03e94006874,extra,nomask_support23,2,all_known,1,369,381,385,617,True,True,6269551,160,80193,23,[],[],1,2,34,136
+99799b09b0008786,extra,noavailability29,2,all_known,1,367,373,382,612,True,True,6325509,160,80913,28,"[27, 28]",[27],1,2,26,133
+0007271d8eb1dad2,hist,legacy6,2,all_known,1,286,365,318,547,False,True,284543,160,4342,6,[],[],1,2,-23,69
+60e1718209321419,extra,full30,2,all_known,1,364,376,383,617,False,True,6255614,160,80017,29,"[27, 28, 29]","[27, 29]",1,2,29,134
+65bc15b3774deee8,hist,noquality27,2,all_known,1,364,371,391,632,True,True,309873,160,4724,25,[],[],1,2,24,142
+c73d3df169aae89e,hist,nomask_support23,2,all_known,1,368,381,391,626,True,True,306287,160,4672,23,[],[],1,2,34,142
+fb70946b2f02c4b6,ranknet,legacy6,2,all_known,0.5,244,351,322,555,False,True,59985,120,839,6,[],[],1,2,-65,73
+0bde869ce9a71b0e,ranknet,noquality27,2,all_known,0.5,369,379,390,616,True,True,60094,120,827,19,[],[],1,2,32,141
+3afb7e418976b411,listnet,legacy6,2,all_known,0.5,210,351,332,559,False,True,60048,120,840,6,[],[],1,2,-99,83
+96dd8925e493be28,listnet,noquality27,2,all_known,0.5,364,373,389,626,True,True,60787,120,838,18,[],[],1,1,26,140
+6460420ffe3181b1,ranknet,legacy6,0,all_known,0,244,343,328,558,False,True,60048,120,840,6,[],[],1,1,-65,79
+fc3378f486961a8c,ranknet,noquality27,0,all_known,0,371,383,392,626,True,True,60661,120,836,19,[],[],1,2,36,143
+5f7d7c525611a9e4,listnet,legacy6,0,all_known,0,231,346,331,549,False,True,60048,120,840,6,[],[],1,2,-78,82
+f286e33fbcce20b7,listnet,noquality27,0,all_known,0,369,380,388,620,True,True,60913,120,840,20,[],[],1,1,33,139
+4e791b62dd58a7a2,extra,legacy6,2,resolved_matched_3px,1,246,349,332,546,False,True,5510239,160,70581,6,[],[],1,2,-63,83
+ce04d20f128fa217,extra,noquality27,2,resolved_matched_3px,1,361,372,381,619,True,True,6360401,160,81346,27,[],[],1,2,25,132
+4d5a3297b3e3f9d4,hist,legacy6,2,resolved_matched_3px,1,276,366,324,549,False,True,284426,160,4339,6,[],[],1,2,-33,75
+266e4e39396d11e6,hist,noquality27,2,resolved_matched_3px,1,368,383,391,627,True,True,305577,160,4657,25,[],[],1,1,36,142

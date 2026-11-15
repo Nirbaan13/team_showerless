@@ -1,0 +1,10 @@
+{
+  "declared_utc": "2026-11-15T07:22:23.292686+00:00",
+  "original_plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "reason": "First combined POS+TIME request timed out, with no metadata rows; syntax-only fallback declared before any successful target SIA response or image download",
+  "change": "Omit server TIME predicate, retrieve same fixed prospective cone/daily-grid collections with same MAXREC and apply exact exposure interval-overlap locally; no change to targets, anchor ordering, footprints, cluster/detector preference or eligibility",
+  "sia_timeout_seconds": 60,
+  "sia_attempts_per_query": 1,
+  "operational_budget_minutes": 90,
+  "incomplete_policy": "If budget exhausted retain partial negative acquisition record; never claim all targets lack coverage"
+}

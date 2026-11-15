@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/run_study.py", line 193, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/run_study.py", line 177, in main
+    record=run_frame(plan,ctx,index);records.append(record);stream.write(json.dumps(record,allow_nan=False)+'\n');stream.flush()
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/run_study.py", line 161, in run_frame
+    registered_neighbour_covariance=neighbour_stats(result),global_median_shift_abs_max=float(np.max(abs(median_shifts))),patches=fields,conditional_native_fits_spotcheck=spotcheck,
+                                                                                                     ~~~^^^^^^^^^^^^^^^
+TypeError: bad operand type for abs(): 'list'

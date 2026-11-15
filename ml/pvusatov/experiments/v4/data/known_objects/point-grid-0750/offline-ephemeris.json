@@ -1,0 +1,48 @@
+{
+  "role": "OFFLINE LABELS ONLY; never detector/model inputs",
+  "target": {
+    "number": 1,
+    "name": "Ceres",
+    "command": "1;"
+  },
+  "positions": [
+    {
+      "utc": "2025-Jul-03 02:08:42.000",
+      "mjd": 60859.08937499998,
+      "ra_deg": 15.615727809,
+      "dec_deg": -5.471356198,
+      "range_au": 2.81370850495971
+    },
+    {
+      "utc": "2025-Jul-03 02:10:50.952",
+      "mjd": 60859.09086749982,
+      "ra_deg": 15.616023575,
+      "dec_deg": -5.471316639,
+      "range_au": 2.81368826101354
+    },
+    {
+      "utc": "2025-Jul-03 02:12:59.904",
+      "mjd": 60859.092360000126,
+      "ra_deg": 15.616319334,
+      "dec_deg": -5.471277083,
+      "range_au": 2.81366801706336
+    },
+    {
+      "utc": "2025-Jul-03 02:15:08.813",
+      "mjd": 60859.093851999845,
+      "ra_deg": 15.616614986,
+      "dec_deg": -5.471237546,
+      "range_au": 2.81364777989143
+    }
+  ],
+  "ephemeris_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-tlist-08c2daaf39052fff.json",
+    "sha256": "6dadd187794a2693e4a7c01f0bcfcedc0f3ef27ce6623c417a7fce934970c3b6"
+  },
+  "parallax_arcsec_bounds": [
+    3.920295995353318,
+    3.9203242016654962,
+    3.92035240838915,
+    3.9203806060740853
+  ]
+}

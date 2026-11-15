@@ -32,6 +32,15 @@
 !ml/pvusatov/releases/v3/model/ranker.onnx
 !ml/pvusatov/releases/v3/model/metadata.json
 !ml/pvusatov/releases/v3/smoke.py
+!ml/pvusatov/releases/v4/
+!ml/pvusatov/releases/v4/requirements-inference.txt
+!ml/pvusatov/releases/v4/runtime/
+!ml/pvusatov/releases/v4/runtime/ml_inference/
+!ml/pvusatov/releases/v4/runtime/ml_inference/**
+!ml/pvusatov/releases/v4/model/
+!ml/pvusatov/releases/v4/model/ranker.onnx
+!ml/pvusatov/releases/v4/model/metadata.json
+!ml/pvusatov/releases/v4/smoke.py
 backend/project/target
 backend/project/project
 backend/scala/src/test

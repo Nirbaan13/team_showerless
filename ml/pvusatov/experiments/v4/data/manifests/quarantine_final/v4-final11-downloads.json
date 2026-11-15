@@ -1,0 +1,138 @@
+[
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0323_1D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0323_1D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "4173bd2d5a654fc2983e73bc37e2290eab4867031d0aa2430e4e675adfe40799",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:05:49 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0323_1",
+    "detector": 1,
+    "t_min_mjd": 60868.272223,
+    "t_max_mjd": 60868.273555
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0323_2D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0323_2D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "dfd2b84d1b3bcb881b669873be030c8a54b38c9a754cecbf88efeb628c671c2d",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:01 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0323_2",
+    "detector": 1,
+    "t_min_mjd": 60868.273715,
+    "t_max_mjd": 60868.275047
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0323_3D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0323_3D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "7b3898778484e90b5cfc6bbcf2ba6dbbb47b451e2fef14f1e8fb5beaf15b2215",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:11 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0323_3",
+    "detector": 1,
+    "t_min_mjd": 60868.275207,
+    "t_max_mjd": 60868.27654
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0334_1D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0334_1D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "22536356f4e2a0cfa1302736ee2ecef01d1a6471f5fa121e7c860be9dc462d3e",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:22 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0334_1",
+    "detector": 1,
+    "t_min_mjd": 60868.334738,
+    "t_max_mjd": 60868.33607
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0334_4D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0334_4D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "9a8470a9e1a3e3d070962d3e779947fdcb4c32b46b4a7fecc5e4bf7e1da2125c",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:32 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0334_4",
+    "detector": 1,
+    "t_min_mjd": 60868.339214,
+    "t_max_mjd": 60868.340547
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0345_3D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0345_3D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "20b8f516f2f1af77fe844f5b2236c93c4e2d00677b80f95570cf040c2ba70d03",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:43 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0345_3",
+    "detector": 1,
+    "t_min_mjd": 60868.409439,
+    "t_max_mjd": 60868.410772
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0382_2D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0382_2D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4023360,
+    "sha256": "b85deb4c9f85948b1cb1ffc0a55e7b6c6d06b34a8856d8b8812a4ac777d15336",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:49 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0382_2",
+    "detector": 1,
+    "t_min_mjd": 60868.614695,
+    "t_max_mjd": 60868.616028
+  },
+  {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2025W28_2A/l2b-v27-2026-216/1/level2_2025W28_2A_0417_1D1_spx_l2b-v27-2026-216.fits?center=8.08439718%2C52.76297986&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/quarantine_final/v4-final11/level2_2025W28_2A_0417_1D1_spx_l2b-v27-2026-216.fits",
+    "bytes": 4011840,
+    "sha256": "754221a507c143c82b2074deae0ba12407a733234eb66a1637dafa395232441c",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 06:06:59 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2025W28_2A_0417_1",
+    "detector": 1,
+    "t_min_mjd": 60868.816167,
+    "t_max_mjd": 60868.8175
+  }
+]

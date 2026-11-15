@@ -1,0 +1,5 @@
+{
+  "base_revision": "b145e7e473d64773c56dc5a00eb36c7704adecef",
+  "base_image_id": "sha256:ea76b240c10f1f902eb99743e67d81546ffe0124e7708e9783c27753f8efb623",
+  "probe_tag": "spaceapps-ml-v4-deps-probe:20261115"
+}

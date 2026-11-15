@@ -1,0 +1,328 @@
+{
+  "id": "1cacf03e94006874",
+  "config": {
+    "family": "extra",
+    "subset": "nomask_support23",
+    "native_mass": 2,
+    "pointwise_fraction": 1,
+    "id": "1cacf03e94006874",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 232363,
+    "positive_rows": 3721,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      },
+      {
+        "kind": "native_moving",
+        "rows": 430,
+        "positives": 430,
+        "independent_groups": 8,
+        "class_mass": 2
+      },
+      {
+        "kind": "native_stationary",
+        "rows": 15,
+        "positives": 0,
+        "independent_groups": 4,
+        "class_mass": 2
+      }
+    ],
+    "native_label_policy": {
+      "policy": "all_attributable_known_native_positive_labels"
+    },
+    "parameters": {
+      "bootstrap": false,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": 16,
+      "max_features": "sqrt",
+      "max_leaf_nodes": 512,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 12,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 160,
+      "n_jobs": 1,
+      "oob_score": false,
+      "random_state": 20261115,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 385,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.18536350505536833,
+        "macro_field_recall1": 0.20729166666666665,
+        "macro_cadence_recall1": 0.18301378127814427,
+        "top3": 617,
+        "micro_recall3": 0.2970630717380838,
+        "macro_field_recall3": 0.3027083333333333,
+        "macro_cadence_recall3": 0.2925706927816954
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 385,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.18536350505536833,
+        "macro_field_recall1": 0.20729166666666665,
+        "macro_cadence_recall1": 0.18301378127814427,
+        "top3": 617,
+        "micro_recall3": 0.2970630717380838,
+        "macro_field_recall3": 0.3027083333333333,
+        "macro_cadence_recall3": 0.2925706927816954
+      }
+    },
+    "native": {
+      "all_planned": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 369,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.17083333333333334,
+        "macro_parent_recall1": 0.17083333333333334,
+        "per_parent_K1": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 41,
+            "recall": 0.15185185185185185
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 61,
+            "recall": 0.22592592592592592
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 66,
+            "recall": 0.24444444444444444
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 36,
+            "recall": 0.13333333333333333
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 64,
+            "recall": 0.23703703703703705
+          }
+        },
+        "top3": 381,
+        "micro_recall3": 0.1763888888888889,
+        "macro_parent_recall3": 0.17638888888888887,
+        "per_parent_K3": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 34,
+            "recall": 0.1259259259259259
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 68,
+            "recall": 0.2518518518518518
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 30,
+            "recall": 0.1111111111111111
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 66,
+            "recall": 0.24444444444444444
+          }
+        }
+      },
+      "common_attributable": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 369,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.17083333333333334,
+        "macro_parent_recall1": 0.17083333333333334,
+        "per_parent_K1": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 41,
+            "recall": 0.15185185185185185
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 61,
+            "recall": 0.22592592592592592
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 66,
+            "recall": 0.24444444444444444
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 36,
+            "recall": 0.13333333333333333
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 64,
+            "recall": 0.23703703703703705
+          }
+        },
+        "top3": 381,
+        "micro_recall3": 0.1763888888888889,
+        "macro_parent_recall3": 0.17638888888888887,
+        "per_parent_K3": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 34,
+            "recall": 0.1259259259259259
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 68,
+            "recall": 0.2518518518518518
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 30,
+            "recall": 0.1111111111111111
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 66,
+            "recall": 0.24444444444444444
+          }
+        }
+      }
+    }
+  },
+  "training_input_manifest_sha256": "01b4ac05d855b920e98dc1cba501f22ed34816a938f6b5d1171d3d1359730efb",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/1cacf03e94006874.joblib",
+  "estimator_sha256": "d318d5d827e874157bbec81892e30259ae559836fdb5c60af056cad1ad800849",
+  "elapsed_seconds": 41.7401203690024,
+  "error": null
+}

@@ -1,0 +1,9 @@
+{
+  "status": "INCOMPLETE_ARCHIVE_REQUEST_FAILURE",
+  "target": "Ceres",
+  "anchor": "2025-05-01",
+  "plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "log_sha256": "b4c2c61a538bce17e7327616e16f740bdd1392bcadbf8e97bcb2eec52b97458a",
+  "no_coverage_inference": true,
+  "no_pixels_opened": true
+}

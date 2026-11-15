@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "stage": "moving",
+  "invocation": {
+    "created_utc": "2026-11-15T06:34:16.609075+00:00",
+    "stage": "moving",
+    "plan_sha256": "8f7ae2a66172df19648f74148f5485c31e0f7c0ae1b6d36b4a65e394556bbdd3",
+    "source_sha256": {
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/run_validation.py": "a74193dd3ba5f8d634b668f601c4d6bfa0e6a5451a3f7ad3549e4c2ea53b12eb",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/native_overlay.py": "3a69909625654c3eba0e57c92567a81c8bf8f473254a8abe34c2f1c571cf0344",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/training/evaluate_background.py": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15"
+    },
+    "versions": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "astropy": "8.0.2"
+    },
+    "final_pixels_opened": false,
+    "detector_or_model_called": false
+  },
+  "planned_trials": 108,
+  "executed_trials": 108,
+  "unavailable_trials": 0,
+  "runtime_error_trials": 0,
+  "maximum_delta_error": 4.3787640180426024e-11,
+  "maximum_relative_L2_error": 1.0,
+  "maximum_nonconstant_delta_residual": 4.378761242485041e-11,
+  "all_scratch_fits_deleted": true,
+  "units": "Amplitude is MJy/sr discrete native-pixel sum; NOT calibrated point-source flux",
+  "added_photon_noise": false,
+  "variance_updated": false,
+  "final_pixels_opened": false,
+  "detector_or_model_called": false,
+  "interpretation": "Engineering equivalence of native IMAGE injection before immutableprepare and registered injection comparator, with median subtraction quantified. Not recovery/performance evidence."
+}

@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-11-15T06:57:45.595246+00:00",
+  "plan_sha256": "54a4e8c243d7bb44aad61944d723f8527fa19fb316de02010420544feab54394",
+  "source_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/run_study.py": "0c7cf7d170ee35144a4f22f32a702204e31da87a6c7f13c361131f9eec9e460c",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/operators.py": "1688a8df33b5bfb8b11a3fe2482eebea5f57326c1c3f349a412d65b090ec9a07",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/native_overlay.py": "3a69909625654c3eba0e57c92567a81c8bf8f473254a8abe34c2f1c571cf0344",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/run_validation.py": "a74193dd3ba5f8d634b668f601c4d6bfa0e6a5451a3f7ad3549e4c2ea53b12eb",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2"
+  },
+  "scope": "TRAIN-only conditional uncertainty propagation engineering; not instrument covariance, source photon-noise simulation, training examples or model evaluation",
+  "final_pixels_opened": false
+}

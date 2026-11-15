@@ -1,0 +1,398 @@
+{
+  "scope": "TRAIN-only group-disjoint cross-validation; no DEV validation or FINAL observations",
+  "purpose": "Class-conditional acquisition-domain audit on TRAIN parent groups only.",
+  "input_manifest_sha256": "cbe2be8e9a11649f4aefc97e4bd5759dc4a048a781ea66526f49f03a4af1c922",
+  "unknown_real_controls_used": false,
+  "interpretation": "Domain separability is class-conditional acquisition shortcut risk, not proof a motion ranker uses it. Native artifact92rows are correlated across7parents and are a small negative-ground-truth sample.",
+  "reports": {
+    "known_moving_positive": {
+      "native_rows": 848,
+      "native_train_parents": 8,
+      "synthetic_rows": 2004,
+      "experiments": {
+        "all_features": {
+          "group_disjoint_train_only_oof_domain_auc": 0.935742900990472,
+          "balanced_accuracy": 0.8562250499001995,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 294,
+              "native_validation_parents": [
+                "native:train01",
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.922851493538592
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 317,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.9403672515229727
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 237,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.9512236286919833
+            }
+          ]
+        },
+        "without_epoch": {
+          "group_disjoint_train_only_oof_domain_auc": 0.9091981132075472,
+          "balanced_accuracy": 0.820254538093624,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 294,
+              "native_validation_parents": [
+                "native:train01",
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.8974354447661418
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 317,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.913301353077665
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 237,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.9200723327305605
+            }
+          ]
+        },
+        "epoch_only": {
+          "group_disjoint_train_only_oof_domain_auc": 0.7367746817685384,
+          "balanced_accuracy": 0.6879095582420065,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 294,
+              "native_validation_parents": [
+                "native:train01",
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.7186198008615211
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 317,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.753869350227251
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 237,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.7648553345388789
+            }
+          ]
+        }
+      },
+      "native_feature_quantiles": [
+        [
+          3.0,
+          0.0,
+          4.178818702697754,
+          4.00177001953125,
+          0.015913328155875206,
+          0.9989399909973145
+        ],
+        [
+          3.0,
+          0.1543041795492172,
+          5.696683788299561,
+          4.4924863338470455,
+          0.07283082455396653,
+          2.0634988069534304
+        ],
+        [
+          4.0,
+          0.3333294689655304,
+          12.845818996429443,
+          9.406607627868652,
+          0.15529819577932358,
+          2.4505655765533447
+        ],
+        [
+          4.0,
+          0.5244045257568359,
+          38.46064567565919,
+          32.1537525177002,
+          0.3446506559848786,
+          3.6300608873367315
+        ],
+        [
+          4.0,
+          0.6892040371894836,
+          178.10498046875,
+          65.31707000732422,
+          1.218308925628662,
+          6.7765069007873535
+        ]
+      ],
+      "synthetic_feature_quantiles": [
+        [
+          3.0,
+          0.0014200137229636312,
+          4.216917991638184,
+          4.001284122467041,
+          0.007248685695230961,
+          1.0967557430267334
+        ],
+        [
+          3.0,
+          0.0720903642475605,
+          7.660347843170166,
+          5.062286329269409,
+          0.12472507283091545,
+          1.7345884442329407
+        ],
+        [
+          4.0,
+          0.31212642788887024,
+          30.787583351135254,
+          16.849458694458008,
+          0.32115206122398376,
+          2.1645708084106445
+        ],
+        [
+          6.0,
+          0.491151487827301,
+          106.44678802490238,
+          65.15066375732422,
+          0.6297383487224579,
+          2.6089768409729004
+        ],
+        [
+          8.0,
+          0.6988661885261536,
+          315.27301025390625,
+          176.01060485839844,
+          1.7038885354995728,
+          4.081488609313965
+        ]
+      ]
+    },
+    "known_stationary_artifact_negative": {
+      "native_rows": 92,
+      "native_train_parents": 7,
+      "synthetic_rows": 157500,
+      "experiments": {
+        "all_features": {
+          "group_disjoint_train_only_oof_domain_auc": 0.9978978605935128,
+          "balanced_accuracy": 0.9830193236714976,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 21,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.9998150151573254
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 28,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.9993013684709708
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 43,
+              "native_validation_parents": [
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.9971356047903398
+            }
+          ]
+        },
+        "without_epoch": {
+          "group_disjoint_train_only_oof_domain_auc": 0.9979900621118012,
+          "balanced_accuracy": 0.9789305728088337,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 21,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.999852427822136
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 28,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.9993558072914146
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 43,
+              "native_validation_parents": [
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.9970657953744635
+            }
+          ]
+        },
+        "epoch_only": {
+          "group_disjoint_train_only_oof_domain_auc": 0.616455900621118,
+          "balanced_accuracy": 0.640688198757764,
+          "folds": [
+            {
+              "fold": 0,
+              "native_validation_rows": 21,
+              "native_validation_parents": [
+                "native:train02",
+                "native:train05",
+                "native:train08"
+              ],
+              "domain_auc": 0.7503338560714
+            },
+            {
+              "fold": 1,
+              "native_validation_rows": 28,
+              "native_validation_parents": [
+                "native:train03",
+                "native:train06"
+              ],
+              "domain_auc": 0.5795753409079911
+            },
+            {
+              "fold": 2,
+              "native_validation_rows": 43,
+              "native_validation_parents": [
+                "native:train04",
+                "native:train07"
+              ],
+              "domain_auc": 0.6295035357585478
+            }
+          ]
+        }
+      },
+      "native_feature_quantiles": [
+        [
+          3.0,
+          0.1543029248714447,
+          4.359850883483887,
+          4.010441303253174,
+          0.01468947809189558,
+          2.5032055377960205
+        ],
+        [
+          3.0,
+          0.23570317029953003,
+          4.867644262313843,
+          4.139786720275879,
+          0.08766666650772094,
+          4.3427159786224365
+        ],
+        [
+          3.0,
+          0.4418252408504486,
+          6.137923717498779,
+          4.813275575637817,
+          0.22424639016389847,
+          5.322124719619751
+        ],
+        [
+          4.0,
+          0.6123725771903992,
+          8.76134786605835,
+          6.417843198776246,
+          0.42784432768821723,
+          6.056103992462159
+        ],
+        [
+          4.0,
+          0.6708200573921204,
+          10.165764808654785,
+          8.28297233581543,
+          0.675557017326355,
+          7.659673690795898
+        ]
+      ],
+      "synthetic_feature_quantiles": [
+        [
+          3.0,
+          6.831970677012578e-05,
+          4.0293192863464355,
+          4.000205039978027,
+          0.003873003413900733,
+          -0.5106365084648132
+        ],
+        [
+          3.0,
+          0.15564770251512527,
+          8.093513584136964,
+          4.511389780044556,
+          0.29555847942829133,
+          1.788716197013855
+        ],
+        [
+          3.0,
+          0.4167461693286896,
+          24.608657836914062,
+          8.397196769714355,
+          0.6478640735149384,
+          2.394122838973999
+        ],
+        [
+          3.0,
+          0.599527931213379,
+          82.16057586669922,
+          27.702177810668953,
+          1.0734540462493896,
+          3.9561245441436768
+        ],
+        [
+          7.0,
+          0.6999433636665344,
+          562.654541015625,
+          286.3775634765625,
+          1.9071160554885864,
+          10.497143745422363
+        ]
+      ]
+    }
+  }
+}

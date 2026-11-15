@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "scope": "development-only-family-integration",
+  "final_read": false,
+  "fit_performed": false,
+  "feature_cache_sha256": "a2be9e01a6f0fa770a7c08023422743fc074604ac422d58236521eb050682744",
+  "preset_cache_sha256": "0acd2fff5d0427cc2179641606db9d918c78725af3c6ae127940b08410dabf3d",
+  "loader_source_sha256": "5bce7283ff344ada62f4864f164c8d87266941ad70462d7ecc0d4163f1174e7d",
+  "records": [
+    {
+      "family": "ExtraTreesClassifier",
+      "artifact_sha256": "8bff9dc1b7291c748edd458593c803292b3177d97866cb0b098a7e797cd5831e",
+      "metadata_sha256": "7ac137a754e341d78d91716c6002786a93b1b040c72865b3c6d58c21cac599cc",
+      "reference_estimator_sha256": "c8e1109483a5801d46e865ab591e9abbe7b9e30b63e2353e864e4680b3d33bcc",
+      "validation_fields": 1000,
+      "candidate_rows": 49286,
+      "max_abs_score_error": 5.59084913254182e-07,
+      "score_allclose_rtol": 2e-06,
+      "score_allclose_atol": 2e-06,
+      "ordered_top1_top3_changed_fields": [],
+      "score_numerics": {
+        "dtype": "float32",
+        "unit_interval_roundoff_tolerance": 2e-06,
+        "roundoff_action": "clip"
+      },
+      "numeric_clip_count": 0,
+      "raw_score_range": [
+        0.010951068252325058,
+        0.9887386560440063
+      ],
+      "adapter_score_range": [
+        0.010951068252325058,
+        0.9887386560440063
+      ],
+      "raw_vs_adapter_top100_membership_changed_fields": [],
+      "raw_vs_adapter_quota99_membership_changed_fields": [],
+      "presets": {
+        "comet-d2": {
+          "rows": 1,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            1
+          ],
+          "known_bloom_unscored": false
+        },
+        "comet-d6": {
+          "rows": 36,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            2
+          ],
+          "known_bloom_unscored": false
+        },
+        "vesta-d3": {
+          "rows": 112,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        },
+        "vesta-d6": {
+          "rows": 17,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        }
+      },
+      "cpu_provider": [
+        "CPUExecutionProvider"
+      ],
+      "load_and_score_wall_seconds": 1.8229629460038268,
+      "selection_performed": false
+    },
+    {
+      "family": "HistGradientBoostingClassifier",
+      "artifact_sha256": "ff35c627f3e6f0559f28cbd65f8f8f32a2cfa92142e616e19e2ea12f7adc8dff",
+      "metadata_sha256": "4e898577887c6fa06b2816e88167942c6b4c8fb31e8a3347e42825c9fa25cce9",
+      "reference_estimator_sha256": "40b8e0094b1938955a5c57254c5b5db3c08c2b8dc41da74a769208ce5f9635d5",
+      "validation_fields": 1000,
+      "candidate_rows": 49286,
+      "max_abs_score_error": 3.3212458316889126e-07,
+      "score_allclose_rtol": 2e-06,
+      "score_allclose_atol": 2e-06,
+      "ordered_top1_top3_changed_fields": [],
+      "score_numerics": {
+        "dtype": "float32",
+        "unit_interval_roundoff_tolerance": 2e-06,
+        "roundoff_action": "clip"
+      },
+      "numeric_clip_count": 0,
+      "raw_score_range": [
+        0.00027945637702941895,
+        0.9989265203475952
+      ],
+      "adapter_score_range": [
+        0.00027945637702941895,
+        0.9989265203475952
+      ],
+      "raw_vs_adapter_top100_membership_changed_fields": [],
+      "raw_vs_adapter_quota99_membership_changed_fields": [],
+      "presets": {
+        "comet-d2": {
+          "rows": 1,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            1
+          ],
+          "known_bloom_unscored": false
+        },
+        "comet-d6": {
+          "rows": 36,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            2
+          ],
+          "known_bloom_unscored": false
+        },
+        "vesta-d3": {
+          "rows": 112,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        },
+        "vesta-d6": {
+          "rows": 17,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        }
+      },
+      "cpu_provider": [
+        "CPUExecutionProvider"
+      ],
+      "load_and_score_wall_seconds": 0.47831097999733174,
+      "selection_performed": false
+    },
+    {
+      "family": "RankNetTreeBoost",
+      "artifact_sha256": "6e8ac8729d7bb69110982365fcc830aec0928aaa4e3112d6bcbb13891708d38b",
+      "metadata_sha256": "a7601a126185817fb436b28fdd4efb7d677f26b189cd6ec8e8fad5e490b57073",
+      "reference_estimator_sha256": "a16532cb4032a78cd4ca09da68496eff35d8418c9cd4164208e0f6d850405c04",
+      "validation_fields": 1000,
+      "candidate_rows": 49286,
+      "max_abs_score_error": 1.9868103920406277e-07,
+      "score_allclose_rtol": 2e-06,
+      "score_allclose_atol": 2e-06,
+      "ordered_top1_top3_changed_fields": [],
+      "score_numerics": {
+        "dtype": "float32",
+        "unit_interval_roundoff_tolerance": 2e-06,
+        "roundoff_action": "clip"
+      },
+      "numeric_clip_count": 0,
+      "raw_score_range": [
+        0.004161447286605835,
+        0.9900568723678589
+      ],
+      "adapter_score_range": [
+        0.004161447286605835,
+        0.9900568723678589
+      ],
+      "raw_vs_adapter_top100_membership_changed_fields": [],
+      "raw_vs_adapter_quota99_membership_changed_fields": [],
+      "presets": {
+        "comet-d2": {
+          "rows": 1,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            1
+          ],
+          "known_bloom_unscored": false
+        },
+        "comet-d6": {
+          "rows": 36,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            2
+          ],
+          "known_bloom_unscored": false
+        },
+        "vesta-d3": {
+          "rows": 112,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        },
+        "vesta-d6": {
+          "rows": 17,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        }
+      },
+      "cpu_provider": [
+        "CPUExecutionProvider"
+      ],
+      "load_and_score_wall_seconds": 0.22183291800320148,
+      "selection_performed": false
+    },
+    {
+      "family": "ListNetTreeBoost",
+      "artifact_sha256": "4c66b0432514cdeb5c80ca30544c34ee92d03c35c92275a7af60597122fecc55",
+      "metadata_sha256": "d9aa65f3655f5a1706c52a685f8614184763e0d4647819059009d99588405111",
+      "reference_estimator_sha256": "37afdd9d25c989299c6e16276bf13cc98a97522f97b2235a228aa4dd72ac56be",
+      "validation_fields": 1000,
+      "candidate_rows": 49286,
+      "max_abs_score_error": 2.302334047854515e-07,
+      "score_allclose_rtol": 2e-06,
+      "score_allclose_atol": 2e-06,
+      "ordered_top1_top3_changed_fields": [],
+      "score_numerics": {
+        "dtype": "float32",
+        "unit_interval_roundoff_tolerance": 2e-06,
+        "roundoff_action": "clip"
+      },
+      "numeric_clip_count": 0,
+      "raw_score_range": [
+        0.007160663604736328,
+        0.9922634363174438
+      ],
+      "adapter_score_range": [
+        0.007160663604736328,
+        0.9922634363174438
+      ],
+      "raw_vs_adapter_top100_membership_changed_fields": [],
+      "raw_vs_adapter_quota99_membership_changed_fields": [],
+      "presets": {
+        "comet-d2": {
+          "rows": 1,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            1
+          ],
+          "known_bloom_unscored": false
+        },
+        "comet-d6": {
+          "rows": 36,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [
+            1
+          ],
+          "known_bloom_unscored": false
+        },
+        "vesta-d3": {
+          "rows": 112,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        },
+        "vesta-d6": {
+          "rows": 17,
+          "ordered_top1_top3_equal": true,
+          "known_target_ranks": [],
+          "known_bloom_unscored": true
+        }
+      },
+      "cpu_provider": [
+        "CPUExecutionProvider"
+      ],
+      "load_and_score_wall_seconds": 0.22349710400158074,
+      "selection_performed": false
+    }
+  ]
+}

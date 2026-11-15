@@ -1,0 +1,28 @@
+{
+  "recorded_utc": "2026-11-15T06:59:43.678003+00:00",
+  "failure": "TypeError: abs(Python list) while formatting first frame report; no frame record or aggregate was published",
+  "physics_plan_changed": false,
+  "seeds_or_operators_changed": false,
+  "files": [
+    {
+      "path": "failure.log",
+      "sha256": "8480c19fa77f20af6c131aba2ba1bb3c9da5df016ae4547029c14a9d74ea70ce",
+      "bytes": 1101
+    },
+    {
+      "path": "invocation.json",
+      "sha256": "90b02adbad68a9c0db6184e060ebb5ca1b9c908703932fe603f3dac378fc332b",
+      "bytes": 1480
+    },
+    {
+      "path": "results.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "run_study.py",
+      "sha256": "0c7cf7d170ee35144a4f22f32a702204e31da87a6c7f13c361131f9eec9e460c",
+      "bytes": 16754
+    }
+  ]
+}

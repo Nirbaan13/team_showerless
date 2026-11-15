@@ -1,0 +1,22 @@
+{
+  "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+6.9774405150+-7.4411781780+0.001&COLLECTION=spherex_qr3&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+  "transport_host": "local workstation",
+  "requested_utc": "2026-11-15T07:53:00.295019+00:00",
+  "status": 200,
+  "headers": {
+    "Server": "nginx",
+    "Date": "Sun, 15 Nov 2026 07:53:01 GMT",
+    "Content-Type": "application/x-votable+xml",
+    "Content-Length": "269445",
+    "Connection": "close",
+    "Server-Timing": "main;dur=479.685, prepare_internal;dur=261.812, generate_adql;dur=0.122, query_delegate;dur=213.451, query_execute;dur=213.284, database_query;dur=213.241, get_postgres_connection;dur=5.053, run_postgres;dur=201.272"
+  },
+  "bytes": 269445,
+  "sha256": "859dccba18ec01d82a1b5ceade1b254b3e8e087b8db0f408c5bee7d7038ae16a",
+  "wall_seconds": 1.9086127539994777,
+  "redacted_header_names": [
+    "Set-Cookie"
+  ],
+  "original_http_metadata_sha256": "fb29bd7e9dbc4b7647e945975d977bda16444e170c40a042d07634093831b2a0",
+  "original_http_metadata_retained_external": true
+}

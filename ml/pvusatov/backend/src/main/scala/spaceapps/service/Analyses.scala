@@ -28,7 +28,7 @@ final class Analyses private(repo:AnalysisRepository,jobs:Jobs,data:Path,config:
   }
   def models:Task[Json]=readJson(root.resolve("models/metadata.json"),65536).map { m=>
     val f=objectFields(m)
-    val publicFields=Set("schema_version","model_id","sha256","feature_names","score_kind","class_labels","positive_class","limitations","status","score_description","training_manifest_sha256","model_family","detector_profile","algorithm_version_proposal")
+    val publicFields=Set("schema_version","model_id","release_name","sha256","feature_names","score_kind","class_labels","positive_class","limitations","status","score_description","training_manifest_sha256","model_family","detector_profile","algorithm_version_proposal")
     Json.Obj("models"->Json.Arr(Json.Obj(zio.Chunk.fromIterable(f.filter((k,_)=>publicFields.contains(k))))))
   }
   def presetList:Task[List[AnalysisPreset]]=

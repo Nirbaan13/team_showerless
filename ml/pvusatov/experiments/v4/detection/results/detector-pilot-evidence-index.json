@@ -1,0 +1,89 @@
+{
+  "designation": "Immutable DEVELOPMENT detector evidence index; no final selection/promotion",
+  "summaries": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/joint-pilot-full-v1-compact.json",
+      "sha256": "e6906e460e2a02f82004291d3bd9f91dd496dc092780378a3cdd6717bc05ad12",
+      "bytes": 726639
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/joint-native-v2-compact.json",
+      "sha256": "c4df10686460b36ed7e9f7a0543f9ea88cbbe110787d6df268bd943f20612e0f",
+      "bytes": 214813
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/joint-competitor-full-v1-compact.json",
+      "sha256": "0dc52f8c98f62e143d2638d24d6791fbf42a3b2dbb0546de0c8b811374e1ca70",
+      "bytes": 443338
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/joint-competitor-native-v2-compact.json",
+      "sha256": "33f92af4b2b62eb86769aa8a8e3b70b0b9bbccb3a257c004d6c61ea8f1b62b6c",
+      "bytes": 132243
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/information-gate-full-v1-compact.json",
+      "sha256": "ca28f3ef822a5cd9e1da56af60fa7e188aad6a126e738a52f2bd796844c06a48",
+      "bytes": 149220
+    }
+  ],
+  "native_sources": {
+    "v4-train01": {
+      "source_cache": "/tmp/spaceapps-v4-native-cache/main-v2/v4-train01-both.json.gz",
+      "sha256": "efff6a122afb7537c6c36357dcbce465c199d977979808f978534f57ec0f0368",
+      "baseline_unknown_control_rows": 147,
+      "baseline_control_peak_cap": false,
+      "physical_times_hours": [
+        0.0,
+        0.03581416670931503,
+        0.07162861106917262,
+        0.10744277777848765,
+        3.3362555555650033,
+        3.3720697222743183,
+        3.407883611158468,
+        4.981572777789552
+      ],
+      "input_sha256": [
+        "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+        "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+        "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+        "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+        "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+        "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+        "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+        "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b"
+      ]
+    },
+    "v4-train03": {
+      "source_cache": "/tmp/spaceapps-v4-native-cache/main-v2/v4-train03-both.json.gz",
+      "sha256": "008327a0785202f5a91a5fdefa50e12dc46e3933792931cbc7d1f3f4f6f85f82",
+      "baseline_unknown_control_rows": 64,
+      "baseline_control_peak_cap": false,
+      "physical_times_hours": [
+        0.0,
+        0.03581416670931503,
+        0.07162805559346452,
+        0.10744249995332211,
+        34.2472186111263,
+        34.28303250001045,
+        34.318846666719764,
+        34.35466083325446
+      ],
+      "input_sha256": [
+        "85f7b6be28f305e07e8fe1da4660680039bf3b69b847b43d04c40c5d60b76ac1",
+        "9bd8b5892296d9a185c1cf6c4dd0ff34004107faa52f310ad31c5a9bd049d1cf",
+        "1b2ccde40e7583743bc3c42fdaf1f14b427ffc422905eb5a65c541cabab5e29c",
+        "a9b998fce8012a7a3b5a58836bf2792f89843795722216373fc5e12c1e32467e",
+        "121d7d509077b6bb93a2e6b68e625453b172014891359c326d7e7101b4f48a65",
+        "63d4b4735a2673092d916f77f832d90bd5b505a6e43a038d489c6499490d4e8f",
+        "e6d8cb57be65d402f4711eda23d2fab6397914e9c7370bb12ce9ebd776273cc3",
+        "0cf38546a8d87cd8b19d053b68c54be7dcbaef9f9822ff0a9a0fdb70bb966652"
+      ]
+    }
+  },
+  "original_attempt": "v1native54representation-guard failures preserved; only synthetic outcomes fromv1 are usable",
+  "corrected_attempt": "v2native-only exactFloat32 observable replay, no physical/truth tolerance change",
+  "independent_units": "synthetic200fields; native54derivatives/twoTRAINparents; informationgate120derivatives/fourOLDTRAINparents",
+  "conclusion": "No detector variant satisfies useful native recovery/review-budget no-regression; no promotion",
+  "publisher_source_sha256": "328d70716a478b28dc039995003426d79d94c3d0c6da5ca7850e79ec49852a5d"
+}

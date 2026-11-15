@@ -1,0 +1,217 @@
+{
+  "completed_points": 15,
+  "planned_points": 15,
+  "rows": 122,
+  "sources": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60850-512.xml",
+      "sha256": "e195e48c9a648a42db4d815b27d420e271d1d72fccedadccce02b81f2473e25d",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 223,
+      "time_filtered_rows": 8,
+      "point_mjd": 60850.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60851-512.xml",
+      "sha256": "97a618d176f87e5c8ddb94e63674dc45e09f3b0a2932e44c8263b24e23a8fcd2",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 221,
+      "time_filtered_rows": 8,
+      "point_mjd": 60851.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60852-512.xml",
+      "sha256": "28b61179d8a7b423b022af545d1589e9c093cca8479524d3f6d5ed44bcc3681b",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 222,
+      "time_filtered_rows": 16,
+      "point_mjd": 60852.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60853-512.xml",
+      "sha256": "b9d7549b7deebb6f49cbb7075f3a0cc9f04601a8773bf9dcf9e15fd34056718e",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 262,
+      "time_filtered_rows": 0,
+      "point_mjd": 60853.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60854-512.xml",
+      "sha256": "f94a02eaf8383439914f7642e1102ee78015df08dc52eb3bf3f25cf08fb79ebc",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 266,
+      "time_filtered_rows": 8,
+      "point_mjd": 60854.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60855-512.xml",
+      "sha256": "9ac2e451644de584be18b6d157c26e03d9aacc35cccd99498f9910816d5ce003",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 219,
+      "time_filtered_rows": 10,
+      "point_mjd": 60855.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60856-512.xml",
+      "sha256": "6f4bb33d419c43e3437a7042bbaf03031e07533c47897841d13d9b2b323c8760",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 269,
+      "time_filtered_rows": 8,
+      "point_mjd": 60856.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60857-512.xml",
+      "sha256": "a25db3547814f0688ad3dab7b788b4552cc72219fc619bd05a502e01afba335e",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 259,
+      "time_filtered_rows": 14,
+      "point_mjd": 60857.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60858-512.xml",
+      "sha256": "a380eb0a7b517484f3bc50c0f6012cf3cf1592a24775859e9b0604dddad66218",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 222,
+      "time_filtered_rows": 0,
+      "point_mjd": 60858.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60859-512.xml",
+      "sha256": "31992ca65107bf3805b1adc0bd963bd78239fa82fddfbaec1b27e8ba751ffec5",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 261,
+      "time_filtered_rows": 16,
+      "point_mjd": 60859.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60860-512.xml",
+      "sha256": "e1310317abc6836d1b73534df0065a9c04be5551582e24dd449d497ab9bc07d9",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 276,
+      "time_filtered_rows": 0,
+      "point_mjd": 60860.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60861-512.xml",
+      "sha256": "4b5e11182f95eecb55039e7c23b9e78e698acf1596f836f6f7eb623c61503a2e",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 226,
+      "time_filtered_rows": 0,
+      "point_mjd": 60861.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60862-512.xml",
+      "sha256": "1994ed4dc9053dcecd9b9db4b4fa21768aeb363ebc905eb5f546b03edce4c3c3",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 221,
+      "time_filtered_rows": 0,
+      "point_mjd": 60862.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60863-512.xml",
+      "sha256": "53e09a92fd2774782fd42ee1db690cd30167f0ecc7928f644e40223a35f439f2",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 219,
+      "time_filtered_rows": 26,
+      "point_mjd": 60863.0
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-2025-07-01-spherex_dr1-day60864-512.xml",
+      "sha256": "a2bc0d14d9a863cfdf99b65b20860deaf47955808d08bb731814ac96557ffb71",
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK",
+          "text": null
+        }
+      ],
+      "raw_rows": 222,
+      "time_filtered_rows": 8,
+      "point_mjd": 60864.0
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "path": "/tmp/spaceapps-v4-ranker/synthetic-train-30-v1.json.gz",
+  "sha256": "55875afa7b8e32b9f83451ef107a6460609830e101d174d9cf2983016181c27e",
+  "bytes": 70247679,
+  "evaluation_complete": true,
+  "planned": 5000,
+  "error_fields": 0,
+  "source_changes": {}
+}

@@ -1,0 +1,180 @@
+{
+  "schema_version": 4,
+  "created_utc": "2026-11-15T08:35:02.249835+00:00",
+  "reviewer": "independent ranker owner reviewing coordinator VPS probe",
+  "status": "PASS",
+  "source_sha256": "ed07c4dc16244c1e2192c24536fd90d2b409543b4e21abca189f97dd30d53ccf",
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "isolated_probe_image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+  "local_python": "3.14.4",
+  "local_versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "validated_evidence_files": 20,
+  "probes": {
+    "presets": {
+      "python": "3.12.3",
+      "versions": {
+        "numpy": "2.5.3",
+        "scipy": "1.18.1",
+        "astropy": "8.0.2",
+        "onnxruntime": "1.30.0",
+        "onnx": "1.23.2",
+        "pillow": "12.3.0"
+      },
+      "elapsed_seconds": 6.476779925003939,
+      "cgroup_peak_mib": 110.48046875,
+      "cpu_usage_seconds": 6.431854,
+      "oom": false,
+      "hard_memory_bytes": 1073741824,
+      "swap_bytes": 0,
+      "hard_cpu_quota": "100000 100000"
+    },
+    "maximum": {
+      "python": "3.12.3",
+      "versions": {
+        "numpy": "2.5.3",
+        "scipy": "1.18.1",
+        "astropy": "8.0.2",
+        "onnxruntime": "1.30.0",
+        "onnx": "1.23.2",
+        "pillow": "12.3.0"
+      },
+      "elapsed_seconds": 44.102212890000374,
+      "cgroup_peak_mib": 727.15234375,
+      "cpu_usage_seconds": 44.071933,
+      "oom": false,
+      "hard_memory_bytes": 1073741824,
+      "swap_bytes": 0,
+      "hard_cpu_quota": "100000 100000",
+      "inner_cli_seconds": 41.97141261199431,
+      "worker_rss_mib": 692.26171875,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "measured_track_epochs": [
+        32
+      ]
+    }
+  },
+  "preset_comparisons": [
+    {
+      "preset": "comet-d2",
+      "full_local_residual_rows": 1,
+      "published_residual_rows": 1,
+      "identical_order": true,
+      "identical_scores": true,
+      "max_abs_score_difference": 0.0,
+      "maximum_measured_position_difference_px": 0.0,
+      "known_target_ranks": [
+        1
+      ],
+      "known_target_methods": [
+        "residual_track"
+      ],
+      "bloom_ranks": [],
+      "bloom_scores_null": true
+    },
+    {
+      "preset": "comet-d6",
+      "full_local_residual_rows": 36,
+      "published_residual_rows": 36,
+      "identical_order": true,
+      "identical_scores": true,
+      "max_abs_score_difference": 0.0,
+      "maximum_measured_position_difference_px": 0.0,
+      "known_target_ranks": [
+        2
+      ],
+      "known_target_methods": [
+        "residual_track"
+      ],
+      "bloom_ranks": [],
+      "bloom_scores_null": true
+    },
+    {
+      "preset": "vesta-d3",
+      "full_local_residual_rows": 112,
+      "published_residual_rows": 99,
+      "identical_order": true,
+      "identical_scores": true,
+      "max_abs_score_difference": 0.0,
+      "maximum_measured_position_difference_px": 0.0,
+      "known_target_ranks": [
+        100
+      ],
+      "known_target_methods": [
+        "bloom_track"
+      ],
+      "bloom_ranks": [
+        100
+      ],
+      "bloom_scores_null": true
+    },
+    {
+      "preset": "vesta-d6",
+      "full_local_residual_rows": 17,
+      "published_residual_rows": 17,
+      "identical_order": true,
+      "identical_scores": true,
+      "max_abs_score_difference": 0.0,
+      "maximum_measured_position_difference_px": 0.0,
+      "known_target_ranks": [
+        18
+      ],
+      "known_target_methods": [
+        "bloom_track"
+      ],
+      "bloom_ranks": [
+        18
+      ],
+      "bloom_scores_null": true
+    }
+  ],
+  "no_final_inputs_or_scores_read": true,
+  "no_refit_or_reselection": true,
+  "references": {
+    "verification/v4-runtime/vps-evidence/deps/base-provenance.json": "9ce0ae8558d98bc52001d0c4882ec04b35f69a700ea17f71bb55525837a05c6b",
+    "verification/v4-runtime/vps-evidence/host-probe-run-v1.json": "9a991f7f87466818b4edfeee0ce3cc4513ab37cd5ceb87ffa8815fafa35399d0",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/host-inspect.json": "826c88cc5559904133f204456edc6bc342f1498009f6104eaa9ea2ffc6298170",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/container-stdout.log": "65eb470453937c456d590aa5d61051c4153cbaeba349e9a8147a888db10bd2cd",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/container-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/comet-d2/result.json": "952005cbbe89b51f95ade51354dcd31d7da38189db8aa80682f0a2afd3decabf",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/comet-d2-request.json": "fc9df2215de1af2c34e7c99cf3422307b33381dc649e9ad113480ec438dd9188",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/comet-d6/result.json": "ad809d84d7ad0411e57a32f6c08cfb070d001997d239b00216bdfe4e6f1391af",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/comet-d6-request.json": "e80ec271c008d1969bad0edaa200df2427aca1f56481a3875733f60c7b065919",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/proof.json": "16522e072c63aee4d65ed5fc0162c8e0df82124c01ed0c27f4dd1a8a12021ca7",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/vesta-d3/result.json": "0a42ae1b8e11ae93f3bb9d1421f0758c4eeb327308ec7eb86615158ab32bc67c",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/vesta-d3-request.json": "a37e9e4dd81b49339c16184978b8fae8a088fe7e4512a1adc73be9abb798497b",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/vesta-d6/result.json": "205d57e5790c444a6bed8d6f946e9a47e661568460b538b23aec7d8494ac4fe0",
+    "verification/v4-runtime/vps-evidence/evidence-v1-presets/presets/vesta-d6-request.json": "e0836e1fa9766d6fffc6b7ba45db7777fcd89432820c8819eef4f2d257676532",
+    "verification/v4-runtime/vps-evidence/evidence-v1-maximum/host-inspect.json": "5bb1db17ffabb4dd5b1ab72592d25b1030c6b29f07d36b035a635592299c2b78",
+    "verification/v4-runtime/vps-evidence/evidence-v1-maximum/container-stdout.log": "73334d8eba48701977a475f1e12aeb68939a79497931b94d63bc091ef3daf7c0",
+    "verification/v4-runtime/vps-evidence/evidence-v1-maximum/container-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/v4-runtime/vps-evidence/evidence-v1-maximum/maximum/maximum-rss-raw.json": "bad07cf524a15f4592322bdf7f095eace2b079ea13bc70bb8fef97b388cf2875",
+    "verification/v4-runtime/vps-evidence/evidence-v1-maximum/maximum/proof.json": "9b6b9d666d01b7ebb2d10c2666968086d93f218e71703819df17b98edc0793aa",
+    "verification/v4-runtime/vps-evidence/host-container-receipt-v1.json": "72868d0ad67b05bea58aaaab8fcfb8d6316e75786d41a976a1cd2ad7d82a186c",
+    "verification/v4-runtime/vps-evidence/resource-capsule-manifest.json": "92b9fc6b6c59aaf88c002223566d36ebd5e78e69317efce20f1548764de523c3",
+    "verification/v4-runtime/bundle-manifest.json": "9d01ec5898e7d2f619a88d09bbc27b6773c4ad866b74d0dd51c961b81d9e819b",
+    "experiments/v4/detection/results/preset-feature-cache.json": "0acd2fff5d0427cc2179641606db9d918c78725af3c6ae127940b08410dabf3d",
+    "backend/inference/fixtures/comet-d2.npz": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+    "backend/inference/fixtures/comet-d6.npz": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+    "backend/inference/fixtures/vesta-d3.npz": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+    "backend/inference/fixtures/vesta-d6.npz": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114"
+  },
+  "limitations": [
+    "Only the 153 published residual scores are compared cross-version; 13 capped Vesta D3 residual rows are absent from the VPS result.",
+    "Maximum shape uses one strong controlled track, min_snr=10 and output cap3; this is not a worst-density or native sensitivity claim.",
+    "Probe is an isolated dependency image, not proof of a deployed backend or production health/cleanup; those remain coordinator-owned.",
+    "Read-only rootfs permits explicit writable /tmp, /evidence and isolated anonymous /app/data volumes shown in the host receipt.",
+    "Recovery performance is evaluated separately by the frozen independent final protocol."
+  ]
+}

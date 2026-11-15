@@ -1,0 +1,2557 @@
+[
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0306_1",
+      "2025W26_1A_0306_2",
+      "2025W26_1A_0306_3",
+      "2025W26_1A_0306_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-21c0b50f9cd7e02e.json",
+      "sha256": "a943eb087d4e823d567f2c4111cdc2d7e67fd347030fa10b3dc5c7f29d60f626"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        13.774236339546745,
+        -5.771336815872899
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.72313944463134,
+          -5.822167849857379
+        ],
+        [
+          13.723148607627529,
+          -5.720501223612376
+        ],
+        [
+          13.825324071465953,
+          -5.7205012236123745
+        ],
+        [
+          13.825333234462144,
+          -5.822167849857378
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5967257860093168,
+    "maximum_parallax_envelope_px": 0.6118811455758567,
+    "parent_separation_deg": 4.205277233252482
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0306_2",
+      "2025W26_1A_0306_3",
+      "2025W26_1A_0306_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-af52b196343e5ab1.json",
+      "sha256": "a151117c1e33a0680e1c18cf6c3a738c4e370dd1055fcfce86d2bc96decb82ce"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        13.774404139691587,
+        -5.771305227065532
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.72330724764871,
+          -5.822136261062572
+        ],
+        [
+          13.723316410593897,
+          -5.720469634817565
+        ],
+        [
+          13.825491868789275,
+          -5.720469634817565
+        ],
+        [
+          13.825501031734461,
+          -5.822136261062572
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3977684835563699,
+    "maximum_parallax_envelope_px": 0.6118811455758567,
+    "parent_separation_deg": 4.205335627704659
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0376_1",
+      "2025W26_1A_0376_2",
+      "2025W26_1A_0376_3",
+      "2025W26_1A_0376_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-dfaf298d80b3b074.json",
+      "sha256": "bbadc3c5b3c791fac71bd311edcf99de8007b135145cc5b6c914233988b1919f"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        13.865810037045907,
+        -5.754199748372151
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.814714698161307,
+          -5.805030789171176
+        ],
+        [
+          13.814723833489591,
+          -5.703364162923734
+        ],
+        [
+          13.916896240602219,
+          -5.703364162923734
+        ],
+        [
+          13.91690537593051,
+          -5.805030789171176
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5957694941577125,
+    "maximum_parallax_envelope_px": 0.6130305708111647,
+    "parent_separation_deg": 4.238130404972755
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0376_2",
+      "2025W26_1A_0376_3",
+      "2025W26_1A_0376_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-dda93ebde4beaefe.json",
+      "sha256": "4b820b27c8a262c652e3dd59c2d37757060296e94f873b9ef15c619240263bed"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        13.865977957690976,
+        -5.754168510731347
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.814882621638466,
+          -5.804999551542795
+        ],
+        [
+          13.814891756916325,
+          -5.703332925295348
+        ],
+        [
+          13.917064158465632,
+          -5.703332925295348
+        ],
+        [
+          13.917073293743488,
+          -5.804999551542795
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.39560691994180647,
+    "maximum_parallax_envelope_px": 0.6130305708111647,
+    "parent_separation_deg": 4.2381924470449315
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0618_1",
+      "2025W26_1A_0618_2",
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-3115fde279b52529.json",
+      "sha256": "1cd8a99d68158917d260c345a0e956157258c3154da2ffdd5bac23bfceb95401"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.187742646134472,
+        -5.695613838844688
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.136652591565586,
+          -5.746444902937252
+        ],
+        [
+          14.136661632337713,
+          -5.6447782766815235
+        ],
+        [
+          14.238823659931231,
+          -5.6447782766815235
+        ],
+        [
+          14.23883270070336,
+          -5.7464449029372515
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.742266716700087,
+    "maximum_parallax_envelope_px": 0.6174641471160107,
+    "parent_separation_deg": 4.368745813601402
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0618_2",
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-97cd55a8f1724a4b.json",
+      "sha256": "93d468519a15d9462abfe1a07972a9db0dc160c316446958e49a8b9f33e47654"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.193805249689955,
+        -5.6945369803356956
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.142715291741098,
+          -5.745368044856369
+        ],
+        [
+          14.142724330775655,
+          -5.643701418600491
+        ],
+        [
+          14.244886168604259,
+          -5.64370141860049
+        ],
+        [
+          14.244895207638812,
+          -5.745368044856369
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.741885140818294,
+    "maximum_parallax_envelope_px": 0.6174684281694104,
+    "parent_separation_deg": 4.3714235823211105
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-b177e97476b091a0.json",
+      "sha256": "bf0919277a211a65d7b3f2f06e6df509be892037789c4339e3836ad1d89747a0"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.199867731611477,
+        -5.693460131697006
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.148777870263348,
+          -5.744291196645785
+        ],
+        [
+          14.148786907560366,
+          -5.642624570389753
+        ],
+        [
+          14.250948555662589,
+          -5.642624570389753
+        ],
+        [
+          14.250957592959603,
+          -5.744291196645785
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.741502993162342,
+    "maximum_parallax_envelope_px": 0.6174727107253916,
+    "parent_separation_deg": 4.374108284610842
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e0b68d7d86ee71f2.json",
+      "sha256": "1b85bb5bd4c698a43b4c5debd38baaf9e0709353c1065e0392c85312d6c294ac"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.2059300477774,
+        -5.692383300767138
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.154840283010005,
+          -5.743214366144011
+        ],
+        [
+          14.154849318569523,
+          -5.64154773988783
+        ],
+        [
+          14.257010776985275,
+          -5.64154773988783
+        ],
+        [
+          14.257019812544797,
+          -5.743214366144011
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.741120375409086,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": 4.376799887621672
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-828beb13f816acb4.json",
+      "sha256": "302d82cf45ac56a56e048f29cf3bf96b0d1bd613f040f69b3345f070e425685b"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        14.21182873029121,
+        -5.691335457865107
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.160739059486943,
+          -5.74216652365855
+        ],
+        [
+          14.160748093355751,
+          -5.640499897402221
+        ],
+        [
+          14.262909367226664,
+          -5.640499897402221
+        ],
+        [
+          14.262918401095476,
+          -5.74216652365855
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5804077291454467,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": 4.379425467496026
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 1,
+    "obsids": [
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-542882d8e0bc0652.json",
+      "sha256": "4662d7a1ad3f0637c3f6961dc49b81ad9767eb1d6a32d69fac9e45edb8f5d5ce"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.211992232021977,
+        -5.691306479728059
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.16090256381602,
+          -5.742137545533025
+        ],
+        [
+          14.160911597638075,
+          -5.64047091927669
+        ],
+        [
+          14.263072866405885,
+          -5.640470919276691
+        ],
+        [
+          14.263081900227938,
+          -5.7421375455330255
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.38695544314297026,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": 4.379498391589007
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W26_2A_0396_1",
+      "2025W26_2A_0396_2",
+      "2025W26_2A_0396_3",
+      "2025W26_2A_0396_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-0204d054a2e29ea7.json",
+      "sha256": "19a474cd86687395ad0ed2a1ca44dbbbf295cda2c1f4d201de3e5e2c9218aa6c"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        14.652115644535776,
+        -5.61593491585733
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.60103268936675,
+          -5.666766011622253
+        ],
+        [
+          14.60104160161579,
+          -5.5650993853553965
+        ],
+        [
+          14.703189687455763,
+          -5.565099385355395
+        ],
+        [
+          14.703198599704812,
+          -5.666766011622252
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5630742024775935,
+    "maximum_parallax_envelope_px": 0.6233867313074157,
+    "parent_separation_deg": 4.595294534360102
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W26_2A_0396_2",
+      "2025W26_2A_0396_3",
+      "2025W26_2A_0396_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-b5fc59b5d93e56b1.json",
+      "sha256": "1b7e46386375f4f716b9290991c2133729a23bc9009dda80cb93c385648e41c4"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.652274567019084,
+        -5.615908679723911
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.601191614171102,
+          -5.666739775499261
+        ],
+        [
+          14.601200526377838,
+          -5.565073149232402
+        ],
+        [
+          14.703348607660327,
+          -5.565073149232402
+        ],
+        [
+          14.703357519867065,
+          -5.666739775499261
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.37539945257835217,
+    "maximum_parallax_envelope_px": 0.6233867313074157,
+    "parent_separation_deg": 4.5953791700847635
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W26_2A_0553_1",
+      "2025W26_2A_0553_2",
+      "2025W26_2A_0553_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e62b0f9144931c4a.json",
+      "sha256": "b29c6eb2e843409f98078556e0cbf0537dcf3a7bdb720f790a55e7a8ea6c3824"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.83911274268454,
+        -5.58557765438881
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.78803246584539,
+          -5.636408762218433
+        ],
+        [
+          14.788041329150799,
+          -5.5347421359473765
+        ],
+        [
+          14.890184156218275,
+          -5.5347421359473765
+        ],
+        [
+          14.890193019523688,
+          -5.636408762218433
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.37023830934190866,
+    "maximum_parallax_envelope_px": 0.6259864012417058,
+    "parent_separation_deg": 4.698008821109555
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W26_2A_0612_1",
+      "2025W26_2A_0612_2",
+      "2025W26_2A_0612_3",
+      "2025W26_2A_0612_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-8c6c136ce2e3219a.json",
+      "sha256": "67596d2c8281f0fb78313459301ad9eed6f0270212d2a5aa0be3fbecd146e0ed"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        14.910304908782667,
+        -5.574295224852793
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.859225623631938,
+          -5.625126337166
+        ],
+        [
+          14.85923446875041,
+          -5.523459710893391
+        ],
+        [
+          14.961375348814927,
+          -5.523459710893391
+        ],
+        [
+          14.961384193933403,
+          -5.625126337166
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5524572661248097,
+    "maximum_parallax_envelope_px": 0.6269943968654303,
+    "parent_separation_deg": 4.738710228003392
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W26_2A_0612_2",
+      "2025W26_2A_0612_3",
+      "2025W26_2A_0612_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-9038c13b60d5040a.json",
+      "sha256": "bba9c25139ac30f1a9bb603a31d3605687e79b8cc6851d43006ec049ddba27fb"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.910461023017419,
+        -5.57427065305481
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.85938174002426,
+          -5.625101765377782
+        ],
+        [
+          14.859390585103124,
+          -5.52343513910517
+        ],
+        [
+          14.961531460931702,
+          -5.52343513910517
+        ],
+        [
+          14.961540306010574,
+          -5.625101765377782
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.36825892546111466,
+    "maximum_parallax_envelope_px": 0.6269943968654303,
+    "parent_separation_deg": 4.73880041849294
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0105_1",
+      "2025W27_1A_0105_2",
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-3aa6280221dbc502.json",
+      "sha256": "0031ba5428b72e83e2ac3233e60bb311b7b4ea73beb5c4ed2bc2ef1ce2e1a7a2"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.10213212262211,
+        -5.54468090922426
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.051055430867567,
+          -5.5955120333052335
+        ],
+        [
+          15.0510642282569,
+          -5.493845407028558
+        ],
+        [
+          15.153200016987316,
+          -5.49384540702856
+        ],
+        [
+          15.153208814376653,
+          -5.5955120333052335
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.742877461495254,
+    "maximum_parallax_envelope_px": 0.6302245696406239,
+    "parent_separation_deg": 4.8525416220576165
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0105_2",
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-26565a514481e4b4.json",
+      "sha256": "a2a9cc1d145d4a0a1d5517d81cc6608d4fc2b655ff22797de8bcb2c6779c3b9a"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.110591068451084,
+        -5.5434039656672995
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.059514488208748,
+          -5.59423509025566
+        ],
+        [
+          15.059523283540306,
+          -5.492568463978811
+        ],
+        [
+          15.161658853361862,
+          -5.492568463978811
+        ],
+        [
+          15.16166764869342,
+          -5.59423509025566
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.74227654247993,
+    "maximum_parallax_envelope_px": 0.6302290491413658,
+    "parent_separation_deg": 4.857697883744148
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-d8784f139c4e7512.json",
+      "sha256": "5de8f5407b774e8a944eb843766c23b195b4412b1dff47075000fbbb52793998"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.119049764993207,
+        -5.542127022377495
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.067973296237195,
+          -5.592958147473243
+        ],
+        [
+          15.067982089511007,
+          -5.491291521196221
+        ],
+        [
+          15.170117440475416,
+          -5.491291521196219
+        ],
+        [
+          15.170126233749224,
+          -5.592958147473243
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.741676200972776,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.862863499035828
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-a67643366bbff0cf.json",
+      "sha256": "29e49781ac52e8fcb20862d5b0b3e772e265a5fc6e1f2beffb8cfb044d2b6eb0"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        15.125316896146519,
+        -5.541180830935317
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.074240509983142,
+          -5.592011956407027
+        ],
+        [
+          15.07424930173221,
+          -5.490345330129874
+        ],
+        [
+          15.176384490560825,
+          -5.490345330129874
+        ],
+        [
+          15.176393282309897,
+          -5.592011956407027
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.560074589047176,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.866696819701232
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-d7f6369ed2ae09b8.json",
+      "sha256": "59c207b022cdfa1c63370d96535ddfbe76aadef60cb318cdcd0a83fb198cae60"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        15.135659358349331,
+        -5.539619280386065
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.084583108461963,
+          -5.5904504064782445
+        ],
+        [
+          15.084591897694704,
+          -5.488783780200879
+        ],
+        [
+          15.186726819003969,
+          -5.488783780200879
+        ],
+        [
+          15.1867356082367,
+          -5.5904504064782445
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.36195376324902423,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.873034154926623
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0632_1",
+      "2025W27_1A_0632_2",
+      "2025W27_1A_0632_3",
+      "2025W27_1A_0632_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-83e96bfd906c6c1b.json",
+      "sha256": "af08971792f588e4075f672ab0c84b8579fdb00305fe4cef682b8e73cf54d906"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        15.65659419627398,
+        -5.46592073383984
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.605524334068356,
+          -5.516751889211758
+        ],
+        [
+          15.605533004578225,
+          -5.415085262924384
+        ],
+        [
+          15.70765538796973,
+          -5.415085262924384
+        ],
+        [
+          15.707664058479605,
+          -5.516751889211758
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5197407119317923,
+    "maximum_parallax_envelope_px": 0.6380888161541117,
+    "parent_separation_deg": 5.212506263220342
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_1A_0632_2",
+      "2025W27_1A_0632_3",
+      "2025W27_1A_0632_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-f981716403e111f0.json",
+      "sha256": "5a0033912f0aee8f67fd5df96728f02f2fcc2530eb8f5644792f432941b7b91f"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        15.656741560346116,
+        -5.46590124404791
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.60567169981835,
+          -5.516732399427571
+        ],
+        [
+          15.605680370296833,
+          -5.415065773140194
+        ],
+        [
+          15.70780275039541,
+          -5.415065773140192
+        ],
+        [
+          15.707811420873893,
+          -5.516732399427571
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.34646982752318184,
+    "maximum_parallax_envelope_px": 0.6380888161541117,
+    "parent_separation_deg": 5.212607514765323
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_2A_0733_1",
+      "2025W27_2A_0733_2",
+      "2025W27_2A_0733_3",
+      "2025W27_2A_0733_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-8b47784b3018d88c.json",
+      "sha256": "73ab07c646df4816f06b7c0ce233b4bf2fb9f114b5b04d4a249e5e008039d6ea"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.320541782266627,
+        -5.3868292003283935
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.26947867942025,
+          -5.437660387114544
+        ],
+        [
+          16.2694872226002,
+          -5.335993760816581
+        ],
+        [
+          16.371596341933053,
+          -5.335993760816581
+        ],
+        [
+          16.371604885113005,
+          -5.437660387114544
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.4874836479955754,
+    "maximum_parallax_envelope_px": 0.6489323175889774,
+    "parent_separation_deg": 5.694651855621345
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W27_2A_0733_2",
+      "2025W27_2A_0733_3",
+      "2025W27_2A_0733_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-61533e2878af6485.json",
+      "sha256": "5a915d9633dd220bdc5394006b72db2ca66e25bb2312cd45766c607c3411646e"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.3206804263422,
+        -5.386814629041813
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.26961732473199,
+          -5.43764581583375
+        ],
+        [
+          16.26962586788849,
+          -5.335979189535785
+        ],
+        [
+          16.37173498479591,
+          -5.335979189535785
+        ],
+        [
+          16.37174352795241,
+          -5.43764581583375
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.32500276119468996,
+    "maximum_parallax_envelope_px": 0.6489323175889774,
+    "parent_separation_deg": 5.69475754350239
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W28_1B_0010_1",
+      "2025W28_1B_0010_2",
+      "2025W28_1B_0010_3",
+      "2025W28_1B_0010_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-6c9f79bccaba43e8.json",
+      "sha256": "c34449d5f0b52ddd80523107e485435f87d5fd4ab915b10c7736f597a8ac0760"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.37099160526608,
+        -5.381585083327542
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.319928947092286,
+          -5.4324162721963
+        ],
+        [
+          16.31993748183262,
+          -5.330749645897643
+        ],
+        [
+          16.422045728699544,
+          -5.330749645897643
+        ],
+        [
+          16.422054263439883,
+          -5.4324162721963
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.48495533737537466,
+    "maximum_parallax_envelope_px": 0.6497996223262992,
+    "parent_separation_deg": 5.733236535388658
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 2,
+    "obsids": [
+      "2025W28_1B_0010_2",
+      "2025W28_1B_0010_3",
+      "2025W28_1B_0010_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-ac51efb026676af8.json",
+      "sha256": "d761b21d74477300b4f3badfb934186401ca60b8d30fd197623436914a4fe480"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.371129554341913,
+        -5.381570902374696
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.320066897369994,
+          -5.432402091249089
+        ],
+        [
+          16.320075432087506,
+          -5.330735464950427
+        ],
+        [
+          16.422183676596322,
+          -5.3307354649504255
+        ],
+        [
+          16.42219221131384,
+          -5.432402091249089
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3233349899617739,
+    "maximum_parallax_envelope_px": 0.6497996223262992,
+    "parent_separation_deg": 5.733342386510735
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 3,
+    "obsids": [
+      "2025W28_1B_0097_1",
+      "2025W28_1B_0097_2",
+      "2025W28_1B_0097_3",
+      "2025W28_1B_0097_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e89d1fdbb3a43377.json",
+      "sha256": "2e305bcd4a87c1724e79e2b7be68d6332aecb8db94269bceba33683d597fc6a6"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.446182799515274,
+        -5.373987036076249
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.395120784841943,
+          -5.424818227962376
+        ],
+        [
+          16.39512930735501,
+          -5.323151601662708
+        ],
+        [
+          16.49723629167555,
+          -5.323151601662708
+        ],
+        [
+          16.497244814188615,
+          -5.4248182279623745
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.4810673818055366,
+    "maximum_parallax_envelope_px": 0.6511046600004249,
+    "parent_separation_deg": 5.791208859982859
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 3,
+    "obsids": [
+      "2025W28_1B_0097_2",
+      "2025W28_1B_0097_3",
+      "2025W28_1B_0097_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-310ae4a480a53200.json",
+      "sha256": "2ea46b45c0783631418f951ca21b32ae918b6bca463156ec9dd41a4c27369550"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.446319689341482,
+        -5.373973443374005
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.39525767581853,
+          -5.42480463526553
+        ],
+        [
+          16.39526619830973,
+          -5.32313800896586
+        ],
+        [
+          16.49737318037324,
+          -5.32313800896586
+        ],
+        [
+          16.497381702864434,
+          -5.42480463526553
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3207426012789753,
+    "maximum_parallax_envelope_px": 0.6511046600004249,
+    "parent_separation_deg": 5.791314901740068
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 3,
+    "obsids": [
+      "2025W28_1B_0145_1",
+      "2025W28_1B_0145_2",
+      "2025W28_1B_0145_3",
+      "2025W28_1B_0145_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-90ac4231bb560fbb.json",
+      "sha256": "27d0791ccd45db5fdd760da953fc7dd7a713154f3a7f08b24155ac70c4b866c8"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.495939989014744,
+        -5.369105302075393
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.444878387307128,
+          -5.4199364959001315
+        ],
+        [
+          16.444886901964598,
+          -5.318269869599819
+        ],
+        [
+          16.546993076064883,
+          -5.318269869599819
+        ],
+        [
+          16.547001590722356,
+          -5.4199364959001315
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.47846862359325965,
+    "maximum_parallax_envelope_px": 0.6519765849157924,
+    "parent_separation_deg": 5.829871696601215
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 3,
+    "obsids": [
+      "2025W28_1B_0145_2",
+      "2025W28_1B_0145_3",
+      "2025W28_1B_0145_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-2691c9485c9e1924.json",
+      "sha256": "9f7687b031eb1bdd764c80a475dd1a2d9d5bccdcd098de4db1d4c4f350571aff"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.49607618500786,
+        -5.36909210070687
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.445014584416494,
+          -5.419923294536852
+        ],
+        [
+          16.44502309905272,
+          -5.318256668236535
+        ],
+        [
+          16.547129270963,
+          -5.318256668236536
+        ],
+        [
+          16.547137785599226,
+          -5.419923294536852
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3189568245617875,
+    "maximum_parallax_envelope_px": 0.6519765849157924,
+    "parent_separation_deg": 5.829977847834367
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0306_1",
+      "2025W26_1A_0306_2",
+      "2025W26_1A_0306_3",
+      "2025W26_1A_0306_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-21c0b50f9cd7e02e.json",
+      "sha256": "a943eb087d4e823d567f2c4111cdc2d7e67fd347030fa10b3dc5c7f29d60f626"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        13.774236339546745,
+        -5.771336815872899
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.72313944463134,
+          -5.822167849857379
+        ],
+        [
+          13.723148607627529,
+          -5.720501223612376
+        ],
+        [
+          13.825324071465953,
+          -5.7205012236123745
+        ],
+        [
+          13.825333234462144,
+          -5.822167849857378
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5967257860093168,
+    "maximum_parallax_envelope_px": 0.6118811455758567,
+    "parent_separation_deg": 4.205277233252482
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0306_2",
+      "2025W26_1A_0306_3",
+      "2025W26_1A_0306_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-af52b196343e5ab1.json",
+      "sha256": "a151117c1e33a0680e1c18cf6c3a738c4e370dd1055fcfce86d2bc96decb82ce"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        13.774404139691587,
+        -5.771305227065532
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.72330724764871,
+          -5.822136261062572
+        ],
+        [
+          13.723316410593897,
+          -5.720469634817565
+        ],
+        [
+          13.825491868789275,
+          -5.720469634817565
+        ],
+        [
+          13.825501031734461,
+          -5.822136261062572
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3977684835563699,
+    "maximum_parallax_envelope_px": 0.6118811455758567,
+    "parent_separation_deg": 4.205335627704659
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0376_1",
+      "2025W26_1A_0376_2",
+      "2025W26_1A_0376_3",
+      "2025W26_1A_0376_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-dfaf298d80b3b074.json",
+      "sha256": "bbadc3c5b3c791fac71bd311edcf99de8007b135145cc5b6c914233988b1919f"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        13.865810037045907,
+        -5.754199748372151
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.814714698161307,
+          -5.805030789171176
+        ],
+        [
+          13.814723833489591,
+          -5.703364162923734
+        ],
+        [
+          13.916896240602219,
+          -5.703364162923734
+        ],
+        [
+          13.91690537593051,
+          -5.805030789171176
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5957694941577125,
+    "maximum_parallax_envelope_px": 0.6130305708111647,
+    "parent_separation_deg": 4.238130404972755
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0376_2",
+      "2025W26_1A_0376_3",
+      "2025W26_1A_0376_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-dda93ebde4beaefe.json",
+      "sha256": "4b820b27c8a262c652e3dd59c2d37757060296e94f873b9ef15c619240263bed"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        13.865977957690976,
+        -5.754168510731347
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          13.814882621638466,
+          -5.804999551542795
+        ],
+        [
+          13.814891756916325,
+          -5.703332925295348
+        ],
+        [
+          13.917064158465632,
+          -5.703332925295348
+        ],
+        [
+          13.917073293743488,
+          -5.804999551542795
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.39560691994180647,
+    "maximum_parallax_envelope_px": 0.6130305708111647,
+    "parent_separation_deg": 4.2381924470449315
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0618_1",
+      "2025W26_1A_0618_2",
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-3115fde279b52529.json",
+      "sha256": "1cd8a99d68158917d260c345a0e956157258c3154da2ffdd5bac23bfceb95401"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.187742646134472,
+        -5.695613838844688
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.136652591565586,
+          -5.746444902937252
+        ],
+        [
+          14.136661632337713,
+          -5.6447782766815235
+        ],
+        [
+          14.238823659931231,
+          -5.6447782766815235
+        ],
+        [
+          14.23883270070336,
+          -5.7464449029372515
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.742266716700087,
+    "maximum_parallax_envelope_px": 0.6174641471160107,
+    "parent_separation_deg": 4.368745813601402
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0618_2",
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-97cd55a8f1724a4b.json",
+      "sha256": "93d468519a15d9462abfe1a07972a9db0dc160c316446958e49a8b9f33e47654"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.193805249689955,
+        -5.6945369803356956
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.142715291741098,
+          -5.745368044856369
+        ],
+        [
+          14.142724330775655,
+          -5.643701418600491
+        ],
+        [
+          14.244886168604259,
+          -5.64370141860049
+        ],
+        [
+          14.244895207638812,
+          -5.745368044856369
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.741885140818294,
+    "maximum_parallax_envelope_px": 0.6174684281694104,
+    "parent_separation_deg": 4.3714235823211105
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0618_3",
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-b177e97476b091a0.json",
+      "sha256": "bf0919277a211a65d7b3f2f06e6df509be892037789c4339e3836ad1d89747a0"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        14.199867731611477,
+        -5.693460131697006
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.148777870263348,
+          -5.744291196645785
+        ],
+        [
+          14.148786907560366,
+          -5.642624570389753
+        ],
+        [
+          14.250948555662589,
+          -5.642624570389753
+        ],
+        [
+          14.250957592959603,
+          -5.744291196645785
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 17.741502993162342,
+    "maximum_parallax_envelope_px": 0.6174727107253916,
+    "parent_separation_deg": 4.374108284610842
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0618_4",
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e0b68d7d86ee71f2.json",
+      "sha256": "1b85bb5bd4c698a43b4c5debd38baaf9e0709353c1065e0392c85312d6c294ac"
+    },
+    "covered_epochs": 5,
+    "common_roi": null,
+    "geocentric_footprint_covered_span_px": 17.741120375409086,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": null
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0640_1",
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-828beb13f816acb4.json",
+      "sha256": "302d82cf45ac56a56e048f29cf3bf96b0d1bd613f040f69b3345f070e425685b"
+    },
+    "covered_epochs": 4,
+    "common_roi": null,
+    "geocentric_footprint_covered_span_px": 0.5804077291454467,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": null
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 4,
+    "obsids": [
+      "2025W26_1A_0640_2",
+      "2025W26_1A_0640_3",
+      "2025W26_1A_0640_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-542882d8e0bc0652.json",
+      "sha256": "4662d7a1ad3f0637c3f6961dc49b81ad9767eb1d6a32d69fac9e45edb8f5d5ce"
+    },
+    "covered_epochs": 3,
+    "common_roi": null,
+    "geocentric_footprint_covered_span_px": 0.38695544314297026,
+    "maximum_parallax_envelope_px": 0.6174769919146337,
+    "parent_separation_deg": null
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W26_2A_0396_1",
+      "2025W26_2A_0396_2",
+      "2025W26_2A_0396_3",
+      "2025W26_2A_0396_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-0204d054a2e29ea7.json",
+      "sha256": "19a474cd86687395ad0ed2a1ca44dbbbf295cda2c1f4d201de3e5e2c9218aa6c"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        14.652115644535776,
+        -5.61593491585733
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.60103268936675,
+          -5.666766011622253
+        ],
+        [
+          14.60104160161579,
+          -5.5650993853553965
+        ],
+        [
+          14.703189687455763,
+          -5.565099385355395
+        ],
+        [
+          14.703198599704812,
+          -5.666766011622252
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5630742024775935,
+    "maximum_parallax_envelope_px": 0.6233867313074157,
+    "parent_separation_deg": 4.595294534360102
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W26_2A_0396_2",
+      "2025W26_2A_0396_3",
+      "2025W26_2A_0396_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-b5fc59b5d93e56b1.json",
+      "sha256": "1b7e46386375f4f716b9290991c2133729a23bc9009dda80cb93c385648e41c4"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.652274567019084,
+        -5.615908679723911
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.601191614171102,
+          -5.666739775499261
+        ],
+        [
+          14.601200526377838,
+          -5.565073149232402
+        ],
+        [
+          14.703348607660327,
+          -5.565073149232402
+        ],
+        [
+          14.703357519867065,
+          -5.666739775499261
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.37539945257835217,
+    "maximum_parallax_envelope_px": 0.6233867313074157,
+    "parent_separation_deg": 4.5953791700847635
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W26_2A_0553_1",
+      "2025W26_2A_0553_2",
+      "2025W26_2A_0553_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e62b0f9144931c4a.json",
+      "sha256": "b29c6eb2e843409f98078556e0cbf0537dcf3a7bdb720f790a55e7a8ea6c3824"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.83911274268454,
+        -5.58557765438881
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.78803246584539,
+          -5.636408762218433
+        ],
+        [
+          14.788041329150799,
+          -5.5347421359473765
+        ],
+        [
+          14.890184156218275,
+          -5.5347421359473765
+        ],
+        [
+          14.890193019523688,
+          -5.636408762218433
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.37023830934190866,
+    "maximum_parallax_envelope_px": 0.6259864012417058,
+    "parent_separation_deg": 4.698008821109555
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W26_2A_0612_1",
+      "2025W26_2A_0612_2",
+      "2025W26_2A_0612_3",
+      "2025W26_2A_0612_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-8c6c136ce2e3219a.json",
+      "sha256": "67596d2c8281f0fb78313459301ad9eed6f0270212d2a5aa0be3fbecd146e0ed"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        14.910304908782667,
+        -5.574295224852793
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.859225623631938,
+          -5.625126337166
+        ],
+        [
+          14.85923446875041,
+          -5.523459710893391
+        ],
+        [
+          14.961375348814927,
+          -5.523459710893391
+        ],
+        [
+          14.961384193933403,
+          -5.625126337166
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5524572661248097,
+    "maximum_parallax_envelope_px": 0.6269943968654303,
+    "parent_separation_deg": 4.738710228003392
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W26_2A_0612_2",
+      "2025W26_2A_0612_3",
+      "2025W26_2A_0612_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-9038c13b60d5040a.json",
+      "sha256": "bba9c25139ac30f1a9bb603a31d3605687e79b8cc6851d43006ec049ddba27fb"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        14.910461023017419,
+        -5.57427065305481
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          14.85938174002426,
+          -5.625101765377782
+        ],
+        [
+          14.859390585103124,
+          -5.52343513910517
+        ],
+        [
+          14.961531460931702,
+          -5.52343513910517
+        ],
+        [
+          14.961540306010574,
+          -5.625101765377782
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.36825892546111466,
+    "maximum_parallax_envelope_px": 0.6269943968654303,
+    "parent_separation_deg": 4.73880041849294
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0105_1",
+      "2025W27_1A_0105_2",
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-3aa6280221dbc502.json",
+      "sha256": "0031ba5428b72e83e2ac3233e60bb311b7b4ea73beb5c4ed2bc2ef1ce2e1a7a2"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.10213212262211,
+        -5.54468090922426
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.051055430867567,
+          -5.5955120333052335
+        ],
+        [
+          15.0510642282569,
+          -5.493845407028558
+        ],
+        [
+          15.153200016987316,
+          -5.49384540702856
+        ],
+        [
+          15.153208814376653,
+          -5.5955120333052335
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.742877461495254,
+    "maximum_parallax_envelope_px": 0.6302245696406239,
+    "parent_separation_deg": 4.8525416220576165
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0105_2",
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-26565a514481e4b4.json",
+      "sha256": "a2a9cc1d145d4a0a1d5517d81cc6608d4fc2b655ff22797de8bcb2c6779c3b9a"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.110591068451084,
+        -5.5434039656672995
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.059514488208748,
+          -5.59423509025566
+        ],
+        [
+          15.059523283540306,
+          -5.492568463978811
+        ],
+        [
+          15.161658853361862,
+          -5.492568463978811
+        ],
+        [
+          15.16166764869342,
+          -5.59423509025566
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.74227654247993,
+    "maximum_parallax_envelope_px": 0.6302290491413658,
+    "parent_separation_deg": 4.857697883744148
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0105_3",
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-d8784f139c4e7512.json",
+      "sha256": "5de8f5407b774e8a944eb843766c23b195b4412b1dff47075000fbbb52793998"
+    },
+    "covered_epochs": 5,
+    "common_roi": {
+      "center": [
+        15.119049764993207,
+        -5.542127022377495
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.067973296237195,
+          -5.592958147473243
+        ],
+        [
+          15.067982089511007,
+          -5.491291521196221
+        ],
+        [
+          15.170117440475416,
+          -5.491291521196219
+        ],
+        [
+          15.170126233749224,
+          -5.592958147473243
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.741676200972776,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.862863499035828
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0105_4",
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-a67643366bbff0cf.json",
+      "sha256": "29e49781ac52e8fcb20862d5b0b3e772e265a5fc6e1f2beffb8cfb044d2b6eb0"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        15.125316896146519,
+        -5.541180830935317
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.074240509983142,
+          -5.592011956407027
+        ],
+        [
+          15.07424930173221,
+          -5.490345330129874
+        ],
+        [
+          15.176384490560825,
+          -5.490345330129874
+        ],
+        [
+          15.176393282309897,
+          -5.592011956407027
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 24.560074589047176,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.866696819701232
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0145_1",
+      "2025W27_1A_0145_2",
+      "2025W27_1A_0145_3"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-d7f6369ed2ae09b8.json",
+      "sha256": "59c207b022cdfa1c63370d96535ddfbe76aadef60cb318cdcd0a83fb198cae60"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        15.135659358349331,
+        -5.539619280386065
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.084583108461963,
+          -5.5904504064782445
+        ],
+        [
+          15.084591897694704,
+          -5.488783780200879
+        ],
+        [
+          15.186726819003969,
+          -5.488783780200879
+        ],
+        [
+          15.1867356082367,
+          -5.5904504064782445
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.36195376324902423,
+    "maximum_parallax_envelope_px": 0.6302335272086481,
+    "parent_separation_deg": 4.873034154926623
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0632_1",
+      "2025W27_1A_0632_2",
+      "2025W27_1A_0632_3",
+      "2025W27_1A_0632_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-83e96bfd906c6c1b.json",
+      "sha256": "af08971792f588e4075f672ab0c84b8579fdb00305fe4cef682b8e73cf54d906"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        15.65659419627398,
+        -5.46592073383984
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.605524334068356,
+          -5.516751889211758
+        ],
+        [
+          15.605533004578225,
+          -5.415085262924384
+        ],
+        [
+          15.70765538796973,
+          -5.415085262924384
+        ],
+        [
+          15.707664058479605,
+          -5.516751889211758
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.5197407119317923,
+    "maximum_parallax_envelope_px": 0.6380888161541117,
+    "parent_separation_deg": 5.212506263220342
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_1A_0632_2",
+      "2025W27_1A_0632_3",
+      "2025W27_1A_0632_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-f981716403e111f0.json",
+      "sha256": "5a0033912f0aee8f67fd5df96728f02f2fcc2530eb8f5644792f432941b7b91f"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        15.656741560346116,
+        -5.46590124404791
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          15.60567169981835,
+          -5.516732399427571
+        ],
+        [
+          15.605680370296833,
+          -5.415065773140194
+        ],
+        [
+          15.70780275039541,
+          -5.415065773140192
+        ],
+        [
+          15.707811420873893,
+          -5.516732399427571
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.34646982752318184,
+    "maximum_parallax_envelope_px": 0.6380888161541117,
+    "parent_separation_deg": 5.212607514765323
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_2A_0733_1",
+      "2025W27_2A_0733_2",
+      "2025W27_2A_0733_3",
+      "2025W27_2A_0733_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-8b47784b3018d88c.json",
+      "sha256": "73ab07c646df4816f06b7c0ce233b4bf2fb9f114b5b04d4a249e5e008039d6ea"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.320541782266627,
+        -5.3868292003283935
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.26947867942025,
+          -5.437660387114544
+        ],
+        [
+          16.2694872226002,
+          -5.335993760816581
+        ],
+        [
+          16.371596341933053,
+          -5.335993760816581
+        ],
+        [
+          16.371604885113005,
+          -5.437660387114544
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.4874836479955754,
+    "maximum_parallax_envelope_px": 0.6489323175889774,
+    "parent_separation_deg": 5.694651855621345
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W27_2A_0733_2",
+      "2025W27_2A_0733_3",
+      "2025W27_2A_0733_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-61533e2878af6485.json",
+      "sha256": "5a915d9633dd220bdc5394006b72db2ca66e25bb2312cd45766c607c3411646e"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.3206804263422,
+        -5.386814629041813
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.26961732473199,
+          -5.43764581583375
+        ],
+        [
+          16.26962586788849,
+          -5.335979189535785
+        ],
+        [
+          16.37173498479591,
+          -5.335979189535785
+        ],
+        [
+          16.37174352795241,
+          -5.43764581583375
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.32500276119468996,
+    "maximum_parallax_envelope_px": 0.6489323175889774,
+    "parent_separation_deg": 5.69475754350239
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W28_1B_0010_1",
+      "2025W28_1B_0010_2",
+      "2025W28_1B_0010_3",
+      "2025W28_1B_0010_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-6c9f79bccaba43e8.json",
+      "sha256": "c34449d5f0b52ddd80523107e485435f87d5fd4ab915b10c7736f597a8ac0760"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.37099160526608,
+        -5.381585083327542
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.319928947092286,
+          -5.4324162721963
+        ],
+        [
+          16.31993748183262,
+          -5.330749645897643
+        ],
+        [
+          16.422045728699544,
+          -5.330749645897643
+        ],
+        [
+          16.422054263439883,
+          -5.4324162721963
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.48495533737537466,
+    "maximum_parallax_envelope_px": 0.6497996223262992,
+    "parent_separation_deg": 5.733236535388658
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 5,
+    "obsids": [
+      "2025W28_1B_0010_2",
+      "2025W28_1B_0010_3",
+      "2025W28_1B_0010_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-ac51efb026676af8.json",
+      "sha256": "d761b21d74477300b4f3badfb934186401ca60b8d30fd197623436914a4fe480"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.371129554341913,
+        -5.381570902374696
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.320066897369994,
+          -5.432402091249089
+        ],
+        [
+          16.320075432087506,
+          -5.330735464950427
+        ],
+        [
+          16.422183676596322,
+          -5.3307354649504255
+        ],
+        [
+          16.42219221131384,
+          -5.432402091249089
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3233349899617739,
+    "maximum_parallax_envelope_px": 0.6497996223262992,
+    "parent_separation_deg": 5.733342386510735
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 6,
+    "obsids": [
+      "2025W28_1B_0097_1",
+      "2025W28_1B_0097_2",
+      "2025W28_1B_0097_3",
+      "2025W28_1B_0097_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-e89d1fdbb3a43377.json",
+      "sha256": "2e305bcd4a87c1724e79e2b7be68d6332aecb8db94269bceba33683d597fc6a6"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.446182799515274,
+        -5.373987036076249
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.395120784841943,
+          -5.424818227962376
+        ],
+        [
+          16.39512930735501,
+          -5.323151601662708
+        ],
+        [
+          16.49723629167555,
+          -5.323151601662708
+        ],
+        [
+          16.497244814188615,
+          -5.4248182279623745
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.4810673818055366,
+    "maximum_parallax_envelope_px": 0.6511046600004249,
+    "parent_separation_deg": 5.791208859982859
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 6,
+    "obsids": [
+      "2025W28_1B_0097_2",
+      "2025W28_1B_0097_3",
+      "2025W28_1B_0097_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-310ae4a480a53200.json",
+      "sha256": "2ea46b45c0783631418f951ca21b32ae918b6bca463156ec9dd41a4c27369550"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.446319689341482,
+        -5.373973443374005
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.39525767581853,
+          -5.42480463526553
+        ],
+        [
+          16.39526619830973,
+          -5.32313800896586
+        ],
+        [
+          16.49737318037324,
+          -5.32313800896586
+        ],
+        [
+          16.497381702864434,
+          -5.42480463526553
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3207426012789753,
+    "maximum_parallax_envelope_px": 0.6511046600004249,
+    "parent_separation_deg": 5.791314901740068
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 6,
+    "obsids": [
+      "2025W28_1B_0145_1",
+      "2025W28_1B_0145_2",
+      "2025W28_1B_0145_3",
+      "2025W28_1B_0145_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-90ac4231bb560fbb.json",
+      "sha256": "27d0791ccd45db5fdd760da953fc7dd7a713154f3a7f08b24155ac70c4b866c8"
+    },
+    "covered_epochs": 4,
+    "common_roi": {
+      "center": [
+        16.495939989014744,
+        -5.369105302075393
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.444878387307128,
+          -5.4199364959001315
+        ],
+        [
+          16.444886901964598,
+          -5.318269869599819
+        ],
+        [
+          16.546993076064883,
+          -5.318269869599819
+        ],
+        [
+          16.547001590722356,
+          -5.4199364959001315
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.47846862359325965,
+    "maximum_parallax_envelope_px": 0.6519765849157924,
+    "parent_separation_deg": 5.829871696601215
+  },
+  {
+    "anchor": "2025-07-01",
+    "detector": 6,
+    "obsids": [
+      "2025W28_1B_0145_2",
+      "2025W28_1B_0145_3",
+      "2025W28_1B_0145_4"
+    ],
+    "exact_ephemeris": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/secondary-long-metadata/evidence/ceres-tlist-2691c9485c9e1924.json",
+      "sha256": "9f7687b031eb1bdd764c80a475dd1a2d9d5bccdcd098de4db1d4c4f350571aff"
+    },
+    "covered_epochs": 3,
+    "common_roi": {
+      "center": [
+        16.49607618500786,
+        -5.36909210070687
+      ],
+      "corner_half_width_arcmin": 3.05,
+      "corners_icrf_deg": [
+        [
+          16.445014584416494,
+          -5.419923294536852
+        ],
+        [
+          16.44502309905272,
+          -5.318256668236535
+        ],
+        [
+          16.547129270963,
+          -5.318256668236536
+        ],
+        [
+          16.547137785599226,
+          -5.419923294536852
+        ]
+      ],
+      "target_and_corner_coverage_proven": true
+    },
+    "geocentric_footprint_covered_span_px": 0.3189568245617875,
+    "maximum_parallax_envelope_px": 0.6519765849157924,
+    "parent_separation_deg": 5.829977847834367
+  }
+]

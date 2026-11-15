@@ -1,0 +1,15 @@
+{
+  "schema_version": 4,
+  "started_at_utc": "2026-11-15T09:22:05.285806+00:00",
+  "published_pre_execution_commit": "9ee48eb5d9d8ce80c6a6339feba5145b9bd33157",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "source_scope": "amended blind coverage repair; same original model/cohort/seeds/gates",
+  "native_output": "/tmp/spaceapps-v4-evaluation/final-1225/native",
+  "synthetic_output": "/tmp/spaceapps-v4-evaluation/final-1225/synthetic",
+  "workers_per_domain": 4,
+  "results_inspected": false,
+  "equality_required_before_report": true,
+  "canonical_unblinding": "once after both complete and exact scientific-row equality passes",
+  "refit": false,
+  "reselection": false
+}

@@ -1,0 +1,52 @@
+{
+  "designation": "Exact-integer profile counter guard; no scoring math change",
+  "loader_sha256": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+  "feature_source_sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+  "fixtures": [
+    {
+      "fixture": "extra",
+      "model_family": "ExtraTreesClassifier",
+      "artifact_sha256": "8bff9dc1b7291c748edd458593c803292b3177d97866cb0b098a7e797cd5831e",
+      "metadata_sha256": "7ac137a754e341d78d91716c6002786a93b1b040c72865b3c6d58c21cac599cc",
+      "accepted": true,
+      "zero_input_scores": [
+        0.521141529083252,
+        0.521141529083252
+      ]
+    },
+    {
+      "fixture": "hist",
+      "model_family": "HistGradientBoostingClassifier",
+      "artifact_sha256": "ff35c627f3e6f0559f28cbd65f8f8f32a2cfa92142e616e19e2ea12f7adc8dff",
+      "metadata_sha256": "4e898577887c6fa06b2816e88167942c6b4c8fb31e8a3347e42825c9fa25cce9",
+      "accepted": true,
+      "zero_input_scores": [
+        0.1884593665599823,
+        0.1884593665599823
+      ]
+    },
+    {
+      "fixture": "ranknet",
+      "model_family": "RankNetTreeBoost",
+      "artifact_sha256": "6e8ac8729d7bb69110982365fcc830aec0928aaa4e3112d6bcbb13891708d38b",
+      "metadata_sha256": "a7601a126185817fb436b28fdd4efb7d677f26b189cd6ec8e8fad5e490b57073",
+      "accepted": true,
+      "zero_input_scores": [
+        0.28199517726898193,
+        0.28199517726898193
+      ]
+    },
+    {
+      "fixture": "listnet",
+      "model_family": "ListNetTreeBoost",
+      "artifact_sha256": "4c66b0432514cdeb5c80ca30544c34ee92d03c35c92275a7af60597122fecc55",
+      "metadata_sha256": "d9aa65f3655f5a1706c52a685f8614184763e0d4647819059009d99588405111",
+      "accepted": true,
+      "zero_input_scores": [
+        0.33229726552963257,
+        0.33229726552963257
+      ]
+    }
+  ],
+  "prior_full_validation_proof": "runtime-family-parity-numerics-v2.json"
+}

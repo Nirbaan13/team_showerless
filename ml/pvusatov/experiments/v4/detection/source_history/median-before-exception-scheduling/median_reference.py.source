@@ -1,0 +1,140 @@
+"""EXPERIMENTAL exact-order-statistic leave-one-out residuals, not runtime wiring.
+
+One per-pixel finite-value sort replaces repeated deletion/median sorts for
+ordinary Float64 columns. Signed zeros, subnormals, extreme magnitudes and other
+dtypes deliberately fall back to the immutable reference implementation. This
+module never changes any frozen/runtime source or model selection.
+"""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import subprocess
+import sys
+import time
+import warnings
+import numpy as np
+from ml_inference.detector import difference_frames as legacy_difference_frames
+
+
+def leave_one_out_residuals(images, *, return_diagnostics=False):
+    original = np.asarray(images)
+    if original.ndim != 3 or not 1 <= len(original) <= 32 or not 1 <= min(original.shape[1:]) <= max(original.shape[1:]) <= 512:
+        raise ValueError('bounded1..32epoch2D images required')
+    total = int(np.prod(original.shape[1:]))
+    if original.dtype != np.dtype(np.float64):
+        result = legacy_difference_frames(images, leave_one_out=True)
+        diagnostics = dict(mode='legacy_non_float64',fast_columns=0,fallback_columns=total)
+        return (result, diagnostics) if return_diagnostics else result
+    valid = np.isfinite(original)
+    finite = np.where(valid, original, np.inf)
+    sorted_values = np.sort(finite, axis=0)
+    del finite
+    counts = valid.sum(axis=0)
+    q = counts // 2
+    take = lambda indices: np.take_along_axis(sorted_values,np.clip(indices,0,len(original)-1)[None],axis=0)[0]
+    below, middle, above = take(q-1), take(q), take(q+1)
+    finfo = np.finfo(np.float64)
+    exceptional = np.any(valid & ((original == 0.) | (np.abs(original) < 2*finfo.tiny) |
+                                  (np.abs(original) > finfo.max/4)),axis=0)
+    result = np.full_like(original,np.nan)
+    # NumPy masked median duplicates its odd central element then sums/divides.
+    # Ordinary values round identically; exceptional arithmetic uses legacy.
+    with np.errstate(over='ignore',under='ignore',invalid='ignore'):
+        left_mean = (below + middle) / 2.
+        skip_mean = (below + above) / 2.
+        right_mean = (middle + above) / 2.
+        even = counts % 2 == 0
+        for epoch,image in enumerate(original):
+            odd_reference = np.where(image < middle,right_mean,np.where(image > middle,left_mean,skip_mean))
+            even_reference = np.where(image <= below,middle,below)
+            reference = np.where(even,even_reference,odd_reference)
+            covered = valid[epoch] & (counts >= 2) & ~exceptional
+            result[epoch,covered] = image[covered] - reference[covered]
+    fallback = int(exceptional.sum())
+    if fallback:
+        columns = original[:,exceptional][:,:,None]
+        result[:,exceptional] = legacy_difference_frames(columns,leave_one_out=True)[:,:,0]
+    diagnostics = dict(mode='sorted_float64_with_exceptional_column_fallback',fast_columns=total-fallback,
+        fallback_columns=fallback,finite_count_min=int(counts.min()),finite_count_max=int(counts.max()),
+        fallback_policy='any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic')
+    return (result,diagnostics) if return_diagnostics else result
+
+
+def _sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _worker(method,mask_fraction,seed):
+    rng = np.random.default_rng(seed)
+    images = rng.normal(size=(32,512,512))
+    if mask_fraction:
+        images[rng.random(images.shape) < mask_fraction] = np.nan
+    started = time.perf_counter(); cpu = time.process_time()
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore',RuntimeWarning)
+        if method == 'legacy':
+            result = legacy_difference_frames(images,leave_one_out=True); diagnostics = None
+        else:
+            result,diagnostics = leave_one_out_residuals(images,return_diagnostics=True)
+    elapsed = time.perf_counter()-started; elapsed_cpu = time.process_time()-cpu
+    return dict(method=method,seed=seed,mask_fraction=mask_fraction,shape=list(images.shape),
+        wall_seconds=elapsed,cpu_seconds=elapsed_cpu,rss_mib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024,
+        result_bytes_sha256=hashlib.sha256(memoryview(result).cast('B')).hexdigest(),
+        finite_values=int(np.isfinite(result).sum()),nan_values=int(np.isnan(result).sum()),
+        diagnostics=diagnostics,cpu_affinity=sorted(os.sched_getaffinity(0)))
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--worker',choices=['legacy','sorted'])
+    parser.add_argument('--mask-fraction',type=float,default=0.)
+    parser.add_argument('--seed',type=int,default=3803000)
+    parser.add_argument('--output')
+    args = parser.parse_args()
+    if not 3803000 <= args.seed < 3803100 or args.mask_fraction not in (0.,.12):
+        raise ValueError('only reserved engineering seed/masks accepted')
+    if args.worker:
+        print(json.dumps(_worker(args.worker,args.mask_fraction,args.seed),allow_nan=False)); return
+    if not args.output or Path(args.output).exists():
+        raise ValueError('new benchmark output required')
+    import ml_inference.detector as original
+    sources = {str(Path(__file__).resolve()):_sha(__file__),str(Path(original.__file__).resolve()):_sha(original.__file__)}
+    output = Path(args.output); output.parent.mkdir(parents=True,exist_ok=True)
+    protocol = dict(designation='ENGINEERING parity/timing only; no science/train/final',
+        parity_seeds=[3803000,3803099],benchmark_seed=args.seed,shape=[32,512,512],
+        masks=[0.,.12],methods=['legacy','sorted'],source_sha256=sources,
+        requirement='bitwise identical full Float64 residual bytes, finite/NaN/sign-zero parity')
+    plan = output.with_suffix('.protocol.json')
+    if plan.exists():
+        raise ValueError('immutable benchmark protocol already exists')
+    plan.write_text(json.dumps(protocol,indent=2)+'\n')
+    cpu = min(os.sched_getaffinity(0)); rows = []
+    for fraction in [0.,.12]:
+        for method in ['legacy','sorted']:
+            child = subprocess.run([sys.executable,str(Path(__file__).resolve()),'--worker',method,
+                '--mask-fraction',str(fraction),'--seed',str(args.seed)],capture_output=True,text=True,
+                timeout=600,check=True,preexec_fn=lambda:os.sched_setaffinity(0,{cpu}))
+            row = json.loads(child.stdout); rows.append(row)
+            print(json.dumps(row),flush=True)
+        if rows[-1]['result_bytes_sha256'] != rows[-2]['result_bytes_sha256']:
+            raise ValueError('maximum-shape byte parity failed; not promotable')
+    if any(_sha(p) != h for p,h in sources.items()):
+        raise ValueError('source changed mid-benchmark')
+    proof = dict(protocol=protocol,protocol_sha256=_sha(plan),numpy_version=np.__version__,
+        measurements=rows,bitwise_parity=True,
+        speedup_by_mask={str(f):next(r['wall_seconds']for r in rows if r['mask_fraction']==f and r['method']=='legacy')/
+            next(r['wall_seconds']for r in rows if r['mask_fraction']==f and r['method']=='sorted')for f in [0.,.12]},
+        limitations=['standalone residual stage, not a full runtime/deployment gate',
+            'exact installedNumPy semantics checked; no frozen/runtime source changed',
+            'exceptional columns deliberately retain legacy performance'])
+    temporary = output.with_suffix(output.suffix+'.tmp')
+    temporary.write_text(json.dumps(proof,indent=2,allow_nan=False)+'\n');temporary.replace(output)
+    print(json.dumps(dict(output=str(output),sha256=_sha(output),speedup=proof['speedup_by_mask'])),flush=True)
+
+
+if __name__ == '__main__':
+    main()

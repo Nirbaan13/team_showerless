@@ -1,10 +1,11 @@
 export interface InferenceModel {
   model_id: string;
+  release_name?: string;
   sha256: string;
   status?: string;
   score_kind: string;
   score_description?: string;
-  model_family?: 'RandomForestClassifier' | 'ExtraTreesClassifier';
+  model_family?: 'RandomForestClassifier' | 'ExtraTreesClassifier' | 'HistGradientBoostingClassifier' | 'RankNetTreeBoost' | 'ListNetTreeBoost';
   detector_profile?: Record<string, unknown>;
   algorithm_version_proposal?: string;
 }

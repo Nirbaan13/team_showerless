@@ -1,0 +1,7 @@
+{
+  "status": "NO_ELIGIBLE_LONG_CASE_IN_EXISTING_NARROW_QUERY_DOMAIN",
+  "metadata_clusters_checked": 60,
+  "plan_sha256": "814113c14aa314d37d80518ece51001c61cad3c11e1ad6395dec6557f9e77f7e",
+  "no_exhaustive_archive_noncoverage_claim": true,
+  "no_images_or_models": true
+}

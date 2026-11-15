@@ -1,0 +1,145 @@
+"""Predeclared V4 fixed-pool feature/objective frontier; TRAIN/DEV only.
+
+Fit synthetic-only controls while new native caches prepare; score/refit is kept
+explicit. All expected configurations and failures are retained. No final access,
+release export or winner selection occurs in this module.
+"""
+from __future__ import annotations
+import os
+for name in ['OPENBLAS_NUM_THREADS','OMP_NUM_THREADS','MKL_NUM_THREADS','NUMEXPR_NUM_THREADS']:os.environ[name]='1'
+from concurrent.futures import ThreadPoolExecutor,as_completed
+from pathlib import Path
+import argparse,json,time,hashlib,platform
+import numpy as np
+import joblib,sklearn
+from sklearn.ensemble import ExtraTreesClassifier,HistGradientBoostingClassifier
+from learning import labeled_rows,group_class_weights
+from datasets import read_cache,sha,recovery_report,FEATURE_NAMES,FEATURE_VERSION,FEATURE_CONTRACT_SHA256,BASE
+from tree_ranker import TreeRanker
+
+SUBSETS=dict(legacy6=list(range(6)),legacy_kinematics12=list(range(12)),legacy_flux_morphology21=list(range(6))+list(range(12,27)),noquality27=list(range(27)),nomask_support23=list(range(23)),noavailability29=list(range(29)),full30=list(range(30)))
+
+
+def configurations():
+    configs=[]
+    for mass in [0,2]:
+        for subset in SUBSETS:configs.append(dict(family='extra',subset=subset,native_mass=mass,pointwise_fraction=1))
+        for subset in ['legacy6','noquality27','nomask_support23']:configs.append(dict(family='hist',subset=subset,native_mass=mass,pointwise_fraction=1))
+        for family in ['ranknet','listnet']:
+            for subset in ['legacy6','noquality27']:configs.append(dict(family=family,subset=subset,native_mass=mass,pointwise_fraction=.5))
+    for family in ['ranknet','listnet']:
+        for subset in ['legacy6','noquality27']:configs.append(dict(family=family,subset=subset,native_mass=0,pointwise_fraction=0))
+    assert len(configs)==32
+    return [dict(c,id=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest()[:16],selected_feature_indices=SUBSETS[c['subset']],diagnostic_only=c['subset']=='full30') for c in configs]
+
+
+def load_many(paths,partition):
+    headers=[];fields=[]
+    for path in paths:
+        h,f=read_cache(path,partition);headers.append(h);fields.extend(f)
+    return headers,fields
+
+
+def training_data(synthetic,native,artifacts,mass):
+    blocks=[];labels=[];weights=[];provenance=[]
+    for data,kind,budget in [(synthetic,'synthetic',1),(native,'native_moving',mass),(artifacts,'native_stationary',mass)]:
+        if not budget:continue
+        x,y,groups=labeled_rows(data,kind)
+        if not len(x):raise ValueError('required known scientific class absent: '+kind)
+        w=group_class_weights(y,groups)
+        for label in np.unique(y):w[y==label]/=w[y==label].sum()
+        blocks.append(x);labels.append(y);weights.append(w*budget);provenance.append(dict(kind=kind,rows=len(x),positives=int(y.sum()),independent_groups=len(set(groups)),class_mass=budget))
+    x=np.vstack(blocks);y=np.concatenate(labels);w=np.concatenate(weights);w*=len(w)/w.sum()
+    return x,y,w,provenance
+
+
+def queries(synthetic,max_negatives=64):
+    result=[];offset=0;rng=np.random.default_rng(20261115)
+    for field in synthetic:
+        matches=np.asarray(field['matches'],int);n=len(matches)
+        if np.any(matches< -1):raise ValueError('synthetic query contains scientifically UNKNOWN labels')
+        positive=np.flatnonzero(matches>=0);negative=np.flatnonzero(matches==-1)
+        if len(positive):
+            if len(negative)>max_negatives:
+                baseline=np.asarray(field['baseline']);hard=negative[np.argsort(-baseline[negative],kind='stable')[:max_negatives//2]];rest=np.setdiff1d(negative,hard);negative=np.r_[hard,rng.choice(rest,max_negatives-len(hard),replace=False)]
+            selected=np.r_[positive,negative];result.append((selected+offset,matches[selected]))
+        offset+=n
+    return result
+
+
+def prediction_scores(model,fields,indices):
+    lengths=[len(f['matches'])for f in fields]
+    matrix=np.vstack([f['features_v4']for f in fields]) if sum(lengths) else np.empty((0,30),np.float32)
+    score=model.predict_proba(matrix[:,indices])[:,1] if len(matrix) else np.empty(0)
+    if score.shape!=(sum(lengths),)or not np.isfinite(score).all()or np.any((score<0)|(score>1)):raise ValueError('invalid bounded utility output')
+    return list(np.split(score,np.cumsum(lengths)[:-1]))
+
+
+def evaluate_model(model,sv,nv,indices):
+    result=dict(synthetic=recovery_report(sv,prediction_scores(model,sv,indices),synthetic=True))
+    if nv:result['native']=recovery_report(nv,prediction_scores(model,nv,indices),synthetic=False)
+    return result
+
+
+def run(args):
+    output=Path(args.output);output.mkdir(parents=True,exist_ok=True)
+    plans=configurations();(output/'all-configurations.json').write_text(json.dumps(dict(schema_version=4,configs=plans,selection_performed=False,scope='development only'),indent=2)+'\n')
+    train_headers,st=load_many([args.synthetic_train],'train');val_headers,sv=load_many([args.synthetic_validation],'validation')
+    assert set(f['seed']for f in st).isdisjoint({f['seed']for f in sv})
+    native_headers,nt=load_many(args.native_train,'train');artifact_headers,art=load_many(args.native_artifacts,'train');native_val_headers,nv=load_many(args.native_validation,'validation')
+    parents_t={f['parent_id']for f in nt};parents_v={f['parent_id']for f in nv}
+    if parents_t&parents_v:raise ValueError('native parent overlap')
+    train_sources={r['sha256']for h in native_headers for r in h['input_sources']};val_sources={r['sha256']for h in native_val_headers for r in h['input_sources']}
+    if train_sources&val_sources:raise ValueError('native physical-byte overlap')
+    if args.phase=='native' and (len(parents_t)!=8 or len({f['parent_id']for f in art})!=8):raise ValueError('all eight new TRAIN moving+stationary parents required')
+    if args.native_validation and len(parents_v)!=8:raise ValueError('all eight new validation parents required for frontier scoring')
+    if any(not p.startswith('v4-')for p in parents_t|parents_v):raise ValueError('new frontier must use new V4 parent fields')
+    paths=[args.synthetic_train,args.synthetic_validation,*args.native_train,*args.native_artifacts,*args.native_validation]
+    source_paths=[Path(__file__),Path(__file__).with_name('learning.py'),Path(__file__).with_name('datasets.py'),Path(__file__).with_name('tree_ranker.py')]
+    manifest=dict(schema_version=4,phase=args.phase,configurations=plans,input_sha256={str(p):sha(p)for p in paths},source_sha256={str(p):sha(p)for p in source_paths},native_training_parents=sorted(parents_t),native_validation_parents=sorted(parents_v),native_unknown_rows_used=False,full_feature_names=list(FEATURE_NAMES),feature_version=FEATURE_VERSION,feature_contract_sha256=FEATURE_CONTRACT_SHA256,feature_source_sha256=sha(BASE/'experiments/v4/detection/features.py'),detector_settings=train_headers[0]['detector_settings'],python=platform.python_version(),numpy=np.__version__,sklearn=sklearn.__version__,scope='TRAIN and DEVELOPMENT validation; no final access, no release winner selection',weighting='Synthetic classes eachmass1 and eachindependentfield equalmass withinclass; nativeknownmoving/knownstationary classes eachnative_mass, equalparent withinclass; normalize totalweights to rowcount; no epoch-stratum reweighting',ranking='Known synthetic withinfield pairs/queries only; trueobjects equalmass despite duplicatecandidate tracks; fixed64neg cap halfheuristic halfseededuniform; UNKNOWNnevernegative; optionalknownlabel pointwisehybrid',fixed_random_state=20261115,internal_random_row_validation=False)
+    manifest_path=output/(args.phase+'-inputs.json')
+    if manifest_path.exists() and json.loads(manifest_path.read_text())!=manifest:raise ValueError('phase manifest already exists with different bytes; use new output directory')
+    manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+    baseline=dict(synthetic=recovery_report(sv,[f['scores_c13']for f in sv],synthetic=True))
+    if nv:baseline['native']=recovery_report(nv,[f['scores_c13']for f in nv])
+    if args.phase=='evaluate':
+        for config in plans:
+            record_path=output/(config['id']+'.json');model_path=output/(config['id']+'.joblib')
+            if not record_path.exists():raise ValueError('incomplete frontier missing '+config['id'])
+            record=json.loads(record_path.read_text())
+            if record.get('error'):continue
+            if sha(model_path)!=record['estimator_sha256']:raise ValueError('cached estimator changed')
+            model=joblib.load(model_path);record['validation']=evaluate_model(model,sv,nv,config['selected_feature_indices']);record['evaluation_input_manifest_sha256']=sha(manifest_path);record_path.write_text(json.dumps(record,indent=2,allow_nan=False)+'\n')
+        rows=[json.loads((output/(c['id']+'.json')).read_text())for c in plans]
+        (output/'complete-frontier-report.json').write_text(json.dumps(dict(baseline=baseline,experiments=rows,selection_performed=False,input_manifest_sha256=sha(manifest_path)),indent=2,allow_nan=False)+'\n');return
+    mass=0 if args.phase=='synthetic' else 2
+    x,y,w,provenance=training_data(st,nt,art,mass);query=queries(st)
+    configs=[c for c in plans if c['native_mass']==mass]
+    progress=[]
+    def fit(config):
+        started=time.monotonic();indices=config['selected_feature_indices'];selected=x[:,indices]
+        try:
+            if config['family']=='extra':model=ExtraTreesClassifier(n_estimators=160,max_depth=16,min_samples_leaf=12,max_features='sqrt',max_leaf_nodes=512,n_jobs=1,random_state=20261115)
+            elif config['family']=='hist':model=HistGradientBoostingClassifier(max_iter=160,max_depth=6,max_leaf_nodes=31,min_samples_leaf=32,learning_rate=.05,l2_regularization=1.,early_stopping=False,random_state=20261115)
+            else:model=TreeRanker(objective=config['family'],n_estimators=120,max_depth=3,min_samples_leaf=24,learning_rate=.05,pointwise_fraction=config['pointwise_fraction'],random_state=20261115)
+            if isinstance(model,TreeRanker):model.fit(selected,y,w,query)
+            else:model.fit(selected,y,sample_weight=w)
+            path=output/(config['id']+'.joblib');joblib.dump(model,path,compress=3)
+            report=evaluate_model(model,sv,nv,indices)
+            record=dict(id=config['id'],config=config,training=dict(rows=len(x),positive_rows=int(y.sum()),known_provenance=provenance,parameters=model.get_params()),validation=report,training_input_manifest_sha256=sha(manifest_path),estimator_path=str(path),estimator_sha256=sha(path),elapsed_seconds=time.monotonic()-started,error=None)
+        except Exception as error:
+            import traceback
+            record=dict(id=config['id'],config=config,error=dict(type=type(error).__name__,message=str(error),traceback=traceback.format_exc()),elapsed_seconds=time.monotonic()-started)
+        (output/(config['id']+'.json')).write_text(json.dumps(record,indent=2,allow_nan=False)+'\n');return record
+    with ThreadPoolExecutor(max_workers=args.workers)as pool:
+        for task in as_completed([pool.submit(fit,c)for c in configs]):
+            r=task.result();progress.append(r);summary=dict(completed=len(progress),planned=len(configs),id=r['id'],config=r['config'],error=r['error'],seconds=r['elapsed_seconds'])
+            if not r['error']:summary['synthetic']=r['validation']['synthetic']['all_planned']
+            print(json.dumps(summary),flush=True)
+            (output/(args.phase+'-progress.json')).write_text(json.dumps(dict(baseline=baseline,experiments=progress),indent=2,allow_nan=False)+'\n')
+    print('COMPLETE '+args.phase,flush=True)
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--phase',choices=['synthetic','native','evaluate'],required=True);p.add_argument('--synthetic-train',default='/tmp/spaceapps-v4-ranker/synthetic-train-30-v1.json.gz');p.add_argument('--synthetic-validation',default='/tmp/spaceapps-v4-ranker/synthetic-validation-30-v1.json.gz');p.add_argument('--native-train',nargs='*',default=[]);p.add_argument('--native-artifacts',nargs='*',default=[]);p.add_argument('--native-validation',nargs='*',default=[]);p.add_argument('--workers',type=int,default=4);p.add_argument('--output',default='/tmp/spaceapps-v4-ranker/frontier-v1');args=p.parse_args()
+    if not 1<=args.workers<=6:p.error('workers must be1..6')
+    run(args)

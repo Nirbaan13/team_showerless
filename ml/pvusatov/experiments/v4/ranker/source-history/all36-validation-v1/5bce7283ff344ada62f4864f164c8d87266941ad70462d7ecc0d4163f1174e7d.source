@@ -1,0 +1,256 @@
+"""Inference-only V4 score-vector loader with three-way contract/graph binding.
+
+Reads bounded ONNX bytes with the official parser, never external tensor files.
+No fitting, sklearn, training code, arbitrary graph operators or custom kernels.
+"""
+from __future__ import annotations
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import numpy as np
+import onnx
+from onnx import TensorProto,numpy_helper
+import onnxruntime as ort
+from . import features as feature_contract
+
+MAX_MODEL_BYTES=64*1024*1024
+MAX_METADATA_BYTES=256*1024
+MAX_GRAPH_NODES=64
+MAX_TREE_NODES=250000
+MAX_TREES=512
+MAX_ROWS=50000
+BATCH_ROWS=2048
+SCORE_NUMERICS=dict(dtype='float32',unit_interval_roundoff_tolerance=2e-6,roundoff_action='clip')
+FAMILY_SCORE_KINDS={
+    'ExtraTreesClassifier':'mean_weighted_class1_leaf_fraction',
+    'HistGradientBoostingClassifier':'sigmoid_logit_utility',
+    'RankNetTreeBoost':'sigmoid_pairwise_utility',
+    'ListNetTreeBoost':'sigmoid_listwise_utility',
+}
+BOUND_KEYS=('schema_version','artifact_format','model_id','feature_names','full_feature_count',
+    'selected_feature_indices','selected_feature_names','feature_version','feature_contract_sha256',
+    'feature_source_sha256','detector_profile','feature_options','class_labels','positive_class',
+    'model_family','score_kind','score_description','algorithm_version_proposal','score_numerics')
+PROFILE=dict(min_snr=4.,max_peaks=100,psf_sigma=.8,min_speed=.5,max_speed=60.,
+             match_radius=1.4,min_epochs=3,min_support=.8,leave_one_out=True)
+
+
+def _json(raw):
+    def pairs(values):
+        result={}
+        for key,value in values:
+            if key in result:raise ValueError('duplicate model JSON key')
+            result[key]=value
+        return result
+    def invalid(value):raise ValueError('nonfinite model metadata')
+    try:return json.loads(raw,object_pairs_hook=pairs,parse_constant=invalid)
+    except (UnicodeError,json.JSONDecodeError)as exc:raise ValueError('invalid model metadata JSON')from exc
+
+
+def _read(path,limit):
+    with Path(path).open('rb')as stream:blob=stream.read(limit+1)
+    if not blob or len(blob)>limit:raise ValueError('model artifact/metadata byte limit exceeded')
+    return blob
+
+
+def _metadata(value):
+    if not isinstance(value,dict)or any(k not in value for k in BOUND_KEYS):raise ValueError('missing V4 model contract')
+    if type(value['schema_version'])is not int or value['schema_version']!=4 or value['artifact_format']!='v4-score-vector-v1':raise ValueError('unsupported V4 model schema')
+    if not isinstance(value.get('sha256'),str)or not re.fullmatch('[0-9a-f]{64}',value['sha256']):raise ValueError('invalid model artifact hash')
+    if not isinstance(value['model_id'],str)or not re.fullmatch('[A-Za-z0-9._-]{1,128}',value['model_id']):raise ValueError('invalid model identity')
+    names=list(feature_contract.FEATURE_NAMES);indices=value['selected_feature_indices']
+    if(value['feature_names']!=names or type(value['full_feature_count'])is not int or value['full_feature_count']!=30
+       or not isinstance(indices,list)or not indices or len(indices)>30
+       or any(type(i)is not int or not 0<=i<30 for i in indices)or len(indices)!=len(set(indices))
+       or value['selected_feature_names']!=[names[i]for i in indices]):raise ValueError('ordered V4 feature subset differs')
+    source_hash=hashlib.sha256(Path(feature_contract.__file__).read_bytes()).hexdigest()
+    if(value['feature_version']!=feature_contract.FEATURE_VERSION
+       or value['feature_contract_sha256']!=feature_contract.FEATURE_CONTRACT_SHA256
+       or value['feature_source_sha256']!=source_hash):raise ValueError('installed V4 feature source/contract differs')
+    profile=value['detector_profile']
+    if(not isinstance(profile,dict)or set(profile)!=set(PROFILE)or profile.get('leave_one_out')is not True
+       or any(type(profile[k])not in (int,float)or not math.isfinite(profile[k])or profile[k]!=v
+              for k,v in PROFILE.items()if k not in ('leave_one_out','psf_sigma'))
+       or type(profile.get('psf_sigma'))not in (int,float)or profile['psf_sigma']not in (.8,1.2)):
+        raise ValueError('unsupported V4 candidate detector profile')
+    if value['feature_options']!={'template_psf_sigma':.8}:raise ValueError('unsupported feature template options')
+    if(value['class_labels']!=[0,1]or any(type(v)is not int for v in value['class_labels'])
+       or type(value['positive_class'])is not int or value['positive_class']!=1):raise ValueError('known class0/1 policy differs')
+    family=value['model_family']
+    if not isinstance(family,str)or family not in FAMILY_SCORE_KINDS or value['score_kind']!=FAMILY_SCORE_KINDS[family]:raise ValueError('model family/score semantics differ')
+    if not isinstance(value['score_description'],str)or not 1<=len(value['score_description'])<=4096:raise ValueError('missing bounded score description')
+    if value['score_numerics']!=SCORE_NUMERICS:raise ValueError('unsupported float32 score roundoff policy')
+    if not isinstance(value['algorithm_version_proposal'],str)or not re.fullmatch('motion-v4-[A-Za-z0-9._-]{1,100}',value['algorithm_version_proposal']):raise ValueError('invalid V4 algorithm version')
+
+
+def _attributes(node):
+    attrs={}
+    for attr in node.attribute:
+        if attr.name in attrs:raise ValueError('duplicate graph attribute')
+        if attr.type not in (onnx.AttributeProto.INT,onnx.AttributeProto.FLOAT,onnx.AttributeProto.STRING,
+                             onnx.AttributeProto.INTS,onnx.AttributeProto.FLOATS,onnx.AttributeProto.STRINGS):
+            raise ValueError('tensor/subgraph attributes are unsupported')
+        if max(len(attr.ints),len(attr.floats),len(attr.strings))>MAX_TREE_NODES:raise ValueError('graph attribute element limit exceeded')
+        if any(not math.isfinite(v)for v in attr.floats)or(attr.type==onnx.AttributeProto.FLOAT and not math.isfinite(attr.f)):raise ValueError('nonfinite graph attribute')
+        attrs[attr.name]=attr
+    return attrs
+
+
+def _shape(value,rank,second=None):
+    if value.type.WhichOneof('value')!='tensor_type':raise ValueError('non-tensor model IO')
+    tensor=value.type.tensor_type;dims=tensor.shape.dim
+    if tensor.elem_type!=TensorProto.FLOAT or len(dims)!=rank or dims[0].HasField('dim_value'):
+        raise ValueError('model IO must use dynamic float32 batch dimensions')
+    if second is not None and(not dims[1].HasField('dim_value')or dims[1].dim_value!=second):raise ValueError('model full input dimension differs')
+
+
+def _tree(node,selected_count,family):
+    attrs=_attributes(node)
+    names=('nodes_treeids','nodes_nodeids','nodes_featureids','nodes_modes','nodes_values',
+           'nodes_truenodeids','nodes_falsenodeids')
+    if any(k not in attrs for k in names):raise ValueError('missing tree structure')
+    arrays={k:(attrs[k].strings if k=='nodes_modes'else attrs[k].floats if k=='nodes_values'else attrs[k].ints)for k in names}
+    count=len(arrays['nodes_treeids'])
+    if not 1<=count<=MAX_TREE_NODES or any(len(v)!=count for v in arrays.values()):raise ValueError('tree node dimensions/limit differ')
+    if any(not 0<=v<selected_count for v in arrays['nodes_featureids']):raise ValueError('tree feature escapes selected subset')
+    if 'nodes_missing_value_tracks_true'in attrs and(len(attrs['nodes_missing_value_tracks_true'].ints)!=count or any(v not in (0,1)for v in attrs['nodes_missing_value_tracks_true'].ints)):raise ValueError('tree missing-value policy invalid')
+    trees={};leaves=set()
+    for i,(tid,nid,mode)in enumerate(zip(arrays['nodes_treeids'],arrays['nodes_nodeids'],arrays['nodes_modes'])):
+        if tid<0 or nid<0 or mode not in (b'LEAF',b'BRANCH_LEQ'):raise ValueError('unsupported tree node policy')
+        tree=trees.setdefault(tid,{})
+        if nid in tree:raise ValueError('duplicate tree node identity')
+        tree[nid]=i
+        if mode==b'LEAF':leaves.add((tid,nid))
+    if len(trees)>MAX_TREES:raise ValueError('tree count limit exceeded')
+    for tid,tree in trees.items():
+        if 0 not in tree:raise ValueError('tree root missing')
+        seen=set();pending=[(0,0)]
+        while pending:
+            nid,depth=pending.pop()
+            if nid in seen or nid not in tree or depth>64:raise ValueError('cyclic/shared/missing/deep tree node')
+            seen.add(nid);i=tree[nid]
+            if arrays['nodes_modes'][i]!=b'LEAF':pending.extend([(arrays['nodes_truenodeids'][i],depth+1),(arrays['nodes_falsenodeids'][i],depth+1)])
+        if len(seen)!=len(tree):raise ValueError('unreachable tree nodes')
+    if family=='ExtraTreesClassifier':
+        if node.op_type!='TreeEnsembleClassifier'or attrs.get('post_transform',onnx.AttributeProto()).s!=b'NONE':raise ValueError('forest probability transform differs')
+        if 'classlabels_int64s'not in attrs or list(attrs['classlabels_int64s'].ints)!=[0,1]or'classlabels_strings'in attrs:raise ValueError('actual graph classes differ')
+        keys=('class_treeids','class_nodeids','class_ids','class_weights')
+        if any(k not in attrs for k in keys):raise ValueError('missing forest leaf policy')
+        ts,ns,cs,weights=attrs[keys[0]].ints,attrs[keys[1]].ints,attrs[keys[2]].ints,attrs[keys[3]].floats
+        if any(v!=0 for v in cs):raise ValueError('unsupported binary forest leaf encoding')
+        if any(v<0 or v>1/len(trees)+1e-7 for v in weights):raise ValueError('forest leaf fraction is not a mean-tree fraction')
+        if 'base_values'in attrs and any(v!=0 for v in attrs['base_values'].floats):raise ValueError('forest base score changes leaf-mean semantics')
+    else:
+        if(node.op_type!='TreeEnsembleRegressor'or attrs.get('n_targets',onnx.AttributeProto()).i!=1
+           or attrs.get('aggregate_function',onnx.AttributeProto()).s!=b'SUM'
+           or attrs.get('post_transform',onnx.AttributeProto()).s!=b'NONE'):raise ValueError('actual one-target summed-utility tree policy differs')
+        keys=('target_treeids','target_nodeids','target_ids','target_weights')
+        if any(k not in attrs for k in keys):raise ValueError('missing utility leaf policy')
+        ts,ns,cs,weights=attrs[keys[0]].ints,attrs[keys[1]].ints,attrs[keys[2]].ints,attrs[keys[3]].floats
+        if any(v!=0 for v in cs):raise ValueError('utility target role differs')
+        if 'base_values'in attrs and len(attrs['base_values'].floats)!=1:raise ValueError('utility base score dimension differs')
+    if not(len(ts)==len(ns)==len(cs)==len(weights)):raise ValueError('tree leaf policy dimensions differ')
+    keys=list(zip(ts,ns))
+    if len(keys)!=len(set(keys))or set(keys)!=leaves:raise ValueError('tree leaf weight identities differ')
+
+
+def _graph(blob,metadata):
+    try:model=onnx.load_model_from_string(blob)
+    except Exception as exc:raise ValueError('invalid ONNX protobuf')from exc
+    if not 8<=model.ir_version<=10 or model.functions or model.training_info:raise ValueError('unsupported ONNX model IR/functions/training graph')
+    graph=model.graph
+    if not 1<=len(graph.node)<=MAX_GRAPH_NODES or graph.sparse_initializer:raise ValueError('operator count/sparse tensor policy differs')
+    if len(graph.input)!=1 or graph.input[0].name!='X'or len(graph.output)!=1 or graph.output[0].name!='score':raise ValueError('model IO names/count differ')
+    _shape(graph.input[0],2,30);_shape(graph.output[0],1)
+    ops={}
+    for op in model.opset_import:
+        if op.domain not in ('','ai.onnx.ml')or(op.domain==''and op.version!=17)or(op.domain=='ai.onnx.ml'and op.version not in (1,2,3)):raise ValueError('unsupported ONNX opset/domain')
+        if op.domain in ops and ops[op.domain]!=op.version:raise ValueError('conflicting ONNX opset declarations')
+        ops[op.domain]=op.version
+    if set(ops)!={'','ai.onnx.ml'}:raise ValueError('required ONNX operator domains missing')
+    embedded={}
+    for item in model.metadata_props:
+        if item.key in embedded:raise ValueError('duplicate embedded model metadata')
+        embedded[item.key]=item.value
+    for key in BOUND_KEYS:
+        expected=metadata[key]
+        if key not in embedded:raise ValueError('missing embedded model contract: '+key)
+        actual=embedded[key]if isinstance(expected,str)else _json(embedded[key])
+        # Canonical JSON also distinguishes nested bool/int values, unlike
+        # Python equality (False==0), while preserving actual numeric literals.
+        if json.dumps(actual,sort_keys=True,separators=(',',':'))!=json.dumps(expected,sort_keys=True,separators=(',',':')):
+            raise ValueError('embedded/outer model contract differs: '+key)
+    classifier=metadata['model_family']=='ExtraTreesClassifier'
+    expected_ops=['Gather','TreeEnsembleClassifier'if classifier else'TreeEnsembleRegressor','Gather'if classifier else'Sigmoid','Squeeze']
+    nodes=list(graph.node)
+    if [n.op_type for n in nodes]!=expected_ops or any(n.domain!=('ai.onnx.ml'if i==1 else'')for i,n in enumerate(nodes)):raise ValueError('actual V4 scoring graph topology differs')
+    attrs=[_attributes(n)for n in nodes]
+    tensors={}
+    expected_tensors={'v4_feature_indices':metadata['selected_feature_indices'],'v4_squeeze_axis':[1]}
+    if classifier:expected_tensors['v4_positive_class']=[1]
+    for tensor in graph.initializer:
+        if tensor.name in tensors or tensor.name not in expected_tensors:raise ValueError('undeclared/duplicate graph tensor')
+        if tensor.data_location!=TensorProto.DEFAULT or tensor.external_data:raise ValueError('external tensor data is forbidden')
+        expected=expected_tensors[tensor.name]
+        if tensor.data_type!=TensorProto.INT64 or list(tensor.dims)!=[len(expected)]:raise ValueError('graph selector/axis tensor shape or size differs')
+        try:actual=numpy_helper.to_array(tensor).tolist()
+        except Exception as exc:raise ValueError('invalid bounded graph tensor')from exc
+        if actual!=expected:raise ValueError('actual graph subset/class/axis tensor differs')
+        tensors[tensor.name]=actual
+    if set(tensors)!=set(expected_tensors):raise ValueError('missing graph selector/axis tensors')
+    if(list(nodes[0].input)!=['X','v4_feature_indices']or list(nodes[0].output)!=['v4_selected']
+       or attrs[0].get('axis',onnx.AttributeProto()).i!=1 or set(attrs[0])!={'axis'}
+       or list(nodes[1].input)!=['v4_selected']):raise ValueError('actual feature Gather is bypassed or differs')
+    _tree(nodes[1],len(metadata['selected_feature_indices']),metadata['model_family'])
+    if classifier:
+        if(len(nodes[1].output)!=2 or list(nodes[2].input)!=[nodes[1].output[1],'v4_positive_class']
+           or attrs[2].get('axis',onnx.AttributeProto()).i!=1 or set(attrs[2])!={'axis'}):raise ValueError('positive-class Gather differs')
+    else:
+        if len(nodes[1].output)!=1 or list(nodes[2].input)!=list(nodes[1].output)or attrs[2]:raise ValueError('sigmoid utility transform differs')
+    if(len(nodes[2].output)!=1 or list(nodes[3].input)!=[nodes[2].output[0],'v4_squeeze_axis']
+       or list(nodes[3].output)!=['score']or attrs[3]):raise ValueError('score vector output transform differs')
+    try:onnx.checker.check_model(model,full_check=True)
+    except Exception as exc:raise ValueError('ONNX checker rejected model')from exc
+
+
+class Ranker:
+    def __init__(self,session,metadata):
+        self._session=session;self.metadata=metadata
+        self.detector_profile=dict(metadata['detector_profile']);self.feature_options=dict(metadata['feature_options'])
+
+    def score(self,features):
+        try:
+            values=np.asarray(features)
+            if values.dtype.kind not in 'iuf':raise ValueError('numeric float32-compatible features required')
+            with np.errstate(over='ignore',invalid='ignore'):values=values.astype(np.float32,copy=False)
+        except (TypeError,OverflowError)as exc:raise ValueError('numeric float32-compatible features required')from exc
+        if values.ndim!=2 or values.shape[1]!=30 or len(values)>MAX_ROWS or not np.isfinite(values).all():raise ValueError('finite features[N,30], N<=50000 required')
+        result=np.empty(len(values),dtype=np.float32)
+        for start in range(0,len(values),BATCH_ROWS):
+            x=np.ascontiguousarray(values[start:start+BATCH_ROWS]);scores=self._session.run(['score'],{'X':x})[0]
+            # Bounds are rounded in the declared inference dtype. E.g. float32
+            # 1+2e-6 is1.0000020265579224; its next representable value rejects.
+            tolerance=SCORE_NUMERICS['unit_interval_roundoff_tolerance']
+            lower=np.float32(-tolerance);upper=np.float32(1.+tolerance)
+            if(scores.dtype!=np.float32 or scores.shape!=(len(x),)or not np.isfinite(scores).all()
+               or np.any(scores<lower)or np.any(scores>upper)):raise ValueError('model score vector exceeds declared finite roundoff bounds')
+            result[start:start+len(x)]=np.clip(scores,0.,1.)
+        return result
+
+
+def load_ranker(model_dir):
+    directory=Path(model_dir);metadata=_json(_read(directory/'metadata.json',MAX_METADATA_BYTES));_metadata(metadata)
+    blob=_read(directory/'ranker.onnx',MAX_MODEL_BYTES)
+    if hashlib.sha256(blob).hexdigest()!=metadata['sha256']:raise ValueError('model artifact hash mismatch')
+    _graph(blob,metadata)
+    options=ort.SessionOptions();options.intra_op_num_threads=1;options.inter_op_num_threads=1
+    options.execution_mode=ort.ExecutionMode.ORT_SEQUENTIAL
+    options.enable_cpu_mem_arena=False;options.enable_mem_pattern=False
+    session=ort.InferenceSession(blob,sess_options=options,providers=['CPUExecutionProvider'])
+    if session.get_providers()!=['CPUExecutionProvider']:raise ValueError('CPU-only model provider required')
+    if len(session.get_inputs())!=1 or len(session.get_outputs())!=1 or session.get_inputs()[0].name!='X'or session.get_outputs()[0].name!='score':raise ValueError('runtime model IO differs')
+    ranker=Ranker(session,metadata)
+    ranker.score(np.vstack([np.zeros(30),np.ones(30),-np.ones(30)]))
+    return ranker

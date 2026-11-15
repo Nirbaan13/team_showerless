@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-15T06:44:08.393071+00:00",
+  "scope": "TRAIN-only native overlay physics audit; no archived/native derivative FITS included, all1368scratchderivativesdeleted",
+  "files": [
+    {
+      "path": "analysis.json",
+      "sha256": "d6a9650c32a6523e04d7803118cf463e80d40f810f16a1365ea872e4cf81c639",
+      "bytes": 3720
+    },
+    {
+      "path": "analyze_results.py",
+      "sha256": "4de0edb819eaf6c94dfd5de770722c7056264b9da5a21f4a647ee8ba6540323f",
+      "bytes": 4808
+    },
+    {
+      "path": "invocation-moving.json",
+      "sha256": "2117bcd899618a859489c614864f2f33d9eb02934e27865676802396e93686f0",
+      "bytes": 1127
+    },
+    {
+      "path": "invocation-stationary.json",
+      "sha256": "68addb5d05ec438e1bb72738a8bbbe2fd3df5cea6b7c2adf1f27647e5f1192ea",
+      "bytes": 1131
+    },
+    {
+      "path": "native_overlay.py",
+      "sha256": "3a69909625654c3eba0e57c92567a81c8bf8f473254a8abe34c2f1c571cf0344",
+      "bytes": 8265
+    },
+    {
+      "path": "plan.json",
+      "sha256": "8f7ae2a66172df19648f74148f5485c31e0f7c0ae1b6d36b4a65e394556bbdd3",
+      "bytes": 5701
+    },
+    {
+      "path": "results-moving.jsonl",
+      "sha256": "018f2c358460925381fe6ae85fd76ebec5959db4319371512f24d659040ea2d0",
+      "bytes": 2361758
+    },
+    {
+      "path": "results-stationary.jsonl",
+      "sha256": "2514965c2a514c658cd91c159470c12677cb3e7a466107b363f146f8edc8e083",
+      "bytes": 1390316
+    },
+    {
+      "path": "run_validation.py",
+      "sha256": "a74193dd3ba5f8d634b668f601c4d6bfa0e6a5451a3f7ad3549e4c2ea53b12eb",
+      "bytes": 13575
+    },
+    {
+      "path": "summary-moving.json",
+      "sha256": "841e768ad39a0cc8bc6668156deef7dcf4e76696dbc9d459f5271d3c541726f4",
+      "bytes": 1944
+    },
+    {
+      "path": "summary-stationary.json",
+      "sha256": "ee2a441cc68d358d69188347bb7be0b361c8569dd61bb81f42dfdad627460557",
+      "bytes": 1968
+    },
+    {
+      "path": "test_native_overlay.py",
+      "sha256": "e9f54528df281f5129d6ed5feda112cd3743f64950a117582d94ff1dc081530f",
+      "bytes": 2925
+    }
+  ],
+  "physics_plan_sha256": "8f7ae2a66172df19648f74148f5485c31e0f7c0ae1b6d36b4a65e394556bbdd3",
+  "final_pixels_opened": false,
+  "model_or_detector_called": false,
+  "source_archive_files_modified": false
+}

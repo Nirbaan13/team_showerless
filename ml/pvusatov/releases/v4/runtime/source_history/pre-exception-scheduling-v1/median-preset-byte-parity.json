@@ -1,0 +1,41 @@
+{
+  "designation": "Numerical-equivalence performance change only; FINAL snapshots/evaluation immutable",
+  "before": {
+    "path": "ml/pvusatov/releases/v4/runtime/verification/development-integration.json",
+    "sha256": "17f814c5c1e8a73cccd74503ecbc749fbbc5dc8197ea43b110acebae7f20a998",
+    "pipeline_sha256": "2b078aede763339b6362e94fa3329deac80687d521ff6579cae608c5a8304ed9"
+  },
+  "after": {
+    "path": "ml/pvusatov/releases/v4/runtime/verification/development-integration-median-v2.json",
+    "sha256": "86859fece39c9c7f7db96c370e0dd764a29c72177005b1631d34a0e45d28f7ba",
+    "pipeline_sha256": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "median_module_sha256": "c14a976929b82445ea0124bb754b7531c5859075455fc8ca0dbfbb0c9ba682f1"
+  },
+  "unchanged_source_sha256": {
+    "__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+  },
+  "cases": 20,
+  "pngs_byte_identical": 1710,
+  "all_case_records_except_wall_time_exact": true,
+  "models_and_metadata_unchanged": true,
+  "selected_model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "selected_metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "tests": {
+    "source_sha256": "c2b234488100a335a6b6bbc7e39ca7bab62350e0d4f8ccc3e2d0b392633a7345",
+    "observation": "22 passed in6.79s; includes bitwise Float64 feature matrices,candidate IDs/full result dictionaries and direct PNG bytes on4selected presets"
+  },
+  "prototype": {
+    "path": "ml/pvusatov/experiments/v4/detection/median_reference.py",
+    "sha256": "39d65fc5890f99cc3a04a138bf800cd9345056f4c8afa4bc97e693e3f6e14976",
+    "runtime_function_source_exact": true,
+    "adapter": "relative detector import and inference-only module header; benchmark CLI omitted"
+  }
+}

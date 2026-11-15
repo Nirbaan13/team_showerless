@@ -1,0 +1,573 @@
+{
+  "schema_version": 4,
+  "scope": "root-only coverage diagnostics; no detector calls or pixel-dependent model scores",
+  "original_freeze_sha256": "1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57",
+  "prepare_source_sha256": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+  "audit_source_sha256": "e82fbcda2d4421ccfef1e6df909a0094ef195bac114b60031e9e6867ba00bfe3",
+  "results": [
+    {
+      "parent_id": "v4-final01",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3002,
+        3184,
+        3115,
+        3203,
+        3109,
+        3073,
+        2591,
+        2504
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W25_2A_0232_1D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0232_2D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0232_3D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0232_4D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0421_2D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0421_3D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0421_4D3_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0456_3D3_spx_l2b-v27-2026-213"
+      ],
+      "physical_ids": [
+        "2025W25_2A_0232_1",
+        "2025W25_2A_0232_2",
+        "2025W25_2A_0232_3",
+        "2025W25_2A_0232_4",
+        "2025W25_2A_0421_2",
+        "2025W25_2A_0421_3",
+        "2025W25_2A_0421_4",
+        "2025W25_2A_0456_3"
+      ],
+      "raw_sha256": [
+        "91c6b100c78f00c9366410f2d80674827866fdfe436b27d3ca3f39b4bddc2228",
+        "19f32745774e4cdfb71c800f16b3b824b214d13371a3a0bdfab5a0c38459a0d1",
+        "2e505d14073c19e24ff5d0bea9462a5a32d356c71890430e23bab0ededd7c4b0",
+        "b73140cf162feda544d34e5c20b1fb0642f50f8c12e47f742964627f93c3c59f",
+        "27e9eb9a3d1f27abc5e55d0e283d8e9b4d8b86abac3a8ae6d7933c95c8e7cc35",
+        "ab1ec1416c1f7df8601f67c24b8082684408232edd224a6c6edf0fcda59806f6",
+        "25985405ce351f149313c848ca36fb18926dee974f31b65a485ad0bec8525e3c",
+        "736bfa162076bb55ea07d9f53a619ff41713679564663412abf692de56294f15"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final02",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3184,
+        3221,
+        3147,
+        3236,
+        3265,
+        2974,
+        3093,
+        3219
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W25_2A_0339_1D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0339_2D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0339_3D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0339_4D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0516_1D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0614_2D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0642_2D1_spx_l2b-v27-2026-213",
+        "level2_2025W25_2A_0686_1D1_spx_l2b-v27-2026-213"
+      ],
+      "physical_ids": [
+        "2025W25_2A_0339_1",
+        "2025W25_2A_0339_2",
+        "2025W25_2A_0339_3",
+        "2025W25_2A_0339_4",
+        "2025W25_2A_0516_1",
+        "2025W25_2A_0614_2",
+        "2025W25_2A_0642_2",
+        "2025W25_2A_0686_1"
+      ],
+      "raw_sha256": [
+        "a76a2e4333fb7c61d8ec51dfe67b81e6ae19e96046a0133e035e199a5b85e7f9",
+        "63c1fc6fc232e90834a876ea14e4c619fa0dc710d867cda1fde66bcae2792261",
+        "2dfa3603d7762566230a836d8f9e39447bb63b662d56c77181bfa4a9f4875bf2",
+        "d4cbc4145859af3b0e919ff8a0bda6d39c52c7b72e4372fbaf74b2760127c24c",
+        "ad78c7f25b17efa8e9b9bf3b610a84fbab0a4283fa4e2750177c736e370b99cf",
+        "d94637acf8e8dac2ec3c62f1bc0444b227a3a41b0956c971d45b987dc0896bed",
+        "885bce77ca0c35fcee9b864933bc37e0bc4a4dca17a8ad3b669c4b93e2b7db89",
+        "f49707a4ac42dc8cddc0ce5880aa71b890d9f56c24b9623db41bd130363baab8"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final03",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3012,
+        3160,
+        3190,
+        3154,
+        3153,
+        3131,
+        3041,
+        3116
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W32_2D_0075_1D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0075_2D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0076_1D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0076_2D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0076_3D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0076_4D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0099_1D2_spx_l2b-v27-2026-226",
+        "level2_2025W32_2D_0100_1D2_spx_l2b-v27-2026-226"
+      ],
+      "physical_ids": [
+        "2025W32_2D_0075_1",
+        "2025W32_2D_0075_2",
+        "2025W32_2D_0076_1",
+        "2025W32_2D_0076_2",
+        "2025W32_2D_0076_3",
+        "2025W32_2D_0076_4",
+        "2025W32_2D_0099_1",
+        "2025W32_2D_0100_1"
+      ],
+      "raw_sha256": [
+        "8a794e11fa9acf6655ebbdd8d2207c74b936934835bc544039cd64b6219edbb4",
+        "3f05afcdbbf3afb2c1b7b9b2251b1b2bdba884cdbc05652587cdb4a054e1e3e8",
+        "24f0efc24ba62801f2786fe1e715d3d1ae9b02ecc265201760edeccb5a7b9c25",
+        "829274d0a39fe6e6da770999d2e29dcc99abd49a9d8c449d9a81e96bd238e968",
+        "6235c742e5ab1b884e8d9832e25bebe96accf78ff59723e36b5a9ce89b683261",
+        "42caa5d0044fe565f3b544e0f816c4406897f1adef25e698b36130ce0800b1ca",
+        "7f5b6e0256a7653861f35868434279c8548e0b1359f5275846a4a4e411ca6982",
+        "6217471f6fdfc218cbec4e62e5ce9a572736d75e8affd8b6f97fd31d9dc4520d"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final04",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3270,
+        3248,
+        3231,
+        3284,
+        3154,
+        0,
+        3221,
+        3203
+      ],
+      "usable_epoch_count": 7,
+      "frame_ids": [
+        "level2_2025W43_1A_0539_1D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_1A_0539_2D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_1A_0539_3D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_1A_0539_4D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_1A_0600_2D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_1A_0600_4D3_spx_l2b-v27-2026-244",
+        "level2_2025W43_2A_0167_2D3_spx_l2b-v27-2026-245",
+        "level2_2025W43_2A_0167_4D3_spx_l2b-v27-2026-245"
+      ],
+      "physical_ids": [
+        "2025W43_1A_0539_1",
+        "2025W43_1A_0539_2",
+        "2025W43_1A_0539_3",
+        "2025W43_1A_0539_4",
+        "2025W43_1A_0600_2",
+        "2025W43_1A_0600_4",
+        "2025W43_2A_0167_2",
+        "2025W43_2A_0167_4"
+      ],
+      "raw_sha256": [
+        "bb64cc9e1b0bc4f84037e6d35ba41c7cb1869e98cd56c1dfd76cd77baec92e18",
+        "40d74a73b44ea3ba6894924bed9c227acdb4a513f2f7d19a374217484cc8f0cd",
+        "fbc84fbef5a178e7262570b252786fbf258ae8b694659fec97a5a5832de56665",
+        "608f108d17698b226612f6e945a9b306caa5c18ca19dd817f3fe9d0b46ce5936",
+        "aa94a331dc38fd18642032adda81db83f673f39c06f6b273440cfe4c90f1320d",
+        "1516633202e772b24aff80542490da2504ee9d6adf9900a171c99b5d16196e9f",
+        "8100b54390630d30f27bb7d978e6b7da5141ab0cef33f95773ed14e398eb8b8f",
+        "f4cdd3771a05df6e8e4eb5d2c165619c0b3aee99a27846e4c4b2498c51b096f1"
+      ],
+      "original_supported": false,
+      "original_error_code": "no_coverage"
+    },
+    {
+      "parent_id": "v4-final05",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3288,
+        3341,
+        3278,
+        3239,
+        3149,
+        3187,
+        3223,
+        3234
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W38_1A_0641_1D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0641_2D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0641_3D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0641_4D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0655_2D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0655_4D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_1A_0761_4D1_spx_l2b-v27-2026-237",
+        "level2_2025W38_2C_0061_1D1_spx_l2b-v27-2026-237"
+      ],
+      "physical_ids": [
+        "2025W38_1A_0641_1",
+        "2025W38_1A_0641_2",
+        "2025W38_1A_0641_3",
+        "2025W38_1A_0641_4",
+        "2025W38_1A_0655_2",
+        "2025W38_1A_0655_4",
+        "2025W38_1A_0761_4",
+        "2025W38_2C_0061_1"
+      ],
+      "raw_sha256": [
+        "09785f5f79738f4268e8a36d9de27152fe9283cec9b460968fa7dd2d8c0a99e7",
+        "6251b8d8c5614781e22dfee235b49c9d70b9d123c164a60c4c2a9a0077510518",
+        "f43dbca2044a68728b14295a24a6584725b83bfdefb527d3e7b432254bb3d18f",
+        "ff1ceaf11953602bbe09ba76d9d7fd6ff3e91ffe4d1574fffb9f7c147873d132",
+        "a1aaf90ca3897c899d8ce2c9085202ccea4e3c9e402427724b2caf16b3606f5f",
+        "f83a91c76462a3078453afa0c7b98153fdb0873423526cf073a8494d435e8846",
+        "b108bb3e7154ac35e928762067fa048090933618a405ac42ac6a320e7bbec524",
+        "dc033824e1dbb963e8c25ddcdafe99c4f30a6992a3f87c163f98936f4aa9bd0e"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final06",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3088,
+        3169,
+        3242,
+        3025,
+        3098,
+        3201,
+        2769,
+        3036
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W20_2D_0083_1D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0083_2D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0083_3D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0116_1D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0116_3D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0116_4D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0136_1D2_spx_l2b-v27-2026-198",
+        "level2_2025W20_2D_0170_2D2_spx_l2b-v27-2026-198"
+      ],
+      "physical_ids": [
+        "2025W20_2D_0083_1",
+        "2025W20_2D_0083_2",
+        "2025W20_2D_0083_3",
+        "2025W20_2D_0116_1",
+        "2025W20_2D_0116_3",
+        "2025W20_2D_0116_4",
+        "2025W20_2D_0136_1",
+        "2025W20_2D_0170_2"
+      ],
+      "raw_sha256": [
+        "de8e7504fca25d9ffcd4c7e06e781fdf608c7146f6403b3dc605f14ea1794278",
+        "20bc3a02381968babd1843a1148766622e4a1720a07757ac7b249646e31b3e36",
+        "0847d309d955e32feed7a9eb61aa704201eda18cc6da4733243787075b1a1eab",
+        "95d28139a30180a705bd45b03ba5ecca8d0415d725f5d9f4a17f764ab3f57602",
+        "dd25bb3088698053bb580e4eacc4ba7cc898e96b4e1cc922d79c23b2296a0417",
+        "b170237bee51b03a70b6b7dbc5672473a919cd9b2691b56ea4d628825a448aaa",
+        "32370cf110ca5450c6678962937ef78ac759de021aaa83c2aefad9cae62cfd84",
+        "89901f99fb41292a938a765849a9f77600476f782618b433ba4d8dbba470ef43"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final07",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3246,
+        3259,
+        3187,
+        3238,
+        3294,
+        3233,
+        3279,
+        3124
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W45_1A_0138_1D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0138_2D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0138_3D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0138_4D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0185_1D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0185_2D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0185_4D3_spx_l2b-v27-2026-247",
+        "level2_2025W45_1A_0242_1D3_spx_l2b-v27-2026-247"
+      ],
+      "physical_ids": [
+        "2025W45_1A_0138_1",
+        "2025W45_1A_0138_2",
+        "2025W45_1A_0138_3",
+        "2025W45_1A_0138_4",
+        "2025W45_1A_0185_1",
+        "2025W45_1A_0185_2",
+        "2025W45_1A_0185_4",
+        "2025W45_1A_0242_1"
+      ],
+      "raw_sha256": [
+        "eb97974807494ac33625fe38af54ba48d191e135a013b9e22a13f459ef6786d3",
+        "d51e2365fef2e95d8fcabfd854e344e84851102b163435982b0595ce0ee6a275",
+        "9b9215fc4ebc509e06b454454f5cb127276e4a968a8e322cd0bf46a9ddd5ca9e",
+        "05d66bd6afa2f2ec48bc64b8a7895a1d9e6b4be9b523cad7aa45e6b429ef4180",
+        "6d8a18f6d38991eb83daff2c5018d022e772563f6fc4e942ffa4991c6fb515b6",
+        "2a0c43d04ac2e1c0c307e0a1af17f3c9a4adc820b9a523d30e073d2fd189a382",
+        "d5c9649edbdda9b32291e732599dc4252d3129de49207413b0cfd7fefa53eac4",
+        "489b01837cbd270cb9c2fe5bdaea12156ad3a02e86d1be88db400cf931131f2f"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final08",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        2988,
+        3156,
+        3135,
+        3143,
+        2677,
+        2813,
+        3181,
+        3232
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W18_1B_0305_1D1_spx_l2b-v27-2026-196",
+        "level2_2025W18_1B_0305_2D1_spx_l2b-v27-2026-196",
+        "level2_2025W18_1B_0305_3D1_spx_l2b-v27-2026-196",
+        "level2_2025W18_1B_0305_4D1_spx_l2b-v27-2026-196",
+        "level2_2025W18_2B_0120_1D1_spx_l2b-v27-2026-197",
+        "level2_2025W18_2B_0120_2D1_spx_l2b-v27-2026-197",
+        "level2_2025W18_2B_0120_3D1_spx_l2b-v27-2026-197",
+        "level2_2025W18_2B_0120_4D1_spx_l2b-v27-2026-197"
+      ],
+      "physical_ids": [
+        "2025W18_1B_0305_1",
+        "2025W18_1B_0305_2",
+        "2025W18_1B_0305_3",
+        "2025W18_1B_0305_4",
+        "2025W18_2B_0120_1",
+        "2025W18_2B_0120_2",
+        "2025W18_2B_0120_3",
+        "2025W18_2B_0120_4"
+      ],
+      "raw_sha256": [
+        "2bcb90435a94d4c53adbbb9407ad99649ff3d74f8b12a374754e585043ee2b1f",
+        "18bb7d995bb410c9ecdc8bdf1609af5179f0ec9f260f5925cc675621581a3dd3",
+        "c3cb1296cc4d0f3b0b1819292015d426c34c0717964ea9f63aae04efdc5d133f",
+        "4ba160743cf7abd89b7723454b73fd795d0dd650d48b3ff56415df5e94f99229",
+        "83ef5a8eac9fca5f5c1671934ce56f1a31757ae611b052b431bef58a4e8f5624",
+        "febcfd1eb9adf55621031afdd98741c966cd56d43d25b76e865929365d5265d5",
+        "6e761bc2ae9f30fafdc436de3bed158d1be32305ee6a495e38b6f7f3de8fac9d",
+        "ce6148b410199db00cb2c38fd6cbe1cad9ee167745642f3c3692f8cc145c600d"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final09",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3293,
+        3070,
+        3130,
+        3083,
+        2683,
+        2161,
+        2775,
+        2469
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W35_1A_0661_1D2_spx_l2b-v27-2026-230",
+        "level2_2025W35_1A_0661_2D2_spx_l2b-v27-2026-230",
+        "level2_2025W35_1A_0661_3D2_spx_l2b-v27-2026-230",
+        "level2_2025W35_1A_0661_4D2_spx_l2b-v27-2026-230",
+        "level2_2025W35_2A_0261_4D2_spx_l2b-v27-2026-231",
+        "level2_2025W35_2A_0273_1D2_spx_l2b-v27-2026-231",
+        "level2_2025W35_2A_0273_3D2_spx_l2b-v27-2026-231",
+        "level2_2025W35_2A_0273_4D2_spx_l2b-v27-2026-231"
+      ],
+      "physical_ids": [
+        "2025W35_1A_0661_1",
+        "2025W35_1A_0661_2",
+        "2025W35_1A_0661_3",
+        "2025W35_1A_0661_4",
+        "2025W35_2A_0261_4",
+        "2025W35_2A_0273_1",
+        "2025W35_2A_0273_3",
+        "2025W35_2A_0273_4"
+      ],
+      "raw_sha256": [
+        "9e4166d0ad10351d209af7e9a0afce385bed4aa1bf5206f2479f1edbf8aeb3c4",
+        "7b45f5d4cc1f88b517fea3e095b88a4259487f4f8b2c6315f0ce5e172eaf53cd",
+        "47db61f316951fccb3a9f9017995b8481daa266039b0b10d9842405d4aec06be",
+        "ddd29afa43b864b01462640653bba30fd3404a93550808c5cb7d68172e33bc1d",
+        "616aea22708a58542d36001c3be66c6bee7afbf30c7fb76dff0783c9fc2fa9ff",
+        "bcb9ce723a236d4b5c7d60c48b83c29c7a3438f92a6293b7b92e2e2d506d8fae",
+        "b590e762bbeafa43c0bdcb5b1f2bee0a93e94c7c372896d71d20337554b47bad",
+        "777a8ebdba33d53ecd457f0448236fa50f96e58d70eeed23465cf77a50aada7f"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final10",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        2364,
+        2738,
+        3154,
+        2491,
+        3161,
+        3164,
+        3083,
+        1255
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2026W04_1A_0586_1D3_spx_l2b-v27-2026-216",
+        "level2_2026W04_1A_0586_2D3_spx_l2b-v27-2026-216",
+        "level2_2026W04_1A_0586_3D3_spx_l2b-v27-2026-216",
+        "level2_2026W04_2A_0059_2D3_spx_l2b-v27-2026-218",
+        "level2_2026W04_2A_0059_4D3_spx_l2b-v27-2026-218",
+        "level2_2026W04_2A_0135_1D3_spx_l2b-v27-2026-218",
+        "level2_2026W04_2A_0135_2D3_spx_l2b-v27-2026-218",
+        "level2_2026W04_2A_0135_4D3_spx_l2b-v27-2026-218"
+      ],
+      "physical_ids": [
+        "2026W04_1A_0586_1",
+        "2026W04_1A_0586_2",
+        "2026W04_1A_0586_3",
+        "2026W04_2A_0059_2",
+        "2026W04_2A_0059_4",
+        "2026W04_2A_0135_1",
+        "2026W04_2A_0135_2",
+        "2026W04_2A_0135_4"
+      ],
+      "raw_sha256": [
+        "6c63fde08b98597a7e56eb885eb9050086d84ee38794891e8503afe90ba245d7",
+        "0b4bc17b74fdf2fbbf3798bce205da6fcf5fe1f19ea1ff5672edeeef14ab8f1a",
+        "12e7d3abf6f37040a0211ad25b0be50ae4f07e0b3b47ecc4866a979b5d5438e1",
+        "06ae9f3e117b8785b3f7bfd13c24f688dc1cbb9e445b40dce10cf208cd1af618",
+        "a65e637d90a1c81267237e5f5aec536f3637156f83ebf303eb85a7355913d09e",
+        "686f015f020f44bdb4bf81cd007d21c7c280037752faaec3b8e94834dcf00d5c",
+        "054b18a66b1206ae5b2af471dd0c4cbe9400a49e9d26304483ea3d64c1f0f81b",
+        "b6a7db1d36ee76a774ec275080f130e115cd0811cbc619801b47d728bc3944c8"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final11",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3145,
+        3082,
+        3152,
+        3177,
+        3150,
+        3078,
+        3123,
+        2653
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W28_2A_0323_1D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0323_2D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0323_3D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0334_1D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0334_4D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0345_3D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0382_2D1_spx_l2b-v27-2026-216",
+        "level2_2025W28_2A_0417_1D1_spx_l2b-v27-2026-216"
+      ],
+      "physical_ids": [
+        "2025W28_2A_0323_1",
+        "2025W28_2A_0323_2",
+        "2025W28_2A_0323_3",
+        "2025W28_2A_0334_1",
+        "2025W28_2A_0334_4",
+        "2025W28_2A_0345_3",
+        "2025W28_2A_0382_2",
+        "2025W28_2A_0417_1"
+      ],
+      "raw_sha256": [
+        "4173bd2d5a654fc2983e73bc37e2290eab4867031d0aa2430e4e675adfe40799",
+        "dfd2b84d1b3bcb881b669873be030c8a54b38c9a754cecbf88efeb628c671c2d",
+        "7b3898778484e90b5cfc6bbcf2ba6dbbb47b451e2fef14f1e8fb5beaf15b2215",
+        "22536356f4e2a0cfa1302736ee2ecef01d1a6471f5fa121e7c860be9dc462d3e",
+        "9a8470a9e1a3e3d070962d3e779947fdcb4c32b46b4a7fecc5e4bf7e1da2125c",
+        "20b8f516f2f1af77fe844f5b2236c93c4e2d00677b80f95570cf040c2ba70d03",
+        "b85deb4c9f85948b1cb1ffc0a55e7b6c6d06b34a8856d8b8812a4ac777d15336",
+        "754221a507c143c82b2074deae0ba12407a733234eb66a1637dafa395232441c"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    },
+    {
+      "parent_id": "v4-final12",
+      "physical_epochs": 8,
+      "finite_pixel_counts": [
+        3324,
+        3173,
+        3264,
+        3252,
+        3301,
+        3171,
+        3212,
+        3171
+      ],
+      "usable_epoch_count": 8,
+      "frame_ids": [
+        "level2_2025W30_1B_0422_1D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0422_2D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0422_3D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0422_4D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0594_2D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0594_4D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0618_2D2_spx_l2b-v27-2026-220",
+        "level2_2025W30_1B_0618_4D2_spx_l2b-v27-2026-220"
+      ],
+      "physical_ids": [
+        "2025W30_1B_0422_1",
+        "2025W30_1B_0422_2",
+        "2025W30_1B_0422_3",
+        "2025W30_1B_0422_4",
+        "2025W30_1B_0594_2",
+        "2025W30_1B_0594_4",
+        "2025W30_1B_0618_2",
+        "2025W30_1B_0618_4"
+      ],
+      "raw_sha256": [
+        "4c8ce9d86e6b490b723a421e15a236e158891c2d95320cef5ccf4e6427f6432b",
+        "85d44972db3608c4d919487d29a7b48a1edb0ee5fc88e9cbdd8a69fbacd2c9ea",
+        "f882686c25055f5e669f3def362cdd387c026bae1c3496bcfe572f48f16adbd6",
+        "9a050e30b636ff065795bdd0048a19a329889f4efbbaacedbbed7a9aa9dad1d5",
+        "a8b5449e65088d8c5fdbabc295d0c3ec98931a76d875e6d370bdd51a921ec76f",
+        "db7ba44618a6efb26f5fa5150c35dec17170cf94e4f677260e0259cba11da7ec",
+        "29a361342cee4c49f0215610bc2867afc052e4570006dc4b097081a64d0cd62d",
+        "331962d4d4505e4f09ad284708045756d054142b9af37a5252f723bcd019d35e"
+      ],
+      "original_supported": true,
+      "original_preparation_bitwise_equal": true
+    }
+  ]
+}

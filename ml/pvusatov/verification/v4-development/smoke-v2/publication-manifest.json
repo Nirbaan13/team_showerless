@@ -1,0 +1,35 @@
+{
+  "scope": "DEVELOPMENT integration smoke, not independent scientific validation",
+  "files": [
+    {
+      "path": "report.json",
+      "sha256": "5e89ea94d1d334021b2832d2608b7b3c51174c5e8cba31326fd8b4ee3c7166e1",
+      "bytes": 17168
+    },
+    {
+      "path": "freeze.json",
+      "sha256": "eff0c9b7dd83eababd9d0dc1c48f853ae3c7c160504971829fed397fb8d0b972",
+      "bytes": 17493
+    },
+    {
+      "path": "native/run-native-manifest.json",
+      "sha256": "cba31f9ee3186d285fe919016170e40f615b6a3230bb614364f39b7b9c089abf",
+      "bytes": 1016
+    },
+    {
+      "path": "native/v4-train04.json.gz",
+      "sha256": "8fb1b4d95762c2738bcbff17fc4f8626091509bc10af80091d40318d0f220dc2",
+      "bytes": 702533
+    },
+    {
+      "path": "synthetic/run-synthetic-manifest.json",
+      "sha256": "17d4b57cbe1c6769d81b1cfc9bf184ead44026e6ec5677ced9b26d06c8fb12f6",
+      "bytes": 985
+    },
+    {
+      "path": "synthetic/synthetic.json.gz",
+      "sha256": "c318c79a2e68b7fa186e95b7519ef31c870e1a4b55f3150ead8db7ff1e4e2393",
+      "bytes": 539315
+    }
+  ]
+}

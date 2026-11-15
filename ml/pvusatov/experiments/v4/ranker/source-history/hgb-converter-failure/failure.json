@@ -1,0 +1,12 @@
+{
+  "observed_utc": "2026-11-15T06:25:47.567192+00:00",
+  "test": "test_binary_histogram_boosting_logit_and_threshold_parity",
+  "conversion": "skl2onnx.to_onnx binary HistGradientBoostingClassifier",
+  "error": "ValueError wrapping ONNX helper TypeError: AttributeProto.ints expected int, got boolean; nodes_missing_value_tracks_true contains bool from sklearn predictor missing_go_to_left",
+  "source_sha256": {
+    "export_graph.py": "f71933669874617e42800cfdaf7a33c01873018fd9bd020dfe3105dc33e9f23b",
+    "test_export.py": "752153648ea2eb267cb8d0c3c4cb268a53ee7e50cf7832f544d68827aa4fddfa"
+  },
+  "weights": "controlled toy only; no selected/final model",
+  "action": "Owned direct numeric binaryHGB regression-tree/logit export; no dependency/global patches"
+}

@@ -1,0 +1,30 @@
+concurrent.futures.process._RemoteTraceback: 
+'''
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/concurrent/futures/process.py", line 423, in wait_result_broken_or_wakeup
+    result_item = result_reader.recv()
+  File "/usr/lib/python3.14/multiprocessing/connection.py", line 258, in recv
+    return _ForkingPickler.loads(buf.getbuffer())
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'ml_inference'
+'''
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/source/experiments/v4/evaluation/execute.py", line 72, in <module>
+    print(run(args.kind, args.freeze, args.freeze_sha256, args.output, args.native_manifest,
+          ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              args.synthetic_manifest, args.both_runs_finished))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/source/experiments/v4/evaluation/execute.py", line 59, in run
+    return runner.run(path, anchor, output)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/source/experiments/v4/evaluation/run_native.py", line 94, in run
+    record = future.result(); results.append(record)
+  File "/usr/lib/python3.14/concurrent/futures/_base.py", line 443, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/concurrent/futures/_base.py", line 395, in __get_result
+    raise self._exception
+concurrent.futures.process.BrokenProcessPool: A process in the process pool was terminated abruptly while the future was running or pending.

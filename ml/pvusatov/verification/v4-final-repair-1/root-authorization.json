@@ -1,0 +1,33 @@
+{
+  "schema_version": 4,
+  "authorized_at_utc": "2026-11-15T09:15:51.370023+00:00",
+  "freeze": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/freeze.json",
+    "sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4"
+  },
+  "amendment": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/amendment.json",
+    "sha256": "dd5485897856a762e67bafcdc00a1fcb45c430f556fb2083bda642d1ed1d0b19"
+  },
+  "selection": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/evaluation/selection.json",
+    "sha256": "b1e364591d2db6f7be8f6f1245ddac53f2586572226c9464ba5a849a3eec2c7a"
+  },
+  "candidate_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "development_smoke": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke/report.json",
+    "sha256": "28de5964335dfde00c2165cba700c393018a7dca16647c004beb731ecd1d99ce"
+  },
+  "independent_review": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/evaluation-review/coverage-repair/REVIEW.AI.md",
+    "sha256": "98f6a4d2b8f70b86bf3b0ca1b08d782deac67a6af3070b54ce5e053e61aa647a"
+  },
+  "scientific_outcomes_inspected": false,
+  "original_outputs_retained_blinded": true,
+  "coverage_diagnostics_inspected": true,
+  "canonical_unblinding_requires": "both amended domains complete and exact scientific equality proof passes",
+  "candidate_reselection": false,
+  "refit": false,
+  "production_promotion_authorized": false
+}

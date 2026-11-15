@@ -1,0 +1,54 @@
+{
+  "role": "Prospectively declared metadata search grids, not training labels or model inputs",
+  "plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "targets": [
+    {
+      "target": {
+        "number": 1,
+        "name": "Ceres",
+        "command": "1;"
+      },
+      "ref": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/ceres-grid.json",
+        "sha256": "5b3f8073c005f213b6d53c9efd34f0bc9e05fec080c8f49a72b1be320477ba5b"
+      },
+      "epochs": 351,
+      "first_mjd": 60789.0,
+      "last_mjd": 61139.0,
+      "range_au_min": 1.96087154115842,
+      "range_au_max": 3.72776839155829
+    },
+    {
+      "target": {
+        "number": 2,
+        "name": "Pallas",
+        "command": "2;"
+      },
+      "ref": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/pallas-grid.json",
+        "sha256": "7d4cdf10fef8d68217811eec1e336d04814396e88fedbc014980b92e4bee32f6"
+      },
+      "epochs": 351,
+      "first_mjd": 60789.0,
+      "last_mjd": 61139.0,
+      "range_au_min": 2.50169793702569,
+      "range_au_max": 4.21616800550339
+    },
+    {
+      "target": {
+        "number": 3,
+        "name": "Juno",
+        "command": "3;"
+      },
+      "ref": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/juno-grid.json",
+        "sha256": "f0c81ca66a0c90e3269056c6dbb2fdd42184eb2ca17816e47aeddfde34f851b4"
+      },
+      "epochs": 351,
+      "first_mjd": 60789.0,
+      "last_mjd": 61139.0,
+      "range_au_min": 2.37155375170098,
+      "range_au_max": 4.20031594370012
+    }
+  ]
+}

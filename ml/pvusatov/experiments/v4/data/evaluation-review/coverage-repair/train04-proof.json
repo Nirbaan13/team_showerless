@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "scope": "TRAIN04 only; no detectors/models/scoring/FINAL access",
+  "source_sha256": {
+    "old_prepare": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+    "new_prepare": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "legacy_latents": "5629b6a9e6ec92e328650ae9e3abd1ba60aac96e90614ab9c3acaf0c8e4e1dcd",
+    "native_epsf": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+    "new_injection": "dfd829e310a74e5bd446a439af9560386bdfb96f5b01386178e32eed024bcf5b",
+    "contracts": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816"
+  },
+  "seed": 3800904,
+  "physical_epochs": 8,
+  "covered_prepare_arrays_bitwise_equal": true,
+  "covered_prepare_metadata_equal": true,
+  "covered_injection_trials_bitwise_equal": 270,
+  "covered_injection_image_sha256": "5245a1c8df4d5ffc835c253f2ec7d978313febd5dce73251b36d3114ea8cd0fd",
+  "covered_core_identity_sha256": "25219058f09b1d7d8e9b4f17418f005f28c2142996da3a9d542afd72dc878d6c",
+  "masked_derivative_trials": 270,
+  "masked_derivative": {
+    "original_sha256": "ac5b19282568e7e94df7b70522052069c6fa3cbc9db6bf34a3f71ed73ca4f1e6",
+    "derivative_sha256": "bd2fec5dab580b660d43afdfe928672319f5d305cffe5483d43392b1ced24620",
+    "scope": "FLAGS-masked TRAIN research version, not an extra physical observation",
+    "planned_epochs": 8,
+    "nonempty_epochs": 7,
+    "warning": [
+      "passband_variation_not_corrected",
+      "psf_matching_not_applied",
+      "observations_without_usable_requested_coverage",
+      "outlier_measurements_retained"
+    ]
+  },
+  "scratch_fits_deleted": true,
+  "all_original_native_bytes_unchanged": true,
+  "wall_seconds": 4.4975830469993525,
+  "maxrss_mib": 258.5
+}

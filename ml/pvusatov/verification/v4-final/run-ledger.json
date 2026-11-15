@@ -1,0 +1,19 @@
+{
+  "schema_version": 4,
+  "started_at_utc": "2026-11-15T08:31:49.530143+00:00",
+  "pre_execution_published_commit": "ceec9ab651a659392800d8c47dd0691f63b58c75",
+  "freeze_sha256": "1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57",
+  "native": {
+    "parents": 12,
+    "planned_moving_trials": 3240,
+    "workers": 4,
+    "output": "/tmp/spaceapps-v4-evaluation/final-1896/native"
+  },
+  "synthetic": {
+    "fields": 3000,
+    "workers": 4,
+    "output": "/tmp/spaceapps-v4-evaluation/final-1896/synthetic"
+  },
+  "root_output_policy": "Neither native nor synthetic scientific result read until both runs terminal and complete",
+  "final_reselection_or_refit": false
+}

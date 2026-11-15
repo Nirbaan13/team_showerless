@@ -1,0 +1,47 @@
+{
+  "designation": "Fixed-model DEVELOPMENT operating-points evidence; no images, no fitting/promotion/default change",
+  "protocol": {
+    "path": "ml/pvusatov/experiments/v4/operating_points/protocol.json",
+    "sha256": "50260bdf28f7bb3cd6db237e1c0f65e505f597fd8634098050001306d72922e0"
+  },
+  "summary": {
+    "path": "ml/pvusatov/experiments/v4/operating_points/results/summary.json",
+    "sha256": "e78485229f512a5c1aeb98e316c2c79e70167a4a1e9652ef17dc5b013d76a534"
+  },
+  "analysis": {
+    "path": "ml/pvusatov/experiments/v4/operating_points/results/analysis.json",
+    "sha256": "dcb2b699ae114ee4f9c8ff60ad0c248c4fa37b1da1dad0ee27aa8e235d56fc9c"
+  },
+  "linker_case": {
+    "path": "ml/pvusatov/experiments/v4/operating_points/results/nonmonotonic-linker-case.json",
+    "sha256": "070473fb401645f40a7a821096c6e82b54538769aebc1d137573a8677e9470e6"
+  },
+  "derived_caches": {
+    "path": "ml/pvusatov/experiments/v4/operating_points/results/derived-feature-caches.tar.gz",
+    "sha256": "3630bf6d1868db6ad6231c9a9ad4a0c00c7afadd1e78e9e2670d9da5f9ca2545",
+    "bytes": 10806051,
+    "records": 156,
+    "contents": "JSONGZ numeric features/scores/epochs/positions/truth/timing/image+mask hashes; no pixels"
+  },
+  "metadata_snapshots": {
+    "C13": {
+      "path": "ml/pvusatov/experiments/v4/operating_points/results/C13-fixed-metadata.json",
+      "sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5",
+      "graph_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204"
+    },
+    "C596": {
+      "path": "ml/pvusatov/experiments/v4/operating_points/results/C596-fixed-metadata.json",
+      "sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+      "graph_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+    }
+  },
+  "allplanned": {
+    "synthetic_fields": 100,
+    "synthetic_truths": 199,
+    "native_derivatives": 54,
+    "native_parents": 2,
+    "unknown_controls": 2
+  },
+  "bootstrap": "whole100syntheticfields,5000pairedresamples; nativeN2descriptive",
+  "scope": "residualproposalpool; BLOOMpublicationnotrun; default4andexistinggatesimmutable"
+}

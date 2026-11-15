@@ -1,0 +1,118 @@
+{
+  "schema_version": 4,
+  "amendment_id": "v4-blinded-coverage-repair-1",
+  "declared_at_utc": "2026-11-15T08:49:30.807616+00:00",
+  "original_freeze": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/freeze.json",
+    "sha256": "1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57",
+    "bytes": 70292
+  },
+  "original_published_commit": "ceec9ab651a659392800d8c47dd0691f63b58c75",
+  "original_protocol_sha256": "e1b1a413e165fedf3014c35353be7493b594b50db9ceb5630a457a486a291c9f",
+  "diagnosis": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final/attempt-1-prepare-diagnosis.json",
+    "sha256": "38f13adc70ef330211b266b64c2791f2e5ad227c0dd8e3754fe379a2143424d1",
+    "bytes": 2342
+  },
+  "opaque_first_attempt": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/first-attempt-opaque-files.json",
+    "sha256": "2efb858f37d36c61dddd728fa54deb96ecffa7bf557298c2b9839e237d4031e5",
+    "bytes": 893
+  },
+  "proposal": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/BLINDED-REPAIR.AI.md",
+    "sha256": "593a6f5bcf13670cfbda0fb79e78a67663dd8e6a6bbba6ed9c3a613bd2e1d3e0",
+    "bytes": 4039
+  },
+  "scientific_outcomes_inspected": false,
+  "coverage_diagnostics_inspected": true,
+  "authorized_readers_before_unblinding": {
+    "root": "preparation diagnostics and opaque hashes only",
+    "agents": "source/protocol/unit and DEV data only; no FINAL pixels/caches/metrics"
+  },
+  "candidate_reselection": false,
+  "refit": false,
+  "parents_replaced": false,
+  "observations_dropped": false,
+  "cohort_and_seeds_unchanged": true,
+  "promotion_gates_unchanged": true,
+  "baseline": "frozen C13 scorer under shared coverage-preserving preparation",
+  "allowed_source_changes": [
+    "freeze",
+    "scene",
+    "run_native",
+    "report"
+  ],
+  "added_sources": [
+    "prepare",
+    "native_injections",
+    "worker_transport",
+    "attempt_equality"
+  ],
+  "scientific_equality_projection": {
+    "field_keys": [
+      "seed",
+      "parent_id",
+      "trajectory_id",
+      "speed_px_hour",
+      "direction_id",
+      "brightness",
+      "origin_xy",
+      "velocity_xy_hour",
+      "injected_flux",
+      "epsf",
+      "usable_center_epochs",
+      "center_usable_flags",
+      "expected_covered_displacement_px",
+      "coverage_known",
+      "independent_geometry",
+      "truth_kind",
+      "truth_count",
+      "expected_xy",
+      "times_hours",
+      "registered_shape",
+      "latent_sha256",
+      "mode",
+      "metadata",
+      "features",
+      "features_v4",
+      "candidate_ids",
+      "candidate_epochs",
+      "candidate_positions_xy",
+      "matches",
+      "matched_geometry",
+      "baseline",
+      "scores_c13",
+      "scores_v4",
+      "geometric_capability",
+      "geometric_capabilities",
+      "attribution_eligible",
+      "preexisting_control_match",
+      "peaks_per_epoch",
+      "peak_cap_reached",
+      "error",
+      "scores",
+      "feature_diagnostics",
+      "truth_count_known"
+    ],
+    "ordering": "exact ordered fields and candidate vectors; compare decoded JSON values without numeric tolerances",
+    "excluded_fields": [
+      "partition",
+      "scope",
+      "freeze/source/provenance metadata",
+      "elapsed_seconds",
+      "rss_mib",
+      "wall_seconds",
+      "noise_reference_usable_epoch_count",
+      "noise_reference_policy"
+    ],
+    "required_synthetic_fields": 3000,
+    "unexpected_difference_action": "halt blinded review; no tolerance relaxation, reselection or refit"
+  },
+  "canonical_unblinding": "once after both amended domains complete and exact equality checks pass",
+  "coverage_audit": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/prepare-only-audit.json",
+    "sha256": "5a1444c0adb7074b5e49396ee1c633890c90d321e75812e1df675a158a06b2a3",
+    "bytes": 21321
+  }
+}

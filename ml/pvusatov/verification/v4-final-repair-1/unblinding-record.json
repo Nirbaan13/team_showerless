@@ -1,0 +1,7 @@
+{
+  "first_canonical_unblinded_at_utc": "2026-11-15T09:45:56.236721+00:00",
+  "report_sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "exact_equality_previously_passed": true,
+  "refit_or_reselection": false
+}

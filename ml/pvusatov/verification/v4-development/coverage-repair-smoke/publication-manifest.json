@@ -1,0 +1,35 @@
+{
+  "scope": "DEVELOPMENT covered-input repaired-runner integration smoke",
+  "files": [
+    {
+      "path": "report.json",
+      "sha256": "28de5964335dfde00c2165cba700c393018a7dca16647c004beb731ecd1d99ce",
+      "bytes": 17457
+    },
+    {
+      "path": "freeze.json",
+      "sha256": "530431150b981780fa2730e32121225b95a60e39900d8954332a6e4c0900c780",
+      "bytes": 19364
+    },
+    {
+      "path": "native/run-native-manifest.json",
+      "sha256": "f6308a53733316ae7cc66b0e1086d2cf0905bc989385d6051e796f5aaa86ef0d",
+      "bytes": 1029
+    },
+    {
+      "path": "native/v4-train04.json.gz",
+      "sha256": "fe04646bf99c9b1e0e249bd9fd09db467daaedb2af8c728f8d4b4138f66a63c9",
+      "bytes": 704601
+    },
+    {
+      "path": "synthetic/run-synthetic-manifest.json",
+      "sha256": "ceef2506d4521ccf34edae8d21c59e0f6d867f17074a581e5928a6c9f55b5190",
+      "bytes": 998
+    },
+    {
+      "path": "synthetic/synthetic.json.gz",
+      "sha256": "4d1fcea5664da9198d41dad4b1ece18f6308f9a5d0a90ff09f8643ecee904c0d",
+      "bytes": 539491
+    }
+  ]
+}

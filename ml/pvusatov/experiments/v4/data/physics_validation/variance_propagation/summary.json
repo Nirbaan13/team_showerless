@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "invocation": {
+    "created_utc": "2026-11-15T06:59:48.711493+00:00",
+    "plan_sha256": "54a4e8c243d7bb44aad61944d723f8527fa19fb316de02010420544feab54394",
+    "source_sha256": {
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/run_study.py": "83201c373dd8d251cb397a55c13d05178bafe4735c9f6323b1dfa644ef495330",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/variance_propagation/operators.py": "1688a8df33b5bfb8b11a3fe2482eebea5f57326c1c3f349a412d65b090ec9a07",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/native_overlay.py": "3a69909625654c3eba0e57c92567a81c8bf8f473254a8abe34c2f1c571cf0344",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/physics_validation/run_validation.py": "a74193dd3ba5f8d634b668f601c4d6bfa0e6a5451a3f7ad3549e4c2ea53b12eb",
+      "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/prepare.py": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb"
+    },
+    "versions": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "astropy": "8.0.2"
+    },
+    "scope": "TRAIN-only conditional uncertainty propagation engineering; not instrument covariance, source photon-noise simulation, training examples or model evaluation",
+    "final_pixels_opened": false
+  },
+  "frame_count": 24,
+  "independent_train_parents": 3,
+  "conditional_draws_per_frame": 2048,
+  "total_conditional_frame_draws": 49152,
+  "planned_patches": 72,
+  "available_patches": 72,
+  "unavailable_patches": 0,
+  "sigma_ratio_exact_to_diagonal": {
+    "min": 1.0024232528339925,
+    "median": 1.2952156580208092,
+    "max": 1.3924080882486471
+  },
+  "maximum_mc_variance_deviation_normalized_by_SE": 2.6199907869738825,
+  "mc95_intervals_containing_analytic": 70,
+  "maximum_affine_amplitude_change_from_median": 1.942890293094024e-15,
+  "maximum_explicit_operator_vs_prepare_error": 7.105427357601002e-15,
+  "native_conditional_fits_spotchecks": [
+    {
+      "original_sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+      "derivative_sha256": "ef2c64b2c20209f1762395d93916715a9a4d0c509509a72c246b3288596fa564",
+      "original_path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+      "derivative_path": "/tmp/spaceapps-v4-native-data/physics-validation-scratch/conditional-variance-w02kp070/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226-v4-conditional-noise.fits",
+      "conditional_gaussian_perturbation": true,
+      "source_photon_noise_added": false,
+      "variance_reference_updated": false,
+      "nonimage_arrays_preserved": true,
+      "image_bitpix": -64,
+      "checksums_valid": true,
+      "archive_bytes_claimed": false,
+      "prepare_vs_explicit_operator_max_abs": 7.105427357601002e-15,
+      "physical_epochs_preserved": true,
+      "deleted_after_validation": true
+    },
+    {
+      "original_sha256": "1b6934be2db3a65c83e11fbfb2c7d27c4680207d90dfcc551fe3838ad462669e",
+      "derivative_sha256": "abdcd145dfd9622650b0f9eec4a419bae3052855f3301ffe218852ec741b4850",
+      "original_path": "/tmp/spaceapps-v4-native-data/development/v4-train02/level2_2025W23_1C_0593_1D2_spx_l2b-v27-2026-200.fits",
+      "derivative_path": "/tmp/spaceapps-v4-native-data/physics-validation-scratch/conditional-variance-jg3g8i7h/level2_2025W23_1C_0593_1D2_spx_l2b-v27-2026-200-v4-conditional-noise.fits",
+      "conditional_gaussian_perturbation": true,
+      "source_photon_noise_added": false,
+      "variance_reference_updated": false,
+      "nonimage_arrays_preserved": true,
+      "image_bitpix": -64,
+      "checksums_valid": true,
+      "archive_bytes_claimed": false,
+      "prepare_vs_explicit_operator_max_abs": 3.552713678800501e-15,
+      "physical_epochs_preserved": true,
+      "deleted_after_validation": true
+    },
+    {
+      "original_sha256": "85f7b6be28f305e07e8fe1da4660680039bf3b69b847b43d04c40c5d60b76ac1",
+      "derivative_sha256": "d0fd506806e381c9f7a5c6dc4552ed2ca179cca3ee94729ff08349dd9d1f2905",
+      "original_path": "/tmp/spaceapps-v4-native-data/development/v4-train03/level2_2025W26_2A_0356_1D3_spx_l2b-v27-2026-214.fits",
+      "derivative_path": "/tmp/spaceapps-v4-native-data/physics-validation-scratch/conditional-variance-8qb01d0c/level2_2025W26_2A_0356_1D3_spx_l2b-v27-2026-214-v4-conditional-noise.fits",
+      "conditional_gaussian_perturbation": true,
+      "source_photon_noise_added": false,
+      "variance_reference_updated": false,
+      "nonimage_arrays_preserved": true,
+      "image_bitpix": -64,
+      "checksums_valid": true,
+      "archive_bytes_claimed": false,
+      "prepare_vs_explicit_operator_max_abs": 3.552713678800501e-15,
+      "physical_epochs_preserved": true,
+      "deleted_after_validation": true
+    }
+  ],
+  "elapsed_seconds": 29.263159620997612,
+  "source_photon_noise_added": false,
+  "variance_reference_updated": false,
+  "model_or_detector_called": false,
+  "final_pixels_opened": false,
+  "scope": "Conditional independent native Gaussian uncertainty propagation only; not instrument covariance, physical source Poisson noise, real precision, training labels or model validation",
+  "temporal_limit": "No leave-one-out residual temporal covariance is modeled. Neighbor covariance refers to registration before temporal background subtraction."
+}

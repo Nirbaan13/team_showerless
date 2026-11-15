@@ -1,0 +1,35 @@
+{
+  "schema_version": 4,
+  "kind": "synthetic",
+  "scope": "final",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "evaluation_complete": true,
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "outputs": [
+    {
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/synthetic/synthetic.json.gz",
+      "sha256": "ec862fa4004ffd08954e90a5d281e3c203f96127d3d71a2547b0dcfda572b0be",
+      "summary": {
+        "planned": 3000,
+        "candidate_rows": 140949,
+        "spatial_recovered": 1926,
+        "spatial_recovered_trials": 1244,
+        "resolved_truth_span_ge3px": 1588,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    }
+  ]
+}

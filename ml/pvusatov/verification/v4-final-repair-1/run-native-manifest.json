@@ -1,0 +1,234 @@
+{
+  "schema_version": 4,
+  "kind": "native",
+  "scope": "final",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "evaluation_complete": true,
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "outputs": [
+    {
+      "parent_id": "v4-final01",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final01.json.gz",
+      "sha256": "448163173eb4afc235c5da54884ec9d261a46beed0619105f2e350d733af3df2",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 21451,
+        "spatial_recovered": 50,
+        "spatial_recovered_trials": 50,
+        "resolved_truth_span_ge3px": 27,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final02",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final02.json.gz",
+      "sha256": "a0b001c3aae1c20383b37898e722a889a1b7cde8edf9dbc45df51e6038f474bc",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 5476,
+        "spatial_recovered": 55,
+        "spatial_recovered_trials": 55,
+        "resolved_truth_span_ge3px": 32,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final03",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final03.json.gz",
+      "sha256": "f1c29e617403a1c4c66b5aba51392a45858c035af236c03029fc310c66da0008",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 32195,
+        "spatial_recovered": 80,
+        "spatial_recovered_trials": 80,
+        "resolved_truth_span_ge3px": 72,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final04",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final04.json.gz",
+      "sha256": "90cdec485fba683e932d599356a59c5067b314ec5257d677811281f721ba0bcb",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 7214,
+        "spatial_recovered": 49,
+        "spatial_recovered_trials": 49,
+        "resolved_truth_span_ge3px": 33,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final05",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final05.json.gz",
+      "sha256": "068d30cb935fcf5994d49ae70c4c3f764f1df184137c65ed7b636461c00f69da",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 55245,
+        "spatial_recovered": 86,
+        "spatial_recovered_trials": 86,
+        "resolved_truth_span_ge3px": 76,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final06",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final06.json.gz",
+      "sha256": "0d0fdd8ca3310fd31deda87879814125ddfbcca00a83145bc6d6cf2caa6616b6",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 6045,
+        "spatial_recovered": 58,
+        "spatial_recovered_trials": 58,
+        "resolved_truth_span_ge3px": 56,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final07",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final07.json.gz",
+      "sha256": "555c0bcf20f85b1082e8d3537c4e35b296687ab0c1b5b4907a0319a720681dd3",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 36125,
+        "spatial_recovered": 62,
+        "spatial_recovered_trials": 62,
+        "resolved_truth_span_ge3px": 37,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final08",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final08.json.gz",
+      "sha256": "cb391d075512b5b28edcb0d498f50cecfae9bbb11804d5269d18488f55e02eea",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 3204,
+        "spatial_recovered": 31,
+        "spatial_recovered_trials": 31,
+        "resolved_truth_span_ge3px": 15,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final09",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final09.json.gz",
+      "sha256": "4133034a08993d92746251f521821e7aa9eaea969e43a1fc76bf8d504c45fdd8",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 39688,
+        "spatial_recovered": 52,
+        "spatial_recovered_trials": 52,
+        "resolved_truth_span_ge3px": 26,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final10",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final10.json.gz",
+      "sha256": "8d6382fc1080d6bf3a8233448a905ce518a839049f41b7de90b483e0b1ab65bb",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 2434,
+        "spatial_recovered": 30,
+        "spatial_recovered_trials": 30,
+        "resolved_truth_span_ge3px": 18,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final11",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final11.json.gz",
+      "sha256": "3aeb57934ba78d49f8227a69253d87923c99c0478eb5757df156db7468a970b8",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 11248,
+        "spatial_recovered": 145,
+        "spatial_recovered_trials": 145,
+        "resolved_truth_span_ge3px": 112,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    },
+    {
+      "parent_id": "v4-final12",
+      "path": "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final12.json.gz",
+      "sha256": "bc237f7bcf8a4c046f69f8a5414d0196675955c9605660d50082a12ad7ce4a76",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 5130,
+        "spatial_recovered": 48,
+        "spatial_recovered_trials": 48,
+        "resolved_truth_span_ge3px": 37,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    }
+  ]
+}

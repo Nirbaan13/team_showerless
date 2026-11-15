@@ -1,0 +1,228 @@
+{
+  "schema_version": 4,
+  "purpose": "Check imported code against exact text and replay fixed cached DEV fields.\n\nThis is post-generation controlled integrity evidence. Original workers did not\nrecord code-object fingerprints; this report does not retroactively claim they did.\n",
+  "feature_source_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/features.py",
+  "feature_source_sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+  "feature_contract_sha256": "67ad2d61e3f26384860c313f69e916ab6b9ed1c46c6016012af0ae7144d3977b",
+  "imported_function_fingerprints": {
+    "_difference": "47f4c11cc3cb37dcb7791ce2182e0d746613c357635e7fea2db5b710f4b9d99b",
+    "_maps": "b728719c6f8bfe3dc4e041670a311771881751b00cd20c29d43972fc8b79f5f8",
+    "_sample": "63a04521227fef5a1ce53fb84eaadc8d50c2c47c2aed36779a5efe0bfa1ffd82",
+    "_coherent": "a99a31d6fba24aed940359bbacb97802ab6f3513dc7a4be6ed4313b8c6176d4a",
+    "FeatureContext.__init__": "8f1c8cabd69a7b8483770129e0e3f8d8d964b58b025cdafba1931a6964b9ac59",
+    "FeatureContext._samples": "e6ea4648e815852e5ed62ca0d1e0b07ce962ff8713d78887ef84bae30c167bcc",
+    "FeatureContext.extract": "f5a0dbf76c86ff1b9ac036917fb0cafbb58cf8a7e4c5d4280f98b1af1df398c3",
+    "FeatureContext._result": "6d91480b2491c7d3a124cbc8311130072b5937f0b078797126bf512394206989",
+    "extract_features": "46270fe494085b93186e8c2905cfb209b6aab3612d9362462e41e20647505735"
+  },
+  "fresh_compile_function_fingerprints": {
+    "_difference": "47f4c11cc3cb37dcb7791ce2182e0d746613c357635e7fea2db5b710f4b9d99b",
+    "_maps": "b728719c6f8bfe3dc4e041670a311771881751b00cd20c29d43972fc8b79f5f8",
+    "_sample": "63a04521227fef5a1ce53fb84eaadc8d50c2c47c2aed36779a5efe0bfa1ffd82",
+    "_coherent": "a99a31d6fba24aed940359bbacb97802ab6f3513dc7a4be6ed4313b8c6176d4a",
+    "FeatureContext.__init__": "8f1c8cabd69a7b8483770129e0e3f8d8d964b58b025cdafba1931a6964b9ac59",
+    "FeatureContext._samples": "e6ea4648e815852e5ed62ca0d1e0b07ce962ff8713d78887ef84bae30c167bcc",
+    "FeatureContext.extract": "f5a0dbf76c86ff1b9ac036917fb0cafbb58cf8a7e4c5d4280f98b1af1df398c3",
+    "FeatureContext._result": "6d91480b2491c7d3a124cbc8311130072b5937f0b078797126bf512394206989",
+    "extract_features": "46270fe494085b93186e8c2905cfb209b6aab3612d9362462e41e20647505735"
+  },
+  "all_function_code_matches_text": true,
+  "replayed_fields": [
+    {
+      "seed": 3000000,
+      "partition": "train",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000001,
+      "partition": "train",
+      "candidate_rows": 78,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000002,
+      "partition": "train",
+      "candidate_rows": 2,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000003,
+      "partition": "train",
+      "candidate_rows": 12,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000009,
+      "partition": "train",
+      "candidate_rows": 1,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000010,
+      "partition": "train",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000011,
+      "partition": "train",
+      "candidate_rows": 8,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000015,
+      "partition": "train",
+      "candidate_rows": 3,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000050,
+      "partition": "train",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000099,
+      "partition": "train",
+      "candidate_rows": 3,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000127,
+      "partition": "train",
+      "candidate_rows": 5,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000511,
+      "partition": "train",
+      "candidate_rows": 8,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3000999,
+      "partition": "train",
+      "candidate_rows": 73,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3002047,
+      "partition": "train",
+      "candidate_rows": 526,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3004095,
+      "partition": "train",
+      "candidate_rows": 50,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3004999,
+      "partition": "train",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100000,
+      "partition": "validation",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100001,
+      "partition": "validation",
+      "candidate_rows": 1,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100002,
+      "partition": "validation",
+      "candidate_rows": 3,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100003,
+      "partition": "validation",
+      "candidate_rows": 129,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100009,
+      "partition": "validation",
+      "candidate_rows": 6,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100010,
+      "partition": "validation",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100011,
+      "partition": "validation",
+      "candidate_rows": 340,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100015,
+      "partition": "validation",
+      "candidate_rows": 5,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100050,
+      "partition": "validation",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100099,
+      "partition": "validation",
+      "candidate_rows": 5,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100127,
+      "partition": "validation",
+      "candidate_rows": 0,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100255,
+      "partition": "validation",
+      "candidate_rows": 795,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100511,
+      "partition": "validation",
+      "candidate_rows": 4,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100767,
+      "partition": "validation",
+      "candidate_rows": 16,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100998,
+      "partition": "validation",
+      "candidate_rows": 2,
+      "scientific_fields_bitwise_equal": true
+    },
+    {
+      "seed": 3100999,
+      "partition": "validation",
+      "candidate_rows": 18,
+      "scientific_fields_bitwise_equal": true
+    }
+  ],
+  "total_candidate_rows": 2093,
+  "source_and_cached_observables_agree": true,
+  "original_workers_recorded_bytecode_fingerprints": false,
+  "limitations": "Controlled deterministic32fieldreplay and currentimport verification, not a claim of originalperworkerfingerprintlogging; module size changed during prior streamingrefactor and source was stablebefore/during cachegeneration."
+}

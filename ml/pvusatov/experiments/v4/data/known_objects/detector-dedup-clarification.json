@@ -1,0 +1,6 @@
+{
+  "declared_utc": "2026-11-15T07:29:02.405169+00:00",
+  "original_plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "clarification": "Deduplicate release/processing versions PER (physical OBSID, detector), preserving D1..D6 alternatives for the declared detector preference. Physical OBSID exclusions apply across ALL detectors. Final selected parent remains one detector with unique physical OBSIDs.",
+  "reason": "Caught in code review and RED regression before any target archive metadata rows or image downloads; global OBSID-only dedup would incorrectly erase detector fallbacks"
+}

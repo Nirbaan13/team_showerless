@@ -1,0 +1,16 @@
+{
+  "scope": "DEV metadata/cache validation only, no scores or FINAL access",
+  "summary_source_sha256": "2c9172120c46759a82fab5648d0d7e0986f44b46da69bc7c7a387839c9fdcda4",
+  "probes": [
+    {
+      "probe": "valid",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "erased_control_geometry",
+      "accepted": false,
+      "error": "ValueError: matched geometry candidate alignment is invalid"
+    }
+  ]
+}

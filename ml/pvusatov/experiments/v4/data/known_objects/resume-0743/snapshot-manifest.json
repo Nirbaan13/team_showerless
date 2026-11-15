@@ -1,0 +1,45 @@
+{
+  "recorded_utc": "2026-11-15T07:47:40.031417+00:00",
+  "status": "INCOMPLETE at original Ceres May01; broad DR1/QR3 timeouts; no archive selection/image access",
+  "translation": [
+    {
+      "original_path": "active-search-source.json",
+      "snapshot_path": "resume-0743/active-search-source.json",
+      "sha256": "372c32629fddd64079e34b2ff4df74c596a2277091b219836e1ce748f471f958",
+      "bytes": 278
+    },
+    {
+      "original_path": "evidence/ceres-2025-05-01-spherex_dr1-posonly-512.xml.failures.json",
+      "snapshot_path": "resume-0743/evidence/ceres-2025-05-01-spherex_dr1-posonly-512.xml.failures.json",
+      "sha256": "7ec3d7b384d58b7fdca4606af1f6d21bc51a63c347e640b34d06d36d63c931bb",
+      "bytes": 415
+    },
+    {
+      "original_path": "evidence/ceres-2025-05-01-spherex_qr3-posonly-512.xml.failures.json",
+      "snapshot_path": "resume-0743/evidence/ceres-2025-05-01-spherex_qr3-posonly-512.xml.failures.json",
+      "sha256": "b184fa8d708ef5e092b4830b7a44258556d2bbe1eba8a1808c08fdc4615f7c8b",
+      "bytes": 415
+    },
+    {
+      "original_path": "search-log.json",
+      "snapshot_path": "resume-0743/search-log.json",
+      "sha256": "b4c2c61a538bce17e7327616e16f740bdd1392bcadbf8e97bcb2eec52b97458a",
+      "bytes": 1803
+    },
+    {
+      "original_path": "search.py",
+      "snapshot_path": "resume-0743/search.py",
+      "sha256": "2c8c75661ef9c21ce82cbc612611b7b8bcae10f33d133c5958de9a7a518647e5",
+      "bytes": 14071
+    },
+    {
+      "original_path": "incomplete-acquisition.json",
+      "snapshot_path": "resume-0743/incomplete-acquisition.json",
+      "sha256": "b93111dd09f79714318ae9d54eafc25ee67d6ca41c271abc60c820f5b1049d0e",
+      "bytes": 330
+    }
+  ],
+  "original_capsule_path": "capsule-0731",
+  "original_manifest_sha256": "7cd997ef44a4511f6b396eb9601065d1ded9d964879ea024de1a4e54fa4a8e35",
+  "original_top_level_capsule_files_restored_exactly": true
+}

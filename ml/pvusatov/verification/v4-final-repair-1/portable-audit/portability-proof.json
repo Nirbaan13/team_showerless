@@ -1,0 +1,275 @@
+{
+  "created_utc": "2026-11-15T10:27:48.770145+00:00",
+  "copied_to_unrelated_temporary_directory": true,
+  "cwd_unrelated": true,
+  "pythonpath_cleared": true,
+  "scientific_inputs_only_inside_copy": true,
+  "manifest_sha256": "019e6cd9a34d4411923fc50f2ea5fe54937bee8b7dabe83181abecb8a656709b",
+  "verifier_sha256": "e8ede62b0e311a31ff40ecb297012788301f5f4ed898a86ac7447fe361d97225",
+  "payload_sha256": "d2f2766935acc92c169de02b0959882186560b6aacdbf34f3dcddd0965f9e50c",
+  "source_capsule_bytes": 25454386,
+  "elapsed_seconds": 7.993846413999563,
+  "exit_code": 0,
+  "evidence": {
+    "canonical_report_sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+    "external_input_guard": {
+      "active": true,
+      "expected_probe_rejections": 1,
+      "scope": "Python audit-hook file opens/listing after interpreter and NumPy initialization",
+      "unexpected_external_attempts": 0
+    },
+    "fields": 6240,
+    "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+    "geometry": {
+      "native": {
+        "finite_centers_ge3": 3135,
+        "geometrically_testable": 1345,
+        "planned_truths": 3240,
+        "resolved_covered_truth_span_ge3px": 1350
+      },
+      "synthetic": {
+        "finite_centers_ge3": 5780,
+        "geometrically_testable": 4576,
+        "planned_truths": 5993,
+        "resolved_covered_truth_span_ge3px": 4667
+      }
+    },
+    "limitation": "Feature matrices are omitted and hash-bound; this is score/geometry accounting, not recomputation of features or model outputs.",
+    "native_fields": 3240,
+    "no_scoring_or_model_or_pixel_reads": true,
+    "peak_cap_trials": {
+      "native": 0,
+      "synthetic": 0
+    },
+    "reports": {
+      "native": {
+        "all_planned": {
+          "baseline": {
+            "candidate_rows": 225455,
+            "detected": 746,
+            "macro_recall1": 0.17067901234567898,
+            "macro_recall3": 0.20771604938271604,
+            "micro_recall1": 0.170679012345679,
+            "micro_recall3": 0.20771604938271604,
+            "top1": 553,
+            "top3": 673
+          },
+          "candidate": {
+            "candidate_rows": 225455,
+            "detected": 746,
+            "macro_recall1": 0.21141975308641978,
+            "macro_recall3": 0.22499999999999998,
+            "micro_recall1": 0.21141975308641975,
+            "micro_recall3": 0.225,
+            "top1": 685,
+            "top3": 729
+          },
+          "groups_with_truth": 12,
+          "independent_groups": 12,
+          "macro_delta_top1": 0.04074074074074074,
+          "macro_delta_top3": 0.017283950617283952,
+          "paired_parent_ci95_top1": [
+            0.023148148148148154,
+            0.05925925925925926
+          ],
+          "paired_parent_ci95_top3": [
+            0.008024691358024692,
+            0.02716049382716049
+          ],
+          "trials": 3240,
+          "truth_count": 3240
+        },
+        "common_attributable": {
+          "baseline": {
+            "candidate_rows": 225455,
+            "detected": 746,
+            "macro_recall1": 0.17067901234567898,
+            "macro_recall3": 0.20771604938271604,
+            "micro_recall1": 0.170679012345679,
+            "micro_recall3": 0.20771604938271604,
+            "top1": 553,
+            "top3": 673
+          },
+          "candidate": {
+            "candidate_rows": 225455,
+            "detected": 746,
+            "macro_recall1": 0.21141975308641978,
+            "macro_recall3": 0.22499999999999998,
+            "micro_recall1": 0.21141975308641975,
+            "micro_recall3": 0.225,
+            "top1": 685,
+            "top3": 729
+          },
+          "groups_with_truth": 12,
+          "independent_groups": 12,
+          "macro_delta_top1": 0.04074074074074074,
+          "macro_delta_top3": 0.017283950617283952,
+          "paired_parent_ci95_top1": [
+            0.023148148148148154,
+            0.05925925925925926
+          ],
+          "paired_parent_ci95_top3": [
+            0.008024691358024692,
+            0.02716049382716049
+          ],
+          "trials": 3240,
+          "truth_count": 3240
+        },
+        "common_finite_center_ge3": {
+          "baseline": {
+            "candidate_rows": 221080,
+            "detected": 732,
+            "macro_recall1": 0.17357752418419292,
+            "macro_recall3": 0.21010020184634526,
+            "micro_recall1": 0.17448165869218502,
+            "micro_recall3": 0.21148325358851675,
+            "top1": 547,
+            "top3": 663
+          },
+          "candidate": {
+            "candidate_rows": 221080,
+            "detected": 732,
+            "macro_recall1": 0.21326435521397624,
+            "macro_recall3": 0.2263856839475876,
+            "micro_recall1": 0.21467304625199363,
+            "micro_recall3": 0.22807017543859648,
+            "top1": 673,
+            "top3": 715
+          },
+          "groups_with_truth": 12,
+          "independent_groups": 12,
+          "macro_delta_top1": 0.03968683102978331,
+          "macro_delta_top3": 0.01628548210124237,
+          "paired_parent_ci95_top1": [
+            0.02222065503350188,
+            0.058549673887724196
+          ],
+          "paired_parent_ci95_top3": [
+            0.0075982895442754895,
+            0.025383521843936205
+          ],
+          "trials": 3135,
+          "truth_count": 3135
+        }
+      },
+      "synthetic": {
+        "all_planned": {
+          "baseline": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.13277777777777777,
+            "macro_recall3": 0.21284722222222222,
+            "micro_recall1": 0.11947271817119973,
+            "micro_recall3": 0.20357083263807776,
+            "top1": 716,
+            "top3": 1220
+          },
+          "candidate": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.21263888888888888,
+            "macro_recall3": 0.29819444444444443,
+            "micro_recall1": 0.1858835307859169,
+            "micro_recall3": 0.2900050058401468,
+            "top1": 1114,
+            "top3": 1738
+          },
+          "groups_with_truth": 2400,
+          "independent_groups": 3000,
+          "macro_delta_top1": 0.0798611111111111,
+          "macro_delta_top3": 0.08534722222222221,
+          "paired_parent_ci95_top1": [
+            0.07104166666666667,
+            0.08885503472222221
+          ],
+          "paired_parent_ci95_top3": [
+            0.07680555555555554,
+            0.09378472222222221
+          ],
+          "trials": 3000,
+          "truth_count": 5993
+        },
+        "common_attributable": {
+          "baseline": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.13277777777777777,
+            "macro_recall3": 0.21284722222222222,
+            "micro_recall1": 0.11947271817119973,
+            "micro_recall3": 0.20357083263807776,
+            "top1": 716,
+            "top3": 1220
+          },
+          "candidate": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.21263888888888888,
+            "macro_recall3": 0.29819444444444443,
+            "micro_recall1": 0.1858835307859169,
+            "micro_recall3": 0.2900050058401468,
+            "top1": 1114,
+            "top3": 1738
+          },
+          "groups_with_truth": 2400,
+          "independent_groups": 3000,
+          "macro_delta_top1": 0.0798611111111111,
+          "macro_delta_top3": 0.08534722222222221,
+          "paired_parent_ci95_top1": [
+            0.07104166666666667,
+            0.08885503472222221
+          ],
+          "paired_parent_ci95_top3": [
+            0.07680555555555554,
+            0.09378472222222221
+          ],
+          "trials": 3000,
+          "truth_count": 5993
+        },
+        "common_finite_center_ge3": {
+          "baseline": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.13277777777777777,
+            "macro_recall3": 0.21284722222222222,
+            "micro_recall1": 0.11947271817119973,
+            "micro_recall3": 0.20357083263807776,
+            "top1": 716,
+            "top3": 1220
+          },
+          "candidate": {
+            "candidate_rows": 140949,
+            "detected": 1926,
+            "macro_recall1": 0.21263888888888888,
+            "macro_recall3": 0.29819444444444443,
+            "micro_recall1": 0.1858835307859169,
+            "micro_recall3": 0.2900050058401468,
+            "top1": 1114,
+            "top3": 1738
+          },
+          "groups_with_truth": 2400,
+          "independent_groups": 3000,
+          "macro_delta_top1": 0.0798611111111111,
+          "macro_delta_top3": 0.08534722222222221,
+          "paired_parent_ci95_top1": [
+            0.07104166666666667,
+            0.08885503472222221
+          ],
+          "paired_parent_ci95_top3": [
+            0.07680555555555554,
+            0.09378472222222221
+          ],
+          "trials": 3000,
+          "truth_count": 5993
+        }
+      }
+    },
+    "status": "PASS",
+    "strata_checked": {
+      "native": 26,
+      "synthetic": 3
+    },
+    "synthetic_fields": 3000,
+    "unknown_control_rows": 824
+  },
+  "interpretation": "Python audit hook rejects external input open/listing after interpreter+NumPy initialization; no OS-sandbox claim"
+}

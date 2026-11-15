@@ -1,0 +1,72 @@
+{
+  "designation": "Controlled exceptional-column scheduling resource probe; exact arithmetic",
+  "measurements": [
+    {
+      "case": "zero",
+      "method": "legacy",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 18.64279066099698,
+      "rss_mib": 607.81640625,
+      "diagnostics": null,
+      "result_sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351"
+    },
+    {
+      "case": "zero",
+      "method": "sorted",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 16.678307171998313,
+      "rss_mib": 607.7109375,
+      "diagnostics": {
+        "mode": "legacy_all_exceptional_float64",
+        "fast_columns": 0,
+        "fallback_columns": 262144,
+        "finite_count_min": 32,
+        "finite_count_max": 32,
+        "fallback_policy": "any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic"
+      },
+      "result_sha256": "3b6a07d0d404fab4e23b6d34bc6696a6a312dd92821332385e5af7c01c421351"
+    },
+    {
+      "case": "mixed_half_zero",
+      "method": "legacy",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 25.395579196003382,
+      "rss_mib": 607.8359375,
+      "diagnostics": null,
+      "result_sha256": "fb686c8807e06bf6873d494c7fda1e77498cb001fb8b94fa9914dcf1c640770b"
+    },
+    {
+      "case": "mixed_half_zero",
+      "method": "sorted",
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "seconds": 12.679285436999635,
+      "rss_mib": 429.703125,
+      "diagnostics": {
+        "mode": "sorted_float64_with_exceptional_column_fallback",
+        "fast_columns": 131072,
+        "fallback_columns": 131072,
+        "finite_count_min": 32,
+        "finite_count_max": 32,
+        "fallback_policy": "any finite zero/subnormal/abs>Float64max/4; exact legacy arithmetic"
+      },
+      "result_sha256": "fb686c8807e06bf6873d494c7fda1e77498cb001fb8b94fa9914dcf1c640770b"
+    }
+  ],
+  "source_sha256": "64d1b79ff119bdee70ac769f9c05fd9db541bbf83473fbe394da80025079d172"
+}

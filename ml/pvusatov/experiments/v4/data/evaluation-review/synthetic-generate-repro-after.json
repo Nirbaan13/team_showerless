@@ -1,0 +1,6 @@
+{
+  "scope": "Actual generate() + actual legacy _record(); fake observable arrays and no detector/model/FITS calls",
+  "source_sha256": "cd171ed89656204b8b9c5dfb1f148e64712c6e469f89457305f3000c29b0098a",
+  "status": "returned",
+  "candidate_rows": 0
+}

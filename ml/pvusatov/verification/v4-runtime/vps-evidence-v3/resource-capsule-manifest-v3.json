@@ -1,0 +1,129 @@
+{
+  "files": [
+    {
+      "path": "deps/base-provenance.json",
+      "sha256": "9ce0ae8558d98bc52001d0c4882ec04b35f69a700ea17f71bb55525837a05c6b",
+      "bytes": 214
+    },
+    {
+      "path": "host-probe-run-v3.json",
+      "sha256": "3af0b8e48a35d3b4539a1c229a799cf445fa0fc3f70074fe5d3008dd9ad96c6e",
+      "bytes": 1887
+    },
+    {
+      "path": "evidence-v3-presets/host-inspect.json",
+      "sha256": "ec774230433c5ead7c7e4295a86a2cf20d1e521816a61ad63315af93a810739f",
+      "bytes": 577
+    },
+    {
+      "path": "evidence-v3-presets/container-stdout.log",
+      "sha256": "b96ffec8e1891b2a235d97eea8005cd1c720659bb8a9f198d60666b82b421b83",
+      "bytes": 192
+    },
+    {
+      "path": "evidence-v3-presets/container-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence-v3-presets/presets/comet-d2/result.json",
+      "sha256": "952005cbbe89b51f95ade51354dcd31d7da38189db8aa80682f0a2afd3decabf",
+      "bytes": 7124
+    },
+    {
+      "path": "evidence-v3-presets/presets/comet-d2-request.json",
+      "sha256": "fc9df2215de1af2c34e7c99cf3422307b33381dc649e9ad113480ec438dd9188",
+      "bytes": 208
+    },
+    {
+      "path": "evidence-v3-presets/presets/comet-d6/result.json",
+      "sha256": "ad809d84d7ad0411e57a32f6c08cfb070d001997d239b00216bdfe4e6f1391af",
+      "bytes": 61774
+    },
+    {
+      "path": "evidence-v3-presets/presets/comet-d6-request.json",
+      "sha256": "e80ec271c008d1969bad0edaa200df2427aca1f56481a3875733f60c7b065919",
+      "bytes": 208
+    },
+    {
+      "path": "evidence-v3-presets/presets/proof.json",
+      "sha256": "49680d6e83014de3898f796599c69a03e8f2f03dfe5b931844fe255d88b8e2e6",
+      "bytes": 19208
+    },
+    {
+      "path": "evidence-v3-presets/presets/vesta-d3/result.json",
+      "sha256": "0a42ae1b8e11ae93f3bb9d1421f0758c4eeb327308ec7eb86615158ab32bc67c",
+      "bytes": 158438
+    },
+    {
+      "path": "evidence-v3-presets/presets/vesta-d3-request.json",
+      "sha256": "a37e9e4dd81b49339c16184978b8fae8a088fe7e4512a1adc73be9abb798497b",
+      "bytes": 208
+    },
+    {
+      "path": "evidence-v3-presets/presets/vesta-d6/result.json",
+      "sha256": "205d57e5790c444a6bed8d6f946e9a47e661568460b538b23aec7d8494ac4fe0",
+      "bytes": 33914
+    },
+    {
+      "path": "evidence-v3-presets/presets/vesta-d6-request.json",
+      "sha256": "e0836e1fa9766d6fffc6b7ba45db7777fcd89432820c8819eef4f2d257676532",
+      "bytes": 208
+    },
+    {
+      "path": "evidence-v3-maximum/host-inspect.json",
+      "sha256": "84e747399abf205abebbbd58498e36870d34928a5814d14fd416cdeaaa8edad0",
+      "bytes": 578
+    },
+    {
+      "path": "evidence-v3-maximum/container-stdout.log",
+      "sha256": "c67c48550a19acadeda9d62ae5597e9aab01bd9920e8f93167215f5f0afac472",
+      "bytes": 192
+    },
+    {
+      "path": "evidence-v3-maximum/container-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence-v3-maximum/maximum/maximum-rss-raw.json",
+      "sha256": "1d3c6829ed0a4b0c164173dd35f2624d0f01f677e112e6ff1af58fb18e0dea68",
+      "bytes": 6297
+    },
+    {
+      "path": "evidence-v3-maximum/maximum/proof.json",
+      "sha256": "511c18368e1cc5f183393fbc6948ce4213eb75589e96ae42e123eb9938ab223f",
+      "bytes": 9810
+    },
+    {
+      "path": "evidence-v3-native-coverage/host-inspect.json",
+      "sha256": "1a481a6778c7bc07e30586bfd76bb9bbc022b8352cd0ebfa628468a16103e625",
+      "bytes": 594
+    },
+    {
+      "path": "evidence-v3-native-coverage/container-stdout.log",
+      "sha256": "84229e83504eccdd04ecda07fa3484da73569d68f989c191a1bdac007eea5f22",
+      "bytes": 198
+    },
+    {
+      "path": "evidence-v3-native-coverage/container-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence-v3-native-coverage/native-coverage/native-coverage/result.json",
+      "sha256": "6ea835c2d3a990cb5a03a36b531ce5cd35d577acec7d14f55c9582cb17199cf9",
+      "bytes": 7929
+    },
+    {
+      "path": "evidence-v3-native-coverage/native-coverage/proof.json",
+      "sha256": "dc8352a62bea0c557931e8e5e387a423eeddbb1023d359886919fb82cc11ab03",
+      "bytes": 6370
+    },
+    {
+      "path": "host-container-receipt-v3.json",
+      "sha256": "a5f023f0d4487e70c57777a2b38bc2694d22757e5ecb4390f8edec52b2cead4a",
+      "bytes": 3304
+    }
+  ]
+}

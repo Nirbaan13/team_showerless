@@ -1,0 +1,313 @@
+{
+  "id": "0007271d8eb1dad2",
+  "config": {
+    "family": "hist",
+    "subset": "legacy6",
+    "native_mass": 2,
+    "pointwise_fraction": 1,
+    "id": "0007271d8eb1dad2",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 232363,
+    "positive_rows": 3721,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      },
+      {
+        "kind": "native_moving",
+        "rows": 430,
+        "positives": 430,
+        "independent_groups": 8,
+        "class_mass": 2
+      },
+      {
+        "kind": "native_stationary",
+        "rows": 15,
+        "positives": 0,
+        "independent_groups": 4,
+        "class_mass": 2
+      }
+    ],
+    "native_label_policy": {
+      "policy": "all_attributable_known_native_positive_labels"
+    },
+    "parameters": {
+      "categorical_features": "from_dtype",
+      "class_weight": null,
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "loss": "log_loss",
+      "max_bins": 255,
+      "max_depth": 6,
+      "max_features": 1.0,
+      "max_iter": 160,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 32,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "random_state": 20261115,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 318,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15310544053923927,
+        "macro_field_recall1": 0.1720833333333333,
+        "macro_cadence_recall1": 0.15067245275905053,
+        "top3": 547,
+        "micro_recall3": 0.26336061627347135,
+        "macro_field_recall3": 0.2728125,
+        "macro_cadence_recall3": 0.2587389038327441
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 318,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15310544053923927,
+        "macro_field_recall1": 0.1720833333333333,
+        "macro_cadence_recall1": 0.15067245275905053,
+        "top3": 547,
+        "micro_recall3": 0.26336061627347135,
+        "macro_field_recall3": 0.2728125,
+        "macro_cadence_recall3": 0.2587389038327441
+      }
+    },
+    "native": {
+      "all_planned": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 286,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.13240740740740742,
+        "macro_parent_recall1": 0.13240740740740742,
+        "per_parent_K1": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 40,
+            "recall": 0.14814814814814814
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 27,
+            "recall": 0.1
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 38,
+            "recall": 0.14074074074074075
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 35,
+            "recall": 0.12962962962962962
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 2,
+            "recall": 0.007407407407407408
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 28,
+            "recall": 0.1037037037037037
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          }
+        },
+        "top3": 365,
+        "micro_recall3": 0.16898148148148148,
+        "macro_parent_recall3": 0.16898148148148148,
+        "per_parent_K3": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 60,
+            "recall": 0.2222222222222222
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 67,
+            "recall": 0.24814814814814815
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 32,
+            "recall": 0.11851851851851852
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          }
+        }
+      },
+      "common_attributable": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 286,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.13240740740740742,
+        "macro_parent_recall1": 0.13240740740740742,
+        "per_parent_K1": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 40,
+            "recall": 0.14814814814814814
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 27,
+            "recall": 0.1
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 38,
+            "recall": 0.14074074074074075
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 35,
+            "recall": 0.12962962962962962
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 2,
+            "recall": 0.007407407407407408
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 28,
+            "recall": 0.1037037037037037
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          }
+        },
+        "top3": 365,
+        "micro_recall3": 0.16898148148148148,
+        "macro_parent_recall3": 0.16898148148148148,
+        "per_parent_K3": {
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 60,
+            "recall": 0.2222222222222222
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 67,
+            "recall": 0.24814814814814815
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 32,
+            "recall": 0.11851851851851852
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          }
+        }
+      }
+    }
+  },
+  "training_input_manifest_sha256": "01b4ac05d855b920e98dc1cba501f22ed34816a938f6b5d1171d3d1359730efb",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/0007271d8eb1dad2.joblib",
+  "estimator_sha256": "1f270ba582c0080f0902213bc82775e8730ceb785a8b2a9387e24e312a827379",
+  "elapsed_seconds": 11.725533178003388,
+  "error": null
+}

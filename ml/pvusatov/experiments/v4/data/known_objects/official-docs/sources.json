@@ -1,0 +1,29 @@
+{
+  "fetched_utc": "2026-11-15T07:20:09.954305+00:00",
+  "sources": [
+    {
+      "url": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+      "path": "ml/pvusatov/experiments/v4/data/known_objects/official-docs/horizons-api.html",
+      "sha256": "6ca45d9c222d6e5c425ae3e0a3c44225cf8b6d30c4a14892b0f1157b0ab4cfe4",
+      "bytes": 112553
+    },
+    {
+      "url": "https://ssd.jpl.nasa.gov/horizons/manual.html",
+      "path": "ml/pvusatov/experiments/v4/data/known_objects/official-docs/horizons-manual.html",
+      "sha256": "be45b0137b37068c48760bbaf306f52a72c10239c175ba91119a30eb30612a81",
+      "bytes": 229979
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/spherex-archive-documentation/spherex-data-access/",
+      "path": "ml/pvusatov/experiments/v4/data/known_objects/official-docs/spherex-access.html",
+      "sha256": "0f686628d5cb3f8907abcb511fbe43b4df7847d61d877cd83847bf9948871654",
+      "bytes": 135927
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/spherex-archive-documentation/spherex-data-releases/",
+      "path": "ml/pvusatov/experiments/v4/data/known_objects/official-docs/spherex-release.html",
+      "sha256": "6a158189442d5624015373aff80d466935238840804e16db9626a58131dc8d73",
+      "bytes": 44132
+    }
+  ]
+}

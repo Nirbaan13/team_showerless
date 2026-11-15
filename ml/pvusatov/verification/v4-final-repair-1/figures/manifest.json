@@ -1,0 +1,75 @@
+{
+  "schema_version": 4,
+  "designation": "POST-HOC PRESENTATION ONLY; controlled injection ranking, no new gates",
+  "created_utc": "2026-11-15T10:04:29.518148+00:00",
+  "producer_sha256": "99344659077eec838d17bfa6c302217735040e6c67227e34dd876ae9c1137149",
+  "python": "3.14.4",
+  "matplotlib": "3.11.2",
+  "numpy": "2.5.3",
+  "frozen_report_sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+  "inputs": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/report.json": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final01.json.gz": "448163173eb4afc235c5da54884ec9d261a46beed0619105f2e350d733af3df2",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final02.json.gz": "a0b001c3aae1c20383b37898e722a889a1b7cde8edf9dbc45df51e6038f474bc",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final03.json.gz": "f1c29e617403a1c4c66b5aba51392a45858c035af236c03029fc310c66da0008",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final04.json.gz": "90cdec485fba683e932d599356a59c5067b314ec5257d677811281f721ba0bcb",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final05.json.gz": "068d30cb935fcf5994d49ae70c4c3f764f1df184137c65ed7b636461c00f69da",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final06.json.gz": "0d0fdd8ca3310fd31deda87879814125ddfbcca00a83145bc6d6cf2caa6616b6",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final07.json.gz": "555c0bcf20f85b1082e8d3537c4e35b296687ab0c1b5b4907a0319a720681dd3",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final08.json.gz": "cb391d075512b5b28edcb0d498f50cecfae9bbb11804d5269d18488f55e02eea",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final09.json.gz": "4133034a08993d92746251f521821e7aa9eaea969e43a1fc76bf8d504c45fdd8",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final10.json.gz": "8d6382fc1080d6bf3a8233448a905ce518a839049f41b7de90b483e0b1ab65bb",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final11.json.gz": "3aeb57934ba78d49f8227a69253d87923c99c0478eb5757df156db7468a970b8",
+    "/tmp/spaceapps-v4-evaluation/final-1225/native/v4-final12.json.gz": "bc237f7bcf8a4c046f69f8a5414d0196675955c9605660d50082a12ad7ce4a76"
+  },
+  "products": {
+    "FIGURES.AI.md": {
+      "sha256": "65d46b68b5dbd3ace5407b598219eb4d2cc8944cfb8a63bd4bf7928ed1d11606",
+      "bytes": 2409
+    },
+    "native-k1-speed-brightness.png": {
+      "sha256": "d41ee46ae09598e2399d1b54aa39ff74acac1a332d78830a8d0b3cfb026fcd2d",
+      "bytes": 244495
+    },
+    "native-k1-speed-brightness.svg": {
+      "sha256": "7406b259eb5872e9a8a8b6734dba95f5421cf6a1dd2cb940bf020da781812a2c",
+      "bytes": 37662
+    },
+    "native-k3-speed-brightness.png": {
+      "sha256": "043b34d4acd4c17ec996737721533b0c88a2353ee5ca40ffbe17da6e93d193ae",
+      "bytes": 241708
+    },
+    "native-k3-speed-brightness.svg": {
+      "sha256": "9302c298b81d966d7b64c8c5977282b0fd79a5fe14dd78aa377fccc403ff6758",
+      "bytes": 37612
+    },
+    "native-speed-brightness.csv": {
+      "sha256": "54ebde0c448ded682f837397e56f5c926da95f42877d27ce4c97797a73efc7fd",
+      "bytes": 2342
+    },
+    "primary-macro-deltas.csv": {
+      "sha256": "dd30d601f83f04cf89f371c313d0ba4e8934931713877abd794336bf1b15697e",
+      "bytes": 745
+    },
+    "primary-macro-deltas.png": {
+      "sha256": "313034c08d60ac303175ea3779cacf5dd00d203e56b254fc311cacd428542e25",
+      "bytes": 161193
+    },
+    "primary-macro-deltas.svg": {
+      "sha256": "af6d6cb99fc1eb3cf3ef57fbf5302857fadde453db7780b60b9b02bc85055fcc",
+      "bytes": 14051
+    },
+    "produce.py": {
+      "sha256": "99344659077eec838d17bfa6c302217735040e6c67227e34dd876ae9c1137149",
+      "bytes": 12902
+    }
+  },
+  "native_heatmap_cell_trials": 72,
+  "native_planned_trials": 3240,
+  "shared_heatmap_scale_pp": [
+    -20.0,
+    20.0
+  ],
+  "source_report_unchanged": true,
+  "no_pixels_models_fitting_scoring_or_selection": true
+}

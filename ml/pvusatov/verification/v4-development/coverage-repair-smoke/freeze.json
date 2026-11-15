@@ -1,0 +1,463 @@
+{
+  "schema_version": 4,
+  "status": "frozen",
+  "scope": "development",
+  "authorized_final": false,
+  "protocol_revision": "v4-blinded-coverage-repair-1",
+  "source_root": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source",
+  "runtime": {
+    "workers": 2,
+    "math_threads": 1,
+    "max_frames": 32,
+    "max_grid": 512
+  },
+  "proposal_policy": "c13-sigma08-v1",
+  "detector_settings": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "models": {
+    "baseline": {
+      "artifact": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v3/model/ranker.onnx",
+        "sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204"
+      },
+      "metadata": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v3/model/metadata.json",
+        "sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5"
+      }
+    },
+    "candidate": {
+      "artifact": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/ranker.onnx",
+        "sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+      },
+      "metadata": {
+        "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/metadata.json",
+        "sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13"
+      }
+    }
+  },
+  "sources": {
+    "execute": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/execute.py",
+      "sha256": "a2afc9c8ddb0ad67a1e443b90d7d42cb045c6dad361c18517212397a444280a9"
+    },
+    "freeze": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/freeze.py",
+      "sha256": "e4fd5c25b4d126e1f658973fa59e0a1b154f82c85a4ab6f800543d194c03d50e"
+    },
+    "run_native": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/run_native.py",
+      "sha256": "d23be6e67eb94f995044d12dc5bc9d96ad586cf50368a628bd9c650ad966e524"
+    },
+    "run_synthetic": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/run_synthetic.py",
+      "sha256": "9518a38398b0640bd5fa5418b9faceb5f488ea63cf9912a6abdfea994a4d2b45"
+    },
+    "report": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/summarize.py",
+      "sha256": "4bf049a45f902a5acb0f951f1ae2e24a8396b086b128942ddb94a15ac51785f0"
+    },
+    "metrics": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/metrics.py",
+      "sha256": "5c45f71d97d6cc2ad97225d010096f69500ee88a76c05b1d696c2d764911f534"
+    },
+    "geometry": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/geometry.py",
+      "sha256": "2691e80fefe6b107e967f8ca0b413412b497193d26c994521bdcf2ba27128266"
+    },
+    "geometry_validation": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/verification/final/summary_geometry.py",
+      "sha256": "17939ab1cc5bcf1bf63df5018455436f4ad7a622f08c14c351d26339c9640cb7"
+    },
+    "data_binding": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/data_binding.py",
+      "sha256": "821cae0d7aed1c8cb3e844d7e983ead3d9b2993a9c842abfa66c64cf2bd2e6f5"
+    },
+    "prepare": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/releases/v4/runtime/ml_inference/prepare.py",
+      "sha256": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec"
+    },
+    "native_injections": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/native_injections.py",
+      "sha256": "dfd829e310a74e5bd446a439af9560386bdfb96f5b01386178e32eed024bcf5b"
+    },
+    "worker_transport": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/worker_transport.py",
+      "sha256": "7b0964db0e8dfdca9fec28ae00f8388c0442c114985b9ff811b0eb0ac6fed45f"
+    },
+    "attempt_equality": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/compare_attempts.py",
+      "sha256": "6b7fcd4bd2da63b762af235db645504c036c1497e7e48a7303191d02594938fb"
+    },
+    "scene": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/scene.py",
+      "sha256": "179ca1f664707b27980825401f6aa77fbc44d2a412a904e0c0494c49c8d0c089"
+    },
+    "native_cache": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/evaluation/cache_native.py",
+      "sha256": "dbb289918c20a6cb25e8223e9600ed88e589de0c19cf332b1f00061959786057"
+    },
+    "features": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/detection/features.py",
+      "sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+    },
+    "runtime_model": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/experiments/v4/detection/runtime_model.py",
+      "sha256": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598"
+    },
+    "paired": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/experiments/v3_evaluation/paired.py",
+      "sha256": "3537abceba2b8a654ec65c2cbd0ef619363ce04524a33fd8a8ce5fa7072438df"
+    },
+    "native_latents": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/experiments/v3_evaluation/run_native.py",
+      "sha256": "5629b6a9e6ec92e328650ae9e3abd1ba60aac96e90614ab9c3acaf0c8e4e1dcd"
+    },
+    "simulate": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/training/simulate_v2.py",
+      "sha256": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28"
+    },
+    "native_psf": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/training/evaluate_background.py",
+      "sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15"
+    },
+    "training_init": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/training/__init__.py",
+      "sha256": "340d665d109e8752797b3d5958c533c7a7218cd866a2ede585281a28bf3ec1ad"
+    },
+    "legacy_init": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/__init__.py",
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a"
+    },
+    "legacy_main": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    "legacy_cli": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/cli.py",
+      "sha256": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a"
+    },
+    "legacy_contracts": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/contracts.py",
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816"
+    },
+    "legacy_detector": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/detector.py",
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d"
+    },
+    "legacy_model": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/model.py",
+      "sha256": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083"
+    },
+    "legacy_pipeline": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/pipeline.py",
+      "sha256": "15763e01808f1680926ae39974c9179b94ccd8f9a5e157872585817c81b44a6c"
+    },
+    "legacy_prepare": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/prepare.py",
+      "sha256": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb"
+    },
+    "legacy_render": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-development/coverage-repair-smoke-source/backend/inference/ml_inference/render.py",
+      "sha256": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+    }
+  },
+  "provenance": {
+    "protocol": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/protocol.json",
+      "sha256": "e1b1a413e165fedf3014c35353be7493b594b50db9ceb5630a457a486a291c9f"
+    },
+    "acquisition_plan": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/partition-plan.json",
+      "sha256": "55e0203db48bc294c6b1f4999d0582d1d9030d9e3e1b558d9f00364ac797e6cd"
+    },
+    "data_audit": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/complete-audit.json",
+      "sha256": "f0361395a0787ba4140238d714acc2da693db077a2a7700fc0709b572540ea44"
+    },
+    "development_handoff": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/development-handoff.json",
+      "sha256": "f8898016db7fda2b74c59099b09c3ea864b5b1d39312273f06831915c9990afa"
+    },
+    "amendment": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/amendment.json",
+      "sha256": "dd5485897856a762e67bafcdc00a1fcb45c430f556fb2083bda642d1ed1d0b19"
+    },
+    "selection_record": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/evaluation/selection.json",
+      "sha256": "b1e364591d2db6f7be8f6f1245ddac53f2586572226c9464ba5a849a3eec2c7a"
+    }
+  },
+  "native": {
+    "parents": [
+      {
+        "parent_id": "v4-train04",
+        "seed": 3800501,
+        "center_deg": [
+          344.94770504,
+          -25.62633834
+        ],
+        "downloads_manifest": {
+          "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/manifests/development/v4-train04-downloads.json",
+          "sha256": "5a0f65687a2140da043b35a786af43bf2e157dcf1ddac7cbea327ba05a8145d7"
+        }
+      }
+    ],
+    "excluded_physical_obsids": [
+      "2025W17_4B_0352_1",
+      "2025W17_4B_0352_2",
+      "2025W17_4B_0352_3",
+      "2025W17_4B_0352_4",
+      "2025W18_1B_0313_1",
+      "2025W18_1B_0313_2",
+      "2025W18_1B_0313_3",
+      "2025W18_1B_0313_4",
+      "2025W18_1B_0325_1",
+      "2025W18_1B_0345_1",
+      "2025W18_1B_0345_4",
+      "2025W18_2B_0045_4",
+      "2025W19_2B_0102_1",
+      "2025W19_2B_0102_2",
+      "2025W19_2B_0102_3",
+      "2025W19_2B_0102_4",
+      "2025W19_2B_0182_1",
+      "2025W19_2B_0182_2",
+      "2025W19_2B_0182_3",
+      "2025W19_2B_0182_4",
+      "2025W19_2B_0237_1",
+      "2025W19_2B_0237_2",
+      "2025W19_2B_0237_3",
+      "2025W19_2B_0496_3",
+      "2025W19_2B_0496_4",
+      "2025W20_1C_0233_1",
+      "2025W20_1C_0233_2",
+      "2025W20_1C_0233_3",
+      "2025W20_1C_0233_4",
+      "2025W20_1C_0298_1",
+      "2025W20_1C_0320_3",
+      "2025W20_1C_0375_1",
+      "2025W20_1C_0375_4",
+      "2025W22_2B_0255_1",
+      "2025W22_2B_0255_2",
+      "2025W22_2B_0255_3",
+      "2025W22_2B_0266_1",
+      "2025W22_2B_0266_3",
+      "2025W22_2B_0415_2",
+      "2025W22_2B_0440_3",
+      "2025W22_2B_0452_1",
+      "2025W24_1A_0174_1",
+      "2025W24_1A_0174_2",
+      "2025W24_1A_0174_3",
+      "2025W24_1A_0174_4",
+      "2025W24_1A_0186_1",
+      "2025W24_1A_0186_2",
+      "2025W24_1A_0186_4",
+      "2025W24_1A_0199_1",
+      "2025W24_2D_0326_1",
+      "2025W24_2D_0326_2",
+      "2025W24_2D_0326_3",
+      "2025W24_2D_0567_2",
+      "2025W24_2D_0567_3",
+      "2025W24_2D_0567_4",
+      "2025W24_2D_0581_1",
+      "2025W24_2D_0581_4",
+      "2025W25_1B_0052_3",
+      "2025W25_1B_0306_1",
+      "2025W25_1B_0306_4",
+      "2025W26_2A_0665_2",
+      "2025W26_2A_0665_3",
+      "2025W26_2A_0665_4",
+      "2025W27_1A_0151_1",
+      "2025W27_1A_0151_3",
+      "2025W27_1A_0295_1",
+      "2025W27_1A_0295_2",
+      "2025W27_1A_0295_4",
+      "2025W28_1B_0424_1",
+      "2025W28_1B_0424_2",
+      "2025W28_1B_0424_3",
+      "2025W28_1B_0424_4",
+      "2025W28_1B_0507_1",
+      "2025W28_1B_0541_1",
+      "2025W28_1B_0541_4",
+      "2025W28_2A_0004_4",
+      "2025W28_2A_0150_2",
+      "2025W28_2A_0150_3",
+      "2025W28_2A_0150_4",
+      "2025W28_2A_0254_1",
+      "2025W28_2A_0347_1",
+      "2025W28_2A_0347_4",
+      "2025W28_2A_0371_3",
+      "2025W28_2A_0432_4",
+      "2025W30_2B_0459_1",
+      "2025W30_2B_0459_2",
+      "2025W30_2B_0459_3",
+      "2025W30_2B_0459_4",
+      "2025W30_2B_0548_3",
+      "2025W30_2B_0586_2",
+      "2025W31_1A_0005_4",
+      "2025W31_1A_0110_3",
+      "2025W31_1A_0300_1",
+      "2025W31_1A_0300_2",
+      "2025W31_1A_0300_3",
+      "2025W31_1A_0300_4",
+      "2025W31_1A_0392_1",
+      "2025W31_1A_0392_3",
+      "2025W31_1A_0404_2",
+      "2025W31_1A_0404_4",
+      "2025W32_1A_0105_1",
+      "2025W32_1A_0225_1",
+      "2025W32_1A_0341_1",
+      "2025W32_1A_0341_2",
+      "2025W32_1A_0341_3",
+      "2025W32_1A_0347_1",
+      "2025W32_1A_0388_1",
+      "2025W32_1A_0433_1",
+      "2025W32_1A_0470_1",
+      "2025W32_1A_0470_3",
+      "2025W32_1A_0470_4",
+      "2025W32_1A_0502_1",
+      "2025W32_1A_0502_2",
+      "2025W32_1A_0502_3",
+      "2025W32_1A_0502_4",
+      "2025W32_1A_0550_1",
+      "2025W32_1A_0550_2",
+      "2025W32_1A_0550_3",
+      "2025W32_1A_0550_4",
+      "2025W32_1A_0649_1",
+      "2025W32_1A_0649_2",
+      "2025W32_1A_0649_3",
+      "2025W32_1A_0649_4",
+      "2025W34_2B_0114_1",
+      "2025W34_2B_0114_2",
+      "2025W34_2B_0114_3",
+      "2025W34_2B_0114_4",
+      "2025W34_2B_0210_1",
+      "2025W34_2B_0210_3",
+      "2025W34_2B_0234_1",
+      "2025W34_2B_0234_3",
+      "2025W34_2B_0432_1",
+      "2025W34_2B_0432_2",
+      "2025W34_2B_0432_3",
+      "2025W35_1A_0117_1",
+      "2025W35_1A_0117_3",
+      "2025W35_1A_0117_4",
+      "2025W35_1A_0143_1",
+      "2025W35_1A_0143_3",
+      "2025W35_1A_0512_1",
+      "2025W35_1A_0512_2",
+      "2025W35_1A_0512_3",
+      "2025W35_1A_0512_4",
+      "2025W36_1A_0489_1",
+      "2025W36_1A_0489_2",
+      "2025W36_1A_0489_3",
+      "2025W36_1A_0489_4",
+      "2025W36_1A_0504_1",
+      "2025W36_1A_0504_3",
+      "2025W36_1A_0504_4",
+      "2025W36_1A_0517_2",
+      "2025W37_1A_0116_1",
+      "2025W37_1A_0116_2",
+      "2025W37_1A_0116_3",
+      "2025W37_1A_0116_4",
+      "2025W37_1A_0318_1",
+      "2025W37_1A_0318_2",
+      "2025W37_1A_0318_3",
+      "2025W37_1A_0318_4",
+      "2025W39_1A_0598_1",
+      "2025W39_1A_0598_2",
+      "2025W39_1A_0598_3",
+      "2025W39_1A_0598_4",
+      "2025W39_2A_0130_1",
+      "2025W39_2A_0130_2",
+      "2025W39_2A_0130_3",
+      "2025W39_2A_0130_4",
+      "2025W39_2A_0138_1",
+      "2025W39_2A_0138_2",
+      "2025W39_2A_0138_3",
+      "2025W39_2A_0232_1",
+      "2025W39_2A_0232_2",
+      "2025W39_2A_0232_4",
+      "2025W39_2A_0326_1",
+      "2025W39_2A_0347_1",
+      "2025W39_2A_0347_2",
+      "2025W39_2A_0347_3",
+      "2025W39_2A_0389_1",
+      "2025W39_2A_0389_2",
+      "2025W39_2A_0389_3",
+      "2025W39_2A_0389_4",
+      "2025W39_2A_0434_1",
+      "2025W39_2A_0478_1",
+      "2025W39_2A_0550_1",
+      "2025W39_2A_0550_2",
+      "2025W39_2A_0550_3",
+      "2025W39_2A_0550_4",
+      "2025W43_2A_0697_1",
+      "2025W43_2A_0697_2",
+      "2025W43_2A_0697_3",
+      "2025W43_2A_0697_4",
+      "2025W44_1A_0070_1",
+      "2025W44_1A_0070_2",
+      "2025W44_1A_0070_3",
+      "2025W44_1A_0070_4",
+      "2025W45_2A_0035_1",
+      "2025W45_2A_0035_2",
+      "2025W45_2A_0035_3",
+      "2025W45_2A_0035_4",
+      "2025W45_2A_0097_1",
+      "2025W45_2A_0154_3",
+      "2025W45_2A_0223_2",
+      "2025W45_2A_0295_4",
+      "2025W50_2A_0685_2",
+      "2025W50_2A_0698_1",
+      "2025W50_2A_0712_2",
+      "2025W50_2A_0741_2",
+      "2025W50_2A_0755_2",
+      "2025W50_2A_0797_4",
+      "2025W50_2A_0813_1"
+    ],
+    "region": {
+      "width_arcmin": 6.0,
+      "height_arcmin": 6.0,
+      "pixel_scale_arcsec": 6.15,
+      "mask_policy": "motion"
+    }
+  },
+  "synthetic": {
+    "seeds": [
+      3800600,
+      3800601,
+      3800602,
+      3800603,
+      3800604,
+      3800605,
+      3800606,
+      3800607,
+      3800608,
+      3800609,
+      3800610,
+      3800611
+    ],
+    "calibration_bank": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "sha256": "793e05135438c95b8eaeace21948b34fe2eb49cd581be9e81dfff2b493e08d6d"
+    }
+  },
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  }
+}

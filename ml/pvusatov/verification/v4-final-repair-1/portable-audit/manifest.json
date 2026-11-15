@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "purpose": "Complete portable scored accounting, not model/feature recomputation",
+  "created_utc": "2026-11-15T10:20:45.992758+00:00",
+  "canonical_report_sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "candidate_model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "candidate_metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "total_fields": 6240,
+  "native_fields": 3240,
+  "synthetic_fields": 3000,
+  "files": {
+    "README.AI.md": {
+      "sha256": "7d352fafd4f239295deba21d283f9f0caf8ea75fc22635fdfe2142604a4a939b",
+      "bytes": 3258
+    },
+    "canonical-report.json": {
+      "sha256": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+      "bytes": 24629
+    },
+    "freeze.json": {
+      "sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+      "bytes": 71975
+    },
+    "produce.py": {
+      "sha256": "ec10901b7995b5aa2ea8190c43d7956a838f1dde10da2ef5e70f3204324b1cd6",
+      "bytes": 4418
+    },
+    "scientific-equality-proof.json": {
+      "sha256": "c4f24c6cd6ee14b80148a6e5e97757205b6d63f864ca574ceb6b4af6fbab2af6",
+      "bytes": 753
+    },
+    "scored-fields.json.gz": {
+      "sha256": "d2f2766935acc92c169de02b0959882186560b6aacdbf34f3dcddd0965f9e50c",
+      "bytes": 25454386
+    },
+    "test_verifier.py": {
+      "sha256": "e015d28a42e42f4fc6f7463283747235f594b3ed89de6b56b6887952dcf40558",
+      "bytes": 3091
+    },
+    "unblinding-record.json": {
+      "sha256": "659cfc081df487c241e7641f9bcfc4a2478c7759166648a95153d18b2b874296",
+      "bytes": 328
+    },
+    "verify.py": {
+      "sha256": "e8ede62b0e311a31ff40ecb297012788301f5f4ed898a86ac7447fe361d97225",
+      "bytes": 14746
+    }
+  },
+  "original_cache_sha256": [
+    "448163173eb4afc235c5da54884ec9d261a46beed0619105f2e350d733af3df2",
+    "a0b001c3aae1c20383b37898e722a889a1b7cde8edf9dbc45df51e6038f474bc",
+    "f1c29e617403a1c4c66b5aba51392a45858c035af236c03029fc310c66da0008",
+    "90cdec485fba683e932d599356a59c5067b314ec5257d677811281f721ba0bcb",
+    "068d30cb935fcf5994d49ae70c4c3f764f1df184137c65ed7b636461c00f69da",
+    "0d0fdd8ca3310fd31deda87879814125ddfbcca00a83145bc6d6cf2caa6616b6",
+    "555c0bcf20f85b1082e8d3537c4e35b296687ab0c1b5b4907a0319a720681dd3",
+    "cb391d075512b5b28edcb0d498f50cecfae9bbb11804d5269d18488f55e02eea",
+    "4133034a08993d92746251f521821e7aa9eaea969e43a1fc76bf8d504c45fdd8",
+    "8d6382fc1080d6bf3a8233448a905ce518a839049f41b7de90b483e0b1ab65bb",
+    "3aeb57934ba78d49f8227a69253d87923c99c0478eb5757df156db7468a970b8",
+    "bc237f7bcf8a4c046f69f8a5414d0196675955c9605660d50082a12ad7ce4a76",
+    "ec862fa4004ffd08954e90a5d281e3c203f96127d3d71a2547b0dcfda572b0be"
+  ],
+  "feature_hash_definition": "sha256 of UTF-8 canonical JSON decoded matrix, sort_keys=true,separators comma/colon,allow_nan=false;features and features_v4 separately",
+  "field_projection_hash_definition": "sha256 of same canonical JSON field excluding projection_sha256 itself",
+  "omitted_fields": [
+    "elapsed_seconds",
+    "feature_diagnostics",
+    "features",
+    "features_v4",
+    "rss_mib"
+  ],
+  "native_context": "Native cache times/shape copied into each field; all candidate/truth coordinate precision preserved as decoded JSON numbers",
+  "external_paths": "Historical provenance strings only; portable verifier never follows them"
+}

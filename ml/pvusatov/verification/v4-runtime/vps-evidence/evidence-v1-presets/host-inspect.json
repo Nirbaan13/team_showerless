@@ -1,0 +1,22 @@
+{
+  "mode": "presets",
+  "name": "spaceapps-v4-probe-presets-20261115",
+  "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "OOMKilled": false,
+    "ExitCode": 0,
+    "StartedAt": "2026-11-15T08:20:48.559522585Z",
+    "FinishedAt": "2026-11-15T08:20:55.239774536Z"
+  },
+  "limits": {
+    "Memory": 1073741824,
+    "MemorySwap": 1073741824,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 64,
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true
+  },
+  "docker_start_exit": 0
+}
