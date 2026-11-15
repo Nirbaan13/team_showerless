@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
+import {
+  OBSERVATION_ERA_PRESETS,
+  type ObservationEraId,
+  type FederatedSearchResponse,
+} from '../services/spherexBackendApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
-import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle, Clock } from 'lucide-react';
 
 interface LeftControlPanelProps {
   ra: number;
@@ -29,6 +34,16 @@ interface LeftControlPanelProps {
   currentPresetId?: string | null;
   frames?: SpherexEpochFrame[];
   className?: string;
+  selectedEra?: ObservationEraId;
+  onSelectEra?: (era: ObservationEraId) => void;
+  customStartDate?: string;
+  customEndDate?: string;
+  onUpdateCustomDates?: (start: string, end: string) => void;
+  selectedProviders?: string[];
+  onToggleProvider?: (provider: string) => void;
+  federatedResults?: FederatedSearchResponse | null;
+  isFederatedSearching?: boolean;
+  onRunFederatedSearch?: () => void;
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -53,10 +68,24 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   currentPresetId,
   frames,
   className = '',
+  selectedEra = 'all',
+  onSelectEra,
+  customStartDate = '1990-01-01',
+  customEndDate = new Date().toISOString().slice(0, 10),
+  onUpdateCustomDates,
+  selectedProviders = ['irsa-spherex', 'cadc', 'eso'],
+  onToggleProvider,
+  federatedResults = null,
+  isFederatedSearching = false,
+  onRunFederatedSearch,
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
   const [coordError, setCoordError] = useState<string | null>(null);
+  const [startDateInput, setStartDateInput] = useState(customStartDate);
+  const [endDateInput, setEndDateInput] = useState(customEndDate);
+
+  const activeEraSpec = OBSERVATION_ERA_PRESETS.find((e) => e.id === selectedEra) || OBSERVATION_ERA_PRESETS[0];
 
   const detectorCoverage = React.useMemo(() => {
     return getDetectorCoverageForTarget(currentPresetId || null, frames);
@@ -190,6 +219,156 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 {f}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Observation Epoch & Archive Era (#28) */}
+        <div id="tutorial-target-epoch" className="mt-2.5 pt-2 border-t border-paper-800 transition-all duration-300">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-mono text-paper-400 flex items-center gap-1 font-semibold uppercase tracking-wider text-[11px]">
+              <Clock className="w-3.5 h-3.5 text-emerald-400" />
+              Observation Era
+            </span>
+            <span className="text-[9px] font-mono text-emerald-400 font-bold">
+              {activeEraSpec.periodLabel}
+            </span>
+          </div>
+
+          {/* Quick Era Badges */}
+          <div className="grid grid-cols-2 gap-1 mb-2">
+            {OBSERVATION_ERA_PRESETS.map((era) => {
+              const isSelected = selectedEra === era.id;
+              return (
+                <button
+                  key={era.id}
+                  type="button"
+                  onClick={() => onSelectEra?.(era.id)}
+                  className={`btn-tactile-sm p-1.5 rounded-lg border-2 border-black text-left flex flex-col justify-between transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-emerald-400 text-gray-950 font-bold'
+                      : 'bg-paper-950 text-paper-400 hover:text-paper-100'
+                  }`}
+                  title={era.description}
+                >
+                  <div className="text-[10px] truncate leading-tight">{era.label}</div>
+                  <div className={`text-[9px] font-mono ${isSelected ? 'text-gray-900 font-semibold' : 'text-paper-400'}`}>
+                    {era.periodLabel}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Custom Date Inputs & Provider Selection when 'custom' is active */}
+          {selectedEra === 'custom' && (
+            <div className="p-2 mb-2 rounded-lg bg-paper-950 border border-paper-800 space-y-2">
+              <div className="grid grid-cols-2 gap-1.5">
+                <div>
+                  <label htmlFor="epoch-start" className="text-[9px] font-mono text-paper-400 block mb-0.5">Start Date / Year</label>
+                  <input
+                    id="epoch-start"
+                    type="text"
+                    placeholder="YYYY or YYYY-MM-DD"
+                    value={startDateInput}
+                    onChange={(e) => {
+                      setStartDateInput(e.target.value);
+                      onUpdateCustomDates?.(e.target.value, endDateInput);
+                    }}
+                    className="w-full bg-paper-900 border border-paper-800 rounded px-1.5 py-1 font-mono text-[10px] text-paper-100 focus:outline-none focus:border-emerald-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="epoch-end" className="text-[9px] font-mono text-paper-400 block mb-0.5">End Date / Year</label>
+                  <input
+                    id="epoch-end"
+                    type="text"
+                    placeholder="YYYY or YYYY-MM-DD"
+                    value={endDateInput}
+                    onChange={(e) => {
+                      setEndDateInput(e.target.value);
+                      onUpdateCustomDates?.(startDateInput, e.target.value);
+                    }}
+                    className="w-full bg-paper-900 border border-paper-800 rounded px-1.5 py-1 font-mono text-[10px] text-paper-100 focus:outline-none focus:border-emerald-400"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[9px] font-mono text-paper-400 block mb-1">Target Archives</span>
+                <div className="flex flex-wrap gap-1">
+                  {[
+                    { id: 'irsa-spherex', label: 'SPHEREx (2024+)' },
+                    { id: 'cadc', label: 'Canada CADC (1990–2010)' },
+                    { id: 'eso', label: 'ESO ObsCore' },
+                  ].map((p) => {
+                    const isChecked = selectedProviders.includes(p.id);
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => onToggleProvider?.(p.id)}
+                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded border transition-colors cursor-pointer ${
+                          isChecked
+                            ? 'bg-emerald-950/80 border-emerald-500/60 text-emerald-300 font-bold'
+                            : 'bg-paper-900/60 border-paper-800 text-paper-400 hover:text-paper-300'
+                        }`}
+                      >
+                        {isChecked ? '✓ ' : '+ '}{p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Federated Observations Search Action & Status */}
+          <div className="mt-1">
+            <button
+              type="button"
+              onClick={onRunFederatedSearch}
+              disabled={isFederatedSearching}
+              className="btn-tactile-sm w-full py-1.5 bg-paper-800 hover:bg-paper-700 disabled:opacity-50 text-paper-200 hover:text-white rounded-lg font-mono text-[10px] font-bold border-2 border-paper-700 hover:border-paper-600 cursor-pointer flex items-center justify-center gap-1.5 transition-all"
+              title="Query federated archive metadata (GET /api/observations-search) across SPHEREx, CADC, and ESO"
+            >
+              {isFederatedSearching ? (
+                <>
+                  <RefreshCw className="w-3 h-3 text-emerald-400 animate-spin" />
+                  <span>Querying Archives…</span>
+                </>
+              ) : (
+                <>
+                  <Database className="w-3 h-3 text-emerald-400" />
+                  <span>Discover Archive Coverage</span>
+                </>
+              )}
+            </button>
+
+            {federatedResults && (
+              <div className="mt-1.5 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
+                <div className="flex items-center justify-between text-paper-300">
+                  <span className="font-semibold text-emerald-400">{federatedResults.returned_count} observations found</span>
+                  <span className="text-[9px] text-paper-400">{activeEraSpec.label}</span>
+                </div>
+                <div className="flex flex-wrap gap-1 pt-0.5">
+                  {federatedResults.outcomes.map((outcome) => (
+                    <span
+                      key={outcome.provider}
+                      className={`text-[9px] px-1.5 py-0.5 rounded border ${
+                        outcome.record_count > 0
+                          ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
+                          : outcome.status === 'available'
+                          ? 'bg-paper-900 border-paper-800 text-paper-400'
+                          : 'bg-amber-950/60 border-amber-500/40 text-amber-300'
+                      }`}
+                      title={`${outcome.provider}: ${outcome.status} (${outcome.record_count} records)${outcome.warnings?.length ? ` · ${outcome.warnings.join(', ')}` : ''}`}
+                    >
+                      {outcome.provider}: {outcome.record_count}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

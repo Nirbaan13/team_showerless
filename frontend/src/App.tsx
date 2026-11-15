@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import type {
   TargetPreset,
   FOVOption,
@@ -22,6 +22,11 @@ import {
 } from './services/mockSpherexApi';
 import {
   fetchLiveBackendCutoutAnalysis,
+  searchFederatedObservations,
+  OBSERVATION_ERA_PRESETS,
+  normalizeIsoUtcDate,
+  type ObservationEraId,
+  type FederatedSearchResponse,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
@@ -379,6 +384,62 @@ export function App() {
     }
   );
 
+  const [selectedEra, setSelectedEra] = useState<ObservationEraId>('all');
+  const [customStartDate, setCustomStartDate] = useState<string>('1990-01-01');
+  const [customEndDate, setCustomEndDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
+  const [selectedProviders, setSelectedProviders] = useState<string[]>(['irsa-spherex', 'cadc', 'eso']);
+  const [federatedResults, setFederatedResults] = useState<FederatedSearchResponse | null>(null);
+  const [isFederatedSearching, setIsFederatedSearching] = useState<boolean>(false);
+
+  const getEffectiveEraDates = useCallback(() => {
+    if (selectedEra === 'spherex') {
+      return { observedAfter: '2024-01-01T00:00:00Z', observedBefore: undefined };
+    }
+    if (selectedEra === 'wise') {
+      return { observedAfter: '2010-01-01T00:00:00Z', observedBefore: '2024-01-01T00:00:00Z' };
+    }
+    if (selectedEra === 'cadc') {
+      return { observedAfter: '1990-01-01T00:00:00Z', observedBefore: '2010-01-01T00:00:00Z' };
+    }
+    if (selectedEra === 'custom') {
+      return {
+        observedAfter: normalizeIsoUtcDate(customStartDate),
+        observedBefore: normalizeIsoUtcDate(customEndDate, true),
+      };
+    }
+    return { observedAfter: undefined, observedBefore: undefined };
+  }, [selectedEra, customStartDate, customEndDate]);
+
+  const handleRunFederatedSearch = useCallback(async () => {
+    setIsFederatedSearching(true);
+    try {
+      const eraDates = getEffectiveEraDates();
+      const radiusDeg = (parseFloat(fov) || 5) / 60 / 2;
+      const providers = selectedEra === 'custom'
+        ? selectedProviders
+        : OBSERVATION_ERA_PRESETS.find(e => e.id === selectedEra)?.providers || ['irsa-spherex', 'cadc', 'eso'];
+      const res = await searchFederatedObservations({
+        ra,
+        dec,
+        radiusDeg,
+        providers,
+        observedAfter: eraDates.observedAfter,
+        observedBefore: eraDates.observedBefore,
+      });
+      setFederatedResults(res);
+    } catch (err) {
+      console.warn('Federated observation search failed', err);
+    } finally {
+      setIsFederatedSearching(false);
+    }
+  }, [ra, dec, fov, selectedEra, selectedProviders, getEffectiveEraDates]);
+
+  const handleToggleProvider = useCallback((provider: string) => {
+    setSelectedProviders((prev) =>
+      prev.includes(provider) ? prev.filter((p) => p !== provider) : [...prev, provider]
+    );
+  }, []);
+
   const { skippedNotice, clearSkippedNotice, stepForward, stepBackward } = useSpherexPlayer({
     frames,
     fps,
@@ -387,8 +448,6 @@ export function App() {
     currentIndex: activeFrameIndex,
     onFrameChange: setActiveFrameIndex,
   });
-
-
 
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
   const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }) => {
@@ -416,8 +475,10 @@ export function App() {
     setSearchStatus({ source: 'loading', message: 'Loading observations from NASA IRSA' });
     setMlAnalysisStatus({ state: 'running', stage: 'Waiting for archive observations', progress: 0, stepIndex: 1 });
     try {
+      const { observedAfter, observedBefore } = getEffectiveEraDates();
       const result = await fetchLiveBackendCutoutAnalysis({
-        ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum, signal: controller.signal,
+        ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum,
+        observedAfter, observedBefore, signal: controller.signal,
         onProgress: progress => {
           if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
           setSearchStatus({ source: 'loading', message: progress.message });
@@ -1048,6 +1109,19 @@ export function App() {
               onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
               currentPresetId={currentPresetId}
               frames={frames}
+              selectedEra={selectedEra}
+              onSelectEra={setSelectedEra}
+              customStartDate={customStartDate}
+              customEndDate={customEndDate}
+              onUpdateCustomDates={(start, end) => {
+                setCustomStartDate(start);
+                setCustomEndDate(end);
+              }}
+              selectedProviders={selectedProviders}
+              onToggleProvider={handleToggleProvider}
+              federatedResults={federatedResults}
+              isFederatedSearching={isFederatedSearching}
+              onRunFederatedSearch={handleRunFederatedSearch}
               className="h-full w-full"
             />
           </div>
