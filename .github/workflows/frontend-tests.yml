@@ -47,6 +47,8 @@ jobs:
         run: bash -n ops/deploy-frontend.sh ops/bootstrap-frontend.sh ops/frontend/test-deploy.sh
       - name: Build exact frontend revision
         run: docker build --file ops/frontend/Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-frontend:$GITHUB_SHA" .
+      - name: Verify registry and native API routing
+        run: python3 ops/frontend/test-routing.py --config ops/frontend/nginx.conf --image "spaceapps-frontend:$GITHUB_SHA"
       - name: Verify frontend deployment and rollback
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}
