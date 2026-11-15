@@ -100,26 +100,26 @@ export const OBSERVATION_ERA_PRESETS: ObservationEraSpec[] = [
   {
     id: 'all',
     label: 'All Eras',
-    periodLabel: '1990–Present',
-    description: 'Cross-mission baseline across Canada CADC (1990-2010), WISE (2010-2024), and SPHEREx (2024+)',
+    periodLabel: 'Any observation date',
+    description: 'Query selected available image archives; actual coverage is reported separately by each provider',
     providers: ['irsa-spherex', 'cadc', 'eso'],
   },
   {
     id: 'spherex',
     label: 'SPHEREx DR1',
-    periodLabel: '2024+',
-    description: 'NASA IRSA SPHEREx DR1/QR2 spectrophotometry (2024 to present)',
+    periodLabel: '2025+',
+    description: 'SPHEREx observation window from 2025 onward; date selection does not guarantee coverage',
     providers: ['irsa-spherex'],
-    timeStartUtc: '2024-01-01T00:00:00Z',
+    timeStartUtc: '2025-01-01T00:00:00Z',
   },
   {
     id: 'wise',
-    label: 'WISE / NEOWISE',
+    label: '2010–2024 window',
     periodLabel: '2010–2024',
-    description: 'NASA WISE & unWISE Reactivation mid-infrared archives (2010 to 2024)',
+    description: 'Historical date window; archive and instrument qualification determine available products. WISE ingestion is not implied.',
     providers: ['irsa-spherex', 'cadc', 'eso'],
     timeStartUtc: '2010-01-01T00:00:00Z',
-    timeEndUtc: '2024-01-01T00:00:00Z',
+    timeEndUtc: '2025-01-01T00:00:00Z',
   },
   {
     id: 'cadc',
@@ -490,12 +490,15 @@ export async function searchFederatedObservations(
     signal,
   });
 
+  if (!response.headers.get('content-type')?.includes('application/json')) throw new Error(`invalid_response: Archive API returned non-JSON (HTTP ${response.status})`);
   if (!response.ok) {
     const errorBody = await response.json().catch(() => null);
-    throw new Error(errorBody?.message ?? `Federated observation search returned status ${response.status}`);
+    throw new Error(`${errorBody?.code ?? 'archive_request_failed'}: ${errorBody?.message ?? `Federated observation search returned status ${response.status}`}`);
   }
 
   const data = await response.json();
+  signal?.throwIfAborted();
+  if (!Array.isArray(data.observations) || !Array.isArray(data.outcomes) || typeof data.returned_count !== 'number') throw new Error('invalid_response: Invalid archive search result');
   return {
     observations: (data.observations || []) as CommonArchiveObservation[],
     outcomes: (data.outcomes || []) as ArchiveProviderOutcome[],

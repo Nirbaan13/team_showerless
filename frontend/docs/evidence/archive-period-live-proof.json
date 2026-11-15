@@ -1,0 +1,64 @@
+{
+  "query_url": "http://127.0.0.1:4174/backend/api/observations-search?right_ascension_deg=53.162500&declination_deg=-27.791400&radius_degrees=0.011785112936675083&providers=cadc&product_kinds=image&observed_after=1990-01-01T00%3A00%3A00.000Z&observed_before=2003-01-01T00%3A00%3A00.000Z&limit_per_provider=100",
+  "returned_count": 100,
+  "outcomes": [
+    {
+      "provider": "cadc",
+      "status": "success",
+      "record_count": 100,
+      "completeness": "truncated",
+      "warnings": [],
+      "has_continuation": false
+    }
+  ],
+  "observation": {
+    "id": "035cd9a10232c1d897640c99b9b9d1b1220a20912be59a5d34db28eff821b78a",
+    "native_id": "ivo://cadc.nrc.ca/mirror/HST?j8g6i9010/j8g6i9010-PRODUCT",
+    "instrument": "ACS/WFC",
+    "observation_date": "2002-10-20T19:50:14.889999986Z",
+    "analysisEligible": false
+  },
+  "payload": {
+    "observation_ids": [
+      "035cd9a10232c1d897640c99b9b9d1b1220a20912be59a5d34db28eff821b78a"
+    ],
+    "delivery": {
+      "mode": "original"
+    }
+  },
+  "download": {
+    "id": "08e27a7b-e94b-41b0-a2b8-efeeb8a4fe01",
+    "status": "failed",
+    "progress": {
+      "discovery_complete": true,
+      "total_chunks": 1,
+      "ready_chunks": 0,
+      "failed_chunks": 1,
+      "unavailable_chunks": 0
+    },
+    "errors": [
+      {
+        "code": "ambiguous_science_asset",
+        "message": "Multiple science originals need a qualified per-artifact identity; select an advertised cutout or another product",
+        "retryable": false
+      }
+    ],
+    "chunks": [
+      {
+        "id": "0cfe0cff2c528879196515e6373291ad35bf3aeb2829bca3f619f175be6d2ee8",
+        "frame_id": "035cd9a10232c1d897640c99b9b9d1b1220a20912be59a5d34db28eff821b78a",
+        "status": "failed",
+        "preview_status": "unavailable",
+        "image_url": "/api/observations-download/chunks/0cfe0cff2c528879196515e6373291ad35bf3aeb2829bca3f619f175be6d2ee8/preview",
+        "fits_cutout_url": "/api/observations-download/chunks/0cfe0cff2c528879196515e6373291ad35bf3aeb2829bca3f619f175be6d2ee8",
+        "error": {
+          "code": "ambiguous_science_asset",
+          "message": "Multiple science originals need a qualified per-artifact identity; select an advertised cutout or another product",
+          "retryable": false
+        }
+      }
+    ]
+  },
+  "analyses_started": 0,
+  "screenshot": "/tmp/archive-period-browser-live.png"
+}

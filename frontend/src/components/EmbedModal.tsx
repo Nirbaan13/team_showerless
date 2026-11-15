@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DEFAULT_ARCHIVE, type ArchiveSelection } from '../services/archiveObservationsApi';
 import { Copy, Check, X, Code2 } from 'lucide-react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
 
@@ -13,6 +14,7 @@ interface EmbedModalProps {
   activeFrameIndex: number;
   candidateId?: string | null;
   presetId?: string | null;
+  archiveSelection?: ArchiveSelection;
 }
 
 export const EmbedModal: React.FC<EmbedModalProps> = ({
@@ -26,6 +28,7 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
   activeFrameIndex,
   candidateId,
   presetId,
+  archiveSelection = DEFAULT_ARCHIVE,
 }) => {
   const [copied, setCopied] = useState(false);
   const [width, setWidth] = useState('800');
@@ -44,6 +47,9 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
   });
   if (candidateId) params.set('candidate', candidateId);
   if (presetId) params.set('preset', presetId);
+  params.set('archive', archiveSelection.provider);
+  if (archiveSelection.from) params.set('observed_from', archiveSelection.from);
+  if (archiveSelection.through) params.set('observed_through', archiveSelection.through);
 
   const embedUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
   const iframeSnippet = `<iframe src="${embedUrl}" width="${width}" height="${height}" frameborder="0" allowfullscreen style="border: 2px solid #000; border-radius: 12px;"></iframe>`;

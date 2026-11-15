@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
+import { OBSERVATION_ERA_PRESETS, type ObservationEraSpec } from '../services/spherexBackendApi';
+import { DEFAULT_ARCHIVE, isArchiveBrowse, observationBounds, type ArchiveSelection, type ArchiveInventory } from '../services/archiveObservationsApi';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
-import {
-  OBSERVATION_ERA_PRESETS,
-  type ObservationEraId,
-  type FederatedSearchResponse,
-} from '../services/spherexBackendApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
-import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle, Clock } from 'lucide-react';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle } from 'lucide-react';
 
 interface LeftControlPanelProps {
   ra: number;
   dec: number;
   fov: FOVOption;
-  onUpdateCoords: (ra: number, dec: number) => void;
+  onUpdateCoords: (ra: number, dec: number, archive?: ArchiveSelection) => void;
+  archiveSelection?: ArchiveSelection;
+  archiveInventory?: ArchiveInventory[];
+  archiveInventoryError?: string;
   onUpdateFov: (fov: FOVOption) => void;
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
@@ -25,7 +25,7 @@ interface LeftControlPanelProps {
   onRefreshCutout: () => void;
   viewMode?: 'volunteer' | 'scientist';
   searchStatus?: {
-    source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle';
+    source: 'live' | 'fallback' | 'preset' | 'loading' | 'error' | 'idle' | 'archive';
     message: string;
   };
   activeCandidate?: CandidateObject | null;
@@ -35,16 +35,6 @@ interface LeftControlPanelProps {
   currentPresetId?: string | null;
   frames?: SpherexEpochFrame[];
   className?: string;
-  selectedEra?: ObservationEraId;
-  onSelectEra?: (era: ObservationEraId) => void;
-  customStartDate?: string;
-  customEndDate?: string;
-  onUpdateCustomDates?: (start: string, end: string) => void;
-  selectedProviders?: string[];
-  onToggleProvider?: (provider: string) => void;
-  federatedResults?: FederatedSearchResponse | null;
-  isFederatedSearching?: boolean;
-  onRunFederatedSearch?: () => void;
 }
 
 export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
@@ -52,6 +42,9 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   dec,
   fov,
   onUpdateCoords,
+  archiveSelection = DEFAULT_ARCHIVE,
+  archiveInventory = [],
+  archiveInventoryError = '',
   onUpdateFov,
   selectedArray,
   onSelectArray,
@@ -70,24 +63,22 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   currentPresetId,
   frames,
   className = '',
-  selectedEra = 'all',
-  onSelectEra,
-  customStartDate = '1990-01-01',
-  customEndDate = new Date().toISOString().slice(0, 10),
-  onUpdateCustomDates,
-  selectedProviders = ['irsa-spherex', 'cadc', 'eso'],
-  onToggleProvider,
-  federatedResults = null,
-  isFederatedSearching = false,
-  onRunFederatedSearch,
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
   const [coordError, setCoordError] = useState<string | null>(null);
-  const [startDateInput, setStartDateInput] = useState(customStartDate);
-  const [endDateInput, setEndDateInput] = useState(customEndDate);
-
-  const activeEraSpec = OBSERVATION_ERA_PRESETS.find((e) => e.id === selectedEra) || OBSERVATION_ERA_PRESETS[0];
+  const [archiveDraft, setArchiveDraft] = useState(archiveSelection);
+  React.useEffect(() => setArchiveDraft(archiveSelection), [archiveSelection]);
+  const archiveBrowse = isArchiveBrowse(archiveDraft);
+  const selectedIds = archiveDraft.provider.split(',').filter(Boolean);
+  const selectedProviders = selectedIds.map(id => archiveInventory.find(item => item.id === id));
+  const imageProviders = archiveInventory.filter(item => item.capabilities.availability === 'available' && item.capabilities.product_kinds.includes('image') && (item.capabilities.original || item.capabilities.cutout));
+  const allProviderIds = imageProviders.map(item => item.id).join(',');
+  const eraSelection = (era: ObservationEraSpec): ArchiveSelection => ({
+    provider: (era.id === 'all' ? imageProviders.map(item => item.id) : era.providers.filter(id => imageProviders.some(item => item.id === id))).join(','),
+    from: era.timeStartUtc?.slice(0, 10) || '',
+    through: era.timeEndUtc ? new Date(Date.parse(era.timeEndUtc) - 1).toISOString().slice(0, 10) : '',
+  });
 
   const detectorCoverage = React.useMemo(() => {
     return getDetectorCoverageForTarget(currentPresetId || null, frames);
@@ -114,9 +105,13 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       setCoordError('Declination must be between -90° and +90°');
       return;
     }
+    try { observationBounds(archiveDraft); } catch (error) {
+      setCoordError(error instanceof Error ? error.message : 'Invalid observation dates'); return;
+    }
+    if (archiveBrowse && (!selectedIds.length || selectedProviders.some(item => !item))) { setCoordError('Archive inventory is unavailable. Retry when the source can be verified.'); return; }
     setCoordError(null);
     const normalizedRa = ((parsedRa % 360) + 360) % 360;
-    onUpdateCoords(normalizedRa, parsedDec);
+    onUpdateCoords(normalizedRa, parsedDec, archiveDraft);
   };
 
   return (
@@ -166,6 +161,57 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
           </div>
 
+          <div>
+            <label htmlFor="field-archive" className="block text-paper-400 mb-1">Archive</label>
+            <select id="field-archive" value={archiveDraft.provider} onChange={e => { setArchiveDraft(value => ({ ...value, provider: e.target.value })); setCoordError(null); }}
+              className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1">
+              {!archiveInventory.some(item => item.id === 'irsa-spherex') && <option value="irsa-spherex">IRSA SPHEREx</option>}
+              {allProviderIds.includes(',') && <option value={allProviderIds}>All available image archives</option>}
+              {archiveDraft.provider.includes(',') && archiveDraft.provider !== allProviderIds && <option value={archiveDraft.provider}>Multiple selected archives</option>}
+              {!archiveDraft.provider && <option value="">Choose archives</option>}
+              {archiveDraft.provider && !archiveDraft.provider.includes(',') && archiveDraft.provider !== 'irsa-spherex' && !selectedProviders[0] && <option value={archiveDraft.provider} disabled>{archiveDraft.provider} · inventory unavailable</option>}
+              {archiveInventory.map(item => <option key={item.id} value={item.id}
+                disabled={item.capabilities.availability !== 'available' || !item.capabilities.product_kinds.includes('image') || (!item.capabilities.original && !item.capabilities.cutout)}>
+                {item.id === 'cadc' ? 'CADC' : item.id === 'irsa-spherex' ? 'IRSA SPHEREx' : item.id.toUpperCase()}
+                {item.capabilities.availability !== 'available' ? ` · ${item.capabilities.availability}` : !item.capabilities.product_kinds.includes('image') ? ' · no images' : (!item.capabilities.original && !item.capabilities.cutout) ? ' · delivery unavailable' : ''}
+              </option>)}
+            </select>
+            {archiveInventoryError && <p role="alert" className="text-amber-300">Archive inventory unavailable: {archiveInventoryError}</p>}
+            {selectedProviders.filter((item): item is ArchiveInventory => !!item).map(item => <div key={item.id} className="text-paper-400 mt-1">{item.id} · Time filter: {item.capabilities.time_filter}
+              {item.capabilities.restrictions?.map((restriction, i) => <p key={i}>{restriction}</p>)}
+            </div>)}
+            <details className="mt-1 text-paper-400"><summary>Combine image archives</summary>
+              {imageProviders.map(item => <label key={item.id} className="flex gap-2 items-center py-1">
+                <input type="checkbox" aria-label={`Search archive ${item.id}`} checked={selectedIds.includes(item.id)} onChange={() => {
+                  setArchiveDraft(value => ({ ...value, provider: (selectedIds.includes(item.id) ? selectedIds.filter(id => id !== item.id) : [...selectedIds, item.id]).join(',') }));
+                  setCoordError(null);
+                }} />{item.id}
+              </label>)}
+            </details>
+          </div>
+          <details id="tutorial-target-epoch" className="group">
+            <summary className="flex items-center gap-1.5 cursor-pointer list-none text-paper-400 [&::-webkit-details-marker]:hidden">
+              <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90">&gt;</span>
+              <span>Observation Era</span>
+            </summary>
+            <div className="space-y-1 pt-1">
+            <div className="grid grid-cols-2 gap-1">
+              {OBSERVATION_ERA_PRESETS.map(era => <button key={era.id} type="button" disabled={era.id !== 'custom' && !eraSelection(era).provider}
+                onClick={() => {
+                  if (era.id === 'custom') document.getElementById('observed-from')?.focus();
+                  else setArchiveDraft(eraSelection(era));
+                  setCoordError(null);
+                }} title={era.description} className="rounded border border-paper-700 bg-paper-950 px-2 py-1 text-left disabled:opacity-40">
+                {era.label}<span className="block text-paper-400">{era.periodLabel}</span>
+              </button>)}
+            </div>
+            <label htmlFor="observed-from" className="block text-paper-400">Observed from</label>
+            <input id="observed-from" type="date" value={archiveDraft.from} onChange={e => { setArchiveDraft(value => ({ ...value, from: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
+            <label htmlFor="observed-through" className="block text-paper-400">Observed through</label>
+            <input id="observed-through" type="date" value={archiveDraft.through} onChange={e => { setArchiveDraft(value => ({ ...value, through: e.target.value })); setCoordError(null); }} className="w-full bg-paper-950 border border-paper-700 rounded px-2 py-1" />
+            <p className="text-paper-400">Observation dates in UTC; end date includes the whole day. Apply source and period with Update Field.</p>
+            </div>
+          </details>
           <p id="coordinate-hint" className="text-[10px] text-paper-400">RA wraps into [0°, 360°). Dec must be −90° to +90°.</p>
           {coordError && (
             <div id="coordinate-error" role="alert" className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
@@ -184,7 +230,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               type="button"
               onClick={onRefreshCutout}
               className="btn-tactile px-3 py-2 bg-paper-800 hover:bg-paper-700 text-paper-200 hover:text-white rounded-lg font-mono text-[11px] font-bold border-2 border-paper-700 hover:border-paper-600 cursor-pointer flex items-center justify-center gap-1"
-              title="Refresh FITS Cutout & Exposure Data from IRSA"
+              title="Refresh the last applied coordinates, archive and observation period"
             >
               <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
               <span>Refresh</span>
@@ -196,11 +242,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           <div role={searchStatus.source === 'error' ? 'alert' : 'status'} className="mt-2 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
             <div className="flex items-center gap-1.5">
               <span className={`w-2 h-2 rounded-full shrink-0 ${searchStatus.source === 'live' ? 'bg-emerald-400' : searchStatus.source === 'error' ? 'bg-red-400' : searchStatus.source === 'preset' ? 'bg-sky-400' : 'bg-amber-400'}`} />
-              <span className="text-paper-300">{searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
+              <span className="text-paper-300">{searchStatus.source === 'archive' ? 'Archive metadata · images not implied' : searchStatus.source === 'live' ? 'NASA IRSA / SPHEREx Stream'
                 : searchStatus.source === 'preset' ? 'Benchmark Preset' : searchStatus.source === 'loading' ? 'Loading observations…'
                 : searchStatus.source === 'error' ? 'Observation request failed' : 'No observations requested'}</span>
             </div>
-            {(searchStatus.source === 'error' || searchStatus.source === 'loading') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
+            {(searchStatus.source === 'error' || searchStatus.source === 'loading' || searchStatus.source === 'archive') && <p className="break-words text-paper-300">{searchStatus.message}</p>}
           </div>
         )}
 
@@ -223,160 +269,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             ))}
           </div>
         </div>
-
-        {/* Observation Epoch & Archive Era (#28) */}
-        <div id="tutorial-target-epoch" className="mt-2.5 pt-2 border-t border-paper-800 transition-all duration-300">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-mono text-paper-400 flex items-center gap-1 font-semibold uppercase tracking-wider text-[11px]">
-              <Clock className="w-3.5 h-3.5 text-emerald-400" />
-              Observation Era
-            </span>
-            <span className="text-[9px] font-mono text-emerald-400 font-bold">
-              {activeEraSpec.periodLabel}
-            </span>
-          </div>
-
-          {/* Quick Era Badges */}
-          <div className="grid grid-cols-2 gap-1 mb-2">
-            {OBSERVATION_ERA_PRESETS.map((era) => {
-              const isSelected = selectedEra === era.id;
-              return (
-                <button
-                  key={era.id}
-                  type="button"
-                  onClick={() => onSelectEra?.(era.id)}
-                  className={`btn-tactile-sm p-1.5 rounded-lg border-2 border-black text-left flex flex-col justify-between transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-emerald-400 text-gray-950 font-bold'
-                      : 'bg-paper-950 text-paper-400 hover:text-paper-100'
-                  }`}
-                  title={era.description}
-                >
-                  <div className="text-[10px] truncate leading-tight">{era.label}</div>
-                  <div className={`text-[9px] font-mono ${isSelected ? 'text-gray-900 font-semibold' : 'text-paper-400'}`}>
-                    {era.periodLabel}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Custom Date Inputs & Provider Selection when 'custom' is active */}
-          {selectedEra === 'custom' && (
-            <div className="p-2 mb-2 rounded-lg bg-paper-950 border border-paper-800 space-y-2">
-              <div className="grid grid-cols-2 gap-1.5">
-                <div>
-                  <label htmlFor="epoch-start" className="text-[9px] font-mono text-paper-400 block mb-0.5">Start Date / Year</label>
-                  <input
-                    id="epoch-start"
-                    type="text"
-                    placeholder="YYYY or YYYY-MM-DD"
-                    value={startDateInput}
-                    onChange={(e) => {
-                      setStartDateInput(e.target.value);
-                      onUpdateCustomDates?.(e.target.value, endDateInput);
-                    }}
-                    className="w-full bg-paper-900 border border-paper-800 rounded px-1.5 py-1 font-mono text-[10px] text-paper-100 focus:outline-none focus:border-emerald-400"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="epoch-end" className="text-[9px] font-mono text-paper-400 block mb-0.5">End Date / Year</label>
-                  <input
-                    id="epoch-end"
-                    type="text"
-                    placeholder="YYYY or YYYY-MM-DD"
-                    value={endDateInput}
-                    onChange={(e) => {
-                      setEndDateInput(e.target.value);
-                      onUpdateCustomDates?.(startDateInput, e.target.value);
-                    }}
-                    className="w-full bg-paper-900 border border-paper-800 rounded px-1.5 py-1 font-mono text-[10px] text-paper-100 focus:outline-none focus:border-emerald-400"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[9px] font-mono text-paper-400 block mb-1">Target Archives</span>
-                <div className="flex flex-wrap gap-1">
-                  {[
-                    { id: 'irsa-spherex', label: 'SPHEREx (2024+)' },
-                    { id: 'cadc', label: 'Canada CADC (1990–2010)' },
-                    { id: 'eso', label: 'ESO ObsCore' },
-                  ].map((p) => {
-                    const isChecked = selectedProviders.includes(p.id);
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => onToggleProvider?.(p.id)}
-                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded border transition-colors cursor-pointer ${
-                          isChecked
-                            ? 'bg-emerald-950/80 border-emerald-500/60 text-emerald-300 font-bold'
-                            : 'bg-paper-900/60 border-paper-800 text-paper-400 hover:text-paper-300'
-                        }`}
-                      >
-                        {isChecked ? '✓ ' : '+ '}{p.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Federated Observations Search Action & Status */}
-          <div className="mt-1">
-            <button
-              type="button"
-              onClick={onRunFederatedSearch}
-              disabled={isFederatedSearching}
-              className="btn-tactile-sm w-full py-1.5 bg-paper-800 hover:bg-paper-700 disabled:opacity-50 text-paper-200 hover:text-white rounded-lg font-mono text-[10px] font-bold border-2 border-paper-700 hover:border-paper-600 cursor-pointer flex items-center justify-center gap-1.5 transition-all"
-              title="Query federated archive metadata (GET /api/observations-search) across SPHEREx, CADC, and ESO"
-            >
-              {isFederatedSearching ? (
-                <>
-                  <RefreshCw className="w-3 h-3 text-emerald-400 animate-spin" />
-                  <span>Querying Archives…</span>
-                </>
-              ) : (
-                <>
-                  <Database className="w-3 h-3 text-emerald-400" />
-                  <span>Discover Archive Coverage</span>
-                </>
-              )}
-            </button>
-
-            {federatedResults && (
-              <div className="mt-1.5 p-2 rounded-lg bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1">
-                <div className="flex items-center justify-between text-paper-300">
-                  <span className="font-semibold text-emerald-400">{federatedResults.returned_count} observations found</span>
-                  <span className="text-[9px] text-paper-400">{activeEraSpec.label}</span>
-                </div>
-                <div className="flex flex-wrap gap-1 pt-0.5">
-                  {federatedResults.outcomes.map((outcome) => (
-                    <span
-                      key={outcome.provider}
-                      className={`text-[9px] px-1.5 py-0.5 rounded border ${
-                        outcome.record_count > 0
-                          ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
-                          : outcome.status === 'available'
-                          ? 'bg-paper-900 border-paper-800 text-paper-400'
-                          : 'bg-amber-950/60 border-amber-500/40 text-amber-300'
-                      }`}
-                      title={`${outcome.provider}: ${outcome.status} (${outcome.record_count} records)${outcome.warnings?.length ? ` · ${outcome.warnings.join(', ')}` : ''}`}
-                    >
-                      {outcome.provider}: {outcome.record_count}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* 2. SPHEREx Infrared Filter Bands */}
-      <div id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
+      <fieldset disabled={archiveBrowse} id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-400" />
@@ -455,7 +351,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
 
         {/* Warning Banner when an unobserved detector band is selected */}
-        {selectedArray !== 'all' && detectorCoverage[selectedArray]?.status === 'none' && (
+        {!archiveBrowse && selectedArray !== 'all' && detectorCoverage[selectedArray]?.status === 'none' && (
           <div className="mt-2 p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-[10px] font-mono text-amber-200">
             <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
@@ -483,10 +379,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         )}
 
         <p className="mt-2 text-[10px] text-paper-400">Images are selected by detector. Channel-resolved images are unavailable.</p>
-      </div>
+        {archiveBrowse && <p className="text-amber-300 mt-2">SPHEREx detector controls do not filter other instruments or generic archive products.</p>}
+      </fieldset>
 
       {/* 3. Image Filtering & Movement Isolation */}
-      <div id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
+      <fieldset disabled={archiveBrowse} id="tutorial-target-filters" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Filter className="w-3.5 h-3.5 text-emerald-400" />
           {viewMode === 'scientist' ? 'Background Subtraction Algorithm' : 'Image Filter'}
@@ -536,7 +433,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             );
           })}
         </div>
-      </div>
+      </fieldset>
 
       {/* 4. Known Astronomical Catalogs (Live Space Agency Pull per Coordinate & Object) */}
       {(() => {

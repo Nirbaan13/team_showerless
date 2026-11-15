@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import type {
   TargetPreset,
   FOVOption,
@@ -23,11 +23,6 @@ import {
 } from './services/mockSpherexApi';
 import {
   fetchLiveBackendCutoutAnalysis,
-  searchFederatedObservations,
-  OBSERVATION_ERA_PRESETS,
-  normalizeIsoUtcDate,
-  type ObservationEraId,
-  type FederatedSearchResponse,
 } from './services/spherexBackendApi';
 import {
   subscribeMotionReviews,
@@ -38,6 +33,9 @@ import {
 } from './services/catalogService';
 import { availableImageModes } from './services/imageArtifacts';
 import { useUrlSync } from './hooks/useUrlSync';
+import { useArchiveObservations } from './hooks/useArchiveObservations';
+import { ArchiveObservationsPanel } from './components/ArchiveObservationsPanel';
+import { DEFAULT_ARCHIVE, isArchiveBrowse, type ArchiveSelection } from './services/archiveObservationsApi';
 import { useSpherexPlayer } from './hooks/useSpherexPlayer';
 import { startPeriodicVerificationSync } from './services/verificationService';
 import { TopNav } from './components/TopNav';
@@ -68,6 +66,16 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
+
+function initialArchiveSelection(): ArchiveSelection {
+  const params = new URLSearchParams(window.location.search);
+  return { provider: params.get('archive') || DEFAULT_ARCHIVE.provider, from: params.get('observed_from') || '', through: params.get('observed_through') || '' };
+}
+function fullViewerUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete('embed'); url.searchParams.set('tab', 'viewer');
+  return url.toString();
+}
 
 export function App() {
   // Check if loaded inside an iframe (?embed=true)
@@ -156,6 +164,7 @@ export function App() {
   };
 
   const [initialViewerCandidate] = useState(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return null;
     const params = new URLSearchParams(window.location.search);
     const candidate = params.get('candidate');
     return candidate && params.get('tab') === 'viewer' && !params.has('preset') && !params.has('ra') && !params.has('dec')
@@ -166,6 +175,7 @@ export function App() {
   const [currentPresetId, setCurrentPresetId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      if ((params.get('archive') && params.get('archive') !== 'irsa-spherex') || params.has('observed_from') || params.has('observed_through')) return null;
       if (params.has('preset')) return params.get('preset');
       if (params.has('ra') && params.has('dec')) return null;
       const candParam = params.get('candidate');
@@ -176,6 +186,9 @@ export function App() {
     }
     return '3i-atlas';
   });
+  const [archiveSelection, setArchiveSelection] = useState<ArchiveSelection>(initialArchiveSelection);
+  const archive = useArchiveObservations();
+  const archiveBrowsing = !currentPresetId && isArchiveBrowse(archiveSelection);
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
@@ -206,6 +219,7 @@ export function App() {
   const [overlays, setOverlays] = useState<CatalogOverlayState>(ALL_OVERLAYS_ON);
 
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return null;
     if (typeof window !== 'undefined') {
       const cand = new URLSearchParams(window.location.search).get('candidate');
       if (cand) return cand;
@@ -236,6 +250,7 @@ export function App() {
 
   const [customFrames, setCustomFrames] = useState<SpherexEpochFrame[] | null>(null);
   const [searchStatus, setSearchStatus] = useState<ObservationLoadStatus>(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return { source: 'idle', message: 'Choose the source and observation period, then Update Field.' };
     const preset = new URLSearchParams(window.location.search).get('preset');
     return preset && !STORED_PRESET_IDS.has(preset)
       ? { source: 'error', message: 'No verified stored image sequence is available for this preset.' }
@@ -263,6 +278,7 @@ export function App() {
   }, [currentPresetId, customFrames, selectedArray, motionReviewsRevision]);
 
   const [candidatesList, setCandidatesList] = useState<CandidateObject[]>(() => {
+    if (isArchiveBrowse(initialArchiveSelection())) return [];
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const candParam = params.get('candidate');
@@ -385,6 +401,7 @@ export function App() {
       candidateId: activeTab === 'catalogue' ? selectedCatalogueCandidateId : selectedCandidateId,
       tab: activeTab,
       presetId: currentPresetId,
+      archive: archiveSelection.provider, observedFrom: archiveSelection.from, observedThrough: archiveSelection.through,
     },
     (partial) => {
       if (partial.ra !== undefined) setRa(partial.ra);
@@ -401,64 +418,11 @@ export function App() {
       }
       if (partial.tab !== undefined) setActiveTab(partial.tab);
       if (partial.presetId !== undefined) setCurrentPresetId(partial.presetId);
+      if (partial.archive !== undefined || partial.observedFrom !== undefined || partial.observedThrough !== undefined) {
+        setArchiveSelection(value => ({ provider: partial.archive ?? value.provider, from: partial.observedFrom ?? value.from, through: partial.observedThrough ?? value.through }));
+      }
     }
   );
-
-  const [selectedEra, setSelectedEra] = useState<ObservationEraId>('all');
-  const [customStartDate, setCustomStartDate] = useState<string>('1990-01-01');
-  const [customEndDate, setCustomEndDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
-  const [selectedProviders, setSelectedProviders] = useState<string[]>(['irsa-spherex', 'cadc', 'eso']);
-  const [federatedResults, setFederatedResults] = useState<FederatedSearchResponse | null>(null);
-  const [isFederatedSearching, setIsFederatedSearching] = useState<boolean>(false);
-
-  const getEffectiveEraDates = useCallback(() => {
-    if (selectedEra === 'spherex') {
-      return { observedAfter: '2024-01-01T00:00:00Z', observedBefore: undefined };
-    }
-    if (selectedEra === 'wise') {
-      return { observedAfter: '2010-01-01T00:00:00Z', observedBefore: '2024-01-01T00:00:00Z' };
-    }
-    if (selectedEra === 'cadc') {
-      return { observedAfter: '1990-01-01T00:00:00Z', observedBefore: '2010-01-01T00:00:00Z' };
-    }
-    if (selectedEra === 'custom') {
-      return {
-        observedAfter: normalizeIsoUtcDate(customStartDate),
-        observedBefore: normalizeIsoUtcDate(customEndDate, true),
-      };
-    }
-    return { observedAfter: undefined, observedBefore: undefined };
-  }, [selectedEra, customStartDate, customEndDate]);
-
-  const handleRunFederatedSearch = useCallback(async () => {
-    setIsFederatedSearching(true);
-    try {
-      const eraDates = getEffectiveEraDates();
-      const radiusDeg = (parseFloat(fov) || 5) / 60 / 2;
-      const providers = selectedEra === 'custom'
-        ? selectedProviders
-        : OBSERVATION_ERA_PRESETS.find(e => e.id === selectedEra)?.providers || ['irsa-spherex', 'cadc', 'eso'];
-      const res = await searchFederatedObservations({
-        ra,
-        dec,
-        radiusDeg,
-        providers,
-        observedAfter: eraDates.observedAfter,
-        observedBefore: eraDates.observedBefore,
-      });
-      setFederatedResults(res);
-    } catch (err) {
-      console.warn('Federated observation search failed', err);
-    } finally {
-      setIsFederatedSearching(false);
-    }
-  }, [ra, dec, fov, selectedEra, selectedProviders, getEffectiveEraDates]);
-
-  const handleToggleProvider = useCallback((provider: string) => {
-    setSelectedProviders((prev) =>
-      prev.includes(provider) ? prev.filter((p) => p !== provider) : [...prev, provider]
-    );
-  }, []);
 
   const { skippedNotice, clearSkippedNotice, stepForward, stepBackward } = useSpherexPlayer({
     frames,
@@ -469,14 +433,20 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
+
+
   // Handler when user searches custom coordinates on Home page or LeftControlPanel
-  const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }) => {
+  const handleSearchCoordinates = async (newRa: number, newDec: number, request?: { fov: FOVOption; detector: DetectorArrayId | 'all'; frameIndex: number; candidateId: string }, selectionOverride?: ArchiveSelection) => {
     initialCandidateResolved.current = true;
     liveRequestRef.current?.abort();
     const runId = ++mlRunIdRef.current;
     const startTime = performance.now();
+    const selection = selectionOverride ?? (request ? DEFAULT_ARCHIVE : archiveSelection);
+    const browse = isArchiveBrowse(selection);
+    setArchiveSelection(selection);
+    archive.reset();
     const array = request?.detector ?? selectedArray;
-    if (array === 'all') {
+    if (!browse && array === 'all') {
       setCurrentPresetId(null); setCustomFrames([]); setCandidatesList([]); setSelectedCandidateId(null);
       setSearchStatus({ source: 'error', message: 'Multi-detector composite unavailable. Select an individual detector.' });
       setMlAnalysisStatus({ state: 'idle', stage: 'No composite data', progress: 0, stepIndex: 1 });
@@ -499,13 +469,18 @@ export function App() {
 
     const controller = new AbortController();
     liveRequestRef.current = controller;
-    setSearchStatus({ source: 'loading', message: 'Loading observations from NASA IRSA' });
+    setSearchStatus({ source: 'loading', message: browse ? `Searching ${selection.provider} observation metadata` : 'Loading observations from NASA IRSA' });
     setMlAnalysisStatus({ state: 'running', stage: 'Waiting for archive observations', progress: 0, stepIndex: 1 });
     try {
-      const { observedAfter, observedBefore } = getEffectiveEraDates();
+      if (browse) {
+        const found = await archive.search({ ...selection, ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5 }, controller.signal);
+        if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
+        setSearchStatus({ source: 'archive', message: `${found.returned_count} metadata records; inspect each provider outcome and select IDs to download.` });
+        setMlAnalysisStatus({ state: 'idle', stage: 'Archive discovery only; no ML analysis was requested', progress: 0, stepIndex: 1 });
+        return;
+      }
       const result = await fetchLiveBackendCutoutAnalysis({
-        ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum,
-        observedAfter, observedBefore, signal: controller.signal,
+        ra: newRa, dec: newDec, fovArcmin: parseFloat(request?.fov ?? fov) || 5, detector: detNum, signal: controller.signal,
         onProgress: progress => {
           if (controller.signal.aborted || mlRunIdRef.current !== runId) return;
           setSearchStatus({ source: 'loading', message: progress.message });
@@ -543,6 +518,8 @@ export function App() {
     liveRequestRef.current?.abort();
     ++mlRunIdRef.current;
 
+    archive.reset();
+    setArchiveSelection(DEFAULT_ARCHIVE);
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
@@ -598,6 +575,8 @@ export function App() {
     const detector = setting.selectedArray;
     const frames = getMockEpochFrames(preset.id, detector);
     const candidates = getMockCandidates(preset.id, detector);
+    archive.reset();
+    setArchiveSelection(DEFAULT_ARCHIVE);
     setCurrentPresetId(preset.id);
     setCustomFrames(null);
     setCandidatesList(candidates);
@@ -1118,8 +1097,11 @@ export function App() {
               ra={ra}
               dec={dec}
               fov={fov}
-              onUpdateCoords={(nRa, nDec) => {
-                void handleSearchCoordinates(nRa, nDec);
+              archiveSelection={archiveSelection}
+              archiveInventory={archive.inventory}
+              archiveInventoryError={archive.inventoryError}
+              onUpdateCoords={(nRa, nDec, selection) => {
+                void handleSearchCoordinates(nRa, nDec, undefined, selection);
                 setMobileViewerPane('canvas');
               }}
               onUpdateFov={setFov}
@@ -1139,19 +1121,6 @@ export function App() {
               onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
               currentPresetId={currentPresetId}
               frames={frames}
-              selectedEra={selectedEra}
-              onSelectEra={setSelectedEra}
-              customStartDate={customStartDate}
-              customEndDate={customEndDate}
-              onUpdateCustomDates={(start, end) => {
-                setCustomStartDate(start);
-                setCustomEndDate(end);
-              }}
-              selectedProviders={selectedProviders}
-              onToggleProvider={handleToggleProvider}
-              federatedResults={federatedResults}
-              isFederatedSearching={isFederatedSearching}
-              onRunFederatedSearch={handleRunFederatedSearch}
               className="h-full w-full"
             />
           </div>
@@ -1173,7 +1142,7 @@ export function App() {
                 <span className="text-paper-500">•</span>
                 <span className="text-emerald-400 font-semibold">{ra.toFixed(4)}°, {dec.toFixed(4)}°</span>
                 <a
-                  href={`${window.location.origin}${window.location.pathname}?ra=${ra.toFixed(6)}&dec=${dec.toFixed(6)}&fov=${fov}&detector=${selectedArray}&tab=viewer`}
+                  href={fullViewerUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-ochre-400 hover:text-ochre-300 underline font-bold ml-1 cursor-pointer"
@@ -1182,7 +1151,7 @@ export function App() {
                 </a>
               </div>
             )}
-            <CanvasViewport
+            {archiveBrowsing ? <ArchiveObservationsPanel archive={archive} /> : <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
               candidates={candidatesList}
@@ -1207,9 +1176,9 @@ export function App() {
                   setMobileViewerPane('telemetry');
                 }
               }}
-            />
+            />}
 
-            <MoviePlayerControls
+            {!archiveBrowsing && <MoviePlayerControls
               frames={frames}
               activeFrameIndex={activeFrameIndex}
               onSelectFrame={setActiveFrameIndex}
@@ -1221,11 +1190,11 @@ export function App() {
               onToggleBlinkMode={() => setBlinkMode((b) => !b)}
               onStepForward={stepForward}
               onStepBackward={stepBackward}
-            />
+            />}
           </main>
 
           {/* Right Drawer: Desktop expandable column, Mobile full-pane overlay */}
-          {!isEmbedMode && (
+          {!isEmbedMode && !archiveBrowsing && (
           <div
             className={`h-full ${
               mobileViewerPane === 'telemetry'
@@ -1303,7 +1272,7 @@ export function App() {
               <span>Sky View</span>
             </button>
             <button
-              onClick={() => setMobileViewerPane('telemetry')}
+              onClick={() => setMobileViewerPane(archiveBrowsing ? 'canvas' : 'telemetry')}
               className={`flex flex-col items-center justify-center flex-1 py-1 text-[10px] font-mono transition-colors ${
                 mobileViewerPane === 'telemetry'
                   ? 'text-emerald-400 font-bold'
@@ -1311,7 +1280,7 @@ export function App() {
               }`}
             >
               <Sparkles className="w-4 h-4 mb-0.5" />
-              <span>Triage & AI</span>
+              <span>{archiveBrowsing ? 'Archive results' : 'Triage & AI'}</span>
             </button>
             <button
               onClick={() => setMobileViewerPane('controls')}
@@ -1341,6 +1310,7 @@ export function App() {
         activeFrameIndex={activeFrameIndex}
         candidateId={selectedCandidateId}
         presetId={currentPresetId}
+        archiveSelection={archiveSelection}
       />
 
       {/* Choose Your View Assessment Pop-up Modal */}
