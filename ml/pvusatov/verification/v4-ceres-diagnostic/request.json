@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "analysis_id": "ceres-fixed-default-postselection",
+  "model_dir": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model",
+  "source": {
+    "kind": "fits",
+    "observations": [
+      {
+        "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_1D2_spx_l2b-v27-2026-214.fits",
+        "frame_id": "level2_2025W27_1A_0591_1D2_spx_l2b-v27-2026-214",
+        "observation_id": "2025W27_1A_0591_1",
+        "sha256": "f6e318782303fdeaa28ac4bb3eb52ae840e48d1f0a67cbb9db52c84aaa6f1855"
+      },
+      {
+        "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_2D2_spx_l2b-v27-2026-214.fits",
+        "frame_id": "level2_2025W27_1A_0591_2D2_spx_l2b-v27-2026-214",
+        "observation_id": "2025W27_1A_0591_2",
+        "sha256": "65227dd79b487f902787d64bd7b3b35e95fecda1c5dfd6c261121434d4b0b45d"
+      },
+      {
+        "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_3D2_spx_l2b-v27-2026-214.fits",
+        "frame_id": "level2_2025W27_1A_0591_3D2_spx_l2b-v27-2026-214",
+        "observation_id": "2025W27_1A_0591_3",
+        "sha256": "b28996edf3818c4f4ef21e7edda7f4b39e1eb44425576cbcb90e7d70ad073462"
+      },
+      {
+        "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_4D2_spx_l2b-v27-2026-214.fits",
+        "frame_id": "level2_2025W27_1A_0591_4D2_spx_l2b-v27-2026-214",
+        "observation_id": "2025W27_1A_0591_4",
+        "sha256": "44c880fc6d89ae4f613376e5b9f570e751cd52350e79cfc924a090ef45b69d60"
+      }
+    ],
+    "region": {
+      "right_ascension_deg": 15.616171426024438,
+      "declination_deg": -5.471296866590545,
+      "width_arcmin": 6.0,
+      "height_arcmin": 6.0
+    }
+  },
+  "options": {
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "scope": "Fixed postselection known-object diagnostic; predictions sealed before ephemeris-to-pixel matching",
+  "sealed_utc": "2026-11-15T10:17:56.027850+00:00",
+  "plan_sha256": "2335980ad8f7ecf4b93b4eb7778ef7364b7f9f43eb0ae2c443b989cf764ba103",
+  "request_sha256": "53fba3886e14bb222918426cd2088c7890838774498206e5b9299ab66cbe6e67",
+  "cli_result_sha256": "13ce38e92c9918adac442ca6cd5c5d55bdede94485dbf63db1c5c71b4c7e3bb3",
+  "cli_exit_code": 0,
+  "cli_error": null,
+  "cli_seconds": 0.5902020110006561,
+  "cli_child_peak_rss_mib": 146.890625,
+  "shared_pool_sha256": "f1afce6cf03c9afd1bc870f598426dcc26fcb1ce5711df339d07afb4b806e37d",
+  "original_input_hashes_unchanged": true,
+  "raw_inputs": [
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_1D2_spx_l2b-v27-2026-214.fits",
+      "sha256": "f6e318782303fdeaa28ac4bb3eb52ae840e48d1f0a67cbb9db52c84aaa6f1855"
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_2D2_spx_l2b-v27-2026-214.fits",
+      "sha256": "65227dd79b487f902787d64bd7b3b35e95fecda1c5dfd6c261121434d4b0b45d"
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_3D2_spx_l2b-v27-2026-214.fits",
+      "sha256": "b28996edf3818c4f4ef21e7edda7f4b39e1eb44425576cbcb90e7d70ad073462"
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_4D2_spx_l2b-v27-2026-214.fits",
+      "sha256": "44c880fc6d89ae4f613376e5b9f570e751cd52350e79cfc924a090ef45b69d60"
+    }
+  ],
+  "source_sha256": {
+    "ml/pvusatov/releases/v4/runtime/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "ml/pvusatov/releases/v4/runtime/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+  },
+  "models": {
+    "candidate": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model",
+      "artifact_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+      "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13"
+    },
+    "c13": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v3/model",
+      "artifact_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+      "metadata_sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5"
+    }
+  },
+  "ephemeris_coordinates_read_before_prediction_seal": false,
+  "final_pixels_accessed": false
+}
