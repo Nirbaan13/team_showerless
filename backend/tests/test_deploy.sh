@@ -32,16 +32,24 @@ PY
 }
 
 assert_pipeline() {
+    local pipeline_id api_id pipeline_image
+    pipeline_id=$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
+        --env-file "$APP_DIR/current.env" ps --quiet pipeline)
+    api_id=$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
+        --env-file "$APP_DIR/current.env" ps --quiet api)
+    pipeline_image=$(docker inspect --format '{{.Image}}' "$pipeline_id")
+    test "$pipeline_image" = "$(docker inspect --format '{{.Image}}' "$api_id")"
+    test "$(docker image inspect --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$pipeline_image")" = "$1"
     docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
         --env-file "$APP_DIR/current.env" exec -T pipeline /opt/inference-venv/bin/python -c '
-import json, sys, urllib.request
+import json, urllib.request
 with urllib.request.urlopen("http://127.0.0.1:8002/health", timeout=5) as response:
     health = json.load(response)
-assert health["revision"] == sys.argv[1], health
-' "$1"
-    # Both processes use exactly the same artifact paths on the shared volume.
+assert health["status"] == "ok", health
+'
+    # The existing pipeline cache keeps its original absolute path.
     test "$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
-        --env-file "$APP_DIR/current.env" exec -T pipeline cat /app/data/deploy-sentinel)" = persisted
+        --env-file "$APP_DIR/current.env" exec -T pipeline cat /tmp/spherex_cutouts/deploy-sentinel)" = persisted
 }
 
 if SSH_ORIGINAL_COMMAND='deploy invalid; touch /tmp/should-not-exist' \

@@ -36,9 +36,10 @@ backend/project/target
 backend/project/project
 backend/scala/src/test
 
+!backend/python/
+!backend/python/requirements-pipeline.txt
 !compose.yaml
 !pipeline/
-!pipeline/requirements-http.txt
 !pipeline/service.py
 !pipeline/spherex/
 !pipeline/spherex/**

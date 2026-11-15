@@ -11,6 +11,5 @@ trait Archive:
 
 trait Processor:
   def supportsPreview: Boolean = true
-  def supportedModes: Set[String] = Set.empty
   def prepare(image: Path, output: Path, mode: String, reference: Option[Path], query: Query): Task[Unit]
   def preview(image: Path, output: Path): Task[Unit]

@@ -1,3 +1,0 @@
-# HTTP boundary only; scientific runtime is locked separately in ml/pvusatov/backend/inference.
-fastapi==0.135.2
-uvicorn==0.42.0

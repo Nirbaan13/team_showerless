@@ -23,11 +23,11 @@ final class Jobs private (repository: Repository, archive: Archive, processor: P
         case _ => ZIO.fail(ApiError("not_found", "Reference frame not found"))
       }
       case None => ZIO.unit
-    validate *> repository.accept(query, mode, reference, maxJobs, requirePreview = processor.supportsPreview).flatMap { candidate =>
+    validate *> repository.accept(query, mode, reference, maxJobs).flatMap { candidate =>
       if !candidate.terminal then ZIO.succeed(candidate)
       else
         repository.get(candidate.id).flatMap(checkFiles) *>
-          repository.accept(query, mode, reference, maxJobs, requirePreview = processor.supportsPreview)
+          repository.accept(query, mode, reference, maxJobs)
     }
 
   private def rawPath(image: ArchiveImage): Path = dataDir.resolve("raw").resolve(Hash.sha256(s"${image.observation.release}|${image.observation.frame_id}|${image.accessUrl}") + ".fits")

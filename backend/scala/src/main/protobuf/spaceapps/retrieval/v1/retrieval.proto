@@ -31,8 +31,7 @@ message Query {
 }
 message SearchRequest { Query query = 1; }
 message SearchResponse { repeated Observation observations = 1; }
-// Empty mode retains native default retrieval; only validated server modes are accepted.
-message PrepareRequest { Query query = 1; string mode = 2; optional string reference_frame_id = 3; }
+message PrepareRequest { Query query = 1; }
 message DownloadRequest { string download_id = 1; }
 message ChunkRequest { string chunk_id = 1; }
 // Each data field is at most 64 KiB. Ordering is the original file byte order.

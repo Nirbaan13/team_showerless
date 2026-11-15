@@ -1,8 +1,4 @@
 
-import numpy as np
-from astropy.io import fits
-from astropy.wcs import WCS
-
 OUTLIER_BIT = 1 << 19
 SOURCE_BIT = 1 << 21
 BLOOM_BIT = 1 << 26
@@ -14,7 +10,7 @@ def build_mask(flags, signal, variance, retain_outliers=False):
     if variance is not None:
         good &= np.isfinite(variance) & (variance > 0)
     return ~good
-
+    
 def load_clean_cutout(path, retain_outliers=False):
     """Return (img, bad, clean_m, meta). clean_m = IMAGE - ZODI with bad pixels set to NaN."""
     with fits.open(path, lazy_load_hdus=True) as hdul:

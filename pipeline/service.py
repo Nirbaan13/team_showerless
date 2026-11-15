@@ -1,45 +1,27 @@
-import asyncio
+import base64
 import hashlib
 import io
-import json
-import os
-import signal
-import sys
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import astropy.units as u
 import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy.visualization import ZScaleInterval
-from fastapi import FastAPI, HTTPException, Request, Query as ApiQuery
+from fastapi import FastAPI, HTTPException, Query as ApiQuery
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from PIL import Image
 from pydantic import BaseModel
 
-from spherex import processing
 from spherex.cleaning import load_clean_cutout
+from spherex.query import DEFAULT, cutout, image_search
 from scripts.spectra import extract_spectrum, measure_cutout_point
-
-# Archive dependencies are optional for the internal, offline processing API.
-DEFAULT = "spherex_dr1"
-
-
-def image_search(*args, **kwargs):
-    from spherex.query import image_search as query
-    return query(*args, **kwargs)
-
-
-def cutout(*args, **kwargs):
-    from spherex.query import cutout as download
-    return download(*args, **kwargs)
-
 
 app = FastAPI(
     title="SPHEREx IRSA Cutout & Preprocessing Worker",
     version="1.0.0",
-    description="Image cutouts, ZODI subtraction, ZScale rendering, and experimental aperture photometry",
+    description="Scientific image cutout, Zodi subtraction, ZScale stretch, and 102-band spectrophotometry worker",
 )
 
 app.add_middleware(
@@ -89,7 +71,7 @@ def array_to_png_bytes(data: np.ndarray) -> bytes:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "SPHEREx IRSA Cutout Worker", "cache_dir": str(CUTOUT_CACHE_DIR), "revision": os.environ.get("APP_REVISION", "unknown"), "processing": "ready"}
+    return {"status": "ok", "service": "SPHEREx IRSA Cutout Worker", "cache_dir": str(CUTOUT_CACHE_DIR)}
 
 
 @app.post("/api/cutout/search")
@@ -278,162 +260,3 @@ def real_spectrum(
         "n_failed": failed,
         "spectrum": spectrum,
     }
-
-
-# Scala owns downloads and file leases; this API processes shared local files only.
-PROCESSING_TIMEOUT_SECONDS = min(120.0, max(0.1, float(os.environ.get('PROCESSING_TIMEOUT_SECONDS', '120'))))
-PROCESSING_MAX_CONCURRENCY = max(1, min(32, int(os.environ.get('PROCESSING_MAX_CONCURRENCY', '2'))))
-PROCESSING_PROTOCOL_BYTES = 65_536
-_active_processing = 0
-
-
-class ProcessingHTTPError(Exception):
-    def __init__(self, code, message, status=502):
-        self.code, self.message, self.status = code, message, status
-
-
-def _processing_error(code, message, status):
-    return JSONResponse(status_code=status, content={'status': 'error', 'error': {'code': code, 'message': message}})
-
-
-def _processing_command():
-    return [sys.executable, '-m', 'spherex.processing']
-
-
-async def _bounded_pipe(stream):
-    data = bytearray()
-    while chunk := await stream.read(4096):
-        data.extend(chunk)
-        if len(data) > PROCESSING_PROTOCOL_BYTES:
-            raise ProcessingHTTPError('invalid_response', 'Processing child exceeded its protocol output limit')
-    return bytes(data)
-
-
-async def _send_processing_request(stream, payload):
-    stream.write(payload)
-    await stream.drain()
-    stream.close()
-    await stream.wait_closed()
-
-
-async def _processing_disconnect(request):
-    while not await request.is_disconnected():
-        await asyncio.sleep(0.05)
-
-
-async def _stop_processing_child(child):
-    # The process owns no network work; kill its entire group before releasing leases.
-    try:
-        os.killpg(child.pid, signal.SIGKILL)
-    except ProcessLookupError:
-        pass
-    await child.wait()
-
-
-async def _finish_processing(child, tasks):
-    try:
-        if child is not None:
-            await _stop_processing_child(child)
-    finally:
-        for task in tasks:
-            task.cancel()
-        if tasks:
-            await asyncio.gather(*tasks, return_exceptions=True)
-
-
-async def _supervised_processing(request, payload):
-    child = None
-    tasks = []
-    try:
-        pipeline_dir = str(Path(__file__).resolve().parent)
-        spawn = asyncio.create_task(asyncio.create_subprocess_exec(
-            *_processing_command(), stdin=asyncio.subprocess.PIPE,
-            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
-            cwd=pipeline_dir, env={**os.environ, 'PYTHONPATH': pipeline_dir},
-            start_new_session=True, limit=PROCESSING_PROTOCOL_BYTES,
-        ))
-        interrupted = False
-        while not spawn.done():
-            try:
-                await asyncio.shield(spawn)
-            except asyncio.CancelledError:
-                interrupted = True
-        child = spawn.result()
-        if interrupted:
-            raise asyncio.CancelledError
-        readers = [asyncio.create_task(coroutine) for coroutine in (
-            _send_processing_request(child.stdin, payload), _bounded_pipe(child.stdout),
-            _bounded_pipe(child.stderr), child.wait())]
-        collection = asyncio.gather(*readers)
-        disconnected = asyncio.create_task(_processing_disconnect(request))
-        tasks = [collection, disconnected, *readers]
-        done, _ = await asyncio.wait([collection, disconnected], timeout=PROCESSING_TIMEOUT_SECONDS,
-                                     return_when=asyncio.FIRST_COMPLETED)
-        if not done:
-            raise ProcessingHTTPError('deadline_exceeded', 'Processing deadline exceeded', 504)
-        if disconnected in done:
-            raise ProcessingHTTPError('client_disconnected', 'Processing client disconnected', 499)
-        _, stdout, _, exit_code = await collection
-        try:
-            result = json.loads(stdout)
-        except (ValueError, UnicodeError) as error:
-            raise ProcessingHTTPError('invalid_response', 'Processing child returned invalid JSON') from error
-        if not isinstance(result, dict) or result.get('status') not in ('ok', 'error'):
-            raise ProcessingHTTPError('invalid_response', 'Processing child returned an invalid result')
-        if result['status'] == 'error':
-            error = result.get('error')
-            if not isinstance(error, dict) or not isinstance(error.get('code'), str):
-                raise ProcessingHTTPError('invalid_response', 'Processing child returned an invalid error')
-            return JSONResponse(status_code=422, content=result)
-        if exit_code != 0:
-            raise ProcessingHTTPError('processing_failed', 'Processing child failed')
-        return JSONResponse(content=result)
-    finally:
-        # Even repeated cancellation must wait for OS exit and reader cleanup.
-        cleanup = asyncio.create_task(_finish_processing(child, tasks))
-        interrupted = False
-        while not cleanup.done():
-            try:
-                await asyncio.shield(cleanup)
-            except asyncio.CancelledError:
-                interrupted = True
-        await cleanup
-        if interrupted:
-            raise asyncio.CancelledError
-
-
-@app.get('/internal/capabilities')
-def processing_capabilities():
-    return processing.execute({'operation': 'capabilities'})
-
-
-@app.post('/internal/processing')
-async def process_shared_fits(request: Request):
-    global _active_processing
-    try:
-        raw = bytearray()
-        async for chunk in request.stream():
-            if len(raw) + len(chunk) > processing.MAX_REQUEST_BYTES:
-                raise processing.WorkerError('invalid_request', 'request exceeds 65536 bytes')
-            raw.extend(chunk)
-        try:
-            payload = json.loads(raw, parse_constant=lambda _: (_ for _ in ()).throw(ValueError('nonfinite JSON')))
-        except (ValueError, UnicodeError, RecursionError) as error:
-            raise processing.WorkerError('invalid_request', 'request must contain one JSON object') from error
-        payload = processing.validate_http_request(payload)
-        immutable_payload = json.dumps(payload, allow_nan=False, separators=(',', ':')).encode()
-    except processing.WorkerError as error:
-        return _processing_error(error.code, str(error), 422)
-    except (OSError, ValueError, TypeError) as error:
-        return _processing_error('invalid_request', str(error), 422)
-    if _active_processing >= PROCESSING_MAX_CONCURRENCY:
-        return _processing_error('capacity_exceeded', 'Processing capacity is exhausted', 503)
-    _active_processing += 1
-    try:
-        return await _supervised_processing(request, immutable_payload)
-    except ProcessingHTTPError as error:
-        return _processing_error(error.code, error.message, error.status)
-    except (OSError, ValueError, BrokenPipeError):
-        return _processing_error('processing_failed', 'Processing child could not complete', 502)
-    finally:
-        _active_processing -= 1

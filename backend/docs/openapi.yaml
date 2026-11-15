@@ -30,58 +30,122 @@ tags:
 paths:
   /api/spectrum:
     get:
-      tags: [Spectra]
-      operationId: measureSpectrumPreview
-      summary: Measure experimental aperture points from native SPHEREx observations
+      tags: [Pipeline]
+      operationId: getPipelineSpectrum
+      summary: Request measured spectral points from the existing Python service
       description: >-
-        Scala owns IRSA discovery and durable native downloads. Returns 202 while
-        downloading; retry with the returned download_id and the same coordinates
-        and aperture. Python runs the team's measured WCS-WAVE aperture function.
-        WCS-WAVE is intended for visualization: these points are approximate,
-        uncorrected aperture fluxes, not scientifically calibrated spectra. Each
-        channel is a measurement index, not a physical SPHEREx channel ID. Missing
-        wavelengths and failed or masked exposures are never synthesized. No
-        molecular detections, aperture corrections or complete 102-band coverage
-        are claimed. Reuses only default-mode native downloads.
+        Scala validates the request and calls the unchanged Python HTTP endpoint.
+        Returns its completed JSON synchronously; no 202 or download-job protocol
+        is introduced. WCS-WAVE aperture points are visualization approximations,
+        not independently calibrated science spectra. Only ZODI-subtracted spectra
+        are implemented by the existing Python endpoint. Python failures remain
+        gateway errors; no synthetic bands or molecules are added by Scala.
       parameters:
-        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}, description: Right ascension in ICRS degrees}
-        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}, description: Declination in ICRS degrees}
-        - {name: radius_pix, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 2}, description: Circular aperture radius in native image pixels}
-        - {name: subtraction, in: query, schema: {type: string, enum: [raw_calibrated, zodi_subtracted], default: zodi_subtracted}}
-        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 1.5}, description: Requested cutout width and height before measurement}
-        - {name: max_frames, in: query, schema: {type: integer, minimum: 1, maximum: 120, default: 120}, description: Measurement limit after bounded archive retrieval; not a download limit}
-        - {name: candidate_id, in: query, schema: {type: string, maxLength: 256}, description: Display label only; never a detection or catalog match}
-        - {name: download_id, in: query, schema: {type: string, maxLength: 128}, description: Existing native download ID; repeat this ID when polling a 202 response}
-        - {name: detector_array, in: query, schema: {type: string, enum: ['all', '1', '2', '3', '4', '5', '6']}}
-        - {name: observed_after, in: query, schema: {type: string, format: date-time}}
-        - {name: observed_before, in: query, schema: {type: string, format: date-time}}
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: radius_pix, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 2}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 1.5}}
+        - {name: max_frames, in: query, schema: {type: integer, minimum: 1, maximum: 400, default: 120}}
+        - {name: candidate_id, in: query, schema: {type: string, maxLength: 256}, description: Display label only}
+        - {name: subtraction, in: query, schema: {type: string, enum: [zodi_subtracted], default: zodi_subtracted}}
       responses:
         '200':
-          description: Actual diagnostic aperture measurements, possibly incomplete
+          description: Original completed spectral JSON from the team service
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/SpectrumPreview'}
-        '202':
-          description: Durable native download is still discovering or preparing
-          headers:
-            Retry-After: {schema: {type: integer}, description: Suggested polling delay in seconds}
-            Location: {schema: {type: string}, description: Spectrum polling URL}
+              schema: {$ref: '#/components/schemas/PipelineSpectrum'}
+        '404': {description: Python found no usable data}
+        '422': {description: Invalid parameters or unsupported processing option}
+        '502': {description: Python failed or returned invalid data}
+        '503': {description: Python service unavailable}
+        '504': {description: Python HTTP request exceeded the backend deadline}
+  /api/cutout/search:
+    post:
+      tags: [Pipeline]
+      operationId: searchPipelineCutouts
+      summary: Call the existing Python cutout search
+      description: Detector filtering is not implemented by this Python operation and is rejected explicitly.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                size_arcmin: {type: number, minimum: 0.01, maximum: 600, default: 3}
+                collection: {type: string, default: spherex_dr1}
+      responses:
+        '200':
+          description: Original search results
           content:
             application/json:
-              schema:
-                type: object
-                required: [id, download_id, status, status_url, download_status_url]
-                properties:
-                  id: {type: string}
-                  download_id: {type: string}
-                  status: {type: string}
-                  status_url: {type: string, format: uri-reference}
-                  download_status_url: {type: string, format: uri-reference}
-        '404': {description: Unknown download or no usable aperture measurements}
-        '422': {description: Invalid coordinates, options, duplicate parameters or processed input}
-        '500': {description: Worker output failed validation}
-        '503': {description: Archive, cache or worker unavailable}
-        '504': {description: Processing exceeded its time budget}
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid search request}
+        '502': {description: Python search failure, including errors reported in a 200 body}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/cutout/render:
+    get:
+      tags: [Pipeline]
+      operationId: renderPipelineCutout
+      summary: Obtain a PNG from the existing Python renderer
+      description: >-
+        The Python service selects the first matching exposure itself. This
+        coordinate-based preview is separate from a native Scala chunk ID and
+        does not claim that it renders a particular downloaded frame.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.01, maximum: 600, default: 3}}
+        - {name: subtraction, in: query, schema: {type: string, enum: [raw_calibrated, zodi_subtracted], default: raw_calibrated}}
+      responses:
+        '200':
+          description: Original PNG, validated for content type and signature
+          content:
+            image/png:
+              schema: {type: string, format: binary}
+        '404': {description: No matching coverage}
+        '422': {description: Invalid render parameters}
+        '502': {description: Python rendering failed or returned an invalid PNG}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/spectrum/measure:
+    post:
+      tags: [Pipeline]
+      operationId: measurePipelineCachedSpectrum
+      summary: Measure existing cutouts in the Python service cache
+      description: >-
+        Accepts cache filenames only, never caller filesystem paths. This route
+        uses the existing Python cache and does not import native Scala jobs into
+        it or change the Python file-handling implementation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                radius_pix: {type: number, minimum: 0.5, maximum: 10, default: 2}
+                cutout_paths:
+                  type: array
+                  maxItems: 120
+                  items: {type: string, maxLength: 256, pattern: '^[A-Za-z0-9_.-]+$'}
+      responses:
+        '200':
+          description: Original measured rows, or original empty-cache response
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid aperture or cache filenames}
+        '502': {description: Python measurement failed}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
   /api/observations/meta:
     get:
       tags: [Observations]
@@ -368,13 +432,10 @@ paths:
     get:
       tags: [Observations]
       operationId: prepareZodiSubtractedObservations
-      summary: Subtract the observation's native zodiacal-background model
+      summary: Prepare observations with zodiacal reference subtraction
       description: |
-        Subtracts the observation's own ZODI layer from its calibrated IMAGE on
-        the original pixel grid, masks the validated bad-pixel bits, and preserves
-        ancillary FITS HDUs, WCS and source provenance. This mode does not subtract
-        a separate observation or reproject images. Immediately returns a job;
-        processed FITS and real PNG previews become ready in the background.
+        Uses the processing pipeline to prepare the requested mode.
+        Immediately returns a job; it does not wait for processing to finish.
       parameters:
         - $ref: '#/components/parameters/RightAscension'
         - $ref: '#/components/parameters/Declination'
@@ -782,66 +843,35 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    SpectrumPreview:
+    PipelineSpectrum:
       type: object
-      required: [target, ra, dec, aperture_radius_pix, subtraction_mode, quality, scientifically_calibrated, download_id, total_channels, spectrum, warnings, molecular_detections, n_exposures_found, n_masked_or_outside, n_failed, n_download_failed, n_unmeasured, failures, detectors_summary, bad_pixel_mask, wcs_mode]
+      description: Original team-service response; no 102-band completeness or calibrated-science guarantee is added.
+      required: [target, ra, dec, aperture_radius_pix, subtraction_mode, total_channels, spectrum]
       properties:
         target: {type: string}
-        candidate_id: {type: [string, 'null']}
         ra: {type: number}
         dec: {type: number}
+        candidate_id: {type: [string, 'null']}
         aperture_radius_pix: {type: number}
-        subtraction_mode: {type: string, enum: [raw_calibrated, zodi_subtracted]}
-        quality: {type: string, const: experimental_visualization_photometry}
-        scientifically_calibrated: {type: boolean, const: false}
-        download_id: {type: string}
-        total_channels: {type: integer, minimum: 1, maximum: 120, description: Number of measured points, not distinct instrument channels}
-        n_exposures_found: {type: integer, minimum: 0, description: Observations in the bounded native download manifest}
-        n_masked_or_outside: {type: integer, minimum: 0}
-        n_failed: {type: integer, minimum: 0, description: Inputs whose measurement failed}
-        n_download_failed: {type: integer, minimum: 0}
-        n_unmeasured: {type: integer, minimum: 0, description: Ready frames omitted by max_frames}
-        bad_pixel_mask: {type: string}
-        wcs_mode: {type: string}
-        molecular_detections: {type: array, maxItems: 0, items: {type: object}}
-        warnings: {type: array, items: {type: string}}
-        failures:
-          type: array
-          items:
-            type: object
-            required: [frame_id, code]
-            properties:
-              frame_id: {type: string}
-              code: {type: string}
-        detectors_summary:
-          type: object
-          additionalProperties:
-            type: object
-            required: [range, mean_flux_mjy, mean_snr, channels]
-            properties:
-              range: {type: string}
-              mean_flux_mjy: {type: number}
-              mean_snr: {type: number}
-              channels: {type: integer, minimum: 1}
+        subtraction_mode: {type: string, enum: [zodi_subtracted]}
+        total_channels: {type: integer, minimum: 0}
         spectrum:
           type: array
-          minItems: 1
-          maxItems: 120
           items:
             type: object
-            required: [channel, frame_id, detector, detector_array, wavelength_um, bandwidth_um, flux_mjy, uncertainty_mjy, snr, mjd, flagged]
             properties:
-              channel: {type: integer, minimum: 1, description: Sequential measurement index only}
-              frame_id: {type: string}
+              channel: {type: integer}
               detector: {type: string}
-              detector_array: {type: integer, minimum: 1, maximum: 6}
-              wavelength_um: {type: number, exclusiveMinimum: 0}
-              bandwidth_um: {type: number, exclusiveMinimum: 0}
+              detector_array: {type: integer}
+              wavelength_um: {type: number}
+              bandwidth_um: {type: number}
               flux_mjy: {type: number}
-              uncertainty_mjy: {type: number, exclusiveMinimum: 0}
+              uncertainty_mjy: {type: number}
               snr: {type: number}
-              mjd: {type: number}
-              flagged: {type: boolean, const: false}
+              flagged: {type: boolean}
+        molecular_detections: {type: array, items: {type: object}}
+        detectors_summary: {type: object, additionalProperties: true}
+      additionalProperties: true
     ObservationMetadata:
       type: object
       required: [frame_id, status, observation, sia, tap, fits]

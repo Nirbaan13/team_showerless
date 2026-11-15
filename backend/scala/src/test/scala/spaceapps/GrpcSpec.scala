@@ -39,16 +39,6 @@ object GrpcSpec extends ZIOSpecDefault:
     jobs.get(id).flatMap(d => if d.chunks.nonEmpty then ZIO.succeed(d) else ZIO.sleep(10.millis) *> awaitDiscovered(jobs, id))
 
   def spec = suite("Native gRPC TCP adapter")(
-    test("unverified processing modes are rejected before accepting durable jobs") {
-      ZIO.scoped {
-        for
-          f <- fixture()
-          (_,repo,client)=f
-          result <- client.prepareObservations(PrepareRequest(Some(query),mode="epoch_difference")).either
-          records <- repo.records
-        yield assertTrue(status(result,Status.Code.UNIMPLEMENTED),records.isEmpty)
-      }
-    },
     test("deep preparation retains its survey through protobuf and durable storage") {
       ZIO.scoped {
         for

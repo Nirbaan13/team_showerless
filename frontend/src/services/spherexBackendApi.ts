@@ -71,7 +71,6 @@ const BACKEND_BASE_URL =
   (import.meta.env.VITE_BACKEND_URL as string) || '/backend';
 
 import type { SpherexEpochFrame, DetectorArrayId, CandidateObject } from '../types/spherex';
-import { fetchSpectrum } from './spectrumClient.mjs';
 import {
   prepareRegion,
   startInference,
@@ -585,10 +584,6 @@ export interface MolecularDetection {
 }
 
 export interface TargetSpectrumResult {
-  quality: 'experimental_visualization_photometry';
-  scientifically_calibrated: false;
-  warnings: string[];
-  download_id: string;
   target: string;
   ra: number;
   dec: number;
@@ -601,7 +596,6 @@ export interface TargetSpectrumResult {
   detectors_summary: Record<string, { range: string; mean_flux_mjy: number; mean_snr: number; channels: number }>;
   total_channels: number;
   spectrum: Array<{
-    frame_id: string;
     channel: number;
     detector: string;
     detector_array: 1 | 2 | 3 | 4 | 5 | 6;
@@ -622,8 +616,7 @@ export async function fetchTargetSpectrum(
   dec: number,
   candidateId?: string | null,
   radiusPix: number = 2.0,
-  subtraction: string = 'zodi_subtracted',
-  signal?: AbortSignal
+  subtraction: string = 'zodi_subtracted'
 ): Promise<TargetSpectrumResult> {
   const params = new URLSearchParams({
     ra: ra.toString(),
@@ -634,6 +627,10 @@ export async function fetchTargetSpectrum(
   if (candidateId) {
     params.set('candidate_id', candidateId);
   }
-  return fetchSpectrum(BACKEND_BASE_URL,params,signal);
+  const res = await fetch(`/api/spectrum?${params.toString()}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch target spectrum: ${res.statusText}`);
+  }
+  return await res.json();
 }
 

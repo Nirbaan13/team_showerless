@@ -107,10 +107,9 @@ final class Repository private (path: Path, metadataCacheBytes: Long):
         }
     }
   }
-  def accept(query: Query, mode: String, reference: Option[String], maxJobs: Int, requirePreview: Boolean = false): Task[Download] = transaction { c =>
+  def accept(query: Query, mode: String, reference: Option[String], maxJobs: Int): Task[Download] = transaction { c =>
     val key = query.key(mode, reference)
-    val existing = rows(c, "SELECT body FROM jobs WHERE request_key=? AND status NOT IN ('failed','completed_with_errors') ORDER BY rowid DESC", List(key))(r => decode[JobRecord](r.getString(1)))
-      .filterNot(record => requirePreview && record.download.terminal && record.download.chunks.exists(c => c.status == "ready" && c.preview_status == "unavailable"))
+    val existing = rows(c, "SELECT body FROM jobs WHERE request_key=? AND status NOT IN ('failed','completed_with_errors') ORDER BY rowid DESC LIMIT 1", List(key))(r => decode[JobRecord](r.getString(1)))
     existing.headOption match
       case Some(record) => record.download
       case None =>

@@ -12,13 +12,13 @@ FROM eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5
 RUN apt-get update && apt-get install -y --no-install-recommends curl python3-venv libgomp1 \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --uid 10001 --user-group --create-home app \
-    && mkdir -p /app/data/tmp && chown -R app:app /app/data
+    && mkdir -p /app/data/tmp /tmp/spherex_cutouts/tmp && chown -R app:app /app/data /tmp/spherex_cutouts
 WORKDIR /app
 COPY ml/pvusatov/backend/inference/requirements-inference.txt /tmp/inference-requirements.txt
-COPY pipeline/requirements-http.txt /tmp/http-requirements.txt
+COPY backend/python/requirements-pipeline.txt /tmp/pipeline-requirements.txt
 RUN python3 -m venv /opt/inference-venv \
-    && /opt/inference-venv/bin/pip install --no-cache-dir --require-hashes -r /tmp/inference-requirements.txt -r /tmp/http-requirements.txt \
-    && rm /tmp/inference-requirements.txt /tmp/http-requirements.txt
+    && /opt/inference-venv/bin/pip install --no-cache-dir --require-hashes -r /tmp/inference-requirements.txt -r /tmp/pipeline-requirements.txt \
+    && rm /tmp/inference-requirements.txt /tmp/pipeline-requirements.txt
 COPY --from=build --chown=app:app /build/backend/target/stage ./
 COPY --chown=app:app backend/docs/openapi.yaml ./docs/openapi.yaml
 COPY --chown=app:app pipeline/service.py ./pipeline/service.py
@@ -34,7 +34,6 @@ ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \
     PROCESSING_URL=http://pipeline:8002 \
-    PROCESSING_DATA_ROOT=/app/data \
     ML_ROOT=/app/inference \
     ML_PYTHON=/opt/inference-venv/bin/python \
     PYTHONPATH=/app/inference \

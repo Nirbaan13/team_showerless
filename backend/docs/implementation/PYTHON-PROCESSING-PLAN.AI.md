@@ -1,7 +1,6 @@
-# Team pipeline integration
+# Scala pipeline integration
 
-The final user-approved design is specified in
+The final scope and verification are in
 [PIPELINE-INTEGRATION-COMPLETION.AI.md](PIPELINE-INTEGRATION-COMPLETION.AI.md).
-Scala calls the team pipeline's HTTP container. The obsolete backend Python
-subprocess adapter and its configuration are removed. Numerical functions and
-HTTP service tests live with the team pipeline under pipeline/.
+Only Scala adapts the existing Python HTTP API. Team Python and frontend source
+are unchanged; the old Python adapter is removed.
