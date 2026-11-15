@@ -1,0 +1,16 @@
+{
+  "schema_version": 4,
+  "operation": "exact dependency-block union; no package version resolution",
+  "parents": {
+    "ml/pvusatov/backend/inference/requirements-inference.txt": "09eb300ec078c87e9e86b0ea06610f4151e7df46a714e5276eda1c34b99061ea",
+    "ml/pvusatov/backend/inference/requirements-training.txt": "4c790bf7a7f777d4f094b7715fdc28359cb20a361bb80e263645fbe9a83db1b8"
+  },
+  "added_runtime_packages": [
+    "onnx==1.23.2",
+    "ml-dtypes==0.6.0",
+    "typing-extensions==4.16.0"
+  ],
+  "learner_runtime_packages": [],
+  "output_sha256": "cff29581270642d95db993f943b78fe5c619074b433dba3cc1163bb6e42f12e6",
+  "verification_required": "pip --require-hashes installation in a fresh Python3.12 container and real inference smoke"
+}

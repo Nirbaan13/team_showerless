@@ -1,0 +1,7 @@
+# Experimental V4 runtime; all scientific versions retained from the existing lock.
+numpy==2.5.3
+scipy==1.18.1
+astropy==8.0.2
+pillow==12.3.0
+onnxruntime==1.30.0
+onnx==1.23.2
