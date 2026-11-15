@@ -103,7 +103,8 @@ object EquipmentService:
           val iterator = entries.iterator()
           while iterator.hasNext do
             val entry = iterator.next()
-            if entry.getFileName.toString.matches("[0-9a-f]{64}\\.part") then
+            val uuid="[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}"
+            if entry.getFileName.toString.matches(s"[0-9a-f]{64}(?:[.]$uuid)?[.]part") then
               if Files.isSymbolicLink(entry) || !Files.isRegularFile(entry,LinkOption.NOFOLLOW_LINKS) then
                 throw ApiError("calibration_cache_error", "Unsafe abandoned calibration partial file")
               Files.delete(entry)

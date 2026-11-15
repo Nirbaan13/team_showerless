@@ -48,8 +48,12 @@ final class DownloadsRepository private(path: Path):
     next.records.foreach(r=>put(c,"federated_records",r.id,r.toJson))
     next
   }
-  def updateDownload(id: String,event: String = "job.updated")(f: DownloadSnapshot=>DownloadSnapshot): IO[ArchiveFailure,DownloadSnapshot] = tx { c=>
-    val next=f(get[DownloadSnapshot](c,"federated_downloads",id)).manifest
+  def updateDownload(id:String,event:String="job.updated")(f:DownloadSnapshot=>DownloadSnapshot):IO[ArchiveFailure,DownloadSnapshot]=
+    modifyDownload(id)(current=>f(current)->event)
+  /** Choose both state and event from the latest row under one write transaction. */
+  def modifyDownload(id:String)(f:DownloadSnapshot=>(DownloadSnapshot,String)):IO[ArchiveFailure,DownloadSnapshot]=tx { c=>
+    val (changed,event)=f(get[DownloadSnapshot](c,"federated_downloads",id))
+    val next=changed.manifest
     put(c,"federated_downloads",id,next.toJson)
     appendEvent(c,next,event)
     next

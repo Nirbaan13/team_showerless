@@ -10,28 +10,14 @@ import java.util.UUID
 final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsRepository,
   downloader:StreamingDownloader,limits:ArchiveLimits,admission:Semaphore,transfers:Semaphore,
   perProvider:Map[String,Semaphore]):
+  private val manifests=new DownloadManifests(repository,downloader.cached)
+  def status(id:String)=manifests.status(id)
   private def retry[A](effect: => IO[ArchiveFailure,A],attempt:Int=0):IO[ArchiveFailure,A]=
     effect.catchAll { error=>
       if error.retryable && attempt<limits.max_retries then
         val delay=error.retry_after_seconds.fold(200L << attempt)(seconds=>math.min(30L,math.max(0L,seconds))*1000L)
         ZIO.sleep(Duration.fromMillis(delay)) *> retry(effect,attempt+1)
       else ZIO.fail(error)
-    }
-  private def initial(record:ArchiveRecord,delivery:DeliveryRequest):DownloadChunk=
-    val key=ArchiveAssetKey.key(record,delivery)
-    DownloadChunk(key,record.id,s"/api/archive-assets/$key")
-  private def hydrate(job:DownloadSnapshot):IO[ArchiveFailure,DownloadSnapshot]=
-    if job.chunks.nonEmpty then ZIO.succeed(job.manifest)
-    else ZIO.foreach(job.selection.record_ids)(repository.record).map { records=>
-      val chunks=records.flatMap { record=>
-        val saved=job.assets.filter(_.record_id==record.id)
-        if saved.isEmpty then List(initial(record,job.selection.delivery))
-        else saved.map { outcome=>
-          val base=initial(record,job.selection.delivery)
-          outcome.asset.fold(base.copy(status=outcome.status,error=outcome.error))(a=>DownloadChunk(a.id,record.id,a.artifact_url,outcome.status,outcome.error))
-        }
-      }
-      job.copy(chunks=chunks).manifest
     }
   def accept(selection:DownloadSelection):IO[ArchiveFailure,AcceptedJob]=admission.withPermit {
     for
@@ -43,7 +29,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
       _ <- ZIO.fail(ArchiveFailure("capacity_exceeded","Archive download queue is full",true)).when(active>=limits.max_active_jobs)
       id=UUID.randomUUID().toString
       url=s"/api/archive-downloads/$id"
-      _ <- repository.saveDownload(DownloadSnapshot(id,selection,status_url=url,chunks=records.map(initial(_,selection.delivery))))
+      _ <- repository.saveDownload(DownloadSnapshot(id,selection,status_url=url,chunks=records.map(manifests.initial(_,selection.delivery))))
     yield AcceptedJob(id,url,Some(url+"/events"))
   }
   private def cached(id:String):ZIO[Scope,ArchiveFailure,Option[StoredAsset]]=
@@ -52,21 +38,6 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
         case None=>ZIO.none
         case Some(asset)=>downloader.cached(id,asset.bytes).map(valid=>Option.when(valid)(asset))
     }
-  /** Validate ready manifests without keeping files pinned between independent requests. */
-  def status(id:String):IO[ArchiveFailure,DownloadSnapshot]=
-    for
-      stored <- repository.download(id)
-      job <- hydrate(stored)
-      invalid <- ZIO.scoped(ZIO.filter(job.assets.filter(_.status=="ready"))(outcome=>outcome.asset.fold[ZIO[Scope,ArchiveFailure,Boolean]](ZIO.succeed(true))(a=>downloader.cached(a.id,a.bytes).map(!_))))
-      result <- if invalid.isEmpty then ZIO.succeed(job)
-        else repository.updateDownload(id,if job.terminal then "job.completed" else "job.updated") { current=>
-          val missing=invalid.flatMap(_.asset.map(_.id)).toSet
-          val error=ArchiveFailure("cache_missing","The cached resource was evicted or removed; submit a new download",true)
-          val assets=current.assets.map(a=>if a.asset.exists(x=>missing(x.id)) then a.copy(status="failed",error=Some(error)) else a)
-          val chunks=job.chunks.map(c=>if missing(c.id) then c.copy(status="failed",error=Some(error)) else c)
-          current.copy(assets=assets,chunks=chunks,status=if !current.terminal then current.status else if assets.exists(_.status=="ready") then "partial" else "failed")
-        }
-    yield result
   private def record(job:DownloadSnapshot,id:String):IO[ArchiveFailure,Unit]=ZIO.scoped {
     for
       product <- repository.record(id)
@@ -97,7 +68,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
             .catchAll(error=>ZIO.succeed(List(AssetOutcome(id,if error.code=="no_content" then "skipped" else "failed",error=Some(error),provenance=product.provenance))))
           _ <- repository.updateDownload(job.id,if assets.forall(_.status=="ready") then "chunk.ready" else "chunk.failed") { current=>
             val chunks=assets.map { outcome=>
-              val pending=initial(product,job.selection.delivery)
+              val pending=manifests.initial(product,job.selection.delivery)
               outcome.asset.fold(pending.copy(status=outcome.status,error=outcome.error))(a=>DownloadChunk(a.id,id,a.artifact_url,outcome.status,outcome.error))
             }
             current.copy(assets=current.assets.filterNot(_.record_id==id)++assets,chunks=current.chunks.filterNot(_.record_id==id)++chunks)
@@ -107,7 +78,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
     yield ()
   }
   def execute(id:String):IO[ArchiveFailure,Unit]=
-    repository.download(id).flatMap(hydrate).flatMap { hydrated=>
+    repository.download(id).flatMap(manifests.hydrate).flatMap { hydrated=>
       repository.updateDownload(id) { job=>
         if job.status!="queued" then throw ArchiveFailure("job_active","Download is not queued")
         job.copy(status="running",chunks=hydrated.chunks)
@@ -135,7 +106,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
     else cached(id).flatMap {
       case Some(asset)=>ZIO.succeed(AssetResource.Ready(downloader.directory.resolve(id),asset))
       case None=>repository.allDownloads.flatMap { jobs=>
-        ZIO.foreach(jobs)(hydrate).flatMap { snapshots=>
+        ZIO.foreach(jobs)(manifests.hydrate).flatMap { snapshots=>
           val chunks=snapshots.flatMap(_.chunks).filter(_.id==id)
           if chunks.exists(c=>Set("pending","downloading")(c.status)) then ZIO.succeed(AssetResource.Pending)
           else if chunks.nonEmpty then ZIO.succeed(AssetResource.Failed(chunks.flatMap(_.error).headOption.getOrElse(ArchiveFailure("cache_missing","Cached resource is unavailable; submit a new download",true))))
@@ -145,7 +116,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
     }
   def recover:IO[ArchiveFailure,Unit]=repository.allDownloads.flatMap { jobs=>
     ZIO.foreachDiscard(jobs.filter(j=> !j.terminal)) { job=>
-      hydrate(job).flatMap { hydrated=>
+      manifests.hydrate(job).flatMap { hydrated=>
         ZIO.scoped(ZIO.filter(hydrated.assets)(a=>a.asset.fold[ZIO[Scope,ArchiveFailure,Boolean]](ZIO.succeed(a.status!="ready"))(s=>downloader.cached(s.id,s.bytes)))).flatMap { assets=>
           val finished=assets.map(_.record_id).toSet
           repository.updateDownload(job.id)(_.copy(status="queued",assets=assets,chunks=hydrated.chunks.map(c=>if finished(c.record_id) then c else c.copy(status="pending",error=None)))).unit

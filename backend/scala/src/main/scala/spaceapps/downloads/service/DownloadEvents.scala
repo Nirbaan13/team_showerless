@@ -20,7 +20,7 @@ final class DownloadEvents(repository:DownloadsRepository):
             case None=>snapshot ++ updates(id,cursor)
             case Some(n) if job.terminal=>
               if n==cursor then ZStream.empty
-              else (replay(id,n,cursor) ++ terminal).takeUntil(_.name=="job.completed")
+              else replay(id,n,cursor)
             case Some(n)=>updates(id,n)
         }
     }

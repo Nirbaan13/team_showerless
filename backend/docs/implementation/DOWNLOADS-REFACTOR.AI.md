@@ -40,7 +40,7 @@ Client migration is a separate PR. Preserve current HTTP and gRPC wire contracts
 
 ### Task 4: Delivery
 
-- [ ] Run full tests/staging, independently review the final diff, and address material findings.
+- [x] Run full tests/staging, independently review the final diff, and address material findings.
 - [ ] Open a PR for backend review (do not merge this unreviewed refactor). Send a concise WhatsApp update with the PR link and client migration boundary.
 
 ## Review focus
@@ -67,3 +67,25 @@ WhatsApp read on 2026-11-15: the team reports the original pipeline integrated i
 - IRSA provider cutout regression failed with unsupported_cutout, then passed using the existing spatial selector. Circle geometry and original-mode URLs are preserved.
 - Retry regression failed after HTTP 503 without retry, then passed after bounded retries and scratch-capacity release were restored.
 - Final pre-review `./sbtw test stage`: 199 passed, 0 failed, 3 optional live tests ignored; stage succeeded. HTTP calibration leases are covered alongside cache/equipment redownload and all prior ML/HTTP/gRPC tests.
+
+## Independent review and fixes
+
+A fresh read-only reviewer found three Important issues, all reproduced with failing tests before fixing:
+
+- Status validation could overwrite a concurrently completed chunk. `DownloadManifests` isolates availability validation and invalidates the latest transaction row; `modifyDownload` chooses the event from that same current row. The deterministic race test preserves the completed chunk, ready count and latest terminal event.
+- Reconnect replay stopped at an old completion before a later cache invalidation. Terminal replay now reads every event through its captured latest cursor, including the newest failed/partial completion.
+- Calibration publication switched to UUID scratch names while restart cleanup recognized only legacy names. Equipment recovery now recognizes both, retaining unrelated files.
+
+The three new regressions failed together (27 passed, 3 failed), then the complete suite passed 202/202. Swagger reference validation subsequently caught a missing progress schema; the failing HTTP specification test was fixed with an explicit ArchiveDownloadProgress schema, and the suite passed 203/203.
+
+Review boundaries: live upstream availability/scientific validity of existing provider data were not claimed; the three optional network checks stay opt-in. Client migration and Python format unification remain separate work as explicitly requested. No review findings were deferred.
+
+Startup audit additionally found that workers could start before another producer removed crash scratch files. Bootstrap now calls shared `FileCache.recover` before opening repositories or starting any worker. It removes only known raw/prepared/preview/archive/calibration scratch names and retains unrelated files. Per-module recovery remains safe for standalone module construction.
+
+## Final verification
+
+- `./sbtw test stage` on the final source tree: **204 passed, 0 failed, 3 optional live checks ignored**, stage succeeded. Log: `/tmp/downloads-final-verified.log` in the author workspace.
+- Staged `spaceapps.bootstrap.Main` ran on an isolated local port with an existing SQLite database, five seeded producer crash partials, a valid retained FITS and an unrelated sentinel. All five crash partials were removed before service startup; completed/unrelated files and the persisted job survived.
+- Runtime health/revision, Swagger HTML, all 32 OpenAPI paths, all 185 local schema references and the 14-provider inventory verified. All 31 existing paths and existing schemas remain, with additive accepted-job/download fields and new download SSE/chunk/progress schemas.
+- `git diff --check` passed. The branch has no changes to frontend, Python, ML or the human-maintained AGENTS.md.
+- WhatsApp refreshed through 2026-11-15 11:57:44 Moscow time. The only newer team message requested a meeting; it did not change the backend contract.

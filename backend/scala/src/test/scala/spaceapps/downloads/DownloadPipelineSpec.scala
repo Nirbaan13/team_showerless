@@ -98,6 +98,38 @@ object DownloadPipelineSpec extends ZIOSpecDefault:
         disk <- ZIO.attempt(Files.exists(f.root.resolve("archive-assets").resolve(f.key)))
       yield assertTrue(text.contains("cache_missing"),restored.status=="completed",disk,f.hits.get==2) }
     },
+    test("SSE replay includes the newest terminal invalidation after historical success") {
+      fixture { f=>for
+        job <- f.jobs.accept(f.selection)
+        _ <- f.jobs.execute(job.id)
+        _ <- f.cache.publish(f.root.resolve("calibration-cache").resolve("e"*64))(write)
+        replay <- f.api.routes.runZIO(Request.get("http://localhost"+job.status_url+"/events").addHeader("Last-Event-ID","1"))
+        text <- replay.body.asString
+        payloads=text.split("\n").filter(_.startsWith("data: ")).map(_.drop(6))
+        latest <- ZIO.fromEither(payloads.last.fromJson[DownloadSnapshot]).mapError(new RuntimeException(_))
+      yield assertTrue(latest.status=="failed",latest.chunks.head.error.exists(_.code=="cache_missing"),text.contains("cache_missing")) }
+    },
+    test("status invalidation preserves a concurrent chunk completion and publishes its terminal state") {
+      ZIO.scoped { for
+        root <- ZIO.attempt(Files.createTempDirectory("download-status-race-"))
+        repo <- DownloadsRepository.open(root.resolve("jobs.sqlite"))
+        a=StoredAsset("a"*64,40,"a"*64,"native",artifact_url="/api/archive-assets/"+"a"*64)
+        b=StoredAsset("b"*64,40,"b"*64,"native",artifact_url="/api/archive-assets/"+"b"*64)
+        before=DownloadSnapshot("race",DownloadSelection(List("record-a","record-b")),status="running",
+          assets=List(AssetOutcome("record-a","ready",Some(a))),status_url="/api/archive-downloads/race",
+          chunks=List(DownloadChunk(a.id,"record-a",a.artifact_url,"ready"),DownloadChunk(b.id,"record-b",b.artifact_url,"downloading")))
+        _ <- repo.saveDownload(before)
+        entered <- Promise.make[Nothing,Unit]
+        release <- Promise.make[Nothing,Unit]
+        manifests=new DownloadManifests(repo,(id,bytes)=>if id==a.id then entered.succeed(()) *> release.await.as(false) else ZIO.succeed(true))
+        polling <- manifests.status("race").forkScoped
+        _ <- entered.await
+        _ <- repo.updateDownload("race","job.completed")(current=>current.copy(status="completed",assets=current.assets:+AssetOutcome("record-b","ready",Some(b)),chunks=current.chunks.map(c=>if c.id==b.id then c.copy(status="ready") else c)))
+        _ <- release.succeed(())
+        result <- polling.join
+        events <- repo.eventsAfter("race",0)
+      yield assertTrue(result.status=="partial",result.chunks.find(_.id==b.id).exists(_.status=="ready"),result.progress.ready_chunks==1,result.progress.failed_chunks==1,events.last.name=="job.completed") }
+    },
     test("concurrent jobs selecting the same product perform one upstream transfer") {
       fixture { f=>for
         accepted <- ZIO.foreach(1 to 8)(_=>f.jobs.accept(f.selection))

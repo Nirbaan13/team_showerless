@@ -122,6 +122,26 @@ final class FileCache private(root:Path, store:FileCacheRepository,maxCacheBytes
 object FileCache:
   private final case class State(pins:Map[Path,Int],reservations:Map[Path,Long],clock:Long)
   private final case class Usage(completed:Long,free:Long,partial:Long)
+  /** Startup only: reclaim every producer's known scratch names before workers start. */
+  def recover(root:Path):Task[Unit]=ZIO.attemptBlocking {
+    val base=root.toAbsolutePath.normalize()
+    val uuid="[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}"
+    val paths=Files.walk(base)
+    try paths.iterator().asScala.foreach { path=>
+      val relative=base.relativize(path)
+      val name=path.getFileName.toString
+      val partial=
+        (relative.getNameCount==2 && relative.getName(0).toString=="raw" && name.matches(s"[0-9a-f]{64}[.]fits[.]$uuid[.]part")) ||
+        (relative.getNameCount==3 && relative.getName(0).toString=="jobs" && name.matches(s"[0-9a-f]{40}[.](?:fits|png)[.]$uuid[.]part")) ||
+        (relative.getNameCount==2 && relative.getName(0).toString=="calibration-cache" && name.matches(s"[0-9a-f]{64}(?:[.]$uuid)?[.]part")) ||
+        (relative.getNameCount==2 && relative.getName(0).toString=="archive-assets" && name.matches("(?:transfer|decoded)-[a-zA-Z0-9_-]+[.]part"))
+      if partial then
+        if Files.isSymbolicLink(path) || !Files.isRegularFile(path,java.nio.file.LinkOption.NOFOLLOW_LINKS) then
+          throw ApiError("invalid_product","Unsafe abandoned cache partial file")
+        Files.deleteIfExists(path)
+    }
+    finally paths.close()
+  }
   def open(root:Path,database:Path,maxCacheBytes:Long,maxProductBytes:Long,minFreeBytes:Long):Task[FileCache]=
     for
       _ <- ZIO.fail(ApiError("invalid_configuration","Cache limits must be positive and fit one product"))

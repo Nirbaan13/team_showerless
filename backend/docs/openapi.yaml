@@ -1509,7 +1509,16 @@ components:
           items:
             $ref: '#/components/schemas/ArchiveDownloadChunk'
         progress:
-          $ref: '#/components/schemas/Progress'
+          $ref: '#/components/schemas/ArchiveDownloadProgress'
+    ArchiveDownloadProgress:
+      type: object
+      required: [discovery_complete, total_chunks, ready_chunks, failed_chunks, unavailable_chunks]
+      properties:
+        discovery_complete: {type: boolean}
+        total_chunks: {type: integer, minimum: 0}
+        ready_chunks: {type: integer, minimum: 0}
+        failed_chunks: {type: integer, minimum: 0}
+        unavailable_chunks: {type: integer, minimum: 0}
     ArchiveDownloadChunk:
       type: object
       required: [id, record_id, artifact_url, status]

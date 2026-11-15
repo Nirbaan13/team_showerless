@@ -266,6 +266,20 @@ object EquipmentSpec extends ZIOSpecDefault:
       yield assertTrue(!Files.exists(abandoned),retained.toList == List[Byte](9,8,7),bytes.toList == yaml.toList,hits.get == 1)
       }
     },
+    test("restart removes current UUID calibration partials before global cache admission") {
+      fixture() { (base,dir,hits)=>for
+        repo <- Repository.open(dir.resolve("jobs.sqlite"))
+        client <- ZIO.service[Client]
+        directory <- ZIO.attempt(Files.createDirectories(dir.resolve("calibration-cache")))
+        abandoned=directory.resolve("c"*64+".12345678-1234-1234-1234-123456789abc.part")
+        unrelated=directory.resolve("user.part")
+        _ <- ZIO.attempt {Files.write(abandoned,new Array[Byte](128));Files.write(unrelated,Array[Byte](1,2,3))}
+        equipment <- EquipmentService.make(repo,dir,client,base,CalibrationLimits(maxFileBytes=128,cacheBytes=yaml.length+3,minFreeBytes=0))
+        catalogue <- equipment.catalog("DR1",None)
+        file <- equipment.file(id(products(catalogue).head))
+        disk <- ZIO.attempt(!Files.exists(abandoned) && Files.exists(unrelated) && Files.size(file.path)==yaml.length)
+      yield assertTrue(disk,hits.get==1) }
+    },
     test("startup rejects symlink partial files without changing their targets") {
       fixture() { (base,dir,hits) => for
         repo <- Repository.open(dir.resolve("db.sqlite"))

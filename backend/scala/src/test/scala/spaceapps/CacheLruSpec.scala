@@ -142,6 +142,23 @@ object CacheLruSpec extends ZIOSpecDefault:
         disk <- ZIO.attempt(List(a,b).map(Files.exists(_)))
       yield assertTrue(failed.isFailure,disk==List(false,true),raw==1) }
     },
+    test("startup reclaims every producer's crash partial before the shared cache admits work") {
+      ZIO.scoped { for
+        dir <- temp
+        uuid="12345678-1234-1234-1234-123456789abc"
+        partials=List(dir.resolve("raw").resolve("a"*64+s".fits.$uuid.part"),
+          dir.resolve("jobs/job").resolve("b"*40+s".png.$uuid.part"),
+          dir.resolve("calibration-cache").resolve("c"*64+s".$uuid.part"),
+          dir.resolve("archive-assets/transfer-12345.part"),dir.resolve("archive-assets/decoded-67890.part"))
+        _ <- ZIO.foreachDiscard(partials)(write(_,40))
+        unrelated=dir.resolve("user.part")
+        _ <- write(unrelated,1)
+        _ <- FileCache.recover(dir)
+        c <- cache(dir,41)
+        _ <- c.publish(native(dir,'f'))(write(_,40))
+        disk <- ZIO.attempt(partials.forall(p=> !Files.exists(p)) && Files.size(unrelated)==1 && Files.size(native(dir,'f'))==40)
+      yield assertTrue(disk) }
+    },
     test("restart reconciles missing indexed products and atomically published unindexed FITS") {
       ZIO.scoped { for
         dir <- temp

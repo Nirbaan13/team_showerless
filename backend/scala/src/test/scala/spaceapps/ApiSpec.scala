@@ -82,6 +82,22 @@ object ApiSpec extends ZIOSpecDefault:
         yield assertTrue(response.status==Status.Ok,direct.getPath=="/openapi.json",proxied.getPath=="/backend/openapi.json")
       })
     },
+    test("every local OpenAPI reference resolves so Swagger can render all response models") {
+      import zio.json.ast.Json
+      def references(value:Json):List[String]=value match
+        case Json.Obj(fields)=>fields.toList.flatMap { case ("$ref",Json.Str(ref))=>List(ref);case (_,child)=>references(child) }
+        case Json.Arr(values)=>values.toList.flatMap(references)
+        case _=>Nil
+      def resolves(value:Json,parts:List[String]):Boolean=parts match
+        case Nil=>true
+        case key::tail=>value.asObject.flatMap(_.get(key.replace("~1","/").replace("~0","~"))).exists(resolves(_,tail))
+      ZIO.scoped(withApi { api=>for
+        response <- api.routes.runZIO(Request.get("http://localhost/openapi.json"))
+        body <- response.body.asString
+        document <- ZIO.fromEither(body.fromJson[Json]).mapError(new RuntimeException(_))
+        missing=references(document).filter(_.startsWith("#/")).filterNot(ref=>resolves(document,ref.drop(2).split("/").toList)).distinct
+      yield assertTrue(missing.isEmpty) })
+    },
     test("health/version/OpenAPI preserve revision and all contract paths") {
       ZIO.scoped(withApi {api=>
         for
