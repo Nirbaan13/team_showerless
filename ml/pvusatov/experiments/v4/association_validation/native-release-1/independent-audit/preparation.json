@@ -1,0 +1,13 @@
+{
+  "analytic_fixture_tests": 5,
+  "checker_sha256": "5b6105c10bfbdca1ea5e6ba4218d8cc357e3c9d10be2fc52cb527c20bd9bb8ca",
+  "fixture_result": "PASS",
+  "fixture_sha256": "c22068a4b7b4d17cdd95d9ae94efc4a078413b3d64e2a45221c9c3b6635216ae",
+  "frozen_r2_sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd",
+  "independent_synthetic_ancestor_sha256": "7262036ecd9bbb5be4fb2600d0eac8a1e3cc84099f895fc31f64c8a466790242",
+  "native_data_audit_executed": false,
+  "native_outcomes_inspected": false,
+  "prepared_utc": "2026-11-15T16:58:57.148421+00:00",
+  "released_handoff_sha256": "6005fd136cdab828cac9c786c18fce2c4977289924f7ff94df3a3ddf92671abb",
+  "stage": "prepared_before_native_outcomes"
+}
