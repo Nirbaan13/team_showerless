@@ -85,8 +85,17 @@ jobs:
         run: ./sbtw test stage
       - name: Check deployment scripts
         run: |
-          bash -n ../ops/deploy.sh ../ops/ci-ssh.sh ../ops/bootstrap-vps.sh ../ops/test-ci-ssh.sh tests/test_deploy.sh
+          bash -n ../ops/deploy.sh ../ops/ci-ssh.sh ../ops/bootstrap-vps.sh ../ops/bootstrap-domain.sh ../ops/test-ci-ssh.sh ../ops/test-deploy-binding.sh tests/test_deploy.sh
           bash ../ops/test-ci-ssh.sh
+          bash ../ops/test-deploy-binding.sh
+      - name: Verify domain routing, TLS and streaming
+        working-directory: .
+        run: |
+          caddy_container=$(docker create caddy:2.11.9@sha256:4e2425f6009577e7c651010f16679c28f7d12df3e7b1914f941a7a3370746b3c)
+          trap 'docker rm "$caddy_container" >/dev/null' EXIT
+          docker cp "$caddy_container:/usr/bin/caddy" "$RUNNER_TEMP/caddy"
+          chmod +x "$RUNNER_TEMP/caddy"
+          PATH="$RUNNER_TEMP:$PATH" python3 ops/domain/test-routing.py
       - name: Build the exact commit
         run: docker build --file Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-api:$GITHUB_SHA" ..
       - name: Verify packaged real-data inference

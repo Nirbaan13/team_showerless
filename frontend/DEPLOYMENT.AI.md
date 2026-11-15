@@ -1,7 +1,10 @@
 # Frontend deployment
 
-The frontend is served from the existing VPS at `http://35.159.162.202:8080/`.
-The API and Swagger keep port 80. No additional hosting service is needed.
+The frontend is served from the existing VPS at `http://144.124.238.101:8080/`.
+The domain proxy for `https://spherexblink.tech` is installed on that VPS; public
+activation requires its DNS owner to point the apex and www records there.
+Direct-IP API and Swagger retain port 80 through the proxy. See
+`backend/docs/implementation/DOMAIN-VPS.AI.md` for routing and DNS state.
 
 ## Automatic delivery
 

@@ -6,6 +6,8 @@ export APP_DIR
 APP_DIR=$(mktemp -d)
 export APP_PORT=18080 GRPC_PORT=15051 COMPOSE_PROJECT_NAME="spaceapps-ci-$$" DEPLOY_HEALTH_TIMEOUT=15
 cp "${TEST_COMPOSE_FILE:-$repo_root/compose.yaml}" "$APP_DIR/compose.yaml"
+# Host-owned binding must survive release configuration replacement and rollback.
+printf 'APP_PORT=127.0.0.1:18080\n' >"$APP_DIR/listen.env"
 cleanup() {
     if [[ -f "$APP_DIR/current.env" ]]; then
         docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" \
@@ -72,6 +74,9 @@ fi
 
 deploy "$first"
 assert_version "$first"
+api_id=$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" --env-file "$APP_DIR/current.env" ps --quiet api)
+test "$(docker inspect --format '{{(index (index .NetworkSettings.Ports "8000/tcp") 0).HostIp}}' "$api_id")" = 127.0.0.1
+grep -qx 'APP_PORT=127.0.0.1:18080' "$APP_DIR/current.env"
 docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" --env-file "$APP_DIR/current.env" exec -T api sh -c 'printf persisted > /app/data/deploy-sentinel'
 assert_storage() {
     test "$(docker compose --project-name "$COMPOSE_PROJECT_NAME" --file "$APP_DIR/compose.yaml" --env-file "$APP_DIR/current.env" exec -T api cat /app/data/deploy-sentinel)" = persisted
