@@ -1208,6 +1208,7 @@ export function App() {
               onChangeSubtractionMode={setSubtractionMode}
               centerRa={ra}
               centerDec={dec}
+              fov={fov}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}

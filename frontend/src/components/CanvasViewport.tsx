@@ -28,6 +28,7 @@ interface CanvasViewportProps {
   mlAnalysisStatus?: MLAnalysisStatus;
   onOpenMlInsights?: () => void;
   liveCatalog?: LiveCatalogResponse | null;
+  fov?: string;
 }
 
 export const CanvasViewport: React.FC<CanvasViewportProps> = ({
@@ -41,6 +42,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   onChangeSubtractionMode,
   centerRa,
   centerDec,
+  fov = "5'",
   skippedNotice,
   onClearSkippedNotice,
   isScientistMode = false,
@@ -92,6 +94,19 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       requestAnimationFrame(animateZoom);
     }
   }, [centerRa, centerDec]);
+
+  useEffect(() => {
+    if (!fov) return;
+    const zoomMap: Record<string, number> = {
+      "1'": 2.7,
+      "3'": 1.9,
+      "5'": 1.4,
+      "10'": 0.85,
+    };
+    const targetZoom = zoomMap[fov] ?? 1.4;
+    setZoom(targetZoom);
+    setPan({ x: 0, y: 0 });
+  }, [fov]);
 
   const activeFrame = frames[activeFrameIndex] || null;
 
@@ -219,10 +234,28 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         const imgW = 512;
         const imgH = 512 / aspect;
         ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
-        if (isWhiteBg) {
-          ctx.filter = 'invert(1)';
+        if (subtractionMode === 'zodi_reference_subtracted') {
+          // Zodi Subtracted: remove diffuse interplanetary dust haze -> crisp black background & boosted contrast
+          ctx.filter = isWhiteBg
+            ? 'invert(1) contrast(1.5) brightness(1.1)'
+            : 'contrast(1.45) brightness(1.15)';
+        } else if (subtractionMode === 'epoch_difference') {
+          // Difference Image: high contrast to pop motion dipole
+          ctx.filter = isWhiteBg
+            ? 'invert(1) contrast(2.2)'
+            : 'contrast(2.0) saturate(0)';
+        } else {
+          // Aligned Sky (Raw): standard telescope exposure with diffuse zodiacal background
+          ctx.filter = isWhiteBg ? 'invert(1)' : 'none';
         }
+
         ctx.drawImage(cachedImg, -imgW / 2, -imgH / 2, imgW, imgH);
+
+        // If raw_calibrated: overlay subtle diffuse warm zodiacal light haze across the sensor
+        if (subtractionMode === 'raw_calibrated' && !isWhiteBg) {
+          ctx.fillStyle = 'rgba(255, 210, 150, 0.06)';
+          ctx.fillRect(-imgW / 2, -imgH / 2, imgW, imgH);
+        }
         ctx.restore();
         hasDrawnRealImage = true;
       }
@@ -250,9 +283,11 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           return rng / 4294967296;
         };
 
-        // 1. Fill detector readout noise floor (~20-35 ADU)
+        // 1. Fill detector readout noise floor with zodiacal background level
+        const basePedestal = subtractionMode === 'raw_calibrated' ? 36 : subtractionMode === 'zodi_reference_subtracted' ? 14 : 4;
+        const noiseSpread = subtractionMode === 'raw_calibrated' ? 18 : 10;
         for (let i = 0; i < 256 * 256; i++) {
-          const noise = 22 + Math.floor(lcg() * 18);
+          const noise = basePedestal + Math.floor(lcg() * noiseSpread);
           const idx = i * 4;
           data[idx] = noise;
           data[idx + 1] = noise;
@@ -261,26 +296,29 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         }
 
         // 2. Add discrete pixelated stellar PSFs (field stars)
-        let starRng = seedCoord;
-        const starLcg = () => {
-          starRng = (starRng * 1664525 + 1013904223) >>> 0;
-          return starRng / 4294967296;
-        };
-        for (let s = 0; s < 28; s++) {
-          const sx = Math.floor(10 + starLcg() * 236);
-          const sy = Math.floor(10 + starLcg() * 236);
-          const flux = 70 + starLcg() * 160;
-          for (let dy = -3; dy <= 3; dy++) {
-            for (let dx = -3; dx <= 3; dx++) {
-              const px = sx + dx;
-              const py = sy + dy;
-              if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                const r2 = dx * dx + dy * dy;
-                const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(flux * Math.exp(-r2 / 2.2)));
-                const idx = (py * 256 + px) * 4;
-                data[idx] = pVal;
-                data[idx + 1] = pVal;
-                data[idx + 2] = pVal;
+        // In epoch_difference mode, static field stars cancel out!
+        if (subtractionMode !== 'epoch_difference') {
+          let starRng = seedCoord;
+          const starLcg = () => {
+            starRng = (starRng * 1664525 + 1013904223) >>> 0;
+            return starRng / 4294967296;
+          };
+          for (let s = 0; s < 28; s++) {
+            const sx = Math.floor(10 + starLcg() * 236);
+            const sy = Math.floor(10 + starLcg() * 236);
+            const flux = (subtractionMode === 'zodi_reference_subtracted' ? 110 : 70) + starLcg() * 160;
+            for (let dy = -3; dy <= 3; dy++) {
+              for (let dx = -3; dx <= 3; dx++) {
+                const px = sx + dx;
+                const py = sy + dy;
+                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
+                  const r2 = dx * dx + dy * dy;
+                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(flux * Math.exp(-r2 / 2.2)));
+                  const idx = (py * 256 + px) * 4;
+                  data[idx] = pVal;
+                  data[idx + 1] = pVal;
+                  data[idx + 2] = pVal;
+                }
               }
             }
           }
@@ -1083,6 +1121,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
           <span>|</span>
           <span>Band {activeFrame.detectorArray} ({activeFrame.wavelengthMinUm}–{activeFrame.wavelengthMaxUm} µm)</span>
+          <span>|</span>
+          <span className="text-amber-300 font-semibold">FOV {fov}</span>
           {subtractionMode === 'zodi_reference_subtracted' && (
             <>
               <span>|</span>
