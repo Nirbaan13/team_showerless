@@ -31,7 +31,7 @@ from PIL import Image
 from pydantic import BaseModel, Field
 
 from detector import find_candidates
-from science.motion.live import SearchError, search_motion
+from science.motion.live import SearchError, bounded_env_int, search_motion
 import catalogue_db
 
 app = FastAPI(
@@ -49,7 +49,7 @@ app.add_middleware(
 )
 
 DIR_PATH = Path(__file__).resolve().parent
-MOTION_SLOTS = BoundedSemaphore(2)
+MOTION_SLOTS = BoundedSemaphore(bounded_env_int('MOTION_SEARCH_SLOTS', 2, 4))
 
 
 class MotionSearchRequest(BaseModel):
@@ -67,7 +67,7 @@ def live_motion_search(req: MotionSearchRequest):
     if not 0 <= (req.end_date - req.start_date).days <= 6 or req.end_date > datetime.now(timezone.utc).date():
         raise HTTPException(422, 'Choose an ordered date range of up to 7 days ending today or earlier (UTC).')
     if not MOTION_SLOTS.acquire(blocking=False):
-        raise HTTPException(503, 'Both motion search slots are busy. Try again shortly.')
+        raise HTTPException(503, 'All motion search slots are busy. Try again shortly.')
     try:
         return search_motion(req.ra_deg, req.dec_deg, req.detector, req.start_date, req.end_date,
                              req.size_arcmin, req.retain_outliers)

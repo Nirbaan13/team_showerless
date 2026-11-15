@@ -34,7 +34,7 @@ foreach (['CONTENT_TYPE' => 'Content-Type', 'HTTP_ACCEPT' => 'Accept', 'HTTP_AUT
     }
 }
 // The upstream is deployment configuration, never a request parameter or header.
-$base = rtrim(getenv('SPACEAPPS_API_UPSTREAM') ?: 'http://144.124.238.101:8080', '/');
+$base = rtrim(getenv('SPACEAPPS_API_UPSTREAM') ?: 'http://146.103.122.246:8080', '/');
 $context = stream_context_create(['http' => [
     'method' => $method, 'header' => $headers, 'content' => $body,
     'timeout' => 300, 'ignore_errors' => true, 'follow_location' => 0,

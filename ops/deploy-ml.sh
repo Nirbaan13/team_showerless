@@ -16,6 +16,11 @@ if [[ ! $port =~ ^(127\.0\.0\.1:)?([1-9][0-9]{0,4})$ ]] || ((10#${BASH_REMATCH[2
     echo 'ML_PORT must be a valid port, optionally bound to loopback' >&2
     exit 64
 fi
+release_lock=${RELEASE_LOCK_FILE:-/var/lock/spaceapps-release.lock}
+if [[ -f "$release_lock" ]]; then
+    exec 8>"$release_lock"
+    flock -w 600 8
+fi
 exec 9>"$app_dir/deploy.lock"
 flock -w 600 9
 previous_image=
@@ -51,6 +56,12 @@ docker container rm --volumes "$config_container" >/dev/null
 config_container=
 compose=(docker compose --project-name "$project" --file "$candidate_compose" --env-file "$candidate")
 previous=(docker compose --project-name "$project" --file "$app_dir/compose.yaml" --env-file "$app_dir/current.env")
+# Keep target-host resource policy across both new releases and rollback.
+# This is Compose data, never a shell environment file.
+if [[ -f "$app_dir/host.override.yaml" ]]; then
+    compose+=(--file "$app_dir/host.override.yaml")
+    previous+=(--file "$app_dir/host.override.yaml")
+fi
 "${compose[@]}" config --quiet
 if ! "${compose[@]}" up --detach --wait --remove-orphans --wait-timeout "$timeout" ||
     ! "${compose[@]}" exec -T ml-inference python /app/smoke_deployment.py --base-url http://127.0.0.1:8001; then
@@ -77,4 +88,9 @@ docker image tag "$image" spaceapps-ml:latest
 mv "$candidate_compose" "$app_dir/compose.yaml"
 mv "$candidate" "$app_dir/current.env"
 deployed=true
+if [[ -f "$app_dir/prune-images.enabled" ]]; then
+    if ! "${IMAGE_PRUNE_HELPER:-/usr/local/bin/spaceapps-prune-images}" "$app_dir" "$image" "$previous_image"; then
+        echo 'Warning: image retention cleanup failed after healthy ML deployment' >&2
+    fi
+fi
 printf 'Deployed ML %s; spaceapps-ml:latest points to this healthy revision\n' "$revision"

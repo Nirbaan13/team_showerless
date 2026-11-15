@@ -28,8 +28,13 @@ import java.nio.file.{Files,Path}
 
 object Application:
   private def env(name:String,default:String):String=java.lang.System.getenv().getOrDefault(name,default)
+  private[bootstrap] def parseProcessingConcurrency(raw:String):Int=
+    raw.toIntOption.filter(value=>value>=1 && value<=4).getOrElse {
+      throw ApiError("invalid_configuration","PROCESSING_CONCURRENCY must be an integer between 1 and 4")
+    }
   def run=ZIO.scoped {
     for
+      processingConcurrency <- ZIO.attempt(parseProcessingConcurrency(env("PROCESSING_CONCURRENCY","2")))
       data <- ZIO.attempt(Path.of(env("DATA_DIR","data")).toAbsolutePath)
       _ <- ZIO.attemptBlocking(Files.createDirectories(data))
       client <- ZIO.service[Client]
@@ -58,7 +63,7 @@ object Application:
       equipment <- EquipmentService.make(repository,data,client,env("IRSA_CALIBRATION_URL","https://nasa-irsa-spherex.s3.amazonaws.com/"),capacity=Some(cache))
       analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
       analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
-      pipeline <- HttpPipelineClient.make(env("PROCESSING_URL","http://pipeline:8002"))
+      pipeline <- HttpPipelineClient.make(env("PROCESSING_URL","http://pipeline:8002"),concurrency=processingConcurrency)
       catalogs <- spaceapps.catalogs.service.Catalogs.make(new spaceapps.catalogs.integrations.TapCatalogs(client))
       api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline),catalogs=Some(catalogs))
       downloadsRuntime <- DownloadsRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(

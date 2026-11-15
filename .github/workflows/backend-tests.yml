@@ -88,6 +88,9 @@ jobs:
           bash -n ../ops/deploy.sh ../ops/ci-ssh.sh ../ops/bootstrap-vps.sh ../ops/bootstrap-domain.sh ../ops/test-ci-ssh.sh ../ops/test-deploy-binding.sh tests/test_deploy.sh
           bash ../ops/test-ci-ssh.sh
           bash ../ops/test-deploy-binding.sh
+          bash ../ops/test-host-overrides.sh
+          bash ../ops/lowmemory/test-prune-images.sh
+          bash ../ops/lowmemory/test-config.sh
       - name: Verify domain routing, TLS and streaming
         working-directory: .
         run: |

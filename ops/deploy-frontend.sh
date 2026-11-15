@@ -11,6 +11,12 @@ image="spaceapps-frontend:$revision"
 app_dir=${FRONTEND_DIR:-/opt/spaceapps-frontend}
 project=${COMPOSE_PROJECT_NAME:-spaceapps-frontend}
 timeout=${DEPLOY_HEALTH_TIMEOUT:-60}
+# Match the optional host-wide release lock used by API and ML deployment.
+release_lock=${RELEASE_LOCK_FILE:-/var/lock/spaceapps-release.lock}
+if [[ -f "$release_lock" ]]; then
+    exec 8>"$release_lock"
+    flock -w 600 8
+fi
 exec 9>"$app_dir/deploy.lock"
 flock -w 600 9
 previous_image=
@@ -50,4 +56,9 @@ if ! "${compose[@]}" --env-file "$candidate" up --detach --wait --wait-timeout "
 fi
 docker image tag "$image" spaceapps-frontend:latest
 mv "$candidate" "$app_dir/current.env"
+if [[ -f "$app_dir/prune-images.enabled" ]]; then
+    if ! "${IMAGE_PRUNE_HELPER:-/usr/local/bin/spaceapps-prune-images}" "$app_dir" "$image" "$previous_image"; then
+        echo 'Warning: image retention cleanup failed after healthy frontend deployment' >&2
+    fi
+fi
 printf 'Deployed frontend %s; latest now points to this revision\n' "$revision"

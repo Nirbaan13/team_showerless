@@ -1,0 +1,18 @@
+# Install on the constrained target only as /opt/spaceapps-ml/host.override.yaml.
+services:
+  ml-inference:
+    mem_limit: 384m
+    memswap_limit: 768m
+    environment:
+      MOTION_SEARCH_SLOTS: "1"
+      MOTION_FETCH_WORKERS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    tmpfs: !reset []
+    volumes:
+      - type: bind
+        source: /opt/spaceapps-ml/runtime-tmp
+        target: /tmp
+        bind:
+          create_host_path: false

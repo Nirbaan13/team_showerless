@@ -20,6 +20,19 @@ from science import archive_gateway
 from .prepare_fits import align_exposure, grid_coordinates, stack_payload
 from .review import build_review
 
+
+def bounded_env_int(name, default, maximum):
+    message = f'{name} must be an integer between 1 and {maximum}'
+    try:
+        value = int(os.environ.get(name, str(default)))
+    except ValueError as exc:
+        raise ValueError(message) from exc
+    if not 1 <= value <= maximum:
+        raise ValueError(message)
+    return value
+
+
+FETCH_WORKERS = bounded_env_int('MOTION_FETCH_WORKERS', 4, 8)
 ARCHIVE_HOST = 'irsa.ipac.caltech.edu'
 COLLECTIONS = tuple(
     c.strip() for c in os.getenv('SPHEREX_COLLECTIONS', 'spherex_dr1,spherex_qr3,spherex_qr2,spherex_dr2,spherex_qr4').split(',') if c.strip()
@@ -219,7 +232,7 @@ def search_motion(ra, dec, detector, start_date, end_date, size_arcmin, retain_o
     center = (ra, dec)
     width = ceil(size_arcmin * 60 / PIXEL_SCALE)
     _, sky = grid_coordinates(*center, width, width, PIXEL_SCALE)
-    with TemporaryDirectory(prefix='spherex-motion-') as tmp, ThreadPoolExecutor(max_workers=4) as pool:
+    with TemporaryDirectory(prefix='spherex-motion-') as tmp, ThreadPoolExecutor(max_workers=FETCH_WORKERS) as pool:
         futures = [pool.submit(load_visit, group, Path(tmp), center, size_arcmin / 60, sky, retain_outliers, start, stop)
                    for group in groups]
         rows, skipped, provenance = {}, [], {}
