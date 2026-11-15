@@ -376,6 +376,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
     // Candidate Detection Overlay: Motion Track & High-Precision Targeting Reticles
     candidates.forEach((cand, candIdx) => {
+      ctx.save();
       const isSelected = selectedCandidateId === cand.id;
       const currentPos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
       const { cx: offsetX, cy: offsetY } = getCanvasCoords(currentPos.x, currentPos.y);

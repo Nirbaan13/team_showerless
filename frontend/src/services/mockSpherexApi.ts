@@ -8,6 +8,7 @@ import type {
 import {
   REAL_3I_ATLAS_FRAMES,
   REAL_BARNARD_FRAMES,
+  REAL_CERES_FRAMES,
   REAL_WISE_0855_FRAMES,
   REAL_EPSILON_INDI_B_FRAMES,
   REAL_RW_AURIGAE_FRAMES,
@@ -296,7 +297,7 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
       flaggedPixelPercentage: 0.08,
       cosmicRayHits: 6,
       isAvailable: true,
-      imageDataUrl: REAL_BARNARD_FRAMES[idx]?.pngDataUrl,
+      imageDataUrl: REAL_CERES_FRAMES[idx]?.pngDataUrl,
       imageWidth: 256,
       imageHeight: 144,
       headerMetadata: {

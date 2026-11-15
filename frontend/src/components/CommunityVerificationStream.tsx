@@ -144,16 +144,18 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
     status: 'dispatching' | 'submitted' | 'accepted' | 'rejected' | 'error';
     log?: string;
   } | null>(null);
+  const [isDispatching, setIsDispatching] = useState<boolean>(false);
 
+  // Poll existing submission status (read-only, does not trigger a POST)
   useEffect(() => {
-    if (!isLevel2Verified || !candidate || !targetId) return;
+    if (!targetId || !candidate) return;
     let cancelled = false;
     let timer: number | undefined;
 
     const poll = async (cid: string) => {
       try {
         const res = await fetch(`/api/catalogue/candidates/${encodeURIComponent(cid)}`);
-        if (!res.ok) throw new Error(String(res.status));
+        if (!res.ok) return;
         const data = await res.json();
         const subs: any[] = data.external_submissions || [];
         const latest = subs[0];
@@ -166,50 +168,61 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
           status: st,
           log: latest.response_log,
         });
-        if (st === 'submitted') timer = window.setTimeout(() => poll(cid), 3000);
+        if (st === 'submitted') timer = window.setTimeout(() => poll(cid), 4000);
       } catch {
-        if (!cancelled) timer = window.setTimeout(() => poll(cid), 5000);
+        // Read-only polling failure is non-blocking
       }
     };
 
-    (async () => {
-      setAutoSub((prev) => prev ?? { candidateId: canonicalId, status: 'dispatching' });
-      try {
-        const res = await fetch('/api/catalogue/auto-submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            thread_key: canonicalId,
-            name: candidate.validationData?.objectName || candidate.catalogId || candidate.id,
-            ra: candidate.ra,
-            dec: candidate.dec,
-            confirmations: currentConsensusCount,
-            candidate_type:
-              candidate.classification === 'transient'
-                ? 'transient'
-                : candidate.classification === 'artifact'
-                ? 'artifact'
-                : 'moving_object',
-            snr: candidate.epochPositions?.[0]?.snr ?? null,
-            speed_arcsec_hr: candidate.speedArcsecPerHour ?? null,
-            fit_rms_px: candidate.fitRmsPx ?? null,
-          }),
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (cancelled) return;
-        poll(data.candidate_id);
-      } catch (err: any) {
-        if (!cancelled) setAutoSub({ candidateId: canonicalId, status: 'error', log: err?.message || 'Catalogue service unreachable' });
-      }
-    })();
+    poll(canonicalId);
 
     return () => {
       cancelled = true;
       if (timer) window.clearTimeout(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLevel2Verified, targetId]);
+  }, [canonicalId, targetId]);
+
+  // Explicit user-initiated clearinghouse dispatch
+  const handleManualDispatch = async () => {
+    if (!candidate || isDispatching) return;
+    setIsDispatching(true);
+    setAutoSub({ candidateId: canonicalId, status: 'dispatching' });
+    try {
+      const res = await fetch('/api/catalogue/auto-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          thread_key: canonicalId,
+          name: candidate.validationData?.objectName || candidate.catalogId || candidate.id,
+          ra: candidate.ra,
+          dec: candidate.dec,
+          confirmations: currentConsensusCount,
+          candidate_type:
+            candidate.classification === 'transient'
+              ? 'transient'
+              : candidate.classification === 'artifact'
+              ? 'artifact'
+              : 'moving_object',
+          snr: candidate.epochPositions?.[0]?.snr ?? null,
+          speed_arcsec_hr: candidate.speedArcsecPerHour ?? null,
+          fit_rms_px: candidate.fitRmsPx ?? null,
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      setAutoSub({
+        candidateId: data.candidate_id || canonicalId,
+        destination: data.destination || 'Minor Planet Center (MPC)',
+        reference: data.reference_id,
+        status: data.status || 'submitted',
+        log: data.log,
+      });
+    } catch (err: any) {
+      setAutoSub({ candidateId: canonicalId, status: 'error', log: err?.message || 'Catalogue service unreachable' });
+    } finally {
+      setIsDispatching(false);
+    }
+  };
 
   const handlePostComment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -482,32 +495,47 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
               </span>
             </div>
 
-            {/* Automatic submission status */}
-            <div
-              className={`p-2.5 rounded-lg border font-mono text-[11px] space-y-1 ${
-                autoSub?.status === 'accepted'
-                  ? 'bg-purple-950/60 border-purple-500/50 text-purple-200'
-                  : autoSub?.status === 'rejected'
-                  ? 'bg-red-950/60 border-red-500/50 text-red-200'
-                  : autoSub?.status === 'error'
-                  ? 'bg-red-950/40 border-red-800 text-red-300'
-                  : 'bg-sky-950/60 border-sky-500/50 text-sky-200'
-              }`}
-            >
-              <div className="font-bold">
-                {!autoSub || autoSub.status === 'dispatching'
-                  ? '⏳ Auto-submitting to clearinghouse…'
-                  : autoSub.status === 'submitted'
-                  ? `📨 Submitted to ${autoSub.destination} — awaiting reply…`
-                  : autoSub.status === 'accepted'
-                  ? `✅ ACCEPTED by ${autoSub.destination}`
-                  : autoSub.status === 'rejected'
-                  ? `❌ REJECTED by ${autoSub.destination}`
-                  : '⚠ Submission service unreachable'}
+            {/* Clearinghouse submission status / manual dispatch button */}
+            {!autoSub ? (
+              <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 font-mono text-[11px] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-emerald-200">Consensus threshold reached. Ready for official clearinghouse dispatch.</span>
+                <button
+                  type="button"
+                  onClick={handleManualDispatch}
+                  disabled={isDispatching}
+                  className="px-3 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold border border-black cursor-pointer shadow-sm shrink-0 flex items-center justify-center gap-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{isDispatching ? 'Dispatching...' : 'Dispatch to MPC / TNS'}</span>
+                </button>
               </div>
-              {autoSub?.reference && <div className="text-paper-400">Ref: {autoSub.reference} · Catalog ID: {autoSub.candidateId}</div>}
-              {autoSub?.log && autoSub.status !== 'submitted' && <div className="text-paper-300">{autoSub.log}</div>}
-            </div>
+            ) : (
+              <div
+                className={`p-2.5 rounded-lg border font-mono text-[11px] space-y-1 ${
+                  autoSub.status === 'accepted'
+                    ? 'bg-purple-950/60 border-purple-500/50 text-purple-200'
+                    : autoSub.status === 'rejected'
+                    ? 'bg-red-950/60 border-red-500/50 text-red-200'
+                    : autoSub.status === 'error'
+                    ? 'bg-red-950/40 border-red-800 text-red-300'
+                    : 'bg-sky-950/60 border-sky-500/50 text-sky-200'
+                }`}
+              >
+                <div className="font-bold">
+                  {autoSub.status === 'dispatching'
+                    ? '⏳ Submitting to clearinghouse…'
+                    : autoSub.status === 'submitted'
+                    ? `📨 Submitted to ${autoSub.destination} — awaiting reply…`
+                    : autoSub.status === 'accepted'
+                    ? `✅ ACCEPTED by ${autoSub.destination}`
+                    : autoSub.status === 'rejected'
+                    ? `❌ REJECTED by ${autoSub.destination}`
+                    : '⚠ Submission service unreachable'}
+                </div>
+                {autoSub.reference && <div className="text-paper-400">Ref: {autoSub.reference} · Catalog ID: {autoSub.candidateId}</div>}
+                {autoSub.log && autoSub.status !== 'submitted' && <div className="text-paper-300">{autoSub.log}</div>}
+              </div>
+            )}
 
             <div className="flex items-center gap-2 pt-0.5">
               {onOpenCatalogue && (

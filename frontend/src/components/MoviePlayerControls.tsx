@@ -100,46 +100,57 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
 
         {/* Multi-Epoch Frame Buttons */}
         <div className="flex items-center space-x-1.5 overflow-x-auto pb-0.5">
-          {frames.map((frame, idx) => {
-            const isActive = idx === activeFrameIndex;
-            const isMissing = !frame.isAvailable;
-            const availIndices = frames
-              .map((f, i) => (f.isAvailable ? i : -1))
-              .filter((i) => i >= 0);
-            const isBlinkA = blinkMode && availIndices[0] === idx;
-            const isBlinkB =
-              blinkMode &&
-              availIndices.length >= 2 &&
-              availIndices[availIndices.length - 1] === idx;
+          {(() => {
+            const allDays = frames.map((f) => (f.observationDate?.includes('T') ? f.observationDate.split('T')[0] : f.observationDate?.split(' ')[0] || ''));
+            const hasSharedDates = allDays.some((day, i) => day && allDays.indexOf(day) !== i);
 
-            return (
-              <button
-                key={frame.frameId}
-                disabled={isMissing}
-                onClick={() => onSelectFrame(idx)}
-                className={`btn-tactile-sm flex-1 min-w-[70px] py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
-                  isMissing
-                    ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
-                    : isActive
-                    ? 'bg-emerald-400 text-gray-950 font-bold'
-                    : isBlinkA || isBlinkB
-                    ? 'bg-paper-800 text-emerald-300 border-emerald-500/50'
-                    : 'bg-paper-950 text-paper-400 hover:text-paper-200'
-                }`}
-                title={
-                  isMissing
-                    ? `Missing: ${frame.skipReason}`
-                    : `Epoch ${idx + 1} (${frame.observationDate.split('T')[0]})`
-                }
-              >
-                {isMissing
-                  ? 'Offline'
-                  : `${isBlinkA ? '[A] ' : isBlinkB ? '[B] ' : ''}${
-                      frame.observationDate.split('T')[0]
-                    }`}
-              </button>
-            );
-          })}
+            return frames.map((frame, idx) => {
+              const isActive = idx === activeFrameIndex;
+              const isMissing = !frame.isAvailable;
+              const availIndices = frames
+                .map((f, i) => (f.isAvailable ? i : -1))
+                .filter((i) => i >= 0);
+              const isBlinkA = blinkMode && availIndices[0] === idx;
+              const isBlinkB =
+                blinkMode &&
+                availIndices.length >= 2 &&
+                availIndices[availIndices.length - 1] === idx;
+
+              const dateStr = frame.observationDate || '';
+              const day = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr.split(' ')[0];
+              const timeMatch = dateStr.match(/[T\s](\d{2}:\d{2})/);
+              const time = timeMatch ? timeMatch[1] : null;
+              const label = isMissing
+                ? 'Offline'
+                : `${isBlinkA ? '[A] ' : isBlinkB ? '[B] ' : ''}${
+                    hasSharedDates && time ? `${day.slice(5)} ${time}z` : day
+                  }`;
+
+              return (
+                <button
+                  key={frame.frameId}
+                  disabled={isMissing}
+                  onClick={() => onSelectFrame(idx)}
+                  className={`btn-tactile-sm flex-1 min-w-[70px] py-1 px-1 rounded-lg text-center font-mono text-[10px] border-2 border-black transition-all truncate cursor-pointer ${
+                    isMissing
+                      ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
+                      : isActive
+                      ? 'bg-emerald-400 text-gray-950 font-bold'
+                      : isBlinkA || isBlinkB
+                      ? 'bg-paper-800 text-emerald-300 border-emerald-500/50'
+                      : 'bg-paper-950 text-paper-400 hover:text-paper-200'
+                  }`}
+                  title={
+                    isMissing
+                      ? `Missing: ${frame.skipReason}`
+                      : `Epoch ${idx + 1} (${frame.frameId}) · UTC: ${frame.observationDate}`
+                  }
+                >
+                  {label}
+                </button>
+              );
+            });
+          })()}
         </div>
       </div>
 

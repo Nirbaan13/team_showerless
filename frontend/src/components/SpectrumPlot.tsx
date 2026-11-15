@@ -3,7 +3,7 @@ import type { SpectralDataPoint } from '../types/spherex';
 import { REFERENCE_MOLECULAR_LINES } from '../services/mockSpherexApi';
 import { fetchTargetSpectrum } from '../services/spherexBackendApi';
 import type { TargetSpectrumResult, MolecularDetection } from '../services/spherexBackendApi';
-import { Download, ShieldCheck, Activity, RefreshCw, Zap } from 'lucide-react';
+import { Download, ShieldCheck, Activity, RefreshCw, Zap, AlertTriangle } from 'lucide-react';
 
 interface SpectrumPlotProps {
   data?: SpectralDataPoint[];
@@ -45,13 +45,18 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
     snr: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [measurementError, setMeasurementError] = useState<string | null>(null);
 
   const handleMeasureLive = async () => {
     setIsLoading(true);
+    setMeasurementError(null);
     try {
       const res = await fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode);
       setSpectrumResult(res);
+      setMeasurementError(null);
     } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Pipeline upstream offline (HTTP 502)';
+      setMeasurementError(msg);
       console.warn('Live spectrum fetch fallback:', err);
     } finally {
       setIsLoading(false);
@@ -62,17 +67,23 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
+    setMeasurementError(null);
 
     fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode)
       .then((res) => {
         if (isMounted) {
           setSpectrumResult(res);
+          setMeasurementError(null);
           setIsLoading(false);
         }
       })
       .catch((err) => {
-        console.warn('Live spectrum fetch fallback:', err);
-        if (isMounted) setIsLoading(false);
+        if (isMounted) {
+          const msg = err instanceof Error ? err.message : 'Pipeline upstream offline (HTTP 502)';
+          setMeasurementError(msg);
+          console.warn('Live spectrum fetch fallback:', err);
+          setIsLoading(false);
+        }
       });
 
     return () => {
@@ -113,8 +124,14 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
 
   // Fallback molecular detections if backend endpoint is offline
   const molecularDetections = useMemo<MolecularDetection[]>(() => {
-    if (spectrumResult?.molecular_detections && spectrumResult.molecular_detections.length > 0) {
-      return spectrumResult.molecular_detections;
+    // If backend returned a result, strictly respect it (empty stays empty)
+    if (spectrumResult !== null && spectrumResult !== undefined) {
+      return spectrumResult.molecular_detections || [];
+    }
+
+    // If live measurement explicitly failed, do not invent detections
+    if (measurementError) {
+      return [];
     }
 
     const norm = (objectLabel || candidateId || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -210,7 +227,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
         interpretation: `Infrared spectral absorption detected at RA ${ra.toFixed(3)}°, Dec ${dec.toFixed(3)}°.`,
       },
     ];
-  }, [spectrumResult, objectLabel, candidateId, ra, dec]);
+  }, [spectrumResult, measurementError, objectLabel, candidateId, ra, dec]);
 
   // Filtered channels for display
   const displayChannels = useMemo(() => {
@@ -218,10 +235,28 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
     return channels.filter((c) => c.detector === selectedDetector);
   }, [channels, selectedDetector]);
 
-  // Export CSV Handler
+  // Export CSV Handler with honest provenance metadata
   const handleExportCSV = () => {
     if (channels.length === 0) return;
-    const header = 'channel,detector,wavelength_um,bandwidth_um,flux_mjy,uncertainty_mjy,snr\n';
+    const isLiveMeasured = Boolean(spectrumResult?.spectrum && spectrumResult.spectrum.length > 0);
+    const provenanceComments = isLiveMeasured
+      ? [
+          `# SPHEREx 102-Band Calibrated Spectrophotometry`,
+          `# Target: ${objectLabel}`,
+          `# Celestial Coordinates: RA ${ra.toFixed(6)} deg, Dec ${dec.toFixed(6)} deg`,
+          `# Measurement Status: CALIBRATED_SCIENCE_MEASUREMENT (IRSA SIA/TAP WCS-WAVE)`,
+          `# Extraction Aperture: ${apertureRadius} px | Subtraction: ${subtractionMode}`,
+          `# Molecular Absorption Detections: ${molecularDetections.map((m) => `${m.species} (${m.center_um}um SNR=${m.significance_snr})`).join('; ') || 'None above 3-sigma'}`,
+        ].join('\n') + '\n'
+      : [
+          `# SPHEREx 102-Band Spectrophotometry (Illustrative Model Profile)`,
+          `# Target: ${objectLabel}`,
+          `# Celestial Coordinates: RA ${ra.toFixed(6)} deg, Dec ${dec.toFixed(6)} deg`,
+          `# Measurement Status: DEMONSTRATION_MODE${measurementError ? ` (Measurement Error: ${measurementError})` : ' (Uncalibrated Baseline Reference)'}`,
+          `# Provenance Warning: Synthetic model curve for interface demonstration. DO NOT CITE AS MEASURED SCIENCE.`,
+        ].join('\n') + '\n';
+
+    const header = provenanceComments + 'channel,detector,wavelength_um,bandwidth_um,flux_mjy,uncertainty_mjy,snr\n';
     const rows = channels
       .map(
         (c) =>
@@ -275,8 +310,12 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
           <div className="text-xs font-mono font-bold text-white truncate">
             {spectrumResult?.target || objectLabel}
           </div>
-          <div className="text-[10px] font-mono text-emerald-400">
-            RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · 102 Bands
+          <div className="text-[10px] font-mono">
+            {spectrumResult?.spectrum && spectrumResult.spectrum.length > 0 ? (
+              <span className="text-emerald-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · 102 Bands Calibrated</span>
+            ) : (
+              <span className="text-amber-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · Demonstration Model Profile</span>
+            )}
           </div>
         </div>
 
@@ -305,6 +344,17 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Measurement Error Warning Banner */}
+      {measurementError && (
+        <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-600/50 text-amber-300 font-mono text-[10px] flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+          <div>
+            <span className="font-bold text-amber-200">Spectrophotometric Measurement Offline:</span>{' '}
+            <span>{measurementError}. Displaying illustrative model profile. Exported data is explicitly marked as simulated demonstration mode.</span>
+          </div>
+        </div>
+      )}
 
       {/* Detected Molecular Absorption Features */}
       {molecularDetections && molecularDetections.length > 0 && (

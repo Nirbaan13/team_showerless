@@ -321,6 +321,7 @@ export function App() {
     const fovArcmin = parseFloat(fov) || 5;
 
     setIsCatalogLoading(true);
+    setLiveCatalog(null);
     fetchLiveCatalogForCoordinate({
       queryRa,
       queryDec,
@@ -358,7 +359,7 @@ export function App() {
       selectedArray,
       subtractionMode,
       activeFrameIndex,
-      candidateId: selectedCandidateId,
+      candidateId: activeTab === 'catalogue' ? selectedCatalogueCandidateId : selectedCandidateId,
       tab: activeTab,
       presetId: currentPresetId,
     },
@@ -369,7 +370,12 @@ export function App() {
       if (partial.selectedArray !== undefined) setSelectedArray(partial.selectedArray);
       if (partial.subtractionMode !== undefined) setSubtractionMode(partial.subtractionMode);
       if (partial.activeFrameIndex !== undefined) setActiveFrameIndex(partial.activeFrameIndex);
-      if (partial.candidateId !== undefined) setSelectedCandidateId(partial.candidateId);
+      if (partial.candidateId !== undefined) {
+        if (activeTab === 'catalogue' || partial.tab === 'catalogue') {
+          setSelectedCatalogueCandidateId(partial.candidateId);
+        }
+        setSelectedCandidateId(partial.candidateId);
+      }
       if (partial.tab !== undefined) setActiveTab(partial.tab);
       if (partial.presetId !== undefined) setCurrentPresetId(partial.presetId);
     }
@@ -1122,7 +1128,7 @@ export function App() {
             className={`flex-1 flex flex-col ${
               isEmbedMode
                 ? 'h-screen'
-                : 'h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)]'
+                : 'h-[calc(100vh-6rem)] md:h-[calc(100vh-3rem)] pb-12 md:pb-0'
             } overflow-hidden relative ${
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}

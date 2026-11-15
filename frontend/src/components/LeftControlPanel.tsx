@@ -53,12 +53,14 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
+  const [coordError, setCoordError] = useState<string | null>(null);
 
   React.useEffect(() => {
     const displayRa = activeCandidate?.ra ?? ra;
     const displayDec = activeCandidate?.dec ?? dec;
     setRaInput(displayRa.toFixed(6));
     setDecInput(displayDec.toFixed(6));
+    setCoordError(null);
   }, [ra, dec, activeCandidate?.ra, activeCandidate?.dec]);
 
   const handleApplyCoords = (e: React.FormEvent) => {
@@ -67,11 +69,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
     const cleanDec = decInput.trim().replace(/[^\d.-]/g, '');
     const parsedRa = parseFloat(cleanRa);
     const parsedDec = parseFloat(cleanDec);
-    if (!isNaN(parsedRa) && !isNaN(parsedDec)) {
-      const normalizedRa = ((parsedRa % 360) + 360) % 360;
-      const clampedDec = Math.max(-90, Math.min(90, parsedDec));
-      onUpdateCoords(normalizedRa, clampedDec);
+    if (isNaN(parsedRa) || isNaN(parsedDec)) {
+      setCoordError('Enter valid numerical coordinates');
+      return;
     }
+    if (parsedDec < -90 || parsedDec > 90) {
+      setCoordError('Declination must be between -90° and +90°');
+      return;
+    }
+    setCoordError(null);
+    const normalizedRa = ((parsedRa % 360) + 360) % 360;
+    onUpdateCoords(normalizedRa, parsedDec);
   };
 
   return (
@@ -90,8 +98,13 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <input
                 type="text"
                 value={raInput}
-                onChange={(e) => setRaInput(e.target.value)}
-                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
+                onChange={(e) => {
+                  setRaInput(e.target.value);
+                  if (coordError) setCoordError(null);
+                }}
+                className={`w-full bg-paper-950 border rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none ${
+                  coordError ? 'border-red-500/80 focus:border-red-400' : 'border-paper-800 focus:border-ochre-400'
+                }`}
               />
             </div>
             <div>
@@ -99,11 +112,22 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
               <input
                 type="text"
                 value={decInput}
-                onChange={(e) => setDecInput(e.target.value)}
-                className="w-full bg-paper-950 border border-paper-800 rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none focus:border-ochre-400"
+                onChange={(e) => {
+                  setDecInput(e.target.value);
+                  if (coordError) setCoordError(null);
+                }}
+                className={`w-full bg-paper-950 border rounded px-2 py-1 font-mono text-[11px] text-paper-100 focus:outline-none ${
+                  coordError ? 'border-red-500/80 focus:border-red-400' : 'border-paper-800 focus:border-ochre-400'
+                }`}
               />
             </div>
           </div>
+
+          {coordError && (
+            <div className="text-[10px] font-mono text-red-400 bg-red-950/40 border border-red-500/40 rounded px-2 py-1">
+              {coordError}
+            </div>
+          )}
 
           <div className="flex gap-1.5 mt-1">
             <button
@@ -372,22 +396,42 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             </div>
 
             {/* Live Catalog Query Status & Agency Provenance Box */}
-            <div className="p-2 rounded-lg bg-paper-950 border border-emerald-500/30 space-y-1.5 font-mono text-[9px]">
+            <div className={`p-2 rounded-lg border space-y-1.5 font-mono text-[9px] ${
+              liveCatalog?.status === 'offline_demonstration'
+                ? 'bg-amber-950/20 border-amber-500/30'
+                : 'bg-paper-950 border-emerald-500/30'
+            }`}>
               <div className="flex items-center justify-between gap-1">
-                <span className="flex items-center gap-1.5 text-emerald-300 font-bold">
+                <span className={`flex items-center gap-1.5 font-bold ${
+                  liveCatalog?.status === 'offline_demonstration' ? 'text-amber-300' : 'text-emerald-300'
+                }`}>
                   <span
                     className={`w-2 h-2 rounded-full shrink-0 ${
                       isCatalogLoading
                         ? 'bg-amber-400 animate-ping'
+                        : liveCatalog?.status === 'offline_demonstration'
+                        ? 'bg-amber-400 shadow-[0_0_6px_#f59e0b]'
                         : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
                     }`}
                   />
                   {isCatalogLoading
                     ? 'Pulling Space Agency Catalogs...'
+                    : liveCatalog?.status === 'offline_demonstration'
+                    ? `! Offline Mock (${liveCatalog?.totalObjects ?? 0} Demo Objects)`
                     : `✓ Pulled ${liveCatalog?.totalObjects ?? gaiaList.length + wiseList.length + ephList.length} Objects (${liveCatalog?.latencyMs ?? 42}ms)`}
                 </span>
-                <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  {liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : 'BACKEND API'}
+                <span className={`text-[8px] px-1 py-0.5 rounded border ${
+                  liveCatalog?.status === 'live_agency'
+                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                    : liveCatalog?.status === 'backend_computed'
+                    ? 'bg-sky-500/15 text-sky-300 border-sky-500/30'
+                    : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                }`}>
+                  {liveCatalog?.status === 'live_agency'
+                    ? 'LIVE TAP'
+                    : liveCatalog?.status === 'backend_computed'
+                    ? 'BACKEND API'
+                    : 'DEMO MOCK'}
                 </span>
               </div>
 
