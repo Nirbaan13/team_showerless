@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://144.124.238.101:8080/backend/api/analyses/8a0faf83-47a1-48f4-a46f-f10ea0260f66",
+    "data": {
+      "id": "8a0faf83-47a1-48f4-a46f-f10ea0260f66",
+      "status": "failed",
+      "download_id": "5a0303d7-1832-4ddd-a90d-cc24904a1e0d",
+      "status_url": "/api/analyses/8a0faf83-47a1-48f4-a46f-f10ea0260f66",
+      "events_url": "/api/analyses/8a0faf83-47a1-48f4-a46f-f10ea0260f66/events",
+      "error": {
+        "code": "download_failed",
+        "message": "The download did not publish every requested native frame; inspect the download errors",
+        "retryable": true
+      }
+    }
+  },
+  {
+    "url": "http://144.124.238.101:8080/backend/api/downloads/5a0303d7-1832-4ddd-a90d-cc24904a1e0d",
+    "data": {
+      "id": "5a0303d7-1832-4ddd-a90d-cc24904a1e0d",
+      "status": "failed",
+      "mode": "default",
+      "query": {
+        "right_ascension_deg": 250.0,
+        "declination_deg": 50.0,
+        "width_arcmin": 5,
+        "height_arcmin": 5,
+        "detector_array": 6
+      },
+      "observations": [],
+      "chunks": [],
+      "progress": {
+        "discovery_complete": false,
+        "total_chunks": 0,
+        "ready_chunks": 0,
+        "failed_chunks": 0,
+        "unavailable_chunks": 0
+      },
+      "status_url": "/api/downloads/5a0303d7-1832-4ddd-a90d-cc24904a1e0d",
+      "events_url": "/api/downloads/5a0303d7-1832-4ddd-a90d-cc24904a1e0d/events",
+      "errors": [
+        {
+          "code": "archive_http_error",
+          "message": "Archive returned HTTP 502",
+          "retryable": true
+        }
+      ]
+    }
+  }
+]

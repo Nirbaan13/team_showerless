@@ -1,0 +1,307 @@
+[frontend]
+343 matching frontend log lines in the captured window; representative first/last lines follow.
+144.124.251.215 - - [15/Nov/2026:15:35:16 +0000] "GET /api/motion/verifications HTTP/1.1" 502 157 "http://144.124.238.101:8080/?ra=250.000000&dec=10.000000&fov=5%27&detector=6&subtraction=epoch_difference&frame=0&tab=viewer&candidate=cand-250.00-10.00" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+2026/11/15 15:35:16 [error] 24#24: *452 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/verifications HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/verifications", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/?ra=250.000000&dec=10.000000&fov=5%27&detector=6&subtraction=epoch_difference&frame=0&tab=viewer&candidate=cand-250.00-10.00"
+2026/11/15 15:35:20 [error] 22#22: *1170 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/catalog?ra=166.79&dec=5.29&fov_arcmin=5&candidate_id=3I%2FATLAS-0 HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/catalog?ra=166.79&dec=5.29&fov_arcmin=5&candidate_id=3I%2FATLAS-0", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/"
+144.124.251.215 - - [15/Nov/2026:15:35:20 +0000] "GET /api/motion/catalog?ra=166.79&dec=5.29&fov_arcmin=5&candidate_id=3I%2FATLAS-0 HTTP/1.1" 502 157 "http://144.124.238.101:8080/" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+2026/11/15 15:35:20 [error] 22#22: *1173 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/catalog?ra=166.6741866&dec=5.3318433&fov_arcmin=5&candidate_id=3I%2FATLAS-0 HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/catalog?ra=166.6741866&dec=5.3318433&fov_arcmin=5&candidate_id=3I%2FATLAS-0", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/?ra=166.790000&dec=5.290000&fov=5%27&detector=6&subtraction=raw_calibrated&frame=0&candidate=3I%2FATLAS&preset=3i-atlas"
+144.124.251.215 - - [15/Nov/2026:15:35:20 +0000] "GET /api/motion/catalog?ra=166.6741866&dec=5.3318433&fov_arcmin=5&candidate_id=3I%2FATLAS-0 HTTP/1.1" 502 157 "http://144.124.238.101:8080/?ra=166.790000&dec=5.290000&fov=5%27&detector=6&subtraction=raw_calibrated&frame=0&candidate=3I%2FATLAS&preset=3i-atlas" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+144.124.251.215 - - [15/Nov/2026:15:46:33 +0000] "GET /api/motion/catalog?ra=15.616171&dec=-5.471297&fov_arcmin=5&candidate_id=(1)%20Ceres%20(D2%20SWIR%20Diagnostic)-3 HTTP/1.1" 502 157 "http://144.124.238.101:8080/?ra=250.000000&dec=50.000000&fov=5%27&detector=6&subtraction=epoch_difference&frame=0&candidate=cand-250.00-50.00" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+2026/11/15 15:46:33 [error] 21#21: *1437 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/catalog?ra=15.616171&dec=-5.471297&fov_arcmin=5&candidate_id=(1)%20Ceres%20(D2%20SWIR%20Diagnostic)-3 HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/catalog?ra=15.616171&dec=-5.471297&fov_arcmin=5&candidate_id=(1)%20Ceres%20(D2%20SWIR%20Diagnostic)-3", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/?ra=250.000000&dec=50.000000&fov=5%27&detector=6&subtraction=epoch_difference&frame=0&candidate=cand-250.00-50.00"
+144.124.251.215 - - [15/Nov/2026:15:46:35 +0000] "GET /api/motion/verifications HTTP/1.1" 502 157 "http://144.124.238.101:8080/?ra=15.616171&dec=-5.471297&fov=5%27&detector=2&subtraction=raw_calibrated&frame=0&candidate=%281%29+Ceres+%28D2+SWIR+Diagnostic%29&tab=viewer&preset=1-ceres" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+2026/11/15 15:46:35 [error] 21#21: *1437 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/verifications HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/verifications", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/?ra=15.616171&dec=-5.471297&fov=5%27&detector=2&subtraction=raw_calibrated&frame=0&candidate=%281%29+Ceres+%28D2+SWIR+Diagnostic%29&tab=viewer&preset=1-ceres"
+2026/11/15 15:46:36 [error] 21#21: *1437 connect() failed (111: Connection refused) while connecting to upstream, client: [redacted-client-IP], server: _, request: "GET /api/motion/catalog?ra=269.452075&dec=4.693365&fov_arcmin=5&candidate_id=cand-barnard-primary-3 HTTP/1.1", upstream: "http://172.17.0.1:8001/api/motion/catalog?ra=269.452075&dec=4.693365&fov_arcmin=5&candidate_id=cand-barnard-primary-3", host: "144.124.238.101:8080", referrer: "http://144.124.238.101:8080/?ra=15.616171&dec=-5.471297&fov=5%27&detector=2&subtraction=raw_calibrated&frame=0&candidate=%281%29+Ceres+%28D2+SWIR+Diagnostic%29&preset=1-ceres"
+144.124.251.215 - - [15/Nov/2026:15:46:36 +0000] "GET /api/motion/catalog?ra=269.452075&dec=4.693365&fov_arcmin=5&candidate_id=cand-barnard-primary-3 HTTP/1.1" 502 157 "http://144.124.238.101:8080/?ra=15.616171&dec=-5.471297&fov=5%27&detector=2&subtraction=raw_calibrated&frame=0&candidate=%281%29+Ceres+%28D2+SWIR+Diagnostic%29&preset=1-ceres" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" "-"
+
+[backend]
+timestamp=2026-11-15T15:39:13.712732904Z level=WARN thread=#zio-fiber-1566364003 message="Pipeline request failed: pipeline_upstream_error" location=spaceapps.processing.controller.PipelineApi.safe file=PipelineApi.scala line=88
+timestamp=2026-11-15T15:41:27.455563280Z level=WARN thread=#zio-fiber-1524788294 message="Pipeline request failed: pipeline_upstream_error" location=spaceapps.processing.controller.PipelineApi.safe file=PipelineApi.scala line=88
+timestamp=2026-11-15T15:42:06.471852016Z level=WARN thread=#zio-fiber-1882595257 message="API error: invalid_request" location=spaceapps.infra.controller.HttpResponses.safe file=HttpResponses.scala line=20
+timestamp=2026-11-15T15:42:54.306355006Z level=ERROR thread=#zio-fiber-1989258519 message="Download a8a09d26-5322-4e4f-97c7-ac922ae162ab failed" cause="spaceapps.infra.model.ApiError: Archive returned HTTP 502
+	at spaceapps.infra.model.ApiError$.apply(Shared.scala:5)
+	at spaceapps.irsa.integrations.LiveArchive.checkStatus$$anonfun$1(LiveArchive.scala:85)
+	at zio.ZIO$.fail$$anonfun$1(ZIO.scala:3249)
+	at zio.ZIO$.failCause$$anonfun$1(ZIO.scala:3260)
+" location=spaceapps.irsa.service.Jobs.runJob file=Jobs.scala line=122
+timestamp=2026-11-15T15:43:13.202046373Z level=WARN thread=#zio-fiber-1439912885 message="API error: archive_http_error" location=spaceapps.infra.controller.HttpResponses.safe file=HttpResponses.scala line=20
+timestamp=2026-11-15T15:43:24.435287649Z level=ERROR thread=#zio-fiber-2127635442 message="Download 5a0303d7-1832-4ddd-a90d-cc24904a1e0d failed" cause="spaceapps.infra.model.ApiError: Archive returned HTTP 502
+	at spaceapps.infra.model.ApiError$.apply(Shared.scala:5)
+	at spaceapps.irsa.integrations.LiveArchive.checkStatus$$anonfun$1(LiveArchive.scala:85)
+	at zio.ZIO$.fail$$anonfun$1(ZIO.scala:3249)
+	at zio.ZIO$.failCause$$anonfun$1(ZIO.scala:3260)
+" location=spaceapps.irsa.service.Jobs.runJob file=Jobs.scala line=122
+
+[processing]
+INFO:     172.19.0.3:51438 - "GET /openapi.json HTTP/1.1" 200 OK
+WARNING:  Unsupported upgrade request.
+WARNING:  No supported WebSocket library detected. Please use "pip install 'uvicorn[standard]'", or install 'websockets' or 'wsproto' manually.
+INFO:     172.19.0.3:40664 - "GET /api/spectrum?candidate_id=3I%2FATLAS&dec=5.29&ra=166.79&radius_pix=2&subtraction=zodi_subtracted HTTP/1.1" 502 Bad Gateway
+WARNING:  Unsupported upgrade request.
+WARNING:  No supported WebSocket library detected. Please use "pip install 'uvicorn[standard]'", or install 'websockets' or 'wsproto' manually.
+INFO:     172.19.0.3:54190 - "GET /api/spectrum?candidate_id=PX-000001&dec=5.29&ra=166.79&radius_pix=2&subtraction=zodi_subtracted HTTP/1.1" 502 Bad Gateway
+INFO:     127.0.0.1:50676 - "GET /api/spectrum?ra=166.79&dec=5.29&radius_pix=2&max_frames=3 HTTP/1.1" 502 Bad Gateway
+WARNING:  Unsupported upgrade request.
+WARNING:  No supported WebSocket library detected. Please use "pip install 'uvicorn[standard]'", or install 'websockets' or 'wsproto' manually.
+WARNING:  Unsupported upgrade request.
+WARNING:  No supported WebSocket library detected. Please use "pip install 'uvicorn[standard]'", or install 'websockets' or 'wsproto' manually.
+INFO:     172.19.0.3:43260 - "GET /api/spectrum?candidate_id=PX-000004&dec=-7.2442&ra=133.7862&radius_pix=2&subtraction=zodi_subtracted HTTP/1.1" 502 Bad Gateway
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
+INFO:
+                Inconsistent SIP distortion information is present in the FITS header and the WCS object:
+                SIP coefficients were detected, but CTYPE is missing a "-SIP" suffix.
+                astropy.wcs is using the SIP distortion coefficients,
+                therefore the coordinates calculated here might be incorrect.
+                If you do not want to apply the SIP distortion coefficients,
+                please remove the SIP coefficients from the FITS header or the
+                WCS object.  As an example, if the image is already distortion-corrected
+                (e.g., drizzled) then distortion components should not apply and the SIP
+                coefficients should be removed.
+                While the SIP distortion coefficients are being applied here, if that was indeed the intent,
+                for consistency please append "-SIP" to the CTYPE in the FITS header or the WCS object.
+                 [astropy.wcs.wcs]
