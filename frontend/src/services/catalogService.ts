@@ -89,21 +89,32 @@ export function buildAgencyReferences(
   fovArcmin: number
 ): AgencyReferenceLink[] {
   const signDec = dec >= 0 ? `+${dec.toFixed(5)}` : dec.toFixed(5);
+  const coordQuery = `${ra.toFixed(5)} ${signDec}`;
+  const encodedCoord = encodeURIComponent(coordQuery);
+  const fovRadiusArcmin = Math.max(0.5, Math.min(30, fovArcmin)).toFixed(1);
+  const fovRadiusArcsec = Math.round(Number(fovRadiusArcmin) * 60).toString();
+  const fovDeg = (Math.max(0.5, Math.min(60, fovArcmin)) / 60).toFixed(3);
+
   return [
     {
       agency: 'NASA/IPAC IRSA',
-      title: 'NASA/IPAC Infrared Science Archive (SPHEREx & AllWISE)',
-      url: `https://irsa.ipac.caltech.edu/applications/finderchart/?__action=table.search&request=DoSearch&locstr=${ra.toFixed(5)}+${signDec}&subsetsize=${fovArcmin.toFixed(1)}`,
+      title: 'NASA/IPAC IRSA Interactive Viewer (SPHEREx & AllWISE)',
+      url: `https://irsa.ipac.caltech.edu/irsaviewer/?__action=init&locstr=${encodedCoord}`,
     },
     {
       agency: 'ESA Gaia / VizieR',
-      title: 'ESA Gaia DR3 & AllWISE Cone Search (I/355/gaiadr3)',
-      url: `https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3,II/328/allwise&-c=${ra.toFixed(5)}${signDec}&-c.rm=${fovArcmin.toFixed(1)}`,
+      title: 'ESA Gaia DR3 Cone Search (VizieR CfA Mirror)',
+      url: `https://vizier.cfa.harvard.edu/viz-bin/VizieR-3?-source=I/355/gaiadr3&-c=${encodedCoord}&-c.rs=${fovRadiusArcsec}`,
     },
     {
       agency: 'CDS SIMBAD',
-      title: 'CDS SIMBAD Astronomical Object Database',
-      url: `https://simbad.cds.unistra.fr/simbad/sim-coo?Coord=${ra.toFixed(5)}+${signDec}&CooFrame=FK5&CooEpoch=2000&CooEqui=2000&Radius=${fovArcmin.toFixed(1)}&Radius.unit=arcmin`,
+      title: 'CDS SIMBAD Astronomical Object Database (CfA Mirror)',
+      url: `https://simbad.cfa.harvard.edu/simbad/sim-coo?Coord=${encodedCoord}&Radius=${fovRadiusArcmin}&Radius.unit=arcmin`,
+    },
+    {
+      agency: 'CDS Aladin Lite',
+      title: 'CDS Aladin Sky Atlas (AllWISE / PanSTARRS Multi-epoch)',
+      url: `https://aladin.cds.unistra.fr/AladinLite/?target=${encodedCoord}&fov=${fovDeg}&survey=P%2FallWISE%2Fcolor`,
     },
     {
       agency: 'NASA/JPL Horizons',
@@ -149,8 +160,8 @@ async function queryBrowserGaiaTap(
         separationArcsec: sep,
         dx,
         dy,
-        agency: 'ESA Gaia DR3 (VizieR TAP)',
-        referenceUrl: `https://vizier.cds.unistra.fr/viz-bin/VizieR-5?-ref=VIZ&-out.add=.&-source=I/355/gaiadr3&Source=${encodeURIComponent(srcId)}`,
+        agency: 'ESA Gaia DR3 (VizieR CfA)',
+        referenceUrl: `https://vizier.cfa.harvard.edu/viz-bin/VizieR-5?-ref=VIZ&-out.add=.&-source=I/355/gaiadr3&Source=${encodeURIComponent(srcId)}`,
         catalogType: 'Gaia DR3' as const,
       };
     });
@@ -176,6 +187,7 @@ async function queryBrowserWiseTap(
       const wiseName = String(r[0]).trim();
       const wRa = Number(r[1]);
       const wDec = Number(r[2]);
+      const signWDec = wDec >= 0 ? `+${wDec.toFixed(5)}` : wDec.toFixed(5);
       const w1 = r[3] != null ? Number(Number(r[3]).toFixed(2)) : 12.8;
       const w2 = r[4] != null ? Number(Number(r[4]).toFixed(2)) : 12.3;
       const sep = angularSeparationArcsec(wRa, wDec, queryRa, queryDec);
@@ -190,8 +202,8 @@ async function queryBrowserWiseTap(
         separationArcsec: sep,
         dx,
         dy,
-        agency: 'NASA/IPAC AllWISE (TAP)',
-        referenceUrl: `https://irsa.ipac.caltech.edu/applications/finderchart/?__action=table.search&request=DoSearch&locstr=${wRa.toFixed(5)}+${wDec.toFixed(5)}&subsetsize=5.0`,
+        agency: 'NASA/IPAC AllWISE (IRSA)',
+        referenceUrl: `https://irsa.ipac.caltech.edu/irsaviewer/?__action=init&locstr=${encodeURIComponent(`${wRa.toFixed(5)} ${signWDec}`)}`,
         catalogType: 'WISE' as const,
       };
     });
@@ -206,7 +218,7 @@ async function queryBrowserSimbadTap(
   radiusDeg: number
 ): Promise<CatalogSourceItem[]> {
   const adql = `SELECT TOP 5 main_id, otype_txt, ra, dec FROM basic WHERE CONTAINS(POINT('ICRS', ra, dec), CIRCLE('ICRS', ${queryRa.toFixed(6)}, ${queryDec.toFixed(6)}, ${radiusDeg.toFixed(5)})) = 1`;
-  const url = `https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=json&query=${encodeURIComponent(adql)}`;
+  const url = `https://simbad.cfa.harvard.edu/simbad/sim-tap/sync?request=doQuery&lang=adql&format=json&query=${encodeURIComponent(adql)}`;
   const res = await fetch(url, { signal: AbortSignal.timeout(3200) });
   if (!res.ok) return [];
   const payload = await res.json();
@@ -229,8 +241,8 @@ async function queryBrowserSimbadTap(
         separationArcsec: sep,
         dx,
         dy,
-        agency: 'CDS SIMBAD TAP',
-        referenceUrl: `https://simbad.cds.unistra.fr/simbad/sim-id?Ident=${encodeURIComponent(mainId)}`,
+        agency: 'CDS SIMBAD (CfA)',
+        referenceUrl: `https://simbad.cfa.harvard.edu/simbad/sim-id?Ident=${encodeURIComponent(mainId)}`,
         catalogType: 'SIMBAD' as const,
       };
     });
@@ -282,8 +294,8 @@ function buildCoordinateSpecificSources(
       separationArcsec: sep,
       dx,
       dy,
-      agency: 'ESA Gaia DR3 Archive',
-      referenceUrl: `https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&-c=${sRa.toFixed(5)}${signDec}&-c.rs=60`,
+      agency: 'ESA Gaia DR3 (VizieR CfA)',
+      referenceUrl: `https://vizier.cfa.harvard.edu/viz-bin/VizieR-3?-source=I/355/gaiadr3&-c=${encodeURIComponent(`${sRa.toFixed(5)} ${signDec}`)}&-c.rs=60`,
       catalogType: 'Gaia DR3',
     });
   }
@@ -297,6 +309,7 @@ function buildCoordinateSpecificSources(
     }
     const wRa = Number((queryRa + dra).toFixed(6));
     const wDec = Number(Math.max(-89.9, Math.min(89.9, queryDec + ddec)).toFixed(6));
+    const signWDec = wDec >= 0 ? `+${wDec.toFixed(5)}` : wDec.toFixed(5);
     const jName = formatJ2000Designation(wRa, wDec);
     const seed = Math.abs(
       Math.floor(wRa * 10000) * 19 + Math.floor((wDec + 90) * 10000) * 23 + idx * 53
@@ -315,8 +328,8 @@ function buildCoordinateSpecificSources(
       separationArcsec: sep,
       dx,
       dy,
-      agency: 'NASA/IPAC IRSA AllWISE',
-      referenceUrl: `https://irsa.ipac.caltech.edu/applications/finderchart/?__action=table.search&request=DoSearch&locstr=${wRa.toFixed(5)}+${wDec.toFixed(5)}&subsetsize=5.0`,
+      agency: 'NASA/IPAC AllWISE (IRSA)',
+      referenceUrl: `https://irsa.ipac.caltech.edu/irsaviewer/?__action=init&locstr=${encodeURIComponent(`${wRa.toFixed(5)} ${signWDec}`)}`,
       catalogType: 'WISE',
     });
   }
@@ -432,7 +445,7 @@ export async function fetchLiveCatalogForCoordinate(params: {
       agency: String(item.agency || 'Space Agency Archive'),
       referenceUrl: String(
         item.referenceUrl ||
-          `https://simbad.cds.unistra.fr/simbad/sim-coo?Coord=${sRa.toFixed(5)}+${sDec.toFixed(5)}`
+          `https://simbad.cfa.harvard.edu/simbad/sim-coo?Coord=${encodeURIComponent(`${sRa.toFixed(5)} ${sDec >= 0 ? `+${sDec.toFixed(5)}` : sDec.toFixed(5)}`)}&Radius=2.0&Radius.unit=arcmin`
       ),
       catalogType,
     };

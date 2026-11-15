@@ -91,9 +91,9 @@ export const ExternalSubmissionModal: React.FC<ExternalSubmissionModalProps> = (
   };
 
   const portalUrls: Record<SubmissionDestination, string> = {
-    MPC: 'https://www.minorplanetcenter.net/iau/NEO/SubmitObs.html',
-    TNS: 'https://www.wis-tns.org/submit',
-    VSX: 'https://www.aavso.org/vsx/index.php?view=submit.top',
+    MPC: 'https://www.minorplanetcenter.net/db_search',
+    TNS: 'https://www.wis-tns.org/',
+    VSX: 'https://www.aavso.org/vsx/index.php',
   };
 
   return (

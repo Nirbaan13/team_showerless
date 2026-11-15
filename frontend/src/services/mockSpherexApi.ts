@@ -1278,7 +1278,7 @@ export async function fetchKnownCatalogObjectAtCoord(
 ): Promise<{ mainId: string; otype: string } | null> {
   try {
     const adql = `SELECT TOP 1 main_id, otype_txt FROM basic WHERE CONTAINS(POINT('ICRS', ra, dec), CIRCLE('ICRS', ${raDeg.toFixed(6)}, ${decDeg.toFixed(6)}, 0.0833)) = 1`;
-    const url = `https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=json&query=${encodeURIComponent(adql)}`;
+    const url = `https://simbad.cfa.harvard.edu/simbad/sim-tap/sync?request=doQuery&lang=adql&format=json&query=${encodeURIComponent(adql)}`;
     const res = await fetch(url, { signal: AbortSignal.timeout(3500) });
     if (!res.ok) return null;
     const json = await res.json();
