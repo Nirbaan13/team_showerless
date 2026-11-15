@@ -11,6 +11,8 @@ interface EmbedModalProps {
   selectedArray: DetectorArrayId | 'all';
   subtractionMode: SubtractionMode;
   activeFrameIndex: number;
+  candidateId?: string | null;
+  presetId?: string | null;
 }
 
 export const EmbedModal: React.FC<EmbedModalProps> = ({
@@ -22,6 +24,8 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
   selectedArray,
   subtractionMode,
   activeFrameIndex,
+  candidateId,
+  presetId,
 }) => {
   const [copied, setCopied] = useState(false);
   const [width, setWidth] = useState('800');
@@ -38,6 +42,8 @@ export const EmbedModal: React.FC<EmbedModalProps> = ({
     frame: String(activeFrameIndex),
     embed: 'true',
   });
+  if (candidateId) params.set('candidate', candidateId);
+  if (presetId) params.set('preset', presetId);
 
   const embedUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
   const iframeSnippet = `<iframe src="${embedUrl}" width="${width}" height="${height}" frameborder="0" allowfullscreen style="border: 2px solid #000; border-radius: 12px;"></iframe>`;

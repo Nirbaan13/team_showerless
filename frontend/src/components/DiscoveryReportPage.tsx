@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { CandidateObject, SpectralDataPoint } from '../types/spherex';
 import { SpectrumPlot } from './SpectrumPlot';
-import { FileText, Download, CheckCircle, ArrowLeft } from 'lucide-react';
+import { FileText, Download, CheckCircle, ArrowLeft, Share2 } from 'lucide-react';
 
 interface DiscoveryReportPageProps {
   candidate: CandidateObject | null;
@@ -15,6 +15,16 @@ export const DiscoveryReportPage: React.FC<DiscoveryReportPageProps> = ({
   onBackToViewer,
 }) => {
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  const handleShareReport = () => {
+    if (!candidate || typeof window === 'undefined') return;
+    const shareUrl = `${window.location.origin}${window.location.pathname}?tab=report&candidate=${encodeURIComponent(candidate.id)}`;
+    void navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2500);
+    });
+  };
 
   const handleExportJson = () => {
     if (!candidate) return;
@@ -86,13 +96,24 @@ export const DiscoveryReportPage: React.FC<DiscoveryReportPageProps> = ({
             <span>Return to Sky Viewer</span>
           </button>
 
-          <button
-            onClick={handleExportJson}
-            className="btn-tactile px-5 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold border-2 border-black rounded-xl font-mono text-xs flex items-center gap-2 cursor-pointer"
-          >
-            {downloadSuccess ? <CheckCircle className="w-4 h-4 stroke-[2.5]" /> : <Download className="w-4 h-4 stroke-[2.5]" />}
-            <span>{downloadSuccess ? 'Report Exported ✓' : 'Export JSON Report'}</span>
-          </button>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handleShareReport}
+              className="btn-tactile px-4 py-2 bg-paper-900 hover:bg-paper-800 text-paper-200 hover:text-white font-mono text-xs border-2 border-black rounded-xl flex items-center gap-2 cursor-pointer"
+              title="Copy direct share link to this candidate report"
+            >
+              <Share2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{copiedShare ? 'Report Link Copied ✓' : 'Share Report'}</span>
+            </button>
+
+            <button
+              onClick={handleExportJson}
+              className="btn-tactile px-5 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-gray-950 font-bold border-2 border-black rounded-xl font-mono text-xs flex items-center gap-2 cursor-pointer"
+            >
+              {downloadSuccess ? <CheckCircle className="w-4 h-4 stroke-[2.5]" /> : <Download className="w-4 h-4 stroke-[2.5]" />}
+              <span>{downloadSuccess ? 'Report Exported ✓' : 'Export JSON Report'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Discovery Title & Header */}

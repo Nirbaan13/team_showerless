@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type {
   CandidateObject,
   FOVOption,
@@ -9,6 +9,11 @@ import type {
 import { getPriorityColors } from '../services/mlRanking';
 import { SEEDED_VERIFICATION_DISCUSSIONS } from '../services/mockVerificationData';
 import {
+  fetchVerifications,
+  createVerification,
+  upvoteVerification,
+} from '../services/verificationService';
+import {
   Send,
   Clock,
   UserCheck,
@@ -17,6 +22,7 @@ import {
   MessageSquare,
   Compass,
   HelpCircle,
+  ThumbsUp,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'spherex_community_comments';
@@ -60,6 +66,26 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
     return SEEDED_VERIFICATION_DISCUSSIONS;
   });
 
+  useEffect(() => {
+    let isMounted = true;
+    fetchVerifications().then((data) => {
+      if (isMounted && data.length > 0) {
+        setComments(data);
+      }
+    });
+
+    const handleUpdated = () => {
+      fetchVerifications().then((data) => {
+        if (isMounted) setComments(data);
+      });
+    };
+    window.addEventListener('spherex_comments_updated', handleUpdated);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('spherex_comments_updated', handleUpdated);
+    };
+  }, []);
+
   const [authorName, setAuthorName] = useState<string>('Citizen Volunteer (You)');
   const [authorRole, setAuthorRole] = useState<'Volunteer' | 'Researcher' | 'Science Team'>('Volunteer');
   const [newComment, setNewComment] = useState('');
@@ -86,8 +112,9 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
       candidate.catalogId ||
       candidate.id;
 
+    const cleanCandId = exactCandidateId.replace(/\//g, '_');
     const entry: VerificationComment = {
-      id: `comment-${exactCandidateId}-${Date.now()}`,
+      id: `comment-${cleanCandId}-${Date.now()}`,
       author: authorName.trim() || 'Citizen Volunteer',
       role: authorRole,
       timestamp: 'Just now',
@@ -108,15 +135,13 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
       },
     };
 
-    const updated = [entry, ...comments];
-    setComments(updated);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      window.dispatchEvent(new Event('spherex_comments_updated'));
-    } catch {}
-
+    void createVerification(entry);
     if (onAddComment) onAddComment(entry);
     setNewComment('');
+  };
+
+  const handleUpvote = (commentId: string) => {
+    void upvoteVerification(commentId);
   };
 
   const getVoteBadge = (vote: VerificationComment['vote']) => {
@@ -243,7 +268,18 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
               </p>
 
               <div className="pt-2 flex items-center justify-between border-t border-paper-800">
-                {getVoteBadge(item.vote)}
+                <div className="flex items-center gap-2">
+                  {getVoteBadge(item.vote)}
+                  <button
+                    type="button"
+                    onClick={() => handleUpvote(item.id)}
+                    className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-paper-900 hover:bg-paper-800 text-emerald-400 border border-paper-800 hover:border-emerald-500/60 transition-colors cursor-pointer"
+                    title="Upvote this verification"
+                  >
+                    <ThumbsUp className="w-2.5 h-2.5" />
+                    <span>{item.upvotes || 1}</span>
+                  </button>
+                </div>
                 {item.setting && (
                   <span className="text-[9px] font-mono text-paper-500">
                     Array {item.setting.selectedArray} • Frame {item.setting.activeFrameIndex + 1}

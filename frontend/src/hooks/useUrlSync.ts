@@ -1,13 +1,16 @@
 import { useEffect, useCallback } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode } from '../types/spherex';
 
-interface UrlParamsState {
+export interface UrlParamsState {
   ra: number;
   dec: number;
   fov: FOVOption;
   selectedArray: DetectorArrayId | 'all';
   subtractionMode: SubtractionMode;
   activeFrameIndex: number;
+  candidateId?: string | null;
+  tab?: 'home' | 'viewer' | 'feed' | 'report' | 'inference';
+  presetId?: string | null;
 }
 
 export function useUrlSync(
@@ -20,11 +23,14 @@ export function useUrlSync(
       const params = new URLSearchParams(window.location.search);
       const partial: Partial<UrlParamsState> = {};
 
-      if (params.has('ra')) {
+      const hasRa = params.has('ra');
+      const hasDec = params.has('dec');
+
+      if (hasRa) {
         const val = parseFloat(params.get('ra')!);
         if (!isNaN(val)) partial.ra = val;
       }
-      if (params.has('dec')) {
+      if (hasDec) {
         const val = parseFloat(params.get('dec')!);
         if (!isNaN(val)) partial.dec = val;
       }
@@ -42,13 +48,34 @@ export function useUrlSync(
       }
       if (params.has('subtraction')) {
         const val = params.get('subtraction') as SubtractionMode;
-        if (['raw_calibrated', 'zodi_reference_subtracted', 'epoch_difference'].includes(val)) {
+        if (['raw_calibrated', 'zodi_reference_subtracted', 'epoch_difference', 'bloom_mask'].includes(val)) {
           partial.subtractionMode = val;
         }
       }
       if (params.has('frame')) {
         const val = parseInt(params.get('frame')!, 10);
         if (!isNaN(val) && val >= 0) partial.activeFrameIndex = val;
+      }
+
+      if (params.has('candidate')) {
+        partial.candidateId = params.get('candidate');
+      }
+
+      if (params.has('preset')) {
+        partial.presetId = params.get('preset');
+      } else if (hasRa && hasDec) {
+        // Direct coordinates provided: clear preset so custom frames are loaded
+        partial.presetId = null;
+      }
+
+      if (params.has('tab')) {
+        const requestedTab = params.get('tab') as UrlParamsState['tab'];
+        if (['home', 'viewer', 'feed', 'report', 'inference'].includes(requestedTab!)) {
+          partial.tab = requestedTab;
+        }
+      } else if (hasRa && hasDec) {
+        // Direct link to coordinates should open Sky Viewer
+        partial.tab = 'viewer';
       }
 
       if (Object.keys(partial).length > 0) {
@@ -70,10 +97,39 @@ export function useUrlSync(
     params.set('subtraction', s.subtractionMode);
     params.set('frame', String(s.activeFrameIndex));
 
+    if (s.candidateId) {
+      params.set('candidate', s.candidateId);
+    } else {
+      params.delete('candidate');
+    }
+
+    if (s.tab && s.tab !== 'home') {
+      params.set('tab', s.tab);
+    } else {
+      params.delete('tab');
+    }
+
+    if (s.presetId) {
+      params.set('preset', s.presetId);
+    } else {
+      params.delete('preset');
+    }
+
     window.history.replaceState(window.history.state, '', url);
   }, []);
 
   useEffect(() => {
     updateUrl(state);
-  }, [state.ra, state.dec, state.fov, state.selectedArray, state.subtractionMode, state.activeFrameIndex, updateUrl]);
+  }, [
+    state.ra,
+    state.dec,
+    state.fov,
+    state.selectedArray,
+    state.subtractionMode,
+    state.activeFrameIndex,
+    state.candidateId,
+    state.tab,
+    state.presetId,
+    updateUrl,
+  ]);
 }
