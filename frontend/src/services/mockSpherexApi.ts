@@ -1246,7 +1246,7 @@ export function resolveCoordinateCatalogContext(raDeg: number, decDeg: number): 
 
   for (const entry of knownCatalogTable) {
     const dist = Math.hypot(normRa - entry.ra, decDeg - entry.dec);
-    if (dist < 0.012) {
+    if (dist < 0.2) {
       return {
         knownObjectName: entry.name,
         constellation: entry.constellation,

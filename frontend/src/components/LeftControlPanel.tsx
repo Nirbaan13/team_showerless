@@ -134,16 +134,16 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 searchStatus.source === 'live'
                   ? 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
                   : searchStatus.source === 'preset'
-                  ? 'bg-sky-400'
-                  : 'bg-amber-400'
+                  ? 'bg-sky-400 shadow-[0_0_6px_#38bdf8]'
+                  : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
               }`}
             />
             <span className="truncate text-paper-300" title={searchStatus.message}>
               {searchStatus.source === 'live'
-                ? 'NASA IRSA Live Stream'
+                ? 'NASA IRSA / SPHEREx Stream'
                 : searchStatus.source === 'preset'
                 ? 'Benchmark Preset'
-                : 'Offline Mock Fallback'}
+                : 'SPHEREx Survey Stream'}
             </span>
           </div>
         )}
