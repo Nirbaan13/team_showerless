@@ -1,0 +1,162 @@
+{
+  "schema_version": 4,
+  "purpose": "isolated V4 optimized/coverage-preserving runtime engineering probes; no FINAL data",
+  "files": [
+    {
+      "path": "inference/ml_inference/__init__.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/__init__.py",
+      "bytes": 74,
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a"
+    },
+    {
+      "path": "inference/ml_inference/__main__.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/__main__.py",
+      "bytes": 48,
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d"
+    },
+    {
+      "path": "inference/ml_inference/cli.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/cli.py",
+      "bytes": 2564,
+      "sha256": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a"
+    },
+    {
+      "path": "inference/ml_inference/contracts.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/contracts.py",
+      "bytes": 2460,
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816"
+    },
+    {
+      "path": "inference/ml_inference/detector.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/detector.py",
+      "bytes": 9710,
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d"
+    },
+    {
+      "path": "inference/ml_inference/features.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/features.py",
+      "bytes": 15131,
+      "sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+    },
+    {
+      "path": "inference/ml_inference/median_reference.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/median_reference.py",
+      "bytes": 3463,
+      "sha256": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e"
+    },
+    {
+      "path": "inference/ml_inference/model.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/model.py",
+      "bytes": 18071,
+      "sha256": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598"
+    },
+    {
+      "path": "inference/ml_inference/pipeline.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/pipeline.py",
+      "bytes": 10627,
+      "sha256": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0"
+    },
+    {
+      "path": "inference/ml_inference/prepare.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py",
+      "bytes": 17330,
+      "sha256": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec"
+    },
+    {
+      "path": "inference/ml_inference/render.py",
+      "source": "ml/pvusatov/releases/v4/runtime/ml_inference/render.py",
+      "bytes": 2564,
+      "sha256": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23"
+    },
+    {
+      "path": "inference/models/ranker.onnx",
+      "source": "ml/pvusatov/releases/v4/model/ranker.onnx",
+      "bytes": 60661,
+      "sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+    },
+    {
+      "path": "inference/models/metadata.json",
+      "source": "ml/pvusatov/releases/v4/model/metadata.json",
+      "bytes": 3588,
+      "sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13"
+    },
+    {
+      "path": "inference/fixtures/comet-d2.npz",
+      "source": "ml/pvusatov/backend/inference/fixtures/comet-d2.npz",
+      "bytes": 89823,
+      "sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd"
+    },
+    {
+      "path": "inference/fixtures/comet-d6.npz",
+      "source": "ml/pvusatov/backend/inference/fixtures/comet-d6.npz",
+      "bytes": 550371,
+      "sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f"
+    },
+    {
+      "path": "inference/fixtures/vesta-d3.npz",
+      "source": "ml/pvusatov/backend/inference/fixtures/vesta-d3.npz",
+      "bytes": 425944,
+      "sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b"
+    },
+    {
+      "path": "inference/fixtures/vesta-d6.npz",
+      "source": "ml/pvusatov/backend/inference/fixtures/vesta-d6.npz",
+      "bytes": 420851,
+      "sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114"
+    },
+    {
+      "path": "inference/fixtures/presets.json",
+      "source": "ml/pvusatov/backend/inference/fixtures/presets.json",
+      "bytes": 1473,
+      "sha256": "cedef7219e8d807e69eb3738a1f2266bca0c0d4346e59e0153064abb16cc1a1f"
+    },
+    {
+      "path": "inference/measure_maximum.py",
+      "source": "ml/pvusatov/releases/v4/runtime/measure_maximum.py",
+      "bytes": 5310,
+      "sha256": "3399629bc6c71559a134e8a79b571ce6b8875d5152f77c71f051e076b5f9f65c"
+    },
+    {
+      "path": "inference/sitecustomize.py",
+      "source": "ml/pvusatov/verification/v4-runtime/sitecustomize.py",
+      "bytes": 462,
+      "sha256": "df0c16304e215cff36f7224f18db01c23b3bfcc6ac964fb139dd1e2c2c7e0a83"
+    },
+    {
+      "path": "vps_probe.py",
+      "source": "ml/pvusatov/verification/v4-runtime/vps_probe_v3.py",
+      "bytes": 8263,
+      "sha256": "9949fe2b154df16ad8130a2dfe07e048d5341717e8f6f3496213d7d9774eb308"
+    },
+    {
+      "path": "coverage-fixture/0.fits",
+      "source": "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/0.fits",
+      "bytes": 37440,
+      "sha256": "a036259f805a7e0238fb6897ced9b8feb357499b3b98c05c8bb964296f45c2c4"
+    },
+    {
+      "path": "coverage-fixture/1.fits",
+      "source": "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/1.fits",
+      "bytes": 37440,
+      "sha256": "7af90790fd8e36f95c31891ff43b11e82e90456456bb97973ad88e74cd71014d"
+    },
+    {
+      "path": "coverage-fixture/2.fits",
+      "source": "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/2.fits",
+      "bytes": 37440,
+      "sha256": "5fcab5c733fda18e569114e0c415137b5b45b5dc01b516870dd19537cdf9aff9"
+    },
+    {
+      "path": "coverage-fixture/3.fits",
+      "source": "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/3.fits",
+      "bytes": 37440,
+      "sha256": "6bbfdcaa3c89e6b379d7eec674b8757f6d23e77e2fc32a0c342a820c36ed16f0"
+    },
+    {
+      "path": "coverage-fixture/request.json",
+      "source": "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/request.json",
+      "bytes": 856,
+      "sha256": "1f58ff8444ce0a91ff6816757045d517e28878644b1cc14dc0cfaa5d7ece8757"
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "schema_version": 4,
+  "designation": "POST-HOC DESCRIPTIVE per-truth coverage companion; not a gate or selection input",
+  "created_utc": "2026-11-15T09:57:54.072686+00:00",
+  "source_sha256": "0682286732478f17c13b67684b8af18575b319853945bb38e4c69245fc47ca21",
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "canonical_unblinding_utc": "2026-11-15T09:45:56.236721+00:00",
+  "ranking_policy": "Original stable full-pool order and original K1/K3 positions; all ineligible competitors remain; unique eligible truth IDs counted only after taking each original budget",
+  "denominator_policy": "Eligible injected truth IDs per whole field; sum for micro, average within-field eligible recall over nonempty eligible fields for macro",
+  "cohorts": {
+    "finite_true_centers_ge3": {
+      "eligibility": "finite_center_epochs>=3",
+      "planned_fields": 3000,
+      "fields_with_eligible_truth": 2371,
+      "empty_eligible_fields": 629,
+      "original_truths": 5993,
+      "eligible_truths": 5780,
+      "original_truth_containing_but_empty_eligible_fields": 29,
+      "original_zero_truth_fields": 600,
+      "original_candidate_rows": 140949,
+      "original_candidate_rows_in_empty_eligible_fields": 12975,
+      "baseline": {
+        "top1": 716,
+        "top3": 1220,
+        "detected": 1926,
+        "micro_recall": {
+          "top1": 0.12387543252595155,
+          "top3": 0.21107266435986158,
+          "detected": 0.3332179930795848
+        },
+        "field_macro_recall": {
+          "top1": 0.1365809081962604,
+          "top3": 0.21885983410656543,
+          "detected": 0.3349852382960776
+        }
+      },
+      "candidate": {
+        "top1": 1114,
+        "top3": 1738,
+        "detected": 1926,
+        "micro_recall": {
+          "top1": 0.19273356401384084,
+          "top3": 0.30069204152249135,
+          "detected": 0.3332179930795848
+        },
+        "field_macro_recall": {
+          "top1": 0.2184732180514551,
+          "top3": 0.3059187403345986,
+          "detected": 0.3349852382960776
+        }
+      },
+      "recall_defined": true,
+      "delta": {
+        "top1": {
+          "field_macro": 0.0818923098551947,
+          "micro": 0.06885813148788927,
+          "field_macro_paired_field_ci95": [
+            0.0730001405876564,
+            0.09106653310839306
+          ],
+          "micro_paired_field_ci95": [
+            0.06232616908082976,
+            0.07554416522669152
+          ]
+        },
+        "top3": {
+          "field_macro": 0.08705890622803318,
+          "micro": 0.08961937716262976,
+          "field_macro_paired_field_ci95": [
+            0.07855335301560523,
+            0.09598622240967242
+          ],
+          "micro_paired_field_ci95": [
+            0.08167924528359605,
+            0.09775086888159987
+          ]
+        }
+      },
+      "uncertainty": {
+        "unit": "whole field with at least one eligible truth; paired counts and denominators resampled together",
+        "empty_eligible_fields": "retain workload; undefined recall, excluded from conditional field-macro resampling",
+        "samples": 10000,
+        "seed": 20261115,
+        "interval": "percentile 2.5/97.5; post-hoc descriptive, no multiplicity adjustment"
+      },
+      "ineligible_injected_truth_occupies_original_top1": {
+        "baseline": 0,
+        "candidate": 0
+      }
+    },
+    "finite_true_centers_ge3_and_covered_span_ge3px": {
+      "eligibility": "finite_center_epochs>=3 AND covered_truth_span_px>=3",
+      "planned_fields": 3000,
+      "fields_with_eligible_truth": 2151,
+      "empty_eligible_fields": 849,
+      "original_truths": 5993,
+      "eligible_truths": 4576,
+      "original_truth_containing_but_empty_eligible_fields": 249,
+      "original_zero_truth_fields": 600,
+      "original_candidate_rows": 140949,
+      "original_candidate_rows_in_empty_eligible_fields": 16442,
+      "baseline": {
+        "top1": 616,
+        "top3": 1034,
+        "detected": 1654,
+        "micro_recall": {
+          "top1": 0.1346153846153846,
+          "top3": 0.22596153846153846,
+          "detected": 0.36145104895104896
+        },
+        "field_macro_recall": {
+          "top1": 0.14702463970246393,
+          "top3": 0.2352006818534015,
+          "detected": 0.3604912443824578
+        }
+      },
+      "candidate": {
+        "top1": 953,
+        "top3": 1487,
+        "detected": 1654,
+        "micro_recall": {
+          "top1": 0.2082604895104895,
+          "top3": 0.3249562937062937,
+          "detected": 0.36145104895104896
+        },
+        "field_macro_recall": {
+          "top1": 0.2346582984658298,
+          "top3": 0.3294591662792499,
+          "detected": 0.3604912443824578
+        }
+      },
+      "recall_defined": true,
+      "delta": {
+        "top1": {
+          "field_macro": 0.08763365876336587,
+          "micro": 0.0736451048951049,
+          "field_macro_paired_field_ci95": [
+            0.07717340771734077,
+            0.0983651015031768
+          ],
+          "micro_paired_field_ci95": [
+            0.06583531401268679,
+            0.08158825709116936
+          ]
+        },
+        "top3": {
+          "field_macro": 0.09425848442584844,
+          "micro": 0.09899475524475525,
+          "field_macro_paired_field_ci95": [
+            0.08445587323725398,
+            0.10467999380133271
+          ],
+          "micro_paired_field_ci95": [
+            0.08963278192577634,
+            0.10857522712164858
+          ]
+        }
+      },
+      "uncertainty": {
+        "unit": "whole field with at least one eligible truth; paired counts and denominators resampled together",
+        "empty_eligible_fields": "retain workload; undefined recall, excluded from conditional field-macro resampling",
+        "samples": 10000,
+        "seed": 20261115,
+        "interval": "percentile 2.5/97.5; post-hoc descriptive, no multiplicity adjustment"
+      },
+      "ineligible_injected_truth_occupies_original_top1": {
+        "baseline": 61,
+        "candidate": 98
+      }
+    },
+    "fewer_than3_finite_true_centers_counterexample_cohort": {
+      "eligibility": "finite_center_epochs<3",
+      "planned_fields": 3000,
+      "fields_with_eligible_truth": 194,
+      "empty_eligible_fields": 2806,
+      "original_truths": 5993,
+      "eligible_truths": 213,
+      "original_truth_containing_but_empty_eligible_fields": 2206,
+      "original_zero_truth_fields": 600,
+      "original_candidate_rows": 140949,
+      "original_candidate_rows_in_empty_eligible_fields": 138887,
+      "baseline": {
+        "top1": 0,
+        "top3": 0,
+        "detected": 0,
+        "micro_recall": {
+          "top1": 0.0,
+          "top3": 0.0,
+          "detected": 0.0
+        },
+        "field_macro_recall": {
+          "top1": 0.0,
+          "top3": 0.0,
+          "detected": 0.0
+        }
+      },
+      "candidate": {
+        "top1": 0,
+        "top3": 0,
+        "detected": 0,
+        "micro_recall": {
+          "top1": 0.0,
+          "top3": 0.0,
+          "detected": 0.0
+        },
+        "field_macro_recall": {
+          "top1": 0.0,
+          "top3": 0.0,
+          "detected": 0.0
+        }
+      },
+      "recall_defined": true,
+      "delta": {
+        "top1": {
+          "field_macro": 0.0,
+          "micro": 0.0,
+          "field_macro_paired_field_ci95": [
+            0.0,
+            0.0
+          ],
+          "micro_paired_field_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "top3": {
+          "field_macro": 0.0,
+          "micro": 0.0,
+          "field_macro_paired_field_ci95": [
+            0.0,
+            0.0
+          ],
+          "micro_paired_field_ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "uncertainty": {
+        "unit": "whole field with at least one eligible truth; paired counts and denominators resampled together",
+        "empty_eligible_fields": "retain workload; undefined recall, excluded from conditional field-macro resampling",
+        "samples": 10000,
+        "seed": 20261115,
+        "interval": "percentile 2.5/97.5; post-hoc descriptive, no multiplicity adjustment"
+      },
+      "ineligible_injected_truth_occupies_original_top1": {
+        "baseline": 27,
+        "candidate": 44
+      }
+    }
+  },
+  "references": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/report.json": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/freeze.json": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/v4-final-repair-1/unblinding-record.json": "659cfc081df487c241e7641f9bcfc4a2478c7759166648a95153d18b2b874296",
+    "/tmp/spaceapps-v4-evaluation/final-1225/synthetic/run-synthetic-manifest.json": "5250b9a9fa23e75f1fe5328c5c2bbd5def07af348f9d384aceb570e8da179995",
+    "/tmp/spaceapps-v4-evaluation/final-1225/synthetic/synthetic.json.gz": "ec862fa4004ffd08954e90a5d281e3c203f96127d3d71a2547b0dcfda572b0be",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/finite-centre-diagnostic-counterexample.json": "6591aba07acf4467f7ac8d969a55fc5d020ad237e05d7aa0581e85dd1b9d2482",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/results/FINITE-CENTRE-INTERPRETATION.AI.md": "b63076af418b21ee5dcacaff6d113ece1162a7d91074cda54b244a90eebc9b3e"
+  },
+  "primary_report_sha256_before": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+  "primary_report_sha256_after": "15cabb840cb8af95771f3534f2b5adfb18caaff5f0e8b57ed678f858525f7e56",
+  "no_pixels_models_scoring_fitting_or_reselection": true,
+  "no_primary_or_promotion_gate_change": true,
+  "legacy_field_level_fallback": "Original synthetic common_finite_center_ge3 defaults missing usable_center_epochs to3, retaining all3000fields and reproducing common_attributable. This companion applies per-truth eligibility only for discussion.",
+  "interpretation": "Finite true-center counts and three-pixel truth spans are engineering descriptors, not necessary detection ceilings, confirmed motion or real survey sensitivity.",
+  "native_corroboration": "Independent primary accounting finds14 native recovered injected truths outside the>=3finite-center subset.",
+  "limitations": [
+    "Truth eligibility is post-hoc and may select different scene/flux/speed distributions; these conditional rates do not replace all-planned recovery.",
+    "600 original zero-truth fields and additional zero-eligible-truth fields retain candidate workload without fabricated recall denominators.",
+    "Bootstrap units are whole paired fields, never individual truths or candidate rows.",
+    "Cache labels and geometry are reused; no pixels, feature recomputation, model reads or score calls occur."
+  ]
+}

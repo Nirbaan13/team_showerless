@@ -47,6 +47,8 @@ export function InferencePage() {
   const [region, setRegion] = useState({ ra: '127.69444', dec: '-39.17760', width: '3', height: '3', detector: '1', after: '2025-04-29T00:00:00Z', before: '2025-05-01T00:00:00Z' });
   const activeRequest = useRef<AbortController | null>(null);
   const result = job?.result;
+  const activeModel = result?.model ?? model;
+  const releaseTitle = activeModel?.release_name ?? (model?.sha256 === activeModel?.sha256 ? model?.release_name : undefined) ?? activeModel?.model_id;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -164,7 +166,7 @@ export function InferencePage() {
           </details>
           <button className="inference-primary" disabled={pending || !model || (mode === 'preset' && !presets.length)} type="submit">{pending ? 'Analysis running…' : 'Run analysis'}</button>
         </form>
-        {model && <div className="inference-model"><strong title={model.model_id}>{model.release_name ?? model.model_id}</strong><span>Frozen {model.model_family === 'RankNetTreeBoost' ? 'RankNet' : model.model_family === 'ListNetTreeBoost' ? 'ListNet' : model.model_family === 'HistGradientBoostingClassifier' ? 'gradient boosting' : model.model_family === 'ExtraTreesClassifier' ? 'ExtraTrees' : model.model_family === 'RandomForestClassifier' ? 'Random Forest' : 'tree ensemble'} · experimental ranking</span><code title={model.sha256}>SHA-256 {model.sha256.slice(0, 16)}…</code></div>}
+        {activeModel && <div className="inference-model"><strong title={activeModel.model_id}>{releaseTitle}</strong><span>Frozen {activeModel.model_family === 'RankNetTreeBoost' ? 'RankNet' : activeModel.model_family === 'ListNetTreeBoost' ? 'ListNet' : activeModel.model_family === 'HistGradientBoostingClassifier' ? 'gradient boosting' : activeModel.model_family === 'ExtraTreesClassifier' ? 'ExtraTrees' : activeModel.model_family === 'RandomForestClassifier' ? 'Random Forest' : 'tree ensemble'} · experimental ranking</span><code title={activeModel.sha256}>SHA-256 {activeModel.sha256.slice(0, 16)}…</code></div>}
       </aside>
       <section className="inference-results">
         {error && <div role="alert" className="inference-error">{error}</div>}

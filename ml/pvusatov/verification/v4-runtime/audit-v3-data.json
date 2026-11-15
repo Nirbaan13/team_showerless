@@ -1,0 +1,250 @@
+{
+  "schema_version": 4,
+  "status": "PASS",
+  "audited_at_utc": "2026-11-15T10:03:18.597431+00:00",
+  "scope": "Engineering evidence only; no FINAL, inference/scoring, model sessions, deployment or VPS writes",
+  "evidence_files_verified": 25,
+  "evidence_manifest_sha256": "4e46ceaefb933021c306ea9aa1cb78f5df05b7ad68a88962b4f071bee4ddc7ba",
+  "bundle_inputs_verified": 26,
+  "bundle_manifest_sha256": "809638b1148a94574816c6827ad4f14303639fe6c33e2bc37f926731d3171829",
+  "external_engineering_inputs": [
+    "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/0.fits",
+    "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/1.fits",
+    "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/2.fits",
+    "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/3.fits",
+    "/tmp/spaceapps-v4-evaluation/coverage-fixture-v3/request.json"
+  ],
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "model_metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "selected_source_sha256": {
+    "pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598"
+  },
+  "probe_image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+  "python": "3.12.3",
+  "versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "probes": [
+    {
+      "mode": "presets",
+      "elapsed_seconds": 6.2119934750007815,
+      "whole_cgroup_peak_mib": 110.55078125,
+      "hard_one_cpu_one_gib_no_swap": true,
+      "configured_user": "app",
+      "readonly_rootfs": true,
+      "network": "none",
+      "pids_limit": 64,
+      "tmpfs_mib": 256,
+      "exit_code": 0,
+      "oom_killed": false,
+      "cases": [
+        {
+          "preset": "comet-d2",
+          "candidates": 1,
+          "declared_pngs": 8
+        },
+        {
+          "preset": "comet-d6",
+          "candidates": 36,
+          "declared_pngs": 80
+        },
+        {
+          "preset": "vesta-d3",
+          "candidates": 100,
+          "declared_pngs": 209
+        },
+        {
+          "preset": "vesta-d6",
+          "candidates": 18,
+          "declared_pngs": 45
+        }
+      ]
+    },
+    {
+      "mode": "maximum",
+      "elapsed_seconds": 19.889950268996472,
+      "whole_cgroup_peak_mib": 672.90234375,
+      "hard_one_cpu_one_gib_no_swap": true,
+      "configured_user": "app",
+      "readonly_rootfs": true,
+      "network": "none",
+      "pids_limit": 64,
+      "tmpfs_mib": 256,
+      "exit_code": 0,
+      "oom_killed": false,
+      "shape": [
+        32,
+        512,
+        512
+      ],
+      "measured_tracks": 1,
+      "track_epochs": 32,
+      "min_snr": 10.0,
+      "publication_cap": 3,
+      "declared_pngs": 66,
+      "child_peak_rss_mib": 638.9453125,
+      "child_cli_seconds": 17.935542981002072,
+      "scope": "Controlled maximum shape; not worst candidate density; maximum PNGs were transient and cannot be byte-reverified"
+    },
+    {
+      "mode": "native-coverage",
+      "elapsed_seconds": 1.2706127450001077,
+      "whole_cgroup_peak_mib": 94.4140625,
+      "hard_one_cpu_one_gib_no_swap": true,
+      "configured_user": "app",
+      "readonly_rootfs": true,
+      "network": "none",
+      "pids_limit": 64,
+      "tmpfs_mib": 256,
+      "exit_code": 0,
+      "oom_killed": false,
+      "physical_epochs": 4,
+      "frame_ids": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "zero_coverage_epoch": 1,
+      "declared_pngs": 8,
+      "coverage_warning": true,
+      "candidate_count": 0
+    }
+  ],
+  "prototype_comparison": {
+    "reference": "Earlier V4 prototype, not production V3; one observation each",
+    "old_proof_sha256": "9b6b9d666d01b7ebb2d10c2666968086d93f218e71703819df17b98edc0793aa",
+    "old_elapsed_seconds": 44.102212890000374,
+    "old_cgroup_peak_mib": 727.15234375,
+    "new_elapsed_seconds": 19.889950268996472,
+    "new_cgroup_peak_mib": 672.90234375,
+    "observed_speedup": 2.2173113704937135
+  },
+  "png_sample_bytes_independently_verified": 7,
+  "png_samples": [
+    {
+      "identity": "comet-d2-frame000",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-presets/presets/comet-d2/frame-000.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/comet-d2-frame000.png",
+      "bytes": 1087,
+      "sha256": "e4fcc1359fbe42df79895ac81f43d2bc964b0c6ad03f82d7313fbca6f1fd59b3",
+      "dimensions": [
+        104,
+        76
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": false,
+      "required_black": false
+    },
+    {
+      "identity": "comet-d6-frame000",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-presets/presets/comet-d6/frame-000.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/comet-d6-frame000.png",
+      "bytes": 14591,
+      "sha256": "52e437976d6285b0d447af5feba8f8ddc7e0ad03a67ddae2bdb542e875e5a152",
+      "dimensions": [
+        256,
+        144
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": false,
+      "required_black": false
+    },
+    {
+      "identity": "vesta-d3-frame000",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-presets/presets/vesta-d3/frame-000.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/vesta-d3-frame000.png",
+      "bytes": 5576,
+      "sha256": "c5da6e0f4ead349a18362cad1937b9444e515d57fa4b2ec26dc7bb959f185466",
+      "dimensions": [
+        222,
+        174
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": false,
+      "required_black": false
+    },
+    {
+      "identity": "vesta-d6-frame000",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-presets/presets/vesta-d6/frame-000.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/vesta-d6-frame000.png",
+      "bytes": 3659,
+      "sha256": "7927ae39f9415180254c97870fe0d9f431ec384bd84a99580c1962adb3553a52",
+      "dimensions": [
+        222,
+        174
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": false,
+      "required_black": false
+    },
+    {
+      "identity": "native-blank-frame",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-native-coverage/native-coverage/native-coverage/frame-001.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/native-blank-frame.png",
+      "bytes": 71,
+      "sha256": "a33682b49caac03a7de19ce35b02fd7ae26bfd5607bffb6040fc88b568649b0e",
+      "dimensions": [
+        20,
+        20
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": true,
+      "required_black": true
+    },
+    {
+      "identity": "native-blank-difference",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-native-coverage/native-coverage/native-coverage/difference-001.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/native-blank-difference.png",
+      "bytes": 71,
+      "sha256": "a33682b49caac03a7de19ce35b02fd7ae26bfd5607bffb6040fc88b568649b0e",
+      "dimensions": [
+        20,
+        20
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": true,
+      "required_black": true
+    },
+    {
+      "identity": "native-covered-frame",
+      "remote_path": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-native-coverage/native-coverage/native-coverage/frame-000.png",
+      "local_tmp_path": "/tmp/spaceapps-v4-runtime-png-audit/native-covered-frame.png",
+      "bytes": 404,
+      "sha256": "8ae677a90395da7e43412bfe0816398972a2ae9fa4d66b906f19ef9597d31daf",
+      "dimensions": [
+        20,
+        20
+      ],
+      "pixel_mode": "L",
+      "png_verified": true,
+      "all_pixels_black": false,
+      "required_black": false
+    }
+  ],
+  "limits": [
+    "Numeric process UID not recorded; Docker configured user app verified",
+    "Writable output bind,256MiB tmpfs and distinct inherited anonymous /app/data volumes exist; rootfs and input bundle are read-only",
+    "Only sampled retained PNGs independently checked; maximum-run PNGs were deleted with its temporary directory",
+    "Controlled one-track maximum shape at minSNR10/publication cap3 is not a worst-density/default-options guarantee",
+    "One run per mode; observed timings are not p95, concurrency or throughput guarantees",
+    "Five bundle inputs live outside git in the declared engineering fixture directory; full input rehash requires those exact files",
+    "Standalone maximum child text says no cgroup claim; outer actual cgroup proof supplies the hard bound",
+    "Resource/integration engineering audit does not substitute for independent recovery or promotion approval"
+  ]
+}

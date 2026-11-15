@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl python3-ve
     && useradd --uid 10001 --user-group --create-home app \
     && mkdir -p /app/data/tmp /tmp/spherex_cutouts/tmp && chown -R app:app /app/data /tmp/spherex_cutouts
 WORKDIR /app
-COPY ml/pvusatov/backend/inference/requirements-inference.txt /tmp/inference-requirements.txt
+COPY ml/pvusatov/releases/v4/requirements-inference.txt /tmp/inference-requirements.txt
 COPY backend/python/requirements-pipeline.txt /tmp/pipeline-requirements.txt
 RUN python3 -m venv /opt/inference-venv \
     && /opt/inference-venv/bin/pip install --no-cache-dir --require-hashes -r /tmp/inference-requirements.txt -r /tmp/pipeline-requirements.txt \
@@ -25,11 +25,11 @@ COPY --chown=app:app pipeline/service.py ./pipeline/service.py
 COPY --chown=app:app pipeline/spherex ./pipeline/spherex
 COPY --chown=app:app pipeline/scripts ./pipeline/scripts
 COPY --chown=app:app compose.yaml ./deploy/compose.yaml
-COPY --chown=app:app ml/pvusatov/backend/inference/ml_inference ./inference/ml_inference
-COPY --chown=app:app ml/pvusatov/releases/v3/model/ranker.onnx ml/pvusatov/releases/v3/model/metadata.json ./inference/models/
+COPY --chown=app:app ml/pvusatov/releases/v4/runtime/ml_inference ./inference/ml_inference
+COPY --chown=app:app ml/pvusatov/releases/v4/model/ranker.onnx ml/pvusatov/releases/v4/model/metadata.json ./inference/models/
 COPY --chown=app:app ml/pvusatov/backend/inference/fixtures ./inference/fixtures
-COPY --chown=app:app ml/pvusatov/backend/inference/smoke.py ./inference/smoke.py
-COPY --chown=app:app ml/pvusatov/releases/v3/smoke.py ./inference/release-smoke.py
+COPY --chown=app:app ml/pvusatov/releases/v4/smoke.py ./inference/smoke.py
+COPY --chown=app:app ml/pvusatov/releases/v4/smoke.py ./inference/release-smoke.py
 ARG APP_REVISION=development
 ENV APP_REVISION=${APP_REVISION} \
     DATA_DIR=/app/data \

@@ -1,0 +1,1 @@
+{"schema_version": 1, "analysis_id": "v4-hard-cgroup-vesta-d6", "model_dir": "/probe/inference/models", "source": {"kind": "preset", "preset_id": "vesta-d6", "path": "/probe/inference/fixtures/vesta-d6.npz"}}

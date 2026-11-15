@@ -1,0 +1,19 @@
+{
+  "schema_version": 4,
+  "passes": true,
+  "freeze_sha256": "1225e2de97c38381818d9ccb3676c1d132701b02b8bc19dc09e0d1785c3e38e4",
+  "amendment_sha256": "dd5485897856a762e67bafcdc00a1fcb45c430f556fb2083bda642d1ed1d0b19",
+  "opaque_inventory_sha256": "2efb858f37d36c61dddd728fa54deb96ecffa7bf557298c2b9839e237d4031e5",
+  "first_artifacts_checked": 4,
+  "native_parents_complete": 12,
+  "unaffected_native_parents_compared": 0,
+  "synthetic": {
+    "passes": true,
+    "rows_compared": 3000,
+    "old_sha256": "8b884475d7863c52c9c2e0f6cdb2e5678b9168d4e723f19b1507dd0db41e52f5",
+    "new_sha256": "8b884475d7863c52c9c2e0f6cdb2e5678b9168d4e723f19b1507dd0db41e52f5"
+  },
+  "native": [],
+  "scientific_values_disclosed": false,
+  "metrics_aggregated": false
+}

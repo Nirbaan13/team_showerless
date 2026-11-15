@@ -1,0 +1,125 @@
+[
+  {
+    "name": "spaceapps-v4-probe-presets-v3-20261115",
+    "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+    "user": "app",
+    "host": {
+      "Memory": 1073741824,
+      "MemorySwap": 1073741824,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "Tmpfs": {
+        "/tmp": "rw,size=256m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/bundle-v3",
+        "Destination": "/probe",
+        "RW": false
+      },
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-presets",
+        "Destination": "/evidence",
+        "RW": true
+      },
+      {
+        "Type": "volume",
+        "Source": "/var/lib/docker/volumes/a8e6219ffb88600c3fa499b64b362faf3d9c206c016ae71f1ae9fe6d08aeac02/_data",
+        "Destination": "/app/data",
+        "RW": true
+      }
+    ],
+    "state": {
+      "Status": "exited",
+      "OOMKilled": false,
+      "ExitCode": 0
+    }
+  },
+  {
+    "name": "spaceapps-v4-probe-maximum-v3-20261115",
+    "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+    "user": "app",
+    "host": {
+      "Memory": 1073741824,
+      "MemorySwap": 1073741824,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "Tmpfs": {
+        "/tmp": "rw,size=256m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/bundle-v3",
+        "Destination": "/probe",
+        "RW": false
+      },
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-maximum",
+        "Destination": "/evidence",
+        "RW": true
+      },
+      {
+        "Type": "volume",
+        "Source": "/var/lib/docker/volumes/de53a22f582dbf03474769353029b847e96ef1d1a2f6f1aee69c0cdd583bdac6/_data",
+        "Destination": "/app/data",
+        "RW": true
+      }
+    ],
+    "state": {
+      "Status": "exited",
+      "OOMKilled": false,
+      "ExitCode": 0
+    }
+  },
+  {
+    "name": "spaceapps-v4-probe-native-coverage-v3-20261115",
+    "image_id": "sha256:8df7927bd71083a8419454906591d25d1e203b73a84608e2bce1e941da352573",
+    "user": "app",
+    "host": {
+      "Memory": 1073741824,
+      "MemorySwap": 1073741824,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "Tmpfs": {
+        "/tmp": "rw,size=256m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/bundle-v3",
+        "Destination": "/probe",
+        "RW": false
+      },
+      {
+        "Type": "bind",
+        "Source": "/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-native-coverage",
+        "Destination": "/evidence",
+        "RW": true
+      },
+      {
+        "Type": "volume",
+        "Source": "/var/lib/docker/volumes/a87ecb2051f6bc1f5aaf88191d766ec386e430ced5b1412b921bd581da4777a9/_data",
+        "Destination": "/app/data",
+        "RW": true
+      }
+    ],
+    "state": {
+      "Status": "exited",
+      "OOMKilled": false,
+      "ExitCode": 0
+    }
+  }
+]

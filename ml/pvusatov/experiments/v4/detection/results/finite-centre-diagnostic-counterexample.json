@@ -1,0 +1,88 @@
+{
+  "designation": "Controlled mask-hole counterexample; no native/FINAL/model reads",
+  "seed": 3803003,
+  "numpy_version": "2.5.3",
+  "shape": [
+    3,
+    40,
+    40
+  ],
+  "known_simulation_amplitude": 300.0,
+  "psf_sigma": 0.8,
+  "times_hours": [
+    0.0,
+    1.0,
+    2.0
+  ],
+  "truth_xy": [
+    [
+      12.0,
+      20.0
+    ],
+    [
+      16.0,
+      20.0
+    ],
+    [
+      20.0,
+      20.0
+    ]
+  ],
+  "noise": "N(0,1)",
+  "mask": "exact nearest true-centre pixel NaN in everyepoch",
+  "detector_settings": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "candidate_generation_truth_arguments": false,
+  "models_called": false,
+  "candidate_rows": 1,
+  "matched_candidates": [
+    {
+      "epochs": [
+        0,
+        1,
+        2
+      ],
+      "positions_xy": [
+        [
+          11,
+          20
+        ],
+        [
+          16,
+          21
+        ],
+        [
+          21,
+          20
+        ]
+      ],
+      "max_offset_px": 1.0,
+      "fit_rms_px": 0.4714045207910317
+    }
+  ],
+  "diagnostic": {
+    "finite_center_epochs": 0,
+    "covered_truth_span_px": 0.0,
+    "covered_time_span_hours": 0.0,
+    "finite_centers_ge_min_epochs": false,
+    "resolved_truth_span_ge3px": false,
+    "geometrically_testable": false,
+    "minimum_speed_for_three_pixel_span_px_hour": null,
+    "diagnostic_only": true
+  },
+  "actual_matched_truth_span_px": 8.0,
+  "source_sha256": {
+    "detector": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "geometry": "2691e80fefe6b107e967f8ca0b413412b497193d26c994521bdcf2ba27128266"
+  },
+  "interpretation": "Finite-centre diagnostic is not a strict necessary detectability ceiling; valid offset peaks recover PSF wings within declared matcher tolerance. No gate/denominator/source change."
+}

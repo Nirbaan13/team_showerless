@@ -79,9 +79,6 @@ jobs:
         run: |
           docker run --rm --read-only --tmpfs /tmp \
             --entrypoint /opt/inference-venv/bin/python \
-            "spaceapps-api:$GITHUB_SHA" /app/inference/smoke.py
-          docker run --rm --read-only --tmpfs /tmp \
-            --entrypoint /opt/inference-venv/bin/python \
             "spaceapps-api:$GITHUB_SHA" /app/inference/release-smoke.py --model-dir /app/inference/models
       - name: Test container deployment and rollback
         env:
