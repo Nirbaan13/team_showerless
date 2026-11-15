@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
-import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
+import { DETECTOR_ARRAY_SPECS } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
 
@@ -303,7 +303,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       {(() => {
         const queryRa = liveCatalog?.queriedCoordinate.ra ?? activeCandidate?.ra ?? ra;
         const queryDec = liveCatalog?.queriedCoordinate.dec ?? activeCandidate?.dec ?? dec;
-        const coordCat = resolveCoordinateCatalogContext(queryRa, queryDec);
         const gaiaList = liveCatalog?.gaiaSources ?? [];
         const wiseList = liveCatalog?.wiseSources ?? [];
         const ephList = liveCatalog?.ephemerisSources ?? [];
@@ -348,10 +347,11 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                   />
                   {isCatalogLoading
                     ? 'Pulling Space Agency Catalogs...'
-                    : `✓ Pulled ${liveCatalog?.totalObjects ?? gaiaList.length + wiseList.length + ephList.length} Objects (${liveCatalog?.latencyMs ?? 42}ms)`}
+                    : !liveCatalog || liveCatalog.status === 'unavailable' ? 'Catalogue query unavailable'
+                    : `Catalogue query ${liveCatalog.status === 'partial' ? 'partial' : 'complete'}: ${liveCatalog.totalObjects} objects`}
                 </span>
                 <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  {liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : 'BACKEND API'}
+                  {isCatalogLoading ? 'QUERYING' : liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : liveCatalog?.status === 'partial' ? 'PARTIAL' : 'UNAVAILABLE'}
                 </span>
               </div>
 
@@ -359,7 +359,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 <span>
                   Query: <strong className="text-paper-200">α {queryRa.toFixed(4)}°, δ {queryDec >= 0 ? `+${queryDec.toFixed(4)}` : queryDec.toFixed(4)}°</strong>
                 </span>
-                <span className="text-emerald-400/90 truncate ml-1">{coordCat.constellation}</span>
+                <span>{liveCatalog?.providers.filter(provider => provider.status === 'failed').map(provider => provider.catalog).join(', ')} unavailable</span>
               </div>
 
               {/* Space Agency Reference Links */}

@@ -9,7 +9,7 @@ const measured = {
     bandwidth_um: .04, flux_mjy: 1.25, uncertainty_mjy: .1, snr: 12.5, flagged: false, mjd: 61023.5 }],
 };
 async function openSpectrum(page: Page, state: { failed: boolean; empty?: boolean }) {
-  await page.route('https://**', route => route.abort());
+  await page.route(/^https:\/\//, route => route.abort());
   await page.route('**/api/catalogue/**', route => route.fulfill({ status: 503, json: {} }));
   await page.route('**/api/motion/**', route => route.fulfill({ status: 503, json: {} }));
   await page.route('**/backend/**', route => route.fulfill({ status: 503, json: {} }));

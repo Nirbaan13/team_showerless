@@ -387,7 +387,7 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
       ? 'moving_object'
       : hasOutlierFlag || track.rank >= 4
       ? 'artifact'
-      : 'already_known';
+      : 'unreviewed';
 
     const displayId = isPrimaryAtlas
       ? '3I/ATLAS'
@@ -415,23 +415,10 @@ export function convertReviewToCandidates(review: MotionReviewDataset): Candidat
         ? `Real SPHEREx ${review.detector} recovery of ${review.target} across ${track.epochs.length}/${totalFrames} exposures. Max offset ${track.max_offset_px?.toFixed(3)} px from JPL Horizons ephemeris. Heuristic #${track.rank}/${totalLoo}, Random Forest #${track.random_forest_rank ?? track.rank}/${totalLoo}.`
         : inferredClass === 'artifact'
         ? `Candidate #${track.rank} flagged near detector OUTLIER bitmask. Likely cosmic ray or bad-pixel residual across ${track.epochs.length} visits.`
-        : inferredClass === 'already_known'
-        ? `Stationary background source residual (#${track.rank}). Subtraction halo from bright neighboring catalog star.`
         : `Secondary moving track candidate #${track.rank} (Random Forest #${track.random_forest_rank ?? '—'}) across ${track.epochs.length}/${totalFrames} exposures. Fit RMS ${track.fit_rms_px.toFixed(2)} px, speed ${speedArcsecHr}″/h.`,
-      isKnownCatalogMatch: track.known_match || inferredClass === 'already_known',
-      matchedCatalog: track.known_match
-        ? 'NEO Ephemeris'
-        : inferredClass === 'already_known'
-        ? 'Gaia DR3'
-        : null,
-      catalogId: track.known_match
-        ? `${review.target} (JPL Horizons Ephemeris)`
-        : inferredClass === 'already_known'
-        ? `Gaia DR3 ${(
-            3816490000000000000n +
-            BigInt(Math.abs(Math.floor((ra * 10000 + dec * 10000) * 137)))
-          ).toString()}`
-        : undefined,
+      isKnownCatalogMatch: track.known_match,
+      matchedCatalog: track.known_match ? 'NEO Ephemeris' : null,
+      catalogId: track.known_match ? `${review.target} (JPL Horizons Ephemeris)` : undefined,
       mlRank: review.bloom_tracks.length + track.rank,
       mlScore: score,
       mlPriorityScore: score,

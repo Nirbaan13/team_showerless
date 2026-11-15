@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('invalid declination keeps the requested field and starts no acquisition', async ({ page }) => {
   const searches: string[] = [];
-  await page.route('https://**', route => route.abort());
+  await page.route(/^https:\/\//, route => route.abort());
   await page.route('**/api/**', route => {
     if (route.request().url().includes('/observations/')) searches.push(route.request().url());
     return route.fulfill({ status: 503, json: { message: 'Unavailable' } });
@@ -20,7 +20,7 @@ test('invalid declination keeps the requested field and starts no acquisition', 
 
 test('malformed coordinates are rejected as whole values and RA wrapping is explicit', async ({ page }) => {
   let searches = 0;
-  await page.route('https://**', route => route.abort());
+  await page.route(/^https:\/\//, route => route.abort());
   await page.route('**/api/**', route => {
     if (route.request().url().includes('/observations/')) searches++;
     return route.fulfill({ status: 503, json: { message: 'Unavailable' } });

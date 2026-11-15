@@ -22,7 +22,7 @@ public submission/vote/comment writes. Production verification follows deploymen
 | QA-008 | Pending | Detector/artifact agreement |
 | QA-009 | Pending | Canvas overlay transforms |
 | QA-010 | Pending | Scientific HUD and cursor metadata |
-| QA-011 | Pending | Catalogue failures/empty results |
+| QA-011 | Fixed locally | Three browser checks pass for outage, true empty results, separate Gaia/SIMBAD identities, missing magnitudes and clearing matches on refresh/field change. Removed coordinate-generated sources, invented Gaia IDs, fake cross-identification and indefinite cached fallback; expose per-provider failure/partial status. |
 | QA-012 | Already fixed in main, verified | Browser opens PX-000004 directly, reloads without changing identity, and copies a permalink retaining candidate=PX-000004. Existing URL state fix retained. |
 | QA-013 | Already fixed in main, verified | Real Chromium taps at 390×844: Play lies above fixed navigation, changes to Pause, advances the visit, and Next remains clickable. No competing layout fix. |
 | QA-014 | Fixed locally | Three browser checks pass: registry errors expose no seed records; zero votes and missing checks stay zero/pending in list+dossier; discussion reads the same persisted identity/consensus and has no simulated peer votes. Removed local success on failed record/vote writes. Live legacy routing currently returns 501; handled under QA-005. |

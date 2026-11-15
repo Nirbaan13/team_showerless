@@ -9,7 +9,6 @@ import type {
   DetectorArrayId,
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
-import { resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
 import { ZoomIn, ZoomOut, RotateCcw, AlertTriangle, Cpu } from 'lucide-react';
 
@@ -481,20 +480,8 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     // Per-Target & Per-Object Live Space Agency Catalog Overlays (ESA Gaia DR3, NASA AllWISE, CDS SIMBAD, JPL Horizons)
     const selectedCand =
       candidates.find((c) => c.id === selectedCandidateId) || candidates[0] || null;
-    const coordCatalog = resolveCoordinateCatalogContext(
-      selectedCand?.ra ?? centerRa,
-      selectedCand?.dec ?? centerDec
-    );
-
-    const gaiaOverlaySources =
-      liveCatalog && liveCatalog.gaiaSources.length > 0
-        ? liveCatalog.gaiaSources
-        : coordCatalog.gaiaSources;
-
-    const wiseOverlaySources =
-      liveCatalog && liveCatalog.wiseSources.length > 0
-        ? liveCatalog.wiseSources
-        : coordCatalog.wiseSources;
+    const gaiaOverlaySources = liveCatalog?.gaiaSources ?? [];
+    const wiseOverlaySources = liveCatalog?.wiseSources ?? [];
 
     if (overlays.gaiaDr3) {
       // 1. Draw live-pulled ESA Gaia DR3 stars in this field
@@ -602,7 +589,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       candidates.find((c) => c.matchedCatalog === 'NEO Ephemeris');
 
     if (overlays.solarSystemEphemeris) {
-      if (neoCandidate || coordCatalog.ephemerisLabel || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
+      if (neoCandidate || (liveCatalog?.ephemerisSources.length ?? 0) > 0) {
         let ex = liveCatalog?.ephemerisSources[0]?.dx ?? 0;
         let ey = liveCatalog?.ephemerisSources[0]?.dy ?? 0;
         if (neoCandidate) {
@@ -621,7 +608,6 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
           liveCatalog?.ephemerisSources[0]?.label ||
           neoCandidate?.validationData?.objectName ||
           neoCandidate?.catalogId ||
-          coordCatalog.ephemerisLabel ||
           'JPL Horizons'
         } [Epoch ${activeFrameIndex + 1} · Δ=${offsetPx.toFixed(2)}px]`;
         ctx.strokeStyle = '#38bdf8';

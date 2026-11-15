@@ -316,6 +316,7 @@ export function App() {
     const fovArcmin = parseFloat(fov) || 5;
 
     setIsCatalogLoading(true);
+    setLiveCatalog(null);
     fetchLiveCatalogForCoordinate({
       queryRa,
       queryDec,

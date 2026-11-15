@@ -14,7 +14,7 @@ async function backend(page: Page, options: { download?: string; analysis?: stri
   const bitmapGate = new Promise<void>(resolve => { releaseBitmap = resolve; });
   releases.add(releaseBitmap);
   if (!options.delayBitmap) releaseBitmap();
-  await page.route('https://**', route => route.abort());
+  await page.route(/^https:\/\//, route => route.abort());
   await page.route('**/api/catalogue/**', route => route.fulfill({ status: 503, json: { message: 'Unavailable' } }));
   await page.route('**/detect', route => route.fulfill({ status: 503, json: { message: 'Unavailable' } }));
   await page.route('**/api/motion/**', route => route.fulfill({ status: 503, json: { detail: 'Motion service unavailable' } }));
@@ -301,4 +301,47 @@ test('mobile playback remains above navigation and receives actual taps', async 
   await expect(page.getByText('Frame 1 of 4', { exact: true })).not.toBeVisible();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Next Epoch Frame', exact: true }).click();
+});
+
+test('catalogue outage clears previous matches instead of inventing a live field', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('LIVE TAP', { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/✓ Pulled \d+ Objects/)).toHaveCount(0);
+  await expect(page.getByText(/^Gaia DR3 \d{10,}/)).toHaveCount(0);
+});
+
+test('successful empty catalogues stay empty and a changed field drops old sources immediately', async ({ page }) => {
+  await backend(page, { download: 'failed' });
+  let fail = false;
+  await page.route(/^https:\/\//, route => fail ? route.abort() : route.fulfill({ json: { data: [] } }));
+  await page.route('**/api/motion/catalog?**', route => fail ? route.fulfill({ status: 503, json: { message: 'Offline' } }) : route.fulfill({ json: { providers: ['Gaia DR3', 'WISE', 'SIMBAD'].map(catalog => ({ catalog, status: 'ok' })), gaiaSources: [], wiseSources: [], simbadSources: [], ephemerisSources: [] } }));
+  await openViewer(page);
+  await expect(page.getByText('Catalogue query complete: 0 objects', { exact: true })).toBeVisible();
+  fail = true;
+  await search(page);
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
+  await expect(page.getByText('Catalogue query complete: 0 objects', { exact: true })).toHaveCount(0);
+});
+
+test('real Gaia and SIMBAD records stay separate and missing magnitudes are not invented', async ({ page }) => {
+  await backend(page);
+  let offline = false;
+  await page.route(/^https:\/\//, route => {
+    if (offline) return route.abort();
+    const url = route.request().url();
+    if (url.includes('gaiadr3')) return route.fulfill({ json: { data: [['1234567890123456789', 166.79, 5.29, null, null, null]] } });
+    if (url.includes('sim-tap')) return route.fulfill({ json: { data: [['Different SIMBAD object', 'Star', 166.81, 5.31]] } });
+    return route.fulfill({ json: { data: [] } });
+  });
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).toHaveAttribute('title', /G=unavailable/);
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).not.toHaveAttribute('title', /SIMBAD/);
+  offline = true;
+  await page.getByRole('button', { name: 'Pull Live', exact: true }).click();
+  await expect(page.locator('[title^="Gaia DR3 1234567890123456789"]')).toHaveCount(0);
+  await expect(page.getByText('Catalogue query unavailable', { exact: true })).toBeVisible();
 });
