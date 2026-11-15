@@ -59,3 +59,21 @@ test('dossier links retain the requested registry identity after reload and shar
   await page.getByRole('button', { name: /Share|Permalink|Copy Link/i }).first().click();
   await expect.poll(() => page.evaluate(() => (window as any).copiedPermalink)).toContain('candidate=PX-000004');
 });
+
+test('opening a qualified discussion and waiting never dispatches a submission', async ({ page }) => {
+  const writes: string[] = [];
+  await page.clock.install();
+  await page.route(/^https:\/\//, route => route.abort());
+  await page.route('**/api/**', route => {
+    if (route.request().method() !== 'GET') writes.push(route.request().url());
+    if (new URL(route.request().url()).pathname === '/api/catalogue/candidates/PX-000001') return route.fulfill({ json: { ...record, classifications: [], validation_checks: [], external_submissions: [], consensus: { total_votes: 12, likely_real: 12, likely_artifact: 0, uncertain: 0, already_known: 0, positive_ratio: 1, artifact_ratio: 0, level1_qualified: true, level2_qualified: true, checks_passed: true, validation_summary: {} } } });
+    return route.fulfill({ status: 503, json: { message: 'Unavailable' } });
+  });
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await page.getByRole('button', { name: /Chat & Confirm/ }).click();
+  await expect(page.getByRole('button', { name: 'Dispatch to MPC / TNS', exact: true })).toBeVisible();
+  await page.clock.fastForward(20000);
+  await expect(page.getByRole('button', { name: 'Dispatch to MPC / TNS', exact: true })).toBeVisible();
+  expect(writes).toHaveLength(0);
+});

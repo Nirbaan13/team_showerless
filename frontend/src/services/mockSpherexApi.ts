@@ -6,9 +6,7 @@ import type {
   MolecularLine,
 } from '../types/spherex';
 import {
-  REAL_3I_ATLAS_FRAMES,
   REAL_BARNARD_FRAMES,
-  REAL_CERES_FRAMES,
   REAL_WISE_0855_FRAMES,
   REAL_EPSILON_INDI_B_FRAMES,
   REAL_RW_AURIGAE_FRAMES,
@@ -97,6 +95,8 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
   },
 ];
 
+export const STORED_PRESET_IDS = new Set([...NASA_TEST_PRESETS.map(preset => preset.id), '3i-atlas-d2', 'vesta-d3', 'vesta-d6']);
+
 export const REFERENCE_MOLECULAR_LINES: MolecularLine[] = [
   { name: 'Silicate Features', formula: 'SiO₄', centerUm: 1.25, widthUm: 0.25, color: '#ec4899' },
   { name: 'Water Vapor / Ice', formula: 'H₂O', centerUm: 3.05, widthUm: 0.35, color: '#38bdf8' },
@@ -123,125 +123,27 @@ export interface DetectorBandCoverage {
   notes?: string;
 }
 
-/**
- * Returns detector coverage and stacking eligibility across all 6 SPHEREx bands.
- * Per pipeline rules, coadd stacking requires >= 3 exposures per detector band.
- */
-export function getDetectorCoverageForTarget(
-  targetId: string | null,
-  frames?: SpherexEpochFrame[] | null
-): Record<number, DetectorBandCoverage> {
-  const coverage: Record<number, DetectorBandCoverage> = {
-    1: { detectorId: 1, name: 'Band 1', range: '0.75 – 1.11 µm', exposureCount: 0, canStack: false, status: 'none' },
-    2: { detectorId: 2, name: 'Band 2', range: '1.11 – 1.64 µm', exposureCount: 0, canStack: false, status: 'none' },
-    3: { detectorId: 3, name: 'Band 3', range: '1.64 – 2.42 µm', exposureCount: 0, canStack: false, status: 'none' },
-    4: { detectorId: 4, name: 'Band 4', range: '2.42 – 3.82 µm', exposureCount: 0, canStack: false, status: 'none' },
-    5: { detectorId: 5, name: 'Band 5', range: '3.82 – 4.42 µm', exposureCount: 0, canStack: false, status: 'none' },
-    6: { detectorId: 6, name: 'Band 6', range: '4.42 – 5.00 µm', exposureCount: 0, canStack: false, status: 'none' },
-  };
-
-  if (!targetId || targetId === 'custom') {
-    if (frames && frames.length > 0) {
-      frames.forEach((f) => {
-        if (f.isAvailable && f.detectorArray && coverage[f.detectorArray]) {
-          coverage[f.detectorArray].exposureCount += 1;
-        }
-      });
-      for (let i = 1; i <= 6; i++) {
-        const cnt = coverage[i].exposureCount;
-        coverage[i].canStack = cnt >= 3;
-        coverage[i].status = cnt >= 3 ? 'stacked' : cnt > 0 ? 'insufficient' : 'none';
-      }
-      return coverage;
-    }
-    coverage[6] = { detectorId: 6, name: 'Band 6', range: '4.42 – 5.00 µm', exposureCount: 4, canStack: true, status: 'stacked' };
-    coverage[3] = { detectorId: 3, name: 'Band 3', range: '1.64 – 2.42 µm', exposureCount: 3, canStack: true, status: 'stacked' };
-    return coverage;
-  }
-
-  if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
-    coverage[6] = { detectorId: 6, name: 'Band 6', range: '4.42 – 5.00 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (QR2)' };
-    coverage[2] = { detectorId: 2, name: 'Band 2', range: '1.11 – 1.64 µm', exposureCount: 3, canStack: true, status: 'stacked', notes: '3 physical exposures (december-d2)' };
-    return coverage;
-  }
-
-  if (targetId.startsWith('vesta')) {
-    coverage[6] = { detectorId: 6, name: 'Band 6', range: '4.42 – 5.00 µm', exposureCount: 3, canStack: true, status: 'stacked', notes: '3 physical exposures (DR1)' };
-    coverage[3] = { detectorId: 3, name: 'Band 3', range: '1.64 – 2.42 µm', exposureCount: 3, canStack: true, status: 'stacked', notes: '3 physical exposures (vesta-d3)' };
-    return coverage;
-  }
-
-  if (targetId === 'barnards-star') {
-    coverage[2] = { detectorId: 2, name: 'Band 2', range: '1.11 – 1.64 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (Warm IR peak)' };
-    return coverage;
-  }
-
-  if (targetId === 'wise-0855') {
-    coverage[5] = { detectorId: 5, name: 'Band 5', range: '3.82 – 4.42 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (Cold Gas & Ice)' };
-    return coverage;
-  }
-
-  if (targetId === 'epsilon-indi-b') {
-    coverage[3] = { detectorId: 3, name: 'Band 3', range: '1.64 – 2.42 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (Mid-Infrared)' };
-    return coverage;
-  }
-
-  if (targetId === 'rw-aurigae') {
-    coverage[4] = { detectorId: 4, name: 'Band 4', range: '2.42 – 3.82 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (Heat Signature)' };
-    return coverage;
-  }
-
-  if (targetId === 'r-draconis') {
-    coverage[6] = { detectorId: 6, name: 'Band 6', range: '4.42 – 5.00 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (Deep Cold Stars)' };
-    return coverage;
-  }
-
-  if (targetId === '1-ceres') {
-    coverage[2] = { detectorId: 2, name: 'Band 2', range: '1.11 – 1.64 µm', exposureCount: 4, canStack: true, status: 'stacked', notes: '4 physical exposures (SWIR diagnostic)' };
-    return coverage;
-  }
-
-  return coverage;
-}
-
-export function makeUnavailableFrame(targetId: string, arrayId: number, reason: string): SpherexEpochFrame {
-  const arrayRanges: Record<number, [number, number]> = {
-    1: [0.75, 1.11],
-    2: [1.11, 1.64],
-    3: [1.64, 2.42],
-    4: [2.42, 3.82],
-    5: [3.82, 4.42],
-    6: [4.42, 5.00],
-  };
-  const [wMin, wMax] = arrayRanges[arrayId] || [4.42, 5.00];
-  return {
-    frameId: `SPX-L3-${targetId.toUpperCase()}-D${arrayId}-UNAVAIL`,
-    epochIndex: 0,
-    observationDate: new Date().toISOString(),
-    detectorArray: (arrayId >= 1 && arrayId <= 6 ? arrayId : 6) as any,
-    wavelengthMinUm: wMin,
-    wavelengthMaxUm: wMax,
-    channelIndex: Math.floor(((wMin + wMax) / 2 - 0.75) / (5.0 - 0.75) * 102) + 1,
-    flaggedPixelPercentage: 100,
-    cosmicRayHits: 0,
-    isAvailable: false,
-    skipReason: reason,
-    headerMetadata: {
-      exposureTimeSec: 0,
-      airmass: 1.0,
-      zodiBrightnessMjySr: 0,
-      snrEstimated: 0,
-    },
-  };
+/** Report loaded artifacts, never infer archive coverage from a failed request. */
+export function getDetectorCoverageForTarget(targetId: string | null, frames?: SpherexEpochFrame[] | null): Record<number, DetectorBandCoverage> {
+  return Object.fromEntries(DETECTOR_ARRAY_SPECS.map(spec => {
+    const available = targetId ? getMockEpochFrames(targetId, spec.id) : frames ?? [];
+    const count = new Set(available.filter(frame => frame.detectorArray === spec.id && frame.isAvailable && frame.imageDataUrl).map(frame => frame.frameId)).size;
+    return [spec.id, { detectorId: spec.id, name: spec.name, range: spec.range, exposureCount: count,
+      canStack: count >= 3, status: count >= 3 ? 'stacked' : count > 0 ? 'insufficient' : 'none', notes: 'Counts loaded image artifacts; archive coverage may be broader.' }];
+  }));
 }
 
 /**
  * Generates multi-epoch frames for the celestial viewport, prioritizing Ivan's precomputed
  * real SPHEREx datasets from public/motion/review.json when available.
  */
-export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
-  const normArray = arrayId === 0 ? 6 : arrayId;
-  const reviewId = resolveMotionReviewIdForPreset(targetId, normArray as any);
+export function getMockEpochFrames(targetId: string, arrayId: number | 'all'): SpherexEpochFrame[] {
+  if (arrayId === 'all' || !STORED_PRESET_IDS.has(targetId)) return [];
+  return getStoredEpochFrames(targetId, arrayId).filter(frame => frame.detectorArray === arrayId);
+}
+
+function getStoredEpochFrames(targetId: string, arrayId: number): SpherexEpochFrame[] {
+  const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
   if (reviewId) {
     const precomputed = getPrecomputedReviewById(reviewId);
     if (precomputed) {
@@ -249,68 +151,9 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
     }
   }
 
-  if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
-    if (arrayId !== 6 && arrayId !== 2 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `SPHEREx Band ${arrayId} has 0 exposures for 3I/ATLAS. Data available only in Band 6 (4 exp) and Band 2 (3 exp). Stacking requires >= 3 exposures.`
-        ),
-      ];
-    }
-    const isD2 = targetId === '3i-atlas-d2' || arrayId === 2;
-    const realObservations = [
-      { id: '2025W50_2A_0741_2D6', date: '2025-12-14T11:01:45.688Z', wave: 4.475, snr: 12.1, offset: 0.421 },
-      { id: '2025W50_2A_0755_2D6', date: '2025-12-14T12:39:42.784Z', wave: 4.608, snr: 13.4, offset: 0.263 },
-      { id: '2025W50_2A_0797_4D6', date: '2025-12-14T17:33:31.003Z', wave: 4.813, snr: 14.8, offset: 0.246 },
-      { id: '2025W50_2A_0813_1D6', date: '2025-12-14T19:06:21.122Z', wave: 4.847, snr: 14.2, offset: 0.539 },
-    ];
-    return realObservations.map((obs, idx) => ({
-      frameId: obs.id,
-      epochIndex: idx,
-      observationDate: obs.date,
-      detectorArray: (isD2 ? 2 : 6) as any,
-      wavelengthMinUm: isD2 ? 1.11 : 4.42,
-      wavelengthMaxUm: isD2 ? 1.64 : 5.00,
-      channelIndex: 94 + idx * 2,
-      flaggedPixelPercentage: 0.12,
-      cosmicRayHits: 8,
-      isAvailable: true,
-      imageDataUrl: REAL_3I_ATLAS_FRAMES[idx]?.pngDataUrl,
-      imageWidth: 256,
-      imageHeight: 144,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.0,
-        zodiBrightnessMjySr: 12.43,
-        snrEstimated: obs.snr,
-      }
-    }));
-  }
-
-  if (targetId.startsWith('vesta')) {
-    if (arrayId !== 6 && arrayId !== 3 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `(4) Vesta has 0 exposures on Band ${arrayId}. Science cutouts and coadds available in Band 6 (3 exp) and Band 3 (3 exp).`
-        ),
-      ];
-    }
-  }
+  if (['3i-atlas', '3i-atlas-d2', 'vesta-d6', 'vesta-d3'].includes(targetId)) return [];
 
   if (targetId === 'barnards-star') {
-    if (arrayId !== 2 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `Barnard's Star has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 2 (Warm IR 1.11 – 1.64 µm, 4 exp).`
-        ),
-      ];
-    }
     return REAL_BARNARD_FRAMES.map((obs, idx) => ({
       frameId: obs.frameId,
       epochIndex: idx,
@@ -333,15 +176,6 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
   }
 
   if (targetId === 'wise-0855') {
-    if (arrayId !== 5 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `WISE 0855 has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 5 (Cold Gas & Ice 3.82 – 4.42 µm, 4 exp).`
-        ),
-      ];
-    }
     return REAL_WISE_0855_FRAMES.map((obs, idx) => ({
       frameId: obs.frameId,
       epochIndex: idx,
@@ -364,15 +198,6 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
   }
 
   if (targetId === 'epsilon-indi-b') {
-    if (arrayId !== 3 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `Epsilon Indi B has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 3 (Mid-Infrared 1.64 – 2.42 µm, 4 exp).`
-        ),
-      ];
-    }
     return REAL_EPSILON_INDI_B_FRAMES.map((obs, idx) => ({
       frameId: obs.frameId,
       epochIndex: idx,
@@ -395,15 +220,6 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
   }
 
   if (targetId === 'rw-aurigae') {
-    if (arrayId !== 4 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `RW Aurigae has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 4 (Heat Signature 2.42 – 3.82 µm, 4 exp).`
-        ),
-      ];
-    }
     return REAL_RW_AURIGAE_FRAMES.map((obs, idx) => ({
       frameId: obs.frameId,
       epochIndex: idx,
@@ -426,15 +242,6 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
   }
 
   if (targetId === 'r-draconis') {
-    if (arrayId !== 6 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `R Draconis has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 6 (Deep Cold Stars 4.42 – 5.00 µm, 4 exp).`
-        ),
-      ];
-    }
     return REAL_R_DRACONIS_FRAMES.map((obs, idx) => ({
       frameId: obs.frameId,
       epochIndex: idx,
@@ -452,45 +259,6 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
         airmass: 1.25,
         zodiBrightnessMjySr: Number((18.4 + idx * 1.1).toFixed(2)),
         snrEstimated: 28.5,
-      },
-    }));
-  }
-
-  if (targetId === '1-ceres') {
-    if (arrayId !== 2 && arrayId !== 0) {
-      return [
-        makeUnavailableFrame(
-          targetId,
-          arrayId,
-          `(1) Ceres has 0 exposures on Band ${arrayId}. Science cutouts and coadds available only in Band 2 (SWIR 1.11 – 1.64 µm, 4 exp).`
-        ),
-      ];
-    }
-    const ceresObs = [
-      { id: '2025W27_1A_0591_1', date: '2025-07-03T02:08:42.024Z', wave: 1.35, snr: 32.4 },
-      { id: '2025W27_1A_0591_2', date: '2025-07-03T02:10:50.955Z', wave: 1.42, snr: 34.1 },
-      { id: '2025W27_1A_0591_3', date: '2025-07-03T02:12:59.886Z', wave: 1.48, snr: 33.7 },
-      { id: '2025W27_1A_0591_4', date: '2025-07-03T02:15:08.816Z', wave: 1.55, snr: 35.2 },
-    ];
-    return ceresObs.map((obs, idx) => ({
-      frameId: obs.id,
-      epochIndex: idx,
-      observationDate: obs.date,
-      detectorArray: 2 as any,
-      wavelengthMinUm: 1.11,
-      wavelengthMaxUm: 1.64,
-      channelIndex: 30 + idx * 3,
-      flaggedPixelPercentage: 0.08,
-      cosmicRayHits: 6,
-      isAvailable: true,
-      imageDataUrl: REAL_CERES_FRAMES[idx]?.pngDataUrl,
-      imageWidth: 256,
-      imageHeight: 144,
-      headerMetadata: {
-        exposureTimeSec: 142.5,
-        airmass: 1.04,
-        zodiBrightnessMjySr: Number((11.8 + idx * 0.4).toFixed(2)),
-        snrEstimated: obs.snr,
       },
     }));
   }
@@ -546,9 +314,13 @@ export function getMockEpochFrames(targetId: string, arrayId: number): SpherexEp
  * Generates candidate objects in the field of view, prioritizing Ivan's precomputed
  * real SPHEREx datasets from public/motion/review.json when available.
  */
-export function getMockCandidates(targetId: string, arrayId: number = 6): CandidateObject[] {
-  const normArray = arrayId === 0 ? 6 : arrayId;
-  const reviewId = resolveMotionReviewIdForPreset(targetId, normArray as any);
+export function getMockCandidates(targetId: string, arrayId: number | 'all' = 6): CandidateObject[] {
+  if (arrayId === 'all' || !getMockEpochFrames(targetId, arrayId).length) return [];
+  return getStoredCandidates(targetId, arrayId);
+}
+
+function getStoredCandidates(targetId: string, arrayId: number): CandidateObject[] {
+  const reviewId = resolveMotionReviewIdForPreset(targetId, arrayId as any);
   if (reviewId) {
     const precomputed = getPrecomputedReviewById(reviewId);
     if (precomputed) {
@@ -556,11 +328,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
     }
   }
 
-  if (targetId.startsWith('vesta')) {
-    if (arrayId !== 6 && arrayId !== 3 && arrayId !== 0) {
-      return [];
-    }
-    const detLabel = arrayId === 3 || targetId === 'vesta-d3' ? 'D3' : 'D6';
+  if (targetId === 'vesta-d6' || targetId === 'vesta-d3') {
+    const detLabel = targetId === 'vesta-d3' ? 'D3' : 'D6';
     return [
       {
         id: `(4) Vesta (${detLabel} BLOOM)`,
@@ -576,7 +345,7 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         detectionMethod: 'bloom_centroids',
         fitRmsPx: 0.19,
         speedArcsecPerHour: 49.2,
-        bloomAreaPx: detLabel === 'D3' ? [32, 33, 31] : [10, 11, 7],
+        bloomAreaPx: targetId === 'vesta-d3' ? [32, 33, 31] : [10, 11, 7],
         epochPositions: [
           { epochIndex: 0, x: 201, y: 37, flux: 240.0, snr: 45.0 },
           { epochIndex: 1, x: 111, y: 87, flux: 245.0, snr: 48.0 },
@@ -584,13 +353,13 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
         ],
         classification: 'moving_object',
         confidence: 'high',
-        volunteerNotes: `(4) Vesta saturated core recovered via detector BLOOM bitmask centroids across all 3 DR1 visits. Max offset ${detLabel === 'D3' ? '0.382' : '0.281'} px from JPL Horizons ephemeris.`,
+        volunteerNotes: `(4) Vesta saturated core recovered via detector BLOOM bitmask centroids across all 3 DR1 visits. Max offset ${targetId === 'vesta-d3' ? '0.382' : '0.281'} px from JPL Horizons ephemeris.`,
         isKnownCatalogMatch: true,
         matchedCatalog: 'NEO Ephemeris',
         catalogId: '(4) Vesta (JPL Horizons)',
         validationData: {
           objectName: `(4) Vesta (${detLabel} BLOOM)`,
-          maxOffsetPx: detLabel === 'D3' ? 0.382 : 0.281,
+          maxOffsetPx: targetId === 'vesta-d3' ? 0.382 : 0.281,
           baselineRank: 1,
           totalCandidates: 1,
           randomForestRank: 1,
@@ -602,56 +371,8 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
     ];
   }
 
-  if (targetId === '1-ceres') {
-    if (arrayId !== 2 && arrayId !== 0) {
-      return [];
-    }
-    return [
-      {
-        id: '(1) Ceres (D2 SWIR Diagnostic)',
-        ra: 15.616171,
-        dec: -5.471297,
-        pixelX: 128,
-        pixelY: 72,
-        mlRank: 1,
-        mlScore: 0.98,
-        mlPriorityScore: 0.98,
-        heuristicRank: 1,
-        randomForestRank: 1,
-        detectionMethod: 'baseline',
-        fitRmsPx: 0.21,
-        speedArcsecPerHour: 29.8,
-        epochPositions: [
-          { epochIndex: 0, x: 126, y: 72, flux: 310.0, snr: 32.4 },
-          { epochIndex: 1, x: 127, y: 72, flux: 315.0, snr: 34.1 },
-          { epochIndex: 2, x: 128, y: 72, flux: 312.0, snr: 33.7 },
-          { epochIndex: 3, x: 129, y: 72, flux: 318.0, snr: 35.2 },
-        ],
-        classification: 'moving_object',
-        confidence: 'high',
-        volunteerNotes: 'Real known-object development diagnostic (1 Ceres). 4 physical D2 exposures on 2025-07-03 spanning 6.45 minutes. Geocentric sky motion 0.52 px matched to JPL Horizons ephemeris.',
-        isKnownCatalogMatch: true,
-        matchedCatalog: 'NEO Ephemeris',
-        catalogId: '1 Ceres (NAIF ID: 2000001)',
-        validationData: {
-          objectName: '(1) Ceres (D2 SWIR Diagnostic)',
-          maxOffsetPx: 0.521,
-          baselineRank: 1,
-          totalCandidates: 1,
-          randomForestRank: 1,
-          datasetDoi: '10.26131/IRSA652',
-          sourceUrl: 'https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/',
-          exposuresCount: 4,
-        },
-      },
-    ];
-  }
-
   if (targetId === '3i-atlas' || targetId === '3i-atlas-d2') {
-    if (arrayId !== 6 && arrayId !== 2 && arrayId !== 0) {
-      return [];
-    }
-    const isD2 = targetId === '3i-atlas-d2' || arrayId === 2;
+    const isD2 = targetId === '3i-atlas-d2';
     return [
       {
         id: isD2 ? '3I/ATLAS (D2)' : '3I/ATLAS',
@@ -779,9 +500,6 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   }
 
   if (targetId === 'barnards-star') {
-    if (arrayId !== 2 && arrayId !== 0) {
-      return [];
-    }
     return [
       {
         id: 'cand-barnard-primary',
@@ -912,9 +630,6 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   }
 
   if (targetId === 'wise-0855') {
-    if (arrayId !== 5 && arrayId !== 0) {
-      return [];
-    }
     return [
       {
         id: 'cand-wise-0855-01',
@@ -969,9 +684,6 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   }
 
   if (targetId === 'epsilon-indi-b') {
-    if (arrayId !== 3 && arrayId !== 0) {
-      return [];
-    }
     return [
       {
         id: 'cand-eps-indi-b-primary',
@@ -1030,9 +742,6 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   }
 
   if (targetId === 'rw-aurigae') {
-    if (arrayId !== 4 && arrayId !== 0) {
-      return [];
-    }
     return [
       {
         id: 'cand-rw-aur-primary',
@@ -1090,9 +799,6 @@ export function getMockCandidates(targetId: string, arrayId: number = 6): Candid
   }
 
   if (targetId === 'r-draconis') {
-    if (arrayId !== 6 && arrayId !== 0) {
-      return [];
-    }
     return [
       {
         id: 'cand-r-dra-primary',
@@ -1185,15 +891,11 @@ export function findCandidateAcrossAllPresets(candidateId: string): {
   recommendedArray: number;
 } | null {
   if (!candidateId) return null;
-  const candidatePresets: { id: string; array: number }[] = [
-    { id: '3i-atlas', array: 6 },
+  const candidatePresets = [
+    ...NASA_TEST_PRESETS.map(preset => ({ id: preset.id, array: preset.recommendedArray })),
     { id: '3i-atlas-d2', array: 2 },
     { id: 'vesta-d6', array: 6 },
     { id: 'vesta-d3', array: 3 },
-    { id: 'barnards-star', array: 2 },
-    { id: 'wise-0855', array: 6 },
-    { id: 'kh-15d', array: 4 },
-    { id: 'r-draconis', array: 6 },
   ];
 
   const searchNorm = candidateId.trim().toLowerCase();
