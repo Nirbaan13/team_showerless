@@ -61,7 +61,7 @@ ML loader `unification.ml.load_bundle(path)` returns a validated bundle with
 ## Constraints and review focus
 
 - Inputs 1–32; target sides 1–512; source sides at most 4096; encoded and decoded
-  input at most 256 MiB each; bundle 64 MiB compressed/160 MiB expanded/32 members.
+  input at most 256 MiB each; bundle 192 MiB compressed/192 MiB expanded/32 members.
 - Missing times, units, masks and calibration remain unknown; preserve provenance.
 - Duplicate observation identities, different bands, missing times, misleading
   unit conversions and unselected cubes must not silently become motion ML input.

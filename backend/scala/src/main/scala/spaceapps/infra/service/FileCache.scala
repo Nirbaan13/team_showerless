@@ -21,7 +21,8 @@ final class FileCache private(root:Path, store:FileCacheRepository,maxCacheBytes
       (relative.getNameCount==2 && relative.getName(0).toString=="raw" && relative.getFileName.toString.matches("[0-9a-f]{64}[.]fits")) ||
       (relative.getNameCount==3 && relative.getName(0).toString=="jobs" && relative.getFileName.toString.matches("[0-9a-f]{40}[.](?:fits|png)")) ||
       (relative.getNameCount==2 && relative.getName(0).toString=="archive-assets" && relative.getFileName.toString.matches("[a-zA-Z0-9_-]{1,128}")) ||
-      (relative.getNameCount==2 && relative.getName(0).toString=="calibration-cache" && relative.getFileName.toString.matches("[0-9a-f]{64}")))
+      (relative.getNameCount==2 && relative.getName(0).toString=="calibration-cache" && relative.getFileName.toString.matches("[0-9a-f]{64}")) ||
+      (relative.getNameCount==3 && relative.getName(0).toString=="unifications" && relative.getName(1).toString.matches("[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}") && relative.getFileName.toString=="dataset.npz"))
   private def valid(path:Path)=safe(path) && Files.isRegularFile(path) && Files.size(path)>0
   /** Serialize lookup plus transfer for the same destination, across every producer. */
   def serialized[R,E,A](path:Path)(effect:ZIO[R,E,A]):ZIO[R,E,A]=
@@ -58,13 +59,13 @@ final class FileCache private(root:Path, store:FileCacheRepository,maxCacheBytes
       val administrative=path.getParent==root && path.getFileName.toString.matches(".*[.](?:sqlite|sqlite3|db)(?:-wal|-shm|-journal)?")
       if !administrative && !Set(database,database+"-wal",database+"-shm",database+"-journal").contains(path.toString) then
         val bytes=try Files.size(path) catch case _:java.nio.file.NoSuchFileException=>0L
-        if active.contains(path) then partial+=bytes else completed+=bytes
+        if active.exists(path.startsWith(_)) then partial+=bytes else completed+=bytes
     }
     finally stream.close()
     Usage(completed,Files.getFileStore(root).getUsableSpace,partial)
   }
-  private def reserve(path:Path,bytes:Long):Task[Unit]=
-    if !safe(path) || bytes<=0 || bytes>maxProductBytes then ZIO.fail(ApiError("archive_overflow","Invalid destination or product reservation exceeds configured maximum size"))
+  private def reserve(path:Path,bytes:Long,product:Boolean=true):Task[Unit]=
+    if !safe(path) || bytes<=0 || (product && bytes>maxProductBytes) then ZIO.fail(ApiError("archive_overflow","Invalid destination or product reservation exceeds configured maximum size"))
     else gate.withPermit {
     def admit(candidates:List[(String,Path,Long,Long)]):Task[Unit]=
       for
@@ -84,6 +85,32 @@ final class FileCache private(root:Path, store:FileCacheRepository,maxCacheBytes
       else ZIO.attemptBlocking(store.entries()).flatMap(admit)
     }
   }
+  /** Reserve staging and output capacity before making immutable unification snapshots. */
+  def withReservation[A](bytes:Long)(work:Task[A]):Task[A]=
+    val token=root.resolve("unifications").resolve(UUID.randomUUID().toString+".reservation")
+    withReservation(token,bytes)(work)
+  /** Files under this staging directory consume its existing reservation. */
+  def withReservation[A](destination:Path,bytes:Long)(work:Task[A]):Task[A]=
+    val path=normalized(destination)
+    ZIO.fail(ApiError("invalid_product","Reservation must remain inside managed storage")).unless(path.startsWith(root) && path!=root) *>
+      ZIO.acquireReleaseWith(reserve(path,bytes,product=false))(_=>gate.withPermit(state.update(s=>s.copy(reservations=s.reservations-path))))(_=>work)
+  /** Atomically adopt validated staging bytes without allocating another product budget. */
+  def adopt(output:Path,staged:Path):Task[Unit]=
+    val target=normalized(output)
+    val source=normalized(staged)
+    ZIO.scoped { protect(target) *> gate.withPermit {
+      (for
+        current <- state.get
+        _ <- ZIO.fail(ApiError("invalid_product","Publication requires an active staging reservation")).unless(
+          owned(target) && current.reservations.keys.exists(p=>source.startsWith(p) && target.startsWith(p)))
+        _ <- ZIO.attemptBlocking {
+          if !valid(source) || Files.isSymbolicLink(source) || Files.size(source)>maxProductBytes then
+            throw ApiError("invalid_product","Generated product is absent or exceeds its configured byte budget")
+          Files.move(source,target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING)
+        }
+        _ <- touch(target)
+      yield ()).uninterruptible
+    } }
   def transfer[A](destination:Path,bytes:Long=maxProductBytes)(fetch:Task[A]):Task[A]=
     val path=normalized(destination)
     ZIO.acquireReleaseWith(reserve(path,bytes))(_=>gate.withPermit(state.update(s=>s.copy(reservations=s.reservations-path))))(_=>fetch)

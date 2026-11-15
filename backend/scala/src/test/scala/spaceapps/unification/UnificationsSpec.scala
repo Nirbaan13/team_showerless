@@ -1,0 +1,306 @@
+package spaceapps.unification
+
+import spaceapps.domain.*
+import spaceapps.service.*
+import spaceapps.repository.Repository
+import spaceapps.archive.repository.ArchiveRepository
+import spaceapps.archive.service.*
+import spaceapps.archive.integrations.protocol.*
+import zio.*
+import zio.json.*
+import zio.json.ast.Json
+import zio.test.*
+import zio.http.*
+import java.nio.file.{Files,Path,StandardCopyOption}
+import java.security.MessageDigest
+import java.util.zip.{ZipEntry,ZipOutputStream}
+import scala.jdk.CollectionConverters.*
+
+object UnificationsSpec extends ZIOSpecDefault:
+  private val query=Query.fromParameters("default",Map("right_ascension_deg"->"1","declination_deg"->"2")).toOption.get
+  private val image=ArchiveImage(Observation("native-1","2026-01-01T00:00:00Z",1,"DR1"),"https://example.test/one.fits")
+  private def temp=ZIO.acquireRelease(ZIO.attemptBlocking(Files.createTempDirectory("unifications-service")))(p=>ZIO.attemptBlocking {
+    val stream=Files.walk(p);try stream.sorted(java.util.Comparator.reverseOrder()).forEach(Files.deleteIfExists(_)) finally stream.close()
+  }.orDie)
+  private def write(p:Path,s:String)=ZIO.attemptBlocking {Files.createDirectories(p.getParent);Files.writeString(p,s);()}
+  private def done(jobs:Jobs,id:String):Task[Download]=jobs.get(id).flatMap(d=>if d.terminal then ZIO.succeed(d) else ZIO.sleep(10.millis) *> done(jobs,id))
+  private def terminal(s:Unifications,id:String):Task[UnificationJob]=s.get(id).flatMap(j=>if Set("failed","completed")(j.status) then ZIO.succeed(j) else ZIO.sleep(10.millis) *> terminal(s,id))
+  private def fixture(dir:Path,budget:Long=1024L*1024*1024)=for
+    repo <- Repository.open(dir.resolve("state.sqlite"))
+    cache <- FitsCache.open(dir,dir.resolve("state.sqlite"),budget,64L*1024*1024,0)
+    source=new Archive:
+      def search(q:Query)=ZIO.succeed(List(image))
+      def fetch(i:ArchiveImage,p:Path)=write(p,"original native bytes")
+    bounded <- CapacityArchive.make(source,dir,budget,64L*1024*1024,0,Some(cache))
+    jobs <- Jobs.make(repo,bounded,NoProcessing,dir)
+    download <- jobs.submit(query,"default",None)
+    completed <- done(jobs,download.id)
+    native <- jobs.resource(completed.chunks.head.id,false)
+    _ <- ZIO.fail(new Exception(s"Native fixture did not publish: ${completed.toJson}; $native")).unless(completed.status=="completed" && native.isInstanceOf[Resource.Ready])
+    ar <- ArchiveRepository.open(dir.resolve("state.sqlite"))
+    registry=new ProviderRegistry(Nil)
+    discovery <- FederatedDiscovery.make(registry,ar)
+    client <- ZIO.service[Client]
+    downloads <- ArchiveDownloads.make(registry,ar,new StreamingDownloader(new ArchiveTransport(client),dir.resolve("archive")))
+    service=new ArchiveService(registry,ar,discovery,downloads)
+  yield (jobs,cache,ar,service,completed)
+  private def selection(d:Download):Json=Json.Obj("inputs"->Json.Arr(Json.Obj("kind"->Json.Str("native_chunk"),"id"->Json.Str(d.chunks.head.id),"download_id"->Json.Str(d.id))),"grid"->Json.Obj("kind"->Json.Str("pixel"),"width"->Json.Num(2),"height"->Json.Num(2)))
+  private def obj(j:Json)=j.asInstanceOf[Json.Obj].fields.toMap
+  private def text(j:Json)=j.asInstanceOf[Json.Str].value
+  private def sha(p:Path)=MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(p)).map(b=>f"${b & 255}%02x").mkString
+  private def npy(shape:String):Array[Byte]=
+    val base=s"{'descr': '<f4', 'fortran_order': False, 'shape': ($shape), }"
+    val header=base+" "*((16-(10+base.length+1)%16)%16)+"\n"
+    Array[Byte](0x93.toByte,78,85,77,80,89,1,0,(header.length & 255).toByte,(header.length >> 8).toByte)++header.getBytes(java.nio.charset.StandardCharsets.US_ASCII)++Array.fill[Byte](if shape=="1, 2, 2" then 16 else 4)(0)
+  private def output(dir:Path,request:Json,wrongIdentity:Boolean=false,reverse:Boolean=false):Task[Json]=ZIO.attemptBlocking {
+    val id=text(obj(request)("job_id"));val base=s"unifications/$id/output";val npz=dir.resolve(base+"/dataset.npz");val manifest=dir.resolve(base+"/manifest.json")
+    Files.createDirectories(npz.getParent)
+    val inputs=obj(request)("inputs").asInstanceOf[Json.Arr].elements.toList
+    val ordered=if reverse then inputs.reverse else inputs
+    val frames=ordered.map { value=>
+      val input=obj(value)
+      Json.Obj("frame_id"->input("id"),"source_sha256"->input("sha256"),"profile"->input("profile"),"provenance"->input("metadata"),"analysis_eligible"->Json.Bool(false))
+    }
+    val manifestText=Json.Obj("schema_version"->Json.Num(1),"job_id"->Json.Str(id),"grid"->obj(request)("grid"),"frames"->Json.Arr(zio.Chunk.fromIterable(frames)),"options"->obj(request)("options")).toJson
+    val manifestBytes=manifestText.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+    BundleFixture.write(npz,BundleFixture.withFrames(inputs.size).updated("manifest",BundleFixture.npy("|u1",List(manifestBytes.length),Some(manifestBytes))))
+    Files.writeString(manifest,manifestText)
+    def descriptor(p:Path)=Json.Obj("path"->Json.Str(dir.relativize(p).toString),"bytes"->Json.Num(Files.size(p)),"sha256"->Json.Str(sha(p)))
+    Json.Obj("schema_version"->Json.Num(1),"job_id"->Json.Str(if wrongIdentity then "wrong" else id),"status"->Json.Str("completed"),"bundle"->descriptor(npz),"manifest"->descriptor(manifest),"frame_count"->Json.Num(inputs.size),"width"->Json.Num(2),"height"->Json.Num(2),"detection_ready"->Json.Bool(false),"warnings"->Json.Arr())
+  }
+  private def python(python:String,script:String,args:String*):Task[String]=ZIO.attemptBlocking {
+    val builder=new ProcessBuilder((List(python,"-c",script)++args).asJava)
+    builder.environment().put("PYTHONPATH",Path.of("../pipeline").toAbsolutePath.normalize().toString)
+    builder.redirectErrorStream(true)
+    val process=builder.start()
+    if !process.waitFor(30,java.util.concurrent.TimeUnit.SECONDS) then {process.destroyForcibly();throw new Exception("Python integration command timed out")}
+    val output=new String(process.getInputStream.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8)
+    if process.exitValue()!=0 then throw new Exception(output.take(4096))
+    output
+  }
+  def spec=suite("unification lifecycle")(
+    test("completed native IDs are snapshotted before callback, source replacement preserves bytes, artifact is durable and eviction explicit") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        original <- jobs.resource(d.chunks.head.id,false).map {case Resource.Ready(p)=>p;case _=>throw new Exception("missing fixture")}
+        snapshot <- Promise.make[Nothing,String]
+        callback=(request:Json)=>for
+          value <- ZIO.attemptBlocking {
+            val input=obj(obj(request)("inputs").asInstanceOf[Json.Arr].elements.head)
+            val p=dir.resolve(text(input("path")))
+            val replacement=original.resolveSibling("replacement")
+            Files.writeString(replacement,"replacement bytes");Files.move(replacement,original,StandardCopyOption.REPLACE_EXISTING,StandardCopyOption.ATOMIC_MOVE)
+            Files.readString(p)
+          }
+          _ <- snapshot.succeed(value)
+          result <- output(dir,request)
+        yield result
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),callback)
+        accepted <- s.submit(selection(d))
+        completed <- terminal(s,accepted.id)
+        _ <- ZIO.fail(new Exception(completed.toJson)).unless(completed.status=="completed")
+        seen <- snapshot.await
+        artifact <- ZIO.scoped(s.artifact(accepted.id))
+        bytes <- ZIO.attemptBlocking(Files.size(artifact))
+        _ <- ZIO.attemptBlocking(Files.delete(artifact))
+        missing <- ZIO.scoped(s.artifact(accepted.id)).either
+        status <- s.get(accepted.id)
+        cleaned <- ZIO.attemptBlocking(!Files.exists(dir.resolve(s"unifications/${accepted.id}/inputs")) && !Files.exists(dir.resolve(s"unifications/${accepted.id}/output")))
+      yield assertTrue(completed.status=="completed",completed.artifact_url.contains(s"/api/image-unifications/${accepted.id}/artifact"),seen=="original native bytes",bytes>0,missing.left.exists {case e:ApiError=>e.code=="artifact_unavailable";case _=>false},status.artifact_url.isEmpty,cleaned) }
+    },
+    test("unknown native IDs reject before acceptance and mismatched callback identity never publishes") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r,true))
+        bad=selection(d.copy(chunks=List(d.chunks.head.copy(id="unknown"))))
+        rejected <- s.submit(bad).either
+        accepted <- s.submit(selection(d))
+        failed <- terminal(s,accepted.id)
+        unavailable <- ZIO.scoped(s.artifact(accepted.id)).either
+        unpublished <- ZIO.attemptBlocking(!Files.exists(dir.resolve(s"unifications/${accepted.id}/dataset.npz")))
+      yield assertTrue(rejected.isLeft,failed.status=="failed",failed.error.exists(_.code=="invalid_output"),unavailable.isLeft,unpublished) }
+    },
+    test("archive IDs use persisted checksums and reject changed or symlinked source bytes") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        record=spaceapps.archive.domain.ArchiveRecord.create("eso","science","observation-real",spaceapps.archive.domain.ProductKind.image)
+        _ <- ar.saveSearch(spaceapps.archive.domain.SearchSnapshot("search",spaceapps.archive.domain.ArchiveQuery(spaceapps.archive.domain.Circle(1,2,1),List("eso")),status="completed",records=List(record)))
+        id="a"*64
+        path=dir.resolve("archive").resolve(id)
+        _ <- write(path,"persisted archive bytes")
+        stored=spaceapps.archive.domain.StoredAsset(id,23,sha(path),"native")
+        _ <- ar.saveDownload(spaceapps.archive.domain.DownloadSnapshot("archive-download",spaceapps.archive.domain.DownloadSelection(List(record.id)),status="completed",assets=List(spaceapps.archive.domain.AssetOutcome(record.id,"ready",Some(stored)))))
+        request=Json.Obj("inputs"->Json.Arr(Json.Obj("kind"->Json.Str("archive_asset"),"id"->Json.Str(id))),"grid"->obj(selection(d))("grid"))
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r))
+        accepted <- s.submit(request)
+        completed <- terminal(s,accepted.id)
+        _ <- write(path,"changed! archive bytes!")
+        changed <- s.submit(request).either
+        _ <- ZIO.attemptBlocking {Files.delete(path);Files.createSymbolicLink(path,dir.resolve("raw").resolve("missing.fits"))}
+        symlink <- s.submit(request).either
+      yield assertTrue(completed.status=="completed",changed.left.exists {case e:ApiError=>e.code=="source_changed";case _=>false},symlink.isLeft) }
+    },
+    test("multiple archive products from one physical observation preserve the same collection-scoped identity") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        records=List("product-v1","product-v2").map(product=>spaceapps.archive.domain.ArchiveRecord.create("eso","science",product,spaceapps.archive.domain.ProductKind.image,native=Map("obs_id"->"physical-exposure-7")))
+        _ <- ar.saveSearch(spaceapps.archive.domain.SearchSnapshot("identity-search",spaceapps.archive.domain.ArchiveQuery(spaceapps.archive.domain.Circle(1,2,1),List("eso")),status="completed",records=records))
+        ids=List("a"*64,"b"*64)
+        _ <- ZIO.foreachDiscard(ids)(id=>write(dir.resolve("archive").resolve(id),"persisted archive bytes"))
+        assets=ids.zip(records).map { (id,r)=>spaceapps.archive.domain.AssetOutcome(r.id,"ready",Some(spaceapps.archive.domain.StoredAsset(id,23,sha(dir.resolve("archive").resolve(id)),"native"))) }
+        _ <- ar.saveDownload(spaceapps.archive.domain.DownloadSnapshot("identity-download",spaceapps.archive.domain.DownloadSelection(records.map(_.id)),status="completed",assets=assets))
+        captured <- Promise.make[Nothing,List[Json]]
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=> {
+          val metadata=obj(r)("inputs").asInstanceOf[Json.Arr].elements.toList.map(i=>obj(i)("metadata"))
+          captured.succeed(metadata) *> output(dir,r)
+        })
+        request=Json.Obj("inputs"->Json.Arr(zio.Chunk.fromIterable(ids.map(id=>Json.Obj("kind"->Json.Str("archive_asset"),"id"->Json.Str(id))))),"grid"->obj(selection(d))("grid"))
+        accepted <- s.submit(request)
+        completed <- terminal(s,accepted.id)
+        metadata <- captured.await
+        physical=metadata.map(m=>obj(m)("observation_id"))
+        products=metadata.map(m=>obj(m).get("product_id"))
+      yield assertTrue(completed.status=="completed",physical.distinct.size==1,physical.head!=Json.Null,products.flatten.distinct.size==2) }
+    },
+    test("validated frame identities allow chronological output order different from selection order") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        next <- jobs.submit(Query.fromParameters("default",Map("right_ascension_deg"->"3","declination_deg"->"2")).toOption.get,"default",None)
+        second <- done(jobs,next.id)
+        firstInput=obj(selection(d))("inputs").asInstanceOf[Json.Arr].elements.head
+        secondInput=obj(selection(second))("inputs").asInstanceOf[Json.Arr].elements.head
+        request=Json.Obj("inputs"->Json.Arr(firstInput,secondInput),"grid"->obj(selection(d))("grid"))
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r,reverse=true))
+        accepted <- s.submit(request)
+        completed <- terminal(s,accepted.id)
+      yield assertTrue(completed.status=="completed") }
+    },
+    test("restart fails abandoned queued work and cleans only owned snapshots and staging") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        repo <- UnificationRepository.open(dir.resolve("state.sqlite"))
+        accepted <- repo.accept(selection(d))
+        base=dir.resolve(s"unifications/${accepted.id}")
+        _ <- write(base.resolve("inputs/000.fits"),"orphan") *> write(base.resolve("output/dataset.npz"),"partial") *> write(base.resolve("request.json"),"orphan request") *> write(base.resolve("dataset.npz"),"unregistered output") *> write(base.resolve("user.txt"),"keep")
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),_=>ZIO.fail(new Exception("must not resume")))
+        recovered <- s.get(accepted.id)
+        files <- ZIO.attemptBlocking(List("inputs","output","request.json","dataset.npz","user.txt").map(p=>Files.exists(base.resolve(p))))
+      yield assertTrue(recovered.status=="failed",recovered.error.exists(_.code=="interrupted"),files==List(false,false,false,false,true)) }
+    },
+    test("tight admitted capacity publishes from its existing reservation without a second output charge") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir,200L*1024*1024)
+        (jobs,cache,ar,archive,d)=f
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r))
+        accepted <- s.submit(selection(d))
+        completed <- terminal(s,accepted.id)
+      yield assertTrue(completed.status=="completed",completed.artifact_url.nonEmpty) }
+    },
+    test("capacity is reserved before snapshots or private work starts") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir,64L*1024*1024)
+        (jobs,cache,ar,archive,d)=f
+        invoked <- Ref.make(false)
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>invoked.set(true) *> output(dir,r))
+        accepted <- s.submit(selection(d))
+        failed <- terminal(s,accepted.id)
+        called <- invoked.get
+        staged <- ZIO.attemptBlocking(Files.exists(dir.resolve(s"unifications/${accepted.id}/inputs")))
+      yield assertTrue(failed.status=="failed",failed.error.exists(_.code=="cache_capacity"),!called,!staged) }
+    },
+    test("shutdown retains immutable inputs until the bounded callback terminates") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        entered <- Promise.make[Nothing,Path]
+        finish <- Promise.make[Nothing,Unit]
+        scope <- ZIO.acquireRelease(Scope.make)(scope=>finish.succeed(()) *> scope.close(Exit.unit))
+        s <- scope.extend(Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=> {
+          val input=obj(obj(r)("inputs").asInstanceOf[Json.Arr].elements.head)
+          entered.succeed(dir.resolve(text(input("path")))) *> finish.await *> output(dir,r)
+        }))
+        accepted <- s.submit(selection(d))
+        input <- entered.await
+        closing <- scope.close(Exit.unit).fork
+        _ <- ZIO.sleep(30.millis)
+        stillClosing <- closing.poll
+        kept <- ZIO.attemptBlocking(Files.exists(input))
+        _ <- finish.succeed(())
+        _ <- closing.join
+        status <- s.get(accepted.id)
+        removed <- ZIO.attemptBlocking(!Files.exists(input))
+      yield assertTrue(stillClosing.isEmpty,kept,status.status=="failed",removed) }
+    },
+    test("streaming response pins a registered NPZ through cache pressure until response scope closes") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r))
+        accepted <- s.submit(selection(d))
+        _ <- terminal(s,accepted.id)
+        scope <- ZIO.acquireRelease(Scope.make)(_.close(Exit.unit))
+        response <- scope.extend(new UnificationApi(s).routes.runZIO(Request.get(s"http://localhost/api/image-unifications/${accepted.id}/artifact")))
+        blocked <- cache.withReservation(1024L*1024*1024-1)(ZIO.unit).either
+        bytes <- response.body.asChunk
+        _ <- scope.close(Exit.unit)
+        released <- cache.withReservation(1024L*1024*1024-1)(ZIO.unit).either
+        unavailable <- s.get(accepted.id)
+      yield assertTrue(response.status==Status.Ok,bytes.size>0,blocked.isLeft,released.isRight,unavailable.artifact_url.isEmpty) }
+    },
+    test("real Scala HTTP operation publishes an artifact that the Python ML loader reloads") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        executable=sys.env("UNIFICATION_PYTHON")
+        original <- jobs.resource(d.chunks.head.id,false).map {case Resource.Ready(p)=>p;case _=>throw new Exception("missing fixture")}
+        _ <- python(executable,"import sys,numpy as np; from astropy.io import fits; h=fits.PrimaryHDU(np.arange(4,dtype=np.float32).reshape(2,2)); h.header['BUNIT']='MJy/sr'; h.writeto(sys.argv[1],overwrite=True)",original.toString)
+        port <- ZIO.attemptBlocking {val socket=new java.net.ServerSocket(0);try socket.getLocalPort finally socket.close()}
+        process <- ZIO.acquireRelease(ZIO.attemptBlocking {
+          val b=new ProcessBuilder(executable,"-m","uvicorn","unification.app:app","--host","127.0.0.1","--port",port.toString,"--log-level","warning")
+          b.environment().put("PYTHONPATH",Path.of("../pipeline").toAbsolutePath.normalize().toString)
+          b.environment().put("UNIFICATION_DATA_ROOT",dir.toString)
+          b.redirectErrorStream(true);b.redirectOutput(dir.resolve("python-http.log").toFile);b.start()
+        })(p=>ZIO.attemptBlocking {p.destroy();if !p.waitFor(10,java.util.concurrent.TimeUnit.SECONDS) then {p.destroyForcibly();p.waitFor()};()}.orDie)
+        _ <- ZIO.attemptBlocking {val socket=new java.net.Socket("127.0.0.1",port);socket.close()}.retry(Schedule.spaced(100.millis) && Schedule.recurs(150))
+        client <- spaceapps.integrations.processing.HttpPipelineClient.make(s"http://127.0.0.1:$port")
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),client.unify)
+        accepted <- s.submit(selection(d))
+        completed <- terminal(s,accepted.id)
+        _ <- ZIO.fail(new Exception(completed.toJson)).unless(completed.status=="completed")
+        artifact <- s.artifact(accepted.id)
+        loaded <- python(executable,"import sys,numpy as np; from unification.ml import load_bundle; b=load_bundle(sys.argv[1]); assert b.images.shape==(1,2,2); assert np.isfinite(b.tensor).all(); assert np.allclose(b.images[0],[[0,1],[2,3]]); print('loaded real unified ML data')",artifact.toString)
+      yield assertTrue(loaded.contains("loaded real unified ML data")) }
+    } @@ TestAspect.ifEnv("UNIFICATION_PYTHON")(_.nonEmpty),
+    test("public routes accept ID selection and stream only completed NPZ artifacts") {
+      ZIO.scoped {for
+        dir <- temp
+        f <- fixture(dir)
+        (jobs,cache,ar,archive,d)=f
+        s <- Unifications.make(jobs,archive,ar,cache,dir,dir.resolve("state.sqlite"),r=>output(dir,r))
+        api=new UnificationApi(s)
+        accepted <- api.routes.runZIO(Request.post("http://localhost/api/image-unifications",Body.fromString(selection(d).toJson)))
+        body <- accepted.body.asString
+        job <- ZIO.fromEither(body.fromJson[UnificationJob]).mapError(new Exception(_))
+        _ <- terminal(s,job.id)
+        response <- api.routes.runZIO(Request.get(s"http://localhost/api/image-unifications/${job.id}/artifact"))
+        bytes <- response.body.asChunk
+      yield assertTrue(accepted.status==Status.Accepted,response.status==Status.Ok,bytes.take(2).toList==List[Byte](80,75)) }
+    }
+  ).provideLayer(Client.default) @@ TestAspect.withLiveClock @@ TestAspect.timeout(30.seconds)

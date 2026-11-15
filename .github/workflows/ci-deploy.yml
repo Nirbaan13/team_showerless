@@ -37,6 +37,13 @@ jobs:
       - name: Install locked scientific test dependencies
         working-directory: ml/pvusatov/backend/inference
         run: python -m pip install --require-hashes -r requirements-training.txt
+      - name: Install locked pipeline and HTTP test dependencies
+        run: python -m pip install --require-hashes -r python/requirements-pipeline.txt -r python/requirements-tests.txt
+      - name: Test image unification and private worker lifecycle
+        working-directory: .
+        env:
+          PYTHONPATH: pipeline:ml/pvusatov/backend/inference
+        run: python -m pytest -q pipeline/tests
       - name: Test frozen model and scientific pipeline
         working-directory: ml/pvusatov/backend/inference
         run: |
@@ -73,6 +80,8 @@ jobs:
             backend/build.sbt
             backend/project/build.properties
       - name: Test and stage Scala API
+        env:
+          UNIFICATION_PYTHON: python
         run: ./sbtw test stage
       - name: Check deployment scripts
         run: |
