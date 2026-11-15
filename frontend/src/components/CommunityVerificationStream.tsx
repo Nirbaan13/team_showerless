@@ -449,10 +449,10 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {objectComments.length === 0 ? (
           <div className="h-44 flex flex-col items-center justify-center text-center p-6 rounded-xl border border-dashed border-paper-800 space-y-2 bg-paper-950/40">
-            <MessageSquare className="w-6 h-6 text-paper-600 mx-auto" />
-            <span className="font-mono text-xs text-paper-300 font-semibold">No Notes Logged Yet</span>
-            <p className="text-[11px] text-paper-500 max-w-xs leading-relaxed">
-              Anyone can start the conversation for this candidate! Post your triage finding below to record the observation setting for other researchers.
+            <MessageSquare className="w-6 h-6 text-paper-500 mx-auto" />
+            <span className="font-mono text-xs text-paper-200 font-semibold">No Peer-Review Comments Yet</span>
+            <p className="text-[11px] text-paper-400 max-w-xs leading-relaxed">
+              Be the first to record an observation or verify this candidate! Use the form below to post your findings and log your consensus vote.
             </p>
           </div>
         ) : (

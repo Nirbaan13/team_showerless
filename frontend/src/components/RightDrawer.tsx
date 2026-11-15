@@ -221,11 +221,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
       setSelectedClass(candidate.classification);
       setSelectedConfidence(candidate.confidence);
       setIsSaved(false);
-      if (activeTab === 'triage' && candidate.classification !== 'unreviewed') {
-        setActiveTab('chat');
-      } else if (activeTab === 'chat' && candidate.classification === 'unreviewed') {
-        setActiveTab('triage');
-      }
     }
   }, [candidate]);
 
@@ -262,9 +257,6 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
     setWidth((prev) => (prev > 420 ? 340 : 540));
   };
 
-  const isClassified = Boolean(
-    candidate && candidate.classification && candidate.classification !== 'unreviewed'
-  );
 
   const handleSaveTriage = () => {
     if (!candidate) return;
@@ -357,43 +349,40 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
             <span>AI</span>
           </button>
 
-          {/* Unified Triage or Chat Tab (never cluttered at the same time) */}
-          {activeTab === 'chat' || isClassified ? (
-            <button
-              onClick={() => setActiveTab('chat')}
-              className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-                activeTab === 'chat'
-                  ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                  : 'border-transparent text-paper-400 hover:text-paper-200'
-              }`}
-            >
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Chat & Confirm</span>
-              {candidate && candidate.classification !== 'unreviewed' && (
-                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-600/50">
-                  {candidate.classification === 'moving_object'
-                    ? 'Moving'
-                    : candidate.classification === 'transient'
-                    ? 'Flash'
-                    : candidate.classification === 'artifact'
-                    ? 'Artifact'
-                    : 'Known'}
-                </span>
-              )}
-            </button>
-          ) : (
-            <button
-              onClick={() => setActiveTab('triage')}
-              className={`py-2 px-3 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1.5 transition-colors cursor-pointer ${
-                activeTab === 'triage'
-                  ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
-                  : 'border-transparent text-paper-400 hover:text-paper-200'
-              }`}
-            >
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Triage</span>
-            </button>
-          )}
+          <button
+            onClick={() => setActiveTab('triage')}
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'triage'
+                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                : 'border-transparent text-paper-400 hover:text-paper-200'
+            }`}
+          >
+            <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Triage</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('chat')}
+            className={`py-2 px-2.5 font-mono text-[11px] font-medium border-b-2 flex items-center gap-1 transition-colors cursor-pointer shrink-0 ${
+              activeTab === 'chat'
+                ? 'border-emerald-400 text-paper-100 bg-paper-900 font-bold'
+                : 'border-transparent text-paper-400 hover:text-paper-200'
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Chat &amp; Confirm</span>
+            {candidate && candidate.classification !== 'unreviewed' && (
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-600/50">
+                {candidate.classification === 'moving_object'
+                  ? 'Moving'
+                  : candidate.classification === 'transient'
+                  ? 'Flash'
+                  : candidate.classification === 'artifact'
+                  ? 'Artifact'
+                  : 'Known'}
+              </span>
+            )}
+          </button>
 
           <button
             onClick={() => setActiveTab('spectrum')}
@@ -646,25 +635,38 @@ export const RightDrawer: React.FC<RightDrawerProps> = ({
         {/* TAB 2: CANDIDATE VERIFICATION DISCUSSION & NOTES THREAD */}
         {activeTab === 'chat' && (
           <div className="flex flex-col h-full">
-            {candidate && (
-              <div className="p-3 bg-paper-950 border-b border-paper-800 flex items-center justify-between gap-2 shrink-0">
-                <div className="min-w-0">
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
-                    ★ Classified Object Thread
-                  </span>
-                  <span className="font-mono text-xs font-bold text-white truncate block">
-                    #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
-                  </span>
+            {candidate ? (
+              <div className="p-3 bg-paper-950 border-b border-paper-800 space-y-2 shrink-0">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-400 font-bold block">
+                      ★ Community Discussion &amp; Verification
+                    </span>
+                    <span className="font-mono text-xs font-bold text-white truncate block">
+                      #{candidate.mlRank} · {candidate.validationData?.objectName || candidate.catalogId || candidate.id}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('triage')}
+                    className="btn-tactile-sm px-2.5 py-1 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                    title="Classify or submit notes for this candidate"
+                  >
+                    <Edit3 className="w-3 h-3 text-emerald-400" />
+                    <span>Submit Triage →</span>
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('triage')}
-                  className="btn-tactile-sm px-2.5 py-1 rounded-lg border border-paper-700 bg-paper-900 hover:bg-paper-850 text-paper-200 hover:text-white font-mono text-[10px] font-bold flex items-center gap-1 cursor-pointer shrink-0"
-                  title="Modify volunteer classification"
-                >
-                  <Edit3 className="w-3 h-3 text-emerald-400" />
-                  <span>Edit Triage</span>
-                </button>
+
+                {candidate.volunteerNotes && (
+                  <div className="p-2 rounded-lg bg-paper-900/80 border border-paper-800 text-[11px] text-paper-300 leading-relaxed">
+                    <span className="text-emerald-400 font-semibold font-mono text-[10px] uppercase block mb-0.5">Catalog &amp; Discovery Note:</span>
+                    {candidate.volunteerNotes}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="p-4 bg-paper-950 border-b border-paper-800 text-center text-xs text-paper-400 font-mono">
+                Select any candidate on the sky to inspect its community notes and submit verifications.
               </div>
             )}
             <CommunityVerificationStream

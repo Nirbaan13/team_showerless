@@ -174,15 +174,6 @@ export const MLDetectionsPanel: React.FC<MLDetectionsPanelProps> = ({
         </div>
       )}
 
-      <section aria-label="Analysis provenance" className="p-2.5 rounded-xl bg-paper-950 border border-paper-800 text-[10px] font-mono space-y-1 break-words">
-        <p>Result source: {isStored ? 'Packaged benchmark review (/motion/review.json)' : 'Backend analysis'}</p>
-        <p>Model: <span>{mlAnalysisStatus?.modelName ?? 'Model ID unavailable in stored review'}</span></p>
-        <p>Algorithm: <span>{mlAnalysisStatus?.modelFamily ?? (isStored ? 'Stored leave-one-out / BLOOM tracks; optional RF ranks' : 'Unavailable')}</span></p>
-        {mlAnalysisStatus?.modelSha256 && <details><summary>Model SHA-256</summary><p>{mlAnalysisStatus.modelSha256}</p></details>}
-        {mlAnalysisStatus?.scoreKind && <p>Score kind: <span>{mlAnalysisStatus.scoreKind}</span></p>}
-        {mlAnalysisStatus?.scoreDescription && <p>{mlAnalysisStatus.scoreDescription}</p>}
-        <p>Scores order candidates; they are not discovery probabilities.</p>
-      </section>
       {isStored && <div className="flex gap-2" role="group" aria-label="Stored ranking method">
         <button type="button" aria-pressed={rankingMode === 'heuristic'} onClick={() => setRankingMode('heuristic')} className="px-2 py-1 border rounded text-xs">Stored heuristic rank</button>
         <button type="button" aria-pressed={rankingMode === 'forest'} disabled={!candidates.some(c => c.randomForestRank != null)} onClick={() => setRankingMode('forest')} className="px-2 py-1 border rounded text-xs disabled:opacity-40">Stored RF rank</button>
