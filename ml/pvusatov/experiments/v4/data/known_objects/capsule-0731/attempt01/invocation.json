@@ -1,0 +1,5 @@
+{
+  "source_sha256": "69456c1999a8858cc2d73ddca74c9aa8e1917e911b8870af151165e8d0910f31",
+  "status": "Interrupted after first 120s combined-query timeout, before selection or image requests; newly added nonconvex guard RED test required correction",
+  "original_log": "/tmp/spaceapps-v4-known-search.log"
+}

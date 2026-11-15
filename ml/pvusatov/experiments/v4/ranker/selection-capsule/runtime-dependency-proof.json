@@ -1,0 +1,38 @@
+{
+  "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+  "metadata_sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+  "reference_sha256": "52b135e757091ddd7975afb915a441050aae577199431342dcba2c44caa2990e",
+  "numeric_rows": 3584,
+  "numeric_rtol": 2e-06,
+  "numeric_atol": 2e-06,
+  "max_abs_error": 0.0,
+  "forbidden_training_imports": [],
+  "training_import_guard_active": true,
+  "inference_only": true,
+  "hard_cgroup_memory_limit_enforced": false,
+  "one_logical_cpu_affinity": [
+    0
+  ],
+  "math_thread_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "onnx_load_seconds": 0.027329253003699705,
+  "warm_1000rows_repeats": 20,
+  "warm_1000rows_median_ms": 3.4419679977872875,
+  "warm_1000rows_p95_ms": 3.493554948363453,
+  "linux_fresh_process_memory_kib": {
+    "VmHWM": 113716,
+    "VmRSS": 113716
+  },
+  "memory_scope": "FreshLinuxprocessVmHWM, includesruntimepackages+model+3584numericprobes; excludesfeatureextraction/realCLI/VPScontainer",
+  "versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.30.0"
+  },
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]"
+}

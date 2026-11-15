@@ -1,0 +1,57 @@
+{
+  "role": "OFFLINE KNOWN-TARGET MATCHING ONLY; keep separate until features/predictions fixed",
+  "target": {
+    "number": 1,
+    "name": "Ceres",
+    "command": "1;"
+  },
+  "ephemeris_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/point-grid-0750/evidence/ceres-tlist-49ae85a4ab6cdbe1.json",
+    "sha256": "736599b85b106e91fa38eccf6afd8e453b6aa512e57681c4da1164af81e6cafc"
+  },
+  "positions": [
+    {
+      "utc": "2025-Jul-03 02:08:42.024",
+      "mjd": 60859.08937527519,
+      "ra_deg": 15.615727863,
+      "dec_deg": -5.471356191,
+      "range_au": 2.8137085012297
+    },
+    {
+      "utc": "2025-Jul-03 02:10:50.955",
+      "mjd": 60859.09086753195,
+      "ra_deg": 15.616023581,
+      "dec_deg": -5.471316638,
+      "range_au": 2.81368826057936
+    },
+    {
+      "utc": "2025-Jul-03 02:12:59.886",
+      "mjd": 60859.09235978918,
+      "ra_deg": 15.616319292,
+      "dec_deg": -5.471277089,
+      "range_au": 2.81366801992533
+    },
+    {
+      "utc": "2025-Jul-03 02:15:08.816",
+      "mjd": 60859.09385203384,
+      "ra_deg": 15.616614993,
+      "dec_deg": -5.471237545,
+      "range_au": 2.81364777943016
+    }
+  ],
+  "observer": "Earth geocenter",
+  "parallax_arcsec_bounds": [
+    3.920296000550381,
+    3.9203242022704528,
+    3.920352404401421,
+    3.9203806067168046
+  ],
+  "astrometric_limits": "Conservative geometric LEO offset envelope, not an applied correction or a complete absolute astrometric error; photocenter/WCS/ephemeris errors separate",
+  "image_sha256s": [
+    "f6e318782303fdeaa28ac4bb3eb52ae840e48d1f0a67cbb9db52c84aaa6f1855",
+    "65227dd79b487f902787d64bd7b3b35e95fecda1c5dfd6c261121434d4b0b45d",
+    "b28996edf3818c4f4ef21e7edda7f4b39e1eb44425576cbcb90e7d70ad073462",
+    "44c880fc6d89ae4f613376e5b9f570e751cd52350e79cfc924a090ef45b69d60"
+  ],
+  "handoff_sha256": "d04e50afecc7456dd438850c9d76643d53dc6d5e5bd5103bfc0802c408eeeeb7"
+}

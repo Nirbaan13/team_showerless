@@ -1,0 +1,26 @@
+{
+  "declared_utc": "2026-11-15T07:51:03.192473+00:00",
+  "original_plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "authorization": "Root approved fixed daily POINT-grid fallback at 07:49 UTC",
+  "purpose": "Explicitly narrower NONEXHAUSTIVE discovery domain; no target/model/image outcome filtering",
+  "point_radius_deg": 0.001,
+  "all_daily_points_before_selection": 15,
+  "domain": "Fixed original anchor +/-7d daily ephemeris positions; each point query time-filtered locally to clipped +/-0.5day interval",
+  "collections": [
+    "spherex_dr1",
+    "spherex_qr3"
+  ],
+  "maxrec": [
+    512,
+    4096
+  ],
+  "response_cap_bytes": 4194304,
+  "max_concurrent": 2,
+  "minimum_start_interval_seconds": 1.05,
+  "request_timeout_seconds": 60,
+  "deadline_utc": "2026-11-15T08:46:00+00:00",
+  "failure_policy": "Any unresolved daily query/overflow/cap failure aborts incomplete before selection or later anchor",
+  "selection": "Original exact-midpoint/common-ROI/corner/434physicalID/5degree separation and target-anchor-detector ordering unchanged",
+  "diagnostic_rows_not_selection_inputs": true,
+  "no_pixels_or_models": true
+}

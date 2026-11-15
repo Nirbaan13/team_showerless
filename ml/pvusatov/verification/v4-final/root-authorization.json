@@ -1,0 +1,40 @@
+{
+  "schema_version": 4,
+  "authorized_at_utc": "2026-11-15T08:25:03.922980+00:00",
+  "authority": "root coordinator under user-authorized ML improvement task",
+  "freeze": {
+    "path": "ml/pvusatov/verification/v4-final/freeze.json",
+    "sha256": "1896c55288579151576f8e1c7026f3b57959fa8e6c857fed96817a7807c11e57"
+  },
+  "selection": {
+    "path": "ml/pvusatov/experiments/v4/evaluation/selection.json",
+    "sha256": "b1e364591d2db6f7be8f6f1245ddac53f2586572226c9464ba5a849a3eec2c7a"
+  },
+  "candidate": {
+    "path": "ml/pvusatov/releases/v4/model/ranker.onnx",
+    "sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+  },
+  "metadata": {
+    "path": "ml/pvusatov/releases/v4/model/metadata.json",
+    "sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13"
+  },
+  "development_smoke": {
+    "path": "ml/pvusatov/verification/v4-development/smoke-v3/report.json",
+    "sha256": "558e3689dd2191c07c21a687a08b9b950ac5f2e85421201d8c6b7cd9d48f2840"
+  },
+  "independent_review": {
+    "agent": "review_v4_release",
+    "fresh_tests_passed": 97,
+    "subtests_passed": 11,
+    "material_findings": 0,
+    "final_access": false
+  },
+  "new_final_pixels_or_scores_opened_before_authorization": false,
+  "final_reselection_or_refit_permitted": false,
+  "production_promotion_authorized": false,
+  "remaining_gates": [
+    "independent native and synthetic FINAL recovery",
+    "VPS hard resource proof retrieval/audit",
+    "application CI and deployed CLI/HTTP/gRPC/PNG/UI/Swagger"
+  ]
+}

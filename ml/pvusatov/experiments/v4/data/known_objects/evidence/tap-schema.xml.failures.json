@@ -1,0 +1,9 @@
+{
+  "url": "https://irsa.ipac.caltech.edu/TAP/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=votable&QUERY=SELECT+TOP+1+p.%2A%2C+a.uri+FROM+spherex.plane+p+JOIN+spherex.artifact+a+ON+a.planeid%3Dp.planeid+WHERE+1%3D0",
+  "failures": [
+    {
+      "attempt": 1,
+      "error": "HTTPError: HTTP Error 502: Proxy Error"
+    }
+  ]
+}

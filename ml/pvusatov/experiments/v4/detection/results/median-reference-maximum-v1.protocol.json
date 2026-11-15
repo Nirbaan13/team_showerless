@@ -1,0 +1,26 @@
+{
+  "designation": "ENGINEERING parity/timing only; no science/train/final",
+  "parity_seeds": [
+    3803000,
+    3803099
+  ],
+  "benchmark_seed": 3803000,
+  "shape": [
+    32,
+    512,
+    512
+  ],
+  "masks": [
+    0.0,
+    0.12
+  ],
+  "methods": [
+    "legacy",
+    "sorted"
+  ],
+  "source_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/detection/median_reference.py": "39d65fc5890f99cc3a04a138bf800cd9345056f4c8afa4bc97e693e3f6e14976",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/backend/inference/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d"
+  },
+  "requirement": "bitwise identical full Float64 residual bytes, finite/NaN/sign-zero parity"
+}

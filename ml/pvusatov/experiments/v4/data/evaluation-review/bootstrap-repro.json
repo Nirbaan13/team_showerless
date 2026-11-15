@@ -1,0 +1,24 @@
+{
+  "scope": "TEMP COPIES ONLY; no actual root sources modified, no FITS/pixels/models/final data",
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "results": [
+    {
+      "executed_profile_sigma": 0.7,
+      "pixel_modules_imported": false,
+      "runner": "run_native",
+      "runner_source_sha256": "523987186e8852ae6a534e04e4593998ef846260095f9b9711e4be8693dd76eb",
+      "current_freeze_source_sha256": "e29b385c346dee087f3c86c49b7ea769e23a7d6ae220182c61fafd4027c8d3f3",
+      "current_source_profile_sigma": 0.8,
+      "source_and_execution_agree": false
+    },
+    {
+      "executed_profile_sigma": 0.7,
+      "pixel_modules_imported": false,
+      "runner": "run_synthetic",
+      "runner_source_sha256": "30f61812670ebf2205db8a55d528f1cb30128ad8cc5f33b1da80b588e77cba8a",
+      "current_freeze_source_sha256": "e29b385c346dee087f3c86c49b7ea769e23a7d6ae220182c61fafd4027c8d3f3",
+      "current_source_profile_sigma": 0.8,
+      "source_and_execution_agree": false
+    }
+  ]
+}

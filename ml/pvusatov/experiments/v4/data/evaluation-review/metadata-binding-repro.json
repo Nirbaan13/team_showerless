@@ -1,0 +1,11 @@
+{
+  "scope": "Component checks only; no full fixture yet, no FITS/model/pixel/final access",
+  "source_sha256": "e29b385c346dee087f3c86c49b7ea769e23a7d6ae220182c61fafd4027c8d3f3",
+  "final_centers_shifted_by_deg": 0.01,
+  "changed_final_centers_accepted_by_validate_plan": true,
+  "development_final_parent_name_accepted_by_validate_plan": "v4-final01",
+  "same_eight_TRAIN04_bytehashes_reused_under_two_fake_parent_IDs_accepted_by_check_physical_ids": true,
+  "actual_unique_bytehashes": 8,
+  "claimed_physical_ids": 16,
+  "arbitrary_dummy_exclusion_set_count": 338
+}

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "query_responses": 90,
+  "complete_priority_anchors": 3,
+  "checked_metadata_clusters": 17,
+  "selected_target": "Ceres",
+  "detector": 2,
+  "physical_exposures": 4,
+  "excluded_previous_physical_ids": 434,
+  "byte_metadata": 16093440,
+  "raw_handoff_sha256": "d04e50afecc7456dd438850c9d76643d53dc6d5e5bd5103bfc0802c408eeeeb7",
+  "scope": "Published query/ephemeris/eligibility/header metadata linkage only; original native bytes and original execution environment not reverified; no pixels/models; narrower nonexhaustive daily-point discovery"
+}

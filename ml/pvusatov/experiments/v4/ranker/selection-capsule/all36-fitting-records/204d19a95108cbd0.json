@@ -1,0 +1,83 @@
+{
+  "id": "204d19a95108cbd0",
+  "config": {
+    "family": "ranknet",
+    "subset": "legacy6",
+    "native_mass": 0,
+    "pointwise_fraction": 0.5,
+    "id": "204d19a95108cbd0",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 231918,
+    "positive_rows": 3291,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      }
+    ],
+    "parameters": {
+      "objective": "ranknet",
+      "n_estimators": 120,
+      "max_depth": 3,
+      "min_samples_leaf": 24,
+      "learning_rate": 0.05,
+      "pointwise_fraction": 0.5,
+      "l2_leaf": 0.001,
+      "random_state": 20261115
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 326,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.156957149735195,
+        "macro_field_recall1": 0.178125,
+        "macro_cadence_recall1": 0.15416557294163818,
+        "top3": 556,
+        "micro_recall3": 0.2676937891189215,
+        "macro_field_recall3": 0.27562499999999995,
+        "macro_cadence_recall3": 0.2631027451270564
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 326,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.156957149735195,
+        "macro_field_recall1": 0.178125,
+        "macro_cadence_recall1": 0.15416557294163818,
+        "top3": 556,
+        "micro_recall3": 0.2676937891189215,
+        "macro_field_recall3": 0.27562499999999995,
+        "macro_cadence_recall3": 0.2631027451270564
+      }
+    }
+  },
+  "training_input_manifest_sha256": "0a8528db632bff107743d60c10b83b108c1602d8f9040eedbe7e9c508cfda0b9",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/204d19a95108cbd0.joblib",
+  "estimator_sha256": "43b2ca475e50cc145acc01039a8a8b72cc3a6a6f45e86af49a7aa739d3f4be5c",
+  "elapsed_seconds": 227.003545546002,
+  "error": null
+}

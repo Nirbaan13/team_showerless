@@ -1,0 +1,633 @@
+{
+  "schema_version": 4,
+  "scope": "development",
+  "freeze_sha256": "eff0c9b7dd83eababd9d0dc1c48f853ae3c7c160504971829fed397fb8d0b972",
+  "comparison": "C13 and one frozen V4 scorer on identical measured proposals",
+  "reports": {
+    "native": {
+      "schema_version": 1,
+      "all_planned": {
+        "trials": 270,
+        "truth_count": 270,
+        "independent_groups": 1,
+        "groups_with_truth": 1,
+        "baseline": {
+          "detected": 50,
+          "top1": 48,
+          "top3": 50,
+          "candidate_rows": 3795,
+          "micro_recall1": 0.17777777777777778,
+          "macro_recall1": 0.17777777777777778,
+          "micro_recall3": 0.18518518518518517,
+          "macro_recall3": 0.18518518518518517
+        },
+        "candidate": {
+          "detected": 50,
+          "top1": 49,
+          "top3": 50,
+          "candidate_rows": 3795,
+          "micro_recall1": 0.1814814814814815,
+          "macro_recall1": 0.1814814814814815,
+          "micro_recall3": 0.18518518518518517,
+          "macro_recall3": 0.18518518518518517
+        },
+        "macro_delta_top1": 0.003703703703703709,
+        "paired_parent_ci95_top1": [
+          0.003703703703703709,
+          0.003703703703703709
+        ],
+        "macro_delta_top3": 0.0,
+        "paired_parent_ci95_top3": [
+          0.0,
+          0.0
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_attributable": {
+        "trials": 270,
+        "truth_count": 270,
+        "independent_groups": 1,
+        "groups_with_truth": 1,
+        "baseline": {
+          "detected": 50,
+          "top1": 48,
+          "top3": 50,
+          "candidate_rows": 3795,
+          "micro_recall1": 0.17777777777777778,
+          "macro_recall1": 0.17777777777777778,
+          "micro_recall3": 0.18518518518518517,
+          "macro_recall3": 0.18518518518518517
+        },
+        "candidate": {
+          "detected": 50,
+          "top1": 49,
+          "top3": 50,
+          "candidate_rows": 3795,
+          "micro_recall1": 0.1814814814814815,
+          "macro_recall1": 0.1814814814814815,
+          "micro_recall3": 0.18518518518518517,
+          "macro_recall3": 0.18518518518518517
+        },
+        "macro_delta_top1": 0.003703703703703709,
+        "paired_parent_ci95_top1": [
+          0.003703703703703709,
+          0.003703703703703709
+        ],
+        "macro_delta_top3": 0.0,
+        "paired_parent_ci95_top3": [
+          0.0,
+          0.0
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_finite_center_ge3": {
+        "trials": 265,
+        "truth_count": 265,
+        "independent_groups": 1,
+        "groups_with_truth": 1,
+        "baseline": {
+          "detected": 47,
+          "top1": 45,
+          "top3": 47,
+          "candidate_rows": 3727,
+          "micro_recall1": 0.16981132075471697,
+          "macro_recall1": 0.16981132075471697,
+          "micro_recall3": 0.17735849056603772,
+          "macro_recall3": 0.17735849056603772
+        },
+        "candidate": {
+          "detected": 47,
+          "top1": 46,
+          "top3": 47,
+          "candidate_rows": 3727,
+          "micro_recall1": 0.17358490566037735,
+          "macro_recall1": 0.17358490566037735,
+          "micro_recall3": 0.17735849056603772,
+          "macro_recall3": 0.17735849056603772
+        },
+        "macro_delta_top1": 0.0037735849056603765,
+        "paired_parent_ci95_top1": [
+          0.0037735849056603765,
+          0.0037735849056603765
+        ],
+        "macro_delta_top3": 0.0,
+        "paired_parent_ci95_top3": [
+          0.0,
+          0.0
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "attribution_excluded_trials": 0,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261115
+    },
+    "synthetic": {
+      "schema_version": 1,
+      "all_planned": {
+        "trials": 12,
+        "truth_count": 19,
+        "independent_groups": 12,
+        "groups_with_truth": 8,
+        "baseline": {
+          "detected": 10,
+          "top1": 4,
+          "top3": 5,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.21052631578947367,
+          "macro_recall1": 0.26041666666666663,
+          "micro_recall3": 0.2631578947368421,
+          "macro_recall3": 0.3020833333333333
+        },
+        "candidate": {
+          "detected": 10,
+          "top1": 5,
+          "top3": 8,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.2631578947368421,
+          "macro_recall1": 0.38541666666666663,
+          "micro_recall3": 0.42105263157894735,
+          "macro_recall3": 0.4895833333333333
+        },
+        "macro_delta_top1": 0.125,
+        "paired_parent_ci95_top1": [
+          0.0,
+          0.375
+        ],
+        "macro_delta_top3": 0.1875,
+        "paired_parent_ci95_top3": [
+          0.03125,
+          0.4375
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_attributable": {
+        "trials": 12,
+        "truth_count": 19,
+        "independent_groups": 12,
+        "groups_with_truth": 8,
+        "baseline": {
+          "detected": 10,
+          "top1": 4,
+          "top3": 5,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.21052631578947367,
+          "macro_recall1": 0.26041666666666663,
+          "micro_recall3": 0.2631578947368421,
+          "macro_recall3": 0.3020833333333333
+        },
+        "candidate": {
+          "detected": 10,
+          "top1": 5,
+          "top3": 8,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.2631578947368421,
+          "macro_recall1": 0.38541666666666663,
+          "micro_recall3": 0.42105263157894735,
+          "macro_recall3": 0.4895833333333333
+        },
+        "macro_delta_top1": 0.125,
+        "paired_parent_ci95_top1": [
+          0.0,
+          0.375
+        ],
+        "macro_delta_top3": 0.1875,
+        "paired_parent_ci95_top3": [
+          0.03125,
+          0.4375
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "common_finite_center_ge3": {
+        "trials": 12,
+        "truth_count": 19,
+        "independent_groups": 12,
+        "groups_with_truth": 8,
+        "baseline": {
+          "detected": 10,
+          "top1": 4,
+          "top3": 5,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.21052631578947367,
+          "macro_recall1": 0.26041666666666663,
+          "micro_recall3": 0.2631578947368421,
+          "macro_recall3": 0.3020833333333333
+        },
+        "candidate": {
+          "detected": 10,
+          "top1": 5,
+          "top3": 8,
+          "candidate_rows": 1854,
+          "micro_recall1": 0.2631578947368421,
+          "macro_recall1": 0.38541666666666663,
+          "micro_recall3": 0.42105263157894735,
+          "macro_recall3": 0.4895833333333333
+        },
+        "macro_delta_top1": 0.125,
+        "paired_parent_ci95_top1": [
+          0.0,
+          0.375
+        ],
+        "macro_delta_top3": 0.1875,
+        "paired_parent_ci95_top3": [
+          0.03125,
+          0.4375
+        ],
+        "uncertainty_unit": "independent native parent or synthetic field; derivatives stay clustered"
+      },
+      "attribution_excluded_trials": 0,
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261115
+    }
+  },
+  "recovery_gate": {
+    "passes_recovery_gate": true,
+    "reasons": [],
+    "control_workload_ratio": 1.0,
+    "control_truth_labels": "UNKNOWN",
+    "runtime_and_integration_gates_required_separately": true,
+    "promotion_authorized": false
+  },
+  "unknown_controls": {
+    "baseline_candidate_rows": 13,
+    "candidate_candidate_rows": 13,
+    "truth_labels": "UNKNOWN; workload is not precision"
+  },
+  "peak_cap_trials": {
+    "native": 0,
+    "synthetic": 0
+  },
+  "caches": {
+    "native": [
+      {
+        "path": "/tmp/spaceapps-v4-evaluation/dev-smoke-v2/native/v4-train04.json.gz",
+        "sha256": "8fb1b4d95762c2738bcbff17fc4f8626091509bc10af80091d40318d0f220dc2"
+      }
+    ],
+    "synthetic": [
+      {
+        "path": "/tmp/spaceapps-v4-evaluation/dev-smoke-v2/synthetic/synthetic.json.gz",
+        "sha256": "c318c79a2e68b7fa186e95b7519ef31c870e1a4b55f3150ead8db7ff1e4e2393"
+      }
+    ]
+  },
+  "diagnostics": {
+    "native": {
+      "geometry": {
+        "planned_truths": 270,
+        "finite_centers_ge3": 265,
+        "resolved_covered_truth_span_ge3px": 105,
+        "geometrically_testable": 105
+      },
+      "strata": [
+        {
+          "kind": "parent",
+          "value": "v4-train04",
+          "planned_trials": 270,
+          "truth_count": 270,
+          "attributable_trials": 270,
+          "baseline": {
+            "top1": 48,
+            "top3": 50,
+            "detected": 50
+          },
+          "candidate": {
+            "top1": 49,
+            "top3": 50,
+            "detected": 50
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "0.01",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "brightness",
+          "value": "3.0",
+          "planned_trials": 54,
+          "truth_count": 54,
+          "attributable_trials": 54,
+          "baseline": {
+            "top1": 1,
+            "top3": 1,
+            "detected": 1
+          },
+          "candidate": {
+            "top1": 1,
+            "top3": 1,
+            "detected": 1
+          }
+        },
+        {
+          "kind": "brightness",
+          "value": "6.0",
+          "planned_trials": 54,
+          "truth_count": 54,
+          "attributable_trials": 54,
+          "baseline": {
+            "top1": 11,
+            "top3": 11,
+            "detected": 11
+          },
+          "candidate": {
+            "top1": 11,
+            "top3": 11,
+            "detected": 11
+          }
+        },
+        {
+          "kind": "brightness",
+          "value": "12.0",
+          "planned_trials": 54,
+          "truth_count": 54,
+          "attributable_trials": 54,
+          "baseline": {
+            "top1": 16,
+            "top3": 17,
+            "detected": 17
+          },
+          "candidate": {
+            "top1": 17,
+            "top3": 17,
+            "detected": 17
+          }
+        },
+        {
+          "kind": "brightness",
+          "value": "24.0",
+          "planned_trials": 54,
+          "truth_count": 54,
+          "attributable_trials": 54,
+          "baseline": {
+            "top1": 8,
+            "top3": 8,
+            "detected": 8
+          },
+          "candidate": {
+            "top1": 7,
+            "top3": 8,
+            "detected": 8
+          }
+        },
+        {
+          "kind": "brightness",
+          "value": "48.0",
+          "planned_trials": 54,
+          "truth_count": 54,
+          "attributable_trials": 54,
+          "baseline": {
+            "top1": 12,
+            "top3": 13,
+            "detected": 13
+          },
+          "candidate": {
+            "top1": 13,
+            "top3": 13,
+            "detected": 13
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "0.03",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "0.1",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "0.3",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "1.0",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 11,
+            "top3": 12,
+            "detected": 12
+          },
+          "candidate": {
+            "top1": 12,
+            "top3": 12,
+            "detected": 12
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "4.0",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 0,
+            "top3": 1,
+            "detected": 1
+          },
+          "candidate": {
+            "top1": 1,
+            "top3": 1,
+            "detected": 1
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "10.0",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 5,
+            "top3": 5,
+            "detected": 5
+          },
+          "candidate": {
+            "top1": 4,
+            "top3": 5,
+            "detected": 5
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "25.0",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 11,
+            "top3": 11,
+            "detected": 11
+          },
+          "candidate": {
+            "top1": 11,
+            "top3": 11,
+            "detected": 11
+          }
+        },
+        {
+          "kind": "speed_px_hour",
+          "value": "50.0",
+          "planned_trials": 30,
+          "truth_count": 30,
+          "attributable_trials": 30,
+          "baseline": {
+            "top1": 21,
+            "top3": 21,
+            "detected": 21
+          },
+          "candidate": {
+            "top1": 21,
+            "top3": 21,
+            "detected": 21
+          }
+        }
+      ],
+      "actual_matched_epoch_truth_span_ge3px_recoveries": {
+        "baseline": {
+          "top1": 32,
+          "top3": 33,
+          "detected": 33
+        },
+        "candidate": {
+          "top1": 33,
+          "top3": 33,
+          "detected": 33
+        }
+      },
+      "interpretation": "descriptive only; three-pixel spans do not confirm motion; no primary denominator filtering"
+    },
+    "synthetic": {
+      "geometry": {
+        "planned_truths": 19,
+        "finite_centers_ge3": 19,
+        "resolved_covered_truth_span_ge3px": 15,
+        "geometrically_testable": 15
+      },
+      "strata": [
+        {
+          "kind": "mode",
+          "value": "noise_only",
+          "planned_trials": 2,
+          "truth_count": 0,
+          "attributable_trials": 2,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "mode",
+          "value": "artifacts_only",
+          "planned_trials": 2,
+          "truth_count": 0,
+          "attributable_trials": 2,
+          "baseline": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          },
+          "candidate": {
+            "top1": 0,
+            "top3": 0,
+            "detected": 0
+          }
+        },
+        {
+          "kind": "mode",
+          "value": "injected",
+          "planned_trials": 8,
+          "truth_count": 19,
+          "attributable_trials": 8,
+          "baseline": {
+            "top1": 4,
+            "top3": 5,
+            "detected": 10
+          },
+          "candidate": {
+            "top1": 5,
+            "top3": 8,
+            "detected": 10
+          }
+        }
+      ],
+      "actual_matched_epoch_truth_span_ge3px_recoveries": {
+        "baseline": {
+          "top1": 3,
+          "top3": 4,
+          "detected": 7
+        },
+        "candidate": {
+          "top1": 4,
+          "top3": 6,
+          "detected": 7
+        }
+      },
+      "interpretation": "descriptive only; three-pixel spans do not confirm motion; no primary denominator filtering"
+    }
+  },
+  "limitations": [
+    "injection recovery is not real-object sensitivity or survey precision",
+    "three-pixel geometry is a diagnostic, not an astrometric detection limit",
+    "model scores are uncalibrated",
+    "runtime/integration gates remain separate"
+  ]
+}

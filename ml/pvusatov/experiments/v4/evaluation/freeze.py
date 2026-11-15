@@ -20,12 +20,15 @@ C13 = 'c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204'
 PROFILE = dict(min_snr=4., max_peaks=100, psf_sigma=.8, min_speed=.5, max_speed=60.,
                match_radius=1.4, min_epochs=3, min_support=.8, leave_one_out=True)
 SOURCES = dict(
+    execute='experiments/v4/evaluation/execute.py',
     freeze='experiments/v4/evaluation/freeze.py',
     run_native='experiments/v4/evaluation/run_native.py',
     run_synthetic='experiments/v4/evaluation/run_synthetic.py',
     report='experiments/v4/evaluation/summarize.py',
     metrics='experiments/v4/evaluation/metrics.py',
     geometry='experiments/v4/evaluation/geometry.py',
+    geometry_validation='verification/final/summary_geometry.py',
+    data_binding='experiments/v4/evaluation/data_binding.py',
     scene='experiments/v4/evaluation/scene.py',
     native_cache='experiments/v4/evaluation/cache_native.py',
     features='experiments/v4/detection/features.py',
@@ -154,6 +157,13 @@ def check_selection(record, models, *, final=True):
         raise ValueError('selection record does not bind the actual frozen candidate or completed development')
 
 
+def require_checked_execution(frozen, namespace, source_name):
+    if namespace.get('__source_sha256__') != frozen['sources'][source_name]['sha256']:
+        raise ValueError('use execute.py to compile the authorized runner source exactly')
+    if getattr(sys.modules.get('freeze'), '__source_sha256__', None) != frozen['sources']['freeze']['sha256']:
+        raise ValueError('use execute.py to compile the authorized validator source exactly')
+
+
 def validate_freeze(path, expected_sha256):
     path = Path(path).resolve()
     if not re.fullmatch('[0-9a-f]{64}', str(expected_sha256)) or digest(path) != expected_sha256:
@@ -173,7 +183,7 @@ def validate_freeze(path, expected_sha256):
             raise ValueError('scientific source path differs: ' + name)
     if value.get('versions') != versions():
         raise ValueError('scientific environment differs from freeze')
-    for key in ('protocol', 'acquisition_plan', 'selection_record', 'data_audit'):
+    for key in ('protocol', 'acquisition_plan', 'selection_record', 'data_audit', 'development_handoff'):
         checked_ref(value['provenance'][key], base)
     check_selection(read_json(value['provenance']['selection_record']['path']), value['models'], final=value['scope'] == 'final')
     for ref in value['provenance'].get('additional', []):
@@ -219,6 +229,11 @@ def validate_freeze(path, expected_sha256):
     if not isinstance(excluded, list) or len(excluded) != len(set(excluded)) or (value['scope'] == 'final' and len(excluded) < 338):
         raise ValueError('prior and development physical observation exclusions missing')
     value['_physical_ids'] = check_physical_ids(parents, set(excluded))
+    binding = exact_module('v4_checked_native_data_binding', value['sources']['data_binding'], base)
+    value['_native_expected'] = binding.validate_data_bindings(
+        value, read_json(value['provenance']['acquisition_plan']['path']),
+        read_json(value['provenance']['data_audit']['path']),
+        read_json(value['provenance']['development_handoff']['path']))
     value['_freeze_path'] = str(path)
     value['_sha256'] = expected_sha256
     return value

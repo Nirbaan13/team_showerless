@@ -1,0 +1,197 @@
+{
+  "status": "INCOMPLETE; no coverage inference/pixels/models",
+  "snapshot_utc": "2026-11-15T07:32:16.032101+00:00",
+  "files": [
+    {
+      "path": "acquisition-status-0731.json",
+      "sha256": "1c5b080d3fe14e3d18aa7a5d201025de69de817d493b582206245345db49a2b2",
+      "bytes": 1008
+    },
+    {
+      "path": "active-search-source.json",
+      "sha256": "f5c5ba3ae7cf618f06da0f8127f9fe083c449c13785090a678393bc001aaebb2",
+      "bytes": 278
+    },
+    {
+      "path": "attempt01/first-request-failure.json",
+      "sha256": "3ea96423909b77cd9f00d520497de1bce16dbfe8a63d9ebcd6713d6dc247af7a",
+      "bytes": 310
+    },
+    {
+      "path": "attempt01/invocation.json",
+      "sha256": "eca24f807913d231ad6251d0c82839dce5394ab1c6348031ea6eafebbfbc1d00",
+      "bytes": 307
+    },
+    {
+      "path": "attempt01/search.py",
+      "sha256": "69456c1999a8858cc2d73ddca74c9aa8e1917e911b8870af151165e8d0910f31",
+      "bytes": 12351
+    },
+    {
+      "path": "attempt02/search.log",
+      "sha256": "c6722f66ad00b150c6d8b4cfb85fd83abe75d6020b88675e94d4560ff56df14f",
+      "bytes": 249
+    },
+    {
+      "path": "attempt02/search.py",
+      "sha256": "493e78fd80e0207aee61d4b1ebb1894f22f07f2f0f116b0a2376ac85d01031e4",
+      "bytes": 12740
+    },
+    {
+      "path": "detector-dedup-clarification.json",
+      "sha256": "a2f5d0664960c5d9a1a51798008568dd64089a8f4db697d5dd6459a6942fdba6",
+      "bytes": 623
+    },
+    {
+      "path": "download.py",
+      "sha256": "98ab1c8e6849a8f75100d35b95332041f0f2fb2b532761b6d5b3394bf53a777c",
+      "bytes": 5294
+    },
+    {
+      "path": "ephemeris-grid-index.json",
+      "sha256": "55f11b90becf55ad9128b0287ccb1ce7a1a377e4700a059995696395508e8e16",
+      "bytes": 1765
+    },
+    {
+      "path": "evidence/ceres-2025-05-01-spherex_dr1-512.xml.failures.json",
+      "sha256": "3ea96423909b77cd9f00d520497de1bce16dbfe8a63d9ebcd6713d6dc247af7a",
+      "bytes": 310
+    },
+    {
+      "path": "evidence/ceres-2025-05-01-spherex_dr1-posonly-512.xml.failures.json",
+      "sha256": "d4f0872dcf66e93cc7ee6aed5a96973e7524207dd362972e5038a2f4ed517203",
+      "bytes": 273
+    },
+    {
+      "path": "evidence/ceres-2025-05-01-spherex_qr3-posonly-512.xml.failures.json",
+      "sha256": "7d75579764cedc005d8170869347032458b8ed205e9d2a6e0920b2d6ebb51085",
+      "bytes": 273
+    },
+    {
+      "path": "evidence/ceres-2025-06-01-spherex_dr1-posonly-512.xml.failures.json",
+      "sha256": "8ff685d8e8f5f4b457ceb71bfeb1ba8185acf37e4961bdddd60785c8ecb6b2e4",
+      "bytes": 270
+    },
+    {
+      "path": "evidence/ceres-grid.json",
+      "sha256": "5b3f8073c005f213b6d53c9efd34f0bc9e05fec080c8f49a72b1be320477ba5b",
+      "bytes": 47538
+    },
+    {
+      "path": "evidence/ceres-grid.request.json",
+      "sha256": "05d5f1b868955b98dbbbaf61b3a71e3cf5f8f45a3e123a728cb0441f844a10ad",
+      "bytes": 970
+    },
+    {
+      "path": "evidence/juno-grid.json",
+      "sha256": "f0c81ca66a0c90e3269056c6dbb2fdd42184eb2ca17816e47aeddfde34f851b4",
+      "bytes": 47455
+    },
+    {
+      "path": "evidence/juno-grid.json.request.json",
+      "sha256": "8886ed2c0063ba54636b02e8b438c3e1f460f5f5d2ee4bfb83b8a66579bc80a4",
+      "bytes": 727
+    },
+    {
+      "path": "evidence/minimal-diagnostic.xml.failures.json",
+      "sha256": "073a30650aaf99cfbd8deeb86e3efbc8a69cd96c19d2d876da48730c1e691bcf",
+      "bytes": 263
+    },
+    {
+      "path": "evidence/pallas-grid.json",
+      "sha256": "7d4cdf10fef8d68217811eec1e336d04814396e88fedbc014980b92e4bee32f6",
+      "bytes": 47504
+    },
+    {
+      "path": "evidence/pallas-grid.json.request.json",
+      "sha256": "37dd718cee895db2047ac588e1aa11fc187ad8bcc43930352c8ed375db593aca",
+      "bytes": 727
+    },
+    {
+      "path": "evidence/tap-schema.xml.failures.json",
+      "sha256": "ed4c1014e70d4bcea8b614bdbad03a0fc812590e1cd8c86d796d1f53496d0f03",
+      "bytes": 320
+    },
+    {
+      "path": "evidence/vps-transport-diagnostic.json",
+      "sha256": "0fb5345d59b25e32154f30d8ea08e2dcf6bf55f4fef036c09183c3cf5b4b4a88",
+      "bytes": 398
+    },
+    {
+      "path": "known-object-acquisition.AI.md",
+      "sha256": "9614003e454306851e0e0b16062dd3ccfde98130e6c9f9c62082d969c8088b91",
+      "bytes": 3550
+    },
+    {
+      "path": "minimal-query-diagnostic-plan.json",
+      "sha256": "3873bb632dfd7afd7c3f67d8333a65ec985c23a0c817e1d3316aa8fd4f75b4fd",
+      "bytes": 498
+    },
+    {
+      "path": "official-docs/horizons-api.html",
+      "sha256": "6ca45d9c222d6e5c425ae3e0a3c44225cf8b6d30c4a14892b0f1157b0ab4cfe4",
+      "bytes": 112553
+    },
+    {
+      "path": "official-docs/horizons-manual.html",
+      "sha256": "be45b0137b37068c48760bbaf306f52a72c10239c175ba91119a30eb30612a81",
+      "bytes": 229979
+    },
+    {
+      "path": "official-docs/sources.json",
+      "sha256": "656521d31e5a0c86c38d11d9530ce3e925ee4e009a1d0934f5635889d70e6589",
+      "bytes": 1259
+    },
+    {
+      "path": "official-docs/spherex-access.html",
+      "sha256": "0f686628d5cb3f8907abcb511fbe43b4df7847d61d877cd83847bf9948871654",
+      "bytes": 135927
+    },
+    {
+      "path": "official-docs/spherex-release.html",
+      "sha256": "6a158189442d5624015373aff80d466935238840804e16db9626a58131dc8d73",
+      "bytes": 44132
+    },
+    {
+      "path": "operational-supplement.json",
+      "sha256": "49541ca238686b167b2008f4d14c51870a0e847b1d7ad5348e5c27c1361aab9d",
+      "bytes": 811
+    },
+    {
+      "path": "plan.json",
+      "sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+      "bytes": 19441
+    },
+    {
+      "path": "search-log.json",
+      "sha256": "92bc4c4b6478c23f45db8873f283a71d11257e107b42cc665d2fd26e9f66e015",
+      "bytes": 815
+    },
+    {
+      "path": "search.py",
+      "sha256": "2c8c75661ef9c21ce82cbc612611b7b8bcae10f33d133c5958de9a7a518647e5",
+      "bytes": 14071
+    },
+    {
+      "path": "tap-supplement.json",
+      "sha256": "a4026a8dc22e288187ddf4396ae24d76343d3e166bade0220380f4c6542cb4b2",
+      "bytes": 1018
+    },
+    {
+      "path": "test_search.py",
+      "sha256": "2c7da9b2448f9e58e820b67745598ffc13f7925c60c6bb26cb9c4c7793bed251",
+      "bytes": 2295
+    },
+    {
+      "path": "transport-diagnostic-plan.json",
+      "sha256": "fff246fbf938db654db2f0e2f6fa4c16b6366d3140ca3fd7e2735d7666c68992",
+      "bytes": 554
+    },
+    {
+      "path": "transport_probe.py",
+      "sha256": "50368e15adf202dd9170bc76a9b8d6fdd641ef2a3200fc0ee0838611df4463c9",
+      "bytes": 2593
+    }
+  ],
+  "total_bytes": 751449
+}

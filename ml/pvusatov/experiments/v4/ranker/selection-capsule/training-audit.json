@@ -1,0 +1,28 @@
+{
+  "loaded_fields": 5000,
+  "loaded_candidate_rows": 231918,
+  "known_positive_rows": 3291,
+  "known_negative_rows": 228627,
+  "unknown_rows": 0,
+  "positive_containing_queries": 2112,
+  "informative_queries": 2004,
+  "active_unique_rows": 68582,
+  "known_positive_negative_pairs": 109852,
+  "native_pixel_rows_fitted": 0,
+  "native_unknown_rows_fitted": 0,
+  "pointwise_loss_fraction": 0,
+  "pairing": "Withinindependentsyntheticfieldonly; allpositiveobjectsweighted equally, duplicatedtracksobjectnormalized;64negativecap halfhighheuristic/halfseededuniform",
+  "noninformative_fields": "No gradient in pureRankNet for fieldswithoutknownpositive/negativecomparisons; loadedrowcount is not activefitrowcount",
+  "validation_used_by_fit": false,
+  "final_used": false,
+  "seed_reservations": {
+    "train": [
+      3000000,
+      3004999
+    ],
+    "validation": [
+      3100000,
+      3100999
+    ]
+  }
+}

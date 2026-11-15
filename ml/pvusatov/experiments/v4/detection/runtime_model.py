@@ -71,6 +71,7 @@ def _metadata(value):
        or value['feature_source_sha256']!=source_hash):raise ValueError('installed V4 feature source/contract differs')
     profile=value['detector_profile']
     if(not isinstance(profile,dict)or set(profile)!=set(PROFILE)or profile.get('leave_one_out')is not True
+       or any(type(profile.get(k))is not int for k in ('max_peaks','min_epochs'))
        or any(type(profile[k])not in (int,float)or not math.isfinite(profile[k])or profile[k]!=v
               for k,v in PROFILE.items()if k not in ('leave_one_out','psf_sigma'))
        or type(profile.get('psf_sigma'))not in (int,float)or profile['psf_sigma']not in (.8,1.2)):

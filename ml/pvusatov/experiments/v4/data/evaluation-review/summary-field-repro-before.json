@@ -1,0 +1,36 @@
+{
+  "scope": "DEV smoke caches only; validation acceptance booleans, no score/outcome reporting; no FINAL",
+  "source_sha256": "91fc12da43a94646afef7c0bda4b6bcc033d3dcfee76e3e4d313ff134db2870b",
+  "probes": [
+    {
+      "probe": "valid_native",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "contradictory_native_attribution",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "native_unknown_truth_count_flag",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "native_velocity_not_matching_recorded_truth",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "valid_synthetic",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "bogus_synthetic_mode_empty_generator_metadata",
+      "accepted": true,
+      "error": null
+    }
+  ]
+}

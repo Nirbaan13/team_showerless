@@ -1,0 +1,8 @@
+{
+  "scope": "DEV metadata/caches only; no scores reported or fitting/final access",
+  "summary_source_sha256": "eaba3b8d2c0d312c8c3b06b1b8ade5431c9c72735c7c50f70b9c71f737ac0f22",
+  "original_control_rows": 13,
+  "used_actual_ambiguous_native_field": false,
+  "erased_control_geometry_with_nonempty_rows_accepted": true,
+  "error": null
+}

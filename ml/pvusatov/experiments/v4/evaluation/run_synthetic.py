@@ -4,12 +4,13 @@ from __future__ import annotations
 import argparse
 from collections import deque
 from concurrent.futures import ProcessPoolExecutor
+import multiprocessing
 import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from freeze import validate_freeze, exact_module, digest
+from freeze import validate_freeze, exact_module, digest, require_checked_execution
 
 FROZEN = MODULES = BANK = None
 
@@ -17,6 +18,7 @@ FROZEN = MODULES = BANK = None
 def initialize(path, anchor):
     global FROZEN, MODULES, BANK
     FROZEN = validate_freeze(path, anchor)
+    require_checked_execution(FROZEN, globals(), 'run_synthetic')
     scene = exact_module('v4_checked_scene', FROZEN['sources']['scene'], Path(path).parent)
     MODULES = scene.science(FROZEN)
     MODULES.scene = scene
@@ -39,15 +41,14 @@ def generate(seed):
         covered = []
         for image, (x, y) in zip(images, np.rint(path).astype(int)):
             covered.append(bool(0 <= x < w and 0 <= y < h and np.isfinite(image[y, x])))
-        capabilities.append(MODULES.geometry.geometry_capability(path, times, covered))
+        capabilities.append({**MODULES.geometry.geometry_capability(path, times, covered), 'center_usable_flags': covered})
     latent = hashlib.sha256()
     for array in (images, times, *truth):
         latent.update(np.asarray(array, dtype='<f8').tobytes())
-    return dict(seed=seed, partition=FROZEN['scope'], mode=mode, metadata=metadata,
-                expected_xy=[path.tolist() for path in truth], times_hours=times.tolist(),
-                registered_shape=list(images.shape), latent_sha256=latent.hexdigest(),
-                geometric_capabilities=capabilities, attribution_eligible=True,
-                preexisting_control_match=False, **record, **measured)
+    return {**record, **measured, 'seed': seed, 'partition': FROZEN['scope'], 'mode': mode, 'metadata': metadata,
+            'expected_xy': [path.tolist() for path in truth], 'times_hours': times.tolist(),
+            'registered_shape': list(images.shape), 'latent_sha256': latent.hexdigest(),
+            'geometric_capabilities': capabilities, 'attribution_eligible': True, 'preexisting_control_match': False}
 
 
 def bounded_results(pool, seeds, maximum_pending):
@@ -63,6 +64,7 @@ def bounded_results(pool, seeds, maximum_pending):
 
 def run(path, anchor, directory):
     frozen = validate_freeze(path, anchor)
+    require_checked_execution(frozen, globals(), 'run_synthetic')
     output = Path(directory).resolve(); output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise ValueError('frozen synthetic destination must be new and empty')
@@ -83,7 +85,7 @@ def run(path, anchor, directory):
     destination = output / 'synthetic.json.gz'
     writer = latent.AtomicCache(destination, metadata)
     try:
-        with ProcessPoolExecutor(max_workers=frozen['runtime']['workers'], initializer=initialize,
+        with ProcessPoolExecutor(max_workers=frozen['runtime']['workers'], mp_context=multiprocessing.get_context('fork'), initializer=initialize,
                                  initargs=(str(Path(path).resolve()), anchor)) as pool:
             for index, field in enumerate(bounded_results(pool, frozen['synthetic']['seeds'], 2 * frozen['runtime']['workers']), 1):
                 writer.append(field)
@@ -105,9 +107,4 @@ def run(path, anchor, directory):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--freeze', required=True)
-    parser.add_argument('--freeze-sha256', required=True)
-    parser.add_argument('--output', required=True)
-    args = parser.parse_args()
-    print(run(args.freeze, args.freeze_sha256, args.output))
+    raise SystemExit('Invoke execute.py --kind synthetic with the external freeze SHA.')

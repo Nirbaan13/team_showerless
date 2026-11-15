@@ -3,17 +3,19 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import multiprocessing
 import json
 import math
 from pathlib import Path
 from types import SimpleNamespace
 
-from freeze import validate_freeze, exact_module, digest
+from freeze import validate_freeze, exact_module, digest, require_checked_execution
 
 
 def run_parent(task):
     freeze_path, anchor, directory, parent_id = task
     frozen = validate_freeze(freeze_path, anchor)
+    require_checked_execution(frozen, globals(), 'run_native')
     scene = exact_module('v4_checked_scene', frozen['sources']['scene'], Path(freeze_path).parent)
     modules = scene.science(frozen)
     import numpy as np
@@ -27,6 +29,8 @@ def run_parent(task):
                                            width_arcmin=region['width_arcmin'], height_arcmin=region['height_arcmin'])),
                    options=dict(pixel_scale_arcsec=region['pixel_scale_arcsec'], mask_policy='motion'))
     stack = modules.prepare(request)
+    binding = exact_module('v4_checked_prepared_data_binding', frozen['sources']['data_binding'], Path(freeze_path).parent)
+    binding.validate_prepared_frames(frozen['_native_expected'][parent_id], stack.frames, stack.times)
     expected_shape = [math.ceil(region[key] * 60 / region['pixel_scale_arcsec'])
                       for key in ('height_arcmin', 'width_arcmin')]
     if list(stack.images.shape[1:]) != expected_shape or len(stack.frames) != len(observations):
@@ -79,12 +83,13 @@ def run_parent(task):
 
 def run(freeze_path, anchor, output):
     frozen = validate_freeze(freeze_path, anchor)
+    require_checked_execution(frozen, globals(), 'run_native')
     output = Path(output).resolve(); output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise ValueError('frozen run destination must be new and empty')
     tasks = [(str(Path(freeze_path).resolve()), anchor, str(output), parent['parent_id']) for parent in frozen['native']['parents']]
     results = []
-    with ProcessPoolExecutor(max_workers=frozen['runtime']['workers']) as pool:
+    with ProcessPoolExecutor(max_workers=frozen['runtime']['workers'], mp_context=multiprocessing.get_context('fork')) as pool:
         for future in as_completed([pool.submit(run_parent, task) for task in tasks]):
             record = future.result(); results.append(record)
             print(json.dumps(dict(parent_id=record['parent_id'], completed=True, sha256=record['sha256'])), flush=True)
@@ -97,9 +102,4 @@ def run(freeze_path, anchor, output):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--freeze', required=True)
-    parser.add_argument('--freeze-sha256', required=True)
-    parser.add_argument('--output', required=True)
-    args = parser.parse_args()
-    print(run(args.freeze, args.freeze_sha256, args.output))
+    raise SystemExit('Invoke execute.py --kind native with the external freeze SHA.')

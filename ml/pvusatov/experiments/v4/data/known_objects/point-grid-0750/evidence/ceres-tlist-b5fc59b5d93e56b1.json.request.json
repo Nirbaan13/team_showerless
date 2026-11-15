@@ -1,0 +1,16 @@
+{
+  "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%271%3B%27&OBJ_DATA=YES&MAKE_EPHEM=YES&EPHEM_TYPE=OBSERVER&CENTER=%27500%40399%27&REF_SYSTEM=ICRF&QUANTITIES=%271%2C20%27&ANG_FORMAT=DEG&CSV_FORMAT=YES&EXTRA_PREC=YES&TIME_TYPE=UT&TIME_DIGITS=FRACSEC&CAL_FORMAT=BOTH&TLIST=%2760854.403466999996+60854.404959499996+60854.406451500006%27&TLIST_TYPE=MJD",
+  "transport_host": "local workstation",
+  "requested_utc": "2026-11-15T07:54:22.744206+00:00",
+  "status": 200,
+  "headers": {
+    "Server": "nginx",
+    "Date": "Sun, 15 Nov 2026 07:54:23 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "close"
+  },
+  "bytes": 8568,
+  "sha256": "655e14de95a74082ea4fcc152f35efe6d8c14e913375c3ee337fd6d18a1c6a7f",
+  "wall_seconds": 0.6937892899950384
+}

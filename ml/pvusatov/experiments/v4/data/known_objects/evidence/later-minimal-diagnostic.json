@@ -1,0 +1,29 @@
+{
+  "declared_utc": "2026-11-15T07:41:55.255696+00:00",
+  "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+358.335531522+-10.176041889+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=16",
+  "original_failure_sha256": "073a30650aaf99cfbd8deeb86e3efbc8a69cd96c19d2d876da48730c1e691bcf",
+  "transport_host": "local workstation",
+  "timeout_seconds": 30,
+  "response_cap_bytes": 4194304,
+  "max_requests": 1,
+  "selection_use": false,
+  "status": 200,
+  "headers": {
+    "Server": "nginx",
+    "Date": "Sun, 15 Nov 2026 07:42:19 GMT",
+    "Content-Type": "application/x-votable+xml",
+    "Content-Length": "60931",
+    "Connection": "close",
+    "Server-Timing": "main;dur=23335.348, prepare_internal;dur=383.765, generate_adql;dur=0.250, query_delegate;dur=194.137, query_execute;dur=193.860, database_query;dur=193.806, get_postgres_connection;dur=100.224, run_postgres;dur=88.910"
+  },
+  "response_path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/later-minimal-diagnostic.xml",
+  "sha256": "52dbc9ad4ba2fe4ed1d5f3230db04d5472f7bdcec44c8b112b209bc473e1a067",
+  "bytes": 60931,
+  "wall_seconds": 24.660169994996977,
+  "finished_utc": "2026-11-15T07:42:19.916485+00:00",
+  "redacted_header_names": [
+    "Set-Cookie"
+  ],
+  "original_http_metadata_sha256": "ea80916999b375bc96609816a326d550a53e7308a38d5cab09b414f85f7e2617",
+  "original_http_metadata_retained_external": true
+}

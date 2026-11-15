@@ -1,0 +1,94 @@
+{
+  "id": "652aaa93442e85b2",
+  "config": {
+    "family": "extra",
+    "subset": "legacy6",
+    "native_mass": 0,
+    "pointwise_fraction": 1,
+    "id": "652aaa93442e85b2",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 231918,
+    "positive_rows": 3291,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      }
+    ],
+    "parameters": {
+      "bootstrap": false,
+      "ccp_alpha": 0.0,
+      "class_weight": null,
+      "criterion": "gini",
+      "max_depth": 16,
+      "max_features": "sqrt",
+      "max_leaf_nodes": 512,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 12,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 160,
+      "n_jobs": 1,
+      "oob_score": false,
+      "random_state": 20261115,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 332,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15984593163216176,
+        "macro_field_recall1": 0.17947916666666663,
+        "macro_cadence_recall1": 0.15728842594824682,
+        "top3": 552,
+        "micro_recall3": 0.26576793452094366,
+        "macro_field_recall3": 0.27510416666666665,
+        "macro_cadence_recall3": 0.2610823601731542
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 332,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15984593163216176,
+        "macro_field_recall1": 0.17947916666666663,
+        "macro_cadence_recall1": 0.15728842594824682,
+        "top3": 552,
+        "micro_recall3": 0.26576793452094366,
+        "macro_field_recall3": 0.27510416666666665,
+        "macro_cadence_recall3": 0.2610823601731542
+      }
+    }
+  },
+  "training_input_manifest_sha256": "0a8528db632bff107743d60c10b83b108c1602d8f9040eedbe7e9c508cfda0b9",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/652aaa93442e85b2.joblib",
+  "estimator_sha256": "4fde28febe4c525307b08ea37016c45f08a7de81cebba1056936eadcfe667809",
+  "elapsed_seconds": 23.816099714000302,
+  "error": null
+}

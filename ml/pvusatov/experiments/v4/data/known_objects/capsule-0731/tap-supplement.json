@@ -1,0 +1,15 @@
+{
+  "declared_utc": "2026-11-15T07:28:00.489616+00:00",
+  "original_plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "official_source": "https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts/",
+  "endpoint": "https://irsa.ipac.caltech.edu/TAP/sync",
+  "reason": "Local SIA timeouts and exact VPS minimal-query HTTP502; direct documented SPHEREx plane/artifact metadata join",
+  "query_schema_probe": "SELECT TOP 1 p.*, a.uri FROM spherex.plane p JOIN spherex.artifact a ON a.planeid=p.planeid WHERE 1=0",
+  "prospective_search": "Same original monthly cones and +/-7-day time intervals using INTERSECTS(CIRCLE,p.poly), time_bounds_lower/upper; deterministic release/version/OBSID dedup and exact-midpoint footprint proof unchanged",
+  "timeout_seconds": 60,
+  "max_concurrent": 1,
+  "minimum_query_interval_seconds": 1.05,
+  "max_rows": 4096,
+  "overflow": "Fixed daily-grid cones from original plan, or report incomplete; never silently truncate",
+  "metadata_only": true
+}

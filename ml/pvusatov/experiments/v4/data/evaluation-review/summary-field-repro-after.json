@@ -1,0 +1,36 @@
+{
+  "scope": "DEV smoke caches only; validation acceptance booleans, no score/outcome reporting; no FINAL",
+  "source_sha256": "2c9172120c46759a82fab5648d0d7e0986f44b46da69bc7c7a387839c9fdcda4",
+  "probes": [
+    {
+      "probe": "valid_native",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "contradictory_native_attribution",
+      "accepted": false,
+      "error": "ValueError: attribution flags must be explicit boolean complements"
+    },
+    {
+      "probe": "native_unknown_truth_count_flag",
+      "accepted": false,
+      "error": "ValueError: unknown truth cannot enter a planned recovery denominator"
+    },
+    {
+      "probe": "native_velocity_not_matching_recorded_truth",
+      "accepted": false,
+      "error": "ValueError: native origin, velocity, flux or coverage contradicts the recorded truth"
+    },
+    {
+      "probe": "valid_synthetic",
+      "accepted": true,
+      "error": null
+    },
+    {
+      "probe": "bogus_synthetic_mode_empty_generator_metadata",
+      "accepted": false,
+      "error": "ValueError: synthetic seed, mode or generator metadata differs"
+    }
+  ]
+}

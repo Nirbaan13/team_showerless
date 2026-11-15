@@ -1,0 +1,46 @@
+[
+  {
+    "target": "Ceres",
+    "anchor": "2025-05-01",
+    "ephemeris_grid": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/ceres-grid.json",
+      "sha256": "5b3f8073c005f213b6d53c9efd34f0bc9e05fec080c8f49a72b1be320477ba5b"
+    },
+    "cone_center": [
+      358.335531522,
+      -10.176041889
+    ],
+    "cone_radius_deg": 3.185700557277491,
+    "t_min": 60789.0,
+    "t_max": 60803.0,
+    "queries": [],
+    "failures": [
+      "spherex_dr1: RuntimeError: [{'attempt': 1, 'error': 'TimeoutError: The read operation timed out'}]",
+      "spherex_qr3: RuntimeError: [{'attempt': 1, 'error': 'TimeoutError: The read operation timed out'}]"
+    ],
+    "raw_rows": 0,
+    "unique_unexcluded_rows": 0,
+    "clusters_checked": []
+  },
+  {
+    "target": "Ceres",
+    "anchor": "2025-05-01",
+    "ephemeris_grid": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/known_objects/evidence/ceres-grid.json",
+      "sha256": "5b3f8073c005f213b6d53c9efd34f0bc9e05fec080c8f49a72b1be320477ba5b"
+    },
+    "cone_center": [
+      358.335531522,
+      -10.176041889
+    ],
+    "cone_radius_deg": 3.185700557277491,
+    "t_min": 60789.0,
+    "t_max": 60803.0,
+    "queries": [],
+    "failures": [
+      "spherex_dr1: RuntimeError: [{'attempt': 1, 'error': 'TimeoutError: The read operation timed out'}, {'attempt': 2, 'utc': '2026-11-15T07:44:48.641434+00:00', 'error': 'TimeoutError: The read operation timed out'}]",
+      "spherex_qr3: RuntimeError: [{'attempt': 1, 'error': 'TimeoutError: The read operation timed out'}, {'attempt': 2, 'utc': '2026-11-15T07:45:51.134510+00:00', 'error': 'TimeoutError: The read operation timed out'}]"
+    ],
+    "status": "incomplete"
+  }
+]

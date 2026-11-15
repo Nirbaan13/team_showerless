@@ -1,0 +1,359 @@
+{
+  "id": "4d5a3297b3e3f9d4",
+  "config": {
+    "family": "hist",
+    "subset": "legacy6",
+    "native_mass": 2,
+    "pointwise_fraction": 1,
+    "training_label_policy": "resolved_matched_3px",
+    "id": "4d5a3297b3e3f9d4",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 232225,
+    "positive_rows": 3583,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      },
+      {
+        "kind": "native_moving",
+        "rows": 292,
+        "positives": 292,
+        "independent_groups": 8,
+        "class_mass": 2
+      },
+      {
+        "kind": "native_stationary",
+        "rows": 15,
+        "positives": 0,
+        "independent_groups": 4,
+        "class_mass": 2
+      }
+    ],
+    "native_label_policy": {
+      "policy": "native_positive_actual_matched_covered_epochs_ge3_and_true_span_ge3px",
+      "known_positive_before": 430,
+      "known_positive_after": 292,
+      "unresolved_became_unknown": 138,
+      "per_parent": {
+        "v4-train01": {
+          "before": 86,
+          "after": 58,
+          "unknown": 28
+        },
+        "v4-train02": {
+          "before": 50,
+          "after": 33,
+          "unknown": 17
+        },
+        "v4-train03": {
+          "before": 44,
+          "after": 23,
+          "unknown": 21
+        },
+        "v4-train04": {
+          "before": 45,
+          "after": 34,
+          "unknown": 11
+        },
+        "v4-train05": {
+          "before": 43,
+          "after": 29,
+          "unknown": 14
+        },
+        "v4-train06": {
+          "before": 55,
+          "after": 28,
+          "unknown": 27
+        },
+        "v4-train07": {
+          "before": 71,
+          "after": 68,
+          "unknown": 3
+        },
+        "v4-train08": {
+          "before": 36,
+          "after": 19,
+          "unknown": 17
+        }
+      }
+    },
+    "parameters": {
+      "categorical_features": "from_dtype",
+      "class_weight": null,
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "loss": "log_loss",
+      "max_bins": 255,
+      "max_depth": 6,
+      "max_features": 1.0,
+      "max_iter": 160,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 32,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "random_state": 20261115,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 324,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15599422243620606,
+        "macro_field_recall1": 0.1745833333333333,
+        "macro_cadence_recall1": 0.15344580700899813,
+        "top3": 549,
+        "micro_recall3": 0.2643235435724603,
+        "macro_field_recall3": 0.2714583333333333,
+        "macro_cadence_recall3": 0.25985925153941003
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 324,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.15599422243620606,
+        "macro_field_recall1": 0.1745833333333333,
+        "macro_cadence_recall1": 0.15344580700899813,
+        "top3": 549,
+        "micro_recall3": 0.2643235435724603,
+        "macro_field_recall3": 0.2714583333333333,
+        "macro_cadence_recall3": 0.25985925153941003
+      }
+    },
+    "native": {
+      "all_planned": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 276,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.12777777777777777,
+        "macro_parent_recall1": 0.12777777777777777,
+        "per_parent_K1": {
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 23,
+            "recall": 0.08518518518518518
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 27,
+            "recall": 0.1
+          },
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 40,
+            "recall": 0.14814814814814814
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 38,
+            "recall": 0.14074074074074075
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 28,
+            "recall": 0.1037037037037037
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 10,
+            "recall": 0.037037037037037035
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 52,
+            "recall": 0.1925925925925926
+          }
+        },
+        "top3": 366,
+        "micro_recall3": 0.16944444444444445,
+        "macro_parent_recall3": 0.16944444444444445,
+        "per_parent_K3": {
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 68,
+            "recall": 0.2518518518518518
+          },
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 31,
+            "recall": 0.11481481481481481
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 61,
+            "recall": 0.22592592592592592
+          }
+        }
+      },
+      "common_attributable": {
+        "planned_fields": 2160,
+        "cohort_fields": 2160,
+        "candidate_rows": 306526,
+        "unknown_real_controls_unlabeled": true,
+        "independent_parents": 8,
+        "top1": 276,
+        "truth_count": 2160,
+        "detected": 393,
+        "micro_recall1": 0.12777777777777777,
+        "macro_parent_recall1": 0.12777777777777777,
+        "per_parent_K1": {
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 23,
+            "recall": 0.08518518518518518
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 27,
+            "recall": 0.1
+          },
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 40,
+            "recall": 0.14814814814814814
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 38,
+            "recall": 0.14074074074074075
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 58,
+            "recall": 0.21481481481481482
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 28,
+            "recall": 0.1037037037037037
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 10,
+            "recall": 0.037037037037037035
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 52,
+            "recall": 0.1925925925925926
+          }
+        },
+        "top3": 366,
+        "micro_recall3": 0.16944444444444445,
+        "macro_parent_recall3": 0.16944444444444445,
+        "per_parent_K3": {
+          "v4-validation07": {
+            "truth_count": 270,
+            "recovered": 33,
+            "recall": 0.12222222222222222
+          },
+          "v4-validation04": {
+            "truth_count": 270,
+            "recovered": 68,
+            "recall": 0.2518518518518518
+          },
+          "v4-validation02": {
+            "truth_count": 270,
+            "recovered": 42,
+            "recall": 0.15555555555555556
+          },
+          "v4-validation03": {
+            "truth_count": 270,
+            "recovered": 39,
+            "recall": 0.14444444444444443
+          },
+          "v4-validation01": {
+            "truth_count": 270,
+            "recovered": 63,
+            "recall": 0.23333333333333334
+          },
+          "v4-validation06": {
+            "truth_count": 270,
+            "recovered": 29,
+            "recall": 0.10740740740740741
+          },
+          "v4-validation05": {
+            "truth_count": 270,
+            "recovered": 31,
+            "recall": 0.11481481481481481
+          },
+          "v4-validation08": {
+            "truth_count": 270,
+            "recovered": 61,
+            "recall": 0.22592592592592592
+          }
+        }
+      }
+    }
+  },
+  "training_input_manifest_sha256": "be79e47bfda6607177452208c74e07e776c4545064c5a709dc67141200902780",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/4d5a3297b3e3f9d4.joblib",
+  "estimator_sha256": "e35405a2104b2d1f6cfd50c6952184a623a7bb9da91cbad65b1e62d3b91d88bd",
+  "elapsed_seconds": 17.272309758998745,
+  "error": null
+}

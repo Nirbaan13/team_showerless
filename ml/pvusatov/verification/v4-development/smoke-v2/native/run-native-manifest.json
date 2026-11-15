@@ -1,0 +1,36 @@
+{
+  "schema_version": 4,
+  "kind": "native",
+  "scope": "development",
+  "freeze_sha256": "eff0c9b7dd83eababd9d0dc1c48f853ae3c7c160504971829fed397fb8d0b972",
+  "evaluation_complete": true,
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "astropy": "8.0.2",
+    "onnxruntime": "1.30.0",
+    "onnx": "1.23.2",
+    "pillow": "12.3.0"
+  },
+  "outputs": [
+    {
+      "parent_id": "v4-train04",
+      "path": "/tmp/spaceapps-v4-evaluation/dev-smoke-v2/native/v4-train04.json.gz",
+      "sha256": "8fb1b4d95762c2738bcbff17fc4f8626091509bc10af80091d40318d0f220dc2",
+      "summary": {
+        "planned": 270,
+        "candidate_rows": 3795,
+        "spatial_recovered": 50,
+        "spatial_recovered_trials": 50,
+        "resolved_truth_span_ge3px": 33,
+        "truth_count_unknown_trials": 0,
+        "error_trials": 0,
+        "peak_cap_trials": 0,
+        "errors_by_phase": {},
+        "evaluation_complete": true,
+        "search_coverage_complete": true
+      }
+    }
+  ]
+}

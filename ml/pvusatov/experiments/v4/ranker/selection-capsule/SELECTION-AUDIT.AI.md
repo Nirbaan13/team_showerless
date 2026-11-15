@@ -1,0 +1,11 @@
+# Frozen V4 selection audit
+
+Root selected experiment `fc3378f486961a8c` using a transparent DEVELOPMENT-informed rule. The exact graph remains `c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35` (60,661 bytes); no refit, re-export or reselection occurred during this audit. New FINAL data remains unopened.
+
+The selected pure RankNet model uses27declared columns and19actual split features; all quality/availability columns are excluded. It learned from109,852known positive-versus-negative within-field pairs over2,004informative synthetic fields. The original5,000fields contained231,918candidate rows; only68,582unique rows received ranking gradients. Noise-only/all-negative fields do not contribute gradients to the pure pairwise loss. Real instrumental ePSF calibration is used; native science candidate rows, native UNKNOWNcontrols, development/final labels are not fitting inputs.
+
+The graph audit compared every1792node and956leaf against the original cached120tree estimator, including float32 threshold/weight bits and child indices. All comparisons match. All36fitting records, input manifests, original fitting sources, complete validation/threshold results and exact generator/calibration lineage are preserved and hash-linked. Full30observable extraction precedes offline truth matching. Metadata names an uncalibrated sigmoid pairwise utility, with explicit float32roundoff handling.
+
+A fresh Python process blocked sklearn,skl2onnx,joblib,training andownranker imports. Actual standalone loading/scoring passed3,584numeric probes with zero difference from the frozen local ONNX reference. One-CPU affinity, all math threads1: 1,000-row warm median3.442ms, p953.494ms across20repeats; fresh Linux VmHWM111.05MiB. This measures model/runtime/probes, excludes image feature extraction and actual CLI/VPScontainer, and does not enforce a cgroup memory cap. Coordinator-owned1CPU/1GiB/VPS and full integration checks remain separate.
+
+`complete-manifest.json` is the capsule entry point; `manifest.json` preserves the initial audit. Original fit records and candidate artifacts are immutable. Raw estimators, numeric vectors and graphs remain in scratch/release locations, referenced by hashes. Nominal DEVELOPMENT confidence intervals are conditional on model selection and are not new independent performance evidence.

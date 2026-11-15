@@ -1,0 +1,15 @@
+{
+  "declared_utc": "2026-11-15T07:24:37.019647+00:00",
+  "role": "Metadata-service latency diagnostic only; not a benchmark selection query",
+  "target": "Ceres",
+  "epoch": "2025-05-01",
+  "center": [
+    358.335531522,
+    -10.176041889
+  ],
+  "radius_deg": 0.001,
+  "MAXREC": 16,
+  "COLLECTION": "spherex_dr1",
+  "no_time": true,
+  "reason": "Both combined POS+TIME and broad POS-only query timed out; diagnose whether minimal official SIA syntax can respond before further bounded fallback"
+}

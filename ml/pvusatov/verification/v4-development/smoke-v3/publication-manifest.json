@@ -1,0 +1,35 @@
+{
+  "scope": "DEVELOPMENT integration smoke, not independent scientific validation",
+  "files": [
+    {
+      "path": "report.json",
+      "sha256": "558e3689dd2191c07c21a687a08b9b950ac5f2e85421201d8c6b7cd9d48f2840",
+      "bytes": 17168
+    },
+    {
+      "path": "freeze.json",
+      "sha256": "de82101962926d496000d906868eb4a74468b8860547f548d41114c2af5a3375",
+      "bytes": 17493
+    },
+    {
+      "path": "native/run-native-manifest.json",
+      "sha256": "154100055390dfb375aa0ccb6e277d25b37fae8d85568e54f7c67547f30e1174",
+      "bytes": 1016
+    },
+    {
+      "path": "native/v4-train04.json.gz",
+      "sha256": "e082eceb1e3bbddf6c8b69a4d83e2de8e57863b8dc5a338986968cfee5b9b080",
+      "bytes": 702554
+    },
+    {
+      "path": "synthetic/run-synthetic-manifest.json",
+      "sha256": "e6f8048ebf4c5762e4a8a7e3a402dc48041473c43a47abd8d1674cdb69190679",
+      "bytes": 985
+    },
+    {
+      "path": "synthetic/synthetic.json.gz",
+      "sha256": "ab9994fe0ef4f06258833a3cbd60cfec868fd7e67c447ab5502eaff2ccef420a",
+      "bytes": 539309
+    }
+  ]
+}

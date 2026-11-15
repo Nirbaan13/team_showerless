@@ -75,6 +75,12 @@ class ModelPolicy(unittest.TestCase):
                 self.assertEqual(ranker.score(np.empty((0,30))).shape,(0,))
                 self.assertEqual(ranker._session.get_providers(),['CPUExecutionProvider'])
 
+    def test_detector_counters_require_exact_integer_types_before_ort(self):
+        for key,value in [('max_peaks',100.0),('min_epochs',3.0)]:
+            with self.subTest(counter=key):
+                meta=metadata();meta['detector_profile'][key]=value
+                self.save(meta);self.rejection()
+
     def test_source_or_contract_or_embedded_metadata_tampering_rejected(self):
         for key,value in [('feature_source_sha256','0'*64),('feature_contract_sha256','0'*64),('model_family','ListNetTreeBoost')]:
             model,meta=self.save();meta[key]=value;self.save(meta,model);self.rejection()

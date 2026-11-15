@@ -1,0 +1,83 @@
+{
+  "id": "177dc4cff6a003e8",
+  "config": {
+    "family": "listnet",
+    "subset": "legacy6",
+    "native_mass": 0,
+    "pointwise_fraction": 0.5,
+    "id": "177dc4cff6a003e8",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 231918,
+    "positive_rows": 3291,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      }
+    ],
+    "parameters": {
+      "objective": "listnet",
+      "n_estimators": 120,
+      "max_depth": 3,
+      "min_samples_leaf": 24,
+      "learning_rate": 0.05,
+      "pointwise_fraction": 0.5,
+      "l2_leaf": 0.001,
+      "random_state": 20261115
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 326,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.156957149735195,
+        "macro_field_recall1": 0.17666666666666664,
+        "macro_cadence_recall1": 0.15419641068622286,
+        "top3": 556,
+        "micro_recall3": 0.2676937891189215,
+        "macro_field_recall3": 0.2739583333333333,
+        "macro_cadence_recall3": 0.26299471785816364
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 326,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.156957149735195,
+        "macro_field_recall1": 0.17666666666666664,
+        "macro_cadence_recall1": 0.15419641068622286,
+        "top3": 556,
+        "micro_recall3": 0.2676937891189215,
+        "macro_field_recall3": 0.2739583333333333,
+        "macro_cadence_recall3": 0.26299471785816364
+      }
+    }
+  },
+  "training_input_manifest_sha256": "0a8528db632bff107743d60c10b83b108c1602d8f9040eedbe7e9c508cfda0b9",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/177dc4cff6a003e8.joblib",
+  "estimator_sha256": "4ab80295c5207a45d0932f4bb06ab986db9104dbf4ff1631273d494b94986def",
+  "elapsed_seconds": 236.57132637600444,
+  "error": null
+}

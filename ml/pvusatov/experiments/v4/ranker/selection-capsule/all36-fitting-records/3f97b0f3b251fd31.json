@@ -1,0 +1,113 @@
+{
+  "id": "3f97b0f3b251fd31",
+  "config": {
+    "family": "hist",
+    "subset": "nomask_support23",
+    "native_mass": 0,
+    "pointwise_fraction": 1,
+    "id": "3f97b0f3b251fd31",
+    "selected_feature_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    ],
+    "diagnostic_only": false
+  },
+  "training": {
+    "rows": 231918,
+    "positive_rows": 3291,
+    "known_provenance": [
+      {
+        "kind": "synthetic",
+        "rows": 231918,
+        "positives": 3291,
+        "independent_groups": 4247,
+        "class_mass": 1
+      }
+    ],
+    "parameters": {
+      "categorical_features": "from_dtype",
+      "class_weight": null,
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 1.0,
+      "learning_rate": 0.05,
+      "loss": "log_loss",
+      "max_bins": 255,
+      "max_depth": 6,
+      "max_features": 1.0,
+      "max_iter": 160,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 32,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "random_state": 20261115,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "validation": {
+    "synthetic": {
+      "all_planned": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 388,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.1868078960038517,
+        "macro_field_recall1": 0.20916666666666664,
+        "macro_cadence_recall1": 0.1842893759584443,
+        "top3": 634,
+        "micro_recall3": 0.30524795377948966,
+        "macro_field_recall3": 0.30927083333333333,
+        "macro_cadence_recall3": 0.3005135459518845
+      },
+      "common_attributable": {
+        "planned_fields": 1000,
+        "cohort_fields": 1000,
+        "candidate_rows": 49286,
+        "unknown_real_controls_unlabeled": true,
+        "top1": 388,
+        "truth_count": 2077,
+        "detected": 704,
+        "micro_recall1": 0.1868078960038517,
+        "macro_field_recall1": 0.20916666666666664,
+        "macro_cadence_recall1": 0.1842893759584443,
+        "top3": 634,
+        "micro_recall3": 0.30524795377948966,
+        "macro_field_recall3": 0.30927083333333333,
+        "macro_cadence_recall3": 0.3005135459518845
+      }
+    }
+  },
+  "training_input_manifest_sha256": "0a8528db632bff107743d60c10b83b108c1602d8f9040eedbe7e9c508cfda0b9",
+  "estimator_path": "/tmp/spaceapps-v4-ranker/frontier-v1/3f97b0f3b251fd31.joblib",
+  "estimator_sha256": "90d08d5d006d88194a44426bbe2c31b8265a97b627f2caaed3e247ba54d42994",
+  "elapsed_seconds": 16.688518178998493,
+  "error": null
+}

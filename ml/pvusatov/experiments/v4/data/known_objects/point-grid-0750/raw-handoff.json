@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "role": "KNOWN DEVELOPMENT CASE; target ephemerides not feature/detection inputs",
+  "group_id": "known-ceres-2025-07-01-d2",
+  "split": "known_development",
+  "detector": 2,
+  "center": [
+    15.616171426024438,
+    -5.471296866590545
+  ],
+  "region_arcmin": [
+    6,
+    6
+  ],
+  "pixel_scale_arcsec": 6.15,
+  "images": [
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_1D2_spx_l2b-v27-2026-214.fits",
+      "obs_id": "2025W27_1A_0591_1",
+      "sha256": "f6e318782303fdeaa28ac4bb3eb52ae840e48d1f0a67cbb9db52c84aaa6f1855",
+      "midpoint_mjd": 60859.089375275,
+      "t_min_mjd": 60859.088709,
+      "t_max_mjd": 60859.090041
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_2D2_spx_l2b-v27-2026-214.fits",
+      "obs_id": "2025W27_1A_0591_2",
+      "sha256": "65227dd79b487f902787d64bd7b3b35e95fecda1c5dfd6c261121434d4b0b45d",
+      "midpoint_mjd": 60859.090867532,
+      "t_min_mjd": 60859.090201,
+      "t_max_mjd": 60859.091534
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_3D2_spx_l2b-v27-2026-214.fits",
+      "obs_id": "2025W27_1A_0591_3",
+      "sha256": "b28996edf3818c4f4ef21e7edda7f4b39e1eb44425576cbcb90e7d70ad073462",
+      "midpoint_mjd": 60859.092359789,
+      "t_min_mjd": 60859.091694,
+      "t_max_mjd": 60859.093026
+    },
+    {
+      "path": "/tmp/spaceapps-v4-native-data/known_objects/known-ceres-2025-07-01-d2/level2_2025W27_1A_0591_4D2_spx_l2b-v27-2026-214.fits",
+      "obs_id": "2025W27_1A_0591_4",
+      "sha256": "44c880fc6d89ae4f613376e5b9f570e751cd52350e79cfc924a090ef45b69d60",
+      "midpoint_mjd": 60859.093852034,
+      "t_min_mjd": 60859.093186,
+      "t_max_mjd": 60859.094518
+    }
+  ],
+  "physical_obsids": [
+    "2025W27_1A_0591_1",
+    "2025W27_1A_0591_2",
+    "2025W27_1A_0591_3",
+    "2025W27_1A_0591_4"
+  ],
+  "metadata_selection_sha256": "83e5544030bd56f5dc1925e8c27f3c703bd82c2c181ffa1358ee19ff0b5dc5e3",
+  "plan_sha256": "dbc027aea38fbc1d315986fc5c7ac6a419e1b5cc4bd8a9073e24eeebe1ea3761",
+  "exclusion_count": 434,
+  "pixels_opened": false,
+  "no_model_calls": true,
+  "no_training_labels": true
+}
