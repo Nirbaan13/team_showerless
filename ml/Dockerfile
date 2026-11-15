@@ -21,6 +21,7 @@ RUN groupadd --gid 10001 app \
 # Keep research directories, caches and tests outside the service image.
 COPY --chown=app:app ml/service.py ml/detector.py ml/catalogue_db.py ml/smoke_deployment.py ./
 COPY --chown=app:app ml/candidate-example.json ml/spherex_3i_atlas.npz ml/spherex-result.png ./
+COPY --chown=app:app science/archive_gateway.py ./science/
 COPY --chown=app:app science/motion/live.py science/motion/prepare_fits.py science/motion/review.py science/motion/detector.py science/motion/ranker.py ./science/motion/
 COPY --chown=app:app science/motion/cases/december-d2.npz science/motion/cases/december-d6.npz science/motion/cases/vesta-d3.npz science/motion/cases/vesta-d6.npz science/motion/cases/observations.csv science/motion/cases/vesta-horizons.csv ./science/motion/cases/
 COPY --chown=app:app ops/ml/compose.yaml ./deploy/compose.yaml

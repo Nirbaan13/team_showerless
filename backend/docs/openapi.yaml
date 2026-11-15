@@ -34,6 +34,88 @@ tags:
   - name: Federated Downloads
   - name: Image unification
 paths:
+  /api/infra/external-services:
+    get:
+      summary: Inspect SIA and TAP circuits and mirror indexing progress
+      description: Read-only state. Dedicated bounded probes run at startup and once per hour; this endpoint never probes upstream services.
+      responses:
+        '200':
+          description: Circuit states, timestamps, preferred route and real mirror index progress
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [upstream, mirror_index]
+                properties:
+                  upstream:
+                    type: object
+                    additionalProperties: true
+                  mirror_index:
+                    type: object
+                    additionalProperties: true
+  /api/irsa/discovery:
+    post:
+      summary: Discover real SPHEREx frames through the shared availability gateway
+      description: Uses healthy SIA or the local public S3 mirror index. No image pixels are downloaded by this operation. Partial index results preserve actual releases and are explicitly labelled; an empty unfinished index returns 503.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [right_ascension_deg, declination_deg, radius_degrees]
+              properties:
+                right_ascension_deg:
+                  type: number
+                  minimum: 0
+                  exclusiveMaximum: 360
+                declination_deg:
+                  type: number
+                  minimum: -90
+                  maximum: 90
+                radius_degrees:
+                  type: number
+                  exclusiveMinimum: 0
+                  maximum: 5
+                detector_array:
+                  type: integer
+                  minimum: 1
+                  maximum: 6
+                observed_after:
+                  type: string
+                  format: date-time
+                observed_before:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Native artifact metadata; mirror original URLs use S3 and cutout consumers must use the corresponding IBE artifact
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [images, discovery_complete]
+                properties:
+                  discovery_complete:
+                    type: boolean
+                  images:
+                    type: array
+                    items:
+                      type: object
+                      required: [observation, accessUrl]
+                      properties:
+                        observation:
+                          $ref: '#/components/schemas/Observation'
+                        accessUrl:
+                          type: string
+                          format: uri
+                        sourceUrl:
+                          type: string
+                          format: uri
+        '422':
+          description: Invalid sky geometry, detector or observing interval
+        '503':
+          description: Mirror index warming, capacity exhausted or upstream unavailable
   /api/capabilities:
     get:
       tags: [Analyses]

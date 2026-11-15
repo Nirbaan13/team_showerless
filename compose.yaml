@@ -34,7 +34,8 @@ services:
     working_dir: /app/pipeline
     command: ["/opt/inference-venv/bin/python", "-m", "uvicorn", "unification.app:app", "--host", "0.0.0.0", "--port", "8002"]
     environment:
-      PYTHONPATH: /app/pipeline
+      PYTHONPATH: /app:/app/pipeline
+      IRSA_DISCOVERY_URL: http://api:8000/api/irsa/discovery
       UNIFICATION_DATA_ROOT: /tmp/spherex_cutouts
     volumes:
       - api-data:/tmp/spherex_cutouts
