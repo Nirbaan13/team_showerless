@@ -1,0 +1,124 @@
+{
+  "status": "PASS",
+  "source": "real unWISE neo11 W2",
+  "base": "http://127.0.0.1:18203",
+  "runtime": "/tmp/ivan-historical-runtime/wise0855-3",
+  "images": [
+    {
+      "loaded": true,
+      "width": 110,
+      "height": 110
+    },
+    {
+      "loaded": true,
+      "width": 29,
+      "height": 29
+    },
+    {
+      "loaded": true,
+      "width": 29,
+      "height": 29
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/archives",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/archives",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/observations-search?right_ascension_deg=133.795125&declination_deg=-7.245139&radius_degrees=0.05892555471129446&providers=unwise-neo11&product_kinds=image&observed_after=2010-01-01T00%3A00%3A00.000Z&observed_before=2025-01-01T00%3A00%3A00.000Z&limit_per_provider=100",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18203/backend/api/observations-download",
+      "body": "{\"observation_ids\":[\"08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5\",\"224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957\",\"2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1\",\"57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa\",\"86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2\",\"936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561\",\"eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86\",\"faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386\"],\"delivery\":{\"mode\":\"original\"}}"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/observations-download/9931ac8a-f31a-4149-82c4-7bac96541007",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications",
+      "body": "{\"inputs\":[{\"kind\":\"archive_asset\",\"id\":\"344994a4be4d3f3121f69ec70d456450efc1027532853c97b5e14d7b898dcb2a\"},{\"kind\":\"archive_asset\",\"id\":\"e62d418bbfa7aa0ad71c506e5857f60b6ce36808da69c851c1a3d17699b3aa19\"},{\"kind\":\"archive_asset\",\"id\":\"e18d440e5a31bb954c2a8c776e42b7aa2853c9c1e7f97f5146da5abf7224011e\"},{\"kind\":\"archive_asset\",\"id\":\"b3b96f57c4002bd48323996cae3e93bd385e49b07aa8af24843e6c904a26be2f\"},{\"kind\":\"archive_asset\",\"id\":\"851c163a59db66642239dfc4295fc463fe09d025d465a32adbc3d8dc7dfcde4f\"},{\"kind\":\"archive_asset\",\"id\":\"5c5d63513cd1e59ddc5e38f432aead993397e04ac75065b9c5733926e0aed2d9\"},{\"kind\":\"archive_asset\",\"id\":\"39e6e9899096d1a8407f139facbfb2e69cb474b06cd6025b62fc9d3b3fc13495\"},{\"kind\":\"archive_asset\",\"id\":\"c2756d15bf1f01015178d9c32abe6d779c04d20378888fd8fce620a5472e5cf3\"}],\"grid\":{\"kind\":\"sky\",\"width\":110,\"height\":110,\"ra_degrees\":133.79512499999998,\"dec_degrees\":-7.245139,\"pixel_scale_arcsec\":2.75},\"options\":{\"normalization\":\"none\",\"mask_policy\":\"science\"}}"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18203/backend/api/motion/search",
+      "body": "{\"unification_id\":\"2ec23afa-f662-46c1-a4e2-cc66593be0da\",\"profile\":\"stellar_proper_motion\"}"
+    }
+  ],
+  "apiResponses": [
+    {
+      "url": "http://127.0.0.1:18203/backend/api/archives",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/observations-search?right_ascension_deg=133.795125&declination_deg=-7.245139&radius_degrees=0.05892555471129446&providers=unwise-neo11&product_kinds=image&observed_after=2010-01-01T00%3A00%3A00.000Z&observed_before=2025-01-01T00%3A00%3A00.000Z&limit_per_provider=100",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/observations-download",
+      "status": 202
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/observations-download/9931ac8a-f31a-4149-82c4-7bac96541007",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications",
+      "status": 202
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/image-unifications/2ec23afa-f662-46c1-a4e2-cc66593be0da",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18203/backend/api/motion/search",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "resultText": "unWISE neo11 W2 time-resolved visit coadds · 8 actual observation epochs · 2010-05-04T22:03:56.931551Z through 2024-04-17T00:21:12.868559Z\n\nVisit coadds are not individual exposures; real mission gaps remain.\n\nFluxes are nominal Vega-equivalent uJy; no source SED color correction is applied.\n\nNominal W2 PSF is 6.4 arcsec; no per-epoch PSF homogenization or astrometric refinement.\n\nArtifact/outlier/bloom evidence is unavailable; unknown masks are not SPHEREx flags.\n\nBilinear sampling does not conserve integrated flux; pixel covariance is not represented.\n\nIvan uses residual-derived noise; supplied variance qualifies preparation but is not detector weighting.\n\nBilinear point sampling does not conserve integrated flux or match PSFs.\n\nResampling induces covariance; only independent input-pixel variance is propagated.\n\nRegistration does not grant production analysis eligibility.\n\nAligned frame\nDifference image\nTrack overlay\n2ec23afa-f662-46c1-a4e2-cc66593be0da\n·\nunWISE neo11 W2\n· 110×110 px (2.75″/px)\nPlay\nE1:2010-05-04 · 22:03:56 UTC\nE2:2010-11-11 · 22:00:25 UTC\nE3:2015-05-02 · 20:16:37 UTC\nE4:2017-04-21 · 05:36:46 UTC\nE5:2019-04-18 · 19:36:57 UTC\nE6:2020-11-11 · 00:28:49 UTC\nE7:2023-11-12 · 22:30:58 UTC\nE8:2024-04-17 · 00:21:12 UTC\nObservation ID: unwise-neo11:unwise:neo11:1342m076:W2:e000\n100.0% valid pixels\nSTACK THE EVIDENCE\n8 exposures contribute at the center\nFixed sky position\nStationary median center\nFollowing the fitted track\nCo-moving linear shift\nDifference Image Coadd\nFitted Linear Trajectory\nRANKED CANDIDATES\n7\nHeuristic\nAlgorithm:\nLeave-One-Out (LOO)\nCANDIDATE TRACK\n#1 · Unreviewed track · 8 frames\n#2 · Unreviewed track · 4 frames\n#3 · Unreviewed track · 3 frames\n#4 · Unreviewed track · 4 frames\n#5 · Unreviewed track · 3 frames\n#6 · Unreviewed track · 3 frames\n#7 · Unreviewed track · 3 frames\nTRACK FIT RMS\n0.33 px\nSKY SPEED\n8.17″/year\nLINKED EXPOSURES\n8/8\n\nRA 133.79551° · Dec -7.24476°\n\nResidual S/N 25.4 · filter coverage 100%\n\nExport candidate JSON\nDETECTOR COMPARISON\nShared median\n7 tracks\nPer-frame reference / heuristic\n7 tracks\nCatalog Free\nOutlier evidence unavailable"
+}

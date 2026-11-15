@@ -1,0 +1,43 @@
+SIMPLE  =                    T / file does conform to FITS standard
+BITPIX  =                  -32 / number of bits per data pixel
+NAXIS   =                    2 / number of data axes
+NAXIS1  =                 2048 / length of data axis 1
+NAXIS2  =                 2048 / length of data axis 2
+EXTEND  =                    T / FITS dataset may contain extensions
+COMMENT   FITS (Flexible Image Transport System) format is defined in 'Astronomy
+COMMENT   and Astrophysics', volume 376, page 359; bibcode: 2001A&A...376..359H
+EXTNAME = 'coadded image, outliers removed'
+WCSAXES =                    2 / no comment
+CTYPE1  = 'RA---TAN'           / TAN (gnomic) projection
+CTYPE2  = 'DEC--TAN'           / TAN (gnomic) projection
+EQUINOX =                2000. / Equatorial coordinates definition (yr)
+LONPOLE =                 180. / no comment
+LATPOLE =                   0. / no comment
+CRVAL1  =           134.237284 / RA  of reference point
+CRVAL2  =            -7.572222 / DEC of reference point
+CRPIX1  =               1024.5 / X reference pixel
+CRPIX2  =               1024.5 / Y reference pixel
+CUNIT1  = 'deg     '           / X pixel scale units
+CUNIT2  = 'deg     '           / Y pixel scale units
+CD1_1   =   -0.000763888888889 / Transformation matrix
+CD1_2   =                    0 / no comment
+CD2_1   =                    0 / no comment
+CD2_2   =    0.000763888888889 / no comment
+IMAGEW  =                 2048 / Image width,  in pixels.
+IMAGEH  =                 2048 / Image height, in pixels.
+MAGZP   =                 22.5 / Magnitude zeropoint (in Vega mag)
+UNW_SKY =    0.811329328766985 / Background value subtracted from coadd img
+UNW_VER = 'v3.5-15-gdebad9c'   / unWISE code git revision
+UNW_URL = 'https://github.com/dstndstn/unwise-coadds' / git URL
+UNW_DVER=                  3.3 / unWISE data model version
+UNW_DATE= '2017-01-05T11:07:23.802093' / unWISE run time
+UNW_FR0 =                    0 / unWISE frame start
+UNW_FRN =                    0 / unWISE N frames
+UNW_MEDF=                    0 / unWISE median filter sz
+UNW_BGMA=                    F / unWISE background matching?
+REFEREN1= '/n/fink2/ameisner/unwise-coadds/neo2_ref_w2' / reference coadd direct
+REFEREN2= '        '           / reference coadd directory, continued
+EPOCH   =                    0 / epoch number
+MJDMIN  =       55319.36486639 / minimum MJD among included L1b frames
+MJDMAX  =       55322.47395147 / maximum MJD among included L1b frames
+END

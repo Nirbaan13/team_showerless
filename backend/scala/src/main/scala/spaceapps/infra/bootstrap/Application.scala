@@ -7,9 +7,9 @@ import spaceapps.downloads.service.ArchiveLimits
 import spaceapps.irsa.model.*
 import spaceapps.irsa.integrations.LiveArchive
 import spaceapps.irsa.integrations.grpc.GrpcServer
-import spaceapps.processing.integrations.HttpPipelineClient
+import spaceapps.processing.integrations.{HttpPipelineClient,HttpHistoricalMotionClient}
 import spaceapps.processing.service.Unifications
-import spaceapps.processing.controller.UnificationApi
+import spaceapps.processing.controller.{UnificationApi,HistoricalMotionApi}
 import spaceapps.irsa.repository.Repository
 import spaceapps.repository.AnalysisRepository
 import spaceapps.infra.service.FileCache
@@ -49,7 +49,8 @@ object Application:
       analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
       pipeline <- HttpPipelineClient.make(env("PROCESSING_URL","http://pipeline:8002"))
       catalogs <- spaceapps.catalogs.service.Catalogs.make(new spaceapps.catalogs.integrations.TapCatalogs(client))
-      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline),catalogs=Some(catalogs))
+      historicalMotion <- HttpHistoricalMotionClient.make(env("IVAN_ML_BASE_URL","http://host.docker.internal:8001"))
+      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline),catalogs=Some(catalogs),historicalMotion=Some(historicalMotion))
       downloadsRuntime <- DownloadsRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(
         global_parallelism=env("ARCHIVE_PARALLELISM","3").toInt,
         per_provider_parallelism=env("ARCHIVE_PROVIDER_PARALLELISM","1").toInt,
@@ -61,9 +62,10 @@ object Application:
       downloadsApi=new DownloadsApi(downloadsRuntime.service)
       unifications <- Unifications.make(jobs,downloadsRuntime.service,downloadsRuntime.repository,cache,data,data.resolve("jobs.sqlite"),pipeline.unify)
       unificationApi=new UnificationApi(unifications)
+      historicalMotionApi=new HistoricalMotionApi(unifications,historicalMotion)
       grpcPort <- GrpcServer.start(jobs,env("APP_REVISION","development"),env("GRPC_HOST","0.0.0.0"),env("GRPC_PORT","50051").toInt,channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       _ <- ZIO.logInfo(s"gRPC listener started on port $grpcPort")
       _ <- ZIO.logInfo(s"Starting IRSA retrieval service, revision ${env("APP_REVISION","development")}")
-      _ <- Server.serve(api.routes ++ downloadsApi.routes ++ unificationApi.routes)
+      _ <- Server.serve(api.routes ++ downloadsApi.routes ++ unificationApi.routes ++ historicalMotionApi.routes)
     yield ()
   }.provide(Client.default,Server.defaultWithPort(env("PORT","8000").toInt))

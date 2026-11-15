@@ -78,10 +78,36 @@ paths:
   /api/motion/search:
     post:
       tags: [Analyses]
-      summary: Retired synchronous legacy motion endpoint
-      description: Use POST /api/analyses/motion with a native download ID, then follow its durable status and events.
+      summary: Run Ivan's stellar proper-motion review on a prepared historical bundle
+      description: >-
+        Select a completed managed image-unification artifact prepared from qualified neo11 W2 observations.
+        The backend leases and streams its bounded bytes to the configured Ivan service; callers cannot provide
+        acquisition URLs or filesystem paths. Uses 0.1–30 arcsec/year with real elapsed observation hours.
+        Existing native-download analysis models remain separate. Legacy coordinate-only requests return 501.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [unification_id, profile]
+              properties:
+                unification_id: {type: string, format: uuid}
+                profile: {type: string, enum: [stellar_proper_motion]}
       responses:
-        '501': {description: Legacy motion service is unsupported; no benchmark fallback is returned}
+        '200':
+          description: Ivan review JSON with candidates, actual dates, profile and preparation limitations
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '404': {description: Unknown unification ID}
+        '409': {description: Artifact incomplete, evicted or changed}
+        '422': {description: Invalid selection or artifact fails historical qualification}
+        '501': {description: Coordinate-only legacy acquisition is unsupported}
+        '502': {description: Ivan upstream or protocol failure}
+        '503': {description: Ivan service unavailable or busy}
+        '504': {description: Ivan service exceeded its bounded processing time}
   /api/catalogue/auto-submit:
     post:
       tags: [Analyses]
@@ -104,6 +130,11 @@ paths:
         real exposure times and provenance are retained alongside a finite tensor.
   
         Registration does not establish comparable PSFs or production ML eligibility.
+
+        For unwise-neo11 science assets the server resolves the completed inverse-variance,
+        coverage and contributors assets from the same observation, verifies their persisted
+        checksums and snapshots them within the shared 256 MiB input budget. Missing or
+        ambiguous companions reject preparation; public input selection remains unchanged.
   
         '
       requestBody:

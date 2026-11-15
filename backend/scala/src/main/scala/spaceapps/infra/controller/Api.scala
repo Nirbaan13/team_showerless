@@ -3,7 +3,7 @@ import spaceapps.irsa.service.{Jobs,MetadataService}
 import spaceapps.irsa.controller.IrsaApi
 import spaceapps.equipment.service.EquipmentService
 import spaceapps.equipment.controller.EquipmentApi
-import spaceapps.processing.integrations.HttpPipelineClient
+import spaceapps.processing.integrations.{HttpPipelineClient,HttpHistoricalMotionClient}
 import spaceapps.processing.controller.PipelineApi
 import spaceapps.catalogs.controller.CatalogApi
 import spaceapps.catalogs.service.Catalogs
@@ -19,8 +19,9 @@ import org.yaml.snakeyaml.{Yaml,LoaderOptions}
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.jdk.CollectionConverters.*
 final class Api private(jobs:Jobs,revision:String,specification:String,openapi:Json,channels:Set[Int],
-  metadata:Option[MetadataService],equipment:Option[EquipmentService],analyses:Option[Analyses],pipeline:Option[HttpPipelineClient],catalogs:Option[Catalogs]):
+  metadata:Option[MetadataService],equipment:Option[EquipmentService],analyses:Option[Analyses],pipeline:Option[HttpPipelineClient],catalogs:Option[Catalogs],historicalMotion:Option[HttpHistoricalMotionClient]):
   private def capabilities:Task[Response]=for
+    historical<-historicalMotion.fold[UIO[Boolean]](ZIO.succeed(false))(_.healthy)
     worker<-pipeline.fold[UIO[Boolean]](ZIO.succeed(false))(_.healthy)
     model<-analyses.fold[UIO[Json]](ZIO.succeed(Json.Null))(_.models.orElseSucceed(Json.Null))
   yield Response.json(Json.Obj("revision"->Json.Str(revision),
@@ -29,6 +30,9 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
     "native_epoch_difference"->Json.Obj("status"->Json.Str("unsupported")),
     "native_zodi_subtraction"->Json.Obj("status"->Json.Str("unsupported")),
     "live_catalogs"->Json.Obj("configured"->Json.Bool(catalogs.nonEmpty),"endpoint"->Json.Str("/api/motion/catalog"),"availability"->Json.Str("reported_per_provider_per_request")),
+    "historical_motion"->Json.Obj("configured"->Json.Bool(historicalMotion.nonEmpty),"available"->Json.Bool(historical),
+      "status"->Json.Str(if historical then "available" else "unavailable"),"endpoint"->Json.Str("/api/motion/search"),
+      "profile"->Json.Str("stellar_proper_motion"),"input"->Json.Str("completed_managed_unification"),"provider"->Json.Str("unwise-neo11"),"band"->Json.Str("W2")),
     "legacy_motion_service"->Json.Obj("status"->Json.Str("unsupported")),
     "community_catalogue"->Json.Obj("status"->Json.Str("unsupported")),
     "external_submission"->Json.Obj("status"->Json.Str("disabled"))).toJson).addHeader("Cache-Control","no-store")
@@ -44,7 +48,7 @@ final class Api private(jobs:Jobs,revision:String,specification:String,openapi:J
   private val retrieval=documentation ++ new IrsaApi(jobs,channels,metadata).routes ++ new EquipmentApi(equipment).routes
   private val analysis=analyses.fold(retrieval)(s=>retrieval ++ LegacyAnalysisRoutes.routes(s))
   private val processing=pipeline.fold(analysis)(s=>analysis ++ new PipelineApi(s).routes)
-  val routes:Routes[Any,Response]=processing ++ new CatalogApi(catalogs).routes ++ new LegacyUiApi().routes
+  val routes:Routes[Any,Response]=processing ++ new CatalogApi(catalogs).routes ++ new LegacyUiApi(includeMotionSearch=historicalMotion.isEmpty).routes
 
 object Api:
   private def ast(value:Any):Json=value match
@@ -55,7 +59,7 @@ object Api:
     case n:java.lang.Number=>Json.Num(new java.math.BigDecimal(n.toString))
     case s=>Json.Str(s.toString)
   def make(jobs:Jobs,revision:String,path:FilePath,channels:Set[Int]=Set.empty,
-    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None,analyses:Option[Analyses]=None,pipeline:Option[HttpPipelineClient]=None,catalogs:Option[Catalogs]=None):Task[Api]=ZIO.attemptBlocking {
+    metadata:Option[MetadataService]=None,equipment:Option[EquipmentService]=None,analyses:Option[Analyses]=None,pipeline:Option[HttpPipelineClient]=None,catalogs:Option[Catalogs]=None,historicalMotion:Option[HttpHistoricalMotionClient]=None):Task[Api]=ZIO.attemptBlocking {
     val text=Files.readString(path)
     val options=new LoaderOptions();options.setAllowDuplicateKeys(false)
     val document=new Yaml(new SafeConstructor(options)).load[java.util.Map[String,Object]](text)
@@ -67,6 +71,6 @@ object Api:
       operation.put("description","The existing pipeline HTTP API does not provide this native-FITS processing operation. Returns HTTP501.")
       operation.get("responses").asInstanceOf[java.util.Map[String,Object]].put("501",java.util.Map.of("description","Processing is not implemented yet"))
     }
-    new Api(jobs,revision,text,ast(document),channels,metadata,equipment,analyses,pipeline,catalogs)
+    new Api(jobs,revision,text,ast(document),channels,metadata,equipment,analyses,pipeline,catalogs,historicalMotion)
   }
   private val swagger="""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>SPHEREx API</title><link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui.css"></head><body><div id="swagger-ui"></div><script src="https://unpkg.com/swagger-ui-dist@5.35.0/swagger-ui-bundle.js"></script><script>SwaggerUIBundle({url:'openapi.json',dom_id:'#swagger-ui'});</script></body></html>"""

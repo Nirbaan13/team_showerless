@@ -14,6 +14,7 @@ from astropy.time import Time
 from .ml import MAX_COMPRESSED, MAX_EXPANDED, load_bundle
 from .readers import read_frame
 from .resampling import resample, target_wcs
+from .unwise import ROLES as UNWISE_ROLES, read_unwise_frame
 
 
 class UnificationError(ValueError):
@@ -63,10 +64,10 @@ def validate_request(request):
     if not isinstance(inputs, list) or not 1 <= len(inputs) <= 32:
         raise ValueError('input count must be between 1 and 32')
     for spec in inputs:
-        _object(spec, ('id', 'path', 'sha256', 'profile'), ('image_hdu', 'plane_indices', 'metadata'))
+        _object(spec, ('id', 'path', 'sha256', 'profile'), ('image_hdu', 'plane_indices', 'metadata', 'auxiliaries'))
         if not isinstance(spec['id'], str) or not 1 <= len(spec['id']) <= 256:
             raise ValueError('invalid input identity')
-        if spec['profile'] not in ('generic', 'spherex', 'raster'):
+        if spec['profile'] not in ('generic', 'spherex', 'raster', 'unwise'):
             raise ValueError('invalid source profile')
         if not isinstance(spec['sha256'], str) or not re.fullmatch('[0-9a-f]{64}', spec['sha256']):
             raise ValueError('invalid source checksum')
@@ -82,6 +83,18 @@ def validate_request(request):
             raise ValueError('invalid plane_indices')
         if not isinstance(spec.get('metadata', {}), dict) or len(json.dumps(spec.get('metadata', {}), allow_nan=False)) > 16384:
             raise ValueError('invalid input metadata')
+        auxiliaries = spec.get('auxiliaries', {})
+        if not isinstance(auxiliaries, dict) or (set(auxiliaries) != UNWISE_ROLES if spec['profile'] == 'unwise' else bool(auxiliaries)):
+            raise ValueError('invalid associated product roles')
+        for ref in auxiliaries.values():
+            _object(ref, ('id', 'path', 'sha256', 'bytes'))
+            if not isinstance(ref['id'], str) or not 1 <= len(ref['id']) <= 256 or not _integer(ref['bytes'], 1, 256*1024**2):
+                raise ValueError('invalid associated product identity or byte count')
+            if not isinstance(ref['sha256'], str) or not re.fullmatch('[0-9a-f]{64}', ref['sha256']):
+                raise ValueError('invalid associated product checksum')
+            relative = ref['path']
+            if not isinstance(relative, str) or not relative.startswith(prefix) or '\\' in relative or '\x00' in relative or any(c in ('', '.', '..') for c in relative.split('/')) or len(PurePosixPath(relative).parts) != 4:
+                raise ValueError('invalid associated product snapshot path')
     if len({s['id'] for s in inputs}) != len(inputs):
         raise ValueError('duplicate frame identities')
     grid = request['grid']
@@ -95,6 +108,8 @@ def validate_request(request):
         values = [grid[k] for k in ('ra_degrees', 'dec_degrees', 'pixel_scale_arcsec')]
         if any(type(v) not in (int, float) or not np.isfinite(v) for v in values) or not (0 <= values[0] < 360 and -90 <= values[1] <= 90 and 0 < values[2] <= 3600):
             raise ValueError('invalid sky grid coordinates or scale')
+    if any(spec['profile'] == 'unwise' for spec in inputs) and (kind != 'sky' or not np.isclose(grid['pixel_scale_arcsec'], 2.75, atol=1e-6, rtol=0)):
+        raise ValueError('qualified unWISE requires a native-scale 2.75 arcsec sky grid')
     options = request['options']
     _object(options, (), ('normalization', 'mask_policy', 'target_unit'))
     if options.get('normalization', 'none') not in ('none', 'robust') or options.get('mask_policy', 'science') not in ('science', 'motion'):
@@ -134,6 +149,7 @@ def _run_job(request, root):
     root = Path(root).resolve(strict=True)
     grid, options = request['grid'], request['options']
     records = []
+    input_bytes = 0
     for spec in request['inputs']:
         source = safe_path(root, spec['path'])
         if not source.is_file() or source.stat().st_size > 256*1024**2:
@@ -141,7 +157,23 @@ def _run_job(request, root):
         # Verify immediately before and after decoding to catch source replacement.
         if _sha(source) != spec['sha256']:
             raise ValueError('source checksum mismatch')
-        frame = read_frame(source, spec, options.get('mask_policy', 'science'))
+        checked_files = [(source, spec['sha256'])]
+        auxiliary_paths = {}
+        input_bytes += source.stat().st_size
+        for role, ref in spec.get('auxiliaries', {}).items():
+            path = safe_path(root, ref['path'])
+            if not path.is_file() or path.stat().st_size != ref['bytes'] or _sha(path) != ref['sha256']:
+                raise ValueError('associated product size or checksum mismatch')
+            input_bytes += ref['bytes']
+            auxiliary_paths[role] = path
+            checked_files.append((path, ref['sha256']))
+        if input_bytes > 256*1024**2:
+            raise ValueError('combined scientific input bytes exceed limit')
+        frame = (read_unwise_frame(source, spec, auxiliary_paths) if spec['profile'] == 'unwise'
+                 else read_frame(source, spec, options.get('mask_policy', 'science')))
+        for path, checksum in checked_files:
+            if _sha(path) != checksum:
+                raise ValueError('scientific input checksum changed during decode')
         if _sha(source) != spec['sha256']:
             raise ValueError('source checksum changed during decode')
         target_unit = options.get('target_unit')

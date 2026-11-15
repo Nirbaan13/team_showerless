@@ -1,0 +1,198 @@
+{
+  "status": "PASS",
+  "paired_native_wcs_checks": 32,
+  "checks": [
+    {
+      "case": "wise0855-3",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "08451800ea1b1410ab12f8793a3bfbf7b6070604f9d85d217e2a27fddb1dffd5",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "2e3e1580b2d80b25c1d2e7ef41a8405e2c2ff24fd53ac94f0e026a011ea73ef1",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "57ea26d5700f6fc6da9bf6c2be44a4ead4610aefd7bd82347b4a78428ca143aa",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "936064dfbd986e4151d6699b28517b464c01885b3d0ac8f373e9bf5c68838561",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "86a4931c92ab513ba494af367bdfdf2588d7fc29feb631e0324bf4afc0a6c2a2",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "eb91f8ec07e444bf0ca51b3ef3acf9e7abea2724bf28251305cd4fad0eab6d86",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "224a0b87464882c8e0ad278328ccf73eea878958157321f46c851d388768a957",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "wise0855-3",
+      "record_id": "faa457a7ae798ca23fe07b195e435195d4056b34bd43c8c5b359d7bd075ac386",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "role": "#inverse-variance",
+      "full_wcs_equal": true
+    },
+    {
+      "case": "accident-1",
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "role": "#coverage",
+      "full_wcs_equal": true
+    }
+  ]
+}

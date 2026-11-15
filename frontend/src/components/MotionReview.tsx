@@ -50,8 +50,10 @@ function exportCandidate(review: MotionReviewDataset, candidate: MotionTrackCand
     ephemeris_match_tolerance_px: review.ephemeris_match_tolerance_px,
     max_ephemeris_offset_px: candidate.max_offset_px,
     fit_rms_px: candidate.fit_rms_px,
-    speed_arcsec_per_hour: candidate.speed_px_per_time * review.pixel_scale_arcsec,
-    retains_outlier_pixels: review.retains_outliers,
+    ...(review.profile === 'stellar_proper_motion'
+      ? { proper_motion_arcsec_per_year: candidate.proper_motion_arcsec_per_year, proper_motion_unit: 'arcsec/year' }
+      : { speed_arcsec_per_hour: candidate.speed_px_per_time * review.pixel_scale_arcsec }),
+    retains_outlier_pixels: review.comparison.outliers_masked === null ? null : review.retains_outliers,
     detections: candidate.epochs.map((epoch, index) => ({
       observation_id: review.frames[epoch].id,
       archive_url: review.frames[epoch].archive_url,
@@ -64,7 +66,7 @@ function exportCandidate(review: MotionReviewDataset, candidate: MotionTrackCand
       residual_snr: candidate.snr?.[index] ?? null,
       filter_support: candidate.filter_support?.[index] ?? null,
       bloom_area_px: candidate.bloom_area_px?.[index] ?? null,
-      near_outlier_pixel: candidate.outlier_at_position[index],
+      near_outlier_pixel: candidate.outlier_at_position?.[index] ?? null,
       ephemeris_offset_px: candidate.ephemeris_offsets_px?.[index] ?? null,
     })),
   };
@@ -88,7 +90,9 @@ interface MotionFieldProps {
   ) => void;
 }
 
-function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
+export function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
+  const historical = review.profile === 'stellar_proper_motion';
+  const instrument = historical ? 'unWISE neo11 W2' : 'SPHEREx';
   const [ranking, setRanking] = useState<RankingMethod>(
     review.bloom_tracks.length ? 'bloom' : 'heuristic'
   );
@@ -207,7 +211,7 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
             width={review.width}
             height={review.height}
             src={frame[layer] || frame.aligned}
-            alt={`SPHEREx exposure at ${utc(frame.time)}, ${
+            alt={`${instrument} exposure at ${frame.time}, ${
               layer === 'aligned'
                 ? 'aligned to the sky'
                 : layer === 'bloom'
@@ -250,7 +254,7 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span className="font-bold text-white">{review.target ?? review.id}</span>
             <span className="text-paper-400">·</span>
-            <span className="text-emerald-300">{review.detector ?? 'SPHEREx'}</span>
+            <span className="text-emerald-300">{review.detector ?? instrument}</span>
             <span className="hidden sm:inline text-paper-400">
               · {review.width}×{review.height} px ({review.pixel_scale_arcsec}″/px)
             </span>
@@ -287,7 +291,7 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
                   }}
                 >
                   <span className="opacity-75 mr-1">E{index + 1}:</span>
-                  {multiDay && `${item.time.slice(5, 10)} · `}
+                  {multiDay && `${historical ? item.time.slice(0, 10) : item.time.slice(5, 10)} · `}
                   {utc(item.time)}
                 </button>
               ))}
@@ -483,7 +487,9 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
                 <div className="p-2.5 rounded-xl bg-paper-950 border border-paper-800">
                   <dt className="text-[10px] font-mono text-paper-400 uppercase">Sky speed</dt>
                   <dd className="mt-1 font-mono font-bold text-emerald-300">
-                    {(candidate.speed_px_per_time * review.pixel_scale_arcsec).toFixed(1)}″/h
+                    {historical
+                      ? `${candidate.proper_motion_arcsec_per_year?.toFixed(2) ?? 'Unavailable'}″/year`
+                      : `${(candidate.speed_px_per_time * review.pixel_scale_arcsec).toFixed(1)}″/h`}
                   </dd>
                 </div>
                 {candidate.max_offset_px !== null && (
@@ -526,7 +532,7 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
                       Offset from ephemeris {frameOffset.toFixed(2)} px
                     </p>
                   )}
-                  {candidate.outlier_at_position[detection] && (
+                  {candidate.outlier_at_position?.[detection] && (
                     <p className="text-amber-300">OUTLIER flag near this detection</p>
                   )}
                 </div>
@@ -591,7 +597,7 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
           <div className="flex items-center justify-between text-[10px] font-mono text-paper-400 pt-1 border-t border-paper-800">
             <span>{review.has_ephemeris ? 'Ephemeris Verified' : 'Catalog Free'}</span>
             <span className="text-paper-300">
-              {review.retains_outliers ? 'Outliers Retained' : 'Outliers Masked'}
+              {review.comparison.outliers_masked === null ? 'Outlier evidence unavailable' : review.retains_outliers ? 'Outliers Retained' : 'Outliers Masked'}
             </span>
           </div>
 

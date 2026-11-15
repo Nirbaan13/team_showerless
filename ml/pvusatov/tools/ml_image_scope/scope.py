@@ -23,7 +23,8 @@ ASSETS = {
 }
 MODULES = {'ml/service.py', 'ml/detector.py', 'ml/catalogue_db.py', 'ml/smoke_deployment.py',
            'science/motion/live.py', 'science/motion/prepare_fits.py', 'science/motion/review.py',
-           'science/motion/detector.py', 'science/motion/ranker.py'}
+           'science/motion/detector.py', 'science/motion/ranker.py',
+           'science/motion/prepared.py', 'science/motion/profiles.py', 'pipeline/unification/ml.py'}
 
 
 def copy_files(root, *, dockerfile=None):

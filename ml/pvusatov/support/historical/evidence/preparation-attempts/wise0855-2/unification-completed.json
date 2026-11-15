@@ -1,0 +1,10 @@
+{
+  "id": "3647444f-8bae-4ded-b227-c6fb1fc366d5",
+  "status": "failed",
+  "status_url": "/api/image-unifications/3647444f-8bae-4ded-b227-c6fb1fc366d5",
+  "error": {
+    "code": "pipeline_invalid_request",
+    "message": "The pipeline rejected the request",
+    "retryable": false
+  }
+}

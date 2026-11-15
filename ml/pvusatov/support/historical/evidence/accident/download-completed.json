@@ -1,0 +1,1545 @@
+{
+  "id": "35c0a1a6-cc87-469e-9ac5-d2630bf8e004",
+  "status": "completed",
+  "mode": "default",
+  "query": {
+    "observation_ids": [
+      "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6"
+    ],
+    "delivery": {
+      "mode": "original"
+    }
+  },
+  "observations": [
+    {
+      "id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e008",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2017-02-10T13:28:10.578720Z",
+        "end_utc": "2017-02-13T05:55:01.734240Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "57794.56123355",
+          "MJDMAX": "57797.24654785"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "57797.24654785",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/project/projectdirs/cosmo/data/unwise/neo3/unwise-coadds/fulldepth",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2018-05-15T18:26:26.832417",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "BAND": "2",
+        "epoch": "8",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "v3.5-22-g76dafcc",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "57794.56123355",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "is_available": true,
+      "observation_date": "2017-02-10T13:28:10.578720Z",
+      "release": "neo11"
+    },
+    {
+      "id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e001",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2010-08-09T22:22:58.157184Z",
+        "end_utc": "2010-08-17T05:00:43.425216Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "55417.93261756",
+          "MJDMAX": "55425.20883594"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "55425.20883594",
+        "epoch": "1",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/n/fink2/ameisner/unwise-coadds/neo2_ref_w2",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2017-01-07T15:22:57.687667",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "v3.5-15-gdebad9c",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "55417.93261756",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "is_available": true,
+      "observation_date": "2010-08-09T22:22:58.157184Z",
+      "release": "neo11"
+    },
+    {
+      "id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e000",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2010-02-12T06:43:56.565120Z",
+        "end_utc": "2010-02-15T03:01:16.316256Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "55239.2805158",
+          "MJDMAX": "55242.12588329"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "55242.12588329",
+        "epoch": "0",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/n/fink2/ameisner/unwise-coadds/neo2_ref_w2",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2017-01-04T15:00:54.448147",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "v3.5-15-gdebad9c",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "55239.2805158",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "is_available": true,
+      "observation_date": "2010-02-12T06:43:56.565120Z",
+      "release": "neo11"
+    },
+    {
+      "id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e015",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2020-07-22T12:30:38.204064Z",
+        "end_utc": "2020-07-25T08:00:16.930656Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "59052.52127551",
+          "MJDMAX": "59055.33352929"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "59055.33352929",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/global/cfs/cdirs/cosmo/data/unwise/neo7/unwise-coadds/fulldepth",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2022-05-17T10:08:00.847521",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "BAND": "2",
+        "epoch": "15",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "neo8",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "59052.52127551",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "is_available": true,
+      "observation_date": "2020-07-22T12:30:38.204064Z",
+      "release": "neo11"
+    },
+    {
+      "id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e012",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2019-02-11T22:33:18.556704Z",
+        "end_utc": "2019-02-14T14:55:45.151968Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "58525.93979811",
+          "MJDMAX": "58528.62205037"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "58528.62205037",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/n/fink1/ameisner/fulldepth_neo5",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2020-04-24T14:58:53.598391",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "BAND": "2",
+        "epoch": "12",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "neo6",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "58525.93979811",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "is_available": true,
+      "observation_date": "2019-02-11T22:33:18.556704Z",
+      "release": "neo11"
+    },
+    {
+      "id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e022",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2024-02-12T16:18:20.894400Z",
+        "end_utc": "2024-02-15T07:42:39.754944Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "60352.6794085",
+          "MJDMAX": "60355.32129346"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "60355.32129346",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/global/cfs/cdirs/cosmo/work/wise/outputs/merge/neo9/fulldepth",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2025-01-04T01:13:48.947559",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "BAND": "2",
+        "epoch": "22",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "neo9-5-ge1eb912",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "60352.6794085",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "is_available": true,
+      "observation_date": "2024-02-12T16:18:20.894400Z",
+      "release": "neo11"
+    },
+    {
+      "id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e021",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2023-07-23T00:09:58.737312Z",
+        "end_utc": "2023-07-25T19:04:25.237920Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "60148.00692983",
+          "MJDMAX": "60150.79473655"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "60150.79473655",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/global/cfs/cdirs/cosmo/work/wise/outputs/merge/neo9/fulldepth",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2025-01-03T08:27:35.375381",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "BAND": "2",
+        "epoch": "21",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "neo9-5-ge1eb912",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "60148.00692983",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "is_available": true,
+      "observation_date": "2023-07-23T00:09:58.737312Z",
+      "release": "neo11"
+    },
+    {
+      "id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "provider": "unwise-neo11",
+      "collection": "neo11",
+      "native_id": "2338m107:w2:e004",
+      "product_kind": "image",
+      "version": "neo11",
+      "mission": "WISE/NEOWISE",
+      "instrument": "WISE",
+      "sky_coverage": "ICRS TAN native coadd centered at 233.845931,-10.601111; per-pixel coverage not yet verified",
+      "time": {
+        "start_utc": "2015-02-10T13:25:00.462432Z",
+        "end_utc": "2015-02-16T00:15:51.649344Z",
+        "quality": "verified",
+        "native": {
+          "MJDMIN": "57063.55903313",
+          "MJDMAX": "57069.01101446"
+        }
+      },
+      "brightness_unit": "Vega nanomaggy (MAGZP 22.5)",
+      "native": {
+        "MJDMAX": "57069.01101446",
+        "epoch": "4",
+        "CRVAL1": "233.845931",
+        "REFEREN1": "/n/fink2/ameisner/unwise-coadds/neo2_ref_w2",
+        "CD2_1": "0",
+        "NAXIS1": "2048",
+        "UNW_DATE": "2017-01-14T11:41:50.931215",
+        "CRVAL2": "-10.601111",
+        "coadd_id": "2338m107",
+        "atlas_row": "6520",
+        "pixel_scale_arcsec": "2.75",
+        "release": "neo11",
+        "CD1_2": "0",
+        "CRPIX2": "1024.5",
+        "NAXIS2": "2048",
+        "UNW_DVER": "3.3",
+        "band": "2",
+        "UNW_VER": "v3.5-15-gdebad9c",
+        "CRPIX1": "1024.5",
+        "CD2_2": "0.000763888888889",
+        "CD1_1": "-0.000763888888889",
+        "MAGZP": "22.5",
+        "MJDMIN": "57063.55903313",
+        "FILTER": "W2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      },
+      "original": true,
+      "cutout": false,
+      "analysisEligible": true,
+      "frame_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "is_available": true,
+      "observation_date": "2015-02-10T13:25:00.462432Z",
+      "release": "neo11"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037",
+      "frame_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037"
+    },
+    {
+      "id": "54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8",
+      "frame_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8"
+    },
+    {
+      "id": "c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964",
+      "frame_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964"
+    },
+    {
+      "id": "6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093",
+      "frame_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093"
+    },
+    {
+      "id": "485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad",
+      "frame_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad"
+    },
+    {
+      "id": "fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c",
+      "frame_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c"
+    },
+    {
+      "id": "674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4",
+      "frame_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4"
+    },
+    {
+      "id": "b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78",
+      "frame_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78"
+    },
+    {
+      "id": "8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780",
+      "frame_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780"
+    },
+    {
+      "id": "e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a",
+      "frame_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a"
+    },
+    {
+      "id": "f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83",
+      "frame_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83"
+    },
+    {
+      "id": "97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd",
+      "frame_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd"
+    },
+    {
+      "id": "07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e",
+      "frame_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e"
+    },
+    {
+      "id": "c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d",
+      "frame_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d"
+    },
+    {
+      "id": "d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599",
+      "frame_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599"
+    },
+    {
+      "id": "6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c",
+      "frame_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c"
+    },
+    {
+      "id": "7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6",
+      "frame_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6"
+    },
+    {
+      "id": "7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004",
+      "frame_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004"
+    },
+    {
+      "id": "6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2",
+      "frame_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2"
+    },
+    {
+      "id": "1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116",
+      "frame_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116"
+    },
+    {
+      "id": "01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc",
+      "frame_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc"
+    },
+    {
+      "id": "6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea",
+      "frame_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea"
+    },
+    {
+      "id": "aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb",
+      "frame_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb"
+    },
+    {
+      "id": "a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab",
+      "frame_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab"
+    },
+    {
+      "id": "ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414",
+      "frame_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414"
+    },
+    {
+      "id": "4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a",
+      "frame_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a"
+    },
+    {
+      "id": "e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2",
+      "frame_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2"
+    },
+    {
+      "id": "31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb",
+      "frame_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb"
+    },
+    {
+      "id": "f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc",
+      "frame_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc"
+    },
+    {
+      "id": "fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb",
+      "frame_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb"
+    },
+    {
+      "id": "60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b",
+      "frame_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b"
+    },
+    {
+      "id": "788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2",
+      "frame_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "preview_status": "unavailable",
+      "image_url": "/api/observations-download/chunks/788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2/preview",
+      "fits_cutout_url": "/api/observations-download/chunks/788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2"
+    }
+  ],
+  "progress": {
+    "discovery_complete": true,
+    "total_chunks": 32,
+    "ready_chunks": 32,
+    "failed_chunks": 0,
+    "unavailable_chunks": 0
+  },
+  "status_url": "/api/observations-download/35c0a1a6-cc87-469e-9ac5-d2630bf8e004",
+  "events_url": "/api/observations-download/35c0a1a6-cc87-469e-9ac5-d2630bf8e004/events",
+  "errors": [],
+  "assets": [
+    {
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "asset": {
+        "id": "416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037",
+        "bytes": 16784640,
+        "sha256": "ad3955b8e0968c36c29bf5165ba792fa1165303fca88c5a1781998f4d85907e2",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/416e01d2a2bf3e35b53699dedaf2218e2c0d17eb20c58c387b4c579ce7cc6037"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "asset": {
+        "id": "54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8",
+        "bytes": 5993107,
+        "sha256": "e062c135255ed8ce34476ed36e2ea41113cbc7806cff5dde91184ec00fb95fdd",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/54c24259e4b20bd769922b2bfea5b085b55e0ce7360b5a93440be4bb070107e8"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "asset": {
+        "id": "c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964",
+        "bytes": 1519662,
+        "sha256": "d25a280990e4e142c3814bc9c45fffa05383662b30652e6103a282a35ec1654e",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/c98181ac3d7da063ccc9e6c40812a24e5ae110abbc085a0f8e1ade14ed9b7964"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "1a4e82e0771d9cb5fca89dc024b833ad9822a2eb864f08dcaa77ebda3d0275d0",
+      "status": "ready",
+      "asset": {
+        "id": "6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093",
+        "bytes": 152640,
+        "sha256": "156888525851c501ef7fb00b02ece6f5931dc867edfd8512819eba14aed67531",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/6a0f5c090f19a6d5354e04f430f9792cafead1917395d19ed04cb44ccfe5d093"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "asset": {
+        "id": "485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad",
+        "bytes": 16784640,
+        "sha256": "04d8d214b0cf6f1fc7b7d6a5b0b5368489c93742588560c42dcd5865216e7394",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/485ecffec87eb3492b66ce6255750eb226d0133320b3b447a913ac01487a07ad"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "asset": {
+        "id": "fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c",
+        "bytes": 3356276,
+        "sha256": "bde075768d01f7553b51527fd94be79736e073aa3a702a6105cef93d45dc414b",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/fbe27633721813656d79b84b31d7b822455c235dfc1f92196ee5516e2e3f842c"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "asset": {
+        "id": "674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4",
+        "bytes": 1127127,
+        "sha256": "ad3da58643d0cbe333e03ed1f26caa09d2aac8f57a5907f0637b623a01863e72",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/674d7e3516e52ed5f7b7397a0b7253cb65adb15840d0dca7795c2eb29ac1b3c4"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "33273bad253518826950318f43c20e3834af0e42cb6a684b6e4635a0c5483f50",
+      "status": "ready",
+      "asset": {
+        "id": "b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78",
+        "bytes": 155520,
+        "sha256": "564cea62c6c99d1d26675a7b82db5a701cd8b7c384f840c492eebdc20b74bfcc",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/b5b3f8e8d5bf0410903ee3aefd1cc150837ec272b28ee3f3918b48440a270c78"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "asset": {
+        "id": "8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780",
+        "bytes": 16784640,
+        "sha256": "16fa55b91d235421cfb10061a53228ae5b37345a6b57f6574c8b8a21c5d8863e",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/8ad9732c1c17c0075cda9c25b481f0ebdb5cb5390e7c93c25b18c9ddc129f780"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "asset": {
+        "id": "e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a",
+        "bytes": 2027349,
+        "sha256": "872987d364c129d00fc2719c4d7ab4f3faf1fd8630fd608be69709e98ea78149",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/e4520351438ed3b9a7b704f83b0ddb171f345e9bf139cdb39630f6d92cf31d0a"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "asset": {
+        "id": "f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83",
+        "bytes": 803586,
+        "sha256": "bac61cb5c4f7bc5b1362ced9227640dc9cd94a67238846248d735217d0391543",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/f2b31d3cfeca4c08ea0edc9a74df7523f3695e4f62b334de67ee44ec58510a83"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "3a931da56a2925df4c2cf9ab7151d9287864fed79db694412bc8fef5486baa18",
+      "status": "ready",
+      "asset": {
+        "id": "97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd",
+        "bytes": 141120,
+        "sha256": "6978c5178157c0abae8998d28750f2501f5e4d10f01856a2fe9c3e43d0f1e846",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/97b44f0db05ebd5d009efc5690a1165251cf1ab21198704340155442d2e1dabd"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "asset": {
+        "id": "07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e",
+        "bytes": 16784640,
+        "sha256": "77610c3b3d15c7127470d2a739505443a75cda1aaa22ba923bf7200fc5752b75",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/07f562731b004774ff9f4662a798d643dc5db894c4c8763de9722a44abe5f49e"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "asset": {
+        "id": "c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d",
+        "bytes": 7226216,
+        "sha256": "0e35d538247110f04e02191abc96dda1b68bcb125a661925a964600f95a32acb",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/c727e94507b049a1c4cfa40ec521c7b0be767fdf6db4d2909ef70eb037aa7a1d"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "asset": {
+        "id": "d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599",
+        "bytes": 1657963,
+        "sha256": "74e0f18343427f0a2d703df1ddf7e4aca32537f97986c70a3c8c8a11c2cca129",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/d86eac205b694e7bc65179c7e72322feb26fe388ebd4a1c8efbf5c6c5c945599"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "7470e2b7734b0064a4b32449e505ac119febeca3d61c84f95f852868f9f1546e",
+      "status": "ready",
+      "asset": {
+        "id": "6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c",
+        "bytes": 155520,
+        "sha256": "e710c0f239c4c4e6271c3b25fcee7f8316d24872df311e7bcd389d0b63b77be3",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/6ac01084fd32a69f78f9502afdf0367f6ed1881a8a4cfb2e3d962460081a0e9c"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "asset": {
+        "id": "7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6",
+        "bytes": 16784640,
+        "sha256": "b3a754aac585d5216bba2f60c91ebef2e199127cf947b74708dec8b8fac6600d",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/7f0cf70e44f9918d4f095810c238a5f773a485f752d6968c41668eaab6a972a6"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "asset": {
+        "id": "7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004",
+        "bytes": 5898529,
+        "sha256": "0de0ccd370e7a1ef114ee9aca4c0eea70cff45369285d5b8e226f3229acf2b83",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/7dfa5ec23b7e2726b155dba53223d4ecd1cdd6626cbd484b1366dd966ac7e004"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "asset": {
+        "id": "6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2",
+        "bytes": 1520980,
+        "sha256": "71333cf885efa7f291a2dbb97d5dc300dc2b8d2230ce3096d66f34a530c006f9",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/6d640006658102cd5adabb9faf1998422aa99a187759fa534bccc47a9fc21bf2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "8e6c05e7c78cc33fb6a79a3f9a248a02ec6a90c0baafdd02dcc82afc07ff612b",
+      "status": "ready",
+      "asset": {
+        "id": "1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116",
+        "bytes": 138240,
+        "sha256": "39544ea452306036e509bb93653f9f08272b69ebff3ff66e5a7335c84e552cea",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/1f7cd86889e16c18c0130701c1ff65de28f00e6d82ce8e94e7149e5bc6baf116"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "asset": {
+        "id": "01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc",
+        "bytes": 16784640,
+        "sha256": "c4be38fdb17a8d4b9f95cd5a4806516d837b5b21dda726ed3b08a1a272d5a329",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/01e37d042f3ae2a1eb9fa688f0a4a9e7d1d0d9dad283bb3c04a279dee513fafc"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "asset": {
+        "id": "6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea",
+        "bytes": 6497201,
+        "sha256": "613352785cd2897254359d1df151106831edb12a8ea645de5418d1ac22df292b",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/6068d18a6abae446f7b169e6b2cc15799e99d679f5e9163f3f281a23fca801ea"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "asset": {
+        "id": "aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb",
+        "bytes": 1611137,
+        "sha256": "72eed79ed66457db7cd4ecbf58589d13dfc1ef9e47ca836bd8656f0a441a4894",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/aff056ea9d5370b198412ac77ac85be2e9e2435f4f3d39619a26d25e2b8f57fb"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "b04d8ee3ce7f7f122da4c08f1325e027ec87fb034b23a9666ae1e7e371c32de6",
+      "status": "ready",
+      "asset": {
+        "id": "a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab",
+        "bytes": 144000,
+        "sha256": "b9f3f9458f93bbd2152011d8be99a444a336ac48810483264ac8efd9c5645a74",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/a8f027d6eab3f1e6207cebcbaf82dc837e2eb805977c1bd8c95484b1d73e34ab"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "asset": {
+        "id": "ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414",
+        "bytes": 16784640,
+        "sha256": "fc2f61627ba6dc424ad103a1fa9acc91377566c79f773f8d847c855f6d42281a",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/ae66a3c855ffb74b8c4ab0c6a2caaaa137cfe8e3c165ceb17b1b18bbfde72414"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "asset": {
+        "id": "4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a",
+        "bytes": 7978213,
+        "sha256": "300a2a88ab37daf48c73c3a847312c795bfe7b94c79ddcc07a8574e8e3e00ddb",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/4b25105313220010e70ee1309adfb4b6b3d7369c16bbaa78aab6d6a16ea74c5a"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "asset": {
+        "id": "e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2",
+        "bytes": 1676649,
+        "sha256": "08e6cce0af368fe2f1ca84fdb00a505e846c60a21f78bec8ce72aca33986f815",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/e1e2b374508cdb9ee485145dda4a914765c532ded37b92525e6dd0239d4922f2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "dbd92f9dd9a3988e421bfa569133f00c37ba0e5ffd051655aaecfab888269e71",
+      "status": "ready",
+      "asset": {
+        "id": "31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb",
+        "bytes": 175680,
+        "sha256": "209116c53d62465617745df15d5da866ca01d5a4a3685c05b8e2c4d8998d7bfa",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/31f517ced25c9cdedb40aa99e0f2087a90af268f227c4989c64c8e107a5c85fb"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "science_fits_BAND",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "asset": {
+        "id": "f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc",
+        "bytes": 16784640,
+        "sha256": "8a98f8376daf1abbc0bf08e85ff1228f0d32a8d53fad99542cdc85873ec68223",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/f4160e24e352c1fadb4d54869aa19b5f7c12d60df68bbd0a69e3a6c43e1b82dc"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#this",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "asset": {
+        "id": "fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb",
+        "bytes": 6664612,
+        "sha256": "56c9df74cd914a16923d2d6be503d9ca4eee581a1d80e3915d655e516f94a29c",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/fa5aa593761e443451d1f7ace1f4f85a83660a6e0778c1a8bdc056e2628559fb"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#inverse-variance",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "asset": {
+        "id": "60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b",
+        "bytes": 1555168,
+        "sha256": "786968d4f446f432c0c9183612ec94e2a32275aef5f4a38ac2cf712170c9c983",
+        "compression": "gzip",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/60345c3348b74408cd12253cc70c5e37ed996554e6ffac6ff02dcc77023c037b"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#coverage",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    },
+    {
+      "record_id": "f4711ee7427bf058ce7f0fe92d25e04cc4f5ca3bd1adba5e43c1ee5cf25f47c6",
+      "status": "ready",
+      "asset": {
+        "id": "788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2",
+        "bytes": 175680,
+        "sha256": "eb6ecaeb51b31ae1af8cac9efc0bbb5cb11367ded44a4315dc42dc908c39851b",
+        "compression": "native",
+        "analysisEligible": false,
+        "artifact_url": "/api/archive-assets/788d8956a5bada6e10db217d0127c2383e40bb880d9e2fbe5395ee13a21d2cd2"
+      },
+      "provenance": {
+        "preparation_limits": "PSF and astrometry require qualification; no local pixels verified by discovery",
+        "analysis_profile": "unwise",
+        "band_identity_source": "atlas_w2+archive_product_path+REFEREN1",
+        "unavailable_masks": "artifact,outlier,bloom",
+        "release": "neo11",
+        "archive": "author unWISE NERSC",
+        "asset_role": "#contributors",
+        "spatial_semantics": "indexed atlas candidates; coadd geometry, per-pixel coverage requires preparation",
+        "observation_time_source": "science FITS MJDMIN/MJDMAX (UTC MJD)"
+      }
+    }
+  ]
+}

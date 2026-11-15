@@ -5,7 +5,7 @@ import zio.json.*
 import zio.json.ast.Json
 
 /** Fail closed for retired UI dependencies; never start the legacy data generators. */
-final class LegacyUiApi:
+final class LegacyUiApi(includeMotionSearch:Boolean=true):
   private def unsupported=Response.json(Json.Obj("code"->Json.Str("unsupported_legacy_operation"),
     "message"->Json.Str("This legacy service is not deployed. Use the documented Scala APIs."),
     "retryable"->Json.Bool(false),"motion_analysis_url"->Json.Str("/api/analyses/motion")).toJson)
@@ -13,8 +13,8 @@ final class LegacyUiApi:
   private def submission=Response.json(Json.Obj("code"->Json.Str("submission_disabled"),
     "message"->Json.Str("Client-provided confirmations do not authorize publication. No submission was created."),
     "retryable"->Json.Bool(false)).toJson).status(Status.Forbidden).addHeader("Cache-Control","no-store")
-  val routes=Routes(
-    Method.POST / "api" / "motion" / "search" -> handler(unsupported),
+  private val search=if includeMotionSearch then Routes(Method.POST / "api" / "motion" / "search" -> handler(unsupported)) else Routes.empty
+  val routes=search ++ Routes(
     Method.POST / "api" / "motion" / "detect" -> handler(unsupported),
     Method.GET / "api" / "motion" / "spectrum" -> handler(unsupported),
     Method.GET / "api" / "motion" / "cutout" / "render" -> handler(unsupported),

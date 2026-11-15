@@ -4,13 +4,17 @@ Exposes REST endpoints for moving-object track detection and NASA 3I/ATLAS comet
 """
 
 import json
+import hashlib
+import hmac
 import os
 import sqlite3
 from datetime import date, datetime, timezone
 from pathlib import Path
 from threading import BoundedSemaphore
+from tempfile import NamedTemporaryFile
+from uuid import UUID
 import io
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 import numpy as np
 try:
@@ -25,13 +29,15 @@ except ImportError:
             if hi <= lo:
                 hi = lo + 1.0
             return (lo, hi)
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, Header, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.concurrency import run_in_threadpool
 from PIL import Image
 from pydantic import BaseModel, Field
 
 from detector import find_candidates
 from science.motion.live import SearchError, search_motion
+from science.motion.prepared import analyze_prepared
 import catalogue_db
 
 app = FastAPI(
@@ -50,6 +56,53 @@ app.add_middleware(
 
 DIR_PATH = Path(__file__).resolve().parent
 MOTION_SLOTS = BoundedSemaphore(2)
+MAX_PREPARED_BYTES = 192 * 1024**2
+
+
+@app.post('/internal/motion/prepared')
+async def prepared_motion_search(
+    request: Request,
+    unification_id: UUID = Header(alias='X-Unification-Id'),
+    artifact_sha256: str = Header(alias='X-Artifact-Sha256', pattern=r'^[0-9a-fA-F]{64}$'),
+    profile: Literal['stellar_proper_motion'] = 'stellar_proper_motion',
+    track_limit: int = Query(default=20, ge=1, le=100),
+):
+    """Analyze a bounded, checksummed prepared artifact; this operation never fetches archives."""
+    if set(request.query_params) - {'profile', 'track_limit'}:
+        raise HTTPException(422, 'Only profile and track_limit query parameters are supported.')
+    if request.headers.get('content-type', '').split(';')[0].strip().lower() not in {
+        'application/octet-stream', 'application/x-npz',
+    }:
+        raise HTTPException(415, 'A binary prepared NPZ artifact is required.')
+    declared = request.headers.get('content-length')
+    if declared is not None:
+        if not declared.isdecimal():
+            raise HTTPException(400, 'Invalid Content-Length.')
+        declared = int(declared)
+        if declared > MAX_PREPARED_BYTES:
+            raise HTTPException(413, 'Prepared artifact exceeds the 192 MiB byte limit.')
+    if not MOTION_SLOTS.acquire(blocking=False):
+        raise HTTPException(503, 'Both motion search slots are busy. Try again shortly.')
+    try:
+        with NamedTemporaryFile(suffix='.npz', prefix='ivan-prepared-') as artifact:
+            digest, received = hashlib.sha256(), 0
+            async for chunk in request.stream():
+                received += len(chunk)
+                if received > MAX_PREPARED_BYTES:
+                    raise HTTPException(413, 'Prepared artifact exceeds the 192 MiB byte limit.')
+                artifact.write(chunk)
+                digest.update(chunk)
+            if declared is not None and received != declared:
+                raise HTTPException(400, 'Content-Length does not match the prepared artifact.')
+            if not hmac.compare_digest(digest.hexdigest(), artifact_sha256.lower()):
+                raise HTTPException(422, 'Prepared artifact checksum does not match X-Artifact-Sha256.')
+            artifact.flush()
+            result = await run_in_threadpool(analyze_prepared, artifact.name, str(unification_id), track_limit=track_limit)
+            return result
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    finally:
+        MOTION_SLOTS.release()
 
 
 class MotionSearchRequest(BaseModel):
@@ -102,6 +155,7 @@ def health_check():
         "status": "ok",
         "service": "spherex-ml-detector",
         "version": "1.0.0",
+        "historical_motion": {"profile": "stellar_proper_motion", "available": True},
     }
 
 

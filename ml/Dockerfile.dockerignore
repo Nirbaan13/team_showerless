@@ -13,6 +13,9 @@
 !science/motion/review.py
 !science/motion/detector.py
 !science/motion/ranker.py
+!science/motion/prepared.py
+!science/motion/profiles.py
+!pipeline/unification/ml.py
 !science/motion/cases/december-d2.npz
 !science/motion/cases/december-d6.npz
 !science/motion/cases/vesta-d3.npz
