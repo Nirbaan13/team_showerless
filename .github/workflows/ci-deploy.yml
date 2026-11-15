@@ -39,21 +39,16 @@ jobs:
           umask 077
           key="$RUNNER_TEMP/vps_deploy_key"
           known_hosts="$RUNNER_TEMP/vps_known_hosts"
-          archive="$RUNNER_TEMP/api-image.tar"
-          trap 'rm -f "$key" "$known_hosts" "$archive"' EXIT
+          trap 'rm -f "$key" "$known_hosts"' EXIT
           printf '%s\n' "$VPS_SSH_KEY" > "$key"
           printf '%s\n' "$VPS_KNOWN_HOSTS" > "$known_hosts"
-          docker image save "spaceapps-api:$GITHUB_SHA" > "$archive"
           ssh_options=(-i "$key" -o IdentitiesOnly=yes -o BatchMode=yes
             -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$known_hosts"
             -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=4)
-          # Keep the tar uncompressed on both ends so rsync can reuse unchanged
-          # Docker layers; compress only the changed blocks on the wire.
-          printf -v rsync_ssh '%q ' ssh "${ssh_options[@]}"
-          rsync --inplace --no-whole-file --compress --partial --checksum --stats \
-            --rsync-path=sync-image -e "$rsync_ssh" \
-            "$archive" "$VPS_USER@$VPS_HOST:/opt/spaceapps/incoming-image.tar"
-          ssh "${ssh_options[@]}" "$VPS_USER@$VPS_HOST" "deploy-cached $GITHUB_SHA"
+          # Stream directly: a cached tar plus Docker's extraction workspace
+          # exceeds the constrained VPS disk budget during an image update.
+          docker image save "spaceapps-api:$GITHUB_SHA" | gzip -1 | \
+            ssh "${ssh_options[@]}" "$VPS_USER@$VPS_HOST" "deploy $GITHUB_SHA"
           python - <<'PY'
           import json
           import os
