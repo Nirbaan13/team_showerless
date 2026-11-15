@@ -95,18 +95,6 @@ export const NASA_TEST_PRESETS: TargetPreset[] = [
     recommendedArray: 6,
     expectedClass: 'transient',
   },
-  {
-    id: '1-ceres',
-    name: '(1) Ceres',
-    subtitle: 'Dwarf Planet (SPHEREx D2 Benchmark)',
-    raHms: '01h 02m 27.88s',
-    decDms: '-05° 28\' 16.7"',
-    raDeg: 15.616171,
-    decDeg: -5.471297,
-    description: 'Real known-object development diagnostic from ML pipeline. 4 physical D2 exposures on 2025-07-03 with 0.52 px geocentric sky motion.',
-    recommendedArray: 2,
-    expectedClass: 'moving_object',
-  },
 ];
 
 export const REFERENCE_MOLECULAR_LINES: MolecularLine[] = [
