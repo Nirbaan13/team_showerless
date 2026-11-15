@@ -1,0 +1,112 @@
+{
+  "designation": "Post-observation diagnosis only; original exact preparation parity criteria unchanged",
+  "plan_sha256": "ee35789cf4c24d9ac650735e7c20636e5a9b06b08ac92d4af99c815ea2b4f03e",
+  "script_sha256": "67a97d1670671397feeaa5dd458a7466cdfda6b1f1ae2f168bc4465d20d2782d",
+  "roi_target_size_pixels": [
+    59,
+    59
+  ],
+  "cutout_native_shape": [
+    70,
+    70
+  ],
+  "full_native_shape": [
+    2040,
+    2040
+  ],
+  "target_coordinate_range_in_cutout": {
+    "x_min": -1.8586856126458313,
+    "x_max": 71.74187261818979,
+    "y_min": -1.8753773202202537,
+    "y_max": 70.03283081540805
+  },
+  "grid_samples_outside_cutout": 43,
+  "usable_full_samples_added": 43,
+  "usable_cutout_samples_lost": 0,
+  "added_samples_outside_cutout": 43,
+  "added_samples_inside_cutout": 0,
+  "support_difference_inside_cutout": {
+    "shape": [
+      3438
+    ],
+    "dtype_a": "float64",
+    "dtype_b": "float64",
+    "bitwise_equal": false,
+    "equal_nan": false,
+    "finite_a": 3438,
+    "finite_b": 3438,
+    "finite_mask_different": 0,
+    "nan_mask_different": 0,
+    "finite_values_different": 360,
+    "max_abs": 1.7763568394002505e-13,
+    "max_relative": 7.937978984393808e-11
+  },
+  "uncentered_common_projection": {
+    "shape": [
+      3132
+    ],
+    "dtype_a": "float64",
+    "dtype_b": "float64",
+    "bitwise_equal": false,
+    "equal_nan": false,
+    "finite_a": 3132,
+    "finite_b": 3132,
+    "finite_mask_different": 0,
+    "nan_mask_different": 0,
+    "finite_values_different": 3107,
+    "max_abs": 2.8625990466935036e-12,
+    "max_relative": 1.2290308402013771e-12
+  },
+  "common_projection_delta_min": -2.8625990466935036e-12,
+  "common_projection_delta_max": 2.0481394358284888e-12,
+  "background_median_cutout": 0.20171496173405234,
+  "background_median_full": 0.20158001252377597,
+  "background_median_full_minus_cutout": -0.00013494921027637496,
+  "centered_difference_plus_background_delta_max_abs": 2.8622937353617317e-12,
+  "image_header_differences": {
+    "CRPIX1": [
+      "800.5",
+      "1020.5"
+    ],
+    "CRPIX1A": [
+      "-219.0",
+      "1.0"
+    ],
+    "CRPIX1W": [
+      "-219.0",
+      "1"
+    ],
+    "CRPIX2": [
+      "-16.5",
+      "1020.5"
+    ],
+    "CRPIX2A": [
+      "-1036.0",
+      "1.0"
+    ],
+    "CRPIX2W": [
+      "-1036.0",
+      "1"
+    ],
+    "NAXIS1": [
+      "70",
+      "2040"
+    ],
+    "NAXIS2": [
+      "70",
+      "2040"
+    ]
+  },
+  "flags_scaling_cutout": {
+    "BITPIX": 32,
+    "BSCALE": null,
+    "BZERO": null
+  },
+  "flags_scaling_full": {
+    "BITPIX": 32,
+    "BSCALE": null,
+    "BZERO": null
+  },
+  "protected_all_unchanged": true,
+  "peak_rss_mib": 640.359375
+}

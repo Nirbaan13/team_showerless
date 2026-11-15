@@ -1,0 +1,49 @@
+{
+  "group_id": "association-holdout-05",
+  "center": [
+    285.33486404,
+    -12.88765097
+  ],
+  "partition": {
+    "name": "before-june",
+    "TIME": "-Inf 60827.0"
+  },
+  "complete": true,
+  "attempts": [
+    {
+      "number": 1,
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512&TIME=-Inf+60827.0",
+      "limit": 512,
+      "error": "RuntimeError: [{\"attempt\": 1, \"error\": \"HTTPError: HTTP Error 502: Proxy Error\"}]"
+    },
+    {
+      "number": 2,
+      "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512&TIME=-Inf+60827.0",
+      "limit": 512,
+      "source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+285.33486404+-12.88765097+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512&TIME=-Inf+60827.0",
+        "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/metadata/before-june-2.xml",
+        "sha256": "96a415e87dde6c014b3726bf060f9d284a759b7738cb03d263854f1b0a307ad2",
+        "bytes": 12200,
+        "response_headers": {
+          "Date": "Sun, 15 Nov 2026 16:09:20 GMT",
+          "Content-Type": "application/x-votable+xml",
+          "Last-Modified": null,
+          "ETag": null
+        },
+        "failures": []
+      },
+      "status": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "row_count": 0
+    }
+  ],
+  "raw_record_ref": {
+    "path": "/tmp/spaceapps-association-native-recovery2/recovery-6/metadata/before-june.json",
+    "sha256": "837c94f100bb0f213119d971275874d5d45d5969e219ca3e03ffdcec7f7023c1"
+  }
+}

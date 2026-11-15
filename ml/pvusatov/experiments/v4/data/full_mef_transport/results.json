@@ -1,0 +1,880 @@
+{
+  "plan_sha256": "ee35789cf4c24d9ac650735e7c20636e5a9b06b08ac92d4af99c815ea2b4f03e",
+  "download": {
+    "plan_sha256": "ee35789cf4c24d9ac650735e7c20636e5a9b06b08ac92d4af99c815ea2b4f03e",
+    "head": {
+      "status": 200,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+      "headers": {
+        "Server": "nginx",
+        "Date": "Sun, 15 Nov 2026 16:17:48 GMT",
+        "Content-Type": "application/fits",
+        "Content-Length": "59852160",
+        "Connection": "close",
+        "last-modified": "Tue, 29 Sep 2026 02:01:44 GMT",
+        "accept-ranges": "bytes",
+        "x-request-id": "685ee80b77cb742735e52aa62253b3f6"
+      }
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "bytes": 59852160,
+        "status": 200,
+        "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+        "headers": {
+          "Server": "nginx",
+          "Date": "Sun, 15 Nov 2026 16:17:49 GMT",
+          "Content-Type": "application/fits",
+          "Content-Length": "59852160",
+          "Connection": "close",
+          "accept-ranges": "bytes",
+          "last-modified": "Tue, 29 Sep 2026 02:01:44 GMT",
+          "etag": "\"ad18fa04df322aef1ef775f2bafb54c1\"",
+          "x-request-id": "815f55895740211eb8997faac937ca7c"
+        },
+        "sha256": "a059388782bdd0961ff6281e208679e588df9ff084e71ce9888d4671007e2f89"
+      }
+    ],
+    "received_bytes": 59852160,
+    "head_size_bytes": 59852160,
+    "status": "download_complete"
+  },
+  "comparisons": {
+    "images": {
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 24236,
+      "finite_b": 24279,
+      "finite_mask_different": 43,
+      "nan_mask_different": 43,
+      "finite_values_different": 3132,
+      "max_abs": 0.0001349492123257079,
+      "max_relative": 1.0
+    },
+    "times": {
+      "shape": [
+        8
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 8,
+      "finite_b": 8,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "outlier": {
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "dtype_a": "bool",
+      "dtype_b": "bool",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 27848,
+      "finite_b": 27848,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    "bloom": {
+      "shape": [
+        8,
+        59,
+        59
+      ],
+      "dtype_a": "bool",
+      "dtype_b": "bool",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 27848,
+      "finite_b": 27848,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    }
+  },
+  "per_frame_images": [
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 3132,
+      "finite_b": 3175,
+      "finite_mask_different": 43,
+      "nan_mask_different": 43,
+      "finite_values_different": 3132,
+      "max_abs": 0.0001349492123257079,
+      "max_relative": 1.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 3142,
+      "finite_b": 3142,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 3075,
+      "finite_b": 3075,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 2931,
+      "finite_b": 2931,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 3092,
+      "finite_b": 3092,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 2808,
+      "finite_b": 2808,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 3017,
+      "finite_b": 3017,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    },
+    {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": true,
+      "equal_nan": true,
+      "finite_a": 3039,
+      "finite_b": 3039,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 0,
+      "max_abs": 0.0,
+      "max_relative": 0.0
+    }
+  ],
+  "grid_header_equal": true,
+  "grid_header": "WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                 30.0 / Pixel coordinate of reference point            CRPIX2  =                 30.0 / Pixel coordinate of reference point            CDELT1  =  -0.0017083333333333 / [deg] Coordinate increment at reference point  CDELT2  =   0.0017083333333333 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               CRVAL1  =           228.745009 / [deg] Coordinate value at reference point      CRVAL2  =         -69.43558622 / [deg] Coordinate value at reference point      LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =         -69.43558622 / [deg] Native latitude of celestial pole        MJDREF  =                  0.0 / [d] MJD of fiducial time                       RADESYS = 'ICRS'               / Equatorial coordinate system                   END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ",
+  "pixel_scale_equal": true,
+  "warnings_a": [
+    "passband_variation_not_corrected",
+    "psf_matching_not_applied",
+    "outlier_measurements_retained"
+  ],
+  "warnings_b": [
+    "passband_variation_not_corrected",
+    "psf_matching_not_applied",
+    "outlier_measurements_retained"
+  ],
+  "frames_a": [
+    {
+      "frame_id": "level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_1:D1",
+      "midpoint_utc": "2026-02-14T20:09:58.930Z",
+      "midpoint_mjd": 61085.84026539352,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_1",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_2:D1",
+      "midpoint_utc": "2026-02-14T20:12:07.861Z",
+      "midpoint_mjd": 61085.841757650465,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_3:D1",
+      "midpoint_utc": "2026-02-14T20:14:16.793Z",
+      "midpoint_mjd": 61085.84324991898,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_4:D1",
+      "midpoint_utc": "2026-02-14T20:16:25.724Z",
+      "midpoint_mjd": 61085.84474217593,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_4",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_2:D1",
+      "midpoint_utc": "2026-02-14T23:30:09.450Z",
+      "midpoint_mjd": 61085.97927604167,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_3:D1",
+      "midpoint_utc": "2026-02-14T23:32:18.381Z",
+      "midpoint_mjd": 61085.980768298614,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_4:D1",
+      "midpoint_utc": "2026-02-14T23:34:27.311Z",
+      "midpoint_mjd": 61085.982260543984,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_4",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0475_2:D1",
+      "midpoint_utc": "2026-02-15T01:08:52.592Z",
+      "midpoint_mjd": 61086.04783092593,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0475_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    }
+  ],
+  "frames_b": [
+    {
+      "frame_id": "level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_1:D1",
+      "midpoint_utc": "2026-02-14T20:09:58.930Z",
+      "midpoint_mjd": 61085.84026539352,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_1",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "a059388782bdd0961ff6281e208679e588df9ff084e71ce9888d4671007e2f89",
+      "input_size_bytes": 59852160,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_2:D1",
+      "midpoint_utc": "2026-02-14T20:12:07.861Z",
+      "midpoint_mjd": 61085.841757650465,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_3:D1",
+      "midpoint_utc": "2026-02-14T20:14:16.793Z",
+      "midpoint_mjd": 61085.84324991898,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_4:D1",
+      "midpoint_utc": "2026-02-14T20:16:25.724Z",
+      "midpoint_mjd": 61085.84474217593,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0437_4",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_2:D1",
+      "midpoint_utc": "2026-02-14T23:30:09.450Z",
+      "midpoint_mjd": 61085.97927604167,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_3:D1",
+      "midpoint_utc": "2026-02-14T23:32:18.381Z",
+      "midpoint_mjd": 61085.980768298614,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_3",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_4:D1",
+      "midpoint_utc": "2026-02-14T23:34:27.311Z",
+      "midpoint_mjd": 61085.982260543984,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0463_4",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "frame_id": "level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0475_2:D1",
+      "midpoint_utc": "2026-02-15T01:08:52.592Z",
+      "midpoint_mjd": 61086.04783092593,
+      "detector": 1,
+      "physical_observation_id": "2026W07_2A_0475_2",
+      "observation_id_source": "fits:OBSID",
+      "units": "MJy / sr",
+      "release": "dr1",
+      "processing_version": "l2b-v27-2026-226",
+      "software_version": "7.0.5",
+      "sha256": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b",
+      "input_size_bytes": 4023360,
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    }
+  ],
+  "expected_shape_equal": true,
+  "expected_times": {
+    "shape": [
+      8
+    ],
+    "dtype_a": "float64",
+    "dtype_b": "float64",
+    "bitwise_equal": true,
+    "equal_nan": true,
+    "finite_a": 8,
+    "finite_b": 8,
+    "finite_mask_different": 0,
+    "nan_mask_different": 0,
+    "finite_values_different": 0,
+    "max_abs": 0.0,
+    "max_relative": 0.0
+  },
+  "physical_frame_metadata_equal": true,
+  "native_diagnostics": {
+    "cutout": {
+      "header": {
+        "OBSID": "2026W07_2A_0437_1",
+        "DETECTOR": 1,
+        "MJD-AVG": 61085.840265391,
+        "DATE-AVG": "2026-02-14T20:09:58.930",
+        "VERSION": "7.0.5",
+        "BUNIT": "MJy / sr",
+        "CRPIX1": 800.5,
+        "CRPIX2": -16.5,
+        "CRVAL1": 225.143549141,
+        "CRVAL2": -69.1068916832,
+        "CTYPE1": "RA---TAN-SIP",
+        "CTYPE2": "DEC--TAN-SIP",
+        "CDELT1": 1.0,
+        "CDELT2": 1.0,
+        "PC1_1": -0.00160547984124,
+        "PC1_2": 0.000651237443112,
+        "PC2_1": 0.000590741633238,
+        "PC2_2": 0.00157989057513,
+        "A_ORDER": 3,
+        "B_ORDER": 3
+      },
+      "hdus": [
+        {
+          "name": "PRIMARY",
+          "axes": [
+            null,
+            null
+          ],
+          "bitpix": 8
+        },
+        {
+          "name": "IMAGE",
+          "axes": [
+            70,
+            70
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "FLAGS",
+          "axes": [
+            70,
+            70
+          ],
+          "bitpix": 32
+        },
+        {
+          "name": "VARIANCE",
+          "axes": [
+            70,
+            70
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "ZODI",
+          "axes": [
+            70,
+            70
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "EPSF",
+          "axes": [
+            8752,
+            441
+          ],
+          "bitpix": 8
+        },
+        {
+          "name": "WCS-WAVE",
+          "axes": [
+            720,
+            1
+          ],
+          "bitpix": 8
+        }
+      ]
+    },
+    "full": {
+      "header": {
+        "OBSID": "2026W07_2A_0437_1",
+        "DETECTOR": 1,
+        "MJD-AVG": 61085.840265391,
+        "DATE-AVG": "2026-02-14T20:09:58.930",
+        "VERSION": "7.0.5",
+        "BUNIT": "MJy / sr",
+        "CRPIX1": 1020.5,
+        "CRPIX2": 1020.5,
+        "CRVAL1": 225.143549141,
+        "CRVAL2": -69.1068916832,
+        "CTYPE1": "RA---TAN-SIP",
+        "CTYPE2": "DEC--TAN-SIP",
+        "CDELT1": 1.0,
+        "CDELT2": 1.0,
+        "PC1_1": -0.00160547984124,
+        "PC1_2": 0.000651237443112,
+        "PC2_1": 0.000590741633238,
+        "PC2_2": 0.00157989057513,
+        "A_ORDER": 3,
+        "B_ORDER": 3
+      },
+      "hdus": [
+        {
+          "name": "PRIMARY",
+          "axes": [
+            null,
+            null
+          ],
+          "bitpix": 8
+        },
+        {
+          "name": "IMAGE",
+          "axes": [
+            2040,
+            2040
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "FLAGS",
+          "axes": [
+            2040,
+            2040
+          ],
+          "bitpix": 32
+        },
+        {
+          "name": "VARIANCE",
+          "axes": [
+            2040,
+            2040
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "ZODI",
+          "axes": [
+            2040,
+            2040
+          ],
+          "bitpix": -32
+        },
+        {
+          "name": "EPSF",
+          "axes": [
+            8752,
+            441
+          ],
+          "bitpix": 8
+        },
+        {
+          "name": "WCS-WAVE",
+          "axes": [
+            720,
+            1
+          ],
+          "bitpix": 8
+        }
+      ]
+    },
+    "full_minus_cutout_coordinate_offset_pixels": [
+      220.0,
+      1037.0
+    ],
+    "registration_x_after_offset": {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 3481,
+      "finite_b": 3481,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 3036,
+      "max_abs": 2.842170943040401e-14,
+      "max_relative": 3.093814680187258e-13
+    },
+    "registration_y_after_offset": {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 3481,
+      "finite_b": 3481,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 3413,
+      "max_abs": 2.291500322826323e-13,
+      "max_relative": 1.281650481339101e-12
+    },
+    "raw_cutout_at_wcs_corresponding_full_pixels": {
+      "image": {
+        "shape": [
+          70,
+          70
+        ],
+        "dtype_a": ">f4",
+        "dtype_b": ">f4",
+        "bitwise_equal": true,
+        "equal_nan": true,
+        "finite_a": 4900,
+        "finite_b": 4900,
+        "finite_mask_different": 0,
+        "nan_mask_different": 0,
+        "finite_values_different": 0,
+        "max_abs": 0.0,
+        "max_relative": 0.0
+      },
+      "flags": {
+        "shape": [
+          70,
+          70
+        ],
+        "dtype_a": ">i4",
+        "dtype_b": "int32",
+        "bitwise_equal": false,
+        "equal_nan": true,
+        "finite_a": 4900,
+        "finite_b": 4900,
+        "finite_mask_different": 0,
+        "nan_mask_different": 0,
+        "finite_values_different": 0,
+        "max_abs": 0.0,
+        "max_relative": 0.0
+      },
+      "variance": {
+        "shape": [
+          70,
+          70
+        ],
+        "dtype_a": ">f4",
+        "dtype_b": ">f4",
+        "bitwise_equal": true,
+        "equal_nan": true,
+        "finite_a": 4900,
+        "finite_b": 4900,
+        "finite_mask_different": 0,
+        "nan_mask_different": 0,
+        "finite_values_different": 0,
+        "max_abs": 0.0,
+        "max_relative": 0.0
+      },
+      "zodi": {
+        "shape": [
+          70,
+          70
+        ],
+        "dtype_a": ">f4",
+        "dtype_b": ">f4",
+        "bitwise_equal": true,
+        "equal_nan": true,
+        "finite_a": 4900,
+        "finite_b": 4900,
+        "finite_mask_different": 0,
+        "nan_mask_different": 0,
+        "finite_values_different": 0,
+        "max_abs": 0.0,
+        "max_relative": 0.0
+      }
+    },
+    "full_index_rounding_max_abs_pixels": 1.651596903684549e-08,
+    "support": {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "float64",
+      "dtype_b": "float64",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 3481,
+      "finite_b": 3481,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 403,
+      "max_abs": 1.0,
+      "max_relative": 1.0
+    },
+    "support_threshold_mask": {
+      "shape": [
+        59,
+        59
+      ],
+      "dtype_a": "bool",
+      "dtype_b": "bool",
+      "bitwise_equal": false,
+      "equal_nan": false,
+      "finite_a": 3481,
+      "finite_b": 3481,
+      "finite_mask_different": 0,
+      "nan_mask_different": 0,
+      "finite_values_different": 43,
+      "max_abs": 1.0,
+      "max_relative": 1.0
+    }
+  },
+  "protected_sha256_after": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_pilot/protocol.json": "afc9a5e27007fdf139728c31d8cfa7db34b8e1e9f8ad5e6a9d552e2380c2f8fe",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/frozen-development-metadata.json": "9f4c574e671b8d1279ca308e81aa6a9e6ebb00f86d6122a355999723f8781ea2",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/metadata.json": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/ranker.onnx": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b"
+  },
+  "protected_all_unchanged": true,
+  "peak_rss_mib": 640.359375
+}

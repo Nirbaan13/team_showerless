@@ -1,0 +1,40 @@
+{
+  "plan_sha256": "ee35789cf4c24d9ac650735e7c20636e5a9b06b08ac92d4af99c815ea2b4f03e",
+  "head": {
+    "status": 200,
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+    "headers": {
+      "Server": "nginx",
+      "Date": "Sun, 15 Nov 2026 16:17:48 GMT",
+      "Content-Type": "application/fits",
+      "Content-Length": "59852160",
+      "Connection": "close",
+      "last-modified": "Tue, 29 Sep 2026 02:01:44 GMT",
+      "accept-ranges": "bytes",
+      "x-request-id": "685ee80b77cb742735e52aa62253b3f6"
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bytes": 59852160,
+      "status": 200,
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+      "headers": {
+        "Server": "nginx",
+        "Date": "Sun, 15 Nov 2026 16:17:49 GMT",
+        "Content-Type": "application/fits",
+        "Content-Length": "59852160",
+        "Connection": "close",
+        "accept-ranges": "bytes",
+        "last-modified": "Tue, 29 Sep 2026 02:01:44 GMT",
+        "etag": "\"ad18fa04df322aef1ef775f2bafb54c1\"",
+        "x-request-id": "815f55895740211eb8997faac937ca7c"
+      },
+      "sha256": "a059388782bdd0961ff6281e208679e588df9ff084e71ce9888d4671007e2f89"
+    }
+  ],
+  "received_bytes": 59852160,
+  "head_size_bytes": 59852160,
+  "status": "download_complete"
+}

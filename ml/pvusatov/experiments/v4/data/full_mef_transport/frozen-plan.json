@@ -1,0 +1,263 @@
+{
+  "purpose": "Scientific engineering transport validation only; no labels, scoring, fitting, new-native or holdout reads",
+  "case": "v4-train01 preexisting first input_sources entry; selection independent of values/results",
+  "selected_source": {
+    "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+    "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+    "bytes": 4023360,
+    "sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+    "response_headers": {
+      "Date": "Sun, 15 Nov 2026 05:55:49 GMT",
+      "Last-Modified": null,
+      "ETag": null,
+      "Content-Type": "application/fits"
+    },
+    "transient_failures": [],
+    "obs_id": "2026W07_2A_0437_1",
+    "detector": 1,
+    "t_min_mjd": 61085.839599,
+    "t_max_mjd": 61085.840932,
+    "frame_id": "level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226",
+    "observation_id": "2026W07_2A_0437_1",
+    "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+  },
+  "packet_sources": [
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:55:49 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [],
+      "obs_id": "2026W07_2A_0437_1",
+      "detector": 1,
+      "t_min_mjd": 61085.839599,
+      "t_max_mjd": 61085.840932,
+      "frame_id": "level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_1",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:55:59 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [],
+      "obs_id": "2026W07_2A_0437_2",
+      "detector": 1,
+      "t_min_mjd": 61085.841091,
+      "t_max_mjd": 61085.842424,
+      "frame_id": "level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_2",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:56:09 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [],
+      "obs_id": "2026W07_2A_0437_3",
+      "detector": 1,
+      "t_min_mjd": 61085.842584,
+      "t_max_mjd": 61085.843916,
+      "frame_id": "level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_3",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:56:22 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [
+        "HTTPError: HTTP Error 503: Service Unavailable"
+      ],
+      "obs_id": "2026W07_2A_0437_4",
+      "detector": 1,
+      "t_min_mjd": 61085.844076,
+      "t_max_mjd": 61085.845408,
+      "frame_id": "level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0437_4",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:56:28 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [],
+      "obs_id": "2026W07_2A_0463_2",
+      "detector": 1,
+      "t_min_mjd": 61085.97861,
+      "t_max_mjd": 61085.979942,
+      "frame_id": "level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_2",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:56:36 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [
+        "HTTPError: HTTP Error 503: Service Unavailable"
+      ],
+      "obs_id": "2026W07_2A_0463_3",
+      "detector": 1,
+      "t_min_mjd": 61085.980102,
+      "t_max_mjd": 61085.981434,
+      "frame_id": "level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_3",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:56:52 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [
+        "HTTPError: HTTP Error 503: Service Unavailable",
+        "HTTPError: HTTP Error 503: Service Unavailable"
+      ],
+      "obs_id": "2026W07_2A_0463_4",
+      "detector": 1,
+      "t_min_mjd": 61085.981594,
+      "t_max_mjd": 61085.982927,
+      "frame_id": "level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0463_4",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    },
+    {
+      "url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12",
+      "path": "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits",
+      "bytes": 4023360,
+      "sha256": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b",
+      "response_headers": {
+        "Date": "Sun, 15 Nov 2026 05:57:04 GMT",
+        "Last-Modified": null,
+        "ETag": null,
+        "Content-Type": "application/fits"
+      },
+      "transient_failures": [
+        "HTTPError: HTTP Error 503: Service Unavailable"
+      ],
+      "obs_id": "2026W07_2A_0475_2",
+      "detector": 1,
+      "t_min_mjd": 61086.047165,
+      "t_max_mjd": 61086.048497,
+      "frame_id": "level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226",
+      "observation_id": "2026W07_2A_0475_2",
+      "access_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits?center=228.745009%2C-69.43558622&size=0.12"
+    }
+  ],
+  "center_deg": [
+    228.745009,
+    -69.43558622
+  ],
+  "full_url": "https://irsa.ipac.caltech.edu/ibe/data/spherex/dr1/level2/2026W07_2A/l2b-v27-2026-226/1/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+  "full_local_path": "/tmp/spaceapps-full-mef-transport-old-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits",
+  "options": {
+    "pixel_scale_arcsec": 6.15,
+    "mask_policy": "motion"
+  },
+  "roi_arcmin": [
+    6.0,
+    6.0
+  ],
+  "packet_size": 8,
+  "intervention": "Replace only first path/access_url/SHA with same full artifact; physical/frame identity unchanged",
+  "limits": {
+    "max_full_bytes": 67108864,
+    "max_total_received_body_bytes": 73400320,
+    "max_get_attempts": 2,
+    "timeout_seconds_per_attempt": 90,
+    "backoff_seconds": 5,
+    "max_cpu_threads": 2,
+    "max_address_space_bytes": 2147483648,
+    "max_wall_seconds": 1200
+  },
+  "criteria": "Report every actual numerical difference and finite/NaN/quality-mask difference; input size/SHA differences expected, excluded from parity criteria",
+  "expected_times_hours": [
+    0.0,
+    0.03581416670931503,
+    0.07162861106917262,
+    0.10744277777848765,
+    3.3362555555650033,
+    3.3720697222743183,
+    3.407883611158468,
+    4.981572777789552
+  ],
+  "expected_shape": [
+    8,
+    59,
+    59
+  ],
+  "protected_sha256": {
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_pilot/protocol.json": "afc9a5e27007fdf139728c31d8cfa7db34b8e1e9f8ad5e6a9d552e2380c2f8fe",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/__init__.py": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/cli.py": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/contracts.py": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/detector.py": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/features.py": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/median_reference.py": "353f4d0a7b6032d18158df99cf90fa992d3cb0bfc714c96e50c05e75c4b18a2e",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/model.py": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/pipeline.py": "1d4a7793f89f190cb580c2b9da7defdf2c6ecc864842d3173ceb9c099dda19b0",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/runtime/ml_inference/render.py": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/frozen-development-metadata.json": "9f4c574e671b8d1279ca308e81aa6a9e6ebb00f86d6122a355999723f8781ea2",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/metadata.json": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13",
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/releases/v4/model/ranker.onnx": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_1D1_spx_l2b-v27-2026-226.fits": "a1756ab01e18dbf34fd52819358419fb1471cb1cbd6890979f86777e7e721dcc",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_2D1_spx_l2b-v27-2026-226.fits": "7966c6d035e2e944971369b09ecd5616669d9afc0d89b2b7b3ab6c154ccd45f6",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_3D1_spx_l2b-v27-2026-226.fits": "479623f82898c579a32ea90355119a3423e448715f37c94f6df3aff9f0eaa72f",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0437_4D1_spx_l2b-v27-2026-226.fits": "49e3c90893c2b84190e282868a46df88bbf46fab2316ac1feb5a3002c4b1db6f",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_2D1_spx_l2b-v27-2026-226.fits": "99d2475c32dd777b9dc84d32a8cec22bb163e6bc84b699f34fa52e16a3c4c844",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_3D1_spx_l2b-v27-2026-226.fits": "564ae87d6943c6ceebcb4fff430c3242042392492612f0f0a8b70249289ac4dc",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0463_4D1_spx_l2b-v27-2026-226.fits": "cd6cd57ae840d0216bd9f79337f9bef3a1cdee26ea86feedcf531ff46e620011",
+    "/tmp/spaceapps-v4-native-data/development/v4-train01/level2_2026W07_2A_0475_2D1_spx_l2b-v27-2026-226.fits": "d821c0d797e6dbae87bec0317e30d64d829b222a9967d2c6aaa2396ef9e6d76b"
+  },
+  "validator_sha256": "4534ca3cc9c759c48622396471a6c6b95749ce774178d0111f1d1b7a8ebd0fa1"
+}

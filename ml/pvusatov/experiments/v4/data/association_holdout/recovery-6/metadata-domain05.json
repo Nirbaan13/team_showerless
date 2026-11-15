@@ -1,0 +1,21 @@
+{
+  "complete": true,
+  "parts": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/query-evidence/before-june.json",
+      "sha256": "ff140ee2ae449ee5ed982206cd123ec1ce59bdafe55b48083052a79aaf9a8f6a"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-6/query-evidence/june-through-october.json",
+      "sha256": "284a40dab8a8866df99d182f267d0193522f0bdc22c6b6594deb8d2fa206604f"
+    }
+  ],
+  "cached_right_ref": {
+    "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/data/association_holdout/recovery-5/query-evidence/association-holdout-05-from-boundary.json",
+    "sha256": "df2f55cd484e6ff3e0df7a35c511e007d4207f7f41eeefda3b86a8b016485bf1"
+  },
+  "metadata_requests": 4,
+  "finite_valid_domain_only": true,
+  "union_rows": 250,
+  "identical_boundary_duplicates": 0
+}

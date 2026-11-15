@@ -1,0 +1,2 @@
+selection 6dcae592febaefbf7051a68dc445c3cbb6ee8471a12417b720d99bee4779ed52 complete05domain True
+{"status": "FINISHED_QUARANTINED", "metadata_requests": 4, "new_product_tasks": 10, "new_verified_products": 8, "pending_full_MEF_proposals": [], "pixels_opened": false, "models_called": false, "inference_authorized": false}
