@@ -5,7 +5,11 @@ import spaceapps.downloads.controller.DownloadsApi
 import spaceapps.downloads.bootstrap.DownloadsRuntime
 import spaceapps.downloads.service.ArchiveLimits
 import spaceapps.irsa.model.*
-import spaceapps.irsa.integrations.LiveArchive
+import spaceapps.irsa.integrations.{LiveArchive,ResilientArchive,S3MirrorArchive,MirrorProcess}
+import spaceapps.infra.service.ExternalServices
+import spaceapps.infra.integrations.ExternalServiceProbes
+import spaceapps.infra.controller.ExternalHealthApi
+import spaceapps.irsa.controller.IrsaDiscoveryApi
 import spaceapps.irsa.integrations.grpc.GrpcServer
 import spaceapps.processing.integrations.{HttpPipelineClient,HttpHistoricalMotionClient}
 import spaceapps.processing.service.Unifications
@@ -37,13 +41,20 @@ object Application:
           index -> (values(0),values(1))
         }
       }
-      source = new LiveArchive(client,env("IRSA_SIA_URL","https://irsa.ipac.caltech.edu/SIA"),env("MAX_OBSERVATIONS","256").toInt,env("MAX_PRODUCT_BYTES","268435456").toLong,channelBands)
+      primary = new LiveArchive(client,env("IRSA_SIA_URL","https://irsa.ipac.caltech.edu/SIA"),env("MAX_OBSERVATIONS","256").toInt,env("MAX_PRODUCT_BYTES","268435456").toLong,channelBands)
+      external <- ExternalServices.make(ExternalServiceProbes.irsa(client,
+        env("IRSA_SIA_URL","https://irsa.ipac.caltech.edu/SIA"),env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync")),1.hour)
+      mirror <- S3MirrorArchive.make(new MirrorProcess(env("ML_PYTHON","python3"),
+        Path.of(env("IRSA_MIRROR_SCRIPT","python/irsa_mirror.py")),data.resolve("irsa-mirror.sqlite"),
+        "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/",env("IRSA_MIRROR_RELEASES","qr2,dr1,qr3")),primary,env("MAX_OBSERVATIONS","256").toInt)
+      source = new ResilientArchive(primary,mirror,external)
+      _ <- mirror.start.when(env("IRSA_MIRROR_SCAN_ENABLED","true").toBoolean)
       _ <- FileCache.recover(data)
       repository <- Repository.open(data.resolve("jobs.sqlite"))
       cache <- FileCache.open(data,data.resolve("jobs.sqlite"),env("MAX_CACHE_BYTES","21474836480").toLong,env("MAX_PRODUCT_BYTES","268435456").toLong,env("MIN_FREE_BYTES","536870912").toLong)
       archive <- CapacityArchive.make(source,data,env("MAX_CACHE_BYTES","21474836480").toLong,env("MAX_PRODUCT_BYTES","268435456").toLong,env("MIN_FREE_BYTES","536870912").toLong,Some(cache))
       jobs <- Jobs.make(repository,archive,NoProcessing,data,env("WORKERS","2").toInt,env("TRANSFERS","4").toInt,env("MAX_ACTIVE_JOBS","32").toInt)
-      metadata <- MetadataService.make(repository,jobs.cachedImage,client,env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync"))
+      metadata <- MetadataService.make(repository,jobs.cachedImage,client,env("IRSA_TAP_URL","https://irsa.ipac.caltech.edu/TAP/sync"),Some(external))
       equipment <- EquipmentService.make(repository,data,client,env("IRSA_CALIBRATION_URL","https://nasa-irsa-spherex.s3.amazonaws.com/"),capacity=Some(cache))
       analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
       analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
@@ -66,6 +77,6 @@ object Application:
       grpcPort <- GrpcServer.start(jobs,env("APP_REVISION","development"),env("GRPC_HOST","0.0.0.0"),env("GRPC_PORT","50051").toInt,channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
       _ <- ZIO.logInfo(s"gRPC listener started on port $grpcPort")
       _ <- ZIO.logInfo(s"Starting IRSA retrieval service, revision ${env("APP_REVISION","development")}")
-      _ <- Server.serve(api.routes ++ downloadsApi.routes ++ unificationApi.routes ++ historicalMotionApi.routes)
+      _ <- Server.serve(api.routes ++ downloadsApi.routes ++ unificationApi.routes ++ historicalMotionApi.routes ++ new IrsaDiscoveryApi(source,repository).routes ++ new ExternalHealthApi(external,mirror.status).routes)
     yield ()
   }.provide(Client.default,Server.defaultWithPort(env("PORT","8000").toInt))

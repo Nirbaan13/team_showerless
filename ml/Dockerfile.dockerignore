@@ -8,6 +8,7 @@
 !ml/candidate-example.json
 !ml/spherex_3i_atlas.npz
 !ml/spherex-result.png
+!science/archive_gateway.py
 !science/motion/live.py
 !science/motion/prepare_fits.py
 !science/motion/review.py

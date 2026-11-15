@@ -1,0 +1,20 @@
+{
+  "http": 200,
+  "bytes": 3954240,
+  "sha256": "48233fd6af5e818c7efb33ba26a4e9b00eb6bac433e5d9d9a12f3dc6cadffc19",
+  "date_obs": "2025-04-24T18:01:05.843",
+  "detector": 1,
+  "shape": [
+    10,
+    10
+  ],
+  "hdus": [
+    "PRIMARY",
+    "IMAGE",
+    "FLAGS",
+    "VARIANCE",
+    "ZODI",
+    "EPSF",
+    "WCS-WAVE"
+  ]
+}

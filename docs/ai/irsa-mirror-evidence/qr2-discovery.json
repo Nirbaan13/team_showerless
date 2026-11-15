@@ -1,0 +1,38 @@
+{
+  "images": [
+    {
+      "observation": {
+        "frame_id": "QR2-D2-e54bc53905cd51c847b06dc4130d530c4fdc9c114cd01a06b4db898c2e45e4d6",
+        "observation_date": "2025-04-24T18:01:05.843Z",
+        "detector_array": 2,
+        "release": "QR2",
+        "is_available": true,
+        "header_metadata": {
+          "discovery_source": "s3_mirror",
+          "survey": "unknown",
+          "source_key": "qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0001_1D2_spx_l2b-v20-2025-240.fits",
+          "content_identity": "[\"\\\"ee30fd35a2ab3d38e52d06acc1128cca\\\"\", \"71634240\", \"2026-04-02T02:08:18.000Z\"]",
+          "native_frame_id": "level2_2025W17_4B_0001_1D2_spx_l2b-v20-2025-240",
+          "observation_time_source": "DATE-OBS",
+          "energy_bandpassname": "SPHEREx-D2",
+          "obs_collection": "spherex_qr2",
+          "t_min": "60789.75076207176",
+          "dataproduct_subtype": "science",
+          "OBSID": "2025W17_4B_0001_1",
+          "EXPIDN": "202517402000112",
+          "DATE-OBS": "2025-04-24T18:01:05.843",
+          "MJD-OBS": "60789.750762072",
+          "DETECTOR": "2",
+          "SPS_FLAGS": "all_sky",
+          "NON_SURVEY": "False",
+          "SPS_TARGET": "81242",
+          "DATE-BEG": "2025-04-24T18:01:05.843",
+          "DATE-END": "2025-04-24T18:03:00.961",
+          "discovery_complete": "false"
+        }
+      },
+      "accessUrl": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/qr2/level2/2025W17_4B/l2b-v20-2025-240/2/level2_2025W17_4B_0001_1D2_spx_l2b-v20-2025-240.fits"
+    }
+  ],
+  "discovery_complete": false
+}

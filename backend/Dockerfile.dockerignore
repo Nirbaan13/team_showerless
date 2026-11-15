@@ -54,5 +54,10 @@ backend/scala/src/test
 !pipeline/spherex/**
 !pipeline/scripts/
 !pipeline/scripts/**
+!pipeline/unification/
+!pipeline/unification/**
+!science/
+!science/**
+!backend/python/**
 **/__pycache__
 **/*.py[cod]

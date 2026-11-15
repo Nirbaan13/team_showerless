@@ -74,13 +74,32 @@ def health():
     return {"status": "ok", "service": "SPHEREx IRSA Cutout Worker", "cache_dir": str(CUTOUT_CACHE_DIR)}
 
 
+def _discovery_metadata(results):
+    return {
+        "discovery_complete": results.meta.get("discovery_complete", True),
+        "discovery_source": results.meta.get("discovery_source", ["sia"]),
+    }
+
+
+def _image_provenance(row):
+    collection = str(row.get("obs_collection", ""))
+    return {
+        "release": collection.removeprefix("spherex_").upper() if collection else None,
+        "obs_collection": collection or None,
+        "observation_date": str(row["observation_date"]) if "observation_date" in row.colnames else None,
+        "source_url": str(row.get("source_url", row.get("access_url", ""))),
+        "discovery_source": str(row.get("discovery_source", "sia")),
+    }
+
+
 @app.post("/api/cutout/search")
 def search_cutouts(req: CutoutRequest):
     """Search NASA/IPAC IRSA SIA archive for SPHEREx images covering the region."""
     try:
         coord = SkyCoord(req.ra * u.deg, req.dec * u.deg)
         size_deg = req.size_arcmin / 60.0
-        results = image_search(coord, size_deg, req.collection)
+        results = image_search(coord, size_deg, req.collection,
+                               allow_release_fallback="collection" not in req.model_fields_set)
         records = []
         for row in results:
             records.append({
@@ -88,10 +107,11 @@ def search_cutouts(req: CutoutRequest):
                 "t_min": float(row["t_min"]) if "t_min" in row.colnames else None,
                 "instrument": str(row.get("instrument_name", "SPHEREx")),
                 "format": str(row.get("format", "application/fits")),
+                **_image_provenance(row),
             })
-        return {"total": len(records), "results": records}
+        return {"total": len(records), "results": records, **_discovery_metadata(results)}
     except Exception as e:
-        return {"total": 0, "results": [], "error": str(e)}
+        raise HTTPException(status_code=getattr(e, "status", 502), detail=f"IRSA search failed: {e}") from e
 
 
 @app.get("/api/cutout/render")
@@ -109,15 +129,18 @@ def render_cutout_png(
     coord = SkyCoord(ra * u.deg, dec * u.deg)
 
     try:
-        results = image_search(coord, size_deg, DEFAULT)
+        results = image_search(coord, size_deg, DEFAULT, allow_release_fallback=True)
     except Exception as e:
-        raise HTTPException(status_code=502, detail=f"IRSA search failed: {e}")
+        raise HTTPException(status_code=getattr(e, "status", 502), detail=f"IRSA search failed: {e}") from e
     if len(results) == 0:
+        if not _discovery_metadata(results)["discovery_complete"]:
+            raise HTTPException(status_code=503, detail="Archive discovery is incomplete; no indexed SPHEREx coverage yet")
         raise HTTPException(status_code=404, detail="No SPHEREx coverage at this position")
 
     b_url = str(results[0]["access_url"]).split("?")[0]
     cutout_url = f"{b_url}?center={ra},{dec}&size={size_deg}"
-    local_file = CUTOUT_CACHE_DIR / f"cutout_{DEFAULT}_{ra:.4f}_{dec:.4f}_{size_arcmin:.1f}.fits"
+    source_key = hashlib.sha256(b_url.encode()).hexdigest()[:16]
+    local_file = CUTOUT_CACHE_DIR / f"cutout_{source_key}_{ra:.4f}_{dec:.4f}_{size_arcmin:.1f}.fits"
     if not local_file.exists():
         status = cutout(cutout_url, local_file)
         if status != "good":
@@ -130,7 +153,14 @@ def render_cutout_png(
     matrix = clean_m if subtraction == "zodi_subtracted" else np.where(bad, np.nan, img)
     png_bytes = array_to_png_bytes(matrix)
 
-    return Response(content=png_bytes, media_type="image/png")
+    provenance = _image_provenance(results[0])
+    discovery = _discovery_metadata(results)
+    return Response(content=png_bytes, media_type="image/png", headers={
+        "X-IRSA-Discovery-Complete": str(discovery["discovery_complete"]).lower(),
+        "X-IRSA-Discovery-Source": ",".join(discovery["discovery_source"]),
+        "X-IRSA-Release": provenance["release"] or "unknown",
+        "X-IRSA-Source-Url": provenance["source_url"],
+    })
 
 
 @app.post("/api/spectrum/measure")
@@ -185,10 +215,12 @@ def real_spectrum(
     coord = SkyCoord(ra * u.deg, dec * u.deg)
     size_deg = size_arcmin / 60.0
     try:
-        results = image_search(coord, size_deg, DEFAULT)
+        results = image_search(coord, size_deg, DEFAULT, allow_release_fallback=True)
     except Exception as e:
-        raise HTTPException(status_code=502, detail=f"IRSA search failed: {e}")
+        raise HTTPException(status_code=getattr(e, "status", 502), detail=f"IRSA search failed: {e}") from e
     if len(results) == 0:
+        if not _discovery_metadata(results)["discovery_complete"]:
+            raise HTTPException(status_code=503, detail="Archive discovery is incomplete; no indexed SPHEREx coverage yet")
         raise HTTPException(status_code=404, detail="No SPHEREx coverage at this position")
 
     rows, skipped, failed = [], 0, 0
@@ -210,7 +242,7 @@ def real_spectrum(
         if pt is None:
             skipped += 1  # outside the cutout, or aperture touches a masked pixel
             continue
-        rows.append(pt)
+        rows.append({**pt, **_image_provenance(row)})
 
     if not rows:
         raise HTTPException(
@@ -223,6 +255,7 @@ def real_spectrum(
     for i, r in enumerate(rows, start=1):
         det_num = _detector_number(r["detector"])
         spectrum.append({
+            **{k: r[k] for k in ("release", "obs_collection", "observation_date", "source_url", "discovery_source")},
             "channel": i,
             "detector": f"D{det_num}",
             "detector_array": det_num,
@@ -256,6 +289,7 @@ def real_spectrum(
         "detectors_summary": summaries,
         "total_channels": len(spectrum),
         "n_exposures_found": len(results),
+        **_discovery_metadata(results),
         "n_masked_or_outside": skipped,
         "n_failed": failed,
         "spectrum": spectrum,

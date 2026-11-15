@@ -1,5 +1,5 @@
 {
-  "scope": "local development-source verification before final main integration",
+  "scope": "local development-source verification, including final integration with main 2b43019",
   "checks": [
     {
       "log": "backend-final-tests.log",
@@ -36,6 +36,24 @@
       "sha256": "aeec4c53fc57e95151955022282d1894eb9168e139b1925aacb47816cc3931fb",
       "summary": "TypeScript and Vite build passed",
       "tail": "\n> frontend@0.0.0 build\n> tsc -b && vite build\n\nvite v8.3.8 building client environment for production...\ntransforming...\n\u2713 2125 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                     0.91 kB \u2502 gzip:     0.51 kB\ndist/assets/index-CUBXBYgx.css     60.45 kB \u2502 gzip:    11.08 kB\ndist/assets/index-VCbccvvi.js   2,280.19 kB \u2502 gzip: 1,432.72 kB\n\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n\u2713 built in 1.88s\n"
+    },
+    {
+      "log": "backend-integrated-tests.log",
+      "sha256": "82bac1b2ee4a22bdea16247e4bfa220b0f416e91a7f933cd59af9008b8176596",
+      "summary": "293 passed, 0 failed, 4 ignored",
+      "tail": "2m+\u001b[0m wide queries are refused and result truncation does not claim completeness\n  \u001b[32m+\u001b[0m unWISE origin policy rejects arbitrary hosts, ports, schemes, and lookalike domains\n  \u001b[32m+\u001b[0m header and tile budgets report truncation instead of fabricating coverage\n  \u001b[32m+\u001b[0m related products retain semantic roles on success, failure, and a cached repeat\n  \u001b[32m+\u001b[0m public observation date search passes federation and filters actual visit intervals\n\u001b[32m+\u001b[0m shared archive cache capacity\n  \u001b[32m+\u001b[0m existing DATA_DIR products consume the same quota before archive transfer\n  \u001b[32m+\u001b[0m free-space reserve rejects transfer before publishing any artifact\n  \u001b[32m+\u001b[0m native gzip reserves both transferred and decoded temporary storage\n  \u001b[32m+\u001b[0m published archive assets are evicted before legacy admission through the same coordinator\n\u001b[32m+\u001b[0m Durable ML analyses\n  \u001b[32m+\u001b[0m preserves published analysis RPC and message wire names\n  \u001b[32m+\u001b[0m rejects ambiguous sources, unknown settings, invalid numerical limits and oversized regions\n  \u001b[32m+\u001b[0m uses projected TAN extents so wide regions contain requested pixel edges\n  \u001b[32m+\u001b[0m deduplicates, executes a real bounded child and publishes only registered safe resources\n  \u001b[32m+\u001b[0m persists completion and explicitly fails interrupted processing on restart\n  \u001b[32m+\u001b[0m bounds active queue and records waiting downloads without blocking other jobs\n  \u001b[32m+\u001b[0m waits for native downloads and snapshots preserve bytes after cache removal\n  \u001b[32m+\u001b[0m accepts preview-only download failures while rejecting any failed native FITS\n  \u001b[32m+\u001b[0m rejects processed downloads at admission and when recovering previously accepted work\n  \u001b[32m+\u001b[0m HTTP and typed gRPC return the same durable analysis and structured errors\n  \u001b[32m+\u001b[0m rejects a worker result from a model other than the admitted frozen hash\n  \u001b[32m+\u001b[0m rejects missing or mismatching model identifiers despite a matching model hash\n  \u001b[32m+\u001b[0m rejects invalid candidate coordinates, ranks, motion and off-frame detections\n  \u001b[32m+\u001b[0m rejects unregistered, escaping, nonfinite and path leaking worker output\n  \u001b[32m+\u001b[0m tolerates scratch files atomically renamed and removed while a real child publishes\n  \u001b[32m+\u001b[0m times out a child and rejects invalid output rather than publishing it\n293 tests passed. 0 tests failed. 4 tests ignored.\n\nExecuted in 43 s 423 ms\n\n[info] Completed tests\n[success] Total time: 77 s (0:01:17.0), completed Nov 15, 2026, 10:16:49 PM\n"
+    },
+    {
+      "log": "scope-integrated-tests.log",
+      "sha256": "04a3eef0ae76397e656785de18aa32bae88523961a4c5f5697b75c94972ab9e3",
+      "summary": "5 passed, 9 subtests; isolated runtime smoke",
+      "tail": ".....                                                           [100%]\n5 passed, 9 subtests passed in 3.52s\n"
+    },
+    {
+      "log": "frontend-integrated-build.log",
+      "sha256": "14e04100ad79d486bb3439112fff6a2b15b8ec6d9aa0ab756cf3c5ad51d7979b",
+      "summary": "TypeScript/Vite integrated build passed",
+      "tail": "\n> frontend@0.0.0 build\n> tsc -b && vite build\n\nvite v8.3.8 building client environment for production...\ntransforming...\n\u2713 2125 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                     0.91 kB \u2502 gzip:     0.51 kB\ndist/assets/index-CS6KppCK.css     60.53 kB \u2502 gzip:    11.11 kB\ndist/assets/index-INumZhOu.js   2,280.70 kB \u2502 gzip: 1,432.91 kB\n\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n\u2713 built in 2.02s\n"
     }
   ]
 }

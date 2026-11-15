@@ -42,13 +42,15 @@ Two initial preparation failures are preserved in `evidence/preparation-attempts
 
 ## Validation
 
-- Scala suite: **258 passed, 0 failed, 4 optional tests ignored**, including the actual Scala-to-Python prepared-bundle fixture.
+- Scala suite after integrating main `2b43019` and its IRSA mirror changes: **293 passed, 0 failed, 4 optional tests ignored**, including the actual Scala-to-Python prepared-bundle fixture.
 - Image preparation: **74 passed, 1 existing Codex-detector roundtrip deselected**. Run with repository `pipeline` on `PYTHONPATH`, as the real worker subprocess imports `unification.worker`; an initial root-directory invocation without that path failed the subprocess test and was corrected without product changes.
 - Ivan service/preparation transport: **48 passed**. Motion review/profile/preparation regressions: **42 passed, 1 forest-training test deselected**, plus two subtests.
 - Frontend: **66 Playwright tests passed** and TypeScript/Vite production build passed. Existing large-bundle warning remains.
 - ML source-scope/staged-runtime checks: **5 tests passed, 9 subtests**. No extra research files enter the service image.
 - Complete native science-to-auxiliary WCS agreement: **32 actual pairs passed**. Regression tests reject inconsistent celestial reference frames and pole metadata; distorted inputs are unsupported. Independent science re-review confirmed the WCS finding resolved.
 - Independent runtime review found no blocking issues. Real HTTP and browser results and the separate natural-object astrometry audits are preserved beside the implementation helpers.
+
+The final integration preserves main's IRSA mirror initialization, discovery/status routes and archive gateway alongside historical motion. Its new ML gateway dependency is included by exact Docker context and source-scope exceptions. The integrated Scala suite, frontend production build and isolated ML runtime smoke passed; independent review of both merge resolutions found no dropped functionality. The 66-test frontend run predates main's small IRSA advisory UI addition; the integrated frontend build was checked again.
 
 No GitHub test workflow was polled or awaited. This PR does not merge or deploy to production.
 
