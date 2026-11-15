@@ -37,7 +37,9 @@ def build(inventory_path, source, revision, output, executable='podman'):
  subprocess.run(['./sbtw','stage'],cwd=source/'backend',env=env,check=True)
  stage=source/'backend/target/stage'
  inventory=validate_inventory(json.loads(Path(inventory_path).read_text()))
- original=next(x for x in inventory['source_images'] if x['source_container']=='spaceapps-api-1')
+ api=inventory['services']['api']
+ parent_id=api.get('parent_image_id',api['image_id'])
+ original=next(x for x in inventory['source_images'] if x['image_id']==parent_id)
  engine=Engine(executable)
  actual=engine.json('image','inspect',original['image'])[0];validate_loaded_image(original,actual)
  base=next((t for t in actual.get('RepoTags',[]) if t.startswith('localhost/')),original['image'])
