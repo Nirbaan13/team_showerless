@@ -926,8 +926,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
 
   return (
     <div
+      id="tutorial-target-skyview"
       ref={containerRef}
-      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none touch-none"
+      className="relative flex-1 h-[calc(100vh-3rem-4rem)] bg-paper-950 overflow-hidden cursor-crosshair select-none touch-none transition-all duration-300"
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}

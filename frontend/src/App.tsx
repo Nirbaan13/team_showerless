@@ -53,6 +53,7 @@ import { ChooseYourViewModal } from './components/ChooseYourViewModal';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { CatalogueDashboard } from './components/CatalogueDashboard';
 import { CandidateDetailPage } from './components/CandidateDetailPage';
+import { GuidedTutorialOverlay } from './components/GuidedTutorialOverlay';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
 import {
@@ -65,6 +66,7 @@ import {
   X,
   Share2,
   Database,
+  HelpCircle,
 } from 'lucide-react';
 import { InferencePage } from '../../ml/pvusatov/frontend/src/components/InferencePage';
 
@@ -136,6 +138,19 @@ export function App() {
       localStorage.setItem('spherex_view_mode', mode);
     } catch {
       // sandboxed
+    }
+  };
+
+  // Interactive Guided Tutorial state (triggered exclusively from Home page)
+  const [isTutorialActive, setIsTutorialActive] = useState<boolean>(false);
+  const [tutorialStep, setTutorialStep] = useState<number>(0);
+
+  const handleStartTutorial = () => {
+    setActiveTab('viewer');
+    setIsTutorialActive(true);
+    setTutorialStep(0);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setMobileViewerPane('controls');
     }
   };
 
@@ -956,6 +971,18 @@ export function App() {
 
         {/* Right Controls: Volunteer/Scientist Toggle & Toolbar */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Tutorial Button (Available ONLY on Home page directly beside the Vol/Sci toggle) */}
+          {activeTab === 'home' && (
+            <button
+              onClick={handleStartTutorial}
+              className="btn-tactile-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg border-2 border-black bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-gray-950 font-bold font-mono text-xs flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.35)] cursor-pointer transition-all shrink-0"
+              title="Launch Guided Sky Viewer Tutorial"
+            >
+              <HelpCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Tutorial</span>
+            </button>
+          )}
+
           <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
@@ -1147,6 +1174,20 @@ export function App() {
                     <span className="text-[9px] font-normal opacity-80">Research HUD</span>
                   </button>
                 </div>
+
+                {/* Tutorial trigger button on mobile drawer - available ONLY on Home page */}
+                {activeTab === 'home' && (
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleStartTutorial();
+                    }}
+                    className="w-full mt-2 py-2 px-3 rounded-xl border-2 border-black bg-gradient-to-r from-emerald-400 to-teal-400 text-gray-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(16,185,129,0.3)] cursor-pointer"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>Launch Sky Viewer Tutorial</span>
+                  </button>
+                )}
               </div>
 
               {/* Quick Actions (Share & Embed) */}
@@ -1527,6 +1568,16 @@ export function App() {
         onClose={() => setIsViewModalOpen(false)}
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
+      />
+
+      {/* Guided Beginner Sky Viewer Tutorial */}
+      <GuidedTutorialOverlay
+        isOpen={isTutorialActive && activeTab === 'viewer'}
+        step={tutorialStep}
+        onNext={() => setTutorialStep((s) => Math.min(s + 1, 3))}
+        onPrev={() => setTutorialStep((s) => Math.max(s - 1, 0))}
+        onClose={() => setIsTutorialActive(false)}
+        onChangeMobilePane={(pane) => setMobileViewerPane(pane)}
       />
     </div>
   );

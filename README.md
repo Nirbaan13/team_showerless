@@ -142,6 +142,16 @@ flowchart TD
 * **Embed Snippet Generation**: Generates standalone responsive `<iframe>` snippets for inclusion in astronomical publications, blogs, and observation portals.
 * **Self-Contained Standalone HTML Artifacts**: Exportable single-file HTML dashboards for offline and sandboxed demonstrations.
 
+### 8. Interactive Guided Beginner Tutorial
+* **Contextual Access**: Located exclusively on the Home section adjacent to the Volunteer / Scientist persona selector to preserve an uncluttered sky observation viewport.
+* **Automated Workflow Routing**: Instantly transitions the user into the Sky Viewer environment and activates an interactive multi-step walkthrough.
+* **Step-by-Step Educational Tour**:
+  * **Step 1 (Celestial Coordinates)**: Focuses on Right Ascension ($RA$) and Declination ($Dec$), explaining celestial longitude/latitude mapping and coordinate updates.
+  * **Step 2 (Field of View)**: Details angular resolution and sky patch scaling from high magnification ($1' - 3'$) to wide survey mode ($5' - 10'$).
+  * **Step 3 (Multi-Epoch Sky View Panel)**: Introduces the canvas, leave-one-out median differencing, dipole identification for moving bodies, and playback controls.
+  * **Step 4 (Spectrophotometric Bands & ML Detection)**: Explains the 6 detector arrays spanning 102 near-infrared channels ($0.75 - 5.0\ \mu\text{m}$), machine learning track correlation, and community consensus routing to the Minor Planet Center.
+* **Mobile-Responsive Adaptations**: Dynamically orchestrates mobile viewport pane transitions (`controls` pane for inputs, `canvas` pane for sky view), guarantees responsive touch targets, and enforces safe bounding limits across small viewports.
+
 ---
 
 ## Scientific Validation & Empirical Benchmarks

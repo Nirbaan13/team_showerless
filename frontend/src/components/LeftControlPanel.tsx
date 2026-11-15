@@ -76,7 +76,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   return (
     <aside className={`w-full md:w-64 bg-paper-900 border-r border-paper-800 flex flex-col h-full md:h-[calc(100vh-3rem)] text-xs overflow-y-auto select-none z-20 ${className}`}>
       {/* 1. Target Query */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-coords" className="p-3 border-b border-paper-800 transition-all duration-300">
         <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-2">
           <Search className="w-3.5 h-3.5 text-ochre-400" />
           Coordinates (J2000)
@@ -145,7 +145,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         )}
 
         {/* FOV Area Size */}
-        <div className="mt-2.5 pt-2 border-t border-paper-800">
+        <div id="tutorial-target-fov" className="mt-2.5 pt-2 border-t border-paper-800 transition-all duration-300">
           <span className="text-[10px] font-mono text-paper-400 block mb-1">Field of View (FOV)</span>
           <div className="grid grid-cols-4 gap-1.5">
             {(["1'", "3'", "5'", "10'"] as FOVOption[]).map((f) => (
@@ -166,7 +166,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
       </div>
 
       {/* 2. SPHEREx Infrared Filter Bands */}
-      <div className="p-3 border-b border-paper-800">
+      <div id="tutorial-target-bands" className="p-3 border-b border-paper-800 transition-all duration-300">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-400" />
