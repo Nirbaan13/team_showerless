@@ -5,6 +5,7 @@ import type {
   CatalogOverlayState,
   SubtractionMode,
   MLAnalysisStatus,
+  ObservationLoadStatus,
   DetectorArrayId,
 } from '../types/spherex';
 import { getPriorityColors } from '../services/mlRanking';
@@ -44,6 +45,7 @@ interface CanvasViewportProps {
   onClearSkippedNotice: () => void;
   isScientistMode?: boolean;
   mlAnalysisStatus?: MLAnalysisStatus;
+  loadStatus?: ObservationLoadStatus;
   onOpenMlInsights?: () => void;
   liveCatalog?: LiveCatalogResponse | null;
   fov?: string;
@@ -66,6 +68,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   onClearSkippedNotice,
   isScientistMode = false,
   mlAnalysisStatus,
+  loadStatus,
   onOpenMlInsights: _onOpenMlInsights,
   liveCatalog,
   selectedArray = 'all',
@@ -80,8 +83,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
   const [cursorCoords, setCursorCoords] = useState<{ ra: string; dec: string; x: number; y: number } | null>(null);
   const [colorMap, setColorMap] = useState<'grayscale' | 'inverted'>('grayscale');
   const imgCacheRef = useRef<Map<string, HTMLImageElement>>(new Map());
-  const proceduralDetectorCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [, setRepaintCount] = useState(0);
+  const [bitmapStates, setBitmapStates] = useState<Record<string, 'ready' | 'failed'>>({});
 
   // Smooth Zoom-in transition state when target changes
   const prevRaRef = useRef(centerRa);
@@ -128,7 +130,21 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     setPan({ x: 0, y: 0 });
   }, [fov]);
 
+  useEffect(() => {
+    if (loadStatus?.source === 'loading') {
+      // A retry may resolve to the same deduplicated job and resource URLs.
+      imgCacheRef.current.clear();
+      setBitmapStates({});
+    }
+  }, [loadStatus?.source]);
+
   const activeFrame = frames[activeFrameIndex] || null;
+  const targetBitmapUrl = subtractionMode === 'epoch_difference' ? activeFrame?.residualDataUrl
+    : subtractionMode === 'bloom_mask' ? activeFrame?.bloomDataUrl : activeFrame?.imageDataUrl;
+  const bitmapReady = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'ready');
+  const bitmapFailed = Boolean(targetBitmapUrl && bitmapStates[targetBitmapUrl] === 'failed');
+  const layerLabel = subtractionMode === 'epoch_difference' ? 'Difference image'
+    : subtractionMode === 'bloom_mask' ? 'BLOOM image' : 'Observation image';
 
   const handleResetView = () => {
     setZoom(1.4);
@@ -194,11 +210,9 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.translate(width / 2 + pan.x, height / 2 + pan.y);
     ctx.scale(zoom, zoom);
 
-    const isDifferenceMode = subtractionMode === 'epoch_difference';
-    const isBloomMode = subtractionMode === 'bloom_mask';
 
     // In Scientist Mode: Draw astronomical coordinate grid lines (RA/Dec J2000 ICRS)
-    if (isScientistMode) {
+    if (isScientistMode && bitmapReady) {
       ctx.save();
       ctx.strokeStyle = isWhiteBg ? 'rgba(0, 0, 0, 0.12)' : 'rgba(52, 211, 153, 0.2)';
       ctx.lineWidth = 1 / zoom;
@@ -232,21 +246,19 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     const currentFrame = frames[activeFrameIndex];
     let hasDrawnRealImage = false;
 
-    const targetBitmapUrl = isBloomMode
-      ? currentFrame?.bloomDataUrl || currentFrame?.residualDataUrl || currentFrame?.imageDataUrl
-      : isDifferenceMode
-      ? currentFrame?.residualDataUrl
-      : currentFrame?.imageDataUrl;
 
     if (targetBitmapUrl) {
       let cachedImg = imgCacheRef.current.get(targetBitmapUrl);
       if (!cachedImg) {
         cachedImg = new Image();
-        cachedImg.src = targetBitmapUrl;
-        cachedImg.onload = () => {
-          setRepaintCount((c) => c + 1);
+        const image = cachedImg;
+        const mark = (status: 'ready' | 'failed') => {
+          if (imgCacheRef.current.get(targetBitmapUrl) === image) setBitmapStates(states => ({ ...states, [targetBitmapUrl]: status }));
         };
-        imgCacheRef.current.set(targetBitmapUrl, cachedImg);
+        image.onload = () => mark('ready');
+        image.onerror = () => mark('failed');
+        imgCacheRef.current.set(targetBitmapUrl, image);
+        image.src = targetBitmapUrl;
       }
 
       if (cachedImg.complete && cachedImg.naturalWidth > 0) {
@@ -286,147 +298,10 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       }
     }
 
+    // Missing, pending or failed bitmaps are data states, never synthetic skies.
     if (!hasDrawnRealImage) {
-      // Authentic raw FITS CCD/CMOS pixel array with detector readout noise,
-      // discrete square pixel PSFs, cosmic rays and ZScale contrast stretching.
-      // Never draw cartoon radial circles or fake yellow dots!
-      if (!proceduralDetectorCanvasRef.current) {
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = 256;
-        offCanvas.height = 256;
-        proceduralDetectorCanvasRef.current = offCanvas;
-      }
-      const off = proceduralDetectorCanvasRef.current;
-      const offCtx = off.getContext('2d');
-      if (offCtx) {
-        const imgData = offCtx.createImageData(256, 256);
-        const data = imgData.data;
-        const activeBandKey = selectedArray === 'all' ? 'all' : (selectedArray || activeFrame?.detectorArray || 6);
-        const bandStyle = BAND_SPECTRAL_STYLES[activeBandKey] || BAND_SPECTRAL_STYLES[6];
-        const detArray = typeof activeBandKey === 'number' ? activeBandKey : 6;
-        const seedCoord = (Math.abs(Math.round(centerRa * 1000 + centerDec * 100)) + detArray * 7393) % 100000;
-        let rng = seedCoord + activeFrameIndex * 1337;
-        const lcg = () => {
-          rng = (rng * 1664525 + 1013904223) >>> 0;
-          return rng / 4294967296;
-        };
-
-        // 1. Fill detector readout noise floor with zodiacal background level
-        const basePedestal = selectedArray === 'all' ? 10 : subtractionMode === 'raw_calibrated' ? 36 : subtractionMode === 'zodi_reference_subtracted' ? 14 : 4;
-        const noiseSpread = selectedArray === 'all' ? 8 : subtractionMode === 'raw_calibrated' ? 18 : 10;
-        for (let i = 0; i < 256 * 256; i++) {
-          const noise = basePedestal + Math.floor(lcg() * noiseSpread);
-          const idx = i * 4;
-          data[idx] = noise;
-          data[idx + 1] = noise;
-          data[idx + 2] = noise;
-          data[idx + 3] = 255;
-        }
-
-        // 2. Add discrete pixelated stellar PSFs (field stars)
-        // In near-IR (Band 1/2), hot stars shine brightest; in mid-IR (Band 5/6), cold dust/gas dominates
-        if (subtractionMode !== 'epoch_difference') {
-          let starRng = seedCoord;
-          const starLcg = () => {
-            starRng = (starRng * 1664525 + 1013904223) >>> 0;
-            return starRng / 4294967296;
-          };
-          for (let s = 0; s < 28; s++) {
-            const sx = Math.floor(10 + starLcg() * 236);
-            const sy = Math.floor(10 + starLcg() * 236);
-            const baseFlux = (subtractionMode === 'zodi_reference_subtracted' ? 110 : 70) + starLcg() * 160;
-            const flux = Math.floor(baseFlux * bandStyle.starFluxScale);
-            for (let dy = -3; dy <= 3; dy++) {
-              for (let dx = -3; dx <= 3; dx++) {
-                const px = sx + dx;
-                const py = sy + dy;
-                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                  const r2 = dx * dx + dy * dy;
-                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(flux * Math.exp(-r2 / 2.2)));
-                  const idx = (py * 256 + px) * 4;
-                  data[idx] = pVal;
-                  data[idx + 1] = pVal;
-                  data[idx + 2] = pVal;
-                }
-              }
-            }
-          }
-        }
-
-        // 3. Add cosmic ray single-pixel hits
-        for (let c = 0; c < 12; c++) {
-          const cx = Math.floor(lcg() * 256);
-          const cy = Math.floor(lcg() * 256);
-          const idx = (cy * 256 + cx) * 4;
-          data[idx] = 250;
-          data[idx + 1] = 250;
-          data[idx + 2] = 250;
-          data[idx + 3] = 255;
-        }
-
-        // 4. Render candidate moving source so it visibly drifts across epochs when blinking!
-        candidates.forEach((cand) => {
-          const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-          if (pos) {
-            const cx = Math.round(pos.x);
-            const cy = Math.round(pos.y);
-            const candFlux = Math.max(160, Math.min(255, pos.flux * 4));
-            for (let dy = -3; dy <= 3; dy++) {
-              for (let dx = -3; dx <= 3; dx++) {
-                const px = cx + dx;
-                const py = cy + dy;
-                if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                  const r2 = dx * dx + dy * dy;
-                  const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(candFlux * Math.exp(-r2 / 1.8)));
-                  const idx = (py * 256 + px) * 4;
-                  data[idx] = pVal;
-                  data[idx + 1] = pVal;
-                  data[idx + 2] = pVal;
-                  data[idx + 3] = 255;
-                }
-              }
-            }
-          }
-        });
-
-        // 5. In difference mode: stationary stars are removed; show the moving motion dipole
-        if (subtractionMode === 'epoch_difference') {
-          candidates.forEach((cand) => {
-            const pos = cand.epochPositions[activeFrameIndex] || cand.epochPositions[0];
-            const prevPos = cand.epochPositions[Math.max(0, activeFrameIndex - 1)];
-            if (pos && prevPos) {
-              const cx = Math.round(pos.x);
-              const cy = Math.round(pos.y);
-              for (let dy = -3; dy <= 3; dy++) {
-                for (let dx = -3; dx <= 3; dx++) {
-                  const px = cx + dx;
-                  const py = cy + dy;
-                  if (px >= 0 && px < 256 && py >= 0 && py < 256) {
-                    const r2 = dx * dx + dy * dy;
-                    const pVal = Math.min(255, data[(py * 256 + px) * 4] + Math.floor(220 * Math.exp(-r2 / 1.5)));
-                    const idx = (py * 256 + px) * 4;
-                    data[idx] = pVal;
-                    data[idx + 1] = pVal;
-                    data[idx + 2] = pVal;
-                    data[idx + 3] = 255;
-                  }
-                }
-              }
-            }
-          });
-        }
-
-        offCtx.putImageData(imgData, 0, 0);
-
-        ctx.save();
-        ctx.imageSmoothingEnabled = false;
-        ctx.globalAlpha = isWhiteBg ? 0.75 : 0.92;
-        if (isWhiteBg) {
-          ctx.filter = 'invert(1)';
-        }
-        ctx.drawImage(off, -256, -256, 512, 512);
-        ctx.restore();
-      }
+      ctx.restore();
+      return;
     }
 
     // Helper to draw clean astronomical targeting brackets [ ] framing candidate pixel cluster
@@ -837,7 +712,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = isWhiteBg ? '#57534e' : '#a8a29e';
     ctx.fillText('30″', sbX + scaleBarPixels / 2 - 6, sbY - 4);
-  }, [zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
+  }, [bitmapReady, targetBitmapUrl, zoom, pan, activeFrameIndex, candidates, selectedCandidateId, overlays, subtractionMode, colorMap, isScientistMode, centerRa, centerDec, frames, liveCatalog, selectedArray]);
 
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -996,8 +871,21 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
     >
       <canvas ref={canvasRef} className="w-full h-full block" />
 
+      {!bitmapReady && (
+        <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+          <div role={loadStatus?.source === 'error' || bitmapFailed ? 'alert' : 'status'} className="max-w-md rounded-xl border border-paper-700 bg-paper-950/95 p-5 text-center space-y-2">
+            <p className="font-semibold text-paper-100">{loadStatus?.source === 'loading' ? 'Loading observations'
+              : targetBitmapUrl && !bitmapFailed ? `Loading ${layerLabel.toLowerCase()}…` : `${layerLabel} unavailable`}</p>
+            <p className="text-xs text-paper-300">{loadStatus?.source === 'error' ? loadStatus.message
+              : loadStatus?.source === 'loading' ? loadStatus.message
+              : bitmapFailed ? 'The image could not be loaded.' : 'No image data is available for this layer.'}</p>
+            <p className="text-xs text-paper-400">Motion cannot be assessed from unavailable image data.</p>
+          </div>
+        </div>
+      )}
+
       {/* Coordinate HUD / Scientist Telemetry HUD */}
-      {isScientistMode ? (
+      {bitmapReady && (isScientistMode ? (
         <div className="absolute top-2.5 left-2.5 bg-paper-950/95 border-2 border-emerald-500/60 shadow-xl rounded-lg p-3 text-[11px] font-mono text-paper-200 pointer-events-none backdrop-blur-sm z-20 max-w-sm space-y-2">
           <div className="flex items-center justify-between border-b border-paper-800 pb-1.5">
             <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
@@ -1064,7 +952,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
             {(6.2 / zoom).toFixed(2)}″/px
           </span>
         </div>
-      )}
+      ))}
 
       {/* Skipped Frame Notification */}
       {skippedNotice && (
@@ -1090,7 +978,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
               <div className="flex items-center gap-2">
                 <Cpu className="w-3.5 h-3.5 text-emerald-400 animate-spin shrink-0" />
                 <span className="text-[10px] font-mono font-bold text-emerald-300">
-                  ML Analysis Running Simultaneously...
+                  {mlAnalysisStatus.stepIndex === 1 ? 'Loading observations…' : 'Preparing difference images…'}
                 </span>
               </div>
               <span className="text-[9px] font-mono font-bold text-paper-200 bg-paper-900 px-1.5 py-0.5 rounded border border-paper-800">
@@ -1199,7 +1087,7 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
       </div>
 
       {/* Frame Status Pill */}
-      {activeFrame && (
+      {activeFrame && bitmapReady && (
         <div className="absolute bottom-2.5 left-2.5 bg-paper-900/90 border border-paper-800 px-2 py-0.5 rounded text-[10px] font-mono text-paper-400 flex items-center gap-2 pointer-events-none">
           <span className="w-1.5 h-1.5 rounded-full bg-ochre-400" />
           <span>Epoch {activeFrame.epochIndex + 1}/{frames.length}: {activeFrame.observationDate.split('T')[0]}</span>
