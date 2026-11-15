@@ -32,8 +32,6 @@ import {
   convertReviewToCandidates,
   searchLiveMotionMicroservice,
   detectTracksViaMicroservice,
-  type MotionReviewDataset,
-  type MotionTrackCandidate,
 } from './services/motionReviewService';
 import {
   fetchLiveCatalogForCoordinate,
@@ -50,7 +48,6 @@ import { EmbedModal } from './components/EmbedModal';
 import { HomePage } from './components/HomePage';
 import { DiscoveryReportPage } from './components/DiscoveryReportPage';
 import { ChooseYourViewModal } from './components/ChooseYourViewModal';
-import { MotionReview } from './components/MotionReview';
 import { VerifyScientistPanel } from './components/VerifyScientistPanel';
 import { ReactBitsLoader } from './components/common/ReactBitsLoader';
 import { SpherexBlinkLogo } from './components/common/SpherexBlinkLogo';
@@ -71,14 +68,15 @@ export function App() {
   const isEmbedMode =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('embed') === 'true';
-  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'motion' | 'inference'>(() => {
+  const [activeTab, setActiveTab] = useState<'home' | 'viewer' | 'feed' | 'report' | 'inference'>(() => {
     if (isEmbedMode) return 'viewer';
     if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('analysis')) {
       return 'inference';
     }
-    return typeof window !== 'undefined' && window.location.hash === '#motion-review'
-      ? 'motion'
-      : 'home';
+    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
+      return 'viewer';
+    }
+    return 'home';
   });
   const [mobileViewerPane, setMobileViewerPane] = useState<'canvas' | 'controls' | 'telemetry'>(
     'canvas'
@@ -108,15 +106,6 @@ export function App() {
     }
   };
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    if (activeTab === 'motion') url.hash = 'motion-review';
-    else if (url.hash === '#motion-review') url.hash = '';
-    if (url.href !== window.location.href) {
-      window.history.replaceState(window.history.state, '', url);
-    }
-  }, [activeTab]);
-
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
@@ -143,7 +132,6 @@ export function App() {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>('3I/ATLAS');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState<boolean>(false);
-  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState<boolean>(false);
   const [drawerControlledTab, setDrawerControlledTab] = useState<
     'ai' | 'triage' | 'chat' | 'spectrum' | null
   >(null);
@@ -307,45 +295,7 @@ export function App() {
     onFrameChange: setActiveFrameIndex,
   });
 
-  // Handler when user jumps from MotionReview directly into the Sky Viewer
-  const handleOpenMotionReviewInViewer = (
-    review: MotionReviewDataset,
-    frameIdx: number,
-    layer: 'aligned' | 'residual' | 'bloom',
-    track?: MotionTrackCandidate
-  ) => {
-    const convertedFrames = convertReviewToEpochFrames(review);
-    const convertedCands = convertReviewToCandidates(review);
-    const detNum = Number(review.detector?.replace(/\D/g, '')) || 6;
-    const detArray = (detNum >= 1 && detNum <= 6 ? detNum : 6) as DetectorArrayId;
 
-    setCurrentPresetId(null);
-    setCustomFrames(convertedFrames);
-    setCandidatesList(convertedCands);
-    setSelectedArray(detArray);
-    setActiveFrameIndex(Math.min(frameIdx, Math.max(0, convertedFrames.length - 1)));
-    setSubtractionMode(
-      layer === 'bloom'
-        ? 'bloom_mask'
-        : layer === 'residual'
-        ? 'epoch_difference'
-        : 'raw_calibrated'
-    );
-
-    if (convertedCands.length > 0) {
-      const firstCoord = track?.sky_deg?.[0] || [ convertedCands[0].ra, convertedCands[0].dec ];
-      setRa(firstCoord[0]);
-      setDec(firstCoord[1]);
-      setSelectedCandidateId(convertedCands[0].id);
-    }
-
-    setSearchStatus({
-      source: review.live_search ? 'live' : 'preset',
-      message: `Motion Review: ${review.target ?? review.id} (${review.detector ?? 'SPHEREx'})`,
-    });
-    setDrawerControlledTab('ai');
-    setActiveTab('viewer');
-  };
 
   const triggerBackgroundMlProgress = (
     runId: number,
@@ -400,8 +350,10 @@ export function App() {
 
     setRa(newRa);
     setDec(newDec);
+    setSelectedCandidateId(null);
     setCurrentPresetId(null);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
+    setCatalogRefreshCounter((c) => c + 1);
     setActiveTab('viewer');
 
     const fovArcmin = parseFloat(fov) || 5;
@@ -769,8 +721,7 @@ export function App() {
     setActiveFrameIndex(setting.activeFrameIndex);
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
-    setDrawerControlledTab('ai');
-    setIsVerifyModalOpen(false);
+    setDrawerControlledTab('chat');
     setActiveTab('viewer');
 
     triggerBackgroundMlProgress(
@@ -905,6 +856,7 @@ export function App() {
               <UserCheck className="w-3.5 h-3.5" />
               <span>Verification Feed</span>
             </button>
+
           </nav>
         </div>
 
@@ -925,11 +877,7 @@ export function App() {
 
         {/* Desktop Right: Global Volunteer vs Scientist View Switch & TopNav */}
         <div className="hidden md:flex items-center gap-2">
-          <div
-            className={`${
-              activeTab === 'motion' ? 'hidden' : 'flex'
-            } items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm`}
-          >
+          <div className="flex items-center rounded-lg border-2 border-black bg-paper-950 p-0.5 btn-tactile-sm">
             <button
               onClick={() => handleSetViewMode('volunteer')}
               className={`px-3 py-1 rounded text-[11px] font-mono font-bold transition-all cursor-pointer ${
@@ -1136,15 +1084,6 @@ export function App() {
       {/* -1. Raw Inference View (when requested) */}
       {activeTab === 'inference' && <InferencePage />}
 
-      {/* 0. Motion Review View */}
-      {activeTab === 'motion' && (
-        <MotionReview
-          ra={ra}
-          dec={dec}
-          detector={selectedArray}
-          onOpenInViewer={handleOpenMotionReviewInViewer}
-        />
-      )}
 
       {/* 1. Clean Home Page: Starts with big name, coordinate search & presets */}
       {activeTab === 'home' && (
@@ -1258,30 +1197,6 @@ export function App() {
               mobileViewerPane === 'canvas' ? 'flex' : 'hidden md:flex'
             }`}
           >
-            {/* Floating Mobile Side Button: Settings (Left Side) */}
-            <div className="md:hidden absolute top-14 left-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('controls')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Change Sky Viewer Settings (FOV, Detector Bands, Overlays, Coordinates)"
-              >
-                <Sliders className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Settings</span>
-              </button>
-            </div>
-
-            {/* Floating Mobile Side Button: Triage (Right Side) */}
-            <div className="md:hidden absolute top-14 right-2.5 z-30 pointer-events-auto">
-              <button
-                onClick={() => setMobileViewerPane('telemetry')}
-                className="btn-tactile px-3 py-1.5 rounded-xl border-2 border-black bg-paper-900/95 backdrop-blur text-emerald-400 font-mono text-xs font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,0,0,0.85)] cursor-pointer hover:bg-paper-850"
-                title="Open Candidate Triage & Classification"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Triage</span>
-              </button>
-            </div>
-
             <CanvasViewport
               frames={frames}
               activeFrameIndex={activeFrameIndex}
@@ -1293,6 +1208,8 @@ export function App() {
               onChangeSubtractionMode={setSubtractionMode}
               centerRa={ra}
               centerDec={dec}
+              fov={fov}
+              selectedArray={selectedArray}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}
@@ -1426,34 +1343,6 @@ export function App() {
         currentMode={viewMode}
         onSelectMode={handleSetViewMode}
       />
-
-      {/* Verify Scientist Object Dialog Modal */}
-      {isVerifyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm anim-fall">
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-paper-950 border-2 border-paper-700 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-4 border-b border-paper-800 mb-6">
-              <div>
-                <h2 className="text-xl font-bold font-mono text-emerald-400">
-                  🔬 NASA Scientist & Community Verification Feed
-                </h2>
-                <p className="text-xs text-paper-400 mt-1">
-                  Inspect flagged candidate objects, view exact observation settings, and verify astrometric tracks.
-                </p>
-              </div>
-              <button
-                onClick={() => setIsVerifyModalOpen(false)}
-                className="btn-tactile-sm px-3 py-1.5 rounded-lg border-2 border-black bg-paper-900 text-paper-300 hover:text-white font-mono text-xs cursor-pointer"
-              >
-                ✕ Close
-              </button>
-            </div>
-            <VerifyScientistPanel
-              onSelectVerificationTarget={handleSelectVerificationTarget}
-              isCompact={false}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

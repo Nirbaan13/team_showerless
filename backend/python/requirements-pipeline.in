@@ -1,0 +1,5 @@
+# Integration packaging for the unchanged pipeline/service.py.
+# Scientific packages remain constrained to the frozen ML runtime lock.
+fastapi==0.135.2
+uvicorn==0.42.0
+astroquery==0.4.11

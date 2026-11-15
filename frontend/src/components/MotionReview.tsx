@@ -354,15 +354,26 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
               ).map((view) => (
                 <figure
                   key={view.title}
-                  className={`min-w-0 p-3 rounded-xl bg-paper-950 border-2 ${view.accent} flex flex-col items-center`}
+                  className={`min-w-0 p-3 rounded-xl bg-paper-950 border-2 ${view.accent} flex flex-col items-center relative`}
                 >
-                  <img
-                    src={view.image}
-                    width={29}
-                    height={29}
-                    alt={view.title}
-                    className="w-full max-w-[9.5rem] aspect-square rounded-lg border-2 border-black bg-black [image-rendering:pixelated]"
-                  />
+                  <div className="relative w-full max-w-[9.5rem] aspect-square">
+                    <img
+                      src={view.image}
+                      width={29}
+                      height={29}
+                      alt={view.title}
+                      className="w-full h-full rounded-lg border-2 border-black bg-black [image-rendering:pixelated]"
+                    />
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                      <div
+                        className={`w-6 h-6 rounded-full border ${
+                          view.title.includes('Following')
+                            ? 'border-emerald-400/90'
+                            : 'border-dashed border-white/40'
+                        }`}
+                      />
+                    </div>
+                  </div>
                   <figcaption className="text-xs font-mono font-bold text-paper-100 mt-2 text-center">
                     {view.title}
                   </figcaption>
@@ -373,12 +384,10 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
               ))}
             </div>
 
-            <p className="text-xs text-paper-400 font-mono leading-relaxed">
-              {ranking === 'bloom'
-                ? 'Both views stack the detector’s BLOOM masks. Bright pixels show where masks overlap.'
-                : 'Both views stack the same difference images with the same contrast.'}{' '}
-              The moving stack follows a fitted straight line.
-            </p>
+            <div className="flex items-center justify-between text-[10px] font-mono text-paper-400 pt-1 border-t border-paper-800">
+              <span>{ranking === 'bloom' ? 'BLOOM Mask Overlap' : 'Difference Image Coadd'}</span>
+              <span className="text-emerald-300 font-bold">Fitted Linear Trajectory</span>
+            </div>
           </section>
         )}
       </section>
@@ -428,13 +437,16 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
             )}
           </div>
 
-          <p className="text-xs text-paper-400 leading-relaxed">
-            {ranking === 'bloom'
-              ? 'Bright sources can leave a flagged core. This search links the centers of those flagged regions.'
-              : ranking === 'forest'
-              ? `Reranks the same residual tracks using a model trained on ${review.simulated_training_fields} simulated fields.`
-              : 'Rank favors tracks with more detections, stronger residuals, and a tighter fit.'}
-          </p>
+          <div className="flex items-center justify-between text-[10px] font-mono text-paper-400">
+            <span>Algorithm:</span>
+            <span className="text-emerald-300 font-bold">
+              {ranking === 'bloom'
+                ? 'BLOOM Centroids'
+                : ranking === 'forest'
+                ? `${review.simulated_training_fields} Sim Fields RF`
+                : 'Leave-One-Out (LOO)'}
+            </span>
+          </div>
 
           {candidate ? (
             <label className="block text-[11px] font-mono uppercase tracking-wider text-paper-400 font-bold">
@@ -576,14 +588,12 @@ function MotionField({ review, onOpenInViewer }: MotionFieldProps) {
             )}
           </dl>
 
-          <p className="text-xs leading-relaxed text-paper-400">
-            {review.has_ephemeris
-              ? 'Published positions label matches after ranking.'
-              : 'Ephemeris unavailable for this series.'}{' '}
-            {review.retains_outliers
-              ? 'OUTLIER pixels were retained in this run.'
-              : 'OUTLIER pixels were masked in this run.'}
-          </p>
+          <div className="flex items-center justify-between text-[10px] font-mono text-paper-400 pt-1 border-t border-paper-800">
+            <span>{review.has_ephemeris ? 'Ephemeris Verified' : 'Catalog Free'}</span>
+            <span className="text-paper-300">
+              {review.retains_outliers ? 'Outliers Retained' : 'Outliers Masked'}
+            </span>
+          </div>
 
           {review.omitted_frame_checks.length > 0 && (
             <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-800/50 text-xs font-mono text-emerald-300 flex items-center gap-2">
@@ -883,10 +893,9 @@ export function MotionReview({ ra, dec, detector, onOpenInViewer }: MotionReview
                 />
                 <span>Retain OUTLIER pixels</span>
               </label>
-              <p className="text-xs text-paper-400 font-mono">
-                Search up to 7 days using one detector. Candidates need detections in at least 3
-                visits.
-              </p>
+              <span className="text-[11px] text-paper-400 font-mono">
+                1–7 days · 1 detector · ≥3 visits
+              </span>
             </div>
           </form>
 

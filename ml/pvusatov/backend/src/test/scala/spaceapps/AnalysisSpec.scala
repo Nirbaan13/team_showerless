@@ -168,7 +168,7 @@ assert all('observation_id' not in f and f['release']=='dr1' and f['processing_v
         download<-jobs.submit(query,"zodi-reference-subtracted",None)
         request=AnalysisRequest(download_id=Some(download.id))
         admission<-s.submit(request).either
-        api<-Api.make(jobs,"test",Path.of("docs/openai/openapi.yaml"),analyses=Some(s))
+        api<-Api.make(jobs,"test",Path.of("docs/openapi.yaml"),analyses=Some(s))
         http<-api.routes.runZIO(Request.post("http://localhost/api/analyses/motion",Body.fromString(request.toJson)))
         body<-http.body.asString
         legacy<-repo.accept(request,"legacy-processed-request",8)
@@ -182,7 +182,7 @@ assert all('observation_id' not in f and f['release']=='dr1' and f['processing_v
         dir<-temp
         f<-setup(dir)
         (s,_,jobs)=f
-        api<-Api.make(jobs,"test",Path.of("docs/openai/openapi.yaml"),analyses=Some(s))
+        api<-Api.make(jobs,"test",Path.of("docs/openapi.yaml"),analyses=Some(s))
         port<-GrpcServer.start(jobs,"test","127.0.0.1",0,analyses=Some(s))
         client<-AnalysisServiceClient.scoped(ZManagedChannel(NettyChannelBuilder.forAddress("127.0.0.1",port).usePlaintext()))
         accepted<-api.routes.runZIO(Request.post("http://localhost/api/analyses/motion",Body.fromString("{\"preset\":\"comet-d6\"}")))

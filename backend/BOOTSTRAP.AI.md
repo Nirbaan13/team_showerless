@@ -22,7 +22,7 @@ cd backend
 APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main
 ```
 
-JDK25 and sbt1.13.1 are the build baseline. Application sources live under backend/src/; persistent state and native FITS are stored under DATA_DIR. Scientific processing and PNG previews are explicitly deferred.
+JDK25 and sbt1.13.1 are the build baseline. Application sources live under backend/scala/src/; persistent state and native FITS are stored under DATA_DIR. Scientific processing and PNG previews are explicitly deferred.
 
 ## CI and deployment
 

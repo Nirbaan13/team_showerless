@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VOTABLE version="1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ivoa.net/xml/VOTable/v1.3">
+  <RESOURCE type="results">
+    <TABLE>
+      <INFO name="QUERY_STATUS" value="OK" />
+      <FIELD name="ID" datatype="char" ucd="meta.id;meta.main" arraysize="*" />
+      <FIELD name="access_url" datatype="char" ucd="meta.ref.url" arraysize="*" />
+      <FIELD name="service_def" datatype="char" ucd="meta.ref" arraysize="*" />
+      <FIELD name="error_message" datatype="char" ucd="meta.code.error" arraysize="*" />
+      <FIELD name="semantics" datatype="char" ucd="meta.code" arraysize="*" />
+      <FIELD name="description" datatype="char" ucd="meta.note" arraysize="*" />
+      <FIELD name="content_type" datatype="char" ucd="meta.code.mime" arraysize="*" />
+      <FIELD name="content_length" datatype="long" ucd="phys.size;meta.file" unit="byte" />
+      <FIELD name="eso_origfile" datatype="char" ucd="meta.id;meta.file" arraysize="*" />
+      <FIELD name="eso_category" datatype="char" ucd="meta.code.class;meta.dataset" arraysize="*" />
+      <FIELD name="eso_datalink" datatype="char" ucd="meta.ref.url" arraysize="*" />
+      <DATA>
+        <TABLEDATA>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/ADP.2014-11-12T16:17:07.630]]></TD>
+            <TD />
+            <TD />
+            <TD>#this</TD>
+            <TD>Requested file</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>201026880</TD>
+            <TD>v20100814_00710_st_tl.fits.fz</TD>
+            <TD>SCIENCE.IMAGE</TD>
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD />
+            <TD>ADP.2014-11-12T16:17:07.630_soda</TD>
+            <TD />
+            <TD>#cutout</TD>
+            <TD>Cutout of #this (SODA-sync)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD />
+            <TD />
+            <TD />
+            <TD />
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://archive.eso.org/previews/v1/files/ADP.2014-11-12T16:17:07.630/preview?format=DOWNLOAD]]></TD>
+            <TD />
+            <TD />
+            <TD>#preview</TD>
+            <TD>PDF preview of the requested file</TD>
+            <TD>application/pdf</TD>
+            <TD>1000000</TD>
+            <TD />
+            <TD />
+            <TD />
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://archive.eso.org/dataset/ADP.2014-11-12T16:17:07.630]]></TD>
+            <TD />
+            <TD />
+            <TD>#preview</TD>
+            <TD>HTML representation of the dataset</TD>
+            <TD>text/html</TD>
+            <TD>1000000</TD>
+            <TD />
+            <TD />
+            <TD />
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/ADP.2014-11-12T16:18:37.860]]></TD>
+            <TD />
+            <TD />
+            <TD>#auxiliary</TD>
+            <TD>Ancillary file associated to the requested file</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>69632640</TD>
+            <TD>v20100814_00710_st_tl_conf.fits.fz</TD>
+            <TD>ANCILLARY.WEIGHTMAP</TD>
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?ADP.2014-11-12T16:18:37.860</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:31:33.762]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75502080</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:31:33.762</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:31:59.808]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75516480</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:31:59.808</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:32:32.831]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75643200</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:32:32.831</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:32:59.652]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75772800</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:32:59.652</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:33:32.093]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75991680</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:33:32.093</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:33:58.162]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>76147200</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:33:58.162</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:34:31.230]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>76057920</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:34:31.230</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:35:00.053]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>76017600</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:35:00.053</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:35:34.789]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75686400</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:35:34.789</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:35:59.828]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75810240</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:35:59.828</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:36:34.741]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75703680</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:36:34.741</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/VCAM.2010-08-15T03:37:01.531]]></TD>
+            <TD />
+            <TD />
+            <TD>#progenitor</TD>
+            <TD>File used to generate the requested file (processing provenance)</TD>
+            <TD>application/x-fits-hcompress</TD>
+            <TD>75816000</TD>
+            <TD />
+            <TD />
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?VCAM.2010-08-15T03:37:01.531</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://dataportal.eso.org/dataPortal/file/ADP.2014-11-12T16:17:31.970]]></TD>
+            <TD />
+            <TD />
+            <TD>#derivation</TD>
+            <TD>Science product derived from the requested file</TD>
+            <TD>application/fits</TD>
+            <TD>361762560</TD>
+            <TD>v20100814_00710_st_tl_cat.fits</TD>
+            <TD>SCIENCE.SRCTBL</TD>
+            <TD>https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?ADP.2014-11-12T16:17:31.970</TD>
+          </TR>
+          <TR>
+            <TD>ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630</TD>
+            <TD><![CDATA[https://archive.eso.org/datalink/links?ID=ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630&eso_download=data_documentation]]></TD>
+            <TD />
+            <TD />
+            <TD>http://archive.eso.org/rdf/datalink/eso#data_documentation</TD>
+            <TD>Release description of the collection the requested file belongs to</TD>
+            <TD>application/pdf</TD>
+            <TD>1000000</TD>
+            <TD />
+            <TD />
+            <TD />
+          </TR>
+        </TABLEDATA>
+      </DATA>
+    </TABLE>
+  </RESOURCE>
+  <RESOURCE ID="ADP.2014-11-12T16:17:07.630_soda" type="meta" utype="adhoc:service">
+    <PARAM arraysize="*" datatype="char" name="accessURL" ucd="meta.ref.url" value="https://dataportal.eso.org/dataPortal/soda/sync" />
+    <PARAM arraysize="*" datatype="char" name="standardID" value="ivo://ivoa.net/std/SODA#sync-1.0" />
+    <GROUP name="inputParams">
+      <PARAM arraysize="*" datatype="char" name="ID" ucd="meta.id;meta.dataset" value="ivo://eso.org/ID?ADP.2014-11-12T16:17:07.630">
+        <DESCRIPTION>The publisher DID of the dataset of interest</DESCRIPTION>
+      </PARAM>
+      <PARAM arraysize="3" datatype="double" name="CIRCLE" ucd="pos.outline;obs" unit="deg" value="" xtype="circle">
+        <DESCRIPTION>A circle (as a flattened array of ra, dec, radius) that should be covered by the cutout.</DESCRIPTION>
+        <VALUES>
+          <MAX value="265.96351255831604 -29.29704473514484 2.680344" />
+        </VALUES>
+      </PARAM>
+    </GROUP>
+  </RESOURCE>
+</VOTABLE>
