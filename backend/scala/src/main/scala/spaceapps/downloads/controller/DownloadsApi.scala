@@ -13,6 +13,7 @@ final class DownloadsApi(service: DownloadsService):
     val status=e.code match
       case "not_found"=>Status.NotFound
       case "storage_error"=>Status.InternalServerError
+      case "timeout"=>Status.GatewayTimeout
       case "capacity_exceeded"=>Status.TooManyRequests
       case "job_active" | "stale_cursor"=>Status.Conflict
       case _=>Status.UnprocessableEntity
@@ -50,7 +51,20 @@ final class DownloadsApi(service: DownloadsService):
       Response(body=Body.fromStreamChunked(ZStream.fromPath(path))).addHeader("Content-Type",if asset.compression=="gzip" then "application/gzip" else "application/fits")
         .addHeader("Content-Disposition",s"attachment; filename=\"${asset.id}.fits${if asset.compression=="gzip" then ".gz" else ""}\"")
   }
+  private def observationEvents(id:String,request:Request):IO[ArchiveFailure,Response]=
+    for
+      after <- ZIO.fromEither(request.headers.get("Last-Event-ID").fold[Either[ArchiveFailure,Option[Long]]](Right(None))(s=>s.toLongOption.map(Some(_)).toRight(ArchiveFailure("invalid_cursor","Last-Event-ID must be a nonnegative integer"))))
+      stream <- service.observationsEvents(id,after)
+    yield Response(body=Body.fromStreamChunked(stream.map(e=>s"id: ${e.sequence}\nevent: ${e.name}\ndata: ${e.data}\n\n").mapConcat(_.getBytes(UTF_8))))
+      .addHeader("Content-Type","text/event-stream").addHeader("Cache-Control","no-store").addHeader("X-Accel-Buffering","no")
+  private def preview(id:String):ZIO[Scope,ArchiveFailure,Response]=service.resource(id).as(json(ArchiveFailure("preview_unavailable","Preview generation is unavailable for native archive downloads"),Status.Conflict))
   val routes: Routes[Any,Response] = Routes(
+    Method.GET / "api" / "observations-search" -> handler { (request:Request)=>safe(ZIO.fromEither(ObservationParameters.parse(request)).flatMap(service.findObservations).map(json(_))) },
+    Method.POST / "api" / "observations-download" -> handler { (request:Request)=>safe(parse[ObservationSelection](request,Set("observation_ids","delivery")).flatMap(service.observationsDownload).map(j=>json(j,if Set("completed","completed_with_errors","failed")(j.status) then Status.Ok else Status.Accepted).addHeader("Location",j.status_url))) },
+    Method.GET / "api" / "observations-download" / string("id") -> handler { (id:String,request:Request)=>safe(service.observationsStatus(id).map(json(_))) },
+    Method.GET / "api" / "observations-download" / string("id") / "events" -> handler { (id:String,request:Request)=>safe(observationEvents(id,request)) },
+    Method.GET / "api" / "observations-download" / "chunks" / string("id") -> Handler.scoped[Any](handler { (id:String,request:Request)=>artifact(id).catchAll(e=>ZIO.succeed(json(e,if e.code=="not_found" then Status.NotFound else Status.InternalServerError))) }),
+    Method.GET / "api" / "observations-download" / "chunks" / string("id") / "preview" -> Handler.scoped[Any](handler { (id:String,request:Request)=>preview(id).catchAll(e=>ZIO.succeed(json(e,if e.code=="not_found" then Status.NotFound else Status.InternalServerError))) }),
     Method.GET / "api" / "archives" -> handler(safe(service.inventory.map(json(_)))),
     Method.POST / "api" / "archive-searches" -> handler { (request: Request)=>safe(parse[ArchiveQuery](request,Set("region","providers","product_kinds","time_start_utc","time_end_utc","limit_per_provider")).flatMap(service.search).map(j=>json(j,Status.Accepted))) },
     Method.GET / "api" / "archive-searches" / string("id") -> handler { (id: String,request: Request)=>safe(page(id,request)) },

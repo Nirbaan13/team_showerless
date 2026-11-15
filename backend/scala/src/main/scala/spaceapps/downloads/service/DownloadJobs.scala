@@ -19,7 +19,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
         ZIO.sleep(Duration.fromMillis(delay)) *> retry(effect,attempt+1)
       else ZIO.fail(error)
     }
-  def accept(selection:DownloadSelection):IO[ArchiveFailure,AcceptedJob]=admission.withPermit {
+  def accept(selection:DownloadSelection,statusBase:String="/api/archive-downloads"):IO[ArchiveFailure,AcceptedJob]=admission.withPermit {
     for
       _ <- ZIO.fail(ArchiveFailure("invalid_selection","Select 1 to 100 distinct server-known record IDs")).when(selection.record_ids.isEmpty || selection.record_ids.size>100 || selection.record_ids.distinct.size!=selection.record_ids.size)
       _ <- ZIO.foreachDiscard(selection.delivery.region)(c=>ZIO.fromEither(ArchiveQuery(c,List("validation")).validate))
@@ -28,7 +28,7 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
       active <- repository.allDownloads.map(_.count(j=> !j.terminal))
       _ <- ZIO.fail(ArchiveFailure("capacity_exceeded","Archive download queue is full",true)).when(active>=limits.max_active_jobs)
       id=UUID.randomUUID().toString
-      url=s"/api/archive-downloads/$id"
+      url=s"$statusBase/$id"
       _ <- repository.saveDownload(DownloadSnapshot(id,selection,status_url=url,chunks=records.map(manifests.initial(_,selection.delivery))))
     yield AcceptedJob(id,url,Some(url+"/events"))
   }
@@ -63,10 +63,10 @@ final class DownloadJobs private(registry:ProviderRegistry,repository:DownloadsR
             })
         yield assets
         for
-          _ <- repository.updateDownload(job.id,"chunk.started")(current=>current.copy(chunks=current.chunks.map(c=>if c.record_id==id then c.copy(status="downloading") else c)))
+          _ <- repository.updateDownload(job.id,"chunk.started",Some(key))(current=>current.copy(chunks=current.chunks.map(c=>if c.record_id==id then c.copy(status="downloading") else c)))
           assets <- work.catchAllDefect(_=>ZIO.fail(ArchiveFailure("provider_error","Archive provider could not resolve or transfer the selected product")))
             .catchAll(error=>ZIO.succeed(List(AssetOutcome(id,if error.code=="no_content" then "skipped" else "failed",error=Some(error),provenance=product.provenance))))
-          _ <- repository.updateDownload(job.id,if assets.forall(_.status=="ready") then "chunk.ready" else "chunk.failed") { current=>
+          _ <- repository.updateDownload(job.id,if assets.forall(_.status=="ready") then "chunk.ready" else "chunk.failed",if assets.size==1 then Some(assets.head.asset.fold(key)(_.id)) else None) { current=>
             val chunks=assets.map { outcome=>
               val pending=manifests.initial(product,job.selection.delivery)
               outcome.asset.fold(pending.copy(status=outcome.status,error=outcome.error))(a=>DownloadChunk(a.id,id,a.artifact_url,outcome.status,outcome.error))

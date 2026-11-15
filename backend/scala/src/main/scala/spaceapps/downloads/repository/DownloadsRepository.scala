@@ -48,14 +48,14 @@ final class DownloadsRepository private(path: Path):
     next.records.foreach(r=>put(c,"federated_records",r.id,r.toJson))
     next
   }
-  def updateDownload(id:String,event:String="job.updated")(f:DownloadSnapshot=>DownloadSnapshot):IO[ArchiveFailure,DownloadSnapshot]=
-    modifyDownload(id)(current=>f(current)->event)
+  def updateDownload(id:String,event:String="job.updated",chunkId:Option[String]=None)(f:DownloadSnapshot=>DownloadSnapshot):IO[ArchiveFailure,DownloadSnapshot]=
+    modifyDownload(id,chunkId)(current=>f(current)->event)
   /** Choose both state and event from the latest row under one write transaction. */
-  def modifyDownload(id:String)(f:DownloadSnapshot=>(DownloadSnapshot,String)):IO[ArchiveFailure,DownloadSnapshot]=tx { c=>
+  def modifyDownload(id:String,chunkId:Option[String]=None)(f:DownloadSnapshot=>(DownloadSnapshot,String)):IO[ArchiveFailure,DownloadSnapshot]=tx { c=>
     val (changed,event)=f(get[DownloadSnapshot](c,"federated_downloads",id))
     val next=changed.manifest
     put(c,"federated_downloads",id,next.toJson)
-    appendEvent(c,next,event)
+    appendEvent(c,next,event,chunkId)
     next
   }
   def search(id: String): IO[ArchiveFailure,SearchSnapshot] = tx(get[SearchSnapshot](_,"federated_searches",id))
@@ -71,11 +71,11 @@ final class DownloadsRepository private(path: Path):
       val r=s.executeQuery()
       try { r.next();r.getLong(1) } finally r.close()
     finally s.close()
-  private def appendEvent(c:Connection,job:DownloadSnapshot,name:String):Unit=
+  private def appendEvent(c:Connection,job:DownloadSnapshot,name:String,chunkId:Option[String]=None):Unit=
     val next=sequence(c,job.id)+1
     val s=c.prepareStatement("INSERT INTO federated_download_events(download_id,sequence,name,data) VALUES(?,?,?,?)")
     try
-      s.setString(1,job.id);s.setLong(2,next);s.setString(3,name);s.setString(4,job.toJson);s.executeUpdate();()
+      s.setString(1,job.id);s.setLong(2,next);s.setString(3,name);s.setString(4,chunkId.fold(job.toJson)(id=>job.toJson.dropRight(1)+s",\"chunk_id\":${id.toJson}}"));s.executeUpdate();()
     finally s.close()
   /** Snapshot and cursor come from one transaction; updates cannot fall between them. */
   def snapshot(id:String):IO[ArchiveFailure,(DownloadSnapshot,Long)]=tx { c=>

@@ -20,6 +20,13 @@ final class FederatedDiscovery private(val registry: ProviderRegistry,val reposi
       _ <- repository.saveSearch(SearchSnapshot(id,q,status_url=url))
     yield AcceptedJob(id,url)
   }
+  /** Search is metadata-only; HTTP GET returns its completed list, never a download job. */
+  def find(query:ArchiveQuery):IO[ArchiveFailure,SearchSnapshot]=
+    def await(id:String):IO[ArchiveFailure,SearchSnapshot]=repository.search(id).flatMap { job=>
+      if Set("queued","running")(job.status) then ZIO.sleep(20.millis) *> await(id)
+      else ZIO.succeed(job)
+    }
+    accept(query).flatMap(job=>await(job.id).timeoutFail(ArchiveFailure("timeout","Observation search timed out",true))(Duration.fromMillis(limits.search_deadline_ms)+30.seconds))
   def continue(id: String,provider: String): IO[ArchiveFailure,AcceptedJob] = admission.withPermit {
     for
       active <- repository.allSearches.map(_.count(j=>Set("queued","running")(j.status)))
