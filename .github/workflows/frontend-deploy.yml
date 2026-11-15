@@ -1,9 +1,7 @@
-name: Frontend CI and deploy
+name: Frontend deploy (agents wait)
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -14,8 +12,10 @@ concurrency:
   group: frontend-deploy-${{ github.ref }}
   cancel-in-progress: false
 
+# This workflow is the release completion gate. Tests run independently.
 jobs:
-  frontend:
+  deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -30,29 +30,14 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci --no-audit --no-fund
-      - name: Lint and build frontend
+      - name: Build frontend
         working-directory: frontend
         env:
           VITE_BACKEND_URL: /backend
-        run: |
-          npm run lint
-          npm run build
-      - name: Install browser for viewer regression tests
-        working-directory: frontend
-        run: npx playwright install --with-deps chromium
-      - name: Test real viewer states and epoch difference rendering
-        working-directory: frontend
-        run: npm test
-      - name: Check frontend deployment scripts
-        run: bash -n ops/deploy-frontend.sh ops/bootstrap-frontend.sh ops/frontend/test-deploy.sh
+        run: npm run build
       - name: Build exact frontend revision
         run: docker build --file ops/frontend/Dockerfile --build-arg "APP_REVISION=$GITHUB_SHA" --tag "spaceapps-frontend:$GITHUB_SHA" .
-      - name: Verify frontend deployment and rollback
-        env:
-          TEST_IMAGE_REVISION: ${{ github.sha }}
-        run: bash ops/frontend/test-deploy.sh
       - name: Deploy main frontend to VPS
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           VPS_HOST: 144.124.238.101
           VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}

@@ -1,4 +1,4 @@
-name: Deploy to Hostinger Live Site
+name: Hostinger deploy (agents wait)
 
 on:
   push:
@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   deploy-hostinger:
+    if: github.ref == 'refs/heads/main'
     name: Build & Sync to spherexblink.tech
     runs-on: ubuntu-latest
     timeout-minutes: 10
