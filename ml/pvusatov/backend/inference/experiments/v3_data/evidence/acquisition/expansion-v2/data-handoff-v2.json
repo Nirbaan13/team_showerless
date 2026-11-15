@@ -1,0 +1,108 @@
+{
+  "schema_version": 2,
+  "purpose": "Expanded native-data handoff; coordinator still owns model/code freeze and final pixel authorization",
+  "sources": [
+    {
+      "path": "/tmp/spaceapps-v3-native-data/data-handoff.json",
+      "sha256": "1d173f83d934c7cae8763053e1028a2f5ceb148818c7768aee7826e4bc4f2de2"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/partition-plan.json",
+      "sha256": "75dd1751b06852b1f6430ae34a0945456621ca7513b5638a5ede0ec19647d05a"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/selected-groups.json",
+      "sha256": "e206f893d483034a6c596226fd69120c4c1ec3aede1de9ed2a0c47fa7d7bbfac"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/audit-expanded-v2.json",
+      "sha256": "c09d22e1b6e8fbbe04e57c7a3b799b966c089caf5baa7d8e9a615f77f1bf76b1"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/final-byte-audit-v2.json",
+      "sha256": "b87db92a0db85c3ffa7943b556be8844fd4fb8e768a15b49786c1507be39ace0"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/development-handoff-v2.json",
+      "sha256": "6b0624b8f0a470f1c5331b81f0d396ed1ae8771caf5b1236650123ba152314e5"
+    },
+    {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/evidence/orientation-evidence.json",
+      "sha256": "45f6a96072313b516b80c1b73f47b4ad17463f90ffcd9df15462a7233c2545c1"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/expand_v2.py",
+      "sha256": "c215538ed3b3f8526702b5e6b04a6556e1402782d116665d0d76c37bc8da9a6b"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/audit_expansion_v2.py",
+      "sha256": "106b71e1316373f95b9929f77b66d1ba28df3cf7cffdd584928270a4bc1bef94"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/orientation_evidence.py",
+      "sha256": "8f89583855cb400941b2c8c5545f88eddcbf8a63ea368445b2374e4ce4b34935"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/build_expanded_handoff.py",
+      "sha256": "dae8b0f5adb6c0b1055e0b8e8193568cac40300e8a7791197bb99d3dacc68a4a"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/docs/implementation/ML-NATIVE-V3-DATA-EXPANSION-V2.AI.md",
+      "sha256": "8ee02a9b1598a639252b394b1ba0647c310cb704bc33e3ad32486f147e2567e4"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/training/evaluate_background.py",
+      "sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/ml_inference/prepare.py",
+      "sha256": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb"
+    }
+  ],
+  "counts": {
+    "train": {
+      "independent_parent_fields": 8,
+      "native_mefs": 43,
+      "bytes": 174006720
+    },
+    "validation": {
+      "independent_parent_fields": 11,
+      "native_mefs": 77,
+      "bytes": 311526720
+    },
+    "final": {
+      "independent_parent_fields": 10,
+      "native_mefs": 80,
+      "bytes": 324541440
+    }
+  },
+  "final_pixels_opened": false,
+  "cross_parent_physical_obsid_overlap": 0,
+  "minimum_expansion_separation_deg": 9.202637087983023,
+  "official_orientation_evidence": {
+    "url": "https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf",
+    "version": "2.1",
+    "document_date": "2026-11-10",
+    "pages": [
+      52,
+      59,
+      60,
+      74,
+      81
+    ],
+    "pdf": {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/evidence/SPHEREx_Expsupp-v2.1.pdf",
+      "sha256": "9f3085cea74c6cdb647cc373bef27aaae50e394d348402e68ea2558ea06011cd"
+    },
+    "marker_source": {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/experiments/v3_data/orientation_evidence.py",
+      "sha256": "8f89583855cb400941b2c8c5545f88eddcbf8a63ea368445b2374e4ce4b34935"
+    },
+    "marker_evidence": {
+      "path": "/tmp/spaceapps-v3-native-data/expansion-v2/evidence/orientation-evidence.json",
+      "sha256": "45f6a96072313b516b80c1b73f47b4ad17463f90ffcd9df15462a7233c2545c1"
+    },
+    "maximum_marker_centroid_error_px": 0.02414033838337186,
+    "scope": "SWIR1\u20133; MWIR4\u20136 unsupported"
+  }
+}

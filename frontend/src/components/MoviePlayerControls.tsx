@@ -69,15 +69,15 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         {/* Clyde Tombaugh Blink Comparator Mode */}
         <button
           onClick={onToggleBlinkMode}
-          className={`btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer ${
+          className={`btn-tactile-sm px-2.5 py-1.5 rounded-lg border-2 border-black font-mono text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
             blinkMode
-              ? 'bg-emerald-400 text-gray-950 font-bold'
+              ? 'bg-emerald-400 text-gray-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.4)]'
               : 'bg-paper-950 text-paper-300 hover:text-white'
           }`}
-          title="Alternate rapidly between 2 observation dates to spot moving objects"
+          title="Alternate rapidly between Frame A and Frame B to spot moving objects"
         >
-          <Eye className={`w-3 h-3 ${blinkMode ? 'text-gray-950' : 'text-emerald-400'}`} />
-          <span>Blink (A / B)</span>
+          <Eye className={`w-3 h-3 ${blinkMode ? 'text-gray-950 animate-pulse' : 'text-emerald-400'}`} />
+          <span>{blinkMode ? 'Blinking (A ↔ B)' : 'Blink (A / B)'}</span>
         </button>
       </div>
 
@@ -86,7 +86,7 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
         <div className="flex items-center justify-between text-[11px] font-mono">
           <div className="flex items-center gap-1 text-paper-400">
             <Clock className="w-3 h-3 text-emerald-400" />
-            <span>Epoch Timeline</span>
+            <span>{blinkMode ? 'Blink Comparator (A ↔ B)' : 'Epoch Timeline'}</span>
           </div>
           <span className="text-paper-200 font-medium">
             Frame {activeFrameIndex + 1} of {frames.length}
@@ -98,6 +98,14 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
           {frames.map((frame, idx) => {
             const isActive = idx === activeFrameIndex;
             const isMissing = !frame.isAvailable;
+            const availIndices = frames
+              .map((f, i) => (f.isAvailable ? i : -1))
+              .filter((i) => i >= 0);
+            const isBlinkA = blinkMode && availIndices[0] === idx;
+            const isBlinkB =
+              blinkMode &&
+              availIndices.length >= 2 &&
+              availIndices[availIndices.length - 1] === idx;
 
             return (
               <button
@@ -109,6 +117,8 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
                     ? 'bg-paper-950/40 border-dashed border-red-500/40 text-red-400/60 cursor-not-allowed shadow-none'
                     : isActive
                     ? 'bg-emerald-400 text-gray-950 font-bold'
+                    : isBlinkA || isBlinkB
+                    ? 'bg-paper-800 text-emerald-300 border-emerald-500/50'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                 }`}
                 title={
@@ -117,7 +127,11 @@ export const MoviePlayerControls: React.FC<MoviePlayerControlsProps> = ({
                     : `Epoch ${idx + 1} (${frame.observationDate.split('T')[0]})`
                 }
               >
-                {isMissing ? 'Offline' : frame.observationDate.split('T')[0]}
+                {isMissing
+                  ? 'Offline'
+                  : `${isBlinkA ? '[A] ' : isBlinkB ? '[B] ' : ''}${
+                      frame.observationDate.split('T')[0]
+                    }`}
               </button>
             );
           })}

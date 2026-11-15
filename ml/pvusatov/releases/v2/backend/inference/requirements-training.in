@@ -1,0 +1,5 @@
+-r requirements-inference.in
+scikit-learn==1.9.1
+skl2onnx==1.20.0
+onnx==1.23.2
+pytest==9.2.0

@@ -1,0 +1,5 @@
+# Regenerable offline candidate audit cache; manifest retains every field seed.
+field-candidates.json
+# Reproducible local model-selection experiments; only the selected frozen release is tracked.
+experiments/
+final-field-candidates.json

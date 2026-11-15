@@ -9,8 +9,12 @@ from astropy.wcs.utils import proj_plane_pixel_area
 from spherex.cleaning import load_clean_cutout
 
 
-def measure_cutout_point(path, ra_deg, dec_deg, radius_pix=2.0):
-    _, bad, clean_m, meta = load_clean_cutout(path)
+def measure_cutout_point(path, ra_deg, dec_deg, radius_pix=2.0, subtraction="zodi_subtracted"):
+    img, bad, clean_m, meta = load_clean_cutout(path)
+    if subtraction == "raw_calibrated":
+        clean_m = np.where(bad, np.nan, img)
+    elif subtraction != "zodi_subtracted":
+        raise ValueError("Unsupported subtraction mode")
 
     with fits.open(path) as hdul:
         head = hdul["IMAGE"].header
@@ -23,7 +27,8 @@ def measure_cutout_point(path, ra_deg, dec_deg, radius_pix=2.0):
         x, y = float(x), float(y)
 
         ny, nx = clean_m.shape
-        if not (0 <= x < nx and 0 <= y < ny):
+        if not (radius_pix <= x <= nx - 1 - radius_pix and
+                radius_pix <= y <= ny - 1 - radius_pix):
             return None  # Target is outside this cutout
 
         # pixel (x, y) -> (wavelength, bandwidth) from WCS-WAVE

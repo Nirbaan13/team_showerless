@@ -2,8 +2,10 @@ services:
   # 1. Scala 3 / ZIO Backend API
   api:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        APP_REVISION: ${APP_REVISION:-development}
     image: ${APP_IMAGE:-spaceapps-api:latest}
     restart: unless-stopped
     ports:
@@ -14,7 +16,11 @@ services:
     environment:
       - DATA_DIR=/app/data
       - ML_SERVICE_URL=http://ml-inference:8001
-      - CUTOUT_SERVICE_URL=http://cutout-worker:8002
+      - CUTOUT_SERVICE_URL=http://pipeline:8002
+      - PROCESSING_URL=http://pipeline:8002
+    depends_on:
+      pipeline:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:8000/health || exit 1"]
       interval: 5s
@@ -55,8 +61,8 @@ services:
   # 3. ML Inference Service (Moving Object Detection & Random Forest Track Ranker)
   ml-inference:
     build:
-      context: ./ml
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ml/Dockerfile
     image: ${ML_IMAGE:-spaceapps-ml:latest}
     restart: unless-stopped
     ports:
@@ -72,21 +78,36 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 4. Python IRSA Cutout Worker (Astroquery / NASA IRSA SIA Pipeline)
-  cutout-worker:
+  # 4. HTTP scientific processing worker; same immutable release as the API.
+  pipeline:
     build:
-      context: ./pipeline
-      dockerfile: Dockerfile
-    image: ${CUTOUT_IMAGE:-spaceapps-cutout:latest}
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        APP_REVISION: ${APP_REVISION:-development}
+    image: ${APP_IMAGE:-spaceapps-api:latest}
     restart: unless-stopped
-    ports:
-      - "${CUTOUT_PORT:-8002}:8002"
+    working_dir: /app/pipeline
+    command: ["/opt/inference-venv/bin/python", "-m", "uvicorn", "service:app", "--host", "0.0.0.0", "--port", "8002"]
+    environment:
+      PYTHONPATH: /app/pipeline
+      PROCESSING_DATA_ROOT: /app/data
+      PROCESSING_TIMEOUT_SECONDS: "120"
+      PROCESSING_MAX_CONCURRENCY: "2"
     volumes:
-      - api-data:/tmp/spherex_cutouts
+      - api-data:/app/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
-      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health')\" || exit 1"]
-      interval: 5s
+      test: ["CMD-SHELL", "curl --fail --silent --max-time 2 http://127.0.0.1:8002/health || exit 1"]
+      interval: 3s
       timeout: 3s
+      start_period: 20s
       retries: 3
     logging:
       driver: json-file

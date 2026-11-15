@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-14T20:50:10.722443+00:00",
+  "preserve_immutable_metadata": true,
+  "historical_workspace": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend",
+  "relocation_snapshot": {
+    "path": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/relocation-manifest.snapshot.json",
+    "sha256": "e38c3b902f80146f417e9a77af2f6064f960fd07b301028f362e4385daeff0a9"
+  },
+  "translations": [
+    {
+      "old_prefix": "/tmp/spaceapps-v3-native-data/",
+      "new_prefix": "ml/pvusatov/backend/inference/experiments/v3_data/evidence/acquisition/",
+      "scope": "Only metadata files listed in publication-manifest.json are copied; native FITS paths still refer to external acquisition storage."
+    },
+    {
+      "old_prefix": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/inference/",
+      "new_prefix": "ml/pvusatov/backend/inference/",
+      "scope": "Historical source paths; resolve after prefix substitution and verify the recorded file hash."
+    },
+    {
+      "old_prefix": "backend/inference/",
+      "new_prefix": "ml/pvusatov/backend/inference/",
+      "scope": "Repository-relative source paths."
+    },
+    {
+      "old_prefix": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/docs/implementation/",
+      "new_prefix": "ml/pvusatov/backend/docs/implementation/",
+      "scope": "Historical ML documentation paths."
+    },
+    {
+      "old_prefix": "backend/docs/implementation/ML-",
+      "new_prefix": "ml/pvusatov/backend/docs/implementation/ML-",
+      "scope": "Repository-relative ML document paths."
+    }
+  ],
+  "notes": [
+    "No old manifest is rewritten. Paths describe the original acquisition environment.",
+    "Mutable integration files may change after relocation; a path translation does not override an immutable source hash.",
+    "The official PDF is referenced by exact URL/version/date/pages/hash in data-handoff-v2.json; the30MB PDF and all native FITS are omitted."
+  ]
+}

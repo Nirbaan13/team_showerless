@@ -1,0 +1,1055 @@
+{
+  "schema_version": 1,
+  "source_revision": "0bf04fa481fca611f8edeaf7a312cc000f0735f3",
+  "phase": "all dedicated sources moved; integration verification in progress",
+  "entries": [
+    {
+      "old_path": "backend/docs/implementation/ML-DETECTION-V3-DEVELOPMENT.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-DETECTION-V3-DEVELOPMENT.AI.md",
+      "sha256": "80f6d285c95a8e67535818a2fff45ce0c5476e0596b4fcca9c00dd2a83b23c04",
+      "size_bytes": 21535
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-INFERENCE-DESIGN.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-INFERENCE-DESIGN.AI.md",
+      "sha256": "9052996dbcac6b96ef6be1fd489a8ae40bbe3e24948bd13b9ac92d12f8891813",
+      "size_bytes": 9292
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-INFERENCE-PLAN.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-INFERENCE-PLAN.AI.md",
+      "sha256": "44ab444d9edebfa5235885491e95c9d6677fac654d7bfd5ba250ab79310f7290",
+      "size_bytes": 5355
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-INFERENCE-PROGRESS.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-INFERENCE-PROGRESS.AI.md",
+      "sha256": "ec81973ec13d6fffaf247b82f60eb6a33be691a20c9b4dc5b4a418fe056d3e80",
+      "size_bytes": 20113
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-INFERENCE-RUNNING.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-INFERENCE-RUNNING.AI.md",
+      "sha256": "9eef51736cb74b4985eab28cbd2a50b131e35eaa569ca85e92bb565cf0a598b7",
+      "size_bytes": 7014
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-INFERENCE-VERIFICATION.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-INFERENCE-VERIFICATION.AI.md",
+      "sha256": "64a9d25d809b85835f3f163148414a38c26bc79048a6c1b1f290ed2216922f58",
+      "size_bytes": 5631
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-MODEL-EVALUATION.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-MODEL-EVALUATION.AI.md",
+      "sha256": "7e6670e76b51622aee569bb0928d79ed56af16003fc316729264528941dd2e92",
+      "size_bytes": 18181
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-MODEL-V1-EVALUATION.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-MODEL-V1-EVALUATION.AI.md",
+      "sha256": "18da2ce6c19ff4588c5e63a71c8ccb9606dce5d561bc1aafc976baac2dc64481",
+      "size_bytes": 16885
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-MODEL-V2-EVALUATION-DESIGN.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-MODEL-V2-EVALUATION-DESIGN.AI.md",
+      "sha256": "794ae6330169404765ea9bb19a114ca67cadbbd58444aa21fe22cc125bb77a86",
+      "size_bytes": 6451
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-MODEL-V2-PRETEST-ACCOUNTING.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-MODEL-V2-PRETEST-ACCOUNTING.AI.md",
+      "sha256": "83a4c636a7e6e5fa00b0a15d87b97c730da0b0b43ec693f6d6c1ff1551c04d27",
+      "size_bytes": 2103
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-MODEL-V3-DEVELOPMENT.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-MODEL-V3-DEVELOPMENT.AI.md",
+      "sha256": "7f7742221f9d962f8ce4b6c867f9ae84e285134e4e9250f0fb09f37defe250c5",
+      "size_bytes": 12862
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-NATIVE-V3-DATA-EXPANSION-V2.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-NATIVE-V3-DATA-EXPANSION-V2.AI.md",
+      "sha256": "8ee02a9b1598a639252b394b1ba0647c310cb704bc33e3ad32486f147e2567e4",
+      "size_bytes": 11354
+    },
+    {
+      "old_path": "backend/docs/implementation/ML-NATIVE-V3-DATA.AI.md",
+      "new_path": "ml/pvusatov/backend/docs/implementation/ML-NATIVE-V3-DATA.AI.md",
+      "sha256": "034d3a5aeba2999e90a481942965248b5bcd2561c33a8d14005e6cb3019ea347",
+      "size_bytes": 10443
+    },
+    {
+      "old_path": "backend/src/main/scala/spaceapps/controller/AnalysisApi.scala",
+      "new_path": "ml/pvusatov/backend/src/main/scala/spaceapps/controller/AnalysisApi.scala",
+      "sha256": "3e72c6ed93667c4a65a9779bf3fadc26b36990441d2ad82914e274ff52b912c3",
+      "size_bytes": 2494
+    },
+    {
+      "old_path": "backend/src/main/scala/spaceapps/domain/Analysis.scala",
+      "new_path": "ml/pvusatov/backend/src/main/scala/spaceapps/domain/Analysis.scala",
+      "sha256": "d0ede76b3a125e2afe0f00a54607daee861cb1f0f8667f73f9520115ab15c9ab",
+      "size_bytes": 5748
+    },
+    {
+      "old_path": "backend/src/main/scala/spaceapps/integrations/grpc/AnalysisGrpc.scala",
+      "new_path": "ml/pvusatov/backend/src/main/scala/spaceapps/integrations/grpc/AnalysisGrpc.scala",
+      "sha256": "8c1d2e7860b0649314916359c893237d7301e3408c829a2fc43a5c54ef30b47a",
+      "size_bytes": 4129
+    },
+    {
+      "old_path": "backend/src/main/scala/spaceapps/repository/AnalysisRepository.scala",
+      "new_path": "ml/pvusatov/backend/src/main/scala/spaceapps/repository/AnalysisRepository.scala",
+      "sha256": "d43efc01be208215b77b00ac046f8ca6df8a0cd2723bbf3576ab77083536df2c",
+      "size_bytes": 5236
+    },
+    {
+      "old_path": "backend/src/main/scala/spaceapps/service/Analyses.scala",
+      "new_path": "ml/pvusatov/backend/src/main/scala/spaceapps/service/Analyses.scala",
+      "sha256": "0d0f0247bdc0f6ae74f35fc86c9f5b8939a562bf438c3b8192543a2f89a93b68",
+      "size_bytes": 23875
+    },
+    {
+      "old_path": "backend/src/test/scala/spaceapps/AnalysisSpec.scala",
+      "new_path": "ml/pvusatov/backend/src/test/scala/spaceapps/AnalysisSpec.scala",
+      "sha256": "501324b2ab32ddb62ac951fc58fec8f8a38fbb7a15eca57d83ec6daecc5b9cce",
+      "size_bytes": 20145
+    },
+    {
+      "old_path": "frontend/src/components/InferencePage.tsx",
+      "new_path": "ml/pvusatov/frontend/src/components/InferencePage.tsx",
+      "sha256": "56da57c52fffa06cb347bd6236353f778687c01feec816f9a93f801e424e1ff4",
+      "size_bytes": 21284
+    },
+    {
+      "old_path": "frontend/src/components/InferencePage.css",
+      "new_path": "ml/pvusatov/frontend/src/components/InferencePage.css",
+      "sha256": "3b5874b03cee86169df26103bf7494cc1eb8a474d28e37d70e598a0385b96d50",
+      "size_bytes": 7153
+    },
+    {
+      "old_path": "frontend/src/services/inferenceApi.ts",
+      "new_path": "ml/pvusatov/frontend/src/services/inferenceApi.ts",
+      "sha256": "9e56761609fee075f3484021a5bdde7bc9136145aa77982da859b303089e5c8f",
+      "size_bytes": 4636
+    },
+    {
+      "old_path": "/home/usatovpavel/playground/hackaton/docs/ai/ML-INFERENCE-DELIVERY-STATE.AI.md",
+      "new_path": "ml/pvusatov/docs/ai/ML-INFERENCE-DELIVERY-STATE.AI.md",
+      "sha256": "80a54eeee4664bfe1c3b0f950318ccba8155cc4d1c9fc0b69530d0e955dd11d3",
+      "size_bytes": 14800,
+      "historical_source": "local coordination workspace"
+    },
+    {
+      "old_path": "/home/usatovpavel/playground/hackaton/docs/ai/ML-V3-COORDINATION.AI.md",
+      "new_path": "ml/pvusatov/docs/ai/ML-V3-COORDINATION.AI.md",
+      "sha256": "5f17601e39edc0464124135ec0385c30b4e6a3e5a58f12efa74e5418eae0f4da",
+      "size_bytes": 7682,
+      "historical_source": "local coordination workspace"
+    },
+    {
+      "old_path": "/home/usatovpavel/playground/hackaton/docs/ai/ML-V3-EVALUATION-PLAN.AI.md",
+      "new_path": "ml/pvusatov/docs/ai/ML-V3-EVALUATION-PLAN.AI.md",
+      "sha256": "8d37fce0d2ca8f234c2fa0ecca78ab149afadd40c45642822ac2f9efd6af8a86",
+      "size_bytes": 3180,
+      "historical_source": "local coordination workspace"
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/acquire.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/acquire.py",
+      "sha256": "c1176f90d153e5511570d97c91c75e5e4f7445b9029af522310e700695db3ecf",
+      "size_bytes": 11437,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/audit.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/audit.py",
+      "sha256": "b21d9a16f40dde9886c48589079dedb374ff4e085318d3fa97a64825e0bd12b8",
+      "size_bytes": 6214,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/audit_expansion_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/audit_expansion_v2.py",
+      "sha256": "106b71e1316373f95b9929f77b66d1ba28df3cf7cffdd584928270a4bc1bef94",
+      "size_bytes": 4855,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/build_expanded_handoff.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/build_expanded_handoff.py",
+      "sha256": "dae8b0f5adb6c0b1055e0b8e8193568cac40300e8a7791197bb99d3dacc68a4a",
+      "size_bytes": 5537,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/expand_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/expand_v2.py",
+      "sha256": "c215538ed3b3f8526702b5e6b04a6556e1402782d116665d0d76c37bc8da9a6b",
+      "size_bytes": 9932,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/materialize_variants.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/materialize_variants.py",
+      "sha256": "694d31aaf6decc76171be6b32fb697787902852a11ddde0fbfb3eadd7ac7a0eb",
+      "size_bytes": 2436,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_data/orientation_evidence.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_data/orientation_evidence.py",
+      "sha256": "8f89583855cb400941b2c8c5545f88eddcbf8a63ea368445b2374e4ce4b34935",
+      "size_bytes": 5247,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/audit_slow_matches.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/audit_slow_matches.py",
+      "sha256": "2bff1b492f53c08d06eaf446f2cad49a1893cca4b9c87087b2da7ddec444af91",
+      "size_bytes": 4593,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/cache_native_narrow.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/cache_native_narrow.py",
+      "sha256": "68ffe5e77988eeebb22fc2dfc399481adf7feb2084b21f9a3fee3fb3688115ea",
+      "size_bytes": 1616,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/cache_synthetic.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/cache_synthetic.py",
+      "sha256": "40ddc16d46cd9db129e6fd746182d327bef07c7ee6d4062cac173c3462443ac2",
+      "size_bytes": 2969,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/confirm_scan.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/confirm_scan.py",
+      "sha256": "b97403c083c16f0e1007c364a06b0ac763f8e6bc2d31072d08784e696b3429f4",
+      "size_bytes": 5020,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/digital_tracking.cpp",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/digital_tracking.cpp",
+      "sha256": "621702d513cd59af82babf695e54e8ec09ffa4b4613d06ed1731982a6327b229",
+      "size_bytes": 2001,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/digital_tracking.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/digital_tracking.py",
+      "sha256": "e79ee35017fef26f6bd960605311e61833819b28e2b6028b2d73535b61ee037b",
+      "size_bytes": 5458,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/joint_scan.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/joint_scan.py",
+      "sha256": "dbe2353b85a0a10fe516b76411173cb9822bb3f069dc16cdc6cfe7bae291172a",
+      "size_bytes": 5380,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/native_scan.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/native_scan.py",
+      "sha256": "bb33b4b959eb48f7ff25758f63fbd7913d07928e616c6b3cd98126ad58fe9f3b",
+      "size_bytes": 6324,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/psf_scan.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/psf_scan.py",
+      "sha256": "1a0d69bddddea20ac18e2deaa4106d63b99fccb4420d1c65dcf921e9b49df870",
+      "size_bytes": 3795,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/recache_expanded.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/recache_expanded.py",
+      "sha256": "c7223967091632a183ea79542ca2d015be9b6c32551c312cb438475660d2b928",
+      "size_bytes": 5973,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/joint-pilot.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/joint-pilot.json",
+      "sha256": "e978629c3922572daa6f71099eb6c7a6363aedba1f4a1f2ac8396a02e85f0a5f",
+      "size_bytes": 28296,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/joint-trimmed-pilot.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/joint-trimmed-pilot.json",
+      "sha256": "e8ec9fac4cc6f6334d7a8c1629fada365e524a400b9cb72cd89abff45812d4bd",
+      "size_bytes": 28215,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/manifest.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/manifest.json",
+      "sha256": "2bb1efacfe9bae4efe3ea5cc6ec42f1e285dd8cf1fdded8c988e0d74f8ec2723",
+      "size_bytes": 2320,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/native-common-summary.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/native-common-summary.json",
+      "sha256": "b55665fe3cc135e0a5c2594235c5724b7ca113c64a5cdd7285b67b549ff22de5",
+      "size_bytes": 115488,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/psf-confirmation.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/psf-confirmation.json",
+      "sha256": "4773c874b07fb5ef17b05b5c7913b4b5327e2072ea6d1a5913f1f855ab6013bf",
+      "size_bytes": 910991,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/psf-pilot.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/psf-pilot.json",
+      "sha256": "cbc53e59063003c8b0ff9f2223cd766be259a4dea01a437480e6877b609215f4",
+      "size_bytes": 300953,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/slow-profile-summary.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/slow-profile-summary.json",
+      "sha256": "338e09b57a4d075564e331b16df230d6d054be9c8007866536f673b5580d1511",
+      "size_bytes": 12961,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/slow-resolution-summary.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/slow-resolution-summary.json",
+      "sha256": "17c1ee53bc6f53fb6cebe0e5a15c9e641c1f4633d5f31494f6b2467d01afe189",
+      "size_bytes": 1343,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/source-manifest.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/source-manifest.json",
+      "sha256": "5fb492e75230acf617f60aa725d87920cef9de7650928da1025876be2c3f9c88",
+      "size_bytes": 2326,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/results/threshold-pilot.json",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/results/threshold-pilot.json",
+      "sha256": "34649a75c9ddac472e49d5b98318a96737b0bf7af7e084ab3a54c640c6007393",
+      "size_bytes": 188379,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/slow_profile.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/slow_profile.py",
+      "sha256": "8bf8c02c8805e11da8d4664ee22ded6f952660da03f980405a06eaacf1b055de",
+      "size_bytes": 6587,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/summarize_native.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/summarize_native.py",
+      "sha256": "c3f014a12ac6a70e285a45208f74f29c84f8285056a75853bc8ff46d8298bc3d",
+      "size_bytes": 2673,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/summarize_slow.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/summarize_slow.py",
+      "sha256": "c1007c48247ae6f13b5c6dddb77698903697221a55b5b50671158c3e21312e8e",
+      "size_bytes": 2623,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/test_digital_tracking.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/test_digital_tracking.py",
+      "sha256": "0e31f88e23d3e69abd43829807846d7c0ca6833c71d48a94f9f63c58de8c62e5",
+      "size_bytes": 1753,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_detection/threshold_scan.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_detection/threshold_scan.py",
+      "sha256": "f0504fb7cb1f8c82a25cc2b271de160b5f0944e5031bff617e593a6e1c67b43a",
+      "size_bytes": 4754,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_evaluation/paired.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/paired.py",
+      "sha256": "ebe526aefa5212b8a40481528f0a890934d4ae360e53cd839ddb1e55766ebdce",
+      "size_bytes": 7719,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_evaluation/test_paired.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/test_paired.py",
+      "sha256": "27e849a114e619614b7bdab64ef5f1021cdb05531a40a02de0833aa8bf6de45a",
+      "size_bytes": 5813,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/audit_domain.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/audit_domain.py",
+      "sha256": "a71f5c5a9117cc62da21695a79ea080592ec7ed9a8556681711aa2f4113125cf",
+      "size_bytes": 2818,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/batch_native.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/batch_native.py",
+      "sha256": "39c464d2a5bb7b0b4d626f1822c49878bd339dba8b68dbf786a74ff948f2eaba",
+      "size_bytes": 2381,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_expanded_validation.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_expanded_validation.py",
+      "sha256": "349779f8995bdb590e0db4957fb56577bbdf1137f39b7f64040193da3757fea9",
+      "size_bytes": 8246,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_forest_artifact_grid.py",
+      "sha256": "53ad91b735a3e685bbe4057f908e9d18246b222c751707ecf9a22942a005a4d0",
+      "size_bytes": 5287,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_forest_grid.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_forest_grid.py",
+      "sha256": "1f13710777c29b4a00a16cdfdf28d95539ae6c5fe0c371875c7c154a5ccd980c",
+      "size_bytes": 3865,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_native.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_native.py",
+      "sha256": "1b851e641e69efc6907bf26c61ce0addfe891ea0961becfdf8b6025aa82bba66",
+      "size_bytes": 6764,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_native_artifacts.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_native_artifacts.py",
+      "sha256": "07a8b86af94c897fa68a9f1fec7c8fde7557b27e32f4d42284273355dbb8d9c9",
+      "size_bytes": 5030,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/cache_synthetic.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/cache_synthetic.py",
+      "sha256": "36455068452af0289c44b9964e762e89aa8763b6ebf00136cc68c2721d76b59b",
+      "size_bytes": 2429,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/protocol.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/protocol.py",
+      "sha256": "e7cdd796dfd170582a7a9f115aedde7da40a9b5c2c87e9314cd03f130864dd5d",
+      "size_bytes": 2288,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/protocol_artifacts.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/protocol_artifacts.py",
+      "sha256": "7815738cbc4785d86d009ae266392a0634ffa5d385e5d4aaaa0e6de266275213",
+      "size_bytes": 1299,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/select_cached.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/select_cached.py",
+      "sha256": "50d57c9dd7909e7e9d789c76c987163b4dec5adb250648989a71e9f8611285ea",
+      "size_bytes": 9544,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/test_artifact_protocol.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/test_artifact_protocol.py",
+      "sha256": "921ebd0eb94054f29b56c973de621b98b176422cfd01eae5fc21714dc7bf6c47",
+      "size_bytes": 768,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/test_protocol.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/test_protocol.py",
+      "sha256": "6ea1a45eaa23e9170f8d97f9e38c5ec1e8e28d46df46175346a764eaf09c06d6",
+      "size_bytes": 1325,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/test_selection_policy.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/test_selection_policy.py",
+      "sha256": "c46970497fa1a71504feca9843b2a68a8e6f0ad17347c605839d5c8f9665a115",
+      "size_bytes": 514,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/experiments/v3_ranker/train_grid.py",
+      "new_path": "ml/pvusatov/backend/inference/experiments/v3_ranker/train_grid.py",
+      "sha256": "a21f9befaa70b1635e909556baaf8aabb5f182e10acb1392562ed36601825efc",
+      "size_bytes": 10448,
+      "immutable_release_file": false
+    },
+    {
+      "old_path": "backend/inference/fixtures/PROVENANCE.AI.md",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/PROVENANCE.AI.md",
+      "sha256": "6e9b5b658a5b3d1aac2884f1b4f78621ed3b9fd6214190e62040ee0656dcba97",
+      "size_bytes": 5887,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/comet-d2.npz",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/comet-d2.npz",
+      "sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+      "size_bytes": 89823,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/comet-d6.npz",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/comet-d6.npz",
+      "sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+      "size_bytes": 550371,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/observations.csv",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/observations.csv",
+      "sha256": "b2f01f993bdc09516de43ee8fd90771a4f3dbe07cac13a34b9094a4f4e1c9af6",
+      "size_bytes": 3104,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/presets.json",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/presets.json",
+      "sha256": "cedef7219e8d807e69eb3738a1f2266bca0c0d4346e59e0153064abb16cc1a1f",
+      "size_bytes": 1473,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/vesta-d3.npz",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/vesta-d3.npz",
+      "sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+      "size_bytes": 425944,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/vesta-d6.npz",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/vesta-d6.npz",
+      "sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114",
+      "size_bytes": 420851,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/fixtures/vesta-horizons.csv",
+      "new_path": "ml/pvusatov/backend/inference/fixtures/vesta-horizons.csv",
+      "sha256": "c1df6a763daa8ba51a98581e934b3e0fd056a782b1145dbcd78c564798303d99",
+      "size_bytes": 222,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/__init__.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/__init__.py",
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+      "size_bytes": 74,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/__main__.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "size_bytes": 48,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/cli.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/cli.py",
+      "sha256": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+      "size_bytes": 2564,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/contracts.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/contracts.py",
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+      "size_bytes": 2460,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/detector.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/detector.py",
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+      "size_bytes": 9710,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/model.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/model.py",
+      "sha256": "3e9cabef0b68c60c154ee91cc51a54aeccbab3339b52a2b2aa21f06c7d8881c5",
+      "size_bytes": 5270,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/pipeline.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/pipeline.py",
+      "sha256": "7f53685b822b7c94945c6bda383e8fcb2213c231d8a68973638eced1cf0e4dc0",
+      "size_bytes": 8458,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/prepare.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/prepare.py",
+      "sha256": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+      "size_bytes": 16967,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/ml_inference/render.py",
+      "new_path": "ml/pvusatov/backend/inference/ml_inference/render.py",
+      "sha256": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+      "size_bytes": 2564,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/.gitignore",
+      "new_path": "ml/pvusatov/backend/inference/models/.gitignore",
+      "sha256": "8d701b318b30430c72c6f40b79f060dd81fcf4575ca0820049fd46d7874e9a97",
+      "size_bytes": 238,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/evaluation-statistics.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/evaluation-statistics.json",
+      "sha256": "aa5cc26b600a413ee7e4219a289283554e5dddadae81a394045f788ffd0609ab",
+      "size_bytes": 390,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/evaluation.json",
+      "sha256": "6dbb118bfaa944cb215c40f6ce225d573b7c69a744e67c8a166b6ef7629fade9",
+      "size_bytes": 7325,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/metadata.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/metadata.json",
+      "sha256": "a5121175eae37bad25702f4872e576cc28bd52dedbf5f0ad60ad1e9287ba23ac",
+      "size_bytes": 643,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/parity-reference.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/parity-reference.json",
+      "sha256": "a68637a62d83a433c7c8ce725e2f9964ee26a17bab3c57a83703fa896b8e3884",
+      "size_bytes": 229235,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/ranker.onnx",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/ranker.onnx",
+      "sha256": "030c1edf972b76b3cb8fadcb4adadcc386a36eab9f2cdbcb65527c277c581ab9",
+      "size_bytes": 2168053,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/real-background-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/real-background-evaluation.json",
+      "sha256": "ef5e661f3bdf074d11bea5454bd74da359169935724db19930695e91d76709b7",
+      "size_bytes": 557390,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/real-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/real-evaluation.json",
+      "sha256": "472d8e167cc3ccd90cfbf967e49935f7f0d09e11443f22cdc5abf2a26cc3b351",
+      "size_bytes": 4883,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/training-manifest.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/training-manifest.json",
+      "sha256": "d0810c183507af13f12ff91d60aaabca66be0955c3a625dcfb9bb9dbeb9e83b0",
+      "size_bytes": 11384,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/archive/v1/v1-domain-ablation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/archive/v1/v1-domain-ablation.json",
+      "sha256": "f06a5c3cb1b3047e35dca4f315cb5b97a85fb21bebb5f93781849a1c9f516b41",
+      "size_bytes": 3385,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/evaluation-statistics.json",
+      "new_path": "ml/pvusatov/backend/inference/models/evaluation-statistics.json",
+      "sha256": "e9be199c1b72dadf272ae971113ee6b24aeb8e19f4d2afef0975a2a8d07d4d13",
+      "size_bytes": 871,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/evaluation-subsets.json",
+      "new_path": "ml/pvusatov/backend/inference/models/evaluation-subsets.json",
+      "sha256": "d23745201e5d5ac08d8cf8cf0542aaba331efbbd97c05631d490260fc3c0036c",
+      "size_bytes": 37400,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/evaluation.fields.json.gz",
+      "new_path": "ml/pvusatov/backend/inference/models/evaluation.fields.json.gz",
+      "sha256": "000041e7d113726c0221130ce03eb5aa233e540594213a7ad9955ef16a729345",
+      "size_bytes": 945996,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/evaluation.json",
+      "sha256": "aa8cf9f9455253d855986dd43da8c0f66afb57c9e7a72cebceee17981c1349c2",
+      "size_bytes": 10182,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/feature-ablation-development.json",
+      "new_path": "ml/pvusatov/backend/inference/models/feature-ablation-development.json",
+      "sha256": "50d27477f27f44a7864874c2a3ef0b0138458c96d1c9291d73c2cd7066ded5ae",
+      "size_bytes": 2979,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/freeze.json",
+      "new_path": "ml/pvusatov/backend/inference/models/freeze.json",
+      "sha256": "3188dc9ad5387f77bd3568c84f05c628e70f8da00595bb63ae43220f7a34cbcc",
+      "size_bytes": 7281,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/m101-development-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/m101-development-evaluation.json",
+      "sha256": "1132a505c2254a93fab21862539c886cb6605f1d78fb7fde9024af497aedc2d8",
+      "size_bytes": 12047,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/m101-development-evaluation.trials.json.gz",
+      "new_path": "ml/pvusatov/backend/inference/models/m101-development-evaluation.trials.json.gz",
+      "sha256": "6f496d7e9927d373c26b9d17c3a544b6abfc9f4716e02e3e61583074605b37ba",
+      "size_bytes": 41601,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/metadata.json",
+      "new_path": "ml/pvusatov/backend/inference/models/metadata.json",
+      "sha256": "56d97071307044ee45740cdc8c36e2f5872cccb5b8db4977edb2ea44b0fe5cab",
+      "size_bytes": 643,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/parity-reference.json",
+      "new_path": "ml/pvusatov/backend/inference/models/parity-reference.json",
+      "sha256": "ea843eab27f1a983134f96a3e6a03a4f6b11d280f67624d65e94ad5463f76e8a",
+      "size_bytes": 239840,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/pretest-accounting-amendment.json",
+      "new_path": "ml/pvusatov/backend/inference/models/pretest-accounting-amendment.json",
+      "sha256": "739ed43579d7fc37a1589060ea7075d11e07d2b754a20deb176f89f3b8c2fed1",
+      "size_bytes": 3818,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/ranker.onnx",
+      "new_path": "ml/pvusatov/backend/inference/models/ranker.onnx",
+      "sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+      "size_bytes": 3679990,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/real-background-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/real-background-evaluation.json",
+      "sha256": "090c4e944d5c41e97648e62836c025bfe8948eaf41178438d520e0efeba06f96",
+      "size_bytes": 26540,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/real-background-evaluation.trials.json.gz",
+      "new_path": "ml/pvusatov/backend/inference/models/real-background-evaluation.trials.json.gz",
+      "sha256": "33ad3952fe1cbf042388cffdfcdb1701461ef4a157d36e3dc1da302c6f003353",
+      "size_bytes": 49437,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/real-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/real-evaluation.json",
+      "sha256": "0f414d4070138808a26efd744eb60eaca4c7adb61e986efa3463e549d8a4c2cb",
+      "size_bytes": 4883,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/release-manifest.json",
+      "new_path": "ml/pvusatov/backend/inference/models/release-manifest.json",
+      "sha256": "ffa4f70448d5c998a4f39efecc1801c0df1477fe2d707d0dd598213c7e59f8ce",
+      "size_bytes": 4227,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/synthetic-development-evaluation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/synthetic-development-evaluation.json",
+      "sha256": "cce2605354ba3637be75148fbef3bf861b1daed525e46c4f052759e21f378ed4",
+      "size_bytes": 78736,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/training-manifest.json",
+      "new_path": "ml/pvusatov/backend/inference/models/training-manifest.json",
+      "sha256": "577c492d424ed21974a8db35d2d5fb0fff2697d605ad921ace2d6057eb796b04",
+      "size_bytes": 77233,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/models/v2-development-ablation.json",
+      "new_path": "ml/pvusatov/backend/inference/models/v2-development-ablation.json",
+      "sha256": "e6ad4951a6375d5e870832317b8724b24b9ffe5caddb290e73fc7dd55b1abb34",
+      "size_bytes": 7171,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/pyproject.toml",
+      "new_path": "ml/pvusatov/backend/inference/pyproject.toml",
+      "sha256": "2507b90dcebe6681681b360c2c158ad9670199060364b4c50267e48d26c3fbd5",
+      "size_bytes": 83,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/requirements-inference.in",
+      "new_path": "ml/pvusatov/backend/inference/requirements-inference.in",
+      "sha256": "ef534a104900c18105fbdea8184c93cc9fad0df71d3ad5f79c3c809530dc9fd5",
+      "size_bytes": 144,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/requirements-inference.txt",
+      "new_path": "ml/pvusatov/backend/inference/requirements-inference.txt",
+      "sha256": "09eb300ec078c87e9e86b0ea06610f4151e7df46a714e5276eda1c34b99061ea",
+      "size_bytes": 30168,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/requirements-training.in",
+      "new_path": "ml/pvusatov/backend/inference/requirements-training.in",
+      "sha256": "92e919a6ad9889ef8ac495a32f448e905bf0946550738b7d7d8cab7ab85caad6",
+      "size_bytes": 93,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/requirements-training.txt",
+      "new_path": "ml/pvusatov/backend/inference/requirements-training.txt",
+      "sha256": "4c790bf7a7f777d4f094b7715fdc28359cb20a361bb80e263645fbe9a83db1b8",
+      "size_bytes": 41745,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/smoke.py",
+      "new_path": "ml/pvusatov/backend/inference/smoke.py",
+      "sha256": "c40b0bd446bba48330af88804f11797d68866368d3aa74e67826f8dcc3b425ac",
+      "size_bytes": 1826,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_detector.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_detector.py",
+      "sha256": "28e70433ffeffabbf4b915be1ff582175c7c454d058b7152ba83be1a453df392",
+      "size_bytes": 1151,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model.py",
+      "sha256": "bf22f73c535ce1d8ef31886f8d650b1c83a15429e8e4ac70254f1fcd86c57cc3",
+      "size_bytes": 5654,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model_background.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model_background.py",
+      "sha256": "fd4acc08c363f02f6507579f036a22b579dc14572b9ff80774ff5d91b212a399",
+      "size_bytes": 6407,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model_evaluation.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model_evaluation.py",
+      "sha256": "7c58a827f0c6a6dd39955fce57703c6e1a366a2cacadefade0195b4eeab0a4fe",
+      "size_bytes": 893,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model_release.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model_release.py",
+      "sha256": "acb7265af8d038e08cff9f84c0031f646850a769f2447df782b5e8e78089102e",
+      "size_bytes": 5051,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model_training.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model_training.py",
+      "sha256": "18e5b65bf72d5b0fd28d22600e446b0b9f043a0e7de97fc2d43c4237fb42cc9c",
+      "size_bytes": 2130,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_model_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_model_v2.py",
+      "sha256": "c234b4a05d69351b0ff996de2288c785b1fb8a33ae81b5cb373cafadf16d0e2e",
+      "size_bytes": 5033,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_pipeline.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_pipeline.py",
+      "sha256": "876ff2e5be9b028058f8e1c73021c81c02da67bd23a36cf5bb72aed05c9608fc",
+      "size_bytes": 5886,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/tests/test_prepare.py",
+      "new_path": "ml/pvusatov/backend/inference/tests/test_prepare.py",
+      "sha256": "67fafaa148e8fd3f7f4d689849f81abcf7a0236fcb9b3d5129b7f528e15097fe",
+      "size_bytes": 11766,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/__init__.py",
+      "new_path": "ml/pvusatov/backend/inference/training/__init__.py",
+      "sha256": "340d665d109e8752797b3d5958c533c7a7218cd866a2ede585281a28bf3ec1ad",
+      "size_bytes": 78,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/ablate_generation.py",
+      "new_path": "ml/pvusatov/backend/inference/training/ablate_generation.py",
+      "sha256": "6046931cc9c17733a895bc37a33801360607bdf7d708e702773a66d671df98d6",
+      "size_bytes": 3640,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/ablate_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/training/ablate_v2.py",
+      "sha256": "a9cd4ceb50938ec95bcfc3943326c173757436685ba40997d8f17df4152d2be6",
+      "size_bytes": 2707,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/archive_v1/evaluate_background.py",
+      "new_path": "ml/pvusatov/backend/inference/training/archive_v1/evaluate_background.py",
+      "sha256": "9c50abab4576e96aacf9dab7351e9c47ffcc76e3249d51b1865710620c429f43",
+      "size_bytes": 13817,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/archive_v2/evaluate_background.py",
+      "new_path": "ml/pvusatov/backend/inference/training/archive_v2/evaluate_background.py",
+      "sha256": "8739e63b9770ba06b0345cb4b81137c1d18715597072c4769344fc70ea586304",
+      "size_bytes": 14774,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "new_path": "ml/pvusatov/backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "sha256": "793e05135438c95b8eaeace21948b34fe2eb49cd581be9e81dfff2b493e08d6d",
+      "size_bytes": 1548991,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/diagnose_domain.py",
+      "new_path": "ml/pvusatov/backend/inference/training/diagnose_domain.py",
+      "sha256": "1f03b584309812df9de38d03e66cc0db7964d9062fc0a92ff99747c5e58259a2",
+      "size_bytes": 4615,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/evaluate_background.py",
+      "new_path": "ml/pvusatov/backend/inference/training/evaluate_background.py",
+      "sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15",
+      "size_bytes": 15469,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/evaluate_real.py",
+      "new_path": "ml/pvusatov/backend/inference/training/evaluate_real.py",
+      "sha256": "68f99a37e6ad7fe48ff64eaf11ae7ef60d647aeeef46ae1aa13220ccdc31a63a",
+      "size_bytes": 4509,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/evaluate_synthetic.py",
+      "new_path": "ml/pvusatov/backend/inference/training/evaluate_synthetic.py",
+      "sha256": "2bdb67ec6ee345de97595681d6ed8157fdc15745c8d3e6a53c8e538c393410cb",
+      "size_bytes": 2977,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/prepare_calibration.py",
+      "new_path": "ml/pvusatov/backend/inference/training/prepare_calibration.py",
+      "sha256": "77b121df742099b374c273cfdd6e815285ea6dc47cfd6cf28a9cea61fa28a53f",
+      "size_bytes": 2596,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/simulate.py",
+      "new_path": "ml/pvusatov/backend/inference/training/simulate.py",
+      "sha256": "cb5abf1a185243fc3219270a731a2166ad134b5075b9f406b1ceb23d4b138426",
+      "size_bytes": 3020,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/simulate_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/training/simulate_v2.py",
+      "sha256": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28",
+      "size_bytes": 8872,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/statistics.py",
+      "new_path": "ml/pvusatov/backend/inference/training/statistics.py",
+      "sha256": "7c324716911a0585e15dc773ce30e1e68fcb43f3b3581654de58ab133fa1159c",
+      "size_bytes": 2106,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/train.py",
+      "new_path": "ml/pvusatov/backend/inference/training/train.py",
+      "sha256": "01ff2708feade429705ea29f766837bb9d53ca04f9bfeb334eb6ab16e6a9cb3c",
+      "size_bytes": 10466,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/train_v2.py",
+      "new_path": "ml/pvusatov/backend/inference/training/train_v2.py",
+      "sha256": "04f0ab04bd9cb56d65f929d19043433052944cb1b6fbf1ea3e17bdb5de98257f",
+      "size_bytes": 12140,
+      "immutable_release_file": true
+    },
+    {
+      "old_path": "backend/inference/training/weights.py",
+      "new_path": "ml/pvusatov/backend/inference/training/weights.py",
+      "sha256": "50121e69f253d992e3048688af15e57ae8736e76e13d5b01a9beb858ae32b6dd",
+      "size_bytes": 2024,
+      "immutable_release_file": true
+    }
+  ],
+  "historical_namespace_root": "ml/pvusatov",
+  "notes": [
+    "Directory relocation preserves existing models/training/fixtures source bytes and their namespace-relative historical manifest paths.",
+    "Ignored temporary estimator artifacts were moved with the directory but remain ignored; native inputs and candidate matrices under /tmp remain external.",
+    "Historical absolute paths under the original worktree backend/inference map to the new namespace; original audit manifests are not rewritten."
+  ]
+}

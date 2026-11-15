@@ -1,6 +1,13 @@
 ThisBuild / scalaVersion := "3.9.0"
 name := "spaceapps-backend"
+Compile / sourceDirectory := baseDirectory.value / "scala" / "src" / "main"
+Test / sourceDirectory := baseDirectory.value / "scala" / "src" / "test"
 version := sys.env.getOrElse("APP_REVISION", "development")
+// ML implementation is owned alongside its inference runtime under ml/pvusatov.
+lazy val mlBackendRoot = settingKey[File]("Repository ML backend source root")
+mlBackendRoot := baseDirectory.value.getParentFile / "ml" / "pvusatov" / "backend"
+Compile / unmanagedSourceDirectories += mlBackendRoot.value / "src" / "main" / "scala"
+Test / unmanagedSourceDirectories += mlBackendRoot.value / "src" / "test" / "scala"
 val zioVersion = "2.1.27"
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio" % zioVersion,
@@ -46,6 +53,7 @@ dependencyOverrides ++= Seq("grpc-api", "grpc-core", "grpc-context", "grpc-util"
 dependencyOverrides ++= Seq("zio", "zio-streams", "zio-internal-macros", "zio-stacktracer")
   .map("dev.zio" %% _ % zioVersion)
 Compile / PB.protocVersion := "3.25.8"
+Compile / PB.protoSources += mlBackendRoot.value / "src" / "main" / "protobuf"
 Compile / PB.targets := Seq(
   scalapb.gen(grpc = true) -> (Compile / sourceManaged).value / "scalapb",
   scalapb.zio_grpc.ZioCodeGenerator -> (Compile / sourceManaged).value / "scalapb"

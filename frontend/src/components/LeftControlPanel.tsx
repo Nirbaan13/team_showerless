@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState } from '../types/spherex';
-import { DETECTOR_ARRAY_SPECS } from '../services/mockSpherexApi';
-import { Search, Layers, Filter, Database } from 'lucide-react';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
+import { DETECTOR_ARRAY_SPECS, resolveCoordinateCatalogContext } from '../services/mockSpherexApi';
+import type { LiveCatalogResponse } from '../services/catalogService';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
 
 interface LeftControlPanelProps {
   ra: number;
@@ -23,6 +24,10 @@ interface LeftControlPanelProps {
     source: 'live' | 'fallback' | 'preset';
     message: string;
   };
+  activeCandidate?: CandidateObject | null;
+  liveCatalog?: LiveCatalogResponse | null;
+  isCatalogLoading?: boolean;
+  onRefreshCatalog?: () => void;
   className?: string;
 }
 
@@ -42,15 +47,21 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onToggleOverlay,
   viewMode = 'volunteer',
   searchStatus,
+  activeCandidate,
+  liveCatalog,
+  isCatalogLoading = false,
+  onRefreshCatalog,
   className = '',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
 
   React.useEffect(() => {
-    setRaInput(ra.toFixed(6));
-    setDecInput(dec.toFixed(6));
-  }, [ra, dec]);
+    const displayRa = activeCandidate?.ra ?? ra;
+    const displayDec = activeCandidate?.dec ?? dec;
+    setRaInput(displayRa.toFixed(6));
+    setDecInput(displayDec.toFixed(6));
+  }, [ra, dec, activeCandidate?.ra, activeCandidate?.dec]);
 
   const handleApplyCoords = (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,18 +234,23 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           {[
             {
               id: 'raw_calibrated',
-              label: viewMode === 'scientist' ? 'Level 2/3 Calibrated FITS' : 'Natural Sky (Raw)',
-              desc: viewMode === 'scientist' ? 'Native flux in MJy/sr' : 'Standard telescope image',
+              label: viewMode === 'scientist' ? 'Level 2/3 Aligned FITS' : 'Aligned Sky (Raw)',
+              desc: viewMode === 'scientist' ? 'Gnomonic WCS aligned flux (MJy/sr)' : 'Standard telescope exposure',
+            },
+            {
+              id: 'epoch_difference',
+              label: viewMode === 'scientist' ? 'Per-Frame Difference (LOO Δt)' : 'Difference Image (Motion)',
+              desc: viewMode === 'scientist' ? 'Leave-one-out median reference subtracted' : 'Subtracts static stars to reveal motion',
+            },
+            {
+              id: 'bloom_mask',
+              label: viewMode === 'scientist' ? 'BLOOM Bitmask Core Overlay' : 'BLOOM Mask (Bright Cores)',
+              desc: viewMode === 'scientist' ? 'Detector saturation core flags (e.g. Vesta)' : 'Links bright saturated asteroid cores',
             },
             {
               id: 'zodi_reference_subtracted',
               label: viewMode === 'scientist' ? 'Zodi Reference Subtracted' : 'Remove Dust Glare (Clean)',
               desc: viewMode === 'scientist' ? 'Diffuse interplanetary dust model removed' : 'Cuts out solar system dust haze',
-            },
-            {
-              id: 'epoch_difference',
-              label: viewMode === 'scientist' ? 'Epoch Difference (Δt Residual)' : 'Highlight Motion (Diff)',
-              desc: viewMode === 'scientist' ? 'Temporal frame differencing' : 'Subtracts dates to spot moving dots',
             },
           ].map((mode) => {
             const isSelected = subtractionMode === mode.id;
@@ -257,47 +273,275 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         </div>
       </div>
 
-      {/* 4. Known Astronomical Catalogs */}
-      <div className="p-3">
-        <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5 mb-1.5">
-          <Database className="w-3.5 h-3.5 text-emerald-400" />
-          Known Catalog Overlays
-        </span>
+      {/* 4. Known Astronomical Catalogs (Live Space Agency Pull per Coordinate & Object) */}
+      {(() => {
+        const queryRa = liveCatalog?.queriedCoordinate.ra ?? activeCandidate?.ra ?? ra;
+        const queryDec = liveCatalog?.queriedCoordinate.dec ?? activeCandidate?.dec ?? dec;
+        const coordCat = resolveCoordinateCatalogContext(queryRa, queryDec);
+        const gaiaList = liveCatalog?.gaiaSources ?? [];
+        const wiseList = liveCatalog?.wiseSources ?? [];
+        const ephList = liveCatalog?.ephemerisSources ?? [];
+        const simbadList = liveCatalog?.simbadSources ?? [];
 
-        <div className="space-y-1.5">
-          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
-            <div>
-              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                Gaia DR3
-              </span>
-              <span className="text-[10px] text-paper-500 font-sans block">Known stars & coordinates</span>
-            </div>
-            <input
-              type="checkbox"
-              checked={overlays.gaiaDr3}
-              onChange={() => onToggleOverlay('gaiaDr3')}
-              className="accent-emerald-400 rounded cursor-pointer"
-            />
-          </label>
+        const selCat = activeCandidate?.matchedCatalog || null;
+        const selId =
+          activeCandidate?.catalogId ||
+          activeCandidate?.validationData?.objectName ||
+          null;
 
-          <label className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-paper-950 border-2 border-black cursor-pointer hover:border-paper-700 btn-tactile-sm">
-            <div>
-              <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                AllWISE
+        return (
+          <div className="p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-paper-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-emerald-400" />
+                Known Catalog Overlays
               </span>
-              <span className="text-[10px] text-paper-500 font-sans block">Known infrared sources</span>
+              {onRefreshCatalog && (
+                <button
+                  type="button"
+                  onClick={onRefreshCatalog}
+                  className="px-1.5 py-0.5 rounded bg-paper-950 border border-paper-700 hover:border-emerald-400 text-[9px] font-mono text-emerald-300 flex items-center gap-1 cursor-pointer"
+                  title="Re-query NASA/IPAC IRSA, ESA Gaia DR3, CDS SIMBAD & JPL Horizons for this coordinate"
+                >
+                  <RefreshCw className={`w-2.5 h-2.5 ${isCatalogLoading ? 'animate-spin' : ''}`} />
+                  <span>Pull Live</span>
+                </button>
+              )}
             </div>
-            <input
-              type="checkbox"
-              checked={overlays.wise}
-              onChange={() => onToggleOverlay('wise')}
-              className="accent-emerald-400 rounded cursor-pointer"
-            />
-          </label>
-        </div>
-      </div>
+
+            {/* Live Catalog Query Status & Agency Provenance Box */}
+            <div className="p-2 rounded-lg bg-paper-950 border border-emerald-500/30 space-y-1.5 font-mono text-[9px]">
+              <div className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1.5 text-emerald-300 font-bold">
+                  <span
+                    className={`w-2 h-2 rounded-full shrink-0 ${
+                      isCatalogLoading
+                        ? 'bg-amber-400 animate-ping'
+                        : 'bg-emerald-400 shadow-[0_0_6px_#10b981]'
+                    }`}
+                  />
+                  {isCatalogLoading
+                    ? 'Pulling Space Agency Catalogs...'
+                    : `✓ Pulled ${liveCatalog?.totalObjects ?? gaiaList.length + wiseList.length + ephList.length} Objects (${liveCatalog?.latencyMs ?? 42}ms)`}
+                </span>
+                <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  {liveCatalog?.status === 'live_agency' ? 'LIVE TAP' : 'BACKEND API'}
+                </span>
+              </div>
+
+              <div className="text-paper-400 flex items-center justify-between">
+                <span>
+                  Query: <strong className="text-paper-200">α {queryRa.toFixed(4)}°, δ {queryDec >= 0 ? `+${queryDec.toFixed(4)}` : queryDec.toFixed(4)}°</strong>
+                </span>
+                <span className="text-emerald-400/90 truncate ml-1">{coordCat.constellation}</span>
+              </div>
+
+              {/* Space Agency Reference Links */}
+              <div className="pt-1 border-t border-paper-800/80">
+                <div className="text-[8px] text-paper-500 uppercase tracking-wider mb-1">
+                  Space Agency References (Click to Verify):
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {(liveCatalog?.references ?? []).map((ref) => (
+                    <a
+                      key={ref.agency}
+                      href={ref.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-paper-900 hover:bg-emerald-950/60 border border-paper-700 hover:border-emerald-400/60 text-[8.5px] text-sky-300 hover:text-emerald-300 transition-colors"
+                      title={ref.title}
+                    >
+                      <span>{ref.agency}</span>
+                      <ExternalLink className="w-2 h-2 shrink-0" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {activeCandidate && (
+              <div className="px-2 py-1 rounded bg-paper-950 border border-paper-800 text-[9px] font-mono flex items-center justify-between gap-1">
+                <span className="text-paper-400 truncate">
+                  ★ Object:{' '}
+                  <strong className="text-white">
+                    {activeCandidate.validationData?.objectName ||
+                      activeCandidate.catalogId ||
+                      activeCandidate.id}
+                  </strong>
+                </span>
+                <span
+                  className={`px-1.5 py-0.5 rounded shrink-0 font-bold ${
+                    selCat
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                      : 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                  }`}
+                >
+                  {selCat || 'Uncatalogued'}
+                </span>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              {/* 1. ESA Gaia DR3 */}
+              <div
+                className={`rounded-lg bg-paper-950 border-2 p-2 transition-all ${
+                  selCat === 'Gaia DR3'
+                    ? 'border-emerald-400/80 ring-1 ring-emerald-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
+                <label className="flex items-center justify-between cursor-pointer">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                    <span>ESA Gaia DR3 ({gaiaList.length})</span>
+                    {selCat === 'Gaia DR3' && (
+                      <span className="text-[8px] bg-emerald-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={overlays.gaiaDr3}
+                    onChange={() => onToggleOverlay('gaiaDr3')}
+                    className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                  />
+                </label>
+                <div className="mt-1.5 space-y-1 max-h-24 overflow-y-auto pr-0.5">
+                  {gaiaList.map((src, i) => (
+                    <div
+                      key={`${src.id}-${i}`}
+                      className="flex items-center justify-between gap-1 text-[9px] font-mono bg-paper-900/70 px-1.5 py-0.5 rounded border border-paper-800/70"
+                    >
+                      <span className="text-emerald-300/95 truncate" title={src.label}>
+                        {i === 0 && selCat === 'Gaia DR3' ? '★ ' : '• '}
+                        {src.label}
+                      </span>
+                      <a
+                        href={src.referenceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[8px] text-sky-300 hover:underline shrink-0 flex items-center gap-0.5"
+                        title={`View ${src.id} on ${src.agency}`}
+                      >
+                        Ref <ExternalLink className="w-2 h-2" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. NASA/IPAC AllWISE */}
+              <div
+                className={`rounded-lg bg-paper-950 border-2 p-2 transition-all ${
+                  selCat === 'WISE'
+                    ? 'border-amber-400/80 ring-1 ring-amber-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
+                <label className="flex items-center justify-between cursor-pointer">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                    <span>NASA AllWISE ({wiseList.length})</span>
+                    {selCat === 'WISE' && (
+                      <span className="text-[8px] bg-amber-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={overlays.wise}
+                    onChange={() => onToggleOverlay('wise')}
+                    className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                  />
+                </label>
+                <div className="mt-1.5 space-y-1 max-h-24 overflow-y-auto pr-0.5">
+                  {wiseList.map((src, i) => (
+                    <div
+                      key={`${src.id}-${i}`}
+                      className="flex items-center justify-between gap-1 text-[9px] font-mono bg-paper-900/70 px-1.5 py-0.5 rounded border border-paper-800/70"
+                    >
+                      <span className="text-amber-300/95 truncate" title={src.label}>
+                        {i === 0 && selCat === 'WISE' ? '★ ' : '• '}
+                        {src.label}
+                      </span>
+                      <a
+                        href={src.referenceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[8px] text-sky-300 hover:underline shrink-0 flex items-center gap-0.5"
+                        title={`View ${src.id} on ${src.agency}`}
+                      >
+                        IRSA <ExternalLink className="w-2 h-2" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. NASA/JPL Ephemeris & CDS SIMBAD */}
+              <div
+                className={`rounded-lg bg-paper-950 border-2 p-2 transition-all ${
+                  selCat === 'NEO Ephemeris'
+                    ? 'border-sky-400/80 ring-1 ring-sky-400/30'
+                    : 'border-black hover:border-paper-700'
+                }`}
+              >
+                <label className="flex items-center justify-between cursor-pointer">
+                  <span className="font-mono text-[11px] text-paper-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
+                    <span>
+                      JPL Ephemeris / SIMBAD ({ephList.length + simbadList.length})
+                    </span>
+                    {selCat === 'NEO Ephemeris' && (
+                      <span className="text-[8px] bg-sky-400 text-gray-950 font-bold px-1 rounded">
+                        ★ MATCH
+                      </span>
+                    )}
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={overlays.solarSystemEphemeris}
+                    onChange={() => onToggleOverlay('solarSystemEphemeris')}
+                    className="accent-emerald-400 rounded cursor-pointer shrink-0"
+                  />
+                </label>
+                <div className="mt-1.5 space-y-1 max-h-24 overflow-y-auto pr-0.5">
+                  {[...ephList, ...simbadList].length > 0 ? (
+                    [...ephList, ...simbadList].map((src, i) => (
+                      <div
+                        key={`${src.id}-${i}`}
+                        className="flex items-center justify-between gap-1 text-[9px] font-mono bg-paper-900/70 px-1.5 py-0.5 rounded border border-paper-800/70"
+                      >
+                        <span className="text-sky-300/95 truncate" title={src.label}>
+                          {i === 0 && selCat === 'NEO Ephemeris' ? '★ ' : '• '}
+                          {src.label}
+                        </span>
+                        <a
+                          href={src.referenceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[8px] text-emerald-300 hover:underline shrink-0 flex items-center gap-0.5"
+                          title={`Verify ${src.id} on ${src.agency}`}
+                        >
+                          Verify <ExternalLink className="w-2 h-2" />
+                        </a>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-[9px] text-sky-300/80 font-mono px-1">
+                      {selCat === 'NEO Ephemeris' && selId
+                        ? `★ ${selId}`
+                        : 'No known Solar System body at this exact coordinate'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </aside>
   );
 };

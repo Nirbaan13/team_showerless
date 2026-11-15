@@ -1,10 +1,16 @@
 # Running the IRSA retrieval service
 
-Use JDK25 and the locked Python scientific runtime. For local work set `PROCESSING_PYTHON` to the shared UtilsAI interpreter (or a compatible installed runtime). Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
+Use JDK25 and the locked Python scientific runtime. For local work start the pipeline HTTP service separately and set `PROCESSING_URL=http://127.0.0.1:8002`. `PROCESSING_PYTHON` is used only by integration tests to launch their test server. Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
 
-The application implements metadata search, expanded frame metadata, equipment/calibration discovery and file delivery, wide/deep native-image retrieval, durable status, snapshot-first SSE and FITS file delivery. The public polygon parameter is spelled `verices_degrees` to match the current contract. It does not invent tiles or reproject pixels. A chunk contains an entire native IRSA image, which can extend beyond the requested discovery region.
+The application implements metadata search, expanded frame metadata, equipment/calibration discovery and file delivery, wide/deep native-image retrieval, durable status, snapshot-first SSE and FITS file delivery. The public polygon parameter is spelled `verices_degrees` to match the current contract. Scala requests an enclosing native-axis IRSA cutout per frame; it does not invent tiles or reproject pixels. The cutout may extend beyond the requested discovery region.
 
-PNG previews and native ZODI subtraction are enabled through a supervised offline Python worker. Default retrieval retains the original FITS and prepares a real masked ZScale PNG. The zodi-reference-subtracted route subtracts the source's own ZODI layer exactly once, preserves FITS HDUs/WCS, and records provenance. Epoch difference and alignment remain unsupported501. Spectrum computation remains explicitly not-ready until per-pixel spectral calibration and photometry are scientifically qualified. No synthetic fallback service is called.
+PNG previews and native ZODI subtraction are enabled through the separate team pipeline HTTP service. Default retrieval retains native cutout FITS and prepares a real masked ZScale PNG. The zodi-reference-subtracted route subtracts the source's own ZODI layer exactly once, preserves FITS HDUs/WCS, and records provenance. Epoch difference remains unsupported501: the team removed its alignment module. Existing ML motion analysis remains independent and available.
+
+`GET /api/spectrum?ra=120&dec=-20&radius_pix=2` starts or reuses a native download and returns202 while pending. Repeat the same request with the returned `download_id`; Location contains the pinned polling URL. Completed inputs are leased during the team's `measure_cutout_point` calls in that service. The response exposes actual measured points, partial-failure counts, source frame IDs and an experimental visualization quality label. `raw_calibrated` and `zodi_subtracted` are both supported; processed FITS inputs are rejected. WCS-WAVE measurements are not calibrated science spectra: missing channels, molecular detections, aperture corrections and local-background corrections are never invented. Cached small result objects are bounded to16 requests and recomputed after restart. The strict scientific spectrum operation remains not-ready until pixel spectral calibration and photometry are validated.
+
+The frontend spectrum client uses this Scala endpoint, polls202, cancels polling when leaving the view, and displays failures instead of falling back to simulated flux or molecules. Its graph reports measured-point counts and supports negative or zero background-subtracted fluxes.
+
+Source layout: `scala/src` contains Scala/protobuf/test resources; `../pipeline` contains the team HTTP service, processing functions and Python tests. The old backend Python adapter is removed. Build with `./sbtw test stage` from `backend`. The authoritative spec is `docs/openapi.yaml`.
 
 Configuration is read at startup:
 
@@ -20,15 +26,13 @@ Configuration is read at startup:
 | MAX_PRODUCT_BYTES | 268435456 | Maximum streamed size of one native image |
 | MAX_CACHE_BYTES | 21474836480 | Cache admission budget including active transfers |
 | MIN_FREE_BYTES | 536870912 | Space reserved for OS/database activity |
-| PROCESSING_PYTHON | python3 | Scientific interpreter; Docker uses /opt/inference-venv/bin/python |
-| PROCESSING_WORKER | processing/worker.py | Offline trusted worker executable |
-| PIPELINE_ROOT | ../pipeline | Team module directory; Docker uses /app/pipeline |
-| PROCESSING_CONCURRENCY | 2 | Concurrent supervised Python operations, between1 and4 |
+| PROCESSING_URL | http://pipeline:8002 | Team pipeline HTTP service on the private Compose network |
+| PROCESSING_CONCURRENCY | 2 | Concurrent HTTP processing calls, between1 and4 |
 | WORKERS | 2 | Application-scoped background coordinators |
 | TRANSFERS | 4 | Global concurrent product transfers |
 | MAX_ACTIVE_JOBS | 32 | Transactional accepted-work limit |
 | CHANNEL_BANDS_JSON | {} | Authoritative channel-to-wavelength interval mapping in meters; absent mappings return422 rather than inventing a calibration |
-| OPENAPI_PATH | docs/openai/openapi.yaml | Team's authoritative contract |
+| OPENAPI_PATH | docs/openapi.yaml | Team's authoritative contract |
 
 Center requests support angular dimensions up to600arcmin; ranges support up to10degrees per axis; convex polygons accept3–64vertices. These are service admission limits, not IRSA image sizes. Use polygons to cross RA0. Search time filters are ISO timestamps converted to UTC MJD. Metadata discovery never downloads FITS bytes. Channel filtering chooses native image products through IRSA BAND; it does not extract spectral planes or relabel an LVF image as a102channel cube.
 
@@ -53,8 +57,8 @@ Additive gRPC methods mirror the new HTTP capabilities: PrepareDeepObservations,
 EquipmentService also assumes a single owning process per data directory. Startup removes only owned regular calibration partials named <64 lowercase hex>.part; unrelated files are retained and symbolic links are rejected. Shared TAP lookups belong to application scope, so one disconnected metadata caller cannot cancel other callers waiting for the same frame.
 
 
-Build the backend image from the repository root with `docker build --file backend/Dockerfile --build-arg APP_REVISION=<git-sha> --tag spaceapps-api:<git-sha> .`. The root build context includes the reviewed team cleaning module and offline worker. Only their required sources are copied into the runtime; pipeline/service.py and its synthetic image fallback are not used. Runtime scientific dependencies are hash-locked under backend/processing; CI runs both Python science tests and Scala/FITS integration tests before image and rollback verification. Root .dockerignore retains frontend/dist for the independent frontend image build.
+Build the image from the repository root with `docker build --file backend/Dockerfile --build-arg APP_REVISION=<git-sha> --tag spaceapps-api:<git-sha> .`. Compose uses the same immutable image revision for two containers: `api` starts Scala, while `pipeline` starts the team FastAPI service on internal port8002. Both mount api-data at /app/data, so native and derived file paths are identical. The pipeline port is not published to the host. Frontend requests continue to reach Scala; Scala issues bounded HTTP processing requests. The independent existing ML inference path remains unchanged.
 
-Python subprocess requests/responses and diagnostics are bounded. A processing operation has a120-second deadline; timeout/cancellation terminates its process before releasing input leases. Worker outputs are checked for matching identity, size and PNG/FITS signatures, then Jobs publishes them atomically. Processing failures remain explicit chunk/preview errors; original native files stay immutable.
+`pipeline` supervises each processing operation, bounds input/output/concurrency, and terminates its execution on timeout or client disconnect. Scala validates operation identity, resource size, PNG/FITS signatures and diagnostic spectral JSON before publication. Failures are explicit; native inputs remain immutable. Runtime HTTP dependencies are hash-locked under pipeline/requirements-http.txt and installed alongside the existing frozen inference dependencies.
 
-The additive gRPC PrepareRequest.mode accepts default (or empty) and zodi_reference_subtracted when the configured processor advertises it. Unvalidated modes return UNIMPLEMENTED before job admission. A separate reference_frame_id is not used by these validated modes. Existing clients that omit the new fields retain default behavior.
+The checked-in deployment scripts support the packaged two-container Compose definition. An existing VPS whose forced SSH command points at an older installed deploy script needs that script refreshed before this deployment migration; updating this PR alone does not alter live VPS scripts. CI exercises migration from the previous Compose file and rollback.

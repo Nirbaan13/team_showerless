@@ -1,0 +1,28 @@
+[
+  {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "bounds": {
+      "top": 48,
+      "bottom": 1000,
+      "viewport": 1000,
+      "clientHeight": 952
+    },
+    "provenance_bottom": 976
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "bounds": {
+      "top": 48,
+      "bottom": 844,
+      "viewport": 844,
+      "clientHeight": 796
+    },
+    "provenance_bottom": 830
+  }
+]

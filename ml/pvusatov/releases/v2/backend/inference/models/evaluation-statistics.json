@@ -1,0 +1,30 @@
+{
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "source": "evaluation.json",
+  "paired_field_bootstrap": {
+    "1": {
+      "method": "paired bootstrap of whole test fields, 10000 draws, seed274912",
+      "top_k": 1,
+      "top_k_recall_difference_rf_minus_baseline_95percent": [
+        0.013079472772065623,
+        0.04860311223161951
+      ],
+      "false_tracks_per_field_difference_rf_minus_baseline_95percent": [
+        -0.095,
+        -0.025
+      ]
+    },
+    "3": {
+      "method": "paired bootstrap of whole test fields, 10000 draws, seed274912",
+      "top_k": 3,
+      "top_k_recall_difference_rf_minus_baseline_95percent": [
+        0.03666245259165613,
+        0.07671250996593462
+      ],
+      "false_tracks_per_field_difference_rf_minus_baseline_95percent": [
+        -0.15,
+        -0.07
+      ]
+    }
+  }
+}

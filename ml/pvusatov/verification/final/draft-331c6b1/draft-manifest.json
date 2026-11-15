@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "authorized_final": false,
+  "source_commit": "331c6b170da23809123f18387236a3fac1400a82",
+  "files": [
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/final-freeze.draft.json",
+      "sha256": "ec0229689879c3e57da6bd268e3a74c197f986ffad243c6d914eabb3bd7bfdbf"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/physical-observation-audit.json",
+      "sha256": "89c482957c091c5060e3b4b3297c1c96d1d604c2bb64ea30f4997e35e8ff792b"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final01-augmented8-downloads.json",
+      "sha256": "b9585243f7f0b1b3a25782fd8a46d3aba64b4a44936badd75015301691078cab"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final02-augmented8-downloads.json",
+      "sha256": "b747999b85ab30e174e8e00a051f3d1624cd246255283b05c5dbe67b34d95d4d"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final03-augmented8-downloads.json",
+      "sha256": "5b42aa38f40dea053364f2bc3a3cd7a209ee969e66b5a4b080a5ebaa071c770b"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final04-augmented8-downloads.json",
+      "sha256": "05d7fbe029ea0892e70550737b9d04f825b1e8e09cc68cfc68b9b99dbaa7df51"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final05-augmented8-downloads.json",
+      "sha256": "6ac79dc76c277645e1a2efc93bf8aa4c15e12b27e4942aa0e237814921ea4851"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final06-augmented8-downloads.json",
+      "sha256": "d87143cdcf8bad9e5256796ea78da23a04aa3ae9e07a169e80bc61d74f759458"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final07-augmented8-downloads.json",
+      "sha256": "7ffc73af9b9ade8bdd5d90daa5bdb5405604bb7e6552f464b7ae9a5853c09599"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final08-augmented8-downloads.json",
+      "sha256": "2d429e7faa26f07d23b8025f8ce444f7c1e9de4746b545c0d96875532a886531"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final09-augmented8-downloads.json",
+      "sha256": "f95e48a10e2675c2dcb0eac3cdeff737b0459658f0753d87aa52a9898271da28"
+    },
+    {
+      "path": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/verification/final/draft-331c6b1/native-manifests/final10-augmented8-downloads.json",
+      "sha256": "2702646ae417c7c82379c796608c46aab2a65f6f5b7693abf8562c8d25433189"
+    }
+  ],
+  "final_pixels_opened": false,
+  "runner_executed": false,
+  "simulation_executed": false
+}

@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T23:07:52.523872+00:00",
+  "runtime_root": "/tmp/spaceapps-v3-local-integration-wgp0l04z/inference",
+  "data_dir": "/tmp/spaceapps-v3-local-integration-wgp0l04z/data",
+  "revision": "premerge-v3-c13-local",
+  "java_stage_root": "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/backend/target/stage",
+  "python": "/home/usatovpavel/edu/UtilsAI/.venv/bin/python",
+  "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
+  "metadata_sha256": "f137db2a3b35ed6c8fa709732a3cf70f8276357fce61275920a482fb63360eb5",
+  "model_metadata_protected_fields_unchanged": [
+    "sha256",
+    "model_id",
+    "feature_names",
+    "class_labels",
+    "positive_class",
+    "score_kind",
+    "model_family",
+    "detector_profile",
+    "algorithm_version_proposal",
+    "training_manifest_sha256"
+  ],
+  "administrative_metadata_changed_keys": [
+    "final_evaluation_status",
+    "final_freeze_sha256",
+    "final_summary_sha256",
+    "original_frozen_metadata_sha256",
+    "release_state"
+  ],
+  "frozen_sources_verified": 15,
+  "copied_runtime_and_fixture_files": [
+    {
+      "runtime_relative_path": "ml_inference/__init__.py",
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a",
+      "bytes": 74
+    },
+    {
+      "runtime_relative_path": "ml_inference/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "bytes": 48
+    },
+    {
+      "runtime_relative_path": "ml_inference/cli.py",
+      "sha256": "ef937b51b0a9aa66e59c64769133fefc65facb6ec796b20f22c5c57e0f19009a",
+      "bytes": 2564
+    },
+    {
+      "runtime_relative_path": "ml_inference/contracts.py",
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816",
+      "bytes": 2460
+    },
+    {
+      "runtime_relative_path": "ml_inference/detector.py",
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d",
+      "bytes": 9710
+    },
+    {
+      "runtime_relative_path": "ml_inference/model.py",
+      "sha256": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083",
+      "bytes": 7190
+    },
+    {
+      "runtime_relative_path": "ml_inference/pipeline.py",
+      "sha256": "15763e01808f1680926ae39974c9179b94ccd8f9a5e157872585817c81b44a6c",
+      "bytes": 9949
+    },
+    {
+      "runtime_relative_path": "ml_inference/prepare.py",
+      "sha256": "e464287bdd6999f75f8d86d1d5ab8fcc3ad977486fad63871763a3b8518dbbeb",
+      "bytes": 16967
+    },
+    {
+      "runtime_relative_path": "ml_inference/render.py",
+      "sha256": "abfda31de11555586a2b6ce573d3efc199a1ef96f5c8aa0c11254e216f521f23",
+      "bytes": 2564
+    },
+    {
+      "runtime_relative_path": "fixtures/PROVENANCE.AI.md",
+      "sha256": "6e9b5b658a5b3d1aac2884f1b4f78621ed3b9fd6214190e62040ee0656dcba97",
+      "bytes": 5887
+    },
+    {
+      "runtime_relative_path": "fixtures/comet-d2.npz",
+      "sha256": "8f1ded9c74c78e03cc4269afa39e149e223eda398914da313afdcad817bc83fd",
+      "bytes": 89823
+    },
+    {
+      "runtime_relative_path": "fixtures/comet-d6.npz",
+      "sha256": "59ee6eab73fd62ae06d354e77d16d3e483e3c04307ef202712362f0503bfe55f",
+      "bytes": 550371
+    },
+    {
+      "runtime_relative_path": "fixtures/observations.csv",
+      "sha256": "b2f01f993bdc09516de43ee8fd90771a4f3dbe07cac13a34b9094a4f4e1c9af6",
+      "bytes": 3104
+    },
+    {
+      "runtime_relative_path": "fixtures/presets.json",
+      "sha256": "cedef7219e8d807e69eb3738a1f2266bca0c0d4346e59e0153064abb16cc1a1f",
+      "bytes": 1473
+    },
+    {
+      "runtime_relative_path": "fixtures/vesta-d3.npz",
+      "sha256": "5b8803f3add3d272d2cbcbc44ac6172f87533fa2f43b68e2ec6158e0fe29d93b",
+      "bytes": 425944
+    },
+    {
+      "runtime_relative_path": "fixtures/vesta-d6.npz",
+      "sha256": "e9e7e67dd3679025b66cd16c3362c80bedea19a671c191ed6ccbc67ee64a2114",
+      "bytes": 420851
+    },
+    {
+      "runtime_relative_path": "fixtures/vesta-horizons.csv",
+      "sha256": "c1df6a763daa8ba51a98581e934b3e0fd056a782b1145dbcd78c564798303d99",
+      "bytes": 222
+    }
+  ],
+  "baseline_default_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "grpc_model_family": "ExtraTreesClassifier",
+  "grpc_detector_profile": {
+    "min_snr": 4.0,
+    "max_peaks": 100,
+    "psf_sigma": 0.8,
+    "min_speed": 0.5,
+    "max_speed": 60.0,
+    "match_radius": 1.4,
+    "min_epochs": 3,
+    "min_support": 0.8,
+    "leave_one_out": true
+  },
+  "grpc_algorithm_version": "motion-extra-v3-sigma08",
+  "smoke_sources": {
+    "http-smoke.py": "6c3269d54bcd974cdaa886418fc852ddc66042a7bf95f8d6534ec9cca06a1619",
+    "grpc-smoke.py": "8c5385ba48eaabf8613605a7c7041bf7a72e562dcc4c09e7d9c844c4d4c47c33"
+  },
+  "proofs": {
+    "http-local-proof.json": "4afb0a84470ef8cef5b1dd1892c3ffe5f6fae4c5c03cd9043daba9038f0c70fe",
+    "grpc-local-proof.json": "7b3cea1d7c7f67065194c01cbe70b23c420c4f47d8ed93c95e806416935dc058"
+  },
+  "owned_api_process_stopped": true,
+  "owned_temp_data_removed": true,
+  "local_ports_closed": [
+    18089,
+    15059
+  ]
+}

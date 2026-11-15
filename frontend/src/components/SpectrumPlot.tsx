@@ -1,27 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import type { SpectralDataPoint } from '../types/spherex';
 import { REFERENCE_MOLECULAR_LINES } from '../services/mockSpherexApi';
+import { fetchTargetSpectrum } from '../services/spherexBackendApi';
+import type { TargetSpectrumResult, MolecularDetection } from '../services/spherexBackendApi';
+import { Download, ShieldCheck, Activity } from 'lucide-react';
 
 interface SpectrumPlotProps {
-  data: SpectralDataPoint[];
-  objectLabel: string;
+  data?: SpectralDataPoint[];
+  objectLabel?: string;
+  ra?: number;
+  dec?: number;
+  candidateId?: string | null;
+  isScientistMode?: boolean;
 }
 
-export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({ data, objectLabel: _objectLabel }) => {
-  const [hoveredPoint, setHoveredPoint] = useState<SpectralDataPoint | null>(null);
+const DETECTOR_COLORS: Record<string, string> = {
+  D1: '#38bdf8', // Cyan (0.75-1.11 µm)
+  D2: '#818cf8', // Indigo (1.11-1.64 µm)
+  D3: '#c084fc', // Purple (1.64-2.42 µm)
+  D4: '#f472b6', // Pink (2.42-3.82 µm)
+  D5: '#fbbf24', // Amber (3.82-4.42 µm - CO2)
+  D6: '#34d399', // Emerald (4.42-5.00 µm - CO)
+};
 
-  if (!data || data.length === 0) {
+export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
+  objectLabel = 'Target',
+  ra = 284.14,
+  dec = -45.12,
+  candidateId = null,
+  isScientistMode: _isScientistMode = false,
+}) => {
+  const [apertureRadius, setApertureRadius] = useState<number>(2.0);
+  const [subtractionMode, setSubtractionMode] = useState<'zodi_subtracted' | 'raw_calibrated'>('zodi_subtracted');
+  const [selectedDetector, setSelectedDetector] = useState<string | 'all'>('all');
+  const [spectrumResult, setSpectrumResult] = useState<TargetSpectrumResult | null>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    channel: number;
+    detector: string;
+    wavelengthUm: number;
+    bandwidthUm: number;
+    fluxMjy: number;
+    uncertaintyMjy: number;
+    snr: number;
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [spectrumError, setSpectrumError] = useState('');
+
+  // Fetch live spectrophotometry from Shasta's WCS-WAVE endpoint
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    setSpectrumResult(null);
+    setSpectrumError('');
+    setIsLoading(true);
+
+    fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode, controller.signal)
+      .then((res) => {
+        if (isMounted) {
+          setSpectrumResult(res);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setSpectrumError(err instanceof Error ? err.message : 'Spectrum unavailable');
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [ra, dec, candidateId, apertureRadius, subtractionMode]);
+
+  // Unified channel points (from live Shasta endpoint or fallback prop)
+  const channels = useMemo(() => {
+    if (spectrumResult?.spectrum && spectrumResult.spectrum.length > 0) {
+      return spectrumResult.spectrum.map((s) => ({
+        channel: s.channel,
+        detector: s.detector,
+        detectorArray: s.detector_array,
+        wavelengthUm: s.wavelength_um,
+        bandwidthUm: s.bandwidth_um,
+        fluxMjy: s.flux_mjy,
+        uncertaintyMjy: s.uncertainty_mjy,
+        snr: s.snr,
+      }));
+    }
+
+    return [];
+  }, [spectrumResult]);
+
+  const molecularDetections = useMemo<MolecularDetection[]>(
+    () => spectrumResult?.molecular_detections ?? [], [spectrumResult]
+  );
+
+  // Filtered channels for display
+  const displayChannels = useMemo(() => {
+    if (selectedDetector === 'all') return channels;
+    return channels.filter((c) => c.detector === selectedDetector);
+  }, [channels, selectedDetector]);
+
+  // Export CSV Handler
+  const handleExportCSV = () => {
+    if (channels.length === 0) return;
+    const header = 'channel,detector,wavelength_um,bandwidth_um,flux_mjy,uncertainty_mjy,snr\n';
+    const rows = channels
+      .map(
+        (c) =>
+          `${c.channel},${c.detector},${c.wavelengthUm},${c.bandwidthUm},${c.fluxMjy},${c.uncertaintyMjy},${c.snr.toFixed(1)}`
+      )
+      .join('\n');
+    const blob = new Blob([header + rows], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `spherex_measured_spectrum_${objectLabel.replace(/[^a-zA-Z0-9]/g, '_')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  if (channels.length === 0) {
     return (
-      <div className="h-48 flex items-center justify-center text-space-500 font-mono text-xs">
-        No spectral data loaded
+      <div className="h-48 flex items-center justify-center text-paper-500 font-mono text-xs">
+        {isLoading ? 'Downloading observations and measuring apertures…' : spectrumError || 'No measured spectral points available'}
       </div>
     );
   }
 
-  // ViewBox bounds
-  const svgWidth = 340;
-  const svgHeight = 160;
-  const padding = { top: 15, right: 15, bottom: 25, left: 35 };
+  // SVG dimensions & scaling
+  const svgWidth = 360;
+  const svgHeight = 180;
+  const padding = { top: 18, right: 15, bottom: 26, left: 38 };
 
   const plotW = svgWidth - padding.left - padding.right;
   const plotH = svgHeight - padding.top - padding.bottom;
@@ -29,150 +140,349 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({ data, objectLabel: _
   const minLambda = 0.75;
   const maxLambda = 5.0;
 
-  const fluxValues = data.map((d) => d.fluxMjy);
-  const minFlux = Math.max(0, Math.min(...fluxValues) * 0.85);
-  const maxFlux = Math.max(...fluxValues) * 1.15;
+  const lower = Math.min(0, ...channels.map(d => d.fluxMjy - d.uncertaintyMjy));
+  const upper = Math.max(0, ...channels.map(d => d.fluxMjy + d.uncertaintyMjy));
+  const margin = Math.max(upper - lower, 1e-6) * 0.1;
+  const minFlux = lower - margin;
+  const maxFlux = upper + margin;
 
   const getX = (lambda: number) => padding.left + ((lambda - minLambda) / (maxLambda - minLambda)) * plotW;
   const getY = (flux: number) => padding.top + plotH - ((flux - minFlux) / (maxFlux - minFlux)) * plotH;
 
-  // Polyline points
-  const pointsStr = data.map((d) => `${getX(d.wavelengthUm).toFixed(1)},${getY(d.fluxMjy).toFixed(1)}`).join(' ');
+  const pointsStr = displayChannels
+    .map((d) => `${getX(d.wavelengthUm).toFixed(1)},${getY(d.fluxMjy).toFixed(1)}`)
+    .join(' ');
 
   return (
-    <div className="bg-space-950 border border-space-700/80 rounded-md p-3 select-none">
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-mono text-[11px] font-semibold text-space-200">
-          Flux Density F_λ vs. Wavelength
-        </span>
-        <span className="text-[10px] font-mono text-cyan-400">
-          WCS-WAVE (102 Bands)
-        </span>
-      </div>
+    <div className="space-y-3.5 select-none text-xs">
+      <p className="p-2 rounded border border-amber-700 text-amber-200" role="status">
+        Experimental WCS-WAVE measurements for visualization. These are uncorrected aperture fluxes;
+        calibrated spectra and molecular detections are unavailable. Spectral coverage may be incomplete.
+      </p>
+      {/* Header Info Banner: Physical Target & Export */}
+      <div className="p-2 rounded-lg bg-paper-950 border border-paper-800 flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <div className="text-xs font-mono font-bold text-white truncate">
+            {spectrumResult?.target || objectLabel}
+          </div>
+          <div className="text-[10px] font-mono text-emerald-400">
+            RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · {channels.length} measured points
+          </div>
+        </div>
 
-      <div className="relative">
-        <svg
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="w-full h-auto overflow-visible"
+        <button
+          onClick={handleExportCSV}
+          className="px-2 py-1 rounded bg-paper-900 hover:bg-paper-800 border border-paper-700 text-paper-300 hover:text-white flex items-center gap-1 font-mono text-[10px] transition-colors cursor-pointer shrink-0"
+          title="Download measured aperture points as CSV"
         >
-          {/* Reference Molecular Absorption Bands */}
-          {REFERENCE_MOLECULAR_LINES.map((line) => {
-            const x = getX(line.centerUm);
-            const w = (line.widthUm / (maxLambda - minLambda)) * plotW;
-            return (
-              <g key={line.formula}>
-                <rect
-                  x={x - w / 2}
-                  y={padding.top}
-                  width={w}
-                  height={plotH}
-                  fill={line.color}
-                  fillOpacity="0.12"
-                />
-                <line
-                  x1={x}
-                  y1={padding.top}
-                  x2={x}
-                  y2={padding.top + plotH}
-                  stroke={line.color}
-                  strokeDasharray="2 2"
-                  strokeWidth="1"
-                  strokeOpacity="0.6"
-                />
-              </g>
-            );
-          })}
-
-          {/* Grid lines */}
-          <line
-            x1={padding.left}
-            y1={padding.top + plotH}
-            x2={padding.left + plotW}
-            y2={padding.top + plotH}
-            stroke="#21262d"
-            strokeWidth="1"
-          />
-          <line
-            x1={padding.left}
-            y1={padding.top}
-            x2={padding.left}
-            y2={padding.top + plotH}
-            stroke="#21262d"
-            strokeWidth="1"
-          />
-
-          {/* Spectrum continuous curve */}
-          <polyline
-            fill="none"
-            stroke="#00f2fe"
-            strokeWidth="1.5"
-            points={pointsStr}
-          />
-
-          {/* Interactive data points */}
-          {data.map((pt) => {
-            const cx = getX(pt.wavelengthUm);
-            const cy = getY(pt.fluxMjy);
-            return (
-              <circle
-                key={pt.channel}
-                cx={cx}
-                cy={cy}
-                r={hoveredPoint?.channel === pt.channel ? 3.5 : 1.5}
-                fill={hoveredPoint?.channel === pt.channel ? '#ffffff' : '#38bdf8'}
-                className="cursor-pointer transition-all"
-                onMouseEnter={() => setHoveredPoint(pt)}
-              />
-            );
-          })}
-
-          {/* Axis Labels */}
-          <text
-            x={padding.left}
-            y={padding.top + plotH + 18}
-            fill="#8b949e"
-            fontSize="9"
-            fontFamily="JetBrains Mono"
-          >
-            0.75 µm
-          </text>
-          <text
-            x={padding.left + plotW / 2 - 14}
-            y={padding.top + plotH + 18}
-            fill="#8b949e"
-            fontSize="9"
-            fontFamily="JetBrains Mono"
-          >
-            2.8 µm
-          </text>
-          <text
-            x={padding.left + plotW - 25}
-            y={padding.top + plotH + 18}
-            fill="#8b949e"
-            fontSize="9"
-            fontFamily="JetBrains Mono"
-          >
-            5.0 µm
-          </text>
-        </svg>
-
-        {/* Hover Readout Tooltip */}
-        {hoveredPoint && (
-          <div className="absolute top-1 right-2 bg-space-900 border border-cyan-500/50 px-2 py-1 rounded text-[10px] font-mono text-cyan-300 shadow-md">
-            Ch #{hoveredPoint.channel}: {hoveredPoint.wavelengthUm} µm | Flux: {hoveredPoint.fluxMjy} mJy
-          </div>
-        )}
+          <Download className="w-3 h-3 text-emerald-400" />
+          <span>Export CSV</span>
+        </button>
       </div>
 
-      {/* Molecular Line Legend */}
-      <div className="mt-2.5 pt-2 border-t border-space-800 grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-        {REFERENCE_MOLECULAR_LINES.map((line) => (
-          <div key={line.formula} className="flex items-center gap-1.5 text-space-400">
-            <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: line.color }} />
-            <span className="text-space-200">{line.formula}</span>
-            <span className="text-space-500">({line.centerUm} µm)</span>
+      {/* Detected Molecular Absorption Features Card */}
+      {molecularDetections && molecularDetections.length > 0 && (
+        <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/40 space-y-1.5">
+          <div className="flex items-center justify-between font-mono text-[10px]">
+            <span className="text-emerald-400 font-bold flex items-center gap-1">
+              <Activity className="w-3 h-3" />
+              <span>Molecular Signatures Identified</span>
+            </span>
+            <span className="text-paper-400">Measured spectral points</span>
           </div>
-        ))}
+
+          <div className="space-y-1.5">
+            {molecularDetections.map((m: MolecularDetection) => (
+              <div key={m.species} className="p-1.5 rounded bg-paper-950/80 border border-paper-800/80 text-[10px]">
+                <div className="flex items-center justify-between font-mono">
+                  <span className="text-emerald-300 font-bold">
+                    {m.species} ({m.center_um} µm)
+                  </span>
+                  <span className="px-1.5 py-0.2 rounded bg-emerald-900/60 text-emerald-300 text-[9px] font-bold">
+                    SNR {m.significance_snr}
+                  </span>
+                </div>
+                <div className="text-[10px] text-paper-400 mt-0.5 leading-snug">
+                  {m.interpretation}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Interactive Controls (Aperture & Subtraction Mode) */}
+      <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
+        {/* Aperture radius */}
+        <div className="p-1.5 rounded bg-paper-950 border border-paper-800">
+          <div className="text-paper-400 text-[9px] uppercase font-bold mb-1">Aperture Radius (px)</div>
+          <div className="flex gap-1">
+            {[1.5, 2.0, 3.0].map((r) => (
+              <button
+                key={r}
+                onClick={() => setApertureRadius(r)}
+                className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer ${
+                  apertureRadius === r
+                    ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
+                    : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
+                }`}
+              >
+                {r.toFixed(1)}px
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Subtraction mode */}
+        <div className="p-1.5 rounded bg-paper-950 border border-paper-800">
+          <div className="text-paper-400 text-[9px] uppercase font-bold mb-1">Background Subtraction</div>
+          <div className="flex gap-1">
+            <button
+              onClick={() => setSubtractionMode('zodi_subtracted')}
+              className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer truncate ${
+                subtractionMode === 'zodi_subtracted'
+                  ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
+                  : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
+              }`}
+              title="clean = img - zodi (Zodiacal light subtracted)"
+            >
+              clean = img - zodi
+            </button>
+            <button
+              onClick={() => setSubtractionMode('raw_calibrated')}
+              className={`flex-1 py-0.5 rounded text-center transition-colors cursor-pointer truncate ${
+                subtractionMode === 'raw_calibrated'
+                  ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-bold'
+                  : 'bg-paper-900 border border-paper-800 text-paper-400 hover:text-white'
+              }`}
+              title="Raw un-subtracted detector flux"
+            >
+              Raw
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main SVG Plot */}
+      <div className="bg-paper-950 border border-paper-800 rounded-lg p-2.5 relative select-none">
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-mono text-[10px] font-semibold text-paper-200">
+            Flux Density F_λ (mJy) vs. Wavelength λ (µm)
+          </span>
+          <span className="text-[10px] font-mono text-emerald-400 font-bold">
+            Measured aperture points
+          </span>
+        </div>
+
+        <div className="relative">
+          <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto overflow-visible">
+            {/* Detector array boundaries background shading */}
+            {[
+              { d: 'D1', start: 0.75, end: 1.11, color: DETECTOR_COLORS.D1 },
+              { d: 'D2', start: 1.11, end: 1.64, color: DETECTOR_COLORS.D2 },
+              { d: 'D3', start: 1.64, end: 2.42, color: DETECTOR_COLORS.D3 },
+              { d: 'D4', start: 2.42, end: 3.82, color: DETECTOR_COLORS.D4 },
+              { d: 'D5', start: 3.82, end: 4.42, color: DETECTOR_COLORS.D5 },
+              { d: 'D6', start: 4.42, end: 5.0, color: DETECTOR_COLORS.D6 },
+            ].map((det) => {
+              const x1 = getX(det.start);
+              const x2 = getX(det.end);
+              const isSelected = selectedDetector === 'all' || selectedDetector === det.d;
+              return (
+                <g key={det.d}>
+                  <rect
+                    x={x1}
+                    y={padding.top}
+                    width={x2 - x1}
+                    height={plotH}
+                    fill={det.color}
+                    fillOpacity={isSelected ? 0.05 : 0.01}
+                  />
+                  <line
+                    x1={x2}
+                    y1={padding.top}
+                    x2={x2}
+                    y2={padding.top + plotH}
+                    stroke="#1e293b"
+                    strokeDasharray="2 2"
+                    strokeWidth="1"
+                  />
+                </g>
+              );
+            })}
+
+            {/* Reference Molecular Absorption Bands */}
+            {REFERENCE_MOLECULAR_LINES.map((line) => {
+              const x = getX(line.centerUm);
+              const w = (line.widthUm / (maxLambda - minLambda)) * plotW;
+              return (
+                <g key={line.formula}>
+                  <rect
+                    x={x - w / 2}
+                    y={padding.top}
+                    width={Math.max(2, w)}
+                    height={plotH}
+                    fill={line.color}
+                    fillOpacity="0.12"
+                  />
+                  <line
+                    x1={x}
+                    y1={padding.top}
+                    x2={x}
+                    y2={padding.top + plotH}
+                    stroke={line.color}
+                    strokeDasharray="2 2"
+                    strokeWidth="1"
+                    strokeOpacity="0.5"
+                  />
+                  <text
+                    x={x}
+                    y={padding.top + 10}
+                    fill={line.color}
+                    fontSize="7.5"
+                    fontFamily="JetBrains Mono, monospace"
+                    textAnchor="middle"
+                    fontWeight="bold"
+                  >
+                    {line.formula}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* Grid Axes */}
+            <line
+              x1={padding.left}
+              y1={padding.top + plotH}
+              x2={padding.left + plotW}
+              y2={padding.top + plotH}
+              stroke="#334155"
+              strokeWidth="1"
+            />
+            <line
+              x1={padding.left}
+              y1={padding.top}
+              x2={padding.left}
+              y2={padding.top + plotH}
+              stroke="#334155"
+              strokeWidth="1"
+            />
+
+            {/* Spectrum continuous curve */}
+            <polyline
+              fill="none"
+              stroke="#34d399"
+              strokeWidth="1.5"
+              points={pointsStr}
+            />
+
+            {/* Error bars & interactive data points */}
+            {displayChannels.map((pt) => {
+              const cx = getX(pt.wavelengthUm);
+              const cy = getY(pt.fluxMjy);
+              const errTop = getY(pt.fluxMjy + pt.uncertaintyMjy);
+              const errBottom = getY(Math.max(0, pt.fluxMjy - pt.uncertaintyMjy));
+              const isHovered = hoveredPoint?.channel === pt.channel;
+              const detColor = DETECTOR_COLORS[pt.detector] || '#38bdf8';
+
+              return (
+                <g key={pt.channel}>
+                  {/* 1-sigma uncertainty vertical tick */}
+                  <line
+                    x1={cx}
+                    y1={errTop}
+                    x2={cx}
+                    y2={errBottom}
+                    stroke={detColor}
+                    strokeOpacity={isHovered ? 0.9 : 0.4}
+                    strokeWidth={isHovered ? 1.5 : 1}
+                  />
+                  {/* Interactive circle */}
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={isHovered ? 4.0 : 1.8}
+                    fill={isHovered ? '#ffffff' : detColor}
+                    stroke={detColor}
+                    strokeWidth={isHovered ? 2 : 0}
+                    className="cursor-pointer transition-all"
+                    onMouseEnter={() => setHoveredPoint(pt)}
+                  />
+                </g>
+              );
+            })}
+
+            {/* Axis Tick Labels */}
+            <text x={padding.left} y={padding.top + plotH + 15} fill="#64748b" fontSize="8.5" fontFamily="monospace">
+              0.75 µm
+            </text>
+            <text x={padding.left + plotW * 0.25} y={padding.top + plotH + 15} fill="#64748b" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
+              1.8 µm
+            </text>
+            <text x={padding.left + plotW * 0.58} y={padding.top + plotH + 15} fill="#64748b" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
+              3.2 µm
+            </text>
+            <text x={padding.left + plotW} y={padding.top + plotH + 15} fill="#64748b" fontSize="8.5" fontFamily="monospace" textAnchor="end">
+              5.00 µm
+            </text>
+          </svg>
+
+          {/* Interactive Hover Tooltip */}
+          {hoveredPoint && (
+            <div className="absolute top-2 right-2 bg-paper-900 border border-emerald-400 px-2.5 py-1.5 rounded-lg text-[10px] font-mono text-emerald-300 shadow-xl z-20 space-y-0.5">
+              <div className="font-bold text-white flex items-center justify-between gap-2">
+                <span>Ch #{hoveredPoint.channel} ({hoveredPoint.detector})</span>
+                <span className="text-emerald-400 font-bold">SNR {hoveredPoint.snr.toFixed(1)}</span>
+              </div>
+              <div>λ: {hoveredPoint.wavelengthUm.toFixed(4)} µm (Δλ {hoveredPoint.bandwidthUm.toFixed(3)})</div>
+              <div>Flux: {hoveredPoint.fluxMjy.toFixed(2)} ± {hoveredPoint.uncertaintyMjy.toFixed(2)} mJy</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 6 Detectors Quick Filter Pills (D1–D6) */}
+      <div className="space-y-1">
+        <div className="flex items-center justify-between text-[9px] font-mono text-paper-400">
+          <span>SPHEREx Detector Arrays</span>
+          <span>Click to focus</span>
+        </div>
+        <div className="grid grid-cols-6 gap-1 text-[10px] font-mono text-center">
+          {[
+            ['D1', '0.75–1.1', DETECTOR_COLORS.D1],
+            ['D2', '1.1–1.6', DETECTOR_COLORS.D2],
+            ['D3', '1.6–2.4', DETECTOR_COLORS.D3],
+            ['D4', '2.4–3.8', DETECTOR_COLORS.D4],
+            ['D5', '3.8–4.4', DETECTOR_COLORS.D5],
+            ['D6', '4.4–5.0', DETECTOR_COLORS.D6],
+          ].map(([d, r, col]) => {
+            const isSel = selectedDetector === d;
+            return (
+              <button
+                key={d}
+                onClick={() => setSelectedDetector(selectedDetector === d ? 'all' : d)}
+                style={{ borderColor: isSel ? col : undefined }}
+                className={`p-1 rounded bg-paper-950 border transition-all cursor-pointer ${
+                  isSel ? 'bg-paper-900 font-bold scale-[1.02]' : 'border-paper-800 hover:border-paper-700'
+                }`}
+              >
+                <div style={{ color: col }} className="font-bold">
+                  {d}
+                </div>
+                <div className="text-[8px] text-paper-500">{r}µm</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Scientific Validation Badge */}
+      <div className="p-2 rounded bg-paper-950 border border-paper-800/80 flex items-center justify-between text-[10px] font-mono text-paper-400">
+        <div className="flex items-center gap-1.5">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <span>FLAGS: SOURCE only; positive variance</span>
+        </div>
+        <span className="text-emerald-400 font-bold">Experimental</span>
       </div>
     </div>
   );

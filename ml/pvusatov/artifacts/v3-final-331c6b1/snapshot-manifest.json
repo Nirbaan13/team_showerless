@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "snapshot_utc": "2026-11-14T22:48:38.503516+00:00",
+  "root_final_freeze_sha256": "2bb68024e0101164f7628074b23e82f07f91480fd5161208e2031c05942dfb75",
+  "designation": "Exact opaque-byte final output snapshot before first score analysis; no manifest rewrite",
+  "files": [
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final01-primary-baseline.json.gz",
+      "snapshot_path": "native/final01-primary-baseline.json.gz",
+      "sha256": "bdd85e89792f6bcda329dfc7c327654cce7e0859bcf69327021a4a166eafa039",
+      "size_bytes": 168791
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final01-primary-candidate.json.gz",
+      "snapshot_path": "native/final01-primary-candidate.json.gz",
+      "sha256": "6a884bfbdf01ab7fc279d82b452ca98dda717b4bf48079da81a3823f928a0318",
+      "size_bytes": 367362
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final01-secondary-baseline.json.gz",
+      "snapshot_path": "native/final01-secondary-baseline.json.gz",
+      "sha256": "6c16d930f04326d94ece9eb4a2f470718d8dc01da764919a5225dfdc05f5f093",
+      "size_bytes": 169194
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final01-secondary-candidate.json.gz",
+      "snapshot_path": "native/final01-secondary-candidate.json.gz",
+      "sha256": "7dc81cd1b874c3d438f728995b49c6972357d3098dda28c901e75943d5fcc43a",
+      "size_bytes": 386044
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final02-primary-baseline.json.gz",
+      "snapshot_path": "native/final02-primary-baseline.json.gz",
+      "sha256": "c241e4aed391c89fdd3e7a7fd20f0338fb23c1c2205c713de1e4f0ac13fccde4",
+      "size_bytes": 307066
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final02-primary-candidate.json.gz",
+      "snapshot_path": "native/final02-primary-candidate.json.gz",
+      "sha256": "61f466393a04975fbf9c0fb4d25e29be003e2d324f0a4d5f2f7c73598dc33e32",
+      "size_bytes": 446858
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final02-secondary-baseline.json.gz",
+      "snapshot_path": "native/final02-secondary-baseline.json.gz",
+      "sha256": "f8ef658151fb2be53c786643549d4b45875043c1f3e3f159eac0d00e16762a7b",
+      "size_bytes": 310540
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final02-secondary-candidate.json.gz",
+      "snapshot_path": "native/final02-secondary-candidate.json.gz",
+      "sha256": "7b625016bdb3bda12062fe69599a5731458d4be1e4f7af81c3d72129ca946365",
+      "size_bytes": 457824
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final03-primary-baseline.json.gz",
+      "snapshot_path": "native/final03-primary-baseline.json.gz",
+      "sha256": "06cb1d9819da3eb9ca860e74cda5f02b38dfa1bc7919038f8ce577bca9548935",
+      "size_bytes": 109994
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final03-primary-candidate.json.gz",
+      "snapshot_path": "native/final03-primary-candidate.json.gz",
+      "sha256": "87ea59d1d9aa14b6cceb90c95da7c67b5cc820697b404571ad56829632c15ff1",
+      "size_bytes": 211539
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final03-secondary-baseline.json.gz",
+      "snapshot_path": "native/final03-secondary-baseline.json.gz",
+      "sha256": "9fb8fc279e70b955586a1232d89deeefc45f9bed8a49777e66d596677c15423a",
+      "size_bytes": 120670
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final03-secondary-candidate.json.gz",
+      "snapshot_path": "native/final03-secondary-candidate.json.gz",
+      "sha256": "6d8eca248cf3ed67979adbdb699e16f632169ec95610714beb7c32cd8bcabc35",
+      "size_bytes": 209375
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final04-primary-baseline.json.gz",
+      "snapshot_path": "native/final04-primary-baseline.json.gz",
+      "sha256": "8defc97e65dcb9d53ac026d2f8bb71fc6d0dee77d17e7a0ff1228b71196db2ca",
+      "size_bytes": 817134
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final04-primary-candidate.json.gz",
+      "snapshot_path": "native/final04-primary-candidate.json.gz",
+      "sha256": "798c956c7d7b842714cfd78e1375b662d751b7e24ebd30f0617664f7dade8bdf",
+      "size_bytes": 1962414
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final04-secondary-baseline.json.gz",
+      "snapshot_path": "native/final04-secondary-baseline.json.gz",
+      "sha256": "0fd4a0b672647d19451400d5606061b924e9410f73625e2ac1397725af001dc2",
+      "size_bytes": 817106
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final04-secondary-candidate.json.gz",
+      "snapshot_path": "native/final04-secondary-candidate.json.gz",
+      "sha256": "05d4895dbade81bfa285eb47f0e16e35ab45b4d9394772cf5403a5f258bd39ce",
+      "size_bytes": 1971880
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final05-primary-baseline.json.gz",
+      "snapshot_path": "native/final05-primary-baseline.json.gz",
+      "sha256": "0338a46dc7565043f6ba41600719d92885b702d27f94c093bfeda2a775eb18c2",
+      "size_bytes": 442615
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final05-primary-candidate.json.gz",
+      "snapshot_path": "native/final05-primary-candidate.json.gz",
+      "sha256": "d59752a44ee1005efba2f4075d10fed821453d01951c95bfbbe60fcfdbcf10ef",
+      "size_bytes": 906479
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final05-secondary-baseline.json.gz",
+      "snapshot_path": "native/final05-secondary-baseline.json.gz",
+      "sha256": "92e25315a19b424a54ae692ece9dfe955eaeeb39eb0ab6849b12cacf10e1e474",
+      "size_bytes": 439287
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final05-secondary-candidate.json.gz",
+      "snapshot_path": "native/final05-secondary-candidate.json.gz",
+      "sha256": "ffa59f3562dde9e766ac3bd4bbd2c26438bfd53f8d081ed1953c0801203bdce1",
+      "size_bytes": 921530
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final06-primary-baseline.json.gz",
+      "snapshot_path": "native/final06-primary-baseline.json.gz",
+      "sha256": "254541b7ef8f5022bc4e3b071db4d7dd7301efdd4cd702fb0557768d4f9b4876",
+      "size_bytes": 691582
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final06-primary-candidate.json.gz",
+      "snapshot_path": "native/final06-primary-candidate.json.gz",
+      "sha256": "ec85e7553ca2d4b02f1cb2456c51d2c441cfbb0123db9ec5fa338cf3df146539",
+      "size_bytes": 5362177
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final06-secondary-baseline.json.gz",
+      "snapshot_path": "native/final06-secondary-baseline.json.gz",
+      "sha256": "530828303c9fb255c7cb657bcfccd8ee9f5372102caa121b031d010619204eb7",
+      "size_bytes": 806520
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final06-secondary-candidate.json.gz",
+      "snapshot_path": "native/final06-secondary-candidate.json.gz",
+      "sha256": "66399c5eaf7e6888803f9c81ac3594e0472e1ae4c4e1eb985781e7c6b29eb829",
+      "size_bytes": 5822240
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final07-primary-baseline.json.gz",
+      "snapshot_path": "native/final07-primary-baseline.json.gz",
+      "sha256": "296be53f311982bebac062212f9d7d8251b3a57c3278eb6dfc520ba779c11195",
+      "size_bytes": 423438
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final07-primary-candidate.json.gz",
+      "snapshot_path": "native/final07-primary-candidate.json.gz",
+      "sha256": "e1d1e9dc9cf02d8b1e714006b4fad8c0844da62a78c4f5cb010d255920bc6fc2",
+      "size_bytes": 1307171
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final07-secondary-baseline.json.gz",
+      "snapshot_path": "native/final07-secondary-baseline.json.gz",
+      "sha256": "cc737630945e6ff276471277db69773ff3b52be6b029e1031b1a3897752013dc",
+      "size_bytes": 549534
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final07-secondary-candidate.json.gz",
+      "snapshot_path": "native/final07-secondary-candidate.json.gz",
+      "sha256": "747ae6d26683a21c218b99e63f920251f69cbb823638ee6fe239b2a2f531fc7d",
+      "size_bytes": 1551662
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final08-primary-baseline.json.gz",
+      "snapshot_path": "native/final08-primary-baseline.json.gz",
+      "sha256": "9c0eb2c747bac1b977856c11186e1350b72748fd49f29ffbfe24597e3850db75",
+      "size_bytes": 169338
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final08-primary-candidate.json.gz",
+      "snapshot_path": "native/final08-primary-candidate.json.gz",
+      "sha256": "8e4c1eafc81e85a8ffcdeb3be49c6ef11ade8eeff9d49551760cd1e6bce7629c",
+      "size_bytes": 317275
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final08-secondary-baseline.json.gz",
+      "snapshot_path": "native/final08-secondary-baseline.json.gz",
+      "sha256": "480fe78d4de2735da5f9779deee491834ee56fc8072ced6b7bcf3537bd8dd9d1",
+      "size_bytes": 227969
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final08-secondary-candidate.json.gz",
+      "snapshot_path": "native/final08-secondary-candidate.json.gz",
+      "sha256": "68afdd42a32aa6b2e8a850160e131152885e8ffef366439e3827e51b88056dd1",
+      "size_bytes": 296220
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final09-primary-baseline.json.gz",
+      "snapshot_path": "native/final09-primary-baseline.json.gz",
+      "sha256": "035fdb835321bd6f6a1add9def68c722e8bd0f479fe59d53aaea469cd3ab6a8f",
+      "size_bytes": 160674
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final09-primary-candidate.json.gz",
+      "snapshot_path": "native/final09-primary-candidate.json.gz",
+      "sha256": "a2b1dde3e8ea9ac276cda5fcfef54472020dce197abf2959b153a46e92d6385f",
+      "size_bytes": 325854
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final09-secondary-baseline.json.gz",
+      "snapshot_path": "native/final09-secondary-baseline.json.gz",
+      "sha256": "7747da63687cc3895706531f7990ca939f69e0d3d54f22b9a3aae925129f2355",
+      "size_bytes": 255157
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final09-secondary-candidate.json.gz",
+      "snapshot_path": "native/final09-secondary-candidate.json.gz",
+      "sha256": "8ff89a3bf4cd4dece4008929d37e6e5eeca329dac105358178baa2f217eb0516",
+      "size_bytes": 457750
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final10-primary-baseline.json.gz",
+      "snapshot_path": "native/final10-primary-baseline.json.gz",
+      "sha256": "1b7e101531f3189400d5624437b367c36f84258064c30e892c98bda863ad249e",
+      "size_bytes": 273384
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final10-primary-candidate.json.gz",
+      "snapshot_path": "native/final10-primary-candidate.json.gz",
+      "sha256": "00c352f28858d0501e35145a291a42b468cc2b6762b1ef9d1dbcd20c70c2eee0",
+      "size_bytes": 373477
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final10-secondary-baseline.json.gz",
+      "snapshot_path": "native/final10-secondary-baseline.json.gz",
+      "sha256": "51aa7f46d198180e60536ed11375ddff1de2c405eb5a1b6cee83498293565458",
+      "size_bytes": 288908
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/final10-secondary-candidate.json.gz",
+      "snapshot_path": "native/final10-secondary-candidate.json.gz",
+      "sha256": "18202b4cc7545ac179b68e2754b737d4957ab095764ea4548f3d8db6bb1e40bf",
+      "size_bytes": 405582
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-native-331c6b1/run-native-manifest.json",
+      "snapshot_path": "native/run-native-manifest.json",
+      "sha256": "e619af73a26ceb73a91ac34e431c156cbeb77a5392ff67af16430849656f5f04",
+      "size_bytes": 19394
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-synthetic-331c6b1/run-synthetic-manifest.json",
+      "snapshot_path": "synthetic/run-synthetic-manifest.json",
+      "sha256": "dd13e0de264e9350b738540ed69a7abc7799f0ad475a802a1b41b496644d36f6",
+      "size_bytes": 2588
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-synthetic-331c6b1/synthetic-primary-baseline.json.gz",
+      "snapshot_path": "synthetic/synthetic-primary-baseline.json.gz",
+      "sha256": "8f2b5951618709c16029f03401a9cbeb926513d7031fa2fd455b653cb99f7e19",
+      "size_bytes": 6560401
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-synthetic-331c6b1/synthetic-primary-candidate.json.gz",
+      "snapshot_path": "synthetic/synthetic-primary-candidate.json.gz",
+      "sha256": "461affe49e0dcf46c4e1009670704b2be55e693650936cf400d3d8ab9000502e",
+      "size_bytes": 8959482
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-synthetic-331c6b1/synthetic-secondary-baseline.json.gz",
+      "snapshot_path": "synthetic/synthetic-secondary-baseline.json.gz",
+      "sha256": "018a49e842215270d49d7e055accb1658acf8b5996788316d9c35d50818802b8",
+      "size_bytes": 6584252
+    },
+    {
+      "original_path": "/tmp/spaceapps-v3-final-synthetic-331c6b1/synthetic-secondary-candidate.json.gz",
+      "snapshot_path": "synthetic/synthetic-secondary-candidate.json.gz",
+      "sha256": "5d0c0f3e44f3c8585cb8477f9e2656f1b6c656089cfdf0a05b5c301497256620",
+      "size_bytes": 8991598
+    }
+  ]
+}

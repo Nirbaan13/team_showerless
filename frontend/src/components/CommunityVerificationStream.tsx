@@ -24,6 +24,7 @@ const STORAGE_KEY = 'spherex_community_comments';
 interface CommunityVerificationStreamProps {
   candidate: CandidateObject | null;
   activeCandidateId?: string | null;
+  currentPresetId?: string | null;
   onAddComment?: (comment: VerificationComment) => void;
   ra?: number;
   dec?: number;
@@ -36,15 +37,17 @@ interface CommunityVerificationStreamProps {
 export const CommunityVerificationStream: React.FC<CommunityVerificationStreamProps> = ({
   candidate,
   activeCandidateId,
+  currentPresetId = null,
   onAddComment,
-  ra,
-  dec,
+  ra: _fieldRa,
+  dec: _fieldDec,
   fov = "3'",
   selectedArray = 2,
   activeFrameIndex = 0,
   subtractionMode = 'raw_calibrated',
 }) => {
-  const targetId = candidate?.id || activeCandidateId || null;
+  // Strictly bind to the currently clicked candidate's ID
+  const targetId = activeCandidateId || candidate?.id || null;
 
   const [comments, setComments] = useState<VerificationComment[]>(() => {
     try {
@@ -60,36 +63,44 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
   const [authorName, setAuthorName] = useState<string>('Citizen Volunteer (You)');
   const [authorRole, setAuthorRole] = useState<'Volunteer' | 'Researcher' | 'Science Team'>('Volunteer');
   const [newComment, setNewComment] = useState('');
-  const [selectedVote, setSelectedVote] = useState<'confirm_motion' | 'artifact' | 'investigate' | 'known'>('confirm_motion');
+  const [selectedVote, setSelectedVote] = useState<'confirm_motion' | 'artifact' | 'investigate' | 'known'>(() => {
+    if (!candidate) return 'confirm_motion';
+    if (candidate.classification === 'artifact') return 'artifact';
+    if (candidate.classification === 'already_known') return 'known';
+    if (candidate.classification === 'transient') return 'investigate';
+    return 'confirm_motion';
+  });
 
-  // Filter comments strictly for THIS specific object
-  const objectComments = comments.filter((c) => c.candidateId === targetId);
+  // Filter comments strictly for THIS specific clicked candidate only
+  const objectComments = comments.filter(
+    (c) => targetId !== null && (c.candidateId === targetId || c.setting?.candidateId === targetId)
+  );
 
   const handlePostComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newComment.trim() || !targetId || !candidate) return;
 
+    const exactCandidateId = candidate.id;
     const candidateTitle =
-      candidate.catalogId ||
-      candidate.matchedCatalog ||
       candidate.validationData?.objectName ||
-      `Candidate ${candidate.id}`;
+      candidate.catalogId ||
+      candidate.id;
 
     const entry: VerificationComment = {
-      id: `comment-${Date.now()}`,
+      id: `comment-${exactCandidateId}-${Date.now()}`,
       author: authorName.trim() || 'Citizen Volunteer',
       role: authorRole,
       timestamp: 'Just now',
-      candidateId: targetId,
+      candidateId: exactCandidateId,
       message: newComment.trim(),
       vote: selectedVote,
       upvotes: 1,
       setting: {
-        targetPresetId: null,
-        candidateId: candidate.id,
-        candidateName: candidateTitle,
-        ra: ra ?? candidate.ra,
-        dec: dec ?? candidate.dec,
+        targetPresetId: currentPresetId ?? null,
+        candidateId: exactCandidateId,
+        candidateName: `#${candidate.mlRank || 1} · ${candidateTitle}`,
+        ra: candidate.ra,
+        dec: candidate.dec,
         fov: fov,
         selectedArray: selectedArray,
         activeFrameIndex: activeFrameIndex,
@@ -101,6 +112,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
     setComments(updated);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      window.dispatchEvent(new Event('spherex_comments_updated'));
     } catch {}
 
     if (onAddComment) onAddComment(entry);
@@ -145,7 +157,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
         <HelpCircle className="w-8 h-8 text-paper-600 mx-auto" />
         <h3 className="text-xs font-mono font-semibold text-paper-200">No Object Selected</h3>
         <p className="text-[11px] text-paper-500 max-w-xs leading-relaxed">
-          Click any priority-marked object in the starfield to join or start its dedicated single-object verification chat.
+          Click any priority-marked object in the starfield or AI sidebar to join its dedicated single-object verification chat.
         </p>
       </div>
     );
@@ -153,26 +165,29 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
 
   const priorityRank = candidate.mlRank || 1;
   const pColors = getPriorityColors(priorityRank);
-  const displayName = candidate.catalogId || candidate.matchedCatalog || candidate.validationData?.objectName || candidate.id;
+  const displayName =
+    candidate.validationData?.objectName ||
+    candidate.catalogId ||
+    candidate.id;
 
   return (
     <div className="flex flex-col h-full bg-paper-900 text-xs">
       {/* Object Dedicated Scope Header */}
       <div className="px-4 py-3 border-b border-paper-800 bg-paper-950/80 space-y-2 shrink-0">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center gap-1.5 min-w-0">
             <span
               style={{ backgroundColor: pColors.badgeBg, color: pColors.text }}
-              className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm border border-black/40"
+              className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded shadow-sm border border-black/40 shrink-0"
             >
-              P{priorityRank}
+              ★ #{priorityRank}
             </span>
-            <span className="font-bold text-paper-100 text-xs font-sans truncate max-w-[200px]" title={displayName}>
+            <span className="font-bold text-paper-100 text-xs font-sans truncate" title={displayName}>
               {displayName}
             </span>
           </div>
 
-          <span className="text-[10px] font-mono text-emerald-400 bg-paper-900 px-2 py-0.5 rounded border border-paper-800 flex items-center gap-1">
+          <span className="text-[10px] font-mono text-emerald-400 bg-paper-900 px-2 py-0.5 rounded border border-paper-800 flex items-center gap-1 shrink-0">
             <MessageSquare className="w-2.5 h-2.5" />
             {objectComments.length} {objectComments.length === 1 ? 'Note' : 'Notes'}
           </span>
@@ -184,7 +199,7 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
             <Compass className="w-2.5 h-2.5" />
             RA {candidate.ra.toFixed(4)}°, Dec {candidate.dec >= 0 ? `+${candidate.dec.toFixed(4)}` : candidate.dec.toFixed(4)}°
           </span>
-          <span className="text-emerald-400/90 font-semibold">Single-Object Thread</span>
+          <span className="text-emerald-400/90 font-semibold">Only for #{priorityRank}</span>
         </div>
       </div>
 
@@ -287,15 +302,16 @@ export const CommunityVerificationStream: React.FC<CommunityVerificationStreamPr
             type="text"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder={`Add observation note for ${displayName}...`}
+            placeholder={`Note only for #${priorityRank} (${displayName})...`}
             className="flex-1 bg-paper-900 border-2 border-black rounded-xl px-3 py-2 text-xs font-sans text-paper-100 focus:outline-none focus:border-emerald-400 placeholder:text-paper-600"
           />
           <button
             type="submit"
-            className="btn-tactile px-4 py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl text-xs font-mono font-bold border-2 border-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer"
+            className="btn-tactile px-3.5 py-2 bg-emerald-400 hover:bg-emerald-300 text-gray-950 rounded-xl text-xs font-mono font-bold border-2 border-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer"
+            title={`Submit chat note exclusively for #${priorityRank} ${displayName}`}
           >
             <Send className="w-3 h-3 stroke-[2.5]" />
-            <span>Post</span>
+            <span>Post #{priorityRank}</span>
           </button>
         </div>
       </form>

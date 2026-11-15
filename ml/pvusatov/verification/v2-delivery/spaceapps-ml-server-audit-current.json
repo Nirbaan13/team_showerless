@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-11-14T20:32:32.884483+00:00",
+  "services": {
+    "backend": {
+      "revision": "82c1dbc8d6e3e2f23409bebd8fc7f94581fd28cb",
+      "image_id": "sha256:367723ddf8a55624d1c732ae653b9b2120c03cba358f73aa3d224a6a603552e8",
+      "latest_matches_running": true,
+      "health": "healthy"
+    },
+    "frontend": {
+      "revision": "0bf04fa481fca611f8edeaf7a312cc000f0735f3",
+      "image_id": "sha256:a895da05d30e712bd6e58a6e903e1d97e738c59cf6c0f5af6776e84ef7ba399b",
+      "latest_matches_running": true,
+      "health": "healthy"
+    }
+  },
+  "python": "3.12.3",
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "private_grpc_binding": [
+    "127.0.0.1:50051"
+  ]
+}

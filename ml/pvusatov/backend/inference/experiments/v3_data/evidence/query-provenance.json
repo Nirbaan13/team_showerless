@@ -1,0 +1,675 @@
+{
+  "schema_version": 1,
+  "collection": "spherex_dr1",
+  "query_count": 29,
+  "raw_xml_and_native_pixels_included": false,
+  "queries": [
+    {
+      "parent_group_id": "final01",
+      "split": "final",
+      "center": [
+        60.0,
+        -45.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.0+-45.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 298,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+60.0+-45.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/final01/sia.xml",
+        "bytes": 649792,
+        "sha256": "4bed9bfbe1a7ee454cfdc1a6060bd3476b37510d42e8f0843a577aa6099e519b"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "e01737d029a83c4ab1227cd87505a8a33fbcbeaea7420847058c79bf7f7c6f4e"
+    },
+    {
+      "parent_group_id": "final02",
+      "split": "final",
+      "center": [
+        135.0,
+        20.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+135.0+20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 320,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+135.0+20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/final02/sia.xml",
+        "bytes": 695258,
+        "sha256": "c580c6caabb53065cafcf22ba8e05d6ddebab397d9aa7d417e4479cd514f888a"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "cc6fae96b79caa83559145dea324707a87572bd1214fb9e37627d5bdb6d5f1de"
+    },
+    {
+      "parent_group_id": "final03",
+      "split": "final",
+      "center": [
+        225.0,
+        15.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+225.0+15.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 237,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+225.0+15.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/final03/sia.xml",
+        "bytes": 522067,
+        "sha256": "179a9fd384e7f14ebe360b4a99b4b52aa9dec76267ece4bfe22873563fdbf148"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "5863be28955d3fcd617e1f3ff4709cd4dd20b7303b74ebeda7776f134937ec70"
+    },
+    {
+      "parent_group_id": "final04",
+      "split": "final",
+      "center": [
+        330.0,
+        40.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+330.0+40.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 314,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+330.0+40.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/final04/sia.xml",
+        "bytes": 681542,
+        "sha256": "9b407e0434f95bcb0c5f2f4c1a134bab0e9efe14cbe25143b36924c975380070"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "40c7fe4facd3f11763bf89f38b3fee1d06967a1f8265122fca16f2139a1f3ea7"
+    },
+    {
+      "parent_group_id": "train01",
+      "split": "train",
+      "center": [
+        15.0,
+        -30.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+15.0+-30.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 223,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+15.0+-30.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train01/sia.xml",
+        "bytes": 494110,
+        "sha256": "eab6470d6ed4281770bf3331b23e50dbe4182f0f271f124161fbd2663a609360"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "337dcbab1f3ce3a5b5d6a76f265b24ddd048d638ef7c7f85500e15753ba6c4b5"
+    },
+    {
+      "parent_group_id": "train02",
+      "split": "train",
+      "center": [
+        45.0,
+        20.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+45.0+20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 283,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+45.0+20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train02/sia.xml",
+        "bytes": 617315,
+        "sha256": "8077f9abf653a4c942eaf6a609db4cff68957da679da1ed60a95099b37637939"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "5f0f950aa1309a86801588899d3eb037cdce8ff53d3d39a2ca287442c8ef45a3"
+    },
+    {
+      "parent_group_id": "train03",
+      "split": "train",
+      "center": [
+        75.0,
+        -15.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+75.0+-15.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 263,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+75.0+-15.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train03/sia.xml",
+        "bytes": 576857,
+        "sha256": "3bc8516b1938931ee2ac6e15dbb43ddf08aeef36692bdd994f1b95ad6093f181"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "441fbbcf75bf6fce293826c910a397723d3c975b866a058ce4b935e2c20e884a"
+    },
+    {
+      "parent_group_id": "train04",
+      "split": "train",
+      "center": [
+        105.0,
+        40.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+105.0+40.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 226,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+105.0+40.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train04/sia.xml",
+        "bytes": 498737,
+        "sha256": "86c8880f708c0f92232f66645ab56b6f4c9fcc58ed2c3ff0448b695db876b9af"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "a6434a01f35d941ade6639130290483c2821b5e46c839376aede4f01d7f86838"
+    },
+    {
+      "parent_group_id": "train05",
+      "split": "train",
+      "center": [
+        150.0,
+        -20.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+150.0+-20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 302,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+150.0+-20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train05/sia.xml",
+        "bytes": 659397,
+        "sha256": "1651ee34db0f58c4605a19361fd6d20b427efbb8cbe97fe4bf450df91a6111e0"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "b273e32128f0e3fa768e2b8be3e7ec662cd7d8b2950f2557c740b24b2a07429e"
+    },
+    {
+      "parent_group_id": "train06",
+      "split": "train",
+      "center": [
+        180.0,
+        25.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+180.0+25.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 293,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+180.0+25.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train06/sia.xml",
+        "bytes": 638896,
+        "sha256": "5a7e6114d0bf611876e79f2e489bbbac88e86b553dda622298a4ef61aac1cb42"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "694fe79099914ef6da6ab34fdfe31955504afa36b2ce936e4111fab50d1f8293"
+    },
+    {
+      "parent_group_id": "train07",
+      "split": "train",
+      "center": [
+        240.0,
+        -25.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+240.0+-25.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 227,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+240.0+-25.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train07/sia.xml",
+        "bytes": 502564,
+        "sha256": "bd4fc118604073be8ac8f7fa9183b6fc4c9b04972002e3b4e17f3cd5ff61201a"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "cb5214bb0caef4a3a013a4cf3807bccafe33d28dee638454bfe0903e329763dd"
+    },
+    {
+      "parent_group_id": "train08",
+      "split": "train",
+      "center": [
+        270.0,
+        35.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+270.0+35.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 285,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+270.0+35.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/train08/sia.xml",
+        "bytes": 621239,
+        "sha256": "43bdb5317e418b783e1c360e506f5f7f9f6f97b7acd2c57d59127cd4340a752a"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "48c2a384c59b154646bb5f253aa127cab9226fb98fbdfa090211c6561bc4bf5f"
+    },
+    {
+      "parent_group_id": "validation01",
+      "split": "validation",
+      "center": [
+        30.0,
+        45.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+30.0+45.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 268,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+30.0+45.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/validation01/sia.xml",
+        "bytes": 585886,
+        "sha256": "3ab56125ad7483265c6e0a4f163e79cb4acfa4df1533297dc48f1d8e6e6baa0c"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "749291981ce052331af5ba00b2cfff1d522db0c5c00cbe3cfdea7c2865658ea7"
+    },
+    {
+      "parent_group_id": "validation02",
+      "split": "validation",
+      "center": [
+        165.0,
+        5.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+165.0+5.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 271,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+165.0+5.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/validation02/sia.xml",
+        "bytes": 592379,
+        "sha256": "90f49bb24e32f245c46deeaee5dabafa32cf940f118c21077cac59a9a75251a1"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "375ca0647bf8c9955277ece102f64db92a16aa2d1b54a7bcd057f96a5cac8e8f"
+    },
+    {
+      "parent_group_id": "validation03",
+      "split": "validation",
+      "center": [
+        300.0,
+        -20.0
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+300.0+-20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 227,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+300.0+-20.0+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/metadata/validation03/sia.xml",
+        "bytes": 502140,
+        "sha256": "43c07158a5cf6887b7e4676bf59945e316ed5b3746d1a303a82c80894b598cbd"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "9eb201921088c961b830f52c9230fff0d37fe5842f2243ff625e9b3a21c31434"
+    },
+    {
+      "parent_group_id": "validation-stress01",
+      "split": "validation",
+      "center": [
+        266.4168,
+        -29.0078
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+266.4168+-29.0078+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 209,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+266.4168+-29.0078+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/crowded-development/metadata/validation-stress01/sia.xml",
+        "bytes": 467592,
+        "sha256": "78a3a91db90dd79ac8cff13701ca256de2c38fc9bfdaedcdeb9dcdc57ba66ea2"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "3ede47a55ef7d106f4d7ffdad726bf3c35d5046d622410ea8fe55a0363c73a7f"
+    },
+    {
+      "parent_group_id": "validation-stress02",
+      "split": "validation",
+      "center": [
+        305.59875,
+        41.1488889
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+305.59875+41.1488889+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 345,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+305.59875+41.1488889+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/crowded-development/metadata/validation-stress02/sia.xml",
+        "bytes": 746167,
+        "sha256": "536c4c92617bb2e81720ec6f063ed9a6830cd2444e8d765e175bc1b2e816b12c"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "2e482f6292b17c150169b474b6a9a8246d32e84ce783c4244cfa8082fdbf37bd"
+    },
+    {
+      "parent_group_id": "final05",
+      "split": "final",
+      "center": [
+        271.9404223,
+        -20.2900295
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+271.9404223+-20.2900295+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 228,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+271.9404223+-20.2900295+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final05/sia.xml",
+        "bytes": 505152,
+        "sha256": "3ee0481888947592504d31547fd1a04bbca484521844461ac2f09f97c9f0ae48"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "6d95a7c1d6717181a3441539bb95d528a540123ce3230dc52cf528195fbb6104"
+    },
+    {
+      "parent_group_id": "final06",
+      "split": "final",
+      "center": [
+        301.866188,
+        32.4424569
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+301.866188+32.4424569+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 289,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+301.866188+32.4424569+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final06/sia.xml",
+        "bytes": 629847,
+        "sha256": "f551277c71b3cb167f7048ea1f141566aed4b8703db0edaec410c38842e95166"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "7ef435b04eb259574d89c93da49dbd3439607d8c9a7896275043ebfcdd03d438"
+    },
+    {
+      "parent_group_id": "final07",
+      "split": "final",
+      "center": [
+        91.9404223,
+        20.2900295
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+91.9404223+20.2900295+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 215,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+91.9404223+20.2900295+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final07/sia.xml",
+        "bytes": 475279,
+        "sha256": "c966e9df6dc5dcc72c7dbf40c44368f79dba0ba35e4371f3876e200893ccccde"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "d6ee13a82e980e002e40e1b9b3aa3364e9b2e856c16dcdb577fe3d54ce9860d8"
+    },
+    {
+      "parent_group_id": "final08",
+      "split": "final",
+      "center": [
+        225.5362254,
+        2.195004
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+225.5362254+2.195004+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 246,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+225.5362254+2.195004+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final08/sia.xml",
+        "bytes": 541173,
+        "sha256": "c787799be14268ea7e5486876e4f03c9c8db0c9588b869950dddd840afac5c32"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "2c4f3109319062277d0de164cca52b7f21fec8e30a06ad430b89713881fdb322"
+    },
+    {
+      "parent_group_id": "final09",
+      "split": "final",
+      "center": [
+        197.6899661,
+        67.0181134
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+197.6899661+67.0181134+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 332,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+197.6899661+67.0181134+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final09/sia.xml",
+        "bytes": 719128,
+        "sha256": "1f24ee44dafd5dfba18bd3d6beacbe50c199b39b0c642c47c7ef25970a57577e"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "b328cbb9766a0a9e4c501ced251a77125643aa22bda67ff0b2d054db4d6db366"
+    },
+    {
+      "parent_group_id": "final10",
+      "split": "final",
+      "center": [
+        44.1650668,
+        -61.1831929
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+44.1650668+-61.1831929+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 339,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+44.1650668+-61.1831929+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/final10/sia.xml",
+        "bytes": 735394,
+        "sha256": "121ec405851df4dea7ac28fd716627f0659d0ed22a3537e79028056e4b54aa54"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "148127d89db51cda98375dac4b4508dbd6aa4fcab7995b9ac77714f4972f8abf"
+    },
+    {
+      "parent_group_id": "validation06",
+      "split": "validation",
+      "center": [
+        288.4275759,
+        10.7237033
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+288.4275759+10.7237033+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 313,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+288.4275759+10.7237033+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation06/sia.xml",
+        "bytes": 680029,
+        "sha256": "7774ca57ef2f5b78b7ad51e02d800d55f2298165f4011e2c78e214c8afc9104e"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "4141b5d779abc07f1ffe309976b284bbf19060e58ec85b5ab325e3cf4320d938"
+    },
+    {
+      "parent_group_id": "validation07",
+      "split": "validation",
+      "center": [
+        318.0043815,
+        48.3296372
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+318.0043815+48.3296372+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 224,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+318.0043815+48.3296372+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation07/sia.xml",
+        "bytes": 494120,
+        "sha256": "a0974e20f86f633b0effe0a9fdddd8fce14af73ee4422ea2de7016e350d83575"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "e10bece9fe239edc4e9104930d5d928235fe31a9b1700b89ab2f53a0e4000339"
+    },
+    {
+      "parent_group_id": "validation08",
+      "split": "validation",
+      "center": [
+        46.8132814,
+        58.2977051
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+46.8132814+58.2977051+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 234,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+46.8132814+58.2977051+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation08/sia.xml",
+        "bytes": 514793,
+        "sha256": "e36a40bd47c34318013581902a026191d9c0a2d08054370f0b3626696815b716"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "055819e119d3a20a90d3a6059e88681e003aaad352f4a14ecb2f7c7bd9fb7dc7"
+    },
+    {
+      "parent_group_id": "validation09",
+      "split": "validation",
+      "center": [
+        238.7463378,
+        31.1454092
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+238.7463378+31.1454092+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 235,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+238.7463378+31.1454092+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation09/sia.xml",
+        "bytes": 517715,
+        "sha256": "538de9cab353dcfb5ac10f56ca078a10d1deeda764195f097190d4d723755c12"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "067fb1e74dbd5617ad517e73098e248fc5ac1ff4cf30f9dace1b4c50be417416"
+    },
+    {
+      "parent_group_id": "validation10",
+      "split": "validation",
+      "center": [
+        35.7948783,
+        6.1519051
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+35.7948783+6.1519051+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 299,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+35.7948783+6.1519051+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation10/sia.xml",
+        "bytes": 649883,
+        "sha256": "112bab907672a66b4d573aa32f9029480d9502c80fef846b3bcb6ab94ecde5a0"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "7fb7356478058bf93240c9af2199721b040b33838a836a5ae058529eade8b48e"
+    },
+    {
+      "parent_group_id": "validation11",
+      "split": "validation",
+      "center": [
+        178.1156476,
+        -10.2275287
+      ],
+      "query_url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+178.1156476+-10.2275287+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+      "returned_rows": 253,
+      "query_source": {
+        "url": "https://irsa.ipac.caltech.edu/SIA?POS=CIRCLE+178.1156476+-10.2275287+0.001&COLLECTION=spherex_dr1&RESPONSEFORMAT=VOTABLE&MAXREC=512",
+        "path": "/tmp/spaceapps-v3-native-data/expansion-v2/metadata/validation11/sia.xml",
+        "bytes": 556661,
+        "sha256": "ea2a3dbad7d42d99ffb601b90796941b25452335c49e905f464c7b3f9e803e96"
+      },
+      "statuses": [
+        {
+          "name": "QUERY_STATUS",
+          "value": "OK"
+        }
+      ],
+      "discovery_record_sha256": "cd975e758c3cca6741186fcf45be1400e99f15d46d3966a88601e26077994c0f"
+    }
+  ]
+}

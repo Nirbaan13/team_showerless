@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "designation": "Bounded immutable-v2 VPS benchmark; exactly3 sequential ephemeral containers",
+  "files": [
+    {
+      "path": "container_probe.py",
+      "sha256": "3641116f13df607cec8531059d5acb15e4a2f22a327f3f49be20d21892a5e821",
+      "bytes": 6025
+    },
+    {
+      "path": "remote_runner.py",
+      "sha256": "b904f3b76e574767e37c200d09ab17f0ff1a86e649a2af2bedd3a7d40caf1893",
+      "bytes": 4969
+    },
+    {
+      "path": "run_ssh.py",
+      "sha256": "9c60194f5c0b5c8d442103d4ec2dba16c87aa8d09b91fed03ca1d50ade39633f",
+      "bytes": 2351
+    },
+    {
+      "path": "v2-vps-benchmark.json",
+      "sha256": "60affa20e6cad85b700c6388c74c53674e7fb3cf38d1bdd69dda88943076434e",
+      "bytes": 12811
+    },
+    {
+      "path": "VPS-V2-BENCHMARK.AI.md",
+      "sha256": "101fd961324524595ed21d781cd94c36d8f179a1df2a5cc6e52bf5cd33c579fc",
+      "bytes": 4401
+    }
+  ],
+  "model_sha256": "dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9",
+  "image_id": "sha256:23f2802cc22e0eb8f60f7c8ef6465cb0ac1a45918c577fd74803b433b37fc608",
+  "production_container_unchanged_at_checks": true,
+  "leftover_containers": 0,
+  "credentials_included": false,
+  "candidate_or_final_data_uploaded": false
+}

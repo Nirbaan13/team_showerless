@@ -9,3 +9,4 @@ photutils
 fastapi
 uvicorn
 Pillow
+scipy

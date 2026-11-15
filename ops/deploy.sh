@@ -43,16 +43,45 @@ if [[ "$label" != "$revision" ]]; then
 fi
 
 candidate=$(mktemp "$app_dir/candidate.XXXXXX.env")
-trap 'rm -f "$candidate"' EXIT
+candidate_compose=$(mktemp "$app_dir/candidate.XXXXXX.compose.yaml")
+config_container=
+deployed=false
+cleanup() {
+    if [[ $deployed != true ]]; then
+        restore_previous_tag
+    fi
+    rm -f "$candidate" "$candidate_compose"
+    if [[ -n $config_container ]]; then
+        docker container rm --volumes "$config_container" >/dev/null 2>&1 || true
+    fi
+}
+trap cleanup EXIT
 printf 'APP_IMAGE=%s\n' "$image" >"$candidate"
-compose=(docker compose --project-name "$project" --file "$app_dir/compose.yaml")
 
-if ! "${compose[@]}" --env-file "$candidate" up --detach --wait --wait-timeout "$timeout"; then
+# Ship topology with the immutable image, so an old API-only VPS Compose file
+# upgrades together with its release. Keep the installed topology until success
+# so rollback can still use the previous image and service configuration.
+config_container=$(docker create --entrypoint /bin/true "$image")
+if ! docker cp "$config_container:/app/deploy/compose.yaml" "$candidate_compose"; then
+    restore_previous_tag
+    echo "Release image is missing its deployment Compose configuration" >&2
+    exit 65
+fi
+docker container rm --volumes "$config_container" >/dev/null
+config_container=
+compose=(docker compose --project-name "$project" --file "$candidate_compose")
+previous_compose=(docker compose --project-name "$project" --file "$app_dir/compose.yaml")
+if ! "${compose[@]}" --env-file "$candidate" config --quiet; then
+    restore_previous_tag
+    exit 65
+fi
+
+if ! "${compose[@]}" --env-file "$candidate" up --detach --wait --remove-orphans --wait-timeout "$timeout"; then
     "${compose[@]}" --env-file "$candidate" logs --tail 50 >&2 || true
     if [[ -f "$app_dir/current.env" ]]; then
         echo "New deployment failed; restoring previous version" >&2
         restore_previous_tag
-        "${compose[@]}" --env-file "$app_dir/current.env" up --detach --wait --wait-timeout "$timeout"
+        "${previous_compose[@]}" --env-file "$app_dir/current.env" up --detach --wait --remove-orphans --wait-timeout "$timeout"
     else
         "${compose[@]}" --env-file "$candidate" down --remove-orphans
     fi
@@ -62,5 +91,7 @@ fi
 # Publish latest only after this exact image is healthy. Keep the previous
 # current.env until then so a failed deployment cannot become the baseline.
 docker image tag "$image" spaceapps-api:latest
+mv "$candidate_compose" "$app_dir/compose.yaml"
 mv "$candidate" "$app_dir/current.env"
+deployed=true
 printf 'Deployed %s; spaceapps-api:latest now points to this revision\n' "$revision"

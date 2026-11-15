@@ -1,0 +1,3 @@
+-r requirements-http.in
+# pytest and scientific packages are provided by the locked training test runtime.
+httpx==0.28.1
