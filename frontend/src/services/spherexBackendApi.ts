@@ -595,6 +595,7 @@ export interface TargetSpectrumResult {
     uncertainty_mjy: number;
     snr: number;
     flagged: boolean;
+    mjd?: number;
   }>;
 }
 
@@ -606,7 +607,8 @@ export async function fetchTargetSpectrum(
   dec: number,
   candidateId?: string | null,
   radiusPix: number = 2.0,
-  subtraction: string = 'zodi_subtracted'
+  subtraction: string = 'zodi_subtracted',
+  signal?: AbortSignal
 ): Promise<TargetSpectrumResult> {
   const params = new URLSearchParams({
     ra: ra.toString(),
@@ -617,10 +619,15 @@ export async function fetchTargetSpectrum(
   if (candidateId) {
     params.set('candidate_id', candidateId);
   }
-  const res = await fetch(`/api/spectrum?${params.toString()}`);
+  const res = await fetch(`/api/spectrum?${params.toString()}`, { signal, headers: { Accept: 'application/json' } });
+  const data = await res.json().catch(() => null);
   if (!res.ok) {
-    throw new Error(`Failed to fetch target spectrum: ${res.statusText}`);
+    throw new Error(`${data?.code ?? 'measurement_failed'}: ${data?.message ?? data?.detail ?? `HTTP ${res.status}`}`);
   }
-  return await res.json();
+  if (!Array.isArray(data?.spectrum) || !data.spectrum.every((point: Record<string, unknown>) =>
+    ['channel', 'detector_array', 'wavelength_um', 'bandwidth_um', 'flux_mjy', 'uncertainty_mjy', 'snr'].every(key => typeof point[key] === 'number' && Number.isFinite(point[key])))) {
+    throw new Error('invalid_response: Spectrum returned no valid measured channels');
+  }
+  return data;
 }
 

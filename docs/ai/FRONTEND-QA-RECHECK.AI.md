@@ -13,7 +13,7 @@ public submission/vote/comment writes. Production verification follows deploymen
 | Finding | Current status | Evidence / action |
 |---|---|---|
 | QA-001 | Fixed locally | Reproduced on40cf5da with existing browser regression: archive errors still became synthetic data. Removed synthetic discovery and restored real job lifecycle, image error states, real stack artifacts and cancellation. Build and all13 browser regressions pass; production recheck follows release. |
-| QA-002 | Pending | Spectrum measurement/export provenance |
+| QA-002 | Fixed locally | Three browser regressions pass: failed/empty measurements cannot export generated values; retry clears old data; CSV keeps only returned channels/MJD. No target-name molecule inference or synthetic curve fallback. |
 | QA-003 | Pending | Cross-target frame identity; Ceres homepage removal already landed |
 | QA-004 | Pending | Passive discussion must not submit |
 | QA-005 | Previously fixed, verify | PR26 deployed the missing ML HTTP service |

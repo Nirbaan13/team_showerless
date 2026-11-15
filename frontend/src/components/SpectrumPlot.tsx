@@ -24,7 +24,7 @@ const DETECTOR_COLORS: Record<string, string> = {
 };
 
 export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
-  data: initialData,
+  data: _initialData,
   objectLabel = 'Target',
   ra = 284.14,
   dec = -45.12,
@@ -34,7 +34,13 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
   const apertureRadius = 2.0;
   const [subtractionMode, setSubtractionMode] = useState<'zodi_subtracted' | 'raw_calibrated'>('zodi_subtracted');
   const [selectedDetector, setSelectedDetector] = useState<string | 'all'>('all');
-  const [spectrumResult, setSpectrumResult] = useState<TargetSpectrumResult | null>(null);
+  const measurementKey = JSON.stringify([ra, dec, candidateId, apertureRadius, subtractionMode]);
+  const [retry, setRetry] = useState(0);
+  const [measurement, setMeasurement] = useState<{ key: string; result: TargetSpectrumResult | null; error: string | null; loading: boolean }>({ key: measurementKey, result: null, error: null, loading: true });
+  const current = measurement.key === measurementKey ? measurement : { result: null, error: null, loading: true };
+  const spectrumResult = current.result;
+  const measurementError = current.error;
+  const isLoading = current.loading;
   const [hoveredPoint, setHoveredPoint] = useState<{
     channel: number;
     detector: string;
@@ -44,52 +50,20 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
     uncertaintyMjy: number;
     snr: number;
   } | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [measurementError, setMeasurementError] = useState<string | null>(null);
-
-  const handleMeasureLive = async () => {
-    setIsLoading(true);
-    setMeasurementError(null);
-    try {
-      const res = await fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode);
-      setSpectrumResult(res);
-      setMeasurementError(null);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Pipeline upstream offline (HTTP 502)';
-      setMeasurementError(msg);
-      console.warn('Live spectrum fetch fallback:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch live spectrophotometry from Shasta's WCS-WAVE endpoint
+  const handleMeasureLive = () => setRetry(value => value + 1);
   useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-    setMeasurementError(null);
-
-    fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode)
-      .then((res) => {
-        if (isMounted) {
-          setSpectrumResult(res);
-          setMeasurementError(null);
-          setIsLoading(false);
-        }
+    const controller = new AbortController();
+    setMeasurement({ key: measurementKey, result: null, error: null, loading: true });
+    setHoveredPoint(null);
+    fetchTargetSpectrum(ra, dec, candidateId, apertureRadius, subtractionMode, controller.signal)
+      .then(result => {
+        if (!controller.signal.aborted) setMeasurement({ key: measurementKey, result, error: null, loading: false });
       })
-      .catch((err) => {
-        if (isMounted) {
-          const msg = err instanceof Error ? err.message : 'Pipeline upstream offline (HTTP 502)';
-          setMeasurementError(msg);
-          console.warn('Live spectrum fetch fallback:', err);
-          setIsLoading(false);
-        }
+      .catch(error => {
+        if (!controller.signal.aborted) setMeasurement({ key: measurementKey, result: null, error: error instanceof Error ? error.message : 'Measurement failed', loading: false });
       });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [ra, dec, candidateId, apertureRadius, subtractionMode]);
+    return () => controller.abort();
+  }, [measurementKey, ra, dec, candidateId, apertureRadius, subtractionMode, retry]);
 
   // Unified channel points (from live Shasta endpoint or fallback prop)
   const channels = useMemo(() => {
@@ -103,133 +77,15 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
         fluxMjy: s.flux_mjy,
         uncertaintyMjy: s.uncertainty_mjy,
         snr: s.snr,
-      }));
-    }
-
-    if (initialData && initialData.length > 0) {
-      return initialData.map((d) => ({
-        channel: d.channel,
-        detector: `D${d.detectorArray}`,
-        detectorArray: d.detectorArray,
-        wavelengthUm: d.wavelengthUm,
-        bandwidthUm: 0.04,
-        fluxMjy: d.fluxMjy,
-        uncertaintyMjy: d.uncertaintyMjy,
-        snr: d.fluxMjy / Math.max(0.1, d.uncertaintyMjy),
+        mjd: s.mjd,
       }));
     }
 
     return [];
-  }, [spectrumResult, initialData]);
+  }, [spectrumResult]);
 
-  // Fallback molecular detections if backend endpoint is offline
-  const molecularDetections = useMemo<MolecularDetection[]>(() => {
-    // If backend returned a result, strictly respect it (empty stays empty)
-    if (spectrumResult !== null && spectrumResult !== undefined) {
-      return spectrumResult.molecular_detections || [];
-    }
+  const molecularDetections = useMemo<MolecularDetection[]>(() => spectrumResult?.molecular_detections ?? [], [spectrumResult]);
 
-    // If live measurement explicitly failed, do not invent detections
-    if (measurementError) {
-      return [];
-    }
-
-    const norm = (objectLabel || candidateId || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    const isAtlas = norm.includes('atlas') || norm.includes('3i') || (Math.abs(ra - 284.14) < 1.0 && Math.abs(dec - (-45.12)) < 1.0);
-    const isVesta = norm.includes('vesta') || norm.includes('4') || (Math.abs(ra - 100.8) < 1.5 && Math.abs(dec - 12.3) < 1.5);
-    const isWise = norm.includes('wise') || norm.includes('0855') || (Math.abs(ra - 133.79) < 1.5 && Math.abs(dec - (-7.24)) < 1.5);
-    const isBarnard = norm.includes('barnard') || (Math.abs(ra - 269.45) < 1.0 && Math.abs(dec - 4.69) < 1.0);
-
-    if (isAtlas) {
-      return [
-        {
-          species: "Water Ice (H₂O)",
-          formula: "H2O",
-          wavelength_um: 3.05,
-          center_um: 3.05,
-          bandwidth_um: 0.35,
-          depth_pct: 34.2,
-          significance_snr: 14.8,
-          type: "Volatile Ice Absorption",
-          interpretation: "Broad 3.05 µm amorphous water-ice absorption trough typical of active cometary coma outgassing.",
-        },
-        {
-          species: "Carbon Dioxide (CO₂)",
-          formula: "CO2",
-          wavelength_um: 4.26,
-          center_um: 4.26,
-          bandwidth_um: 0.12,
-          depth_pct: 26.5,
-          significance_snr: 9.4,
-          type: "Super-volatile Ice Absorption",
-          interpretation: "Characteristic CO₂ ice band indicating deep volatile activity at heliocentric distance.",
-        },
-      ];
-    }
-    if (isVesta) {
-      return [
-        {
-          species: "Pyroxene Silicate (Band I)",
-          formula: "Fe2+ Silicate",
-          wavelength_um: 0.92,
-          center_um: 0.92,
-          bandwidth_um: 0.22,
-          depth_pct: 28.0,
-          significance_snr: 22.4,
-          type: "Mineralogical Absorption",
-          interpretation: "Deep 0.92 µm Fe²⁺ crystal field transition in pyroxene, matching basaltic achondrite meteorites.",
-        },
-      ];
-    }
-    if (isWise) {
-      return [
-        {
-          species: "Methane (CH₄)",
-          formula: "CH4",
-          wavelength_um: 3.30,
-          center_um: 3.30,
-          bandwidth_um: 0.25,
-          depth_pct: 42.0,
-          significance_snr: 17.6,
-          type: "Atmospheric Molecular Opacity",
-          interpretation: "Fundamental ν₃ band of methane in sub-zero (250 K) ultracool brown dwarf atmosphere.",
-        },
-      ];
-    }
-    if (isBarnard) {
-      return [
-        {
-          species: "Titanium Oxide (TiO)",
-          formula: "TiO",
-          wavelength_um: 0.85,
-          center_um: 0.85,
-          bandwidth_um: 0.15,
-          depth_pct: 31.0,
-          significance_snr: 28.5,
-          type: "Photospheric Opacity",
-          interpretation: "Dominant optical/NIR molecular band in cool M-dwarf stellar atmosphere.",
-        },
-      ];
-    }
-
-    const coordHash = Math.abs(Math.sin(ra * 12.9898 + dec * 78.233) * 43758.5453);
-    const snr = 6.0 + (coordHash % 14.0);
-    return [
-      {
-        species: (coordHash % 2 > 1) ? "Water Vapor / Ice (H₂O)" : "Silicate Mineral Matrix",
-        formula: (coordHash % 2 > 1) ? "H2O" : "SiO4",
-        wavelength_um: (coordHash % 2 > 1) ? 3.05 : 1.15,
-        center_um: (coordHash % 2 > 1) ? 3.05 : 1.15,
-        bandwidth_um: 0.25,
-        depth_pct: 12.0 + (coordHash % 18.0),
-        significance_snr: Number(snr.toFixed(1)),
-        type: "Infrared Spectral Feature",
-        interpretation: `Infrared spectral absorption detected at RA ${ra.toFixed(3)}°, Dec ${dec.toFixed(3)}°.`,
-      },
-    ];
-  }, [spectrumResult, measurementError, objectLabel, candidateId, ra, dec]);
-
-  // Filtered channels for display
   const displayChannels = useMemo(() => {
     if (selectedDetector === 'all') return channels;
     return channels.filter((c) => c.detector === selectedDetector);
@@ -237,48 +93,33 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
 
   // Export CSV Handler with honest provenance metadata
   const handleExportCSV = () => {
-    if (channels.length === 0) return;
-    const isLiveMeasured = Boolean(spectrumResult?.spectrum && spectrumResult.spectrum.length > 0);
-    const provenanceComments = isLiveMeasured
-      ? [
-          `# SPHEREx 102-Band Calibrated Spectrophotometry`,
-          `# Target: ${objectLabel}`,
-          `# Celestial Coordinates: RA ${ra.toFixed(6)} deg, Dec ${dec.toFixed(6)} deg`,
-          `# Measurement Status: CALIBRATED_SCIENCE_MEASUREMENT (IRSA SIA/TAP WCS-WAVE)`,
-          `# Extraction Aperture: ${apertureRadius} px | Subtraction: ${subtractionMode}`,
-          `# Molecular Absorption Detections: ${molecularDetections.map((m) => `${m.species} (${m.center_um}um SNR=${m.significance_snr})`).join('; ') || 'None above 3-sigma'}`,
-        ].join('\n') + '\n'
-      : [
-          `# SPHEREx 102-Band Spectrophotometry (Illustrative Model Profile)`,
-          `# Target: ${objectLabel}`,
-          `# Celestial Coordinates: RA ${ra.toFixed(6)} deg, Dec ${dec.toFixed(6)} deg`,
-          `# Measurement Status: DEMONSTRATION_MODE${measurementError ? ` (Measurement Error: ${measurementError})` : ' (Uncalibrated Baseline Reference)'}`,
-          `# Provenance Warning: Synthetic model curve for interface demonstration. DO NOT CITE AS MEASURED SCIENCE.`,
-        ].join('\n') + '\n';
+    if (isLoading || measurementError || !spectrumResult || channels.length === 0) return;
+    const provenanceComments = [
+      '# SPHEREx measured spectrophotometry',
+      `# Target: ${spectrumResult.target || objectLabel}`,
+      `# Requested coordinates: RA ${ra} deg, Dec ${dec} deg`,
+      '# Measurement API: /api/spectrum',
+      `# WCS mode: ${spectrumResult.wcs_mode ?? 'not reported'}`,
+      `# Pixel mask: ${spectrumResult.bad_pixel_mask ?? 'not reported'}`,
+      `# Extraction aperture: ${apertureRadius} px | Subtraction: ${spectrumResult.subtraction_mode}`,
+      `# Molecular detections: ${molecularDetections.map(m => m.species).join('; ') || 'None reported'}`,
+    ].join('\n') + '\n';
 
-    const header = provenanceComments + 'channel,detector,wavelength_um,bandwidth_um,flux_mjy,uncertainty_mjy,snr\n';
+    const header = provenanceComments + 'channel,detector,wavelength_um,bandwidth_um,flux_mjy,uncertainty_mjy,snr,mjd\n';
     const rows = channels
       .map(
         (c) =>
-          `${c.channel},${c.detector},${c.wavelengthUm},${c.bandwidthUm},${c.fluxMjy},${c.uncertaintyMjy},${c.snr.toFixed(1)}`
+          `${c.channel},${c.detector},${c.wavelengthUm},${c.bandwidthUm},${c.fluxMjy},${c.uncertaintyMjy},${c.snr.toFixed(1)},${c.mjd ?? ''}`
       )
       .join('\n');
     const blob = new Blob([header + rows], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `spherex_102band_spectrum_${objectLabel.replace(/[^a-zA-Z0-9]/g, '_')}.csv`;
+    a.download = `spherex_measured_spectrum_${objectLabel.replace(/[^a-zA-Z0-9]/g, '_')}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
-
-  if (channels.length === 0) {
-    return (
-      <div className="h-48 flex items-center justify-center text-paper-500 font-mono text-xs">
-        {isLoading ? 'Computing WCS-WAVE 102-band flux...' : 'No spectral channels available'}
-      </div>
-    );
-  }
 
   // SVG dimensions & scaling
   const svgWidth = 360;
@@ -292,8 +133,8 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
   const maxLambda = 5.0;
 
   const fluxValues = channels.map((d) => d.fluxMjy);
-  const minFlux = Math.max(0, Math.min(...fluxValues) * 0.8);
-  const maxFlux = Math.max(...fluxValues) * 1.25;
+  const minFlux = Math.min(0, ...fluxValues) * 1.25;
+  const maxFlux = Math.max(1, ...fluxValues) * 1.25;
 
   const getX = (lambda: number) => padding.left + ((lambda - minLambda) / (maxLambda - minLambda)) * plotW;
   const getY = (flux: number) => padding.top + plotH - ((flux - minFlux) / (maxFlux - minFlux)) * plotH;
@@ -312,9 +153,9 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
           </div>
           <div className="text-[10px] font-mono">
             {spectrumResult?.spectrum && spectrumResult.spectrum.length > 0 ? (
-              <span className="text-emerald-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · 102 Bands Calibrated</span>
+              <span className="text-emerald-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · {channels.length} measured channel{channels.length === 1 ? '' : 's'}</span>
             ) : (
-              <span className="text-amber-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · Demonstration Model Profile</span>
+              <span className="text-amber-400">RA {ra.toFixed(4)}°, Dec {dec.toFixed(4)}° · {isLoading ? 'Measuring spectrum…' : 'Spectrum unavailable'}</span>
             )}
           </div>
         </div>
@@ -324,7 +165,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
             onClick={handleMeasureLive}
             disabled={isLoading}
             className="btn-tactile-sm px-2 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer disabled:opacity-50"
-            title="Measure real 102-band spectrophotometry from IRSA SPHEREx FITS cutouts"
+            title="Measure spectrophotometry from IRSA SPHEREx FITS cutouts"
           >
             {isLoading ? (
               <RefreshCw className="w-3 h-3 animate-spin text-emerald-400" />
@@ -336,8 +177,9 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
 
           <button
             onClick={handleExportCSV}
+            disabled={isLoading || Boolean(measurementError) || !spectrumResult || channels.length === 0}
             className="px-2 py-1 rounded bg-paper-900 hover:bg-paper-800 border border-paper-700 text-paper-300 hover:text-white flex items-center gap-1 font-mono text-[10px] transition-colors cursor-pointer shrink-0"
-            title="Download full 102-band calibrated spectrophotometry as CSV"
+            title="Download returned measured channels as CSV"
           >
             <Download className="w-3 h-3 text-emerald-400" />
             <span>Export CSV</span>
@@ -347,11 +189,11 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
 
       {/* Measurement Error Warning Banner */}
       {measurementError && (
-        <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-600/50 text-amber-300 font-mono text-[10px] flex items-start gap-2">
+        <div role="alert" className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-600/50 text-amber-300 font-mono text-[10px] flex items-start gap-2">
           <AlertTriangle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
           <div>
             <span className="font-bold text-amber-200">Spectrophotometric Measurement Offline:</span>{' '}
-            <span>{measurementError}. Displaying illustrative model profile. Exported data is explicitly marked as simulated demonstration mode.</span>
+            <span>{measurementError}. No measured spectrum is available; export is disabled.</span>
           </div>
         </div>
       )}
@@ -400,12 +242,13 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
             >
               {subtractionMode === 'zodi_subtracted' ? 'Zodi Clean' : 'Raw Flux'}
             </button>
-            <span className="text-emerald-400 font-bold">102 Bands</span>
+            <span className="text-emerald-400 font-bold">{channels.length} measured channels</span>
           </div>
         </div>
 
         <div className="relative">
-          <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto overflow-visible">
+          {!channels.length && <p role="status" className="p-6 text-center text-paper-400">{isLoading ? 'Measuring spectrum…' : 'No measured spectral channels available'}</p>}
+          {channels.length > 0 && <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto overflow-visible">
             {/* Detector array boundaries background shading */}
             {[
               { d: 'D1', start: 0.75, end: 1.11, color: DETECTOR_COLORS.D1 },
@@ -555,7 +398,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
             <text x={padding.left + plotW} y={padding.top + plotH + 15} fill="#64748b" fontSize="8.5" fontFamily="monospace" textAnchor="end">
               5.00 µm
             </text>
-          </svg>
+          </svg>}
 
           {/* Interactive Hover Tooltip */}
           {hoveredPoint && (
@@ -613,7 +456,7 @@ export const SpectrumPlot: React.FC<SpectrumPlotProps> = ({
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           <span>WCS-WAVE Spectrophotometry</span>
         </div>
-        <span className="text-emerald-400 font-bold">102 Bands Calibrated</span>
+        <span className="text-emerald-400 font-bold">{channels.length} measured channel{channels.length === 1 ? '' : 's'}</span>
       </div>
     </div>
   );
