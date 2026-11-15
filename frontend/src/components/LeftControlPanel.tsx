@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject } from '../types/spherex';
-import { DETECTOR_ARRAY_SPECS } from '../services/mockSpherexApi';
+import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
+import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
-import { Search, Layers, Filter, Database, ExternalLink, RefreshCw } from 'lucide-react';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle } from 'lucide-react';
 
 interface LeftControlPanelProps {
   ra: number;
@@ -27,6 +27,8 @@ interface LeftControlPanelProps {
   liveCatalog?: LiveCatalogResponse | null;
   isCatalogLoading?: boolean;
   onRefreshCatalog?: () => void;
+  currentPresetId?: string | null;
+  frames?: SpherexEpochFrame[];
   className?: string;
 }
 
@@ -50,11 +52,17 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   liveCatalog,
   isCatalogLoading = false,
   onRefreshCatalog,
+  currentPresetId,
+  frames,
   className = '',
 }) => {
   const [raInput, setRaInput] = useState(ra.toFixed(6));
   const [decInput, setDecInput] = useState(dec.toFixed(6));
   const [coordError, setCoordError] = useState<string | null>(null);
+
+  const detectorCoverage = React.useMemo(() => {
+    return getDetectorCoverageForTarget(currentPresetId || null, frames);
+  }, [currentPresetId, frames]);
 
   React.useEffect(() => {
     const displayRa = activeCandidate?.ra ?? ra;
@@ -214,6 +222,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
         <div className="space-y-1.5">
           {DETECTOR_ARRAY_SPECS.map((spec) => {
             const isSelected = selectedArray === spec.id;
+            const cov = detectorCoverage[spec.id];
             return (
               <button
                 key={spec.id}
@@ -223,29 +232,76 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-paper-100 font-medium'
+                    : cov?.status === 'none'
+                    ? 'bg-paper-950/60 text-paper-500 hover:text-paper-300'
                     : 'bg-paper-950 text-paper-400 hover:text-paper-200'
                 }`}
-                title={`Wavelength: ${spec.range} | Resolving Power: ${spec.res} (${spec.desc})`}
+                title={`Wavelength: ${spec.range} | Resolving Power: ${spec.res} (${spec.desc})${cov?.notes ? ` — ${cov.notes}` : ''}`}
               >
-                <div className="font-mono text-[11px] font-semibold text-paper-200 flex items-center gap-1.5">
+                <div className="font-mono text-[11px] font-semibold text-paper-200 flex items-center gap-1.5 min-w-0">
                   <span>{spec.name}</span>
                   {viewMode === 'scientist' ? (
-                    <span className="text-[10px] font-mono text-emerald-400 font-normal">
+                    <span className="text-[10px] font-mono text-emerald-400 font-normal truncate">
                       ({spec.range})
                     </span>
                   ) : (
-                    <span className="text-[10px] font-sans font-normal text-paper-400">
+                    <span className="text-[10px] font-sans font-normal text-paper-400 truncate">
                       ({spec.label})
                     </span>
                   )}
                 </div>
-                {isSelected && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                )}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {cov?.status === 'stacked' && (
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 font-bold">
+                      ✓ {cov.exposureCount} exp · Stack eligible
+                    </span>
+                  )}
+                  {cov?.status === 'insufficient' && (
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950/70 border border-amber-500/50 text-amber-300 font-bold">
+                      {cov.exposureCount} exp (&lt;3)
+                    </span>
+                  )}
+                  {cov?.status === 'none' && (
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-paper-900 border border-paper-800 text-paper-500">
+                      No data
+                    </span>
+                  )}
+                  {isSelected && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  )}
+                </div>
               </button>
             );
           })}
         </div>
+
+        {/* Warning Banner when an unobserved detector band is selected */}
+        {selectedArray !== 'all' && detectorCoverage[selectedArray]?.status === 'none' && (
+          <div className="mt-2 p-2 rounded-lg bg-amber-950/30 border border-amber-500/40 text-[10px] font-mono text-amber-200">
+            <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+              <span>Band {selectedArray} Data Unavailable</span>
+            </div>
+            <p className="text-paper-400 leading-tight mb-2">
+              No image artifacts are loaded for this detector. Archive coverage may be broader. Stacking eligibility requires at least 3 exposures.
+            </p>
+            {(() => {
+              const bestBand = Object.values(detectorCoverage).find((c) => c.canStack);
+              if (bestBand) {
+                return (
+                  <button
+                    type="button"
+                    onClick={() => onSelectArray(bestBand.detectorId as DetectorArrayId)}
+                    className="w-full py-1 px-2 rounded bg-amber-500 text-gray-950 font-bold text-[10px] hover:bg-amber-400 transition-colors cursor-pointer"
+                  >
+                    Switch to {bestBand.name} ({bestBand.exposureCount} exp · Stackable)
+                  </button>
+                );
+              }
+              return null;
+            })()}
+          </div>
+        )}
 
         <p className="mt-2 text-[10px] text-paper-400">Images are selected by detector. Channel-resolved images are unavailable.</p>
       </div>

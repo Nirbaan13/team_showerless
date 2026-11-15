@@ -113,6 +113,26 @@ export const DETECTOR_ARRAY_SPECS = [
   { id: 6, name: 'Band 6', label: 'Deep Cold Stars', range: '4.42 – 5.00 µm', res: 'R ~ 130', desc: 'Coldest sub-stellar brown dwarfs' },
 ];
 
+export interface DetectorBandCoverage {
+  detectorId: number;
+  name: string;
+  range: string;
+  exposureCount: number;
+  canStack: boolean;
+  status: 'stacked' | 'insufficient' | 'none';
+  notes?: string;
+}
+
+/** Report loaded artifacts, never infer archive coverage from a failed request. */
+export function getDetectorCoverageForTarget(targetId: string | null, frames?: SpherexEpochFrame[] | null): Record<number, DetectorBandCoverage> {
+  return Object.fromEntries(DETECTOR_ARRAY_SPECS.map(spec => {
+    const available = targetId ? getMockEpochFrames(targetId, spec.id) : frames ?? [];
+    const count = new Set(available.filter(frame => frame.detectorArray === spec.id && frame.isAvailable && frame.imageDataUrl).map(frame => frame.frameId)).size;
+    return [spec.id, { detectorId: spec.id, name: spec.name, range: spec.range, exposureCount: count,
+      canStack: count >= 3, status: count >= 3 ? 'stacked' : count > 0 ? 'insufficient' : 'none', notes: 'Counts loaded image artifacts; archive coverage may be broader.' }];
+  }));
+}
+
 /**
  * Generates multi-epoch frames for the celestial viewport, prioritizing Ivan's precomputed
  * real SPHEREx datasets from public/motion/review.json when available.

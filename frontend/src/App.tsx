@@ -1043,6 +1043,8 @@ export function App() {
               liveCatalog={liveCatalog}
               isCatalogLoading={isCatalogLoading}
               onRefreshCatalog={() => setCatalogRefreshCounter((c) => c + 1)}
+              currentPresetId={currentPresetId}
+              frames={frames}
               className="h-full w-full"
             />
           </div>

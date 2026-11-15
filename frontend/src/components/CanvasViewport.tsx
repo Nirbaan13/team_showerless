@@ -819,6 +819,26 @@ export const CanvasViewport: React.FC<CanvasViewportProps> = ({
         </div>
       ))}
 
+      {/* Unavailable Detector Array Overlay */}
+      {activeFrame && !activeFrame.isAvailable && (
+        <div className="absolute inset-0 bg-paper-950/85 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center select-none pointer-events-none">
+          <div className="max-w-md bg-paper-900 border-2 border-paper-700 rounded-xl p-5 shadow-2xl pointer-events-auto">
+            <div className="w-10 h-10 rounded-full bg-amber-950/60 border border-amber-400/50 flex items-center justify-center mx-auto mb-3">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
+            </div>
+            <h3 className="text-sm font-mono font-bold text-paper-100 mb-1.5">
+              Detector Band {selectedArray} — Observation Unavailable
+            </h3>
+            <p className="text-xs font-mono text-paper-300 mb-3 leading-relaxed">
+              {activeFrame.skipReason || 'SPHEREx did not photograph this target on this detector array. Shift & stack coadds require >= 3 visits on an observed band.'}
+            </p>
+            <div className="text-[10px] font-mono text-paper-400 bg-paper-950 p-2.5 rounded border border-paper-800">
+              Per pipeline rules, only detector bands with sufficient multi-epoch coverage (&ge; 3 visits) provide stacked products.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Skipped Frame Notification */}
       {skippedNotice && (
         <div className="absolute top-12 left-2.5 bg-paper-900 border border-ochre-500/60 text-ochre-300 px-3 py-1.5 rounded flex items-center justify-between text-xs font-mono z-30">
