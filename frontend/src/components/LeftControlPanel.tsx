@@ -12,8 +12,6 @@ interface LeftControlPanelProps {
   onUpdateFov: (fov: FOVOption) => void;
   selectedArray: DetectorArrayId | 'all';
   onSelectArray: (arr: DetectorArrayId | 'all') => void;
-  selectedChannel: number | null;
-  onSelectChannel: (ch: number | null) => void;
   subtractionMode: SubtractionMode;
   onChangeSubtractionMode: (mode: SubtractionMode) => void;
   overlays: CatalogOverlayState;
@@ -39,8 +37,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
   onUpdateFov,
   selectedArray,
   onSelectArray,
-  selectedChannel,
-  onSelectChannel,
   subtractionMode,
   onChangeSubtractionMode,
   overlays,
@@ -200,7 +196,6 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           <button
             onClick={() => {
               onSelectArray('all');
-              onSelectChannel(null);
             }}
             title="Combine all 6 infrared bands into a stacked composite image"
             className={`btn-tactile-sm text-[10px] font-mono px-2 py-0.5 rounded-lg border-2 border-black transition-all cursor-pointer ${
@@ -221,8 +216,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
                 key={spec.id}
                 onClick={() => {
                   onSelectArray(spec.id as DetectorArrayId);
-                  onSelectChannel(null);
-                }}
+                    }}
                 className={`btn-tactile-sm w-full px-2.5 py-1.5 rounded-lg border-2 border-black text-left flex items-center justify-between transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-paper-800 text-paper-100 font-medium'
@@ -250,70 +244,7 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
           })}
         </div>
 
-        {/* 102-Band Spectrophotometric Fine-Tuning Slider */}
-        <div className="mt-2.5 pt-2 border-t border-paper-800">
-          <div className="flex items-center justify-between text-[10px] font-mono mb-1">
-            <span className="text-paper-400 font-semibold">102-Band Channel:</span>
-            <span className="text-emerald-300 font-bold">
-              {selectedChannel ? `Ch #${selectedChannel} (${(0.75 + (selectedChannel - 1) * (4.25 / 101)).toFixed(2)} µm)` : 'Broad Band (Stacked)'}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min="1"
-              max="102"
-              value={selectedChannel ?? (selectedArray === 'all' ? 51 : (Number(selectedArray) - 1) * 17 + 9)}
-              onChange={(e) => {
-                const ch = parseInt(e.target.value, 10);
-                onSelectChannel(ch);
-                const arrId = Math.min(6, Math.max(1, Math.floor((ch - 1) / 17) + 1)) as DetectorArrayId;
-                if (selectedArray !== arrId && selectedArray !== 'all') {
-                  onSelectArray(arrId);
-                }
-              }}
-              className="w-full accent-emerald-400 cursor-pointer h-1.5 bg-paper-950 rounded-lg"
-            />
-            {selectedChannel !== null && (
-              <button
-                type="button"
-                onClick={() => onSelectChannel(null)}
-                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-paper-800 text-paper-400 hover:text-white cursor-pointer"
-                title="Reset to full detector array"
-              >
-                Reset
-              </button>
-            )}
-          </div>
-
-          {/* Key Molecular Line Fast-Picks */}
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            {[
-              { ch: 26, label: 'H₂O 1.5µm', arr: 2 },
-              { ch: 42, label: 'H₂O 2.0µm', arr: 3 },
-              { ch: 59, label: 'H₂O 3.0µm', arr: 4 },
-              { ch: 81, label: 'CO₂ 4.27µm', arr: 5 },
-              { ch: 93, label: 'CO 4.67µm', arr: 6 },
-            ].map((p) => (
-              <button
-                key={p.ch}
-                type="button"
-                onClick={() => {
-                  onSelectArray(p.arr as DetectorArrayId);
-                  onSelectChannel(p.ch);
-                }}
-                className={`px-1.5 py-0.5 rounded text-[8px] font-mono border transition-all cursor-pointer ${
-                  selectedChannel === p.ch
-                    ? 'bg-emerald-400 text-gray-950 font-bold border-black shadow-[0_0_6px_rgba(16,185,129,0.5)]'
-                    : 'bg-paper-950 text-paper-400 hover:text-emerald-300 border-paper-800'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <p className="mt-2 text-[10px] text-paper-400">Images are selected by detector. Channel-resolved images are unavailable.</p>
       </div>
 
       {/* 3. Image Filtering & Movement Isolation */}

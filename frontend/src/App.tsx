@@ -165,7 +165,6 @@ export function App() {
   const [dec, setDec] = useState<number>(5.290000);
   const [fov, setFov] = useState<FOVOption>("5'");
   const [selectedArray, setSelectedArray] = useState<DetectorArrayId | 'all'>(6);
-  const [selectedChannel, setSelectedChannel] = useState<number | null>(null);
   const [subtractionMode, setSubtractionMode] = useState<SubtractionMode>('raw_calibrated');
   const [activeFrameIndex, setActiveFrameIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -1032,8 +1031,6 @@ export function App() {
               onUpdateFov={setFov}
               selectedArray={selectedArray}
               onSelectArray={handleSelectDetectorArray}
-              selectedChannel={selectedChannel}
-              onSelectChannel={setSelectedChannel}
               subtractionMode={subtractionMode}
               onChangeSubtractionMode={setSubtractionMode}
               overlays={overlays}

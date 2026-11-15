@@ -275,3 +275,14 @@ test('same-day visits retain distinct UTC labels and select their actual frames'
     await expect(page.getByText(`Frame ${index + 1} of 4`, { exact: true })).toBeVisible();
   }
 });
+
+
+test('detector controls do not advertise an unsupported channel image or molecular slice', async ({ page }) => {
+  await backend(page);
+  await page.goto('/?tab=viewer&preset=3i-atlas');
+  await page.getByRole('button', { name: 'Scientist', exact: true }).click();
+  await expect(page.getByText('102-Band Channel:', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'H₂O 1.5µm', exact: true })).toHaveCount(0);
+  await expect(page.locator('input[type=range][max="102"]')).toHaveCount(0);
+  await expect(page.getByText('Images are selected by detector. Channel-resolved images are unavailable.', { exact: true })).toBeVisible();
+});
