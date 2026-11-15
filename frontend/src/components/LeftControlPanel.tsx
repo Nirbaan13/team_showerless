@@ -4,7 +4,7 @@ import { DEFAULT_ARCHIVE, isArchiveBrowse, observationBounds, type ArchiveSelect
 import type { FOVOption, DetectorArrayId, SubtractionMode, CatalogOverlayState, CandidateObject, SpherexEpochFrame } from '../types/spherex';
 import { DETECTOR_ARRAY_SPECS, getDetectorCoverageForTarget } from '../services/mockSpherexApi';
 import type { LiveCatalogResponse } from '../services/catalogService';
-import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Search, Layers, Filter, Database, ExternalLink, RefreshCw, AlertTriangle, ChevronDown } from 'lucide-react';
 
 interface LeftControlPanelProps {
   ra: number;
@@ -180,18 +180,10 @@ export const LeftControlPanel: React.FC<LeftControlPanelProps> = ({
             {selectedProviders.filter((item): item is ArchiveInventory => !!item).map(item => <div key={item.id} className="text-paper-400 mt-1">{item.id} · Time filter: {item.capabilities.time_filter}
               {item.capabilities.restrictions?.map((restriction, i) => <p key={i}>{restriction}</p>)}
             </div>)}
-            <details className="mt-1 text-paper-400"><summary>Combine image archives</summary>
-              {imageProviders.map(item => <label key={item.id} className="flex gap-2 items-center py-1">
-                <input type="checkbox" aria-label={`Search archive ${item.id}`} checked={selectedIds.includes(item.id)} onChange={() => {
-                  setArchiveDraft(value => ({ ...value, provider: (selectedIds.includes(item.id) ? selectedIds.filter(id => id !== item.id) : [...selectedIds, item.id]).join(',') }));
-                  setCoordError(null);
-                }} />{item.id}
-              </label>)}
-            </details>
           </div>
           <details id="tutorial-target-epoch" className="group">
             <summary className="flex items-center gap-1.5 cursor-pointer list-none text-paper-400 [&::-webkit-details-marker]:hidden">
-              <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90">&gt;</span>
+              <ChevronDown aria-hidden="true" className="h-3 w-3 shrink-0 transition-transform group-open:rotate-180" />
               <span>Observation Era</span>
             </summary>
             <div className="space-y-1 pt-1">
