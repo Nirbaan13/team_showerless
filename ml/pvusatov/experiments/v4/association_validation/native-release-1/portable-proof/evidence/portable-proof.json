@@ -1,0 +1,194 @@
+{
+  "archive_file_members": 3267,
+  "archive_member_manifest_sha256": "8b41f3efbb8f1e40b83a0f537fac686376a3c63d1057add0bec092f9d3dab508",
+  "cache_archive_bytes": 1482526720,
+  "cache_archive_sha256": "78fd49b821c58e891b9bd05c24f63a42edf2d66e3f682399d5d8d1a0d7936173",
+  "checker_sha256": "5b6105c10bfbdca1ea5e6ba4218d8cc357e3c9d10be2fc52cb527c20bd9bb8ca",
+  "child_command": [
+    "/home/usatovpavel/edu/UtilsAI/.venv/bin/python",
+    "/tmp/association-native-offline-proof-pb1hw1fr/repo/ml/pvusatov/experiments/v4/association_validation/native-release-1/portable-proof/guarded_child.py",
+    "--checker",
+    "/tmp/association-native-offline-proof-pb1hw1fr/repo/ml/pvusatov/experiments/v4/association_validation/native-release-1/independent-audit/check.py",
+    "--freeze",
+    "/tmp/association-native-offline-proof-pb1hw1fr/repo/ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/freeze.json",
+    "--handoff",
+    "/tmp/association-native-offline-proof-pb1hw1fr/repo/ml/pvusatov/experiments/v4/association_validation/native-release-1/handoff.json",
+    "--run",
+    "/tmp/association-native-offline-proof-pb1hw1fr/cache/native-release-1/run-manifest.json",
+    "--report",
+    "/tmp/association-native-offline-proof-pb1hw1fr/cache/report-native-release-1/research-report.json",
+    "--output",
+    "/tmp/association-native-offline-proof-pb1hw1fr/proof/native-recount.json",
+    "--proof-output",
+    "/tmp/association-native-offline-proof-pb1hw1fr/proof/guarded-child.json",
+    "--repo-root",
+    "/tmp/association-native-offline-proof-pb1hw1fr/repo",
+    "--cache-root",
+    "/tmp/association-native-offline-proof-pb1hw1fr/cache"
+  ],
+  "child_exit_code": 0,
+  "child_original_inputs_denied": true,
+  "child_proof_sha256": "740f10ce99d92a6a96ac1ba352adf9afc24fa0fb2fe2f252396dd6c3d8ff1733",
+  "child_stderr": "",
+  "child_stdout": "{\"status\": \"PASS\", \"all_record_count\": 1632, \"audited_candidate_rows\": 6349758, \"error_records\": [], \"elapsed_seconds\": 389.53970699899946, \"peak_rss_mib\": 127.4609375}\n",
+  "child_timeout_seconds": 900,
+  "child_wrapper_sha256": "f8f71b6fef270bbd439bc63e842f267e480c073f5e0c4e8778cbb78bbcbddc12",
+  "copied_reference_files": [
+    {
+      "bytes": 5597,
+      "path": "ml/pvusatov/experiments/v4/association_validation/freeze.py",
+      "sha256": "a5dd891b523fdb38289ba56d58d6747c960c65377855d02ec7fcc782e02956f9"
+    },
+    {
+      "bytes": 1759,
+      "path": "ml/pvusatov/experiments/v4/association_validation/execute.py",
+      "sha256": "5666358c3d4dd23c2f9cb4b33fba1c5968b0712fc2e951f74bfa45ef34dfb22a"
+    },
+    {
+      "bytes": 26613,
+      "path": "ml/pvusatov/experiments/v4/association_validation/runner.py",
+      "sha256": "6ffbb66b2c4353619eae865d9927e54d768c69a4ec04bcc420043e51577734a1"
+    },
+    {
+      "bytes": 3810,
+      "path": "ml/pvusatov/experiments/v4/association_validation/accounting.py",
+      "sha256": "efa32c564c1a5dd16ca76f8c1fee9ff70823cb379ad0c1617cc422f2b7ee5843"
+    },
+    {
+      "bytes": 6413,
+      "path": "ml/pvusatov/experiments/v4/association_pilot/policies.py",
+      "sha256": "854c2abf696dfa5094dfb79c0a39eeecdc796f5ac723bbe6f8727eceaccf271d"
+    },
+    {
+      "bytes": 15131,
+      "path": "ml/pvusatov/experiments/v4/detection/features.py",
+      "sha256": "8433495da9d0eda745903a9d63f430e3fc8b7c283b2ad7aded96511059b91282"
+    },
+    {
+      "bytes": 18071,
+      "path": "ml/pvusatov/experiments/v4/detection/runtime_model.py",
+      "sha256": "cd7154e2bbba3595b656c4207e9a6afe890a35e1f12ffa4203ab0b7cf6a74598"
+    },
+    {
+      "bytes": 17330,
+      "path": "ml/pvusatov/releases/v4/runtime/ml_inference/prepare.py",
+      "sha256": "27ef087aa19f394eaf16ee19c0801ed6c7557a79a7ea77b3410445363f4624ec"
+    },
+    {
+      "bytes": 4065,
+      "path": "ml/pvusatov/experiments/v4/evaluation/native_injections.py",
+      "sha256": "dfd829e310a74e5bd446a439af9560386bdfb96f5b01386178e32eed024bcf5b"
+    },
+    {
+      "bytes": 1296,
+      "path": "ml/pvusatov/experiments/v4/evaluation/worker_transport.py",
+      "sha256": "7b0964db0e8dfdca9fec28ae00f8388c0442c114985b9ff811b0eb0ac6fed45f"
+    },
+    {
+      "bytes": 31999,
+      "path": "ml/pvusatov/backend/inference/experiments/v3_evaluation/run_native.py",
+      "sha256": "5629b6a9e6ec92e328650ae9e3abd1ba60aac96e90614ab9c3acaf0c8e4e1dcd"
+    },
+    {
+      "bytes": 15469,
+      "path": "ml/pvusatov/backend/inference/training/evaluate_background.py",
+      "sha256": "37db87a3e7a9630296867a1ae943578fbb15965edd4f948d68a32e6ef4f40d15"
+    },
+    {
+      "bytes": 8872,
+      "path": "ml/pvusatov/backend/inference/training/simulate_v2.py",
+      "sha256": "b3aa95028a7b17fdeaca0da2e7c68009bc99e9fd7bb895760871c68a02277e28"
+    },
+    {
+      "bytes": 78,
+      "path": "ml/pvusatov/backend/inference/training/__init__.py",
+      "sha256": "340d665d109e8752797b3d5958c533c7a7218cd866a2ede585281a28bf3ec1ad"
+    },
+    {
+      "bytes": 74,
+      "path": "ml/pvusatov/backend/inference/ml_inference/__init__.py",
+      "sha256": "1f534210089fc71f7708cd5b6a252db95c4b760e9d1af1db30d600eed247713a"
+    },
+    {
+      "bytes": 2460,
+      "path": "ml/pvusatov/backend/inference/ml_inference/contracts.py",
+      "sha256": "0c05d439e6ec20a56f5fbf93d40cdea62010150f5d41eae1733b9c49bf985816"
+    },
+    {
+      "bytes": 9710,
+      "path": "ml/pvusatov/backend/inference/ml_inference/detector.py",
+      "sha256": "0f8debc9ecb9c377abd489451ccad1e00808633b071659644045859ac501e31d"
+    },
+    {
+      "bytes": 7190,
+      "path": "ml/pvusatov/backend/inference/ml_inference/model.py",
+      "sha256": "f4b6a329c49a771fab6c51941697fd0fcd80a673e894b8c4afa6cec63e5a0083"
+    },
+    {
+      "bytes": 60661,
+      "path": "ml/pvusatov/releases/v4/model/ranker.onnx",
+      "sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35"
+    },
+    {
+      "bytes": 3588,
+      "path": "ml/pvusatov/releases/v4/model/metadata.json",
+      "sha256": "472a3db474a84d856110a7f52907c461c402ddde640fa108ec9a521a79ab5e13"
+    },
+    {
+      "bytes": 2494,
+      "path": "ml/pvusatov/experiments/v4/association_validation/protocol.json",
+      "sha256": "66a3758136244592cb7f3b384613068cd1203fd5f6a089eb57aa220156c4649f"
+    },
+    {
+      "bytes": 3208,
+      "path": "ml/pvusatov/experiments/v4/association_validation/selection-record.json",
+      "sha256": "eebadab67f344848f35b118605a6b09e5383189120f91ce70d1ca75f970e84e5"
+    },
+    {
+      "bytes": 1548991,
+      "path": "ml/pvusatov/backend/inference/training/calibration/instrument-epsf-bank.npz",
+      "sha256": "793e05135438c95b8eaeace21948b34fe2eb49cd581be9e81dfff2b493e08d6d"
+    },
+    {
+      "bytes": 22921,
+      "path": "ml/pvusatov/experiments/v4/data/association_holdout/plan.json",
+      "sha256": "5d58c00b91c0eeaa7518c78917cf0ed49a45e720d66da98a85f51ae120efc107"
+    },
+    {
+      "bytes": 1393,
+      "path": "ml/pvusatov/experiments/v4/data/association_holdout/retry-percent20/amendment.json",
+      "sha256": "15e2636fbc66ee73df2d250b4e1d5a3102cbc805b54cf6874a4d030d833c5853"
+    },
+    {
+      "bytes": 6445,
+      "path": "ml/pvusatov/experiments/v4/association_validation/engineering-repair-1/freeze.json",
+      "sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd"
+    },
+    {
+      "bytes": 1090548,
+      "path": "ml/pvusatov/experiments/v4/association_validation/native-release-1/handoff.json",
+      "sha256": "6005fd136cdab828cac9c786c18fce2c4977289924f7ff94df3a3ddf92671abb"
+    },
+    {
+      "bytes": 22418,
+      "path": "ml/pvusatov/experiments/v4/association_validation/native-release-1/independent-audit/check.py",
+      "sha256": "5b6105c10bfbdca1ea5e6ba4218d8cc357e3c9d10be2fc52cb527c20bd9bb8ca"
+    }
+  ],
+  "fresh_copy_directory": "/tmp/association-native-offline-proof-pb1hw1fr",
+  "frozen_r2_sha256": "ae981b56f43c8a14cd6dee9ce61c48853ea7c90b63eca8ddcf586e0a3e3dbbdd",
+  "guard": "Python open/list audit hook after dependency import; instrumentation only, not an OS sandbox",
+  "intentional_denied_reads": [
+    "/home/usatovpavel/.codex/worktrees/spaceapps-zio-backend/ml/pvusatov/experiments/v4/association_validation/protocol.json",
+    "/tmp/spaceapps-association-validation/synthetic-repair-1/run-manifest.json",
+    "/etc/passwd"
+  ],
+  "model_execution": false,
+  "native_recount_sha256": "aeb4a36048e7b6737c88214bf1019ffdc3441e4b0177ee27b7840db16610761c",
+  "preparation_reads_original_reference_inputs": true,
+  "preparation_script_sha256": "13a9fea8b5d6f67b7e72d7457c437285f83805f9765eb000e907219161f719b2",
+  "raw_fits_opened": false,
+  "released_handoff_sha256": "6005fd136cdab828cac9c786c18fce2c4977289924f7ff94df3a3ddf92671abb",
+  "scoring_or_simulation": false,
+  "status": "PASS"
+}
