@@ -38,9 +38,9 @@ Operations:
 
 - docker compose --project-name spaceapps-ml --file /opt/spaceapps-ml/compose.yaml
   --env-file /opt/spaceapps-ml/current.env ps
-- GET http://144.124.238.101:8001/health
-- GET http://144.124.238.101:8080/api/motion/verifications
-- GET http://144.124.238.101:8080/api/catalogue/candidates
+- GET http://146.103.122.246:8001/health
+- GET http://146.103.122.246:8080/api/motion/verifications
+- GET http://146.103.122.246:8080/api/catalogue/candidates
 
 Production release revision is verified through the immutable image label and
 running container identity; the original /health application version is retained.

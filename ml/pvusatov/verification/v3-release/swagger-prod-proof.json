@@ -1,5 +1,5 @@
 {
-  "frontend_base": "http://144.124.238.101:8080",
+  "frontend_base": "http://146.103.122.246:8080",
   "checked_at_utc": "2026-11-14T23:23:27.632Z",
   "frontend_proxy_spec_loaded": true,
   "openapi_paths": 20,
@@ -51,5 +51,5 @@
   "post_probe_identity_checked_at_utc": "2026-11-14T23:24:14.988037+00:00",
   "probe_source_sha256": "674040b29d23c55c927d23cbf475e90159ffaa8c3ef6e04f3bc8b26557a8789e",
   "probe_source_modified": false,
-  "probe_command": "PROBE_FRONTEND=http://144.124.238.101:8080 PROBE_HTTP=http://144.124.238.101 PROBE_OUTPUT=ml/pvusatov/verification/v3-release/swagger-prod-proof.json node ml/pvusatov/verification/v3-release/swagger-smoke.cjs"
+  "probe_command": "PROBE_FRONTEND=http://146.103.122.246:8080 PROBE_HTTP=http://146.103.122.246 PROBE_OUTPUT=ml/pvusatov/verification/v3-release/swagger-prod-proof.json node ml/pvusatov/verification/v3-release/swagger-smoke.cjs"
 }

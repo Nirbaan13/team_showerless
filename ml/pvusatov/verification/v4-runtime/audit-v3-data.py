@@ -52,7 +52,7 @@ def fetch_pngs(samples):
     output=Path('/tmp/spaceapps-v4-runtime-png-audit');output.mkdir(parents=True,exist_ok=True);records=[]
     for sample in samples:
         remote=sample['remote_path'];require(remote.startswith('/opt/spaceapps/ml-pvusatov-v4-probe/evidence-v3-')and remote.endswith('.png'),'non-engineering PNG path')
-        command=['ssh','-i','/home/usatovpavel/.ssh/spaceapps-netherlands-admin-20261114','-o','UserKnownHostsFile=/home/usatovpavel/.local/state/spaceapps-migration-20261114/known_hosts','-o','BatchMode=yes','-o','IdentitiesOnly=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=15','root@144.124.238.101','cat -- '+shlex.quote(remote)]
+        command=['ssh','-i','/home/usatovpavel/.ssh/spaceapps-1gb-admin-20261115','-o','UserKnownHostsFile=/home/usatovpavel/.local/state/spaceapps-migration-20261115-1gb/known_hosts','-o','BatchMode=yes','-o','IdentitiesOnly=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=15','root@146.103.122.246','cat -- '+shlex.quote(remote)]
         value=subprocess.run(command,capture_output=True,timeout=30);require(value.returncode==0,'read-only PNG fetch failed: '+sample['identity']);require(len(value.stdout)==sample['bytes'],'PNG byte size differs: '+sample['identity'])
         path=output/(sample['identity']+'.png');path.write_bytes(value.stdout)
         with Image.open(path)as image:require(image.format=='PNG','unexpected image format');image.verify()

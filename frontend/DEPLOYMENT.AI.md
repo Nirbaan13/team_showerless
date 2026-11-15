@@ -1,6 +1,6 @@
 # Frontend deployment
 
-The frontend is served from the existing VPS at `http://144.124.238.101:8080/`.
+The frontend is served from the existing VPS at `http://146.103.122.246:8080/`.
 The domain proxy for `https://spherexblink.tech` is installed on that VPS; public
 activation requires its DNS owner to point the apex and www records there.
 Direct-IP API and Swagger retain port 80 through the proxy. See
@@ -66,9 +66,9 @@ gh secret set FRONTEND_VPS_SSH_KEY --repo Nirbaan13/team_showerless < /path/to/f
 ## Manual verification and rollback
 
 ```bash
-curl --fail http://35.159.162.202:8080/
-curl --fail http://35.159.162.202:8080/frontend-version.json
-curl --fail http://35.159.162.202:8080/backend/health
+curl --fail http://146.103.122.246:8080/
+curl --fail http://146.103.122.246:8080/frontend-version.json
+curl --fail http://146.103.122.246:8080/backend/health
 ```
 
 To deploy or roll back a previously built image, stream that image with the
@@ -78,7 +78,7 @@ frontend CI key, the existing pinned known-hosts file, and the desired commit:
 docker image save "spaceapps-frontend:$revision" | gzip -1 |
   ssh -i /path/to/frontend-ci-private-key -o IdentitiesOnly=yes -o BatchMode=yes \
     -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/path/to/pinned-known-hosts \
-    frontend-deploy@35.159.162.202 "deploy-frontend $revision"
+    frontend-deploy@146.103.122.246 "deploy-frontend $revision"
 ```
 
 The installed entry point also automatically rolls back a candidate that fails

@@ -1,6 +1,6 @@
 # SPHEREx Sky-Viewer Frontend & Backend API Contract
 
-This document specifies the communication protocol between the **Frontend** (`/frontend`) and Paul's **Backend** (`/backend` deployed on AWS Lightsail `35.159.162.202`).
+This document specifies the communication protocol between the **Frontend** (`/frontend`) and Paul's **Backend** (`/backend` deployed on the VPS at `146.103.122.246`).
 
 ---
 

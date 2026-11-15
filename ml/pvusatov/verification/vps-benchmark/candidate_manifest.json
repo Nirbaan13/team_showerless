@@ -14,8 +14,8 @@
     },
     {
       "path": "candidate_run_ssh.py",
-      "sha256": "c34e8d0f57a2f2c40ab999230bfa81cb3e9aa68e4b67db746f2ccca32bcfe051",
-      "bytes": 2895
+      "sha256": "efbe77878c8f845baaad4c5f04b73206b750b03c6cff604274669bc372401070",
+      "bytes": 2891
     },
     {
       "path": "candidate_vps_benchmark.json",
@@ -38,5 +38,10 @@
   "credentials_included": false,
   "final_data_uploaded": false,
   "loader_has_profile_binding": false,
-  "inference_pipeline_executed": false
+  "inference_pipeline_executed": false,
+  "endpoint_reference_migration": {
+    "source_revision": "47224cb853adcd42a54b09b09b85333f961d2f40",
+    "results_rerun": false,
+    "scope": "Endpoint references and current-file integrity hashes updated; captured results remain historical."
+  }
 }

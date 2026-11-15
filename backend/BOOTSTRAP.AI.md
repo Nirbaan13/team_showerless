@@ -4,10 +4,10 @@ Scala/ZIO IRSA retrieval service for the Planet X and SPHEREx challenge. See [ru
 
 ## Live server
 
-- API: http://35.159.162.202/
-- Swagger UI: http://35.159.162.202/docs
-- Health: http://35.159.162.202/health
-- Version: http://35.159.162.202/version
+- API: http://146.103.122.246/
+- Swagger UI: http://146.103.122.246/docs
+- Health: http://146.103.122.246/health
+- Version: http://146.103.122.246/version
 
 The application version and OpenAPI version are the full GitHub commit SHA.
 Each successful deployment creates `spaceapps-api:<commit-sha>` and moves
@@ -40,7 +40,7 @@ The workflow uses these repository Actions secrets:
 
 | Secret | Meaning |
 | --- | --- |
-| `VPS_HOST` | Server IP, currently `35.159.162.202` |
+| `VPS_HOST` | Server IP, currently `146.103.122.246` |
 | `VPS_USER` | Dedicated SSH account, `deploy` |
 | `VPS_SSH_KEY` | Dedicated CI private key; never commit it |
 | `VPS_KNOWN_HOSTS` | Server SSH host key verified through the owner's SSH connection |

@@ -7,7 +7,7 @@ const {firefox}=require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_modul
   try{
     for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){
       const page=await browser.newPage({viewport});
-      const url=(process.env.PROBE_BASE||'http://144.124.238.101:8080')+'/?analysis=1&id='+(process.env.PROBE_JOB||'f5a4bcc9-fbce-4291-88dd-945182ea8de5');
+      const url=(process.env.PROBE_BASE||'http://146.103.122.246:8080')+'/?analysis=1&id='+(process.env.PROBE_JOB||'f5a4bcc9-fbce-4291-88dd-945182ea8de5');
       await page.goto(url);
       await page.getByRole('heading',{name:'10 candidate tracks · 4 exposures',exact:true}).waitFor();
       const bounds=await page.locator('.inference-page').evaluate(el=>({top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,viewport:innerHeight,clientHeight:el.clientHeight}));

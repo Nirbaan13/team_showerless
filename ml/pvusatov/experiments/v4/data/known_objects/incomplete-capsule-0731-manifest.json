@@ -114,7 +114,7 @@
     },
     {
       "path": "evidence/vps-transport-diagnostic.json",
-      "sha256": "0fb5345d59b25e32154f30d8ea08e2dcf6bf55f4fef036c09183c3cf5b4b4a88",
+      "sha256": "b84807764ec43664a0012a89f362461b56716836a4a53f99f4f9f2409c1d9468",
       "bytes": 398
     },
     {
@@ -184,14 +184,19 @@
     },
     {
       "path": "transport-diagnostic-plan.json",
-      "sha256": "fff246fbf938db654db2f0e2f6fa4c16b6366d3140ca3fd7e2735d7666c68992",
+      "sha256": "d0304428e59ec386437bc8920c69bbbcc111b5e434eeb227b2cfe9ad59dccacc",
       "bytes": 554
     },
     {
       "path": "transport_probe.py",
-      "sha256": "50368e15adf202dd9170bc76a9b8d6fdd641ef2a3200fc0ee0838611df4463c9",
-      "bytes": 2593
+      "sha256": "c268c1aaa901540ffaf2379f4d7d97aaa4376add996ff88fcba00fc4c9b80fdf",
+      "bytes": 2589
     }
   ],
-  "total_bytes": 751449
+  "total_bytes": 751445,
+  "endpoint_reference_migration": {
+    "source_revision": "47224cb853adcd42a54b09b09b85333f961d2f40",
+    "results_rerun": false,
+    "scope": "Endpoint references and current-file integrity hashes updated; captured results remain historical."
+  }
 }

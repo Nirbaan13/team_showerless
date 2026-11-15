@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const base=process.env.PROBE_FRONTEND||'http://144.124.238.101:8080';
+const base=process.env.PROBE_FRONTEND||'http://146.103.122.246:8080';
 const {firefox}=require('/home/usatovpavel/.npm/_npx/9833c18b2d85bc59/node_modules/playwright-core');
 (async()=>{
   const browser=await firefox.launch({headless:true});

@@ -14,8 +14,8 @@ EXPECTED={'ranker.onnx':'c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate-dir',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--key',default='/home/usatovpavel/.ssh/spaceapps-netherlands-admin-20261114')
-    parser.add_argument('--known-hosts',default='/home/usatovpavel/.local/state/spaceapps-migration-20261114/known_hosts');args=parser.parse_args()
+    parser.add_argument('--key',default='/home/usatovpavel/.ssh/spaceapps-1gb-admin-20261115')
+    parser.add_argument('--known-hosts',default='/home/usatovpavel/.local/state/spaceapps-migration-20261115-1gb/known_hosts');args=parser.parse_args()
     folder=Path(__file__).resolve().parent;probe=(folder/'candidate_container_probe.py').read_text();remote=(folder/'candidate_remote_runner.py').read_text()
     files={}
     for filename,digest in EXPECTED.items():
@@ -23,7 +23,7 @@ def main():
         if hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('candidate published checksum differs: '+filename)
         files[filename]=dict(sha256=digest,base64=base64.b64encode(raw).decode())
     config=dict(container_probe_source=probe,container_probe_sha256=hashlib.sha256(probe.encode()).hexdigest(),files=files)
-    command=['ssh','-T','-i',args.key,'-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile='+args.known_hosts,'-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=4','root@144.124.238.101','python3 -c '+shlex.quote(remote)]
+    command=['ssh','-T','-i',args.key,'-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile='+args.known_hosts,'-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=4','root@146.103.122.246','python3 -c '+shlex.quote(remote)]
     done=subprocess.run(command,input=json.dumps(config),text=True,capture_output=True,timeout=600)
     if done.returncode:raise SystemExit('Candidate SSH probe failed: '+done.stderr[:4096])
     report=json.loads(done.stdout)

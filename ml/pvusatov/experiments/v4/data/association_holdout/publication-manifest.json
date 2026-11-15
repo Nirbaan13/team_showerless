@@ -426,12 +426,12 @@
     },
     {
       "path": "vps-transport-diagnostic/plan.json",
-      "sha256": "9ecb94ff56b76f38c089d5d495db07342cf33f3c7e0f2ed188c054f5d3e77231",
+      "sha256": "58e4c57dafed8a6a1315b0499e434a96bfb1b47d42521ecabea6b9a20e1941ad",
       "bytes": 536
     },
     {
       "path": "vps-transport-diagnostic/result.json",
-      "sha256": "5dffc459122a23650d8a9f67575fcf8f4fdb08d791626ef7a12ed09ee1394726",
+      "sha256": "d75ad6ee5a7a56f5bd1f5e20b8a27a13f7034a086d8721ef6badc3d6d010ff08",
       "bytes": 356
     }
   ],
@@ -445,5 +445,10 @@
   "pixels_opened": false,
   "injections_generated": false,
   "models_called": false,
-  "tests": "8 acquisition/header/geometry/source-integrity tests passed; portablefreshrelocationaudit passed"
+  "tests": "8 acquisition/header/geometry/source-integrity tests passed; portablefreshrelocationaudit passed",
+  "endpoint_reference_migration": {
+    "source_revision": "47224cb853adcd42a54b09b09b85333f961d2f40",
+    "results_rerun": false,
+    "scope": "Endpoint references and current-file integrity hashes updated; captured results remain historical."
+  }
 }

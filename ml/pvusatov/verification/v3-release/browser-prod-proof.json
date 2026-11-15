@@ -1,7 +1,7 @@
 {
   "checked_at_utc": "2026-11-14T23:23:38.045Z",
-  "frontend_base": "http://144.124.238.101:8080",
-  "api_base": "http://144.124.238.101",
+  "frontend_base": "http://146.103.122.246:8080",
+  "api_base": "http://146.103.122.246",
   "analysis_id": "8d39e1a6-57d2-44fc-8d55-b9da101e187c",
   "model_sha256": "c13ba9577273610ab09ad4c962322118b27bb06c1a34933ef4252b9e643bd204",
   "frames": 4,
@@ -83,6 +83,6 @@
   "post_probe_identity_checked_at_utc": "2026-11-14T23:24:14.987558+00:00",
   "probe_source_sha256": "22f19dd78140d14f6311a998f9b1f9796eec9ceef1436b71a18ff8995519d521",
   "probe_source_modified": false,
-  "probe_command": "PROBE_FRONTEND=http://144.124.238.101:8080 PROBE_HTTP=http://144.124.238.101 PROBE_OUTPUT=ml/pvusatov/verification/v3-release/browser-prod-proof.json node ml/pvusatov/verification/v3-release/browser-smoke.cjs",
+  "probe_command": "PROBE_FRONTEND=http://146.103.122.246:8080 PROBE_HTTP=http://146.103.122.246 PROBE_OUTPUT=ml/pvusatov/verification/v3-release/browser-prod-proof.json node ml/pvusatov/verification/v3-release/browser-smoke.cjs",
   "desktop_global_homepage_navigation": true
 }

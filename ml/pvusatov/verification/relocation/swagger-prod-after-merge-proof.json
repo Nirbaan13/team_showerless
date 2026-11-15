@@ -1,5 +1,5 @@
 {
-  "frontend_base": "http://144.124.238.101:8080",
+  "frontend_base": "http://146.103.122.246:8080",
   "checked_at_utc": "2026-11-14T21:59:00.032Z",
   "frontend_proxy_spec_loaded": true,
   "openapi_paths": 20,

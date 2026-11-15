@@ -63,7 +63,7 @@ Change only the web host records in the authoritative zone:
 
 | Name | Type | Value |
 |---|---|---|
-| @ | A | 144.124.238.101 |
+| @ | A | 146.103.122.246 |
 | www | CNAME | spherexblink.tech |
 
 Replace the old apex A records; remove conflicting www A/CNAME and old apex/www

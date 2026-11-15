@@ -18,7 +18,7 @@ import urllib.request
 
 from PIL import Image
 
-BASE = os.environ.get('PROBE_HTTP', 'http://144.124.238.101').rstrip('/')
+BASE = os.environ.get('PROBE_HTTP', 'http://146.103.122.246').rstrip('/')
 HERE = Path(__file__).resolve().parent
 CASE = HERE.parents[1] / 'v4-ceres-diagnostic'
 MODEL = 'c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35'

@@ -1,7 +1,7 @@
 {
   "checked_at_utc": "2026-11-15T11:12:26.084Z",
-  "frontend_base": "http://144.124.238.101:8080",
-  "api_base": "http://144.124.238.101",
+  "frontend_base": "http://146.103.122.246:8080",
+  "api_base": "http://146.103.122.246",
   "analysis_id": "41f7ac88-14ac-407d-8978-91ec35607157",
   "model_sha256": "c596f66fe073d669d7b1b8ae0bd5d5cf710910cf36f34ad04fc08bcd10ecdb35",
   "frames": 4,

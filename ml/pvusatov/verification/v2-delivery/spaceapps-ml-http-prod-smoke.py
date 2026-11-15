@@ -4,7 +4,7 @@ import time
 import urllib.error
 import urllib.request
 
-BASE = 'http://144.124.238.101'
+BASE = 'http://146.103.122.246'
 SHA = 'dde04fc3996be19150c57ca0399a7de52d6e7b62b2b65731133159585a3580a9'
 
 

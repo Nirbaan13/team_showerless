@@ -5,8 +5,8 @@ async (page) => {
     match(value, pattern) { if (!pattern.test(value)) throw Error(`Unexpected value: ${value}`); },
     deepEqual(actual, expected) { if (JSON.stringify(actual) !== JSON.stringify(expected)) throw Error('Values differ'); }
   };
-  const base = 'http://144.124.238.101:8080';
-  const api = 'http://144.124.238.101';
+  const base = 'http://146.103.122.246:8080';
+  const api = 'http://146.103.122.246';
   const errors = [];
   page.on('pageerror', error => errors.push(String(error)));
   await page.setViewportSize({width: 1440, height: 1000});
