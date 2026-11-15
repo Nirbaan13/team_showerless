@@ -11,6 +11,9 @@ export interface UrlParamsState {
   candidateId?: string | null;
   tab?: 'home' | 'viewer' | 'feed' | 'report' | 'inference' | 'catalogue';
   presetId?: string | null;
+  archive?: string;
+  observedFrom?: string;
+  observedThrough?: string;
 }
 
 export function useUrlSync(
@@ -34,6 +37,9 @@ export function useUrlSync(
         const val = parseFloat(params.get('dec')!);
         if (!isNaN(val)) partial.dec = val;
       }
+      if (params.has('archive')) partial.archive = params.get('archive')!;
+      if (params.has('observed_from')) partial.observedFrom = params.get('observed_from')!;
+      if (params.has('observed_through')) partial.observedThrough = params.get('observed_through')!;
       if (params.has('fov')) {
         const val = params.get('fov') as FOVOption;
         if (["1'", "3'", "5'", "10'"].includes(val)) partial.fov = val;
@@ -68,6 +74,7 @@ export function useUrlSync(
         partial.presetId = null;
       }
 
+      if ((partial.archive && partial.archive !== 'irsa-spherex') || partial.observedFrom || partial.observedThrough) partial.presetId = null;
       if (params.has('tab')) {
         const requestedTab = params.get('tab') as UrlParamsState['tab'];
         if (['home', 'viewer', 'feed', 'report', 'inference', 'catalogue'].includes(requestedTab!)) {
@@ -96,6 +103,9 @@ export function useUrlSync(
     params.set('detector', String(s.selectedArray));
     params.set('subtraction', s.subtractionMode);
     params.set('frame', String(s.activeFrameIndex));
+    for (const [key, value] of [['archive', s.archive], ['observed_from', s.observedFrom], ['observed_through', s.observedThrough]]) {
+      if (value) params.set(key!, value); else params.delete(key!);
+    }
 
     if (s.candidateId) {
       params.set('candidate', s.candidateId);
@@ -130,6 +140,7 @@ export function useUrlSync(
     state.candidateId,
     state.tab,
     state.presetId,
+    state.archive, state.observedFrom, state.observedThrough,
     updateUrl,
   ]);
 }

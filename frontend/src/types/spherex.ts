@@ -214,6 +214,6 @@ export interface MLAnalysisStatus {
 
 
 export interface ObservationLoadStatus {
-  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback';
+  source: 'idle' | 'loading' | 'live' | 'preset' | 'error' | 'fallback' | 'archive';
   message: string;
 }
