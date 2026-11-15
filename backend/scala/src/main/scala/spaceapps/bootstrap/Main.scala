@@ -7,6 +7,7 @@ import spaceapps.archive.service.ArchiveLimits
 import spaceapps.domain.*
 import spaceapps.integrations.irsa.LiveArchive
 import spaceapps.integrations.grpc.GrpcServer
+import spaceapps.integrations.processing.HttpPipelineClient
 import spaceapps.repository.{Repository,AnalysisRepository}
 import spaceapps.service.*
 
@@ -39,7 +40,8 @@ object Main extends ZIOAppDefault:
       equipment <- EquipmentService.make(repository,data,client,env("IRSA_CALIBRATION_URL","https://nasa-irsa-spherex.s3.amazonaws.com/"))
       analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
       analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
-      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openai/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses))
+      pipeline <- HttpPipelineClient.make(env("PROCESSING_URL","http://pipeline:8002"))
+      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline))
       archiveRuntime <- ArchiveRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(
         global_parallelism=env("ARCHIVE_PARALLELISM","3").toInt,
         per_provider_parallelism=env("ARCHIVE_PROVIDER_PARALLELISM","1").toInt,

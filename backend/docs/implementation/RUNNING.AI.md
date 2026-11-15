@@ -1,10 +1,25 @@
 # Running the IRSA retrieval service
 
-Use JDK25. Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
+Use JDK25 and the locked Python scientific runtime. For local work start the existing pipeline HTTP service separately and set `PROCESSING_URL=http://127.0.0.1:8002`. Run `./sbtw test stage` in backend/, then `APP_REVISION=$(git rev-parse HEAD) java --enable-native-access=ALL-UNNAMED -cp 'target/stage/classes:target/stage/lib/*' spaceapps.bootstrap.Main`. Native libraries require an executable temporary directory. The service listens on port8000; /health and /version report the Git revision; /docs serves Swagger UI from the checked-in OpenAPI through /openapi.json.
 
-The application implements metadata search, expanded frame metadata, equipment/calibration discovery and file delivery, wide/deep native-image retrieval, durable status, snapshot-first SSE and FITS file delivery. The public polygon parameter is spelled `verices_degrees` to match the current contract. It does not invent tiles or reproject pixels. A chunk contains an entire native IRSA image, which can extend beyond the requested discovery region.
+The application implements metadata search, expanded frame metadata, equipment/calibration discovery and file delivery, wide/deep native-image retrieval, durable status, snapshot-first SSE and FITS file delivery. The public polygon parameter is spelled `verices_degrees` to match the current contract. Scala requests an enclosing native-axis IRSA cutout per frame; it does not invent tiles or reproject pixels. The cutout may extend beyond the requested discovery region.
 
-Per the user's clarification, PNG previews and the two scientific subtraction modes are deferred. Preview resources report409 unavailable and preview_status=unavailable. The subtraction routes report501 unsupported_processing and never return native data mislabeled as processed. Runtime Swagger documents this deviation; the checked-in team contract is not rewritten. Future processing interfaces are isolated behind Processor.
+The existing team Python pipeline runs in a separate HTTP container. Scala's
+`integrations.processing.HttpPipelineClient` calls its existing cutout search,
+coordinate PNG render, spectrum and cached-aperture HTTP endpoints. It validates
+requests/responses and returns ready JSON/PNG synchronously. The team Python
+source and frontend are unchanged. PROCESSING_URL defaults to
+http://pipeline:8002 on the Compose network. The native Jobs processor remains
+NoProcessing: coordinate-based Python PNGs are not substituted for native chunk
+previews, and the current Python API does not provide processed FITS output.
+
+The original Python service has known missing imports in cleaning.py and
+query.cutout. The Scala adapter preserves their failures as gateway errors; this
+PR does not change the team's Python code. See
+PIPELINE-INTEGRATION-COMPLETION.AI.md for the exact integration boundary.
+
+Source layout: Scala/protobuf/test resources are in scala/src; Python integration
+dependency locks only are in python/. The authoritative spec is docs/openapi.yaml.
 
 Configuration is read at startup:
 
@@ -20,11 +35,12 @@ Configuration is read at startup:
 | MAX_PRODUCT_BYTES | 268435456 | Maximum streamed size of one native image |
 | MAX_CACHE_BYTES | 21474836480 | Cache admission budget including active transfers |
 | MIN_FREE_BYTES | 536870912 | Space reserved for OS/database activity |
+| PROCESSING_URL | http://pipeline:8002 | Team pipeline HTTP service on the private Compose network |
 | WORKERS | 2 | Application-scoped background coordinators |
 | TRANSFERS | 4 | Global concurrent product transfers |
 | MAX_ACTIVE_JOBS | 32 | Transactional accepted-work limit |
 | CHANNEL_BANDS_JSON | {} | Authoritative channel-to-wavelength interval mapping in meters; absent mappings return422 rather than inventing a calibration |
-| OPENAPI_PATH | docs/openai/openapi.yaml | Team's authoritative contract |
+| OPENAPI_PATH | docs/openapi.yaml | Team's authoritative contract |
 
 Center requests support angular dimensions up to600arcmin; ranges support up to10degrees per axis; convex polygons accept3–64vertices. These are service admission limits, not IRSA image sizes. Use polygons to cross RA0. Search time filters are ISO timestamps converted to UTC MJD. Metadata discovery never downloads FITS bytes. Channel filtering chooses native image products through IRSA BAND; it does not extract spectral planes or relabel an LVF image as a102channel cube.
 
@@ -47,3 +63,8 @@ Additive gRPC methods mirror the new HTTP capabilities: PrepareDeepObservations,
 
 
 EquipmentService also assumes a single owning process per data directory. Startup removes only owned regular calibration partials named <64 lowercase hex>.part; unrelated files are retained and symbolic links are rejected. Shared TAP lookups belong to application scope, so one disconnected metadata caller cannot cancel other callers waiting for the same frame.
+
+
+Build from the repository root with `docker build --file backend/Dockerfile --build-arg APP_REVISION=<git-sha> --tag spaceapps-api:<git-sha> .`. Compose runs two containers from the same immutable image: api starts Scala, pipeline starts the unchanged team FastAPI service on internal port8002. The Python cache is persisted at its original /tmp/spherex_cutouts location. Frozen ML remains independent and unchanged. Additional Python import dependencies are hash-locked under backend/python/requirements-pipeline.txt; there is no backend Python adapter code.
+
+The image carries its Compose definition, and the deployment script rolls image and topology back together. An existing VPS whose forced SSH command uses an older root-installed /usr/local/bin/spaceapps-deploy needs that installed script refreshed from ops/deploy.sh once before this two-container rollout. This PR does not modify a live VPS.

@@ -106,12 +106,6 @@ export function App() {
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash === '#motion-review') {
-      setDrawerControlledTab('ai');
-    }
-  }, []);
-
   const [currentPresetId, setCurrentPresetId] = useState<string | null>('3i-atlas');
   const [ra, setRa] = useState<number>(166.790000);
   const [dec, setDec] = useState<number>(5.290000);
@@ -356,8 +350,10 @@ export function App() {
 
     setRa(newRa);
     setDec(newDec);
+    setSelectedCandidateId(null);
     setCurrentPresetId(null);
     setOverlays({ gaiaDr3: true, wise: true, solarSystemEphemeris: true });
+    setCatalogRefreshCounter((c) => c + 1);
     setActiveTab('viewer');
 
     const fovArcmin = parseFloat(fov) || 5;
@@ -725,7 +721,7 @@ export function App() {
     setActiveFrameIndex(setting.activeFrameIndex);
     setSubtractionMode(setting.subtractionMode);
     setSelectedCandidateId(setting.candidateId);
-    setDrawerControlledTab('ai');
+    setDrawerControlledTab('chat');
     setActiveTab('viewer');
 
     triggerBackgroundMlProgress(
@@ -1212,6 +1208,7 @@ export function App() {
               onChangeSubtractionMode={setSubtractionMode}
               centerRa={ra}
               centerDec={dec}
+              fov={fov}
               skippedNotice={skippedNotice}
               onClearSkippedNotice={clearSkippedNotice}
               isScientistMode={viewMode === 'scientist'}

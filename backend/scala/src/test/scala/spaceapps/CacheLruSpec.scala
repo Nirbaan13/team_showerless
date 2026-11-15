@@ -160,7 +160,7 @@ object CacheLruSpec extends ZIOSpecDefault:
         dir <- temp
         f <- fixture(dir,40)
         (c,jobs,first)=f
-        api <- Api.make(jobs,"test",Path.of("docs/openai/openapi.yaml"))
+        api <- Api.make(jobs,"test",Path.of("docs/openapi.yaml"))
         scope <- Scope.make
         response <- scope.extend(api.routes.runZIO(Request.get(s"http://localhost/api/chunks/${first.chunks.head.id}")))
         whileOpen <- c.publish(native(dir,'f'))(write(_,40)).exit
@@ -199,7 +199,7 @@ object CacheLruSpec extends ZIOSpecDefault:
         dir <- temp
         f <- fixture(dir,40)
         (c,jobs,first)=f
-        api <- Api.make(jobs,"test",Path.of("docs/openai/openapi.yaml"))
+        api <- Api.make(jobs,"test",Path.of("docs/openapi.yaml"))
         ready <- Promise.make[Nothing,Unit]
         request <- ZIO.scoped(api.routes.runZIO(Request.get(s"http://localhost/api/chunks/${first.chunks.head.id}")) *> ready.succeed(()) *> ZIO.never).forkScoped
         _ <- ready.await

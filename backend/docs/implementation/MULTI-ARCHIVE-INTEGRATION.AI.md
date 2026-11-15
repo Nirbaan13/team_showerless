@@ -6,7 +6,7 @@ changing legacy SPHEREx HTTP/gRPC schemas, detectors or `verices_degrees`.
 
 ## Contract
 
-The additive HTTP routes are documented in `backend/docs/openai/openapi.yaml`:
+The additive HTTP routes are documented in `backend/docs/openapi.yaml`:
 
 - `GET /api/archives`: full inventory, qualified operations and limitations.
 - `POST /api/archive-searches`: accept a validated ICRS circle/UTC query; return
@@ -264,3 +264,14 @@ remain structurally identical. The staged Main started in isolated temporary
 storage, served health/Swagger and all27 OpenAPI paths, returned14 inventory
 entries, and persisted an ESASky-only request as unavailable without external
 network access or a fabricated successful result.
+
+Reconciled the subsequent main layout migration: archive module sources and tests
+now live under backend/scala/src. All24 main HTTP paths and
+24 schemas, including the team pipeline API,
+remain structurally identical; the module still adds exactly7 archive paths.
+
+After merging the main source-root/API migration, `./sbtw test stage` passed185
+tests, zero failures, three optional network tests ignored. Archive fixtures were
+relocated to backend/scala/src/test/resources/archive. The final staged application
+served all31 paths, all14 archive inventory entries, Swagger and the unchanged
+pipeline validation route. Main's24 paths and24 schemas are preserved.

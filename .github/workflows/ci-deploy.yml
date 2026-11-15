@@ -84,7 +84,7 @@ jobs:
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}
         run: bash tests/test_deploy.sh
-      - name: Verify compatibility with the existing VPS Compose file
+      - name: Verify upgrade from the existing VPS Compose file
         env:
           TEST_IMAGE_REVISION: ${{ github.sha }}
           TEST_COMPOSE_FILE: tests/fixtures/legacy-compose.yaml

@@ -58,7 +58,7 @@ object ArchiveDetailsApiSpec extends ZIOSpecDefault:
       client <- ZIO.service[Client]
       metadata <- MetadataService.make(repo,jobs.cachedImage,client,base+"/tap")
       equipment <- EquipmentService.make(repo,dir,client,base+"/")
-      api <- Api.make(jobs,"details-test",Paths.get("docs/openai/openapi.yaml"),metadata=Some(metadata),equipment=Some(equipment))
+      api <- Api.make(jobs,"details-test",Paths.get("docs/openapi.yaml"),metadata=Some(metadata),equipment=Some(equipment))
       port <- GrpcServer.start(jobs,"details-test","127.0.0.1",0,metadata=Some(metadata),equipment=Some(equipment))
       grpc <- RetrievalServiceClient.scoped(ZManagedChannel(NettyChannelBuilder.forAddress("127.0.0.1",port).usePlaintext()))
       _ <- repo.remember(List(image))

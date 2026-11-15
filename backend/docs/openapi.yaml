@@ -26,12 +26,13 @@ tags:
   - name: Downloads
   - name: Chunks
   - name: Equipment
-  - name: Archives
   - name: Analyses
+  - name: Archives
 paths:
   /api/archives:
     get:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: listArchives
       summary: List independent archive capabilities and qualification restrictions
       responses:
@@ -41,64 +42,89 @@ paths:
             application/json:
               schema:
                 type: array
-                items: {$ref: '#/components/schemas/ArchiveInventory'}
+                items:
+                  $ref: '#/components/schemas/ArchiveInventory'
   /api/archive-searches:
     post:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: createArchiveSearch
       summary: Queue a durable federated metadata search
       requestBody:
         required: true
         content:
           application/json:
-            schema: {$ref: '#/components/schemas/ArchiveQuery'}
+            schema:
+              $ref: '#/components/schemas/ArchiveQuery'
       responses:
         '202':
-          description: Accepted; poll status_url for records and independent provider outcomes
+          description: Accepted; poll status_url for records and independent provider
+            outcomes
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/ArchiveAcceptedJob'}
-        '422': {$ref: '#/components/responses/InvalidRequest'}
+              schema:
+                $ref: '#/components/schemas/ArchiveAcceptedJob'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
         '429':
           description: Archive search queue capacity exceeded
   /api/archive-searches/{id}:
     parameters:
-      - {$ref: '#/components/parameters/Id'}
+    - $ref: '#/components/parameters/Id'
     get:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: getArchiveSearch
       summary: Get job status and a bounded local snapshot page
-      description: |
-        Local pagination is independent of upstream completeness. An opaque cursor
+      description: 'Local pagination is independent of upstream completeness. An opaque
+        cursor
+
         belongs to this persisted snapshot generation. If records change, restart
+
         local pagination after HTTP 409. Truncation never implies a continuation.
+
+        '
       parameters:
-        - name: cursor
-          in: query
-          schema: {type: string}
-        - name: limit
-          in: query
-          schema: {type: integer, minimum: 1, maximum: 200, default: 50}
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
       responses:
         '200':
           description: Normalized records and independent provider outcomes
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/ArchiveSearchPage'}
-        '404': {$ref: '#/components/responses/NotFound'}
-        '409': {description: Cursor belongs to a different snapshot generation}
-        '422': {$ref: '#/components/responses/InvalidRequest'}
+              schema:
+                $ref: '#/components/schemas/ArchiveSearchPage'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Cursor belongs to a different snapshot generation
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
   /api/archive-searches/{id}/continue:
     parameters:
-      - {$ref: '#/components/parameters/Id'}
+    - $ref: '#/components/parameters/Id'
     post:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: continueArchiveSearch
       summary: Resume one genuine provider continuation
-      description: |
-        Only providers with has_continuation=true can resume. The initial qualified
+      description: 'Only providers with has_continuation=true can resume. The initial
+        qualified
+
         production profiles do not advertise upstream pagination. Truncated results
+
         can be narrowed with a new search; arbitrary offsets are never fabricated.
+
+        '
       requestBody:
         required: true
         content:
@@ -106,29 +132,42 @@ paths:
             schema:
               type: object
               additionalProperties: false
-              required: [provider]
+              required:
+              - provider
               properties:
-                provider: {type: string}
+                provider:
+                  type: string
       responses:
         '202':
           description: Continuation queued on the same job
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/ArchiveAcceptedJob'}
-        '404': {$ref: '#/components/responses/NotFound'}
-        '409': {description: Job is already active}
-        '422': {$ref: '#/components/responses/InvalidRequest'}
+              schema:
+                $ref: '#/components/schemas/ArchiveAcceptedJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Job is already active
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
   /api/archive-downloads:
     post:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: createArchiveDownload
       summary: Queue selected server-known native science products
-      description: |
-        Submit record IDs from archive search. Arbitrary upstream URLs are rejected.
+      description: 'Submit record IDs from archive search. Arbitrary upstream URLs are
+        rejected.
+
         Foreign native products have analysisEligible=false. A NoContent subset is
+
         skipped; prefer_cutout never fetches a large original after a failed subset.
+
         If no cutout is advertised, prefer_cutout can choose an original explicitly
+
         supported by the provider. require_cutout never chooses an original.
+
+        '
       requestBody:
         required: true
         content:
@@ -136,29 +175,37 @@ paths:
             schema:
               type: object
               additionalProperties: false
-              required: [record_ids]
+              required:
+              - record_ids
               properties:
                 record_ids:
                   type: array
                   minItems: 1
                   maxItems: 100
                   uniqueItems: true
-                  items: {type: string}
-                delivery: {$ref: '#/components/schemas/ArchiveDelivery'}
+                  items:
+                    type: string
+                delivery:
+                  $ref: '#/components/schemas/ArchiveDelivery'
       responses:
         '202':
           description: Accepted native-product download job
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/ArchiveAcceptedJob'}
-        '404': {$ref: '#/components/responses/NotFound'}
-        '422': {$ref: '#/components/responses/InvalidRequest'}
-        '429': {description: Archive download queue capacity exceeded}
+              schema:
+                $ref: '#/components/schemas/ArchiveAcceptedJob'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+        '429':
+          description: Archive download queue capacity exceeded
   /api/archive-downloads/{id}:
     parameters:
-      - {$ref: '#/components/parameters/Id'}
+    - $ref: '#/components/parameters/Id'
     get:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: getArchiveDownload
       summary: Get persisted per-asset state, provenance and local artifact URLs
       responses:
@@ -166,25 +213,152 @@ paths:
           description: Durable native-product download state
           content:
             application/json:
-              schema: {$ref: '#/components/schemas/ArchiveDownload'}
-        '404': {$ref: '#/components/responses/NotFound'}
+              schema:
+                $ref: '#/components/schemas/ArchiveDownload'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /api/archive-assets/{id}:
     parameters:
-      - {$ref: '#/components/parameters/Id'}
+    - $ref: '#/components/parameters/Id'
     get:
-      tags: [Archives]
+      tags:
+      - Archives
       operationId: getArchiveAsset
       summary: Retrieve a completed server-known native science artifact
-      description: Native gzip products retain gzip bytes. This route does not run SPHEREx processing.
+      description: Native gzip products retain gzip bytes. This route does not run SPHEREx
+        processing.
       responses:
         '200':
           description: Structurally validated native FITS or gzip FITS bytes
           content:
             application/fits:
-              schema: {type: string, format: binary}
+              schema:
+                type: string
+                format: binary
             application/gzip:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/spectrum:
+    get:
+      tags: [Pipeline]
+      operationId: getPipelineSpectrum
+      summary: Request measured spectral points from the existing Python service
+      description: >-
+        Scala validates the request and calls the unchanged Python HTTP endpoint.
+        Returns its completed JSON synchronously; no 202 or download-job protocol
+        is introduced. WCS-WAVE aperture points are visualization approximations,
+        not independently calibrated science spectra. Only ZODI-subtracted spectra
+        are implemented by the existing Python endpoint. Python failures remain
+        gateway errors; no synthetic bands or molecules are added by Scala.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: radius_pix, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 2}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.5, maximum: 10, default: 1.5}}
+        - {name: max_frames, in: query, schema: {type: integer, minimum: 1, maximum: 400, default: 120}}
+        - {name: candidate_id, in: query, schema: {type: string, maxLength: 256}, description: Display label only}
+        - {name: subtraction, in: query, schema: {type: string, enum: [zodi_subtracted], default: zodi_subtracted}}
+      responses:
+        '200':
+          description: Original completed spectral JSON from the team service
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PipelineSpectrum'}
+        '404': {description: Python found no usable data}
+        '422': {description: Invalid parameters or unsupported processing option}
+        '502': {description: Python failed or returned invalid data}
+        '503': {description: Python service unavailable}
+        '504': {description: Python HTTP request exceeded the backend deadline}
+  /api/cutout/search:
+    post:
+      tags: [Pipeline]
+      operationId: searchPipelineCutouts
+      summary: Call the existing Python cutout search
+      description: Detector filtering is not implemented by this Python operation and is rejected explicitly.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                size_arcmin: {type: number, minimum: 0.01, maximum: 600, default: 3}
+                collection: {type: string, default: spherex_dr1}
+      responses:
+        '200':
+          description: Original search results
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid search request}
+        '502': {description: Python search failure, including errors reported in a 200 body}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/cutout/render:
+    get:
+      tags: [Pipeline]
+      operationId: renderPipelineCutout
+      summary: Obtain a PNG from the existing Python renderer
+      description: >-
+        The Python service selects the first matching exposure itself. This
+        coordinate-based preview is separate from a native Scala chunk ID and
+        does not claim that it renders a particular downloaded frame.
+      parameters:
+        - {name: ra, in: query, required: true, schema: {type: number, minimum: 0, exclusiveMaximum: 360}}
+        - {name: dec, in: query, required: true, schema: {type: number, minimum: -90, maximum: 90}}
+        - {name: size_arcmin, in: query, schema: {type: number, minimum: 0.01, maximum: 600, default: 3}}
+        - {name: subtraction, in: query, schema: {type: string, enum: [raw_calibrated, zodi_subtracted], default: raw_calibrated}}
+      responses:
+        '200':
+          description: Original PNG, validated for content type and signature
+          content:
+            image/png:
               schema: {type: string, format: binary}
-        '404': {$ref: '#/components/responses/NotFound'}
+        '404': {description: No matching coverage}
+        '422': {description: Invalid render parameters}
+        '502': {description: Python rendering failed or returned an invalid PNG}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
+  /api/spectrum/measure:
+    post:
+      tags: [Pipeline]
+      operationId: measurePipelineCachedSpectrum
+      summary: Measure existing cutouts in the Python service cache
+      description: >-
+        Accepts cache filenames only, never caller filesystem paths. This route
+        uses the existing Python cache and does not import native Scala jobs into
+        it or change the Python file-handling implementation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ra, dec]
+              properties:
+                ra: {type: number, minimum: 0, exclusiveMaximum: 360}
+                dec: {type: number, minimum: -90, maximum: 90}
+                radius_pix: {type: number, minimum: 0.5, maximum: 10, default: 2}
+                cutout_paths:
+                  type: array
+                  maxItems: 120
+                  items: {type: string, maxLength: 256, pattern: '^[A-Za-z0-9_.-]+$'}
+      responses:
+        '200':
+          description: Original measured rows, or original empty-cache response
+          content:
+            application/json:
+              schema: {type: object, additionalProperties: true}
+        '422': {description: Invalid aperture or cache filenames}
+        '502': {description: Python measurement failed}
+        '503': {description: Python service unavailable}
+        '504': {description: Python request timed out}
   /api/observations/meta:
     get:
       tags: [Observations]
@@ -882,6 +1056,430 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ArchiveCircle:
+      type: object
+      additionalProperties: false
+      required:
+      - ra_degrees
+      - dec_degrees
+      - radius_degrees
+      properties:
+        type:
+          type: string
+          const: circle
+          default: circle
+        ra_degrees:
+          type: number
+          minimum: 0
+          exclusiveMaximum: 360
+        dec_degrees:
+          type: number
+          minimum: -90
+          maximum: 90
+        radius_degrees:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 180
+    ArchiveProductKind:
+      type: string
+      enum:
+      - image
+      - cube
+      - spectrum
+      - catalog_source
+      - coverage
+    ArchiveCompleteness:
+      type: string
+      enum:
+      - complete
+      - truncated
+      - unknown
+      - indexed_subset
+    ArchiveQuery:
+      type: object
+      additionalProperties: false
+      required:
+      - region
+      - providers
+      properties:
+        region:
+          $ref: '#/components/schemas/ArchiveCircle'
+        providers:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+        product_kinds:
+          type: array
+          minItems: 1
+          default:
+          - image
+          items:
+            $ref: '#/components/schemas/ArchiveProductKind'
+        time_start_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        time_end_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        limit_per_provider:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+    ArchiveInventory:
+      type: object
+      required:
+      - id
+      - capabilities
+      properties:
+        id:
+          type: string
+        capabilities:
+          type: object
+          properties:
+            product_kinds:
+              type: array
+              items:
+                $ref: '#/components/schemas/ArchiveProductKind'
+            time_filter:
+              type: string
+              enum:
+              - exact_utc
+              - native
+              - client
+              - provisional
+              - unsupported
+            original:
+              type: boolean
+            cutout:
+              type: boolean
+            availability:
+              type: string
+              enum:
+              - available
+              - unavailable
+              - requires_auth
+              - pending_qualification
+            restrictions:
+              type: array
+              items:
+                type: string
+            geometry:
+              type: string
+    ArchiveAcceptedJob:
+      type: object
+      required:
+      - id
+      - status_url
+      properties:
+        id:
+          type: string
+        status_url:
+          type: string
+          format: uri-reference
+    ArchiveFailure:
+      type: object
+      required:
+      - code
+      - message
+      - retryable
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+        retry_after_seconds:
+          type: integer
+          minimum: 0
+    ArchiveProviderOutcome:
+      type: object
+      required:
+      - provider
+      - status
+      - record_count
+      - completeness
+      - warnings
+      - has_continuation
+      properties:
+        provider:
+          type: string
+        status:
+          type: string
+          enum:
+          - success
+          - empty
+          - unavailable
+          - requires_auth
+          - unsupported_filter
+          - failed
+        record_count:
+          type: integer
+          minimum: 0
+        completeness:
+          $ref: '#/components/schemas/ArchiveCompleteness'
+        warnings:
+          type: array
+          items:
+            type: string
+        error:
+          $ref: '#/components/schemas/ArchiveFailure'
+        has_continuation:
+          type: boolean
+    ArchiveObservationTime:
+      type: object
+      properties:
+        start_utc:
+          type: string
+          format: date-time
+        end_utc:
+          type: string
+          format: date-time
+        quality:
+          type: string
+          enum:
+          - verified
+          - native
+          - provisional
+          - reference_epoch
+          - unknown
+        native:
+          type: object
+          additionalProperties:
+            type: string
+        reference_epoch:
+          type: string
+    ArchiveRecord:
+      type: object
+      required:
+      - id
+      - provider
+      - collection
+      - native_id
+      - product_kind
+      - time
+      - native
+      - provenance
+      - original
+      - cutout
+      - analysisEligible
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        collection:
+          type: string
+        native_id:
+          type: string
+          description: Native string identity; catalogue IDs never pass through floating
+            point
+        product_kind:
+          $ref: '#/components/schemas/ArchiveProductKind'
+        version:
+          type: string
+        mission:
+          type: string
+        instrument:
+          type: string
+        sky_coverage:
+          type: string
+        time:
+          $ref: '#/components/schemas/ArchiveObservationTime'
+        wavelength_min_m:
+          type: number
+        wavelength_max_m:
+          type: number
+        brightness_unit:
+          type: string
+          description: Omitted when BUNIT or equivalent units are unknown
+        native:
+          type: object
+          additionalProperties:
+            type: string
+        provenance:
+          type: object
+          additionalProperties:
+            type: string
+        original:
+          type: boolean
+          description: Provider-level original-delivery candidate; individual asset availability
+            and authorization are qualified at resolution
+        cutout:
+          type: boolean
+          description: Provider-level cutout candidate; DataLink must advertise a usable
+            per-record SODA service at resolution
+        analysisEligible:
+          type: boolean
+          const: false
+    ArchiveSearchPage:
+      type: object
+      required:
+      - id
+      - status
+      - outcomes
+      - records
+      - returned_count
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - completed
+          - partial
+          - failed
+        outcomes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveProviderOutcome'
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveRecord'
+        returned_count:
+          type: integer
+          minimum: 0
+          maximum: 200
+        next_cursor:
+          type: string
+    ArchiveDelivery:
+      type: object
+      additionalProperties: false
+      properties:
+        mode:
+          type: string
+          enum:
+          - prefer_cutout
+          - require_cutout
+          - original
+          default: prefer_cutout
+        region:
+          $ref: '#/components/schemas/ArchiveCircle'
+    ArchiveStoredAsset:
+      type: object
+      required:
+      - id
+      - bytes
+      - sha256
+      - compression
+      - analysisEligible
+      - artifact_url
+      properties:
+        id:
+          type: string
+        bytes:
+          type: integer
+          minimum: 1
+        sha256:
+          type: string
+        compression:
+          type: string
+          enum:
+          - native
+          - gzip
+        brightness_unit:
+          type: string
+        analysisEligible:
+          type: boolean
+          const: false
+        artifact_url:
+          type: string
+          format: uri-reference
+    ArchiveDownload:
+      type: object
+      required:
+      - id
+      - status
+      - selection
+      - assets
+      - status_url
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - completed
+          - partial
+          - failed
+        selection:
+          type: object
+          properties:
+            record_ids:
+              type: array
+              items:
+                type: string
+            delivery:
+              $ref: '#/components/schemas/ArchiveDelivery'
+        assets:
+          type: array
+          items:
+            type: object
+            required:
+            - record_id
+            - status
+            - provenance
+            properties:
+              record_id:
+                type: string
+              status:
+                type: string
+                enum:
+                - ready
+                - skipped
+                - failed
+              asset:
+                $ref: '#/components/schemas/ArchiveStoredAsset'
+              error:
+                $ref: '#/components/schemas/ArchiveFailure'
+              provenance:
+                type: object
+                additionalProperties:
+                  type: string
+        status_url:
+          type: string
+          format: uri-reference
+    PipelineSpectrum:
+      type: object
+      description: Original team-service response; no 102-band completeness or calibrated-science guarantee is added.
+      required: [target, ra, dec, aperture_radius_pix, subtraction_mode, total_channels, spectrum]
+      properties:
+        target: {type: string}
+        ra: {type: number}
+        dec: {type: number}
+        candidate_id: {type: [string, 'null']}
+        aperture_radius_pix: {type: number}
+        subtraction_mode: {type: string, enum: [zodi_subtracted]}
+        total_channels: {type: integer, minimum: 0}
+        spectrum:
+          type: array
+          items:
+            type: object
+            properties:
+              channel: {type: integer}
+              detector: {type: string}
+              detector_array: {type: integer}
+              wavelength_um: {type: number}
+              bandwidth_um: {type: number}
+              flux_mjy: {type: number}
+              uncertainty_mjy: {type: number}
+              snr: {type: number}
+              flagged: {type: boolean}
+        molecular_detections: {type: array, items: {type: object}}
+        detectors_summary: {type: object, additionalProperties: true}
+      additionalProperties: true
     ObservationMetadata:
       type: object
       required: [frame_id, status, observation, sia, tap, fits]
@@ -1323,176 +1921,3 @@ components:
         code: {type: string}
         message: {type: string}
         retryable: {type: boolean}
-
-    ArchiveCircle:
-      type: object
-      additionalProperties: false
-      required: [ra_degrees, dec_degrees, radius_degrees]
-      properties:
-        type: {type: string, const: circle, default: circle}
-        ra_degrees: {type: number, minimum: 0, exclusiveMaximum: 360}
-        dec_degrees: {type: number, minimum: -90, maximum: 90}
-        radius_degrees: {type: number, exclusiveMinimum: 0, maximum: 180}
-    ArchiveProductKind:
-      type: string
-      enum: [image, cube, spectrum, catalog_source, coverage]
-    ArchiveCompleteness:
-      type: string
-      enum: [complete, truncated, unknown, indexed_subset]
-    ArchiveQuery:
-      type: object
-      additionalProperties: false
-      required: [region, providers]
-      properties:
-        region: {$ref: '#/components/schemas/ArchiveCircle'}
-        providers:
-          type: array
-          minItems: 1
-          uniqueItems: true
-          items: {type: string}
-        product_kinds:
-          type: array
-          minItems: 1
-          default: [image]
-          items: {$ref: '#/components/schemas/ArchiveProductKind'}
-        time_start_utc: {type: [string, 'null'], format: date-time}
-        time_end_utc: {type: [string, 'null'], format: date-time}
-        limit_per_provider: {type: integer, minimum: 1, maximum: 1000, default: 100}
-    ArchiveInventory:
-      type: object
-      required: [id, capabilities]
-      properties:
-        id: {type: string}
-        capabilities:
-          type: object
-          properties:
-            product_kinds:
-              type: array
-              items: {$ref: '#/components/schemas/ArchiveProductKind'}
-            time_filter: {type: string, enum: [exact_utc, native, client, provisional, unsupported]}
-            original: {type: boolean}
-            cutout: {type: boolean}
-            availability: {type: string, enum: [available, unavailable, requires_auth, pending_qualification]}
-            restrictions:
-              type: array
-              items: {type: string}
-            geometry: {type: string}
-    ArchiveAcceptedJob:
-      type: object
-      required: [id, status_url]
-      properties:
-        id: {type: string}
-        status_url: {type: string, format: uri-reference}
-    ArchiveFailure:
-      type: object
-      required: [code, message, retryable]
-      properties:
-        code: {type: string}
-        message: {type: string}
-        retryable: {type: boolean}
-        retry_after_seconds: {type: integer, minimum: 0}
-    ArchiveProviderOutcome:
-      type: object
-      required: [provider, status, record_count, completeness, warnings, has_continuation]
-      properties:
-        provider: {type: string}
-        status: {type: string, enum: [success, empty, unavailable, requires_auth, unsupported_filter, failed]}
-        record_count: {type: integer, minimum: 0}
-        completeness: {$ref: '#/components/schemas/ArchiveCompleteness'}
-        warnings:
-          type: array
-          items: {type: string}
-        error: {$ref: '#/components/schemas/ArchiveFailure'}
-        has_continuation: {type: boolean}
-    ArchiveObservationTime:
-      type: object
-      properties:
-        start_utc: {type: string, format: date-time}
-        end_utc: {type: string, format: date-time}
-        quality: {type: string, enum: [verified, native, provisional, reference_epoch, unknown]}
-        native: {type: object, additionalProperties: {type: string}}
-        reference_epoch: {type: string}
-    ArchiveRecord:
-      type: object
-      required: [id, provider, collection, native_id, product_kind, time, native, provenance, original, cutout, analysisEligible]
-      properties:
-        id: {type: string}
-        provider: {type: string}
-        collection: {type: string}
-        native_id:
-          type: string
-          description: Native string identity; catalogue IDs never pass through floating point
-        product_kind: {$ref: '#/components/schemas/ArchiveProductKind'}
-        version: {type: string}
-        mission: {type: string}
-        instrument: {type: string}
-        sky_coverage: {type: string}
-        time: {$ref: '#/components/schemas/ArchiveObservationTime'}
-        wavelength_min_m: {type: number}
-        wavelength_max_m: {type: number}
-        brightness_unit:
-          type: string
-          description: Omitted when BUNIT or equivalent units are unknown
-        native: {type: object, additionalProperties: {type: string}}
-        provenance: {type: object, additionalProperties: {type: string}}
-        original:
-          type: boolean
-          description: Provider-level original-delivery candidate; individual asset availability and authorization are qualified at resolution
-        cutout:
-          type: boolean
-          description: Provider-level cutout candidate; DataLink must advertise a usable per-record SODA service at resolution
-        analysisEligible: {type: boolean, const: false}
-    ArchiveSearchPage:
-      type: object
-      required: [id, status, outcomes, records, returned_count]
-      properties:
-        id: {type: string}
-        status: {type: string, enum: [queued, running, completed, partial, failed]}
-        outcomes:
-          type: array
-          items: {$ref: '#/components/schemas/ArchiveProviderOutcome'}
-        records:
-          type: array
-          items: {$ref: '#/components/schemas/ArchiveRecord'}
-        returned_count: {type: integer, minimum: 0, maximum: 200}
-        next_cursor: {type: string}
-    ArchiveDelivery:
-      type: object
-      additionalProperties: false
-      properties:
-        mode: {type: string, enum: [prefer_cutout, require_cutout, original], default: prefer_cutout}
-        region: {$ref: '#/components/schemas/ArchiveCircle'}
-    ArchiveStoredAsset:
-      type: object
-      required: [id, bytes, sha256, compression, analysisEligible, artifact_url]
-      properties:
-        id: {type: string}
-        bytes: {type: integer, minimum: 1}
-        sha256: {type: string}
-        compression: {type: string, enum: [native, gzip]}
-        brightness_unit: {type: string}
-        analysisEligible: {type: boolean, const: false}
-        artifact_url: {type: string, format: uri-reference}
-    ArchiveDownload:
-      type: object
-      required: [id, status, selection, assets, status_url]
-      properties:
-        id: {type: string}
-        status: {type: string, enum: [queued, running, completed, partial, failed]}
-        selection:
-          type: object
-          properties:
-            record_ids: {type: array, items: {type: string}}
-            delivery: {$ref: '#/components/schemas/ArchiveDelivery'}
-        assets:
-          type: array
-          items:
-            type: object
-            required: [record_id, status, provenance]
-            properties:
-              record_id: {type: string}
-              status: {type: string, enum: [ready, skipped, failed]}
-              asset: {$ref: '#/components/schemas/ArchiveStoredAsset'}
-              error: {$ref: '#/components/schemas/ArchiveFailure'}
-              provenance: {type: object, additionalProperties: {type: string}}
-        status_url: {type: string, format: uri-reference}
