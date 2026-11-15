@@ -12,7 +12,10 @@ final case class PipelineResponse(bytes:Array[Byte],contentType:String)
 
 /** Bounded transport to the team pipeline and its independent unification module. */
 final class HttpPipelineClient private(base:URI,client:HttpClient,slots:Semaphore,timeout:Duration):
-  private val routes=Set("/api/cutout/search","/api/cutout/render","/api/spectrum","/api/spectrum/measure","/internal/image-unifications")
+  private val routes=Set("/health","/api/cutout/search","/api/cutout/render","/api/spectrum","/api/spectrum/measure","/internal/image-unifications")
+  def healthy:UIO[Boolean]=request("GET","/health").map { response=>
+    new String(response.bytes,UTF_8).fromJson[Json].toOption.flatMap(_.asObject).flatMap(_.get("status")).contains(Json.Str("ok"))
+  }.timeout(3.seconds).map(_.getOrElse(false)).orElseSucceed(false)
   def unify(body:Json):Task[Json]=
     request("POST","/internal/image-unifications",body=Some(body)).flatMap { response=>
       ZIO.fromEither(new String(response.bytes,UTF_8).fromJson[Json])
@@ -36,7 +39,7 @@ final class HttpPipelineClient private(base:URI,client:HttpClient,slots:Semaphor
         case 400 | 422=>throw ApiError("pipeline_invalid_request","The pipeline rejected the request")
         case 429 | 503=>throw ApiError("pipeline_unavailable","The pipeline is busy or unavailable",true)
         case 504=>throw ApiError("pipeline_timeout","The pipeline exceeded its time budget",true)
-        case _=>throw ApiError("pipeline_upstream_error","The Python pipeline returned an error; inspect its service logs",true)
+        case _=>throw ApiError("pipeline_upstream_error",s"The Python pipeline returned HTTP ${response.statusCode()}; inspect its service logs",true)
       val bytes=response.body()
       val media=response.headers().firstValue("Content-Type").orElse("").takeWhile(_!=';').trim
       if path=="/api/cutout/render" then

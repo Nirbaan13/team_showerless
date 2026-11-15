@@ -48,7 +48,8 @@ object Application:
       analysisRepository <- AnalysisRepository.open(data.resolve("jobs.sqlite"))
       analyses <- Analyses.make(analysisRepository,jobs,data,AnalysisConfig(Path.of(env("ML_ROOT","../ml/pvusatov/backend/inference")),env("ML_PYTHON","python3")))
       pipeline <- HttpPipelineClient.make(env("PROCESSING_URL","http://pipeline:8002"))
-      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline))
+      catalogs <- spaceapps.catalogs.service.Catalogs.make(new spaceapps.catalogs.integrations.TapCatalogs(client))
+      api <- Api.make(jobs,env("APP_REVISION","development"),Path.of(env("OPENAPI_PATH","docs/openapi.yaml")),channelBands.keySet,metadata=Some(metadata),equipment=Some(equipment),analyses=Some(analyses),pipeline=Some(pipeline),catalogs=Some(catalogs))
       downloadsRuntime <- DownloadsRuntime.make(client,source,data,data.resolve("jobs.sqlite"),ArchiveLimits(
         global_parallelism=env("ARCHIVE_PARALLELISM","3").toInt,
         per_provider_parallelism=env("ARCHIVE_PROVIDER_PARALLELISM","1").toInt,
